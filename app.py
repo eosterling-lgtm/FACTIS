@@ -4427,6 +4427,43 @@ def calcular_sensibilidad(cabida: dict, fin_base: dict, zona: str) -> pd.DataFra
     return pd.DataFrame(filas, columns=cols, index=idx)
 
 
+def calcular_sensibilidad_terreno(cabida: dict, fin_base: dict, zona: str):
+    """Matriz margen% + TIR% cruzando precio de venta (cols) × precio de terreno (filas).
+    Returns (df_mg, df_tir, precios_list, terrenos_list, precio_base, terreno_base).
+    """
+    precio_base  = fin_base.get("precio_venta_m2", 0)
+    terreno_base = fin_base.get("costo_terreno", 0)
+    if precio_base <= 0 or terreno_base <= 0:
+        return None
+
+    # 7 columnas: precio de venta -15%…+15% redondeado a $50
+    pct_p = [-15, -10, -5, 0, 5, 10, 15]
+    precios   = [max(500, round(precio_base * (1 + p / 100) / 50) * 50) for p in pct_p]
+
+    # 7 filas: terreno -30%…+30% redondeado a $5,000
+    pct_t = [-30, -20, -10, 0, 10, 20, 30]
+    terrenos  = [max(10_000, round(terreno_base * (1 + t / 100) / 5_000) * 5_000) for t in pct_t]
+
+    mg_grid  = []
+    tir_grid = []
+    for t in terrenos:
+        mg_row  = []
+        tir_row = []
+        for p in precios:
+            fin_adj = {**fin_base, "precio_venta_m2": p, "costo_terreno": t}
+            r = calcular_financiero(cabida, fin_adj, zona)["resumen"]
+            mg_row.append(r["margen_pct"])
+            tir_row.append(r["tir_anual_pct"])
+        mg_grid.append(mg_row)
+        tir_grid.append(tir_row)
+
+    cols = [f"${p:,}" for p in precios]
+    idx  = [f"${t:,.0f}" for t in terrenos]
+    df_mg  = pd.DataFrame(mg_grid,  columns=cols, index=idx)
+    df_tir = pd.DataFrame(tir_grid, columns=cols, index=idx)
+    return df_mg, df_tir, precios, terrenos, precio_base, terreno_base
+
+
 def _s_curve_weights(n: int) -> list:
     """Bell-shaped marginal weights (slow-fast-slow disbursement), sum = 1.0.
     Uses midpoints t=(i+0.5)/n so no endpoint is ever zero (avoids $0 first/last month).
@@ -7325,6 +7362,87 @@ if tipo_op == "Proyecto Inmobiliario":
                 sens_html += '</tbody></table>'
                 st.markdown(sens_html, unsafe_allow_html=True)
                 st.caption("Verde = margen ≥ 20% · Amarillo = 12–20% · Rojo = < 12%")
+
+                # ── Matriz Precio de Venta × Terreno ──────
+                st.markdown("---")
+                st.markdown(
+                    '<div class="section-title">Matriz Estratégica — '
+                    'Precio de Venta ($/m²) × Precio del Terreno ($)</div>',
+                    unsafe_allow_html=True)
+                st.caption(
+                    "Margen neto % en cada combinación · "
+                    "⭐ = escenario actual · "
+                    "Verde ≥ 18% · Amarillo 12–18% · Rojo < 12%")
+
+                _st_result = calcular_sensibilidad_terreno(c, fin_run, zona_sel)
+                if _st_result:
+                    _df_mg, _df_tir, _st_precios, _st_terrenos, _st_p0, _st_t0 = _st_result
+
+                    # Precio base y terreno base más cercanos en la grilla
+                    _st_col0 = min(range(len(_st_precios)), key=lambda i: abs(_st_precios[i] - _st_p0))
+                    _st_row0 = min(range(len(_st_terrenos)), key=lambda i: abs(_st_terrenos[i] - _st_t0))
+
+                    def _cell_color_mg(v):
+                        if v >= 18:  return "#1B5E20", "#A5D6A7"   # verde oscuro / texto claro
+                        if v >= 12:  return "#F57F17", "#FFF9C4"   # naranja / amarillo claro
+                        return "#B71C1C", "#FFCDD2"                 # rojo oscuro / rosa claro
+
+                    _NAV = "#0A1628"
+                    _BRD = "#2A3D52"
+                    # Cabecera de columnas (precio de venta)
+                    _st_html = (
+                        f'<div style="overflow-x:auto;margin-bottom:4px;">'
+                        f'<table style="border-collapse:collapse;min-width:100%;">'
+                        f'<thead><tr>'
+                        f'<th style="background:{_NAV};color:#B8904A;padding:8px 12px;font-size:10px;'
+                        f'font-weight:700;text-align:left;border:1px solid {_BRD};white-space:nowrap;">'
+                        f'Terreno ↓ / Precio m² →</th>'
+                    )
+                    for ci, p in enumerate(_st_precios):
+                        _is_base_col = (ci == _st_col0)
+                        _ch_bg = "#1E3A5A" if _is_base_col else _NAV
+                        _ch_fw = "800" if _is_base_col else "600"
+                        _st_html += (
+                            f'<th style="background:{_ch_bg};color:#FFFFFF;padding:8px 10px;'
+                            f'font-size:10px;font-weight:{_ch_fw};text-align:center;'
+                            f'border:1px solid {_BRD};white-space:nowrap;">'
+                            f'{"⭐ " if _is_base_col else ""}${p:,}</th>'
+                        )
+                    _st_html += '</tr></thead><tbody>'
+
+                    for ri, t in enumerate(_st_terrenos):
+                        _is_base_row = (ri == _st_row0)
+                        _rh_bg = "#0E2236" if _is_base_row else "#0A1628"
+                        _st_html += (
+                            f'<tr><td style="background:{_rh_bg};color:{"#B8904A" if _is_base_row else "#8AA8C0"};'
+                            f'padding:8px 12px;font-size:10px;font-weight:{"800" if _is_base_row else "600"};'
+                            f'border:1px solid {_BRD};white-space:nowrap;">'
+                            f'{"⭐ " if _is_base_row else ""}${t:,.0f}</td>'
+                        )
+                        for ci in range(len(_st_precios)):
+                            mg_val  = float(_df_mg.iloc[ri, ci])
+                            tir_val = float(_df_tir.iloc[ri, ci])
+                            _bg_cell, _txt_cell = _cell_color_mg(mg_val)
+                            _is_cur = (_is_base_row and ci == _st_col0)
+                            _border_extra = f"outline:2px solid #B8904A;outline-offset:-2px;" if _is_cur else ""
+                            _st_html += (
+                                f'<td style="background:{_bg_cell};color:{_txt_cell};'
+                                f'padding:6px 10px;font-size:11px;font-weight:700;'
+                                f'text-align:center;border:1px solid {_BRD};{_border_extra}">'
+                                f'{mg_val:.0f}%'
+                                f'<div style="font-size:9px;font-weight:400;opacity:0.75;margin-top:1px;">'
+                                f'TIR {tir_val:.0f}%</div></td>'
+                            )
+                        _st_html += '</tr>'
+                    _st_html += '</tbody></table></div>'
+                    st.markdown(_st_html, unsafe_allow_html=True)
+                    st.caption(
+                        f"Base actual: terreno ${fin_run['costo_terreno']:,.0f} · "
+                        f"precio ${fin_run['precio_venta_m2']:,}/m² → "
+                        f"margen {st.session_state.financ['resumen']['margen_pct']:.1f}%"
+                    )
+                else:
+                    st.info("Ingresa precio de venta y costo de terreno para ver la matriz.")
 
                 # ── Comparador de Escenarios ──────────────
                 st.markdown("---")
