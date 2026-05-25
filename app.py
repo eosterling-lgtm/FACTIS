@@ -3111,7 +3111,7 @@ def calcular_financiero(cabida: dict, fin: dict, zona: str) -> dict:
     c_alcabala      = c_terreno_base * 0.03 if fin.get("include_alcabala", True) else 0
     c_notarial      = c_terreno_base * 0.003     # Gastos notariales: 0.3%
     c_registral     = c_terreno_base * 0.0015    # Gastos registrales: 0.15%
-    c_due_dilig     = 11500 if fin.get("include_dd", True) else 0
+    c_due_dilig     = 10000 if fin.get("include_dd", True) else 0
     c_terreno_total = c_terreno_base + c_alcabala + c_notarial + c_registral + c_due_dilig
 
     # ── Construcción ────────────────────────────────────
@@ -5406,7 +5406,7 @@ with st.sidebar:
         zona = st.selectbox("Ubicación", list(MERCADO.keys()), index=_cab_zona_default, key="cab_zona_sel_widget")
 
         st.markdown("---")
-        st.markdown("### INFORMACIÓN DEL TERRENO")
+        st.markdown("### INFORMACIÓN COMPLEMENTARIA DEL INMUEBLE")
         with st.expander("📄 Completar desde documento"):
             st.caption("Sube el certificado de parámetros, plano o cualquier documento del predio. La IA extrae automáticamente el área, frente, fondo, distrito y precios.")
             _cab_doc_up = st.file_uploader(
@@ -5444,7 +5444,7 @@ with st.sidebar:
                             break
                     st.success("Datos extraídos. Revisa y ajusta antes de ejecutar.")
                     st.rerun()
-        st.caption("Completa o corrige los datos del predio a analizar.")
+        st.caption("Completa o adiciona información del inmueble para enriquecer el análisis.")
 
         col_fr, col_fo = st.columns(2)
         override_frente = col_fr.number_input("Frente (ml)", min_value=0.0, max_value=500.0,
@@ -5467,7 +5467,7 @@ with st.sidebar:
 
         st.markdown("---")
         st.markdown("### COLINDANTES")
-        st.caption("Alturas de edificaciones colindantes (verificar en campo). Activa la regla de colindancia del RIN para mayor altura.")
+        st.caption("Norma por Colindancia — Se activa cuando las edificaciones colindantes superan la altura permitida, otorgando beneficio de altura al proyecto.")
         _col_izq, _col_der = st.columns(2)
         colind_izq = _col_izq.number_input("Colindante izq. (pisos)", min_value=0, max_value=40,
                                             value=0, step=1,
@@ -5494,7 +5494,7 @@ with st.sidebar:
         costo_const_m2  = st.number_input("Costo construcción dptos / m² (USD)",
                                           min_value=300, max_value=2_000,
                                           value=int(st.session_state.get("cab_costo_const_m2", MERCADO[zona]["costo_construccion"])), step=25, key="cab_cconst_inp")
-        with st.expander("Parámetros avanzados"):
+        with st.expander("Costos avanzados"):
             costo_sotano_m2  = st.number_input("Costo sótano / m² (USD)", 200, 1000, 450, 25,
                                                 help="Costo por m² de sótano (excavación + estructura)")
             fee_constructora = st.number_input("Fee constructora (%)", 0.0, 20.0, 10.0, 0.5,
@@ -5503,8 +5503,8 @@ with st.sidebar:
                                                 help="IR corporativo Perú: 29.5%")
             include_alcabala = st.checkbox("Incluir Alcabala (3%)", value=True,
                                             help="Impuesto de alcabala sobre precio del terreno")
-            include_dd       = st.checkbox("Incluir Due Diligence (~$11,500)", value=True,
-                                            help="Suelo, topografía, títulos, notariales, registrales")
+            include_dd       = st.checkbox("Incluir Due Diligence ($10,000)", value=True,
+                                            help="Acompaña todo el proyecto: títulos, registrales, notariales. Varía si el cliente tiene abogado in-house.")
 
         st.markdown("---")
         st.markdown("### COMPETENCIA / PRECIOS")
