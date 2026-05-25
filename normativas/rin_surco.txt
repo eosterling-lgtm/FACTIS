@@ -1,0 +1,82 @@
+
+=== REGLAMENTO DE ÍNDICES NORMATIVOS — DISTRITO DE SANTIAGO DE SURCO ===
+Municipalidad de Santiago de Surco (MSS).
+Surco tiene DOS sectores normativos con diferente base legal:
+  • ATN II: Ord. N°1076-MML (08.10.2007) + Ord. N°1015-MML (15.04.2009) — administrado por MML
+  • ATN III: Ord. N°912-MML (zonificación) + D.A. N°04-2023-MSS (08.02.2023, parámetros vigentes)
+    [Nota: Ord. N°599-MSS fue DEROGADA por Ord. N°672-MSS — ya no aplica]
+Normativa complementaria: Ord. N°328-MSS (retiros por consolidación) + Ord. N°200-MSS +
+D.S. N°006-2017-Vivienda (TUO Ley N°29090) + D.S. N°029-2019-Vivienda.
+Expedición de CPUs: Sub-Gerencia de Planeamiento Urbano y Catastro — GDU-MSS.
+
+--- SECTOR ATN II (Eje Paseo de la República / Ayacucho / zonas intermedias) ---
+[CPU N°1915-2022-SGPUC-GDU-MSS — Av. Paseo de la República esq. Jr. Batalla de Ayacucho]
+Base: Ord. N°1076-MML + Ord. N°1015-MML
+
+ZONA CZ (Comercio Zonal) — ATN II:
+• Lote normativo: Existente según proyecto · Frente: No se indica
+• Área libre: No exigible para uso comercial (0%)
+  → Pisos residenciales: según uso residencial compatible
+  → Lotes residenciales >200 m²: área libre 40%
+• Altura máxima CZ: 1.5 × (a + r) — a = ancho vía, r = retiro municipal ambos lados
+• Se permite usar el 100% del área del lote comercial para uso residencial (Nota 1)
+• Altura piso a piso máxima en edificios multifamiliares: 3.00 ml
+  (Ord. N°1076-MML, Anexo N°04, Item A.9)
+• Estacionamiento CZ: comercial = 1/50 m² · residencial = 1/1.5 viviendas
+• Usos residenciales compatibles: RDM-RDA (Unifamiliar, Multifamiliar, Conj. Residencial)
+
+ZONA RDM (Residencial Densidad Media) — ATN II, parámetros escalonados por tamaño de lote:
+  Lote 120 m² / frente 6m → 3 pisos · área libre 30%
+  Lote 120-150 m² / frente 6m → 3-4 pisos · área libre 30%
+  Lote 200 m² / frente 8m → 4-5 pisos · área libre 35%
+  Lote 300 m² / frente 10m → 5-6 pisos · área libre 35%
+  Lote 300 m² / frente 10m → 6 pisos · área libre 35%
+  Lote 1600 m² / frente 20m → 8 pisos · área libre 40%
+
+ZONA RDA (Residencial Densidad Alta) — ATN II:
+  Lote 300-450 m² / frente 10-10 ml → 8 pisos · área libre 35-40%
+  Lote 2500 m² / frente 25 ml → 1.5(a+r) pisos · área libre 50%
+  Frente a avenida >20 m: altura = 8 - 1.5(a+r) pisos (6)
+  Lote grande (2500 m²): altura = 1.5(a+r) pisos
+
+ÁREA MÍNIMA DE VIVIENDA (ATN II — confirmado CPU):
+• 3 dormitorios: 75 m² mínimo
+• 2 y 1 dormitorio: con áreas y porcentajes a definir en proyecto
+• Todo ambiente ≥ dimensiones mínimas permitidas se contará como dormitorio
+• Aplica al 100% de unidades (no hay porcentaje de excepción)
+
+RETIROS FRONTALES (ATN II — confirmados CPU):
+• Av. Paseo de la República (metropolitana): 5.00 ml
+• Jr. Batalla de Ayacucho (local): 0.00 ml
+• Jr. Doña Delmira (local): 3.00 ml
+• Alineamiento: respetar sección vial de la habilitación + retiro establecido
+
+--- SECTOR ATN III (Monterrico, Camacho, La Planicie, Las Gardenias, Chacarilla) ---
+Base: Ord. N°912-MML (zonificación) + D.A. N°04-2023-MSS (parámetros vigentes desde feb 2023)
+[Nota: Ord. N°599-MSS DEROGADA por Ord. N°672-MSS — verificar en CPU reciente si el predio es ATN III]
+• ATN III = sector premium de Surco, reglamento propio de la MSS
+• Para predios en ATN III: el CPU deberá indicar D.A. N°04-2023-MSS como base normativa
+• Parámetros específicos ATN III: confirmar siempre con el CPU actual del predio
+• Surco ATN III es comparable en nivel con San Isidro y Miraflores
+
+--- ESTACIONAMIENTOS (ATN II — confirmado CPU) ---
+• Uso comercial (CZ): 1 est. / 50 m² de área comercial
+• Uso residencial (RDM/RDA): 1 est. / 1.5 viviendas
+• Establecimientos especiales: Ord. N°1076-MML Anexo N°04, Inc. A.10
+  → Hospedajes: 20% del total de habitaciones
+
+--- RETIROS GENERALES (Ord. N°328-MSS — Plano de Retiros por Consolidación) ---
+• Calles locales: 3.00 ml (confirmado CPU)
+• Avenidas: 5.00 ml (confirmado CPU — Paseo de la República)
+• Algunas calles internas sin retiro exigido (confirmado CPU — Jr. Batalla de Ayacucho: 0m)
+• Verificar Plano de Retiros Ord. N°328-MSS para cada vía específica
+
+--- NOTAS CLAVE ---
+• En zona CZ: 100% del lote puede ser residencial (no solo planta baja)
+• Área libre 0% para uso comercial puro; 40% cuando hay pisos residenciales en lote >200m²
+• Altura piso a piso máx 3.00 ml en multifamiliar (distinto a Miraflores que permite 4.00m en comercial)
+• RDA frente a avenida >20m activa fórmula 1.5(a+r) — mismo mecanismo que CZ
+
+--- CERTIFICADOS DE REFERENCIA ---
+CPU N°1915-2022-SGPUC-GDU-MSS / Exp. 122966-2022 (Av. Paseo de la República esq. Jr. Ayacucho)
+— CZ + RDM/RDA, ATN II, vigencia 36 meses desde 09.11.2022

@@ -1,0 +1,69 @@
+
+=== REGLAMENTO DE ÍNDICES NORMATIVOS — DISTRITO DE SANTA ANITA ===
+Municipalidad Distrital de Santa Anita (MDSA).
+ATN I (Área de Características Especiales — distritos periféricos/industriales de Lima).
+Normativa base: Ord. N°1025-MML (Índice de Usos Lima) + Ord. N°341-MML (Sistema Vial) +
+Ord. N°1015-MML + Ord. N°202-MML (estacionamientos usos especiales).
+Expedición de CPUs: Subgerencia de Obras Privadas, Control Urbano y Catastro — MDSA.
+
+--- PERFIL DEL DISTRITO ---
+Santa Anita es un distrito de vocación INDUSTRIAL y COMERCIAL, ubicado en el eje de la
+Carretera Central. No es distrito residencial premium. El desarrollo inmobiliario relevante
+se concentra en zonas CM (reconversión industrial a comercial/residencial) y corredores I2/I3.
+
+--- ZONA I3 — GRAN INDUSTRIA (Eje Carretera Central) ---
+[CPU N°374-19, Inmuebles Limatambo S.A. — Carretera Central frente Autopista Lima-Chosica]
+• ATN I · Área de Características Especiales
+• Usos permisibles: Industria I3 (Gran Industria)
+• Usos compatibles: hasta 20% de I2 / hasta 10% de I1
+• Uso predominante: Industrial
+• Área lote normativo: 2,500 m² mínimo · Frente normativo: 30.00 ml
+• Área libre: Según proyecto
+• Altura máxima: Según actividades específicas y consideraciones ambientales (no hay fórmula fija)
+• Retiro Carretera Central: 10.00 ml (Ord. N°341-MML — sección vial 45.00 m)
+• Estacionamiento industrial I3:
+  → 1 espacio por cada 6 personas ocupadas en turno principal
+  → Patio de maniobras obligatorio para carga/descarga con radio de volteo apropiado al tipo de vehículo
+• PAMA (Plan de Adecuación y Manejo Ambiental): obligatorio para instalaciones I3
+
+--- ZONA CM — COMERCIO METROPOLITANO (Zona industrial reconvertida) ---
+[CPU N°130-2020, Lima Caucho S.A. — Calle Ticino 167]
+• ATN I · Área de Características Especiales
+• Usos permisibles: Comercio Metropolitano
+• Usos compatibles: RDA (*) — según Índice de Uso Ord. N°1025-MML
+• Área lote normativo: Existente o Según Proyecto · Frente normativo: 10.00 ml
+• Coeficiente de edificación: Resultante del Proyecto
+• Altura máxima CM: 1.5 × (a + r), donde a = ancho de vía, r = suma retiros ambos lados
+  - Calle Ticino (sección no especificada): retiro 3.00 ml
+• Área libre:
+  → Uso comercial: NO EXIGIBLE (0%)
+  → Pisos residenciales: según uso residencial compatible
+  → Lotes con uso residencial y área >200 m²: área libre 40%
+• Se permite usar hasta el 100% del área del lote comercial para uso Residencial (**)
+• Estacionamiento CM:
+  → Comercial: 1 est. / 50 m² de área de uso comercial
+  → Residencial (RDA compatible): 1 est. / 2 viviendas
+  → Usos especiales (hospedaje): 20% del total de habitaciones
+  → Otros usos no contemplados: Ord. N°1025-MML + Ord. N°1015-MML + Ord. N°202-MML
+
+--- ZONAS INDUSTRIALES REFERENCIA (Marco MML) ---
+I1 (Industria Elemental y Complementaria): lotes pequeños, industria ligera, compatible vivienda
+I2 (Industria Liviana): lotes medianos, industria liviana, sin vivienda
+I3 (Gran Industria): lotes ≥2,500 m², industria pesada/gran escala, sin vivienda
+Zona Industrial General: aplica Ord. N°1025-MML para usos y compatibilidades
+
+--- RETIROS FRONTALES ---
+• Carretera Central (arteria principal 45m): 10.00 ml (Ord. N°341-MML 06/12/01)
+• Calles internas (ej. Calle Ticino): 3.00 ml
+• Avenidas secundarias: verificar en certificado específico
+
+--- NOTAS CLAVE PARA ANÁLISIS ---
+• Santa Anita NO tiene zonas residenciales puras atractivas para desarrollo multifamiliar premium.
+• El potencial de desarrollo está en zonas CM sobre terrenos industriales reconvertidos.
+• En CM: altura libre por fórmula 1.5(a+r) + posibilidad de uso 100% residencial = oportunidad.
+• Lotes industriales grandes (I3) en Carretera Central: potencial para reconversión logística/comercial.
+• ATN I implica normativa MML base, sin reglamento distrital premium propio.
+
+--- CERTIFICADOS DE REFERENCIA ---
+CPU N°374-19 / Exp. 9338-19 (Carretera Central, Fundo Inquisidor) — I3, caduca 06.09.2022
+CPU N°130-2020 / Exp. 3814-2020 (Calle Ticino 167, Zona Industrial A-2) — CM+RDA, caduca 17.09.2023

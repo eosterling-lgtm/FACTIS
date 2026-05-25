@@ -1,0 +1,101 @@
+
+=== REGLAMENTO DE ÍNDICES NORMATIVOS — DISTRITO DE VILLA EL SALVADOR ===
+Municipalidad Distrital de Villa El Salvador (MVES).
+ATN I (Área de Tratamiento Normativo I — distritos periféricos/consolidación en curso).
+Normativa base: Ord. N°933-MML (20.04.2006, Reajuste Integral Zonificación VES) +
+modificatorias: Ord. N°1690-MML, N°2141-MML, N°2165-MML, N°2248-MML, N°2289-MML,
+N°2308-2021-MML (Índice de Usos ATN I), N°2400-2021-MML, N°2471-2022-MML, N°2486-2022-MML,
+N°2627-MML. Ord. N°620-MML (Plan Metropolitano).
+NORMATIVA CLAVE SECTORIAL: Ord. N°2220-MML — "Plano de Reajuste Integral de Zonificación de los
+Usos del Suelo en los ámbitos del Sector V Territorio y Sector Litoral del distrito de Villa El Salvador"
+(Art. 2°: aprueba el Plano que define usos compatibles, condicionados y no permitidos por sector,
+en concordancia con el Plan de Acondicionamiento Territorial y Desarrollo Urbano).
+Normativa distrital: Ord. N°369-MVES (ROF) + Ord. N°479-MVES (modifica ROF).
+Expedición de CPUs: Sub-Gerencia de Obras Privadas, Catastro y Control Urbano — GDU-MVES.
+Expedición Informes de Compatibilidad de Uso: Gerencia de Desarrollo Económico y Licencias — GDEL-MVES.
+
+--- PERFIL ESTRATÉGICO DEL DISTRITO ---
+Villa El Salvador es el principal HUB LOGÍSTICO E INDUSTRIAL del sur de Lima:
+~800,000 m² de almacenes · Zona Industrial de Villa El Salvador (ZIVS) consolidada.
+Tendencia 2024-2026: crecimiento residencial desde el norte del distrito hacia el sur,
+con factibilidad de servicios básicos en expansión, buena conectividad vial
+(Panamericana Sur, Av. El Sol, Av. Separadora Industrial, Av. Revolución) y lotes grandes
+disponibles para desarrollo multifamiliar/mixto. Primer ola de proyectos residenciales
+en etapa de inicio — oportunidad de ingreso temprano.
+
+--- ZONA CZ (COMERCIO ZONAL) — confirmado CPU ---
+[CPU N°440-2022-MVES-GDU-SGOPCCU — Av. Los Algarrobos, Parcela 3.4, Manzana C]
+• ATN I · Área mínima lote: existente o según proyecto · Frente mínimo: existente
+• Altura máxima CZ: 4 PISOS (fijo — NO aplica fórmula 1.5(a+r) como en ATN II/III)
+• Área libre: pisos destinados a vivienda → área libre según uso residencial compatible
+• Retiro frontal: 1.50 ml en todo el frente
+  → Terrenos en esquina: 1.50 ml en ambos lados
+• Alineamiento de fachada: según retiro municipal
+• Estacionamiento comercial: 1 est. / 50 m² de área comercial
+  → Usos especiales: Ord. N°933-MML Anexo 2, Ítem B.5
+• Uso residencial compatible: RDM (no RDA — menor densidad que distritos intermedios)
+• Uso educacional compatible: Inicial, Primaria, Secundaria, Pre-universitaria
+• Se permite usar hasta el 100% del lote comercial para uso residencial
+• ⚠ Edificaciones >3 pisos: Estudio Geotécnico OBLIGATORIO (suelo arenoso VES)
+
+--- HERRAMIENTA NORMATIVA CLAVE: INFORME DE COMPATIBILIDAD DE USO ---
+[Confirmado: Carta N°531-2025-GDEL/MVES, Documento N°21941-2025, 24 jun 2025]
+• Trámite SEPARADO del CPU — lo emite la Gerencia de Desarrollo Económico y Licencias (GDEL), no la GDU
+• Base: Art. 40° numeral 36 ROF (Ord. N°369-MVES + Ord. N°479-MVES)
+• Permite confirmar si un uso específico es compatible con la zonificación SIN tramitar licencia
+• Referencia normativa: Ord. N°933-MML (Índice de Usos ATN I) + Ord. N°2220-MML (Sector V/Litoral)
+• DOBLE ZONIFICACIÓN posible: un mismo predio puede calificar CZ + I2 simultáneamente
+  → Ejemplo confirmado: Manzana H Parcela 2, Av. Forestales = CZ (Comercio Zonal) + I2 (Industria Liviana)
+  → Esto permite usos industriales Y comerciales en el mismo predio legalmente
+• Pocos desarrolladores conocen este trámite — es una ventaja competitiva de información
+
+--- ZONA INDUSTRIAL (ZI / I2 — Zona Industrial de Villa El Salvador, ZIVS) ---
+Marco: Ord. N°933-MML Anexo 2, Ítem B.5 + Ord. N°2220-MML (Sector V Territorio) + Ord. N°1084-MML
+• Zona Industrial VES: una de las más grandes de Lima Metropolitana (~800,000 m² de almacenes)
+• Usos principales: almacenes, logística, manufactura liviana (I2), distribución
+• Lote normativo I2: típicamente 1,000-2,500 m² · Frente: 20-30 ml
+• Retiro industrial: 3.00-5.00 ml vías principales · verificar en CPU para vía específica
+• Altura industrial: según actividad y consideraciones de seguridad (no fórmula residencial)
+• Estacionamiento industrial: 1 est. / 6 trabajadores turno principal + patio de maniobras
+• Área libre industrial: según proyecto (no % fijo como en residencial)
+• PAMA: para actividades con impacto ambiental significativo
+• Reconversión industrial → comercial/residencial: requiere cambio de zonificación
+  (actualmente en proceso en algunas manzanas del norte del distrito — verificar plano vigente)
+
+--- ZONA RDM (RESIDENCIAL DENSIDAD MEDIA) ---
+Marco: Ord. N°933-MML + ATN I base MML
+• Uso: Vivienda unifamiliar y multifamiliar
+• Altura: según plano de alturas distrital — típicamente 3-5 pisos en ATN I
+• Área libre: 30-35%
+• Lote normativo: 90-120 m² · Frente: 6-8 ml
+• Estacionamiento: según Ord. N°933-MML Anexo 2
+• Retiros: calles locales 1.50-3.00 ml · avenidas 3.00-5.00 ml (verificar en CPU)
+
+--- RETIROS (confirmados CPU y marco ATN I) ---
+• Zona CZ, vías locales: 1.50 ml (mínimo del stack — propio de ATN I periférico)
+• Terrenos en esquina CZ: 1.50 ml en ambos frentes
+• Vías industriales principales: retiro mayor (verificar en CPU específico)
+• Avenidas principales (Panamericana Sur, Av. El Sol): retiro ≥5.00 ml (marco MML)
+
+--- SECTOR V TERRITORIO Y SECTOR LITORAL (Ord. N°2220-MML) ---
+• Ord. N°2220-MML aprueba el Plano de Reajuste Integral de Zonificación específico para estos sectores
+• Define usos compatibles, condicionados y no permitidos — puede diferir del Ord. N°933-MML general
+• Verificar en qué sector se ubica el predio: Sector V Territorio / Sector Litoral / sectores generales
+• Para predios en Sector V o Litoral: Ord. N°2220-MML es la normativa sectorial aplicable
+• Consulta de Zonificación es el documento previo que identifica la clasificación exacta del predio
+
+--- NOTAS CLAVE PARA ANÁLISIS ---
+• CZ en VES = 4 pisos fijos — muy distinto a CZ en ATN II (donde altura = 1.5(a+r), potencialmente 15-25p)
+• Suelo arenoso: estudio geotécnico siempre obligatorio para >3 pisos (impacto en costo de cimentación)
+• 100% del lote CZ puede ser residencial RDM — oportunidad de conversión
+• La expansión residencial es hacia el norte del distrito (cercanía a Villa María del Triunfo, Lurín)
+• Retiros muy reducidos (1.50 ml) permiten maximizar el área techada en lotes pequeños
+• Factibilidad de servicios: verificar SEDAPAL y Luz del Sur por sector antes de análisis financiero
+• Doble zonificación CZ+I2: permite operación industrial y comercial simultánea en el mismo predio —
+  ventaja competitiva para proyectos mixtos logístico-comerciales
+
+--- CERTIFICADOS DE REFERENCIA ---
+CPU N°440-2022-MVES-GDU-SGOPCCU / Exp. 11786-2022 (Av. Los Algarrobos, Parcela 3.4, Mz. C)
+— CZ + RDM compatible, ATN I, vigencia 36 meses desde 05.08.2022 (vence ago 2025)
+Carta N°531-2025-GDEL/MVES / Doc. N°21941-2025 (Mz. H Parcela 2, Av. Forestales)
+— Informe de Compatibilidad de Uso: CZ + I2 (doble zonificación), jun 2025 [MÁS RECIENTE]

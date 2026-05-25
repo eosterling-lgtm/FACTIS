@@ -1,0 +1,151 @@
+
+=== REGLAMENTO NORMATIVO — DISTRITO DE LINCE ===
+Base principal: Ord. N°235-MDL + Ord. N°290-MDL · Área de Tratamiento Normativo II
+Ejes principales: Av. Arequipa (CM), Jr. Emilio Althaus (CZ), Parque Mariscal Castilla (RDA), interior residencial (RDM)
+Limita con: San Isidro (sur), Jesús María (noroeste), La Victoria (este), Breña (norte)
+
+--- BASE LEGAL VIGENTE ---
+• Ord. N°235-MDL (07/05/2009) — Reglamento de Zonificación de Lince (base principal)
+• Ord. N°279-MDL (12/12/2010) + Ord. N°236-MDL (07/05/2009) — modificatorias
+• Ord. N°290-MDL (17/06/2011) — modifica Índice de Estacionamientos Comerciales/Administrativos
+• Ord. N°331-MDL (14/11/2013) — azoteas; Ord. N°335-MDL (08/03/2014) — modificatoria
+• Ord. N°371-MDL (23/01/2016) + Ord. N°380-MDL (09/10/2016) — modificatorias
+• Ord. N°393-MDL (22/07/2017) — habilitaciones urbanas y licencias de edificación
+• Decreto de Alcaldía N°010-2012-ALC-MDL + N°021-2012-ALC-MDL — Reglamento de Retiros Municipales
+• Ord. N°1017-MML (08/10/07) + Ord. N°1076-MML (08/10/07) — Índice de Usos Lima Metropolitana
+• Ord. N°1361-MML (19/03/2010) + Ord. N°1439-MML (27/09/2010) — modificatorias MML
+• RNE (DS N°011-2006-VIVIENDA) — base técnica general
+
+--- SISTEMA DE ÁMBITOS (Art. 6°, Ord. 235-MDL) ---
+Lince divide su territorio en ámbitos según localización. Cada ámbito determina zonificación, alturas y estacionamientos:
+  ÁMBITO A — RDA pura (Residencial Densidad Alta): zona alrededor del Parque Mariscal Castilla · 1 est/1 viv
+  ÁMBITO B — RDM (Residencial Densidad Media): interior residencial del distrito · 1 est/1.5 viv
+  ÁMBITO C — CZ/CM (Comercio Zonal o Metropolitano): ejes comerciales (Arequipa, Althaus, etc.) · 1 est/2 viv
+
+--- RETIROS MÍNIMOS ---
+  Avenidas principales (Arequipa, Petit Thouars): 5.00 ml
+  Jirones / calles secundarias: 3.00 ml
+  RETIRO 0.00ml (*): aplica en CZ jirones cuando la consolidación urbana lo justifica
+    → Regla especial (DA N°010-2012-ALC-MDL): retiro 0.00ml solo en los dos primeros niveles
+       A partir del 3er nivel: respetar retiro según Cuadro N°4 Ord. 235-MDL (Ord. 279-MDL)
+       cuando la vía sea menor a 16.00ml de sección
+  Jardín de Aislamiento: puede formar parte del Derecho de Vía Pública — verificar con Partida Registral
+
+=== ZONA CM (COMERCIO METROPOLITANO) — AV. AREQUIPA Y PETIT THOUARS ===
+Usos: Comercio Metropolitano + RDA compatible
+Altura: 1.5(a+r) sin tope fijo de pisos
+Área libre comercial: No exigible (hasta 100% del lote puede ser uso residencial)
+Retiro: Av. Arequipa 5.00ml | calles 3.00ml
+
+TABLA CM + RDA COMPATIBLE (Ámbito C en CM):
+  Estándar:
+    Lote 300m² / frente 10ml  → 8 pisos · área libre 35% · 1 est/2 viv
+    Lote 450m² / frente 10ml  → 1.5(a+r) [frente vía >20m] · área libre 35% · 1 est/2 viv
+    Lote 2500m² / frente 25ml → 1.5(a+r) (CR) · área libre 50% · 1 est/2 viv
+  Frente Parque Castilla (bonificación Ámbito C):
+    Lote 200m² / frente 10ml  → 10 pisos · área libre 30% · 1 est/2 viv
+    Lote 350m² / frente 10ml  → 15 pisos · área libre 30% · 1 est/2 viv
+    Lote 450m² / frente 10ml  → 20 pisos · área libre 30% · 1 est/2 viv
+  Frente a parques generales (no Castilla): hasta 15 pisos en lotes ≥450m²
+
+ÁREAS MÍNIMAS CM+RDA: 3D=60m² / 2D=55m² / 1D=45m²
+
+=== ZONA CZ (COMERCIO ZONAL) — JR. EMILIO ALTHAUS Y EJES SECUNDARIOS ===
+Usos: Comercio Zonal + RDM + RDA compatibles
+Altura CZ: 1.5(a+r) sin tope fijo de pisos
+Área libre comercial: No exigible (hasta 100% del lote para uso residencial)
+Retiro: 0.00ml en jirones < 16m (consolidación, ver regla especial retiros), 3.00ml en calles > 16m
+Ámbito C (Jr. Althaus y similares)
+
+TABLA CZ + RDA COMPATIBLE:
+  Estándar:
+    Lote 300m² / frente 10ml  → 8 pisos · área libre 35% · 1 est/2 viv
+    Lote 450m² / frente 10ml  → 1.5(a+r) [frente vía >20m] · área libre 35% · 1 est/2 viv
+    Lote 2500m² / frente 25ml → 1.5(a+r) (CR) · área libre 50% · 1 est/2 viv
+  Frente Parque Castilla:
+    Lote 200m² / frente 10ml  → 10 pisos · área libre 30%
+    Lote 350m² / frente 10ml  → 15 pisos · área libre 30%
+    Lote 450m² / frente 10ml  → 20 pisos · área libre 30%
+
+TABLA CZ + RDM COMPATIBLE:
+  Unifamiliar: lote 120m² / frente 6ml → 3 pisos · área libre 30%
+  Multifamiliar lote 120m² / frente 6ml  → 3 pisos · área libre 30% · 1 est/2 viv
+  Multifamiliar lote 150m² / frente 8ml  → 4 pisos (5 frente parque/avda >20m) · área libre 35%
+  Multifamiliar lote 200m² / frente 10ml → 5 pisos (6 frente parque/avda >20m) · área libre 35%
+  Multifamiliar lote 300m² / frente 10ml → 6 pisos (7 frente parque; 8 si colindante posterior CM) · área libre 35%
+  CR lote 1600m² / frente 20ml           → 8 pisos · área libre 40%
+
+ÁREAS MÍNIMAS CZ (RDA o RDM compatible): 3D=60m² / 2D=55m² / 1D=45m²
+
+=== ZONA RDA (RESIDENCIAL DENSIDAD ALTA) — ÁMBITO A — PARQUE CASTILLA ===
+Usos: Vivienda Unifamiliar, Multifamiliar y Conjunto Residencial
+Retiro: Jr. Cmdte. Manuel Villavicencio y jirones del perímetro → 3.00ml
+Parque Mariscal Ramón Castilla: perímetro = Av. César Vallejo, Jr. Villavicencio, Jr. Joaquín Bernal,
+  Jr. Almte. Martín Guisse, Jr. Sinchi Roca
+
+TABLA RDA — ÁMBITO A (frente Parque Castilla):
+  Estándar:
+    Lote 300m² / frente 10ml  → 8 pisos · área libre 35% · 1 est/1 viv
+    Lote 450m² / frente 10ml  → 1.5(a+r) [frente vía >20m] o 15 pisos [frente parques] · área libre 35% · 1 est/1 viv
+    Lote 2500m² / frente 25ml → 1.5(a+r) (CR) · área libre 50% · 1 est/1 viv
+  Bonificación frente Parque Castilla (nota 4):
+    Lote 200m² / frente 10ml  → 10 pisos · área libre 30%
+    Lote 350m² / frente 10ml  → 15 pisos · área libre 30%
+    Lote 450m² / frente 10ml  → 20 pisos · área libre 30%
+
+ÁREAS MÍNIMAS RDA pura (Ámbito A): 3D=85m² / 2D=75m² / 1D=45m²
+  [Significativamente mayores que en zonas comerciales — impacta el mix de tipologías]
+
+=== ZONA RDM (RESIDENCIAL DENSIDAD MEDIA) — ÁMBITO B — INTERIOR RESIDENCIAL ===
+Usos: Vivienda Unifamiliar, Multifamiliar y Conjunto Residencial
+Retiro: Jirones → 3.00ml
+Densidad neta: 830-1400 hab/ha (multifamiliar) / 330-560 (unifamiliar)
+
+TABLA RDM — ÁMBITO B:
+  Unifamiliar lote 120m² / frente 6ml  → 3 pisos · área libre 30% · 2 est
+  Multifamiliar lote 120m² / frente 6ml  → 3 pisos · área libre 30% · 1 est/1.5 viv
+  Multifamiliar lote 150m² / frente 8ml  → 4 pisos (5 frente parque/avda >20m) · área libre 35% · 1 est/1.5 viv
+  Multifamiliar lote 200m² / frente 10ml → 5 pisos (6 frente parque/avda >20m) · área libre 35% · 1 est/1.5 viv
+  Multifamiliar lote 300m² / frente 10ml → 6 pisos (7 frente parque; 8 si colindante posterior CM) · área libre 35% · 1 est/1.5 viv
+  CR lote 1600m² / frente 20ml           → 8 pisos · área libre 40% · 1 est/1.5 viv
+
+ÁREAS MÍNIMAS RDM pura (Ámbito B): 3D=75m² / 2D=65m² / 1D=45m²
+
+--- REGLA DE COLINDANCIA CM (nota 5 — homogeneidad de perfil urbano) ---
+Aplica a lotes RDM o RDA cuya zonificación colindante POSTERIOR sea CM:
+Para lograr perfil urbano homogéneo, se permite aplicar concepto de colindancia para precisar
+el número de pisos que corresponde al predio vecino a un CM. Resultado: hasta 8 pisos en lote 300m² RDM.
+
+--- RESUMEN ÁREAS MÍNIMAS POR ZONA ---
+  CZ / CM (uso residencial compatible): 3D=60m² · 2D=55m² · 1D=45m²
+  RDM pura (Ámbito B):                 3D=75m² · 2D=65m² · 1D=45m²
+  RDA pura (Ámbito A):                 3D=85m² · 2D=75m² · 1D=45m²
+  [El 1D nunca excede el 40% del total de unidades del proyecto — en todos los ámbitos]
+
+--- ESTACIONAMIENTO RESIDENCIAL POR ZONA ---
+  CM (Ámbito C): 1 cada 2 viviendas
+  CZ (Ámbito C): 1 cada 2 viviendas
+  RDM (Ámbito B): 1 cada 1.5 viviendas (unifamiliar: 2 est fijos)
+  RDA (Ámbito A): 1 cada 1 vivienda
+
+--- ESTACIONAMIENTO COMERCIAL (Índice Ord. N°290-MDL) ---
+  Local comercial / tienda / oficinas: 1 cada 50m² (cero en primeros 49m²)
+  Restaurantes / cafeterías: 1 cada 50m² (cero en primeros 49m²)
+  Supermercados / grandes almacenes: 1 cada 50m² área de venta
+  Apart-Hotel: 75% del n° habitaciones; Hoteles 4-5★: 35%; ≤3★: 30%
+  Bancos / financieras / AFP / clínicas: 1 cada 50m²
+  Cálculo: excluye circulación vertical, escaleras, pasadizos, baños, cocinas, depósitos
+
+--- REGLAS GENERALES ---
+• Altura piso a piso máxima: 3.00m (departamentos, conjuntos y comercio) — puede ser mayor sin superar altura total normativa
+• Quintas / conjuntos con unifamiliares: máx 3 niveles (Art. 31°, A020 RNE)
+• Uso complementario 1er piso (RDM/RDA): oficinas y artesanías máx 35% del área del lote
+• Habilitación temporal de retiro (CM/CZ): solo restaurante, cafetería, florería, librería — elementos desmontables
+• Edificaciones >3 pisos frente a áreas recreacionales privadas: incorporar protección visual (Art. 15° Ord. 235-MDL)
+• Proyectos que requieren EIA + EIV: hoteles ≥4★, hospitales, CC, colegios >500 alumnos, grifos
+
+--- CERTIFICADOS DE REFERENCIA ---
+CPU N°006-2021-MDL (Av. Arequipa 2698 esq. Jr. Soledad) — CM / Ámbito C, caduca 14/01/2024
+CPU N°399-2019-MDL (Jr. Emilio Althaus 456 esq. Jr. Bartolomé Herrera) — CZ / Ámbito C, caduca 02/09/2022
+CPU N°259-2020-MDL (Jr. Crnel. Manuel Gómez 390 esq. Jr. Almte. Martín Guisse) — RDM / Ámbito B, caduca 02/11/2023
+CPU N°263-2020-MDL (Jr. Cmdte. Manuel Villavicencio 959-969) — RDA / Ámbito A, caduca 09/11/2023

@@ -1,0 +1,88 @@
+
+=== REGLAMENTO INTEGRADO NORMATIVO - DISTRITO DE SAN ISIDRO ===
+Ordenanza N°523-MSI · Vigente desde 12 julio 2020
+
+--- ZONIFICACIÓN RESIDENCIAL (Cuadro N°01) ---
+RDB (Residencial Densidad Baja):
+  • Lote 200m² / frente 10ml → área libre mín 35% · azotea 30% del área utilizable
+  • Lote 300m² / frente 10ml → área libre mín 40% · azotea 30%
+RDM (Residencial Densidad Media):
+  • Lote 300m² / frente 10ml → área libre mín 35%
+  • Lote 350m² / frente 10ml → área libre mín 40%
+  • Lote 2500m² / frente 50ml → área libre mín 50%
+RDA (Residencial Densidad Alta):
+  • Lote 350m² / frente 10ml → área libre mín 35%
+  • Lote 450m² / frente 15ml → área libre mín 40%
+  • Lote 600m² / frente 15ml → área libre mín 40%
+  • Lote 2500m² / frente 50ml → área libre mín 50%
+RDMA (Residencial Densidad Muy Alta):
+  • Lote 800m² / frente 18ml → área libre mín 50%
+  • Lote 1000m² / frente 20ml → área libre mín 50%
+  • Lote 2500m² / frente 50ml → área libre mín 60%
+
+AZOTEAS: 30% del área utilizable (después de descontar retranques)
+  • Acceso obligatorio desde interior del departamento del último piso (azotea exclusiva)
+  • Azotea de uso exclusivo: propiedad del último piso
+
+--- ZONIFICACIÓN COMERCIAL (Cuadro N°02) ---
+CV (Comercio Vecinal): Compatible RDM/RDB · lote existente · área libre NO exigible para uso comercial
+CZ (Comercio Zonal): Compatible RDA/RDM · lote existente · área libre NO exigible para uso comercial
+CM (Comercio Metropolitano): Compatible RDMA/RDA · lote mín 600m² · frente mín 25ml
+  • Pisos residenciales en CZ/CM dejan área libre según zonificación residencial compatible
+
+--- RETIROS FRONTALES OBLIGATORIOS ---
+Vías expresas:
+  Av. Paseo de la República: 5.00 m · Circuito de Playas: 10.00 m
+Vías arteriales (5.00 m cada una):
+  Av. Javier Prado Oeste (cuadras 1-18), Av. Javier Prado Este (cuadras 1-9),
+  Av. República de Panamá, Av. Salaverry, Av. Angamos Oeste,
+  Av. José Larco, Av. Dos de Mayo, Av. Arequipa, Av. La Marina (tramo),
+  Av. Cádiz, Av. Miguel Dasso, Av. Nicolás de Ribera, Av. Dionisio Derteano,
+  Av. El Rosario, Av. Octavio Espinosa, Av. Daniel Hernández, Av. General Jacinto Lara,
+  Av. José Leal, Av. Paseo Parodi, Av. Guardia Civil, Av. Ricardo Rivera Navarrete,
+  Av. Santo Toribio, Av. Francisco Tudela y Varela, Calle Las Begonias: 5.00 m
+Vías colectoras:
+  Av. Camino Real, Av. Los Conquistadores: 3.00 m
+  Calle Las Camelias: 3.00 m
+Pasajes (3.00 m cada uno):
+  Pasaje Alberto Lynch, Pasaje Atenas, Pasaje Country, Pasaje El Aromito,
+  Pasaje Huaura, Pasaje La Florida, Pasaje La Palmira, Pasaje San Alejandro
+Frente a parque: 3.00 m · Frente a calle/jirón: 3.00 m · Frente a pasaje: 1.50 m
+
+--- BONIFICACIONES DE ALTURA ---
+1. RDB frente a parque (lote ≥500m²): +1 piso con retranque de 3m
+2. RDM frente a parque (lote ≥800m²): +2 pisos con retranque 3m, máximo 7 pisos total
+3. Colindancia: promedio entre altura edificio colindante existente y altura normativa del lote
+4. Calles transversales a Javier Prado entre 2 de Mayo y Basadre, sección <14m:
+   máx 4 pisos para RDB / máx 7 pisos + azotea para RDM
+5. Lotes esquina: pueden aplicar altura de la vía de mayor jerarquía
+
+--- ÁMBITOS URBANOS HOMOGÉNEOS (para estacionamientos y áreas mínimas) ---
+ÁMBITO A: Zonas de menor densidad / lotes grandes (ej. periferia Lima Golf Club, Av. Daniel Hernández RDB)
+ÁMBITO B: Zonas residenciales consolidadas de densidad media-alta
+  (Av. Felipe Salaverry, Av. Alberto del Campo entre Salaverry y Juan de Aliaga,
+   Av. Juan Antonio Pezet entre Juan Dellepiani y Juan de Aliaga, Calle Las Palmeras)
+ÁMBITO C: Corredores viales intermedios
+  (Av. Javier Prado Oeste ambos lados, transversales RDM entre Javier Prado Oeste y Dos de Mayo,
+   Av. Augusto Pérez Araníbar lado par tramo Miraflores-Juan Dellepiani)
+ÁMBITO D / CENTRO FINANCIERO Y EMPRESARIAL: Alta densidad, zona financiera
+  (Calle Las Camelias ambos lados, predios frente a Calle y Parque Antequera RDB)
+
+--- ESTACIONAMIENTOS RESIDENCIALES (Anexo N°02) ---
+Ámbito A:       2 est. residentes/vivienda · visitas máx 25% del total · motos mín 1 c/5 viv.
+Ámbitos B y C:  2 est. residentes/vivienda · visitas máx 15% del total · motos mín 1 c/10 viv.
+Ámbito D / CF:  1 est. residente/vivienda  · visitas máx 10% del total · motos mín 1 c/10 viv.
+Nota: Sin redondeo al entero superior en decimales. Visitas/motos con decimal < 1 → redondear a 1.
+
+--- ÁREAS MÍNIMAS POR VIVIENDA (Anexo N°03) ---
+                 Ámbito A   Ámbito B   Ámbito C   Ámbito D/CF
+3 dormitorios:   200 m²     150 m²     130 m²     110 m²
+2 dormitorios:   150 m²     120 m²     110 m²      90 m²
+1 dormitorio:    100 m²      90 m²      80 m²      70 m²
+% por tipo: 3 dorm (50%-100%) · 2 dorm (máx 50%) · 1 dorm (máx 20%)
+  → Solo número entero resultante de aplicar porcentaje (NO redondear al superior)
+
+--- USOS COMERCIALES COMPATIBLES EN ZONA RESIDENCIAL ---
+CV en RDB/RDM: bazar, bodega, bodega gourmet, peluquería, barbería, salón de belleza,
+  panadería, pastelería, juguería, dulcería, heladería, cafetería, florería, lavandería,
+  librería, sastrería, farmacia, sandwichería, comunicaciones/internet

@@ -1,0 +1,501 @@
+
+=== MARCO NORMATIVO GENERAL - LIMA METROPOLITANA ===
+Base: Ordenanza N°893-MML (zonificación y parámetros), RNE (Reglamento Nacional de Edificaciones),
+Ley N°29090 y D.S. N°029-2019-VIVIENDA (licencias de edificación).
+Área de Tratamiento Normativo I: distritos periféricos (SJL, Ate, VES, Puente Piedra, etc.)
+Área de Tratamiento Normativo II: Cercado de Lima y distritos intermedios
+Área de Tratamiento Normativo III: distritos consolidados premium (San Isidro, Miraflores, San Borja, Surco, La Molina)
+
+--- ZONAS RESIDENCIALES (aplicación general Lima Metropolitana) ---
+RDB (Densidad Baja): multifamiliar / unifamiliar · altura 3-5 pisos según planos · área libre 30-40%
+  retiro frontal: 3m (calle) / 5m (avenida) · estac.: 1 cada 1-2 viviendas
+RDM (Densidad Media): multifamiliar · altura 6-10 pisos · área libre 30-35%
+  retiro frontal: 3m (calle) / 5m (avenida) · estac.: 1 cada 1.5 viviendas
+RDA (Densidad Alta): multifamiliar / conjuntos · altura 10-15 pisos · área libre 30%
+  retiro frontal: 3m (calle) / 5m (avenida) · estac.: 1 cada 1-1.5 viviendas
+  visitas: mín 10% del total de estacionamientos
+RDMA (Densidad Muy Alta): grandes conjuntos / torres · altura libre según planos · área libre 35-50%
+  estac.: 2 por vivienda (distritos premium) / 1 por vivienda (zonas de alta densidad)
+
+--- ZONAS COMERCIALES ---
+CV (Comercio Vecinal): lote mín existente · compatible RDB/RDM · área libre no exigible comercio
+CZ (Comercio Zonal): lote mín existente · compatible RDM/RDA · área libre no exigible comercio
+CM (Comercio Metropolitano): lote mín 1500-2500m² · compatible RDA/RDMA · área libre no exigible comercio
+  → pisos destinados a vivienda dejan área libre según zonificación residencial compatible
+
+--- ZONAS INDUSTRIALES ---
+I1 (Gran Industria): lote mín 10,000m² · frente mín 40m · retiro 5m · altura libre
+I2 (Industria Liviana): lote mín 1,000m² · frente mín 20m · retiro 3m · altura según proyecto
+  estac.: 1 espacio c/6 empleados · carga/descarga dentro del lote
+  compatible hasta 20% con I1 · estudios de impacto vial/ambiental según escala
+I3 (Industria Elemental y Complementaria): lote mín 300m² · frente mín 10m · retiro 2m
+
+--- PARÁMETROS POR DISTRITO (datos verificados de certificados reales) ---
+
+SAN JUAN DE LURIGANCHO (SJL) · Área Tratamiento I · Ord. 933-MML + 284-MDSJL-2014:
+  I2 Industria Liviana: lote mín 1,000m², frente mín 20m, retiro 3m, altura según proyecto/entorno
+    estac. 1/6 empleados, área libre según actividad, compatible hasta 20% con I1
+  RDM / RDA: retiro 3m, altura según planos MML, área libre 30-35%
+
+CERCADO DE LIMA · Área Tratamiento II · Ord. 893-MML + 2635-MML-2024:
+  CM (Comercio Metropolitano): Av. Colonial clasificada Vía Arterial, ancho 50m
+    compatible 100% RDA en área comercial · retiro 3m (calle) / 5m (avenida ≥25m ancho)
+    visitas: mín 10% del total de estacionamientos en Conjuntos Residenciales
+    altura: según Planos de Alturas MML · Ord. 2517-2022-MML (Zona 6 Cercado)
+
+VILLA EL SALVADOR (VES) · Área Tratamiento I:
+  I2 / I3: grandes manzanas industriales, lote mín 1,000m², retiro 3m
+  RDM: altura 5-8 pisos, área libre 30%, retiro 3m
+  CV/CZ: zonas comerciales sobre ejes viales (Av. Separadora Industrial, Av. El Sol)
+
+PUENTE PIEDRA · Área Tratamiento I:
+  I2: lote mín 1,000m², frente mín 20m, retiro 3m, altura según proyecto
+  RDM / RDA: altura 5-8 pisos, área libre 30%, retiro 3m
+
+MIRAFLORES · Área Tratamiento III · Ord. N°920-MML + Ord. N°342-MM + Ord. N°1012-MML (IUAU):
+  RDB (Res. Densidad Baja) — lote mín 200 m², frente mín 10 m:
+    altura 3-4 pisos · área libre mín 35% · retiro 3 m (calle) / 5 m (avenida)
+    estac.: 3/viv (3-2 dorm) · 2/viv (1 dorm) · visitas: mín 10% del total
+  RDB ampliado — lote mín 300 m²: altura hasta 5 pisos · área libre 35%
+  RDM (Res. Densidad Media) — lote mín 300 m², frente mín 10 m:
+    altura 5-8 pisos · área libre mín 35% · retiro 3 m (calle) / 5 m (avenida)
+  RDA (Res. Densidad Alta) — lote mín 350 m², frente mín 10 m:
+    altura 8-10 pisos · área libre mín 40% · retiro 5 m (avenida)
+    lotes ≥600 m² frente mín 15 m: hasta 12 pisos
+  RDMA (Res. Densidad Muy Alta) — lote mín 800 m², frente mín 18 m:
+    altura >12 pisos · área libre según proyecto
+  CZ/CM: Av. Larco, Av. Benavides, Av. 28 de Julio, Av. Armendáriz — sin área libre comercio
+  Especificaciones: piso a piso residencial máx 3.00 m · comercial máx 3.60 m
+  Nota: Plano de Alturas de Edificación 2024 vigente — verificar altura exacta por predio
+
+SAN BORJA · Área Tratamiento III · Ord. N°1063-MML + DA-002-2008-MSB:
+  Clasificación por Áreas (A→E) según lote y densidad:
+  Área A (RDB denso) — lote referencial ≥600 m²:
+    área libre 40% · retiro 3 m (calle) / 5 m (avenida) · estac. 2/viv · depto mín 140 m²
+    altura máx 8 pisos (25.50 m) · excepción Av. Javier Prado lotes >600 m²: hasta 12 pisos (37.50 m)
+  Área B — lote referencial ~400 m²:
+    área libre 35% (esquina 30%) · estac. 2/viv · depto mín 100 m²
+  Área C (RDM) — lote referencial ~300 m²:
+    área libre 35% (esquina 30%) · estac. 1.5/viv (vías internas) / 2/viv (avenidas) · depto mín 90 m²
+  Área D — área libre 30% · estac. 1/viv · depto mín 80 m²
+  Área E — área libre 30% · estac. 1 c/1.5 viv · depto mín 70 m²
+  Retiros: 3 m (calle) / 5 m (avenida) · ochavo en esquinas: 3 m diagonal mínimo
+  Tabla de alturas: 3p=10.50m · 4p=13.50m · 5p=16.50m · 6p=19.50m · 7p=22.50m · 8p=25.50m · 12p=37.50m
+  Plano de Alturas de Edificación a nivel de lote — verificar altura exacta por predio
+
+SURCO (Santiago de Surco) · Área Tratamiento III · Ord. N°912-MML + Ord. N°1216-MML (IUAU) + DA N°04-2023-MSS:
+  RDB (Res. Densidad Baja): altura 3-5 pisos · área libre mín 35% · retiro 3 m (calle) / 5 m (avenida)
+    estac.: 1/viv unifamiliar · 2/viv multifamiliar
+  RDM (Res. Densidad Media): altura 5-8 pisos · área libre mín 30-35%
+    Av. Caminos del Inca (RDM): altura uniformizada 5 pisos en lotes ≥500 m² acumulados
+    estac.: 1.5-2/viv multifamiliar
+  RDA (Res. Densidad Alta): altura 8-15 pisos · área libre mín 30%
+  CM / CZ: ejes Av. Benavides, Av. Caminos del Inca, Av. Primavera, Av. El Derby — sin área libre comercio
+  Plano de Alturas de Edificación 2024 vigente · DA N°04-2023-MSS (feb 2023): reglamento ATN III actualizado
+  Nota: para parámetros exactos por predio verificar con DA N°04-2023-MSS Anexo 01
+
+LA MOLINA · Área Tratamiento III · Ordenanza N°1144-MML (vigente):
+  Fuente: Anexo N°02 — Índice de Usos y Parámetros Urbanístico-Edificatorios
+  PTPE (Protección y Tratamiento Paisajista Especial):
+    lote mín 2,500 m², frente mín 50 m, altura máx 1 piso, área libre mín 80%, estac. 2/viv
+  RDMB (Res. Densidad Muy Baja):
+    lote mín 1,000 m², frente mín 20 m, altura máx 2 pisos, área libre mín 60%, estac. 2/viv
+  RDB (Res. Densidad Baja) — Unifamiliar / Bifamiliar / Quinta:
+    lote mín 450 m², frente mín 15 m, altura máx 2 pisos, área libre mín 40%, estac. 2/viv
+  RDB — Multifamiliar (lotes ≥300 m²):
+    lote mín 300 m², frente mín 10 m, altura según Plano de Alturas (2-3 pisos), área libre mín 40%, estac. 2/viv
+    Trama especial: multifamiliar hasta 3 pisos en todos los lotes del ámbito
+    Restricción: multifamiliar solo en lotes con frente a vías colectoras o avenidas de doble calzada con separador central
+  RDM (Res. Densidad Media):
+    lote mín 120-150 m², frente mín 8 m, altura máx 3 pisos, área libre mín 30%, estac. 1/viv
+  RDM — Conjunto Residencial:
+    lote mín 2,500 m², frente mín 25 m, altura máx 3 pisos, área libre mín 40%, estac. 1/viv
+  CV (Comercio Vecinal):
+    lote existente, altura máx 3 pisos, área libre no exigible (uso comercial), estac. 1 c/50 m² área vendible
+  CZ (Comercio Zonal):
+    lote existente, altura máx 5 pisos, área libre no exigible (uso comercial), estac. 1 c/50 m² área vendible
+    Excepción: CC Camacho y ex IBM con frente a Javier Prado → altura máx 12 pisos
+  Especificaciones complementarias:
+    Piso a piso multifamiliar: máximo 3.00 m
+    Colindancia lateral: permite edificar hasta la altura del predio vecino
+    ATN I aplica Ord. N°1015-MML (Zonas Residencial, Comercial e Industrial)
+
+--- MECANISMO DAET-VIS — CENTRO HISTÓRICO (Ord. N°2451-2022-MML) ---
+  Aplicable a predios receptores en vías metropolitanas colindantes con el Centro Histórico.
+  Altura máxima predios receptores: H = 1(a + r), donde a = ancho de vía, r = retiro
+  Usos mixtos: hasta 30% de la ATTE del predio receptor
+  Estacionamiento: 1 espacio c/3 viviendas (VIS)
+  Factor de cálculo VIS: Techo Propio → 0.9 · MIVIVIENDA → 0.6
+  Generadores VIS: predios en el Centro Histórico con ZRPCH o inmuebles de valor monumental
+
+--- RETIROS GENERALES (RNE A.010 + Ord. 893-MML) ---
+Frente a avenida (ancho ≥ 25m): 5.00 m
+Frente a calle/jirón: 3.00 m
+Frente a pasaje: 1.50 m
+Frente a parque: 3.00 m (algunos distritos exigen 5m)
+Lateral y posterior: según zonificación y acuerdo entre colindantes (RNE mín 2.10m ventanas)
+
+--- BENCHMARKS FINANCIEROS Y DE CABIDA — MERCADO LIMA (U. del Pacífico, Boro Fleischmann) ---
+Fuente: Curso de Desarrollo Inmobiliario, Sesión III — datos validados con proyectos reales Lima 2023-2024
+
+ESTRUCTURA DE COSTOS BOE (Back of Envelope) — sobre ingresos brutos:
+  Terreno (TIT - Tasa de Incidencia del Terreno): 20-25% (ref. ideal 23%)
+  Adquisición terreno (alcabala 3% + notariales 0.3% + registrales 0.15% + DD): ~1% adicional
+  Costo Directo (construcción + arquitectura + especialidades): ~43-45%
+  Gerenciamiento inmobiliario: 6%
+  Publicidad y marketing: 2.5%
+  Gestión comercial: 0.5%
+  Comisiones de venta: 3%
+  Supervisión técnica: 0.5% del costo directo
+  Post-venta: 0.5%
+  → Margen Operativo pre-financiero: ~18-20%
+  → Costos financieros (deuda bancaria): ~3-4%
+  → Margen Financiero neto pre-IR: ~15-18%
+
+KPIS DE CABIDA — referencias Lima:
+  AV/AT sobre rasante (Área Vendible / Área Techada sin sótanos): objetivo 75-80%
+  AV/AT total (incluyendo sótanos): proyectos reales Lima = 60-74%
+  AC común/AT (Área Común / Área Techada): ~35-40%
+  Autos/vivienda (ratio estacionamientos): mercado real Lima ≈ 0.91 (no siempre 1/viv)
+  Área promedio departamento Lima: 60-110 m², concentración en 75-90 m²
+  Ticket promedio Lima 2024: USD 175,000-185,000 (precio ≈ USD 2,275/m²)
+  Depósitos: 25-50% de unidades en distritos medios/premium; <20% en periféricos
+
+PERFILES DE INVERSIÓN (riesgo/retorno):
+  CORE: margen <12%, TIR <12% — activo estabilizado, flujo predecible, bajo riesgo
+  CORE PLUS: margen 12-15%, TIR 12-15% — mejora incremental, riesgo moderado
+  VALUE ADD: margen 15-20%, TIR 15-18% — gestión activa para capturar valor, riesgo medio-alto
+  OPPORTUNISTIC: margen >20%, TIR >18% — alto riesgo, upside significativo (terreno muy barato o reconversión)
+
+MODELO DE ADQUISICIÓN TERRENO (hitos típicos Lima):
+  Carta de Intención: sin pago o garantía simbólica
+  Minuta de Compraventa (pre-inscripción): 10-20% del precio
+  Escritura Pública (inscripción SUNARP): saldo 80-90%
+  → DD Legal debe completarse antes de firma de minuta
+
+PERMUTA (modelo alternativo de adquisición):
+  Pre-construcción: precio terreno en m² equivalentes a precio pre-lanzamiento (~$2,100-2,200/m²)
+  Post-construcción: precio terreno en m² equivalentes a precio lista (~$2,300-2,400/m²)
+  ROI permuta típico Lima: 10-12% para el propietario del terreno
+  Ventaja promotor: preserva caja inicial para construcción
+
+--- LURÍN · Área Tratamiento Normativo I ---
+Fuente: Municipalidad Distrital de Lurín — Gerencia de Desarrollo Urbano y Gestión Territorial
+Plano PZ-01 · Enero 2017 · Base: Ordenanza N°341-MML (Reajuste Integral de Zonificación Lima)
+
+ZONAS EXISTENTES EN LURÍN (según leyenda oficial PZ-01):
+  ZA    Zona Agrícola
+  ZAP   Zona Agropecuaria
+  CH-1  Casas Huerta 1 · CH-2 Casas Huerta 2 · CH-3 Casas Huerta 3
+  CM    Comercio Metropolitano
+  CPR   Centro Poblado Rural
+  CZ    Comercio Zonal
+  EB    Educación Básica · EST Educación Superior Tecnológica
+  CS    Centro de Salud · HG Hospital General
+  I3    Industria Elemental y Complementaria
+  I2    Industria Liviana  ← zona predominante corredor logístico Lurín
+  IDT   Industria Orientada al Desarrollo Tecnológico
+  I1    Gran Industria
+  I1-G  Gran Industria (requiere aprobación de DIGESA)
+  IP    Industria Pesada
+  IE    Industria Especial
+  OU    Otros Usos
+  ZTE   Protección y Tratamiento Especial  ← ZONA RESTRICTIVA
+  ZTP   Protección y Tratamiento Paisajístico
+  PZ    Parque Zonal
+  RDA   Residencial de Densidad Alta
+  RDB   Residencial de Densidad Baja (R1-S, R1, R2)
+
+PARÁMETROS POR ZONA (Lurín):
+
+  I2 — INDUSTRIA LIVIANA (corredor logístico principal Lurín):
+    Lote mínimo: 1,000 m² · Frente mínimo: 20 m
+    Retiro frontal: 3 m (calle) / 5 m (avenida ≥25 m)
+    Altura: según proyecto y estudio de impacto
+    Área techada: hasta 80% del lote (20% libre para maniobras/circulación)
+    Estacionamiento: 1 espacio c/6 trabajadores + zona carga/descarga obligatoria dentro del lote
+    Compatible hasta 20% con I1 · Requiere EIA para actividades de impacto medio
+    Usos compatibles: almacén logístico, nave de distribución, manufactura liviana, comercio industrial
+
+  I3 — INDUSTRIA ELEMENTAL Y COMPLEMENTARIA:
+    Lote mínimo: 300 m² · Frente mínimo: 10 m · Retiro: 2 m
+    Usos: talleres, pequeña industria, artesanía industrial
+
+  I1 — GRAN INDUSTRIA:
+    Lote mínimo: 10,000 m² · Frente mínimo: 40 m · Retiro: 5 m
+    Requiere EIA y aprobación sectorial · Usos: planta industrial a gran escala
+
+  RDA — RESIDENCIAL DENSIDAD ALTA:
+    Altura: 5-8 pisos · Área libre: 30% · Retiro: 3 m (calle) / 5 m (avenida)
+    Estacionamiento: 1/vivienda · Densidad según parámetros MML
+
+  RDB — RESIDENCIAL DENSIDAD BAJA (R1-S, R1, R2):
+    Altura: 2-3 pisos · Área libre: 40% · Retiro: 3 m
+    Uso preferente: unifamiliar / bifamiliar
+
+  CZ — COMERCIO ZONAL:
+    Altura: hasta 5 pisos · Sin área libre obligatoria (uso comercial)
+    Estacionamiento: 1 espacio c/50 m² área vendible
+
+  ZTE — ZONA DE TRATAMIENTO ESPECIAL CON FINES DE PRESERVACIÓN:
+    *** ZONA ALTAMENTE RESTRICTIVA — NO EDIFICABLE PARA FINES LUCRATIVOS ***
+    Uso exclusivo: preservación arqueológica, ambiental o paisajística
+    No se permite: residencial, comercial, industrial, ni ningún uso que altere el suelo
+    Requiere: aprobación del Ministerio de Cultura si hay vestigios arqueológicos
+    Impacto en compraventa: valor de mercado muy bajo · no financiable · alto riesgo legal
+    ALERTA FACTIS: predio en ZTE-3 no es viable para desarrollo inmobiliario convencional
+
+  ZTP — ZONA DE PROTECCIÓN Y TRATAMIENTO PAISAJÍSTICO:
+    Uso: preservación de paisaje, riberas, bordes costeros
+    Actividades permitidas: recreación pasiva, áreas verdes, miradores
+    No se permite construcción de uso privado con fines comerciales o residenciales
+
+CONTEXTO DE MERCADO INDUSTRIAL LURÍN 2024-2026:
+  Corredor logístico principal de Lima Sur: Av. Antigua Panamericana Sur, Av. Los Eucaliptos
+  Renta nave logística Clase A: $6.0–7.0/m²/mes + IGV
+  Renta nave estándar I2: $4.5–6.0/m²/mes + IGV
+  Vacancia: 3–5% (mercado ajustado, demanda 3PL y e-commerce)
+  Precio terreno I2 (Lurín industrial): $80–150/m² según frente y acceso
+  Precio terreno RDA/RDB (Lurín urbano): $120–220/m² (zonas consolidadas)
+  Plazo habilitación urbana: 6–18 meses adicionales si es terreno eriáneo
+  Yield bruto nave logística sobre costo total: 7–10% anual
+  NOTA: predios en ZTE o ZTP tienen valor residual mínimo ($10–30/m²) por restricción de uso
+
+
+=== PARÁMETROS NORMATIVOSDISTRITOS — CALLAO ===
+Fuente: Certificados de Parámetros Urbanísticos y Edificatorios emitidos por la Municipalidad Provincial del Callao
+Base legal principal (Av. Argentina / Av. República Argentina):
+  Plan Urbano Director de la Provincia Constitucional del Callao 1995-2010,
+  aprobado con Ordenanza Municipal N°000018-1995 publicada el 05 de Octubre de 1995,
+  vigente a la fecha conforme al Artículo 2° de la Ordenanza Municipal N°023-2019 publicada el 05.12.2019.
+Base legal complementaria (Av. Néstor Gambetta / Callao Sur):
+  Plan de Desarrollo Urbano de la Provincia Constitucional del Callao 2011-2022,
+  aprobado con Ordenanza N°000068-2010 publicada el 30 de Diciembre de 2010,
+  vigente con Ordenanza N°023-2018 publicada el 30 de Noviembre de 2018.
+
+*** ALERTA CRÍTICA CALLAO (aplica a TODOS los predios) ***
+Ley N°27261 — Ley de Aeronáutica Civil del Perú (10 de Mayo de 2000), Capítulo II —
+Limitaciones de la Propiedad Privada. Resolución Directoral N°032-2014-MTC/12.
+La Dirección de Aeronáutica Civil del MTC autoriza las alturas para edificaciones e instalaciones
+dentro de las áreas cubiertas por las superficies limitadoras de obstáculos del aeropuerto
+Jorge Chávez y/o aeródromos públicos o privados.
+CONSECUENCIA PRÁCTICA: Toda edificación en Callao debe obtener autorización de altura ante la DGAC/MTC
+antes de tramitar licencia de edificación. Las alturas resultantes del proyecto pueden ser
+significativamente menores a lo que la zonificación permitiría por sí sola.
+
+--- ZONA ZRE — ZONA CON REGLAMENTACIÓN ESPECIAL (Callao, Área Estructuración Urbana I) ---
+Ubicación de referencia: Av. Argentina / Av. República Argentina (corredor Callao – Lima)
+Ejemplos de predios: Av. Argentina N°2228 (CPU N°001-2021), Av. República Argentina N°2007 (CPU N°147-2020)
+Área Estructuración Urbana: I
+Usos Permisibles: Vivienda Unifamiliar, Multifamiliar, Conjunto Residencial, Comercio, Industria
+Usos Compatibles: según Índice de Usos para Ubicación de Actividades Urbanas y Reglamento
+  de Ubicación de Actividades Urbanas (Ord. N°000014 del 10 de Marzo del 2008)
+
+Densidad neta:
+  Viv. Unifamiliar:             1,300 hab/ha
+  Viv. Multifamiliar / Conjunto Residencial:  2,250 hab/ha
+
+Lote normativo: Los resultantes de la Habilitación Urbana según tipología
+
+Coeficiente de Edificación:
+  Viv. Unifamiliar:             2.1
+  Viv. Multifamiliar / Conj. Residencial:  3.25 (frente a calle) / 4.00 (frente a Av.)
+  Comercio:                     3.25 (frente a calle) / 4.00 (frente a Av.)
+  Industria:                    La resultante del proyecto (ver alerta aeronáutica)
+
+Área libre mínima:
+  Vivienda:                     30%
+  Industria:                    Resultante del Proyecto
+  Comercio:                     Resultante del Proyecto (si uso netamente comercial)
+
+Alturas máximas:
+  Viv. Unifamiliar:             03 pisos
+  Viv. Multifamiliar / Conj. Residencial:  05 pisos (frente a calle) / 1.5(a+r) (frente a Av.)
+  Industria:                    La Resultante del Proyecto (sujeta a Ley N°27261 — DGAC)
+  Comercio:                     05 pisos (frente a calle) / 1.5(a+r) (frente a Av.)
+
+Retiro:
+  Av. Argentina / Av. República Argentina:  0.00ml (sin contar afectación vial)
+  Alineamiento de fachada: La Resultante de la Hab. Urbana o Formalización de Propiedad Informal
+  NOTA: el retiro municipal se consolida por el frente de manzana (informe de consolidación previo)
+
+Estacionamiento:
+  Viv. Unifamiliar:             01 estacionamiento
+  Viv. Multifamiliar / C. Residencial:  01 c/3 viviendas
+  Comercio:                     1 c/100m² de área comercial
+  Industria:                    01 estac. c/6 personas ocupando el turno principal
+                                Suficientes para personal visitante y vehículos de trabajo
+                                Carga y descarga DENTRO del lote
+
+Vigencia certificados consultados:
+  CPU N°001-2021 (Av. Argentina N°2228):  04/01/2021 – 04/01/2024 (vigencia 36 meses, Ley N°29090)
+  CPU N°147-2020 (Av. Rep. Argentina N°2007):  02/03/2020 – 02/03/2023
+
+--- ZONA I3 — GRAN INDUSTRIA (Callao, Av. Néstor Gambetta) ---
+Ubicación de referencia: Av. Néstor Gambetta Km. 11,600 — Callao (1)
+Ejemplo de predio: CPU N°524-2019 (Inmobiliaria Vencedor SAC)
+Área Estructuración Urbana: I
+Zonificación: I3 – Gran Industria
+Usos Permisibles: I2 – Industria Liviana (hasta 20%), I1 – Industria Elemental Liviana (hasta 10%)
+Usos Compatibles: según Índice de Usos y Reglamento de Ubicación de Actividades Urbanas
+  (Ord. N°00068-2010 del 22 de Diciembre de 2010)
+
+Densidad neta: No aplica (uso industrial)
+
+Área de lote normativo / Frente mínimo: 2,500 m² / 30.00 ml
+
+Área libre mínima:         Según Proyecto (conforme a RNE Norma A.060 y Norma A.010)
+
+Alturas máximas permisibles: Según tipo de Proyecto — SUJETO A LEY N°27261 (DGAC)
+  *** Requiere consulta previa a Dirección de Aeronáutica Civil antes de proyectar alturas ***
+
+Retiro:
+  Av. Néstor Gambetta:          5.00ml (sin contar afectación vial)
+  Av. Vencedores de Márquez:    5.00ml
+  Av. Malecón Playa Oquendo:    5.00ml
+  Alineamiento de fachada: La Resultante de la Hab. Urbana o Formalización de Propiedad Informal
+
+Estacionamiento:
+  1 estacionamiento c/6 personas ocupando el turno principal
+  Suficientes para personal visitante y vehículos de trabajo
+  Carga y descarga DENTRO del lote
+
+*** ALERTAS ESPECIALES Av. Néstor Gambetta ***
+1. DOMINIO RESTRINGIDO: parte del predio ocupa 200 mt de Dominio Restringido y 50 mt de Playa.
+   Afectado por Av. Néstor Gambetta, Av. Malecón Playa Oquendo y Av. Vencedores de Márquez.
+   Verificar afectación vial antes de cualquier compra. Reducción significativa del área útil.
+2. RESTRICCIÓN AERONÁUTICA: Ley N°27261 — alturas controladas por aeropuerto Jorge Chávez.
+   Obligatorio tramitar autorización de altura ante DGAC/MTC antes de licencia.
+3. Proceso judicial pendiente invalida el certificado (cláusula estándar MPC).
+
+Vigencia certificado consultado:
+  CPU N°524-2019 (Av. Gambetta Km 11,600):  06/09/2019 – 06/09/2022
+
+CONTEXTO DE MERCADO CALLAO 2024-2026 (industrial / logístico):
+  Principales corredores industriales: Av. Argentina, Av. Néstor Gambetta, Av. Venezuela,
+    Av. Colonial, Av. Faucett, Zona Franca Callao
+  Renta nave logística Clase A (Callao):     $6.0–7.5/m²/mes + IGV
+  Renta nave industrial estándar (Callao):   $5.0–6.5/m²/mes + IGV
+  Precio terreno I2/I3 Callao:              $200–400/m² (Av. Argentina) / $80–180/m² (Gambetta Sur)
+  Vacancia logística Callao: 3–6%
+  Ventaja logística: acceso directo al Puerto del Callao y aeropuerto Jorge Chávez
+  RESTRICCIÓN CLAVE: toda la Provincia del Callao está bajo supervisión de alturas DGAC/MTC
+
+
+=== PARÁMETROS NORMATIVOS — PUEBLO LIBRE ===
+Fuente: Certificados de Parámetros Urbanísticos y Edificatorios emitidos por la Municipalidad de Pueblo Libre
+Base legal: Plano de Zonificación del distrito aprobado mediante Ordenanzas N°1015 y N°1017-MML;
+  Ordenanza N°369-MPL (parámetros); Ordenanza N°360-MPL (conjuntos residenciales)
+Área de Tratamiento Normativo: II (distrito intermedio consolidado)
+
+--- ZONA CZ — COMERCIO ZONAL (Pueblo Libre) ---
+Ubicación de referencia: Av. Simón Bolívar Esq. Jr. Manuel Belgrano (CPU N°215-2021-MPL-GDUA/SGOPHU)
+Usos Permitidos: Unifamiliar / Multifamiliar / Conjunto Residencial (hasta 100% para uso residencial)
+Usos Permisibles y Compatibles: Multifamiliar / Conjunto Residencial; según Índice de Actividades Urbanas
+
+Altura de Edificación (máxima):
+  CZ general:                   1.5 × (ancho de vía + retiros)
+  RDA Multifamiliar (300m²):    8 pisos
+  RDA Multifamiliar (450m²):    10 pisos (frente calle/jirón) / 15 pisos (frente a Av. >20m)
+  RDA Conjunto Resid. (2,500m²): 1.5(a+r)
+  RDM Unifam./Multifam. (120m²): 3 pisos
+  RDM Multifamiliar (150m²):    4 pisos / 5 pisos (frente a Av.)
+  RDM Multifamiliar (200m²):    5 pisos / 6 pisos (frente a Av.)
+  RDM Multifamiliar (300m²):    6 pisos / 7 pisos (frente a Av.)
+  RDM Conjunto Resid. (1,600m²): 8 pisos
+
+Área libre mínima (según área de lote):
+  35%    Unifam./Multifam. (120m²) — RDM
+  40%    Multifam. (150–300m²) — RDM
+  50%    Conjunto Residencial (1,600m²) — RDM
+  30%    Unifam./Multifam. (120m²) — RDA
+  35%    Multifam. (150–300m²) — RDA
+  40%    Conjunto Residencial (1,600m²) — RDA
+
+Lote normativo CZ: Existente o según Proyecto
+
+Retiro frontal / Alineamiento:
+  Av. Simón Bolívar:            5.00ml retiro / 5.00ml alineamiento / 2.50ml jardín de aislamiento
+  Jr. Manuel Belgrano:          3.00ml retiro / 3.00ml alineamiento / 0.00ml jardín de aislamiento
+
+Estacionamiento: 1 c/1.5 viviendas; 1 c/50m² área comercial
+Vigencia: expedido JULIO-2021, caducidad JULIO-2024
+
+--- ZONA RDA — RESIDENCIAL DENSIDAD ALTA (Pueblo Libre) ---
+Ubicación de referencia: Av. Mariano Cornejo 733, Mz. B Lote 7, Urb. La Esperanza
+  (CPU N°0721-2019-MPL-GDUA/SGOPHU, expediente 7298-2019)
+Área de Tratamiento Normativo: II
+
+Densidad Neta máxima (RDA):
+  Multifamiliar (300–450m²):    2,250 hab/ha
+  Conjunto Residencial (2,500m²): 2,250 hab/ha
+
+Área de lote normativo y frente mínimo:
+  Multifamiliar:                300 m² / 10.00ml
+  Multifamiliar (mayor):        450 m² / 10.00ml
+  Conjunto Residencial:         2,500 m² / 25.00ml
+
+Altura de Edificación (máxima, RDA):
+  Multifamiliar (300m²):        8 pisos
+  Multifamiliar (450m²):        1.5 × (ancho de vía + retiros)
+  Conjunto Residencial (2,500m²): 1.5 × (ancho de vía + retiros)
+
+Área libre mínima:
+  35%    Multifamiliar (300m²)
+  40%    Multifamiliar (450m²)
+  50%    Conjunto Residencial (2,500m²)
+
+Retiro frontal / Alineamiento:
+  Av. Mariano Cornejo:          5.00ml retiro / 5.00ml alineamiento
+  Retiro lateral y fondo:       No exigido (----) según certificado
+
+Estacionamiento: 1 c/1.5 viviendas
+Vigencia: expedido 2019
+
+--- ZONA RDM — RESIDENCIAL DENSIDAD MEDIA (Pueblo Libre) ---
+Ubicación de referencia: Av. Gral. Borgoño 147-149-151-155-159, Urb. Morón Martínez
+  (CPU N°021-2015-MPL-GLA/SLO, expediente 255-2015)
+Área de Tratamiento Normativo: II
+
+Densidad Neta máxima (RDM):
+  Unifamiliar (90m²):           1,300 hab/ha
+  Multifamiliar (150m²):        1,300 hab/ha
+  Multifamiliar (300m²):        2,250 hab/ha
+  Conjunto Residencial (450–1,600m²): 2,250 hab/ha
+
+Área de lote normativo y frente mínimo:
+  Unifam./Multifam. (120m²):    6.00ml
+  Multifamiliar (150m²):        8.00ml
+  Multifamiliar (200–300m²):    10.00ml
+  Conjunto Residencial (1,600m²): 20.00ml
+
+Altura de Edificación (máxima, RDM):
+  Unifam./Multifam. (120m²):    3 pisos
+  Multifamiliar (150m²):        4 pisos (calle) / 5 pisos (frente a Av. >20m)
+  Multifamiliar (200m²):        5 pisos (calle) / 6 pisos (frente a Av. >20m)
+  Multifamiliar (300m²):        6 pisos (calle) / 7 pisos (frente a Av. >20m)
+  Conjunto Residencial (1,600m²): 8 pisos
+
+Área libre mínima:
+  30%    Unifam./Multifam. (120m²)
+  35%    Multifam. (150–300m²)
+  40%    Conjunto Residencial (1,600m²)
+
+Retiro frontal / Alineamiento:
+  Av. Gral. Borgoño:            5.00ml retiro / 5.00ml alineamiento
+  Retiro lateral y fondo:       No indicado en certificado
+
+Estacionamiento: 1 c/1.5 viviendas
+Vigencia: expedido 20.ENE.2015, caducidad 20.ENE.2018 (referencial, actualizar con nuevo certificado)
+
+CONTEXTO DE MERCADO PUEBLO LIBRE 2024-2026:
+  Distrito residencial consolidado de Lima Media-Alta, contiguo a San Isidro y Jesús María
+  Área de Tratamiento Normativo II (reglas similares a Jesús María, Lince, Magdalena)
+  Precio terreno RDA/CZ (Av. Bolívar, Av. Sucre, Av. Brasil):  $800–1,400/m²
+  Precio terreno RDM (calles interiores):  $600–1,000/m²
+  Precio venta dpto. multifamiliar: $1,600–2,200/m² según acabados y ubicación
+  Perfil de demanda: familias NSE B/B+, primera vivienda y inversión
+  Proyectos predominantes: 8–12 pisos en RDA / 5–7 pisos en RDM frente a avenidas
+  Restricción clave: área libre mínima 35–40% en lotes medianos RDM limita la densificación
+  Estacionamiento obligatorio: 1 c/1.5 viviendas (igual a Jesús María, Magdalena)
+  Zonas de mayor valor: entorno Av. Simón Bolívar, Av. Sucre, cercanía Parque Universitario

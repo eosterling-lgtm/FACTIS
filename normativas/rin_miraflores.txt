@@ -1,0 +1,177 @@
+
+=== REGLAMENTO NORMATIVO — DISTRITO DE MIRAFLORES ===
+Base principal: Ord. N°342-MM (09/02/2011) y modificatorias · Área de Tratamiento Normativo III
+
+--- BASE LEGAL VIGENTE ---
+NORMA PRINCIPAL:
+• Ord. 342-MM (09/02/2011): Aprueba parámetros urbanísticos, edificatorios y condiciones generales de edificación en Miraflores.
+  Modificatorias: Ord. 385/MM (11/07/2012), Ord. 388-MM (25/07/2012), Ord. 466-MM (25/08/2016),
+  Ord. 520-MM (21/07/2019), Ord. 543/MM (10/06/2020 – reactivación COVID), Ord. 561/MM (22/01/2021).
+
+ZONIFICACIÓN Y USOS:
+• Ord. 920-MML (30/03/2006): Reajuste Integral de Zonificación de Miraflores (Área de Tratamiento III).
+  Modificatorias: Ord. 1305-MML (30/10/2009), Ord. 1385-MML (07/06/2010), Ord. 1840-MML (11/12/2014),
+  Ord. 1348-MML (11/02/2010), Ord. 1402-MML (04/07/2010), Ord. 1443-MML (16/10/2010),
+  Ord. 1457-MML (19/11/2010), Ord. 1600-MML, 1602-MML, 1603-MML (09/05/2012),
+  Ord. 1677-MML (17/03/2013), Ord. 1839-MML (11/12/2014), Ord. 1909-MML (05/11/2015).
+• Ord. 1012-MML (29/04/2007): Índice de Uso para Actividades Urbanas de Miraflores.
+  Modificatorias: Ord. 1537-MML (13/07/2011), Ord. 1912-MML (19/11/2015), Ord. 1924-MML (23/12/2015).
+
+ALTURAS:
+• Ord. 226-MM (14/04/2006): Plano de Alturas por Ejes y Sectores Urbanos del distrito.
+  Modificatorias: Ord. 370-MM (16/01/2012), Ord. 393-MM (26/11/2012).
+
+BENEFICIOS / TRANSFERENCIA DE DERECHOS EDIFICATORIOS (TDR – voluntario):
+• Ord. 387-MM (25/07/2012): Microzonas de Valor Urbanístico y Ejes de Aprovechamiento (predios generadores).
+• Ord. 401-MM (13/05/2013): Disposiciones para aplicación del TDR.
+• Ord. 2351-MML (26/05/2021): Ratifica parcialmente Ord. 387/MM y 401/MM.
+• Certificado de Derechos Edificatorios (CDE): permite altura adicional en predios receptores ubicados en
+  Vías de Aprovechamiento de Desarrollo Urbano. LIMITACIÓN: No aplica colindancia-altura para predios que ya
+  recibieron mayor área edificable vía CDE (Ord. 387/MM y 401/MM).
+
+SOSTENIBILIDAD:
+• Ord. 618-MM (28/09/2023) — VIGENTE: Establece, regula y promueve condiciones sostenibles en Miraflores.
+  (Reemplaza a Ord. 581-MM + 588-MM + 599-MM para certificados emitidos desde oct 2023 en adelante)
+• Aplicación voluntaria; puede otorgar bonificaciones de área edificable o altura adicional.
+
+OTRAS DISPOSICIONES:
+• Ord. 388/MM (25/07/2012): Retiro para lotes con frente a Malecones.
+• Ord. 348-MM (19/05/2011): Actividades comerciales, profesionales y de servicios.
+• Ord. 151-MM (24/04/2004): Accesibilidad para personas con discapacidad.
+• Ord. 154-MM (06/06/2004): Áreas verdes de uso público.
+• Ord. 49-98-MM (26/03/1998): Retiro Municipal (fines comerciales).
+• Ord. 341-MML (06/12/2001): Sistema Vial Metropolitano de Lima.
+• Ley N°29090 (25/09/2007) + D.S. 029-2019-VIVIENDA: Marco de licencias de edificación.
+
+--- ZONIFICACIONES Y PARÁMETROS POR ZONA ---
+TABLA RESUMEN ÁREAS MÍNIMAS (confirmadas de certificados reales):
+  Zona        | Compat. | 3D    | 2D    | 1D   | Máx 1D | Estac.      | Visitas
+  RDMA puro   | —       | 130m² | 110m² | 80m² | 50%    | 1.5/1.5/1.0 | +10%
+  RDM puro    | —       | 130m² | 110m² | 80m² | 50%    | 1.5/1.5/1.0 | +10%
+  CZ          | RDM     | 120m² | 100m² | 80m² | 35-50% | 1.5/1.5/1.0 | +10%
+  CZ          | RDA     | 130m² | 110m² | 80m² | 30%    | 1.5/1.5/1.0 | +10%
+  CM          | RDMA    | 120m² | 100m² | 80m² | 35%    | 1.5/1.5/1.0 | +10%
+  CM          | RDA     | 100m² |  80m² | 70m² | 50%    | 1.0/1.0/1.0 | No req.
+
+RDMA — Residencial Densidad Muy Alta [CPU N°544-2023 Sector A · CPU N°0006-2021 vía CM]
+  • Lote normativo: 800m² · frente 18ml · área libre 40%
+  • Altura BASE: 12 pisos
+  • Lotes < normativo → altura de calificación inmediata anterior (Ord. 920-MML Anexo N°2 B.1)
+  • Sector A con frente a eje vial → hasta 17 pisos
+    Condición: área_edificable_total ≤ 0.60 × área_terreno × 12 pisos (Art. 6° literal g)
+  • Áreas mínimas (RDMA puro): 3D=130m² · 2D=110m² · 1D=80m² (máx 50% unidades)
+  • Áreas mínimas (CM compatible RDMA): 3D=120m² · 2D=100m² · 1D=80m² (máx 35% unidades)
+  • Estacionamientos: 3D→1.5 · 2D→1.5 · 1D→1.0 · +10% visitas
+
+CZ — Comercio Zonal [CPU N°967-2023 Sector B · CPU N°1082-2020 Sector A · CPU N°1494-2019 Sector B]
+  CASO 1 — CZ compatible RDM (Sector B): altura 7 pisos ó 28ml
+    • Lote/frente residencial: 300m² / 10ml · área libre 35%
+    • Áreas mínimas: 3D=120m² · 2D=100m² · 1D=80m² (máx 35-50% según certificado)
+    • Estac.: 3D→1.5 · 2D→1.5 · 1D→1.0 · +10% visitas
+    • Vías confirmadas: Ca. Colón retiro 3.00ml · Ca. San Martín retiro 3.00ml
+  CASO 2 — CZ compatible RDA (Sector A): altura 10 pisos
+    • Lote/frente residencial: 350m² / 10ml · área libre 40%
+    • Áreas mínimas: 3D=130m² · 2D=110m² · 1D=80m² (máx 30% 1-dorm)
+    • Estac.: 3D→1.5 · 2D→1.5 · 1D→1.0 · +10% visitas
+    • Av. 28 de Julio (metropolitana): retiro 5.00ml · alineamiento 17.5ml
+    • Ca. Francisco del Castillo (local): retiro 3.00ml · alineamiento 10.0ml
+  • Uso comercial: Art. 11° Ord. 342-MM + Ord. 520-MM + Ord. 543-MM
+  • Algunos predios CZ en Microzona de Valor Urbanístico → Ord. 387/MM + 401/MM aplicable
+
+RDM — Residencial Densidad Media [CPU N°1075-2025 Sector B · CPU N°967-2023 vía CZ]
+  • Lote normativo: 300m² · frente 10ml · área libre 35% · altura 7 pisos (Sector B)
+  • Usos permisibles: Viv. Unifamiliar / Viv. Multifamiliar
+  • Áreas mínimas: 3D=130m² · 2D=110m² · 1D=80m² (máx 50% unidades)
+  • Estacionamientos: 3D→1.5 · 2D→1.5 · 1D→1.0 · +10% visitas
+  • Av. Jorge Chávez (local): alineamiento 13.4ml · retiro 5.00ml
+  • Lote parte de matriz → subdivisión previa obligatoria (Ord. 920-MML Anexo N°2 B.1 y B.2)
+  ⚠ RDM puro (130/110/80m²) ≠ CZ compatible RDM (120/100/80m²)
+
+CM — Comercio Metropolitano [CPU N°0017-2022 Sector B (RDA) · CPU N°0006-2021 Sector B (RDMA)]
+  • Área libre: NO EXIGIBLE comercial · 40% residencial
+  • ALTURA: fórmula 1.5(a+r) — a=ancho vía · r=suma retiros AMBOS lados
+    → Usar secciones viales y retiros de cada frente del predio
+    → Lote debe cumplir área mínima de la zona residencial compatible; si no → calificación anterior
+  CASO CM compatible RDMA (CPU N°0006-2021):
+    • Lote residencial: 800m² / 18ml · Av. José Pardo (metropolitana): retiro 5.00ml
+    • Áreas mínimas: 3D=120m² · 2D=100m² · 1D=80m² (máx 35%) · +10% visitas
+    • Predio en Vía Aprovechamiento → CDE aplicable (Ord. 387/MM + 401/MM)
+  CASO CM compatible RDA (CPU N°0017-2022):
+    • Lote residencial: 350m² / 10ml
+    • Áreas mínimas: 3D=100m² · 2D=80m² · 1D=70m² (máx 50%) · visitas NO requeridas (Ord. 543-MM)
+    • Estac.: 1 estac./viv. todas las tipologías
+    • Psje. Tello: retiro 3.00ml · Psje. El Porvenir: SIN RETIRO
+
+RDA — Residencial Densidad Alta [CPU N°0017-2022 vía CM · CPU N°1082-2020 vía CZ Sector A]
+  • Lote normativo: 350m² · frente 10ml · área libre 40%
+  • Altura: 1.5(a+r) en zonas CM · fija según sector en RDA pura o CZ (ej. 10 pisos Sector A)
+  • Áreas mínimas según zona comercial compatible:
+    CM+RDA: 3D=100m² · 2D=80m² · 1D=70m²
+    CZ+RDA: 3D=130m² · 2D=110m² · 1D=80m²
+  ⚠ RDA tiene áreas mínimas distintas según si es CM o CZ compatible
+
+RDB — Residencial Densidad Baja [Referencia — confirmar con certificado. Visible en mapa CPU N°1082-2020]
+  • Lote mín 200m² · frente 8ml · área libre 35-40% · altura 3-5 pisos según sector
+
+--- SECTORES URBANOS Y ALTURAS CONFIRMADAS (Ord. 226-MM + certificados reales) ---
+SECTOR A:
+  • RDMA puro: hasta 17 pisos (condición 0.60 × área × 12p) [CPU N°544-2023 Paseo de la República]
+  • CZ+RDA: 10 pisos [CPU N°1082-2020 Av. 28 de Julio / Ca. Francisco del Castillo]
+  • Av. 28 de Julio (metropolitana): retiro 5.00ml · alineamiento 17.5ml
+  • Av. José Pardo (metropolitana): retiro 5.00ml · alineamiento 20.0ml
+SECTOR B:
+  • CZ+RDM: 7 pisos [CPU N°967-2023 Ca. Colón · CPU N°1494-2019 Ca. San Martín]
+  • RDM: 7 pisos [CPU N°1075-2025 Av. Jorge Chávez]
+  • CM+RDA / CM+RDMA: 1.5(a+r) [CPU N°0017-2022 · CPU N°0006-2021]
+  • Ca. Colón: retiro 3.00ml · Ca. San Martín: retiro 3.00ml · Av. Jorge Chávez: retiro 5.00ml
+SECTORES C / D: alturas menores — consultar Plano de Alturas Ord. 226-MM.
+REGLA GENERAL: lote < normativo → altura calificación inmediata anterior (Ord. 920-MML Anexo N°2 B.1)
+
+--- REGLAS DE ALTURA (Ord. 342-MM Art. 6° + Ord. 520-MM + RNE Art. 10°) ---
+Art. 6° literal a) + RNE Art. 10°:
+  Zona residencial: máx 3.00m/piso · Zona comercial y usos compatibles: máx 4.00m/piso
+  ⚠ Si supera → DOBLE ALTURA (cuenta como 2 pisos)
+Art. 6° literal c) — LOTES ESQUINA [Confirmado CPU N°1082-2020]:
+  Se puede adoptar la MAYOR altura de edificación hasta un fondo de 30.00m sobre el frente
+  del eje vial de MENOR altura normativa. En el resto del lote → altura de transición.
+  ⚠ Lotes esquina deben respetar el OCHAVO existente (RNE Norma A.010 Art. 3°)
+Art. 6° literal g): Frente a eje/sector de mayor altura → puede alcanzar esa altura si:
+  área_edificable_total ≤ 0.60 × área_terreno × pisos_base_normativo
+Fórmula 1.5(a+r): altura = 1.5 × (ancho_vía + suma_retiros_ambos_lados) para zonas CM
+Ord. 543-MM Título V: medidas excepcionales post-COVID aplicables a proyectos que califiquen.
+
+--- RETIROS FRONTALES CONFIRMADOS ---
+Vías metropolitanas:
+  • Paseo de la República: 5.00m [CPU N°544-2023]
+  • Av. 28 de Julio: 5.00m [CPU N°1082-2020]
+  • Av. José Pardo: 5.00m [CPU N°0006-2021]
+Vías locales:
+  • Ca. Colón: 3.00m [CPU N°967-2023]
+  • Ca. San Martín: 3.00m [CPU N°1494-2019]
+  • Ca. Francisco del Castillo: 3.00m [CPU N°1082-2020]
+  • Psje. Tello: 3.00m · Psje. El Porvenir: SIN RETIRO [CPU N°0017-2022]
+  • Av. Jorge Chávez: 5.00m [CPU N°1075-2025]
+Malecones: según Ord. 388/MM (variable, mín 5m)
+
+--- ESTACIONAMIENTOS (Ord. 342-MM Art. 11° + Ord. 520-MM + Ord. 543-MM) ---
+Zonas RDMA/RDM/CZ: 3D→1.5 · 2D→1.5 · 1D→1.0 · +10% visitas
+Zonas CM+RDA: 1 estac./viv. todas tipologías · visitas no requeridas (Ord. 543-MM)
+Uso comercial: Art. 11° Ord. 342-MM + Ord. 520-MM + Ord. 543-MM
+
+--- COLINDANCIA ---
+• Altura predio = promedio(altura_colindante, altura_normativa_predio) si colindante > base normativa
+• EXCEPCIÓN: colindante receptor de CDE (Ord. 387/MM o 401/MM) → NO aplica regla colindancia
+
+--- MICROZONAS DE VALOR URBANÍSTICO (Ord. 387-MM + Ord. 401-MM — voluntario) ---
+• Indicado expresamente en el certificado cuando aplica.
+• Opción A: acogerse → protección inmueble representativo + posible TDR
+• Opción B: no acogerse → aplican parámetros normales del certificado
+
+--- QUINTAS (Art. 12° Ord. 342-MM + Ord. 520-MM Art. 9°) ---
+• Parte del lote matriz uso exclusivo: máx 3 pisos (RNE A.020 Art. 31)
+
+--- EDIFICACIONES SOSTENIBLES (evolución normativa) ---
+• Ord. 510-MM (08/04/2019) + Ord. 539-MM (26/04/2020): primera norma de sostenibilidad
+• Ord. 581-MM (17/12/2021) + Ord. 588-MM + Ord. 599-MM: segunda versión
+• Ord. 618-MM (28/09/2023) — VIGENTE ACTUAL: reemplaza anteriores en certificados desde oct 2023
+• Aplicación voluntaria. Puede otorgar bonificaciones de área o altura adicional.

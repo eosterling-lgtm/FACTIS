@@ -1,0 +1,81 @@
+
+=== REGLAMENTO NORMATIVO — DISTRITO DE MAGDALENA DEL MAR ===
+Base principal: Ord. N°950-MML + Ord. N°017-2016-MDMM · Área de Tratamiento Normativo III
+Carácter: distrito predominantemente residencial de baja densidad (RDB) con escasa oferta de suelo para alta densidad
+Límites: San Isidro (este), Jesús María (norte), Pueblo Libre (noroeste), océano Pacífico (sur)
+
+--- BASE LEGAL VIGENTE ---
+• Ord. N°950-MML — Reajuste Integral de Zonificación de los Usos del Suelo para el Área de Tratamiento Normativo III
+• Ord. N°1017-MML (16/05/07) — Índice de Usos para la Ubicación de Actividades Urbanas (Área Tratamiento II)
+• Ord. N°1015-MML + Ord. N°1076-MML (08/10/07) — Normas Generales de Zonificación Área Tratamiento Normativo II
+• Ord. N°1173-2008-MML — modifica especificaciones normativas
+• Ord. N°017-2016-MDMM — define alturas en metros: 04 Pisos = 12.00 ml (Vivienda y Comercio)
+• Ord. N°021-2016-MDMM — Uso del 80% de Azotea
+• Ord. N°031-2013-MDMM — normativa complementaria
+• Ord. N°186-MDMM — prohíbe licencias para actividades no compatibles con la zonificación
+• DS N°029-2019-VIVIENDA — Reglamento de Licencias de Edificación
+• RNE — base técnica general
+
+--- SISTEMA DE SECTORES (Ord. N°950-MML) ---
+Magdalena divide su territorio en sectores numerados:
+  Sector III — zona interior residencial (Pque. Francisco Graña, etc.)
+  Sector IV  — zona sur / Av. Javier Prado Oeste / acceso al mar
+
+--- ZONIFICACIÓN RDB (RESIDENCIAL DENSIDAD BAJA) — ZONA DOMINANTE ---
+Es la zonificación más extendida en Magdalena. No hay zonas de alta densidad confirmadas.
+Usos: Vivienda Unifamiliar y Multifamiliar
+
+ALTURA RDB:
+  Máximo: 4 pisos = 12.00 ml (Ord. N°017-2016-MDMM)
+  Altura expresada en metros — 1 piso = 3.00 ml
+  Se aplica en lotes iguales o mayores al normativo (Ord. N°950-MML Anexo N°04, B.1)
+  Alturas específicas según Plano de Alturas de edificación aprobado
+
+TABLA RDB:
+  Lote 300m² / frente 10ml → 4 pisos · área libre 35% · 1 est/1 viv
+  Unifamiliar y Multifamiliar: mismos parámetros de lote y frente
+
+ÁREA LIBRE MÍNIMA: 35%
+
+RETIRO MÍNIMO:
+  Calles / Jirones: 3.00 ml
+  Av. Javier Prado Oeste: 5.00 ml + jardín de aislamiento
+  Parques (Pque. Francisco Graña, etc.): 3.00 ml
+
+ESTACIONAMIENTO:
+  1 estacionamiento por cada unidad de vivienda (1/1 viv — el más restrictivo de todos los distritos integrados)
+
+DENSIDAD NETA: 600 hab/ha
+
+ÁREAS MÍNIMAS (inferidas de Ord. N°950-MML / RNE para ATN III):
+  No especificadas explícitamente en los certificados — aplicar norma RNE A.020 como mínimo
+  Referencia: distritos RDB ATN III típicamente: 3D≈90m² / 2D≈70m² / 1D≈50m²
+
+--- ZONIFICACIÓN E3 (EDUCACIÓN SUPERIOR UNIVERSITARIA) — AV. JAVIER PRADO OESTE ---
+Uso principal: Educación
+Retiro: 5.00ml + jardín de aislamiento (Av. Javier Prado) / 3.00ml (Jr. La Mar)
+Altura: Según entorno
+Área libre: Según RNE
+Estacionamientos: Según proyecto de acuerdo al RNE
+
+NOTA CLAVE (Ord. N°950-MML Anexo N°04, C.3):
+  Predios zonificados E3 (Educación Superior) pueden optar por Uso Residencial compatible
+  con la zona, SIN necesidad de Cambio Específico de Zonificación, cuando concluyan las
+  actividades educativas. Esto convierte lotes E3 en oportunidades de reconversión a vivienda.
+
+--- ALTURAS Y NORMATIVA CLAVE ---
+• 4 pisos = 12.00 ml (tope duro Ord. 017-2016-MDMM — no hay excepción por frente a parque confirmada)
+• Azotea: uso hasta 80% del área del último piso (Ord. N°021-2016-MDMM)
+• Altura piso a piso: máx 3.00 ml (vivienda y comercio)
+• No se otorgará licencia para actividades no compatibles (Ord. N°186-MDMM)
+
+--- IMPLICANCIAS PARA EL DESARROLLO ---
+• Magdalena es ATN III pero con altura limitada a 4 pisos en casi todo el distrito
+• La restricción de 1 est/viv incrementa el costo de construcción vs. otros distritos
+• Oportunidad: lotes E3 sobre Av. Javier Prado Oeste pueden reconvertirse a residencial
+• No se han confirmado zonas CM, CZ ni RDA en los certificados disponibles
+
+--- CERTIFICADOS DE REFERENCIA ---
+CPU N°00377-2019-MDMM (Pque. Francisco Graña 165 esq. Jr. Daniel Carrión) — RDB/Sector III, caduca 26/09/2022
+CPU N°00104-2020-MDMM (Jr. Flora Tristán 345) — RDB/Sector IV, caduca 13/07/2023
+CPU N°00100-2023-MDMM (Av. Javier Prado Oeste 2281-2291 esq. Jr. La Mar) — E3/Sector IV, caduca 29/03/2026

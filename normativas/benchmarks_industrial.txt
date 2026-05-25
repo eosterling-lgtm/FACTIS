@@ -1,0 +1,84 @@
+
+=== BENCHMARKS INDUSTRIALES — NAVES LOGÍSTICAS LIMA ===
+Fuente: Parque Logístico 47 (proyecto real Lima, constructora especializada, llave en mano 2024-2025)
++ Referencias mercado industrial Lima (Lurín, VES, Ate, Lurigancho, Callao)
+
+--- DIFERENCIA CLAVE: INDUSTRIAL ≠ RESIDENCIAL ---
+La construcción de naves industriales NO debe estimarse con los mismos costos que vivienda u oficinas.
+  Residencial/Oficinas: $880–1,100/m² construido
+  Industrial logístico: $180–300/m² de nave (3-4x más barato)
+Razón: estructura metálica portal frame prefabricada, sin acabados interiores,
+  sin tabiques, sin instalaciones complejas de agua/desagüe, sin ascensores, sin sótanos.
+
+--- PROYECTO DE REFERENCIA: PARQUE LOGÍSTICO 47 (LIMA) ---
+  Clase: A (premium logístico) · Categoría: almacén de alta densidad
+  Área terreno: 18,789 m² · Área nave: 14,315 m² · Ocupación: 76.2%
+  Área patios/maniobras: 4,474 m²
+  Altura de almacenamiento: 13.6 m clara (Clase A = ≥12m)
+  Posiciones de pallets: 30,484 · Densidad: 2.13 pos/m²
+  Sistema constructivo: estructura metálica prefabricada, losa industrial reforzada
+  Inversión total (construcción, SIN terreno): US$ 4,172,660 + IGV
+    → por m² de nave: $291.5/m² (all-in, llave en mano)
+    → por m² de terreno total: $222/m²
+    → estimado nave sola: $270/m² · patios/maniobras: $70/m²
+  Plazo de construcción: solo 120 días (4 meses) — rapidez típica del acero prefabricado
+  Timeline total (diseño + licencias + construcción): ~195 días (~6.5 meses)
+  Renta: US$ 6.5/m²/mes + IGV
+  Facturación mensual: US$ 93,048 · Facturación anual: US$ 1,116,570
+  Payback simple (inversión/renta): 3.74 años
+  Yield bruto anual (sobre inversión construcción): 26.8%
+
+--- COSTOS DE REFERENCIA POR TIPO DE NAVE (Lima, USD/m² de nave construida) ---
+  Almacén Logístico básico (<10m clara):            $180–220/m²
+  Almacén Logístico estándar (10–12m clara):        $220–260/m²
+  Almacén Logístico Clase A (12–15m clara):         $270–310/m²  ← Ref: Parque Logístico 47
+  Cross-docking (múltiples docks, alta complejidad): $380–500/m²
+  Nave Industrial manufactura (losa reforzada):      $350–450/m²
+  Patios / maniobras (losa concreto forklift):       $60–90/m²
+  Piso básico exterior (circulación):                $40–60/m²
+
+--- KPIs OPERATIVOS (Clase A, Lima) ---
+  Ocupación nave: 70–80% del área del terreno (excluye retiro, patios, maniobras)
+  Altura mínima Clase A: 12 m clara al hombro (columna más baja)
+  Altura estándar Lima Clase A: 12–15 m (Lurín, Huachipa)
+  Densidad de almacenamiento: 1.8–2.5 posiciones de pallet/m² (con racking)
+  Renta logística Lima 2024–2026 (primaria): $5.5–7.5/m²/mes + IGV
+    Lurín/Callao Clase A: $6.0–7.5/m²/mes
+    VES/Ate: $5.0–6.5/m²/mes
+    Huachipa/SJL: $4.5–6.0/m²/mes
+  Vacancia promedio mercado Lima: 3–6% (mercado ajustado, demanda de operadores 3PL y e-commerce)
+  Yield neto target: 6–8% anual sobre costo total (incluyendo terreno)
+  TIR equity mínima: 12% anual (para proyectos de desarrollo)
+  DSCR mínimo bancario: 1.20x
+
+--- ESTRUCTURA TÍPICA DE COSTOS (Clase A, desarrollo) ---
+  Terreno: 20–30% del costo total (varía mucho por ubicación)
+  Construcción nave: 55–65% del costo total
+  Patios y habilitación exterior: 5–10%
+  Costos indirectos (licencias, diseño, supervisión, gestión): 5–8%
+  Alcabala: 3% del precio del terreno (si aplica)
+
+--- ZONIFICACIÓN APLICABLE LIMA ---
+  I2 (Industria Liviana): lote mín 1,000 m² — aplica a mayoría de almacenes logísticos
+  I1 (Gran Industria): lote mín 10,000 m² — para grandes centros de distribución
+  Corredores principales: Av. Argentina (Callao), Lurín, Huachipa/Ate, Lurigancho, VES, Pachacámac
+  Retiros: 3 m (calle) · 5 m (avenida) · aplicar por distrito
+
+--- PROCESO CONSTRUCTIVO (referencia) ---
+  Fase 1 — Diseño ingenierías: 30 días
+  Fase 2 — Tramitología licencias: 30 días
+  Fase 3 — Ejecución obra: 120 días (4 meses)
+  Fase 4 — Entrega y recepción: 15 días
+  Total: ~195 días (~6.5 meses) para nave Clase A
+  Modalidad: A Suma Alzada / Llave en Mano es lo habitual en el mercado
+
+--- DIFERENCIAS VS RESIDENCIAL (tabla comparativa) ---
+                        Industrial logístico    Residencial multifamiliar
+  Costo construc./m²:  $180–300/m²             $880–1,100/m²
+  Estructura:          Acero prefabricado       Concreto armado in-situ
+  Acabados:            Ninguno interior         Pisos, paredes, carpintería, SSHH
+  Altura libre:        10–15m                  2.4–3.0m por piso
+  MEP:                 Básico (eléctrico/IL)    Completo (agua, desagüe, gas, EE)
+  Sótanos:             No (losa a nivel)        Frecuente (estacionamientos)
+  Plazo construcción:  4–7 meses               18–36 meses
+  Yield arrendamiento: 6–8% neto/año           4–6% neto/año (Lima)

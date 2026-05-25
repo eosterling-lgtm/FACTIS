@@ -1,0 +1,281 @@
+
+=== REGLAMENTO NACIONAL DE EDIFICACIONES — NORMAS CLAVE PARA PROYECTOS RESIDENCIALES ===
+
+--- NORMA A.010: CONDICIONES GENERALES DE DISEÑO ---
+
+ALTURAS MÍNIMAS DE AMBIENTES (Art. 18):
+  Vivienda: 2.30 m piso terminado a cielo raso
+  Oficinas / Hospedaje: 2.40 m
+  Educación / Servicios comunales: 2.50 m
+  Salud: 2.70 m
+  Comercio / Recreación / Deportes: 3.00 m
+  Industria: hasta punto más bajo de estructura
+  Baños al interior de vivienda: pueden ser menores (mín 2.10 m)
+  Equipos / Depósitos accesibles: 2.00 m mínimo
+  Vigas y elementos horizontales: altura libre mínima 2.10 m sobre piso terminado
+
+CONVERSIÓN PISOS → METROS (Art. 10):
+  Uso residencial: 1 piso = máx 3.00 m
+  Uso comercial / hospedaje / oficinas compatible: 1 piso = máx 4.00 m
+  Medición: desde vereda más alta del frente del lote; sin vereda = calzada + 0.15 m
+  No cuentan: parapetos, tanques elevados, casetas de equipos, pisos técnicos
+
+ALTURA POR COLINDANCIA (Art. 10.2):
+  Un colindante mayor → puede llegar al promedio entre altura existente y normativa
+    (sin superar el 50% de la diferencia)
+  Dos colindantes mayores ambos lados → puede llegar al promedio de ambos colindantes
+
+ALTURA EN LOTE EN ESQUINA (Art. 10.5):
+  La altura de la vía de mayor ancho puede voltear hasta distancia = sección de la vía menor + retiros
+  A partir de ese punto, aplica criterio de colindancia
+
+AZOTEA (Art. 14):
+  Se puede techar hasta 50% del área de azotea
+  Retranque mínimo de 2.50 m del límite exterior de la(s) fachada(s)
+  Parapeto hacia propiedades vecinas: ≥ 1.80 m
+  Parapeto frente a espacios propios / público: ≥ 1.10 m
+  Las azoteas no cuentan como piso ni como altura de edificación
+
+RETIROS (Art. 8):
+  Definidos por PDU municipal · En retiro frontal se permite (hasta 1.50 m sobre vereda):
+    gradas/rampas, cisternas, guardianía, estacionamientos, semisótano, medidores, instalaciones
+  Volado sobre retiro frontal: hasta 0.50 m desde 2.30 m de altura
+  Balcones/terrazas: hasta 0.80 m sobre retiro frontal
+
+OCHAVO EN ESQUINAS (Art. 12):
+  Cuando vía < 3.00 m desde calzada al límite del lote: ochavo diagonal de 3.00 m, libre hasta 2.30 m
+
+ÁREA TECHADA Y LIBRE (Art. 9):
+  Área libre residencial: se computa desde el nivel donde el uso residencial ocupa todo el piso
+  No son área techada: aleros, balcones sin techo, pérgolas, techos translúcidos tipo sol y sombra
+  En terrenos en pendiente (distintos niveles): no se exige área libre mínima
+
+PASAJES DE CIRCULACIÓN (Art. 20 y Cuadro N°02):
+  Interior de viviendas: 0.90 m
+  Acceso hasta 2 viviendas: 1.00 m
+  Acceso hasta 4 viviendas: 1.20 m
+  Áreas comunes multifamiliar: 1.20 m
+  Distancia máx. evacuación: 45 m sin rociadores / 60 m con rociadores
+
+ESCALERAS (Art. 23):
+  Paso mínimo: 0.25 m (vivienda/industria) · Contrapaso máximo: 0.18 m
+  Máximo 17 pasos entre descansos · Descanso mínimo: 0.90 m
+  Escaleras integradas multifamiliar: ancho mínimo 1.20 m entre muros
+  Escaleras interiores de vivienda: ancho mínimo 0.90 m
+
+RAMPAS (Art. 21):
+  Pendiente máxima: 12% · Ancho mínimo: 1.00 m con pasamanos
+
+VENTILACIÓN (Art. 38):
+  Abertura al exterior mínima: 5% del área del ambiente
+  Ductos de ventilación SS.HH.: 0.036 m² por inodoro · mínimo 0.24 m²
+  Edificaciones > 15 m altura: extracción mecánica obligatoria en ductos
+
+RESIDUOS SÓLIDOS (Art. 43):
+  Residencial: 0.004 m³ (4 litros) por habitante / día
+  No residencial: 0.004 m³ por m² techado / día (sin estacionamientos)
+
+ESTACIONAMIENTOS — ACCESO Y RAMPAS (Art. 53):
+  Rampa: pendiente máxima 15% con superficie rugosa
+    Inicio a 3.00 m mínimo del límite de propiedad (primeros 3 m pendiente máx 6%)
+  Radio de giro de rampas: 5.00 m al eje del carril
+  Ancho de ingreso vehicular (vivienda/oficinas/hospedaje):
+    Hasta 40 vehículos: 3.00 m
+    41–60 vehículos: 3.25 m
+    61–500 vehículos: 6.00 m
+    Más de 500 vehículos: 12.00 m
+
+ESTACIONAMIENTOS — DIMENSIONES DE CAJÓN (Art. 54):
+  Uso privado (vivienda, oficinas, hospedaje):
+    Individual: 2.70 m × 5.00 m · altura libre 2.10 m
+    2 contiguos: 2.50 m × 5.00 m · altura libre 2.10 m
+    3 o más contiguos: 2.40 m × 5.00 m · altura libre 2.10 m
+    En paralelo: 2.40 m × 5.40 m · altura libre 2.10 m
+    Circulación entre filas opuestas: 6.00 m mínimo
+  Uso público (comercio, educación, salud):
+    Individual: 3.00 m × 5.00 m · altura libre 2.10 m
+    2 contiguos: 2.60 m × 5.00 m
+    3 o más contiguos: 2.50 m × 5.00 m
+    Circulación entre filas opuestas: 6.50 m mínimo
+
+--- NORMA A.020: VIVIENDA ---
+
+ÁREAS MÍNIMAS (Art. 8):
+  Departamento multifamiliar (sin capacidad de ampliación): 40.00 m² mínimo
+  Vivienda de uso colectivo (sin ampliación): 16.00 m² mínimo
+  Módulo básico unifamiliar con expansión: 25.00 m² mínimo
+
+DENSIDAD HABITACIONAL (Art. 7):
+  1 dormitorio: 2 personas · 2 dormitorios: 3 personas
+  3 dormitorios: 4 personas · 4+ dormitorios: +1 persona por dormitorio adicional
+
+ALTURA MÍNIMA DE AMBIENTES (Art. 9):
+  Piso terminado a cielo raso: mínimo 2.30 m
+  Baños al interior de vivienda: pueden reducirse hasta 2.10 m
+  Cubiertas inclinadas: mínimo 1.80 m en el encuentro muro-techo (si promedio ≥ 2.30 m)
+
+VANOS — PUERTAS (Art. 12, Cuadro N°06):
+  Altura mínima de puertas: 2.10 m
+  Acceso principal a unidad de vivienda: 0.90 m ancho
+  Dormitorio / Sala / Comedor / Cocina: 0.80 m ancho
+  Baño / Servicio: 0.70 m ancho
+  Acceso a edificio multifamiliar / uso colectivo / conjunto: 1.20 m ancho
+  Una hoja no debe ser menor a 1.00 m cuando hay más de una hoja
+
+VANOS — VENTANAS (Art. 12):
+  Área mínima de vano de ventana: 10% del área de la habitación
+  Abertura al exterior: mínimo 5% del área del ambiente que ventila
+  Alféizar mínimo: 1.00 m (si menor, vidrio fijo o baranda con elementos máx 0.15 m)
+
+POZOS DE LUZ — VIVIENDA MULTIFAMILIAR (Art. 11, Cuadro N°04):
+  Dimensión mínima absoluta: 2.10 m en todos los casos
+  Cálculo según altura de la edificación (% de la altura del paramento más bajo opuesto):
+    Primeros 18 m:
+      Tipo A (dorm/sala/comedor) 1-2 lados: 30% · 3-4 lados: 35%
+      Tipo B (cocina/patios techados) 1-2 lados: 25% · 3-4 lados: 30%
+    Siguientes 18 m (19–36 m):
+      Tipo A: 1-2 lados 15% · 3-4 lados 25%
+      Tipo B: 1-2 lados 13% · 3-4 lados 16%
+    Siguientes 18 m (37–54 m):
+      Tipo A y B: 1-2 lados 10% · 3-4 lados 15% (A) / 13% (B)
+  Dimensión paralela al vano: equivalente al 50% de la medida perpendicular
+  Para edificaciones > 72 m: +0.10 m por cada metro adicional
+
+SEPARACIÓN ENTRE EDIFICACIONES EN CONJUNTOS (Art. 11, Cuadro N°05):
+  Tipo A (dorm/sala/comedor): 30% de altura · mín 5.00 m · máx 20.00 m
+  Tipo B (cocina/patios): 25% de altura · mín 4.00 m · máx 15.00 m
+
+PASAJES (Art. 13, Cuadro N°07):
+  Interiores de vivienda: 0.90 m · Acceso hasta 2 viviendas: 1.00 m
+  Acceso hasta 4 viviendas: 1.20 m · Áreas comunes: 1.20 m
+
+ESCALERAS INTEGRADAS MULTIFAMILIAR (Art. 15):
+  Ancho mínimo: 1.20 m entre muros
+  Acceso a techos/azotea de equipos: tipo gato (solo mantenimiento)
+  Si azotea tiene área común: continuación de escalera común obligatoria
+
+ASCENSOR OBLIGATORIO (Art. 16):
+  Cuando el acceso al 5to piso esté a más de 12.00 m sobre el nivel de ingreso
+  Se permite subir 1-2 niveles adicionales por escalera al interior de la vivienda (dúplex/tríplex)
+
+AZOTEA EN VIVIENDA (Art. 18):
+  Se puede techar hasta 50% del área de azotea
+  Retranque mínimo 2.50 m del límite de fachada
+  Parapeto frente a espacios: 1.10 m · Entre vecinos/unidades: 2.10 m
+  Azotea de flat/dúplex/tríplex: puede albergar cualquier uso destinado a vivienda
+
+ESTACIONAMIENTOS (Art. 21):
+  Norma general (si PDU no especifica): 1 estacionamiento cada 3 viviendas
+  Vivienda de uso colectivo: 1 cada 5 unidades
+  Bicicletas: 1 cada 3 viviendas (área común del edificio)
+
+SERVICIOS SANITARIOS (Art. 23, Cuadro N°08):
+  Vivienda hasta 25 m²: 1 inodoro + 1 ducha + 1 lavadero
+  Vivienda más de 25 m²: 1 inodoro + 1 lavatorio + 1 ducha + 1 lavadero
+
+PROTECCIÓN CONTRA INCENDIOS (Art. 27, Cuadro N°09):
+  Multifamiliar hasta 15 m: señalética, detectores de humo, extintores, red de agua, escalera integrada
+  Multifamiliar 15–30 m: + central de alarma, escalera protegida obligatoria
+  Multifamiliar 30–60 m: + rociadores obligatorios
+  Multifamiliar > 60 m: + rociadores (sin red agua por sección)
+
+MUROS DIVISORIOS (Art. 19):
+  Entre viviendas y con pasajes comunes: resistencia al fuego 60 minutos
+  Tabiques divisorios de zonas descubiertas (patios) entre viviendas: mínimo 2.10 m de altura
+
+--- NORMA A.060: INDUSTRIA ---
+
+TIPOLOGÍAS (Art. 3):
+  Gran industria / Industria pesada · Industria mediana · Industria Liviana · Industria Artesanal · Depósitos Especiales
+
+ALTURA MÍNIMA (Art. 18):
+  Ambientes de proceso industrial: 3.00 m piso terminado a punto más bajo de estructura
+
+ESTACIONAMIENTOS (Art. 6):
+  Suficientes para personal, visitantes y vehículos de trabajo
+  Carga y descarga íntegramente dentro del lote — no puede afectar vía pública
+
+ILUMINACIÓN (Art. 8):
+  Oficinas administrativas: ventanas mínimo 20% del área del recinto · iluminación artificial mínima 250 lux
+  Áreas de producción: mínimo 300 lux sobre plano de trabajo
+  Depósitos / apoyo: mínimo 50 lux · Comedores: ventanas mínimo 20% área + 220 lux artificial
+
+VENTILACIÓN (Art. 9):
+  Comedor: ventilación natural mínima 12% del área del recinto · dotación mínima 0.30 m³/persona
+
+RUIDO (Art. 14):
+  Zona industrial: máximo 90 dB medido a 5 m del paramento exterior
+  Colindante con zona residencial o comercial: máximo 50 dB
+
+DOTACIÓN DE AGUA (Art. 20):
+  100 litros por trabajador / día
+
+SERVICIOS HIGIÉNICOS (Art. 21):
+  Distancia máxima al puesto de trabajo más alejado: 30 m
+  0–15 personas: H(1L+1u+1I) M(1L+1I)
+  16–50: H(2L+2u+2I) M(2L+2I) · 51–100: H(3L+3u+3I) M(3L+3I)
+  101–200: H(4L+4u+4I) M(4L+4I) · +100 personas adicionales: H(1L+1u+1I) M(1L+1I)
+
+DUCHAS Y VESTUARIOS (Art. 22):
+  1 ducha por cada 10 trabajadores por turno
+  Vestuario: 1.50 m² por trabajador por turno
+
+GRANDES INDUSTRIAS (Art. 4):
+  >Gran industria e industria mediana requieren: Estudio de Impacto Vial + Estudio Impacto Ambiental + Estudio Seguridad Integral
+
+--- NORMA A.070: COMERCIO ---
+
+AFORO (Art. 7) — personas por m² de área de exposición/atención:
+  Tienda independiente: 1 persona / 5.0 m² · Galería comercial: 1 / 2.0 m²
+  Tienda por departamentos: 1 / 3.0 m² · Centro Comercial: 1 / 3.0 m²
+  Supermercado: 1 / 2.5 m² · Mercado mayorista: 1 / 5.0 m² · Mercado minorista: 1 / 2.0 m²
+  Restaurante (mesas): 1 / 1.5 m² · Patio de comidas (mesas): 1 / 1.5 m²
+  Bar / Discoteca: 1 / 1.0 m² · Gimnasio: 1 / 4.5 m² · Salas de juegos/casino: 1 / 2.0 m²
+  Áreas de servicio/cocinas: 1 / 10.0 m²
+
+ALTURA MÍNIMA (Art. 8):
+  Edificaciones comerciales: 3.00 m piso terminado a cielo raso
+
+ESTACIONAMIENTOS (Art. 24) — mínimo requerido:
+  Tienda independiente: 1 est. c/6 personal + 1 est. c/10 público
+  Tienda por departamentos / Centro Comercial: 1 est. c/5 personal + 1 est. c/10 público
+  Complejo Comercial: 1 est. c/10 personal + 1 est. c/10 público
+  Supermercado / Mercado mayorista: 1 est. c/10 personal + 1 est. c/10 público
+  Mercado minorista: 1 est. c/20 personal + 1 est. c/20 público
+  Restaurante: 1 est. c/10 personal + 1 est. c/10 público
+  Locales con asientos fijos: 1 est. c/15 asientos
+
+--- NORMA A.080: OFICINAS ---
+
+AFORO (Art. 6):
+  1 persona cada 9.5 m² de área útil
+
+ALTURA MÍNIMA (Art. 7):
+  2.40 m piso terminado a cielo raso
+
+VENTILACIÓN NATURAL (Art. 5):
+  Vanos de apertura mínima: 10% del área del ambiente
+
+PUERTAS (Art. 10):
+  Ingreso principal: 1.00 m · Otras dependencias: 0.90 m · Altura mínima: 2.10 m
+
+ESTUDIO DE IMPACTO VIAL (Art. 8):
+  Obligatorio para edificios con más de 5,000 m² de área útil
+
+--- NORMA TH.030: HABILITACIONES PARA USO INDUSTRIAL ---
+
+TIPOS DE LOTE POR ZONIFICACIÓN:
+  Tipo 1 (I1 - Industria Elemental y Complementaria): lote mín 300 m², frente mín 10 ml
+  Tipo 2 (I2 - Industria Liviana): lote mín 1,000 m², frente mín 20 ml
+  Tipo 3 (I3 - Gran Industria): lote mín 2,500 m², frente mín 30 ml
+  Tipo 4 (I4 - Industria Pesada Básica): dimensiones según estudio específico
+
+APORTES (todos los tipos):
+  1% Parques Zonales + 2% Otros Fines
+
+VÍAS LOCALES SECUNDARIAS: ancho mínimo 16.80 m
+FRENTE DE MANZANA: máximo 400 m (excepto Tipo 4)
+
+AISLAMIENTO:
+  I2 debe estar separada de zona residencial por Vía Local Secundaria (≥16.80 m)
+  I3 debe tener jardín separador mínimo 30.00 m de sección

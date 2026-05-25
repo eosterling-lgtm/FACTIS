@@ -1,0 +1,116 @@
+
+=== REGLAMENTO DE ÍNDICES NORMATIVOS — DISTRITO DE SAN JUAN DE LURIGANCHO (SJL) ===
+Municipalidad Distrital de San Juan de Lurigancho (MDSJL).
+Distrito más poblado del Perú: ~1,200,000 habitantes · Mayor distrito de Lima.
+ATN I (Área de Tratamiento Normativo I — periférico/consolidación).
+Normativa base: Ord. N°933-MML (05.05.2006) + Ord. N°1015-MML (14.05.2007) +
+Ord. N°1081-MML (12.12.2007, Reajuste Integral Zonificación SJL) + Res. Alcaldía N°648-97-MDSJL.
+Normativa distrital clave: Ord. N°284-MDSJL (30.11.2014, El Peruano) — define alturas por eje vial,
+parámetros RDM/RDA/CZ/I2 completos. Complementa Ord. N°1015-MML y Ord. N°1081-MML.
+Expedición de CPUs: Sub-Gerencia de Planeamiento Urbano, Catastro y Obras Privadas — GDU-SPUCOP.
+Verificación digital: https://mesadepartes.munisjl.gob.pe/verifica/inicio.do
+
+--- CUADRO RESUMEN POR EJE VIAL (Ord. N°284-MDSJL, Art. 6°) ---
+Aplica independientemente de la zonificación vigente del predio.
+
+EJE VIAL           | CLASIF.    | SECCIÓN | LOTE MÍN | FRENTE | ALTURA    | ESTAC.
+Av. Canto Grande   | Colectora  | 26-29ml | 450 m²   | 25 ml  | 1.5(a+r)  | 1/1.5 viv
+Ca. Los Naranjos   | Local-Calle| 9.00ml  | 400 m²   | 25 ml  | 14 pisos  | 1/1.5 viv
+Jr. Las Estrellas  | Local-Jirón| 13.30ml | 400 m²   | 25 ml  | 14 pisos  | 1/1.5 viv
+Calle 11           | Local-Calle| 13.80ml | 2,000/5,000m² | 35ml | 20 pisos | 1/1.5 viv
+Jr. Los Terrazos   | Local-Jirón| 12.20ml | 800 m²   | 20 ml  | 6 pisos   | 1/1.5 viv
+Av. Lurigancho     | Colectora  | 44.00ml | 2,000/5,000m² | 35ml | 20 pisos | 1/1.5 viv
+Av. Próceres Indep.| Arterial   | 66.00ml | 2,000/5,000m² | 35ml | 20 pisos | 1/1.5 viv
+Av. Santa Rosa     | Arterial   | 40.00ml | 400 m²   | 25 ml  | 14 pisos* | 1/1.5 viv
+
+(*) 14 pisos para multifamiliar lote ≥400m²; para RDA lote ≥450m² frente a av. ≥20ml → 1.5(a+r)
+CASO REAL CONFIRMADO: Av. Santa Rosa RDA = 1.5×(40+5+5+aportes) → 23 PISOS = 69ml
+(Proyecto Av. Santa Rosa de Lima Norte 1300-1398, DLP Arquitectos, terreno 68,304 m²)
+
+Reglas generales (Art. 4°):
+• Vías Colectoras: altura = 1.5(a+r)
+• Jirones y Calles: hasta 14 pisos (lote ≥200m² frente a jirones/calles)
+• Calle con registro visual a Parque ≥1,500m² y sección 13.50ml: hasta 20 pisos
+• NO se permite uso de azoteas en predios frente a las vías de esta Ordenanza (Art. 4.6)
+• En vías locales: se puede usar el retiro proyectado para cálculo 1.5(a+r) (Art. 4.8)
+• Si se deja área verde pública como aporte → puede aplicarse 1.5(a+r) adicional (Art. 4.7)
+• Aplica solo en lotes iguales o mayores al normativo (Art. 4.5)
+
+--- CUADRO N°01 ZONIFICACIÓN RESIDENCIAL ATN I (Ord. N°284-MDSJL + Ord. N°1015-MML) ---
+
+ZONA CZ (Comercio Zonal):
+  • Usos: RDA, RDM · Lote: existente según proyecto · Frente: existente
+  • Altura: 1.5(a+r) · Área libre: 0% comercial / según uso residencial en pisos de vivienda
+  • Estac. comercial: 1/50m² · Retiro CZ: 0.00m si sección permite estac. perpendicular / 3.00m si no
+  • 100% del lote comercial puede destinarse a uso residencial
+
+ZONA RDM (Residencial Densidad Media) — parámetros escalonados:
+  Lote 120m² / frente 6ml  → 3 pisos  · área libre 30% · 1 est./1.5 viv
+  Lote 120m² / frente 6ml  → 3 pisos  · área libre 30% · 1 est./1.5 viv (multifamiliar)
+  Lote 150m² / frente 8ml  → 4-5 pisos(1) · área libre 30% · 1 est./1.5 viv
+  Lote 200m² / frente 10ml → 5-6 pisos(1) · área libre 35% · 1 est./1.5 viv
+  Lote 300m² / frente 10ml → 6-7 pisos(3) · área libre 35% · 1 est./1.5 viv
+  Lote 1600m²/ frente 20ml → 8 pisos(3)  · área libre 40% · 1 est./1.5 viv (Conjunto Residencial)
+  (1) Frente a parques y Avenidas con ancho ≥20ml
+  (3) En vías locales: puede usarse área de aporte de recreación pública de HU para 1.5(a+r)
+
+CASO REAL RDM: Proyecto Av. Santa Rosa → RDM sector = 17 pisos (45.5ml) aplicando 1.5(a+r)
+
+ZONA RDA (Residencial Densidad Alta):
+  Lote 300m² / frente 10ml  → 8 pisos        · área libre 35% · 1 est./1.5 viv
+  Lote 450m² / frente 10ml  → 1.5(a+r)(2)    · área libre 40% · 1 est./1.5 viv
+  Lote 1600m²/ frente 25ml  → 1.5(a+r)(3)    · área libre 60% · 1 est./1.5 viv (Conjunto Resid.)
+  (2) Frente a Avenidas con ancho ≥20ml
+  (3) En vías locales: área de aporte de recreación pública de HU integra el cálculo de altura
+
+CASO REAL RDA: Proyecto Av. Santa Rosa → RDA 23 PISOS (69ml) = 1.5×(40+5+5+aportes)
+  Terreno 68,304m² · 4,500 unidades totales · 260,000m² vendibles
+  Mix: 75% 3D + 25% 2D · 10 unidades/piso · Estac. normativo 1/3 dptos
+
+ZONA VT (Vivienda Taller — aplica en áreas antes I1-R4):
+  Lote 180m² / frente 8ml → 3 pisos (hasta 5 pisos si uso 100% residencial)
+  Área libre 35% · Uso mixto vivienda (120-180m²) + talleres (150-180m²)
+  No se permiten nuevos establecimientos industriales en zona VT
+
+--- ZONA I2 (INDUSTRIA LIVIANA) — confirmado CPU ---
+[CPU N°D000183-2025-MDSJL/GDU-SPUCOP — Av. Los Claveles 650, Lotes 6-10 Mz. E, Urb. Industrial Flores]
+• Lote mínimo: 1,000 m² · Frente mínimo: 20 ml · Retiro: 3.00 ml
+• Altura: SEGÚN PROYECTO Y SEGÚN ENTORNO (no hay límite fijo)
+• Área libre: según actividades y consideraciones ambientales
+• Estacionamiento: 1 espacio / 6 personas empleadas (turno principal)
+• Usos compatibles: hasta 20% de I1
+• Usos compatibles (ATN I): según Anexo N°3 Ord. N°933-MML
+
+ESTUDIOS OBLIGATORIOS I2 (NRE A.60, Art. 4°):
+  a) Impacto Vial — operaciones con movimiento de carga pesada
+  b) Impacto Ambiental — residuos con impacto ambiental
+  c) Seguridad Integral
+• Carga/descarga íntegramente dentro del terreno
+• Solución de espera de vehículos sin afectar vías públicas
+• Puertas: dimensiones para paso + maniobra de volteo del vehículo más grande
+
+--- ÁREA MÍNIMA DE VIVIENDA (Ord. N°284-MDSJL, Notas) ---
+• 2-3 dormitorios: 75 m² mínimo (aplica al conjunto — pueden incluirse 1D y 2D en porcentajes a definir)
+• Todo ambiente con dimensiones que permitan uso como dormitorio = cuenta como dormitorio
+• Vivienda familiar permitida en cualquier lote >90m² en zonas residenciales
+• Programas Mi Vivienda / Techo Propio: pueden aplicar estándares de área distintos (Ley N°26912)
+
+--- RETIROS (confirmados Ord. N°284-MDSJL + CPU) ---
+• I2 industrial: 3.00 ml
+• CZ comercial: 0.00m si sección vial permite estac. perpendicular / 3.00m si no (Res. N°648-97)
+• Residencial arteriales: verificar por vía en Ord. N°284-MDSJL
+• Retiro puede integrarse al cálculo de altura 1.5(a+r) en vías locales
+
+--- PERFIL ESTRATÉGICO ---
+• Distrito más poblado de Lima (~1.2M hab.) — mercado residencial masivo y en expansión
+• Línea 1 del Metro: eje Av. Próceres — predios frente a estaciones con bonus de demanda real
+• Av. Próceres (66ml): hasta 20 pisos (Conjunto Residencial ≥5,000m²) — máximo normativo SJL
+• Av. Santa Rosa (40ml): RDA hasta 23 pisos (caso real confirmado), RDM hasta 17 pisos
+• Zona industrial Urb. Flores / Zárate: potencial de reconversión residencial
+• Segmento objetivo: B/C/D · Precios USD 1,000-1,600/m² · tipologías compactas 2D y 3D
+
+--- CERTIFICADOS Y PROYECTOS DE REFERENCIA ---
+CPU N°D000183-2025-MDSJL/GDU-SPUCOP / Exp. E-0045610-2025
+(Av. Los Claveles 650, Mz. E, Urb. Industrial Flores) — I2, caduca 10.09.2028 [MÁS RECIENTE]
+Proyecto Av. Santa Rosa de Lima Norte 1300-1398 (DLP Arquitectos, 2024)
+— RDA 23p + RDM 17p · terreno 68,304m² · 4,500 unidades · 260,000m² vendibles

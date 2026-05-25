@@ -1,0 +1,87 @@
+
+=== REGLAMENTO DE ÍNDICES NORMATIVOS — DISTRITO DE SAN BORJA ===
+Municipalidad de San Borja (MSB) — ATN III (Área de Tratamiento Normativo III, premium).
+Normativa base: Ord. N°491-MSB (08.12.2012) + modificatorias: Ord. N°556-MSB (11.02.2016),
+Ord. N°600-MSB, Ord. N°637-MSB, Ord. N°660-MSB.
+TUO vigente: Decreto de Alcaldía N°002-2025-MSB-A (27.01.2025) — consolida todas las modificatorias.
+Zonificación MML: Ord. N°1063-2007-MML + Ord. N°1429-2010-MML + Ord. N°1444-2010-MML.
+
+--- SISTEMA DE ÁREAS DIFERENCIADAS ---
+San Borja se organiza en 5 Áreas Diferenciadas que rigen altura, área libre, área mínima y estacionamiento:
+
+ÁREA A — Lotes grandes ~600 m² · Chacarilla del Estanque, Valle Hermoso
+  • Área libre: 40% (35% en lote esquina)
+  • Área mínima de vivienda: 140 m² (aplica al 70% de unidades)
+  • Estacionamiento: 2 est./vivienda
+  • Frentes >12 m: máx 60% del frente para ingreso vehicular
+
+ÁREA B — Lotes ~400 m² · Mariscal Castilla, La Toma
+  • Área libre: 35% (30% en lote esquina)
+  • Área mínima de vivienda: 100 m² (aplica al 70% de unidades)
+  • Estacionamiento: 2 est./vivienda
+  • Frentes >12 m: máx 60% del frente para ingreso vehicular
+
+ÁREA C — Lotes ~300 m² · Mayor parte del distrito (zona de mayor densificación)
+  • Área libre: 35% (30% en lote esquina)
+  • Área mínima de vivienda: 90 m² (aplica al 70% de unidades)
+  • Estacionamiento: 1.5 est./vivienda
+  • Frentes >12 m: máx 60% del frente para ingreso vehicular
+
+ÁREA D — Norte del distrito · Eje Av. Javier Prado (delimitada por esta avenida)
+  • Área libre: 30% (25% en lote esquina)
+  • Área mínima de vivienda: 80 m² (aplica al 70% de unidades) [confirmado CPU N°0359-2018 RDM]
+  • Estacionamiento: 1 est./vivienda + 5% visitas [confirmado Ord. N°556-MSB, Art. 5°, Cuadro N°03]
+  • Lote normativo RDM: el resultante de la habilitación urbana
+
+ÁREA E — Programa Mi Vivienda (única área donde aplica)
+  • Área libre: 30% (25% en lote esquina)
+  • Área mínima de vivienda: 70 m² (aplica al 70% de unidades)
+  • Estacionamiento: 1 est. / 1.5 viviendas
+
+--- ALTURA MÁXIMA DE EDIFICACIÓN ---
+• Altura general máxima en San Borja: 8 pisos (base distrital)
+• Correspondencia altura-pisos:
+  3p=10.5m · 4p=13.5m · 5p=16.5m · 6p=19.5m · 7p=22.5m · 8p=25.5m
+• EXCEPCIÓN — Lotes >600 m² con frente a Av. Javier Prado: hasta 12 pisos = 37.5 ml
+• Conjunto Habitacional Torres de San Borja: altura = "Altura Existente" del conjunto
+  (Ord. N°491-MSB, Art. 17°, inciso 2, letra f) — no se aplica fórmula libre
+• Lotes en áreas A/B/C con ZRE (Zona de Reglamentación Especial): consultar norma específica
+
+--- ZONAS DE REGLAMENTACIÓN ESPECIAL (ZRE) ---
+• ZRE-1: San Juan Masías · ZRE-2: El Bosque y El Bosque de San Borja
+• ZRE-3: Pequeños Agricultores Todos los Santos · ZRE-4: Papa Juan XXIII
+• En ZRE aplican normas específicas distintas a los parámetros generales
+
+--- RETIROS FRONTALES ---
+• Frente a calles: 3.00 ml
+• Frente a avenidas: 5.00 ml
+• Lotes con 8+ pisos en Av. Javier Prado: 5.00 ml
+• Retiros específicos confirmados CPU N°0359-2018:
+  Av. De La Poesía (avenida 25m): 5.00 ml · Calle De La Prosa (20m): 3.00 ml
+  Psj. Abelardo Gamarra (3m): 0.00 ml · Pasaje s/n (5.5m): 0.00 ml
+
+--- ZONIFICACIÓN RESIDENCIAL ---
+RDM (Residencial Densidad Media):
+  • Usos: Vivienda Unifamiliar + Multifamiliar
+  • Área Diferenciada D (norte/Javier Prado): área libre 25-30%, área mín 80m², 1 est./viv
+  • Lote normativo: el resultante de la habilitación urbana en conjuntos habitacionales
+RDA (Residencial Densidad Alta):
+  • Altura máxima: 8 pisos (general); hasta 12p en lotes >600m² frente Av. Javier Prado
+  • Parámetros según área diferenciada correspondiente
+RDB (Residencial Densidad Baja):
+  • Unifamiliar predominante · altura 3-4 pisos · Áreas A y B principalmente
+
+--- ESTACIONAMIENTO GENERAL (Ord. N°491-MSB + Ord. N°556-MSB) ---
+• Área A y B: 2 est./viv
+• Área C: 1.5 est./viv
+• Área D: 1 est./viv + 5% visitas
+• Área E: 1 est. / 1.5 viv
+• Bicicletas: Ord. N°491-MSB, Art. 14°, Cuadro N°05
+• Frentes >12m en áreas A/B/C: máx 60% del frente para uso vehicular
+
+--- NORMATIVA DE SOSTENIBILIDAD ---
+• Ord. N°593-MSB (30.09.2017): Edificaciones Sostenibles en Zonas Residenciales (voluntario)
+• Puede otorgar bonificaciones — verificar en certificado reciente
+
+--- CERTIFICADOS DE REFERENCIA ---
+CPU N°0359-2018 (Av. De La Poesía esq. Calle De La Prosa) — RDM Área D, caduca 01.06.2021

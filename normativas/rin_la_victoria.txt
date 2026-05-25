@@ -1,0 +1,85 @@
+
+=== REGLAMENTO NORMATIVO — DISTRITO DE LA VICTORIA ===
+Base principal: Ord. N°355-MLV + Ord. N°1082-MML · Área de Tratamiento Normativo II
+Cuadrante más activo para desarrollo: CZ corredor Javier Prado / Carlos Villarán / Av. México
+
+--- BASE LEGAL VIGENTE ---
+• Ord. N°355-MLV — Consolidación de zonas, Áreas mínimas de vivienda, Estacionamiento y Uso de Azoteas (La Victoria)
+• Ord. N°1082-MML — Reajuste integral Zonificación Usos del Suelo La Victoria y San Luis
+• Ord. N°1015-MML (14/05/2007) + Ord. N°1076-MML — Normas Generales Área Tratamiento Normativo II Lima Metropolitana
+• Ord. N°1136-MML, N°1692-MML, N°1826-MML, N°2316-MML — modifican plano Zonificación La Victoria
+• Ord. N°2388-2021 MML — Vía Expresa renombrada "Luis Fernán Bedoya Reyes" (antes Paseo de la República)
+• Ley N°29090 + D.S. N°029-2019-VIVIENDA — Ley de regulación de habilitaciones urbanas y edificaciones
+• RNE: A.010, A.020, A.070; RM N°061-2021-VIVIENDA (modifica art. 17° A.070 estacionamientos comercio)
+
+--- ZONIFICACIÓN CZ (COMERCIO ZONAL) — ZONA PREDOMINANTE EN CUADRANTE JAVIER PRADO ---
+Uso principal: Comercio Zonal (según Índice de Usos para Actividades Urbanas)
+Uso complementario: Unifamiliar, Multifamiliar y Conjunto Residencial (RDM y RDA compatibles)
+Área de tratamiento normativo: II
+
+ALTURA CZ:
+  Fórmula: 1.5 × (a + r)
+  a = ancho de la vía (ml)
+  r = retiro municipal establecido para AMBOS lados de la vía (suma de los dos retiros)
+  Ejemplo Av. Javier Prado (40m vía, retiro 5m cada lado): 1.5 × (40 + 10) = 75m ≈ 22-25 pisos
+  NOTA: la altura resultante no tiene tope fijo de pisos en CZ — se calcula caso a caso
+
+ÁREA LIBRE CZ:
+  Uso comercial: NO EXIGIBLE
+  Uso residencial compatible: según norma residencial compatible aplicable
+
+RETIRO MÍNIMO FRONTAL:
+  Avenidas: 5.00 ml
+  Calles / Jirones: 3.00 ml
+
+ESTACIONAMIENTO CZ (uso comercial):
+  1 estacionamiento cada 50 m² de área vendible/arrendable
+  Base: Art. 17° Norma A.070-COMERCIO del RNE, modificado por RM N°061-2021-VIVIENDA
+  Nota: La Municipalidad Distrital puede proponer requisitos distintos (ratificación MML requerida)
+  Estacionamientos de visita: mín 10% del total requerido para vivienda (cuando <10 estac. totales no obligatorio)
+  Bicicletas: mín 5% del área prevista para estacionamiento vehicular (no menor a 1 estacionamiento)
+
+ESTACIONAMIENTO RESIDENCIAL COMPATIBLE:
+  01 estacionamiento cada 1.5 viviendas (CZ+RDM y CZ+RDA)
+
+ALTURA MÁXIMA PISO A PISO:
+  Departamentos en edificios multifamiliares: 3.00 ml (máximo)
+  Uso comercial / compatible con vivienda: 4.00 ml (máximo)
+
+--- TABLA RESIDENCIAL COMPATIBLE CZ + RDM (Residencial Densidad Media) ---
+  Lote 120m² / frente 6ml  → 3 pisos · área libre 30% · 1 est/1.5 viv
+  Lote 150m² / frente 8ml  → 4 pisos · área libre 35% · 1 est/1.5 viv
+  Lote 200m² / frente 10ml → 5 pisos · área libre 35% · 1 est/1.5 viv
+                              [frente a Parque o Avda ancho >20m: 6 pisos]
+  Lote 300m² / frente 10ml → 6 pisos · área libre 35% · 1 est/1.5 viv
+                              [frente a Parque o Avda ancho >20m: 7 pisos]
+  Lote 1600m² / frente 20ml → 8 pisos (Conjunto Residencial) · área libre 40% · 1 est/1.5 viv
+
+--- TABLA RESIDENCIAL COMPATIBLE CZ + RDA (Residencial Densidad Alta) ---
+  Lote 300m² / frente 10ml  → 8 pisos · área libre 35% · 1 est/1.5 viv
+  Lote 450m² / frente 10ml  → 1.5(a+r) · área libre 40% · 1 est/1.5 viv
+                               [frente a Avda >20m o Parque: hasta 15 pisos]
+                               [frente a vía local: hasta 10 pisos]
+  Lote 2500m² / frente 25ml → 1.5(a+r) (Conjunto Residencial) · área libre 50% · 1 est/1.5 viv
+
+--- ÁREAS MÍNIMAS DE VIVIENDA (Ord. N°355-MLV Art. 22°, Lit. a) ---
+  3 dormitorios: 75 m²
+  2 dormitorios: 55 m²
+  1 dormitorio:  40 m²
+
+--- REGLAS ESPECIALES ---
+QUINTAS:
+  Altura máxima: 3 pisos (cuando es parte de lote matriz)
+
+ESTACIONAMIENTOS EN EDIFICIOS MIXTOS:
+  Obras nuevas deben cumplir AMBOS: estacionamientos para uso comercial + uso residencial, independientes
+  Locales comerciales existentes ≤40m²: pueden resolver estacionamientos en vía pública (si está dentro de sección vial)
+  No se exigen estacionamientos dentro del lote para locales ≤40m² con esta condición
+
+LOTES SIN DATOS DE ÁREA/FRENTE:
+  "El existente o según proyecto" — la municipalidad acepta el lote existente como válido
+
+--- CERTIFICADOS DE REFERENCIA ---
+CPU N°000371-2021 (Av. Javier Prado / Mz.B Lt.2 / El Palomar Norte) — CZ, caduca 29/10/2024
+CPU N°000367-2021 (Av. Carlos Villarán / Mz.B Lts.13-14-15 / El Palomar Norte) — CZ, caduca 29/10/2024
+CPU N°000132-2024 (Av. Javier Prado Este 1197-1199) — CZ, caduca 01/04/2027 [MÁS RECIENTE]

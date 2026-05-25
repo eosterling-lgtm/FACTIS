@@ -1,0 +1,66 @@
+
+=== REGLAMENTO DE ÍNDICES NORMATIVOS — DISTRITO DE SURQUILLO ===
+Municipalidad Distrital de Surquillo (MDS).
+ATN II — administrado por MML para zonificación, con reglamento propio MDS para edificaciones.
+Normativa base: Ord. N°1076-MML (08.10.2007, reajuste integral zonificación) +
+Ord. N°1156-MML (26.07.2008) + Ord. N°1574-MML (21.12.2011) + Ord. N°1842-MML (19.12.2014).
+Normativa distrital: Ord. N°501-MDS (30.03.2022, Régimen de Estacionamientos vigente) +
+Ord. N°533-2023-MDS (jun 2023, deroga Ord. N°391-MDS).
+⚠ ALERTA: Ord. N°391-MDS DEROGADA por Ord. N°533-2023-MDS — CPUs anteriores a jun 2023
+  que citen la Ord. N°391-MDS tienen estacionamientos desactualizados. Verificar Ord. N°501-MDS.
+Expedición de CPUs: Sub-Gerencia de Obras Privadas y Catastro — GDU-MDS.
+
+--- ZONA CZ (COMERCIO ZONAL) — ATN II ---
+[CPU N°437-2018-SOPC-GDU-MDS — Av. Angamos Este N°1795, Lote 1,246.90 m²]
+• Uso residencial compatible: RDA y RDM (Unifamiliar, Multifamiliar)
+• Área libre: NO exigible para uso comercial (0%)
+  → Pisos destinados a vivienda: área libre según uso residencial compatible
+• Altura máxima:
+  - Frente Av. Angamos Este: 1.5 × (a + r)
+  - Frente Av. Tomas Marsano: 1.5 × (a + r)
+  → a = ancho de vía · r = retiro municipal establecido para ambos lados
+• Retiro Municipal:
+  - Av. Angamos Este: 5.00 ml
+  - Av. Tomas Marsano: 5.00 ml
+• Tamaño de lote: Existente o según proyecto · Frente mínimo: el existente
+• Densidad neta: No aplicable
+• (**) Se puede usar el 100% del lote comercial para uso residencial
+
+--- ESTACIONAMIENTOS ---
+COMERCIAL (confirmado CPU y Ord. N°391-MDS — verificar Ord. N°501-MDS para vigencia):
+• General: 1 est. / 50 m² de área de uso comercial
+• Supermercados: 1 est. / 100 m² de área de venta
+• Tiendas de autoservicio: 1 est. / 100 m² de área de venta
+• Mercados: 1 est. / 25 puestos o tiendas
+• Cines y Teatros: 1 est. / 20 butacas
+• Locales de Espectáculos: 1 est. / 20 butacas
+• Locales Culturales y Clubes: 1 est. / 75 m² de área de venta
+• Locales de Culto: 1 est. / 30 m² de área de culto
+• Estacionamiento mínimo comercial: Art. 16, Item 16.2 Ord. N°391-MDS (verificar vigencia Ord. N°501-MDS)
+
+RESIDENCIAL (Ord. N°391-MDS — DEROGADA jun 2023 / reemplazada por Ord. N°501-MDS):
+• 2 y 3 dormitorios: 1 estacionamiento por unidad de vivienda
+• 1 dormitorio: 2 estacionamientos cada 3 unidades
+⚠ Para CPUs emitidos desde jun 2023: verificar estacionamiento en Ord. N°501-MDS vigente
+
+--- ZONAS RESIDENCIALES (Base Ord. N°1076-MML ATN II) ---
+RDA (Residencial Densidad Alta):
+• Uso compatible en CZ: multifamiliar / conj. residencial
+• Altura en zona CZ: 1.5(a+r) — igual que uso comercial
+• Frente a avenidas principales: retiro 5.00 ml confirmado (Angamos Este / Tomas Marsano)
+RDM (Residencial Densidad Media):
+• Uso compatible en CZ: unifamiliar / multifamiliar
+• Altura en zona CZ: 1.5(a+r)
+
+--- NOTAS CLAVE ---
+• Surquillo es ATN II — no tiene reglamento premium propio como San Isidro o Miraflores
+• En zona CZ: el 100% del lote puede destinarse a uso residencial
+• Altura se rige por fórmula 1.5(a+r) — no hay límite fijo de pisos en CZ
+• Las alturas máximas en cuadros de zonificación aplican a lotes iguales o mayores al normativo
+  (Ord. N°1076-MML — lotes menores al normativo → altura inmediata anterior)
+• Sección vial Av. Angamos Este y Av. Tomas Marsano: verificar en plano vial para calcular 1.5(a+r)
+
+--- CERTIFICADOS DE REFERENCIA ---
+CPU N°437-2018-SOPC-GDU-MDS / Exp. 005024-18 (Av. Angamos Este N°1795)
+— CZ + RDA/RDM, ATN II, caduca 25.09.2021
+⚠ Este CPU cita Ord. N°391-MDS (derogada) — estacionamientos deben verificarse con Ord. N°501-MDS

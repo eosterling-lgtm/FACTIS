@@ -1,0 +1,80 @@
+
+=== REGLAMENTO NORMATIVO — DISTRITO DE JESÚS MARÍA ===
+Base principal: Ord. N°1017-MML + Ord. N°2213-MML + Ord. N°586-MDJM · Área de Tratamiento Normativo II (Mayor Heterogeneidad de Función)
+Corredor principal: Av. General Eugenio Garzón (Vía Colectora C-09-A24, 20.00m) · Av. Cayetano Heredia · Av. De La Policía
+Limita con: San Isidro (este), Lince (este), Magdalena (sur/oeste), Pueblo Libre (oeste), Breña (norte)
+
+--- BASE LEGAL VIGENTE ---
+• Ord. N°1017-MML (16/05/07) — Reajuste Integral de Zonificación de los Usos del Suelo · distrito Jesús María
+• Ord. N°1076-MML (08/10/07) — Reajuste Integral Zonificación Área Tratamiento II Lima Metropolitana
+• Ord. N°2213-MML (29/12/2019) — Plano de Reajuste Integral de Zonificación Jesús María [ACTUALIZACIÓN RECIENTE]
+• Ord. N°586-MDJM — regula retiros municipales, estacionamientos, azoteas, registro visual y colindancia de alturas
+• A.C.N°077-2016-MDJM (21/11/2016) — estacionamientos mínimos RDA
+• D.S.N°006-2017-VIVIENDA (TUO Ley N°29090) Art. 14 Inc. 2f; DS N°029-2019-VIVIENDA
+• RNE — base técnica general
+
+--- RETIROS MÍNIMOS CONFIRMADOS ---
+  Av. General Eugenio Garzón (colectora 20m): 5.00 ml
+  Av. Cayetano Heredia (vía local I): 5.00 ml + Jardín de Aislamiento 2.50 ml (parte de la vía)
+  Av. De La Policía (vía local): 5.00 ml
+  Jr. General Luis Sánchez Cerro (vía local): 3.00 ml + Jardín de Aislamiento 2.00 ml (parte de la vía)
+  Jirones / calles locales: 3.00 ml
+  NOTA: los Jardines de Aislamiento forman parte del Derecho de Vía — no son retiro privado del lote
+
+=== ZONA RDA (RESIDENCIAL DENSIDAD ALTA) — AV. GARZÓN Y EJES PRINCIPALES ===
+Usos: Vivienda Multifamiliar y Conjunto Residencial
+
+TABLA RDA:
+  Lote 300m² / frente 10ml  → 8 pisos (24.00m) · área libre 35% · 1 est/1 viv
+  Lote 450m² / frente 10ml  → 1.5(a+r) · área libre 40% · 1 est/1 viv
+    [frente a Parque o Avenida ancho >20m: hasta 15 pisos]
+    [frente a vía local: hasta 10 pisos]
+  Lote 2500m² / frente 25ml → 1.5(a+r) (CR) · área libre 50% · 1 est/1 viv
+
+ESTACIONAMIENTO RDA: 1 cada 1 vivienda (A.C.N°077-2016-MDJM)
+
+=== ZONA RDM (RESIDENCIAL DENSIDAD MEDIA) — INTERIOR RESIDENCIAL ===
+Usos: Vivienda Unifamiliar, Multifamiliar y Conjunto Residencial
+Confirmado en: Av. De La Policía (vía local), Jr. Sánchez Cerro / Av. Cayetano Heredia
+
+TABLA RDM:
+  Unifamiliar/Multifamiliar lote 120m² / frente 6ml  → 3 pisos (9.00m)  · área libre 30% · 1 est/1.5 viv
+  Multifamiliar lote 150m² / frente 8ml               → 4 pisos (12.00m) / 5 pisos avda>20m (15.00m) · área libre 35% · 1 est/1.5 viv
+  Multifamiliar lote 200m² / frente 10ml              → 5 pisos (15.00m) / 6 pisos avda>20m (18.00m) · área libre 35% · 1 est/1.5 viv
+  Multifamiliar lote 300m² / frente 10ml              → 6 pisos (18.00m) / 7 pisos avda>20m (21.00m) · área libre 35% · 1 est/1.5 viv
+  CR lote 1600m² / frente 20ml                        → 8 pisos (24.00m) · área libre 40% · 1 est/1.5 viv
+
+ESTACIONAMIENTO RDM: 1 cada 1.5 viviendas (Ord. N°586-MDJM) — más flexible que RDA
+BONIFICACIÓN: frente a Parque o Avenida ancho >20m → +1 piso adicional al estándar
+RESTRICCIÓN PASAJES: predios frente a pasaje → altura máxima 3 pisos
+
+--- RESUMEN ESTACIONAMIENTOS POR ZONA ---
+  RDA: 1 est por cada 1 vivienda
+  RDM: 1 est por cada 1.5 viviendas
+
+--- ÁREAS MÍNIMAS DE VIVIENDA ---
+  3 dormitorios: 75 m² (confirmado en todos los certificados)
+  2 dormitorios: a definir en proyecto (porcentaje libre)
+  1 dormitorio:  a definir en proyecto (porcentaje libre)
+  NOTA: se considera dormitorio todo ambiente cuyas dimensiones lo permitan
+
+--- ALTURA EN METROS (equivalencias confirmadas) ---
+  8 pisos = 24.00 m · 7 pisos = 21.00 m · 6 pisos = 18.00 m
+  5 pisos = 15.00 m · 4 pisos = 12.00 m · 3 pisos = 9.00 m
+
+--- USO COMPLEMENTARIO EN PRIMER PISO ---
+  RDM / RDA (frente interior): oficinas administrativas + artesanías ≤35% del área del lote
+  RDM / RDA (frente a Avenida): comercio + oficinas en 1er piso con acceso independiente desde la calle
+  Unifamiliar permitida en cualquier lote >90m² en zonas residenciales
+
+--- REGLAS ESPECIALES ---
+• Av. Garzón (C-09-A24, 20m) → activa bonificación: RDA lotes ≥450m² hasta 15 pisos; RDM +1 piso
+• ATN II — normativa base MML aplica directamente (no es distrito premium ATN III)
+• Retiros, estacionamientos, azoteas, registro visual y colindancia de alturas → Ord. N°586-MDJM
+• Ord. N°2213-MML (2019) actualizó el plano de zonificación — verificar en certificado reciente
+
+--- CERTIFICADOS DE REFERENCIA ---
+CPU N°391-2019-MDJM (Av. Garzón 550-572) — RDA, caduca 03/10/2022
+CPU N°489-2018-MDJM (Av. Garzón 082) — RDA, caduca 27/11/2021
+CPU N°162-2020-MDJM (Av. De La Policía 640-642) — RDM, caduca 10/07/2023
+CPU N°097-2023-MDJM (Jr. Sánchez Cerro 1915 / Av. Cayetano Heredia 930) — RDM, caduca 22/03/2026 [MÁS RECIENTE]
