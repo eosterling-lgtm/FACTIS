@@ -445,6 +445,83 @@ def calcular_residencial(inp: dict) -> dict:
 
 
 # ═══════════════════════════════════════════════════════
+# CALCULADORA INVERSA DE TERRENO
+# ═══════════════════════════════════════════════════════
+
+def calcular_terreno_maximo(inp: dict) -> dict:
+    zona          = inp.get("zona", "")
+    m             = MERCADO.get(zona, {})
+    area_terreno  = inp.get("area_terreno", 0)
+    area_vendible = inp.get("area_vendible", 0)
+    area_techada  = inp.get("area_techada", 0)
+    num_pisos     = max(inp.get("num_pisos", 7), 1)
+    n_estac       = inp.get("n_estac", 0)
+    n_depositos   = inp.get("n_depositos", 0)
+    precio_m2     = inp.get("precio_m2", m.get("precio_2br", 0))
+    costo_const   = inp.get("costo_construccion", 920)
+    costo_sotano  = inp.get("costo_sotano", 450)
+    fee_constr    = inp.get("fee_constructora", 10.0) / 100
+    tasa_financ   = inp.get("tasa_financ", 7.0)
+    tasa_ir       = inp.get("tasa_ir", 29.5) / 100
+
+    ing_dptos    = area_vendible * precio_m2
+    ing_estac    = n_estac * m.get("precio_estac", 0)
+    ing_deposito = n_depositos * m.get("precio_deposito", 0)
+    ing_brutos   = ing_dptos + ing_estac + ing_deposito
+
+    c_obra_dptos   = area_techada * costo_const
+    c_obra_sotanos = n_estac * 25 * costo_sotano
+    c_construccion = (c_obra_dptos + c_obra_sotanos) * (1 + fee_constr)
+    c_arq          = area_techada * 10.5
+    c_esp          = area_techada * 4.4
+    c_supervision  = c_construccion * 0.005
+    c_permisos     = c_construccion * 0.005
+    c_gerencia     = ing_brutos * 0.060
+    c_gestion_com  = ing_brutos * 0.005
+    c_publicidad   = ing_brutos * 0.025
+    c_ventas       = ing_brutos * 0.030
+    c_postventa    = ing_brutos * 0.005
+    c_due_dilig    = 11500
+    _meses_obra    = max(18, num_pisos * 2 + 8)
+    c_financiero   = c_construccion * 0.40 * 0.50 * tasa_financ / 100 * (_meses_obra / 12)
+
+    c_base_constr  = c_construccion + c_arq + c_esp
+    c_legales_base = (c_due_dilig + c_base_constr) * 0.005
+    # factor de transacción: alcabala 3% + notarial 0.3% + registral 0.15%
+    factor_trans   = 1 + 0.03 + 0.003 + 0.0015  # 1.0345
+    # c_legales también sube 0.5% del terreno: factor_trans * 0.005 extra por cada $ de terreno
+    factor_terreno = factor_trans * 1.005
+
+    C_fixed = (c_base_constr + c_supervision + c_legales_base + c_postventa + c_permisos
+               + c_gerencia + c_gestion_com + c_publicidad + c_ventas
+               + c_due_dilig + c_financiero)
+
+    k = max(1 - tasa_ir, 0.01)
+
+    resultados = {}
+    for mg in [0.10, 0.12, 0.15, 0.18, 0.20]:
+        target_c_total = ing_brutos * (1 - mg / k)
+        T = (target_c_total - C_fixed) / factor_terreno
+        resultados[mg] = max(0, round(T))
+
+    tc = float((st.secrets.get("mercado") or {}).get("tipo_cambio", 3.45))
+
+    return {
+        "ing_brutos":    round(ing_brutos),
+        "C_fixed":       round(C_fixed),
+        "c_construccion": round(c_construccion),
+        "c_financiero":  round(c_financiero),
+        "area_terreno":  area_terreno,
+        "area_vendible": area_vendible,
+        "area_techada":  area_techada,
+        "precio_m2":     precio_m2,
+        "zona":          zona,
+        "resultados":    resultados,
+        "tipo_cambio":   tc,
+    }
+
+
+# ═══════════════════════════════════════════════════════
 # CONFIGURACIÓN
 # ═══════════════════════════════════════════════════════
 
@@ -5195,7 +5272,7 @@ with st.sidebar:
     st.markdown("### MÓDULO DE ANÁLISIS")
     tipo_op = st.radio(
         "tipo_op_radio",
-        ["Proyecto Inmobiliario", "Proyecto Logístico / Industrial", "Inmueble Residencial"],
+        ["Proyecto Inmobiliario", "Proyecto Logístico / Industrial", "Inmueble Residencial", "Calculadora Inversa"],
         key="tipo_operacion",
         label_visibility="collapsed",
     )
@@ -5219,6 +5296,12 @@ with st.sidebar:
             "Valuación de inmueble existente",
             "Precio · Renta · Yield · Comparables",
             "Úsalo cuando tienes un departamento, casa o unidad residencial ya construida y quieres analizar su valor o rentabilidad.",
+        ),
+        "Calculadora Inversa": (
+            "🎯",
+            "Precio máximo de terreno",
+            "Margen objetivo → Terreno máx.",
+            "Ingresa el margen que necesitas y la app calcula el precio máximo que puedes pagar por el terreno. Ideal para negociaciones rápidas con propietarios.",
         ),
     }
     _mico, _mtit, _mtag, _mdesc = _mod_ctx[tipo_op]
@@ -10093,3 +10176,167 @@ elif tipo_op == "Inmueble Residencial":
             '</div></div>',
             unsafe_allow_html=True
         )
+
+# ═══════════════════════════════════════════════════════
+# MÓDULO 4: CALCULADORA INVERSA DE TERRENO
+# ═══════════════════════════════════════════════════════
+elif tipo_op == "Calculadora Inversa":
+    st.markdown(
+        '<div style="font-size:9px;color:#B8904A;letter-spacing:4px;text-transform:uppercase;'
+        'font-weight:600;margin-bottom:4px;">Osterling Advisory</div>'
+        '<div style="font-size:26px;font-weight:700;color:#FFFFFF;letter-spacing:-0.5px;">'
+        '🎯 Calculadora Inversa de Terreno</div>'
+        '<div style="font-size:13px;color:#B0C0D0;margin-top:6px;margin-bottom:24px;">'
+        'Ingresa el margen objetivo y los datos del proyecto — la app calcula el precio máximo '
+        'que puedes pagar por el terreno para alcanzar ese margen.</div>',
+        unsafe_allow_html=True)
+
+    _ci_col1, _ci_col2 = st.columns([1, 1], gap="large")
+
+    with _ci_col1:
+        st.markdown("#### Datos del proyecto")
+        _ci_zona = st.selectbox("Distrito", sorted(MERCADO.keys()), key="ci_zona")
+        _m_ci = MERCADO.get(_ci_zona, {})
+        _ci_area_t = st.number_input("Área del terreno (m²)", 100, 5000, 400, 10, key="ci_area_t")
+        _ci_pisos  = st.number_input("Número de pisos", 1, 30, 8, 1, key="ci_pisos")
+
+        _ci_cus_default = min(_ci_pisos * 0.85, 9.0)
+        _ci_area_techada = st.number_input(
+            "Área techada total (m²)",
+            100, 20000,
+            int(_ci_area_t * _ci_cus_default),
+            50, key="ci_area_techada",
+            help="Área techada total construida. Referencia: área terreno × CUS")
+        _ci_area_v = st.number_input(
+            "Área vendible (m²)",
+            50, 15000,
+            int(_ci_area_techada * 0.73),
+            50, key="ci_area_v",
+            help="Aprox. 70-75% del área techada")
+
+        _ci_estac = st.number_input("Estacionamientos", 0, 200, max(int(_ci_area_v / 75), 0), 1, key="ci_estac")
+        _ci_dep   = st.number_input("Depósitos", 0, 200, max(int(_ci_area_v / 150), 0), 1, key="ci_dep")
+
+        st.markdown("#### Costos y precios")
+        _ci_precio_m2 = st.number_input(
+            "Precio de venta ($/m² vendible)",
+            500, 5000,
+            int(_m_ci.get("precio_2br", 1800)),
+            50, key="ci_precio_m2")
+        _ci_costo_c = st.number_input("Costo construcción ($/m² techado)", 500, 2000, 920, 10, key="ci_costo_c")
+        _ci_tasa_f  = st.number_input("Tasa financiamiento (%)", 0.0, 15.0, 7.0, 0.5, key="ci_tasa_f")
+
+        st.markdown("#### Margen objetivo")
+        _ci_margen = st.slider(
+            "Margen neto objetivo (%)", 5, 30, 15, 1, key="ci_margen",
+            help="Margen neto = utilidad neta / ingresos brutos")
+
+    _ci_inp = {
+        "zona": _ci_zona,
+        "area_terreno": _ci_area_t,
+        "area_vendible": _ci_area_v,
+        "area_techada": _ci_area_techada,
+        "num_pisos": _ci_pisos,
+        "n_estac": _ci_estac,
+        "n_depositos": _ci_dep,
+        "precio_m2": _ci_precio_m2,
+        "costo_construccion": _ci_costo_c,
+        "tasa_financ": _ci_tasa_f,
+        "tasa_ir": 29.5,
+        "margen_objetivo": _ci_margen,
+    }
+    _ci_r = calcular_terreno_maximo(_ci_inp)
+
+    with _ci_col2:
+        st.markdown("#### Resultado")
+        _ci_T    = _ci_r["resultados"].get(_ci_margen / 100, 0)
+        _ci_tc   = _ci_r["tipo_cambio"]
+        _ci_T_s  = round(_ci_T * _ci_tc)
+        _ci_T_m2 = round(_ci_T / _ci_area_t) if _ci_area_t > 0 else 0
+        _ci_T_m2_s = round(_ci_T_m2 * _ci_tc)
+        _ci_ing  = _ci_r["ing_brutos"]
+
+        # Semáforo según precio/m² de terreno vs. benchmarks de Lima
+        if _ci_T_m2 <= 0:
+            _ci_sem = "🔴"
+            _ci_sem_txt = "Inviable con estos parámetros"
+            _ci_sem_col = "#FF4444"
+        elif _ci_T_m2 >= 800:
+            _ci_sem = "🟢"
+            _ci_sem_txt = "Holgura amplia — zona premium viable"
+            _ci_sem_col = "#4CAF50"
+        elif _ci_T_m2 >= 400:
+            _ci_sem = "🟡"
+            _ci_sem_txt = "Viable — negocia dentro de este rango"
+            _ci_sem_col = "#FFC107"
+        elif _ci_T_m2 >= 150:
+            _ci_sem = "🟡"
+            _ci_sem_txt = "Viable — zona media/periferia"
+            _ci_sem_col = "#FFC107"
+        else:
+            _ci_sem = "🔴"
+            _ci_sem_txt = "Precio máximo muy bajo — revisar supuestos"
+            _ci_sem_col = "#FF4444"
+
+        st.markdown(
+            f'<div style="background:linear-gradient(135deg,#1A2737,#1E2D3D);border-radius:12px;'
+            f'padding:24px;border:1px solid rgba(184,144,74,0.3);margin-bottom:16px;">'
+            f'<div style="font-size:11px;color:#B8904A;letter-spacing:2px;text-transform:uppercase;'
+            f'font-weight:600;margin-bottom:8px;">Precio máximo de terreno — margen {_ci_margen}%</div>'
+            f'<div style="font-size:38px;font-weight:800;color:#FFFFFF;letter-spacing:-1px;">'
+            f'${_ci_T:,.0f}</div>'
+            f'<div style="font-size:15px;color:#B0C0D0;margin-top:4px;">S/ {_ci_T_s:,.0f}</div>'
+            f'<div style="width:40px;height:2px;background:#B8904A;margin:14px 0;"></div>'
+            f'<div style="display:flex;gap:32px;">'
+            f'<div><div style="font-size:22px;font-weight:700;color:#D4A853;">${_ci_T_m2:,}/m²</div>'
+            f'<div style="font-size:10px;color:#8AA8C0;letter-spacing:1px;text-transform:uppercase;">por m² de terreno</div></div>'
+            f'<div><div style="font-size:22px;font-weight:700;color:#D4A853;">S/ {_ci_T_m2_s:,}/m²</div>'
+            f'<div style="font-size:10px;color:#8AA8C0;letter-spacing:1px;text-transform:uppercase;">en soles</div></div>'
+            f'</div>'
+            f'<div style="margin-top:16px;padding:10px 14px;background:rgba(255,255,255,0.04);'
+            f'border-radius:8px;border-left:3px solid {_ci_sem_col};">'
+            f'<div style="font-size:13px;color:{_ci_sem_col};font-weight:600;">{_ci_sem} {_ci_sem_txt}</div>'
+            f'</div></div>',
+            unsafe_allow_html=True)
+
+        _ci_mc1, _ci_mc2 = st.columns(2)
+        _ci_mc1.metric("Ingresos brutos", f"${_ci_ing:,.0f}")
+        _ci_mc2.metric("Costo construcción", f"${_ci_r['c_construccion']:,.0f}")
+
+        st.markdown("#### Tabla de sensibilidad")
+        st.caption("Precio máximo de terreno según margen objetivo")
+        _ci_rows = []
+        for mg_k, mg_label in [(0.10,"10%"),(0.12,"12%"),(0.15,"15%"),(0.18,"18%"),(0.20,"20%")]:
+            T_v = _ci_r["resultados"].get(mg_k, 0)
+            T_m2_v = round(T_v / _ci_area_t) if _ci_area_t > 0 else 0
+            marker = " ◀" if abs(mg_k - _ci_margen/100) < 0.001 else ""
+            _ci_rows.append({
+                "Margen": mg_label + marker,
+                "Terreno máx. ($)": f"${T_v:,.0f}",
+                "$/m² terreno": f"${T_m2_v:,}",
+                f"S/ m² (TC {_ci_tc})": f"S/ {round(T_m2_v * _ci_tc):,}",
+            })
+        st.dataframe(
+            pd.DataFrame(_ci_rows),
+            hide_index=True,
+            use_container_width=True)
+
+        st.markdown("#### Desglose de costos fijos")
+        st.caption("Costos independientes del terreno (base de cálculo)")
+        _ci_desglose = {
+            "Construcción (inc. fee constructora)": _ci_r["c_construccion"],
+            "Gerenciamiento (6% ing.)": round(_ci_ing * 0.06),
+            "Comercialización (6% ing.)": round(_ci_ing * 0.065),
+            "Diseño (arq. + esp.)": round(_ci_area_techada * (10.5 + 4.4)),
+            "Costo financiero (est.)": _ci_r["c_financiero"],
+            "Due diligence + otros fijos": 11500,
+        }
+        for _lbl, _val in _ci_desglose.items():
+            pct = _val / _ci_ing * 100 if _ci_ing > 0 else 0
+            st.markdown(
+                f'<div style="display:flex;justify-content:space-between;padding:4px 0;'
+                f'border-bottom:1px solid rgba(255,255,255,0.05);font-size:12px;">'
+                f'<span style="color:#B0C0D0;">{_lbl}</span>'
+                f'<span style="color:#FFFFFF;font-weight:600;">${_val:,.0f} '
+                f'<span style="color:#8AA8C0;font-weight:400;">({pct:.1f}%)</span></span></div>',
+                unsafe_allow_html=True)
