@@ -83,17 +83,18 @@ def guardar_proyecto(nombre: str, estado: dict, tipo: str = "", zona: str = "") 
     return _Proyecto(fp.name, path=fp)
 
 
-def listar_proyectos() -> list:
+def listar_proyectos(con_resumen: bool = False) -> list:
     usuario = st.session_state.get("_username", "unknown")
     sb = _get_supabase()
     if sb:
         try:
+            cols = "id, nombre_proyecto, tipo, zona, creado_en" + (", resumen" if con_resumen else "")
             resp = (
                 sb.table("proyectos")
-                  .select("id, nombre_proyecto, tipo, zona, creado_en")
+                  .select(cols)
                   .eq("usuario", usuario)
                   .order("creado_en", desc=True)
-                  .limit(50)
+                  .limit(100)
                   .execute()
             )
             result = []
@@ -101,7 +102,14 @@ def listar_proyectos() -> list:
                 fecha = (row.get("creado_en") or "")[:10]
                 tipo_tag = row.get("tipo") or ""
                 display = f"{row['nombre_proyecto']}  [{tipo_tag}  ·  {fecha}]"
-                result.append(_Proyecto(display, id=row["id"]))
+                p = _Proyecto(display, id=row["id"])
+                if con_resumen:
+                    p._resumen = row.get("resumen") or {}
+                    p._tipo    = tipo_tag
+                    p._zona    = row.get("zona") or ""
+                    p._fecha   = fecha
+                    p._nombre  = row.get("nombre_proyecto") or display
+                result.append(p)
             return result
         except Exception:
             pass
@@ -3286,6 +3294,188 @@ def calcular_financiero(cabida: dict, fin: dict, zona: str) -> dict:
 
 
 # ═══════════════════════════════════════════════════════
+# GENERADOR DE REPORTE EXCEL
+# ═══════════════════════════════════════════════════════
+
+def generar_excel_factis(result: dict, cabida: dict, params: dict,
+                         fin_inputs: dict, zona: str) -> bytes:
+    import io
+    from openpyxl import Workbook
+    from openpyxl.styles import (Font, PatternFill, Alignment, Border, Side,
+                                  numbers)
+    from openpyxl.utils import get_column_letter
+
+    GOLD   = "B8904A"
+    DARK   = "0A1628"
+    LIGHT  = "F5F2ED"
+    WHITE  = "FFFFFF"
+    GRAY   = "E8E4DC"
+
+    def _hdr_fill(ws, row, col, value, bg=DARK, fg=WHITE, bold=True, size=10):
+        c = ws.cell(row=row, column=col, value=value)
+        c.fill = PatternFill("solid", fgColor=bg)
+        c.font = Font(bold=bold, color=fg, size=size)
+        c.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+        c.border = Border(
+            bottom=Side(style="thin", color=GOLD),
+            right=Side(style="thin", color="DDDDDD"))
+        return c
+
+    def _val_cell(ws, row, col, value, fmt=None, bold=False, bg=WHITE):
+        c = ws.cell(row=row, column=col, value=value)
+        c.font = Font(bold=bold, size=10, color=DARK)
+        c.fill = PatternFill("solid", fgColor=bg)
+        c.alignment = Alignment(horizontal="right", vertical="center")
+        c.border = Border(right=Side(style="thin", color="DDDDDD"),
+                          bottom=Side(style="thin", color="EEEEEE"))
+        if fmt:
+            c.number_format = fmt
+        return c
+
+    def _lbl_cell(ws, row, col, value, bold=False, bg=LIGHT):
+        c = ws.cell(row=row, column=col, value=value)
+        c.font = Font(bold=bold, size=10, color=DARK)
+        c.fill = PatternFill("solid", fgColor=bg)
+        c.alignment = Alignment(horizontal="left", vertical="center")
+        c.border = Border(right=Side(style="thin", color="DDDDDD"),
+                          bottom=Side(style="thin", color="EEEEEE"))
+        return c
+
+    wb  = Workbook()
+    r   = result.get("resumen", {})
+    det = result.get("detalle_costos", {})
+    ing = result.get("detalle_ingresos", {})
+
+    # ── Hoja 1: Resumen Ejecutivo ────────────────────────
+    ws1 = wb.active
+    ws1.title = "Resumen Ejecutivo"
+    ws1.column_dimensions["A"].width = 32
+    ws1.column_dimensions["B"].width = 22
+    ws1.column_dimensions["C"].width = 18
+    ws1.row_dimensions[1].height = 36
+
+    # Título
+    t = ws1.cell(row=1, column=1, value=f"FACTIS — Reporte Financiero · {zona}")
+    t.font = Font(bold=True, size=14, color=GOLD)
+    t.fill = PatternFill("solid", fgColor=DARK)
+    t.alignment = Alignment(horizontal="left", vertical="center")
+    ws1.merge_cells("A1:C1")
+    ws1.cell(row=2, column=1, value=f"Proyecto: {fin_inputs.get('nombre_proyecto', zona)}").font = Font(size=10, color="888888")
+    ws1.cell(row=2, column=2, value=f"Zona: {zona}").font = Font(size=10, color="888888")
+    ws1.cell(row=2, column=3, value=f"Fecha: {datetime.date.today().strftime('%d/%m/%Y')}").font = Font(size=10, color="888888")
+
+    # Cabeceras bloque KPIs
+    _hdr_fill(ws1, 4, 1, "INDICADOR")
+    _hdr_fill(ws1, 4, 2, "VALOR (USD)")
+    _hdr_fill(ws1, 4, 3, "REFERENCIA")
+
+    kpis = [
+        ("Ingresos Brutos",     r.get("ingresos_brutos", 0),      "$#,##0",  "100%"),
+        ("Costo Total",         r.get("costo_total", 0),           "$#,##0",  f"{100-r.get('margen_bruto_pct',0):.1f}% ing."),
+        ("Utilidad Bruta",      r.get("utilidad_bruta", 0),        "$#,##0",  f"{r.get('margen_bruto_pct',0):.1f}% bruto"),
+        ("Impuesto a la Renta", r.get("costo_ir", 0),             "$#,##0",  f"{r.get('ir_pct',29.5):.1f}%"),
+        ("Utilidad Neta",       r.get("utilidad_neta", 0),        "$#,##0",  f"{r.get('margen_pct',0):.1f}% neto"),
+        (None, None, None, None),
+        ("TIR Anual (aprox.)",  r.get("tir_anual_pct", 0),        "0.0\"%\"", "Objetivo >15%"),
+        ("ROI",                 r.get("roi_pct", 0),               "0.0\"%\"", "Utilidad/Costo"),
+        ("TIT (terreno/ingr.)", r.get("tit_pct", 0),              "0.0\"%\"", "Ideal <20%"),
+        ("Margen bruto",        r.get("margen_bruto_pct", 0),     "0.0\"%\"", "Pre-IR"),
+        ("Margen neto",         r.get("margen_pct", 0),           "0.0\"%\"", "Post-IR"),
+    ]
+    for i, row_data in enumerate(kpis, start=5):
+        if row_data[0] is None:
+            for col in range(1, 4):
+                ws1.cell(row=i, column=col).fill = PatternFill("solid", fgColor=GRAY)
+            continue
+        lbl, val, fmt, ref = row_data
+        _lbl_cell(ws1, i, 1, lbl, bold=(lbl in ("Utilidad Neta", "TIR Anual (aprox.)")))
+        _val_cell(ws1, i, 2, val, fmt=fmt, bold=(lbl in ("Utilidad Neta",)))
+        ws1.cell(row=i, column=3, value=ref).font = Font(size=9, color="888888", italic=True)
+
+    # Cabida resumen
+    ws1.cell(row=17, column=1, value="CABIDA").font = Font(bold=True, size=11, color=GOLD)
+    cabida_kpis = [
+        ("Unidades totales",  cabida.get("total_unidades", 0)),
+        ("Pisos",             cabida.get("num_pisos", 0)),
+        ("Área techada (m²)", cabida.get("area_techada_total_m2", 0)),
+        ("Área vendible (m²)",cabida.get("area_vendible_m2", 0)),
+        ("Estacionamientos",  cabida.get("estac_residentes", 0)),
+        ("Depósitos",         cabida.get("depositos_total", 0)),
+    ]
+    for i, (lbl, val) in enumerate(cabida_kpis, start=18):
+        _lbl_cell(ws1, i, 1, lbl)
+        _val_cell(ws1, i, 2, val, fmt="#,##0")
+
+    # ── Hoja 2: Estructura de Costos ────────────────────
+    ws2 = wb.create_sheet("Estructura de Costos")
+    ws2.column_dimensions["A"].width = 38
+    ws2.column_dimensions["B"].width = 22
+    ws2.column_dimensions["C"].width = 14
+
+    _hdr_fill(ws2, 1, 1, "RUBRO DE COSTO")
+    _hdr_fill(ws2, 1, 2, "MONTO (USD)")
+    _hdr_fill(ws2, 1, 3, "% TOTAL")
+    total_cost = r.get("costo_total", 1) or 1
+    for i, (lbl, val) in enumerate(det.items(), start=2):
+        bg = LIGHT if i % 2 == 0 else WHITE
+        _lbl_cell(ws2, i, 1, lbl, bg=bg)
+        _val_cell(ws2, i, 2, val, fmt="$#,##0", bg=bg)
+        _val_cell(ws2, i, 3, round(val / total_cost * 100, 1), fmt='0.0"%"', bg=bg)
+    # Total
+    n = len(det) + 2
+    _lbl_cell(ws2, n, 1, "TOTAL COSTOS", bold=True, bg=GRAY)
+    _val_cell(ws2, n, 2, sum(det.values()), fmt="$#,##0", bold=True, bg=GRAY)
+    _val_cell(ws2, n, 3, 100.0, fmt='0.0"%"', bold=True, bg=GRAY)
+
+    # ── Hoja 3: Ingresos ────────────────────────────────
+    ws3 = wb.create_sheet("Ingresos")
+    ws3.column_dimensions["A"].width = 38
+    ws3.column_dimensions["B"].width = 22
+    ws3.column_dimensions["C"].width = 14
+    _hdr_fill(ws3, 1, 1, "FUENTE DE INGRESO")
+    _hdr_fill(ws3, 1, 2, "MONTO (USD)")
+    _hdr_fill(ws3, 1, 3, "% TOTAL")
+    total_ing = r.get("ingresos_brutos", 1) or 1
+    for i, (lbl, val) in enumerate(ing.items(), start=2):
+        bg = LIGHT if i % 2 == 0 else WHITE
+        _lbl_cell(ws3, i, 1, lbl, bg=bg)
+        _val_cell(ws3, i, 2, val, fmt="$#,##0", bg=bg)
+        _val_cell(ws3, i, 3, round(val / total_ing * 100, 1), fmt='0.0"%"', bg=bg)
+    n3 = len(ing) + 2
+    _lbl_cell(ws3, n3, 1, "TOTAL INGRESOS", bold=True, bg=GRAY)
+    _val_cell(ws3, n3, 2, sum(ing.values()), fmt="$#,##0", bold=True, bg=GRAY)
+    _val_cell(ws3, n3, 3, 100.0, fmt='0.0"%"', bold=True, bg=GRAY)
+
+    # ── Hoja 4: Parámetros del Terreno ──────────────────
+    ws4 = wb.create_sheet("Parámetros")
+    ws4.column_dimensions["A"].width = 30
+    ws4.column_dimensions["B"].width = 24
+    _hdr_fill(ws4, 1, 1, "PARÁMETRO")
+    _hdr_fill(ws4, 1, 2, "VALOR")
+    param_rows = [
+        ("Ubicación",            params.get("ubicacion", zona)),
+        ("Distrito",             zona),
+        ("Área del terreno",     f"{params.get('area_terreno_m2','—')} m²"),
+        ("Frente",               f"{params.get('frente_ml','—')} ml"),
+        ("Zonificación",         params.get("zonificacion", "—")),
+        ("Pisos máx.",           params.get("pisos_max", "—")),
+        ("Área libre mín.",      params.get("area_libre_min", "—")),
+        ("Precio terreno",       f"${fin_inputs.get('costo_terreno',0):,.0f}"),
+        ("Precio venta m²",      f"${fin_inputs.get('precio_venta_m2',0):,.0f}"),
+        ("Costo construcción m²",f"${fin_inputs.get('costo_construccion',0):,.0f}"),
+    ]
+    for i, (lbl, val) in enumerate(param_rows, start=2):
+        bg = LIGHT if i % 2 == 0 else WHITE
+        _lbl_cell(ws4, i, 1, lbl, bg=bg)
+        _val_cell(ws4, i, 2, val, bg=bg)
+        ws4.cell(row=i, column=2).alignment = Alignment(horizontal="left")
+
+    buf = io.BytesIO()
+    wb.save(buf)
+    return buf.getvalue()
+
+
+# ═══════════════════════════════════════════════════════
 # GENERADOR DE REPORTE PDF
 # ═══════════════════════════════════════════════════════
 
@@ -5272,7 +5462,7 @@ with st.sidebar:
     st.markdown("### MÓDULO DE ANÁLISIS")
     tipo_op = st.radio(
         "tipo_op_radio",
-        ["Proyecto Inmobiliario", "Proyecto Logístico / Industrial", "Inmueble Residencial", "Calculadora Inversa"],
+        ["Proyecto Inmobiliario", "Proyecto Logístico / Industrial", "Inmueble Residencial", "Calculadora Inversa", "Portfolio"],
         key="tipo_operacion",
         label_visibility="collapsed",
     )
@@ -5302,6 +5492,12 @@ with st.sidebar:
             "Precio máximo de terreno",
             "Margen objetivo → Terreno máx.",
             "Ingresa el margen que necesitas y la app calcula el precio máximo que puedes pagar por el terreno. Ideal para negociaciones rápidas con propietarios.",
+        ),
+        "Portfolio": (
+            "📁",
+            "Proyectos guardados",
+            "KPIs · Historial · Comparativa",
+            "Vista consolidada de todos los proyectos analizados y guardados. Compara KPIs entre proyectos y revisa el historial de versiones.",
         ),
     }
     _mico, _mtit, _mtag, _mdesc = _mod_ctx[tipo_op]
@@ -6595,7 +6791,7 @@ if tipo_op == "Proyecto Inmobiliario":
             </div>
         </div>""", unsafe_allow_html=True)
 
-        tabs = st.tabs(["Parámetros", "Cabida", "Financiero", "Competencia", "Flujo de Caja", "Legal", "Resumen", "Propuesta"])
+        tabs = st.tabs(["Parámetros", "Cabida", "Financiero", "Competencia", "Flujo de Caja", "Legal", "Resumen", "Propuesta", "Comparador"])
 
         # ── TAB 1: PARÁMETROS ────────────────────────────
         with tabs[0]:
@@ -7123,9 +7319,9 @@ if tipo_op == "Proyecto Inmobiliario":
                 st.markdown(_tbl, unsafe_allow_html=True)
                 st.caption("Margen/TIR/ROI: Verde = óptimo · Amarillo = aceptable · Rojo = revisar")
 
-                # ── Botón de descarga PDF ─────────────────
+                # ── Botones de descarga PDF + Excel ──────────
                 st.markdown("---")
-                _pdf_col1, _pdf_col2 = st.columns([3, 1])
+                _pdf_col1, _pdf_col2, _pdf_col3 = st.columns([2, 1, 1])
                 with _pdf_col1:
                     st.markdown(
                         '<div style="font-size:11px;color:#7A7268;padding-top:8px;">'
@@ -7133,10 +7329,10 @@ if tipo_op == "Proyecto Inmobiliario":
                         'análisis financiero y estructura de costos.</div>',
                         unsafe_allow_html=True)
                 with _pdf_col2:
-                    if st.button("⬇ DESCARGAR REPORTE PDF",
+                    if st.button("⬇ DESCARGAR PDF",
                                  use_container_width=True, type="primary",
                                  key="btn_pdf"):
-                        with st.spinner("Generando reporte…"):
+                        with st.spinner("Generando PDF…"):
                             try:
                                 _pdf_bytes = generar_pdf_factis(
                                     result=st.session_state.financ,
@@ -7159,7 +7355,34 @@ if tipo_op == "Proyecto Inmobiliario":
                                     key="btn_pdf_dl",
                                 )
                             except Exception as _pdf_err:
-                                st.error(f"Error al generar PDF: {_pdf_err}")
+                                st.error(f"Error PDF: {_pdf_err}")
+                with _pdf_col3:
+                    if st.button("⬇ DESCARGAR EXCEL",
+                                 use_container_width=True,
+                                 key="btn_excel"):
+                        with st.spinner("Generando Excel…"):
+                            try:
+                                _xl_bytes = generar_excel_factis(
+                                    result=st.session_state.financ,
+                                    cabida=st.session_state.cabida,
+                                    params=st.session_state.params,
+                                    fin_inputs=fin_run,
+                                    zona=zona_sel,
+                                )
+                                _xl_nombre = (
+                                    f"Factis_{zona_sel.replace(' ','_')}_"
+                                    f"{datetime.date.today().strftime('%Y%m%d')}.xlsx"
+                                )
+                                st.download_button(
+                                    label="📊 GUARDAR EXCEL",
+                                    data=_xl_bytes,
+                                    file_name=_xl_nombre,
+                                    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                                    use_container_width=True,
+                                    key="btn_xl_dl",
+                                )
+                            except Exception as _xl_err:
+                                st.error(f"Error Excel: {_xl_err}")
 
         # ── TAB 4: COMPETENCIA ───────────────────────────
         with tabs[3]:
@@ -8126,6 +8349,110 @@ if tipo_op == "Proyecto Inmobiliario":
             '</div>',
             unsafe_allow_html=True
         )
+
+        # ── TAB 9: COMPARADOR DE TERRENOS ────────────────
+        with tabs[8]:
+            st.markdown('<div class="section-title">Comparador de Terrenos</div>', unsafe_allow_html=True)
+            st.caption("Compara dos terrenos lado a lado con los mismos parámetros de construcción y venta.")
+
+            _cmp_za, _cmp_zb = st.columns(2)
+            with _cmp_za:
+                st.markdown("#### Terreno A")
+                _cmp_zona_a    = st.selectbox("Distrito A", sorted(MERCADO.keys()), key="cmp_zona_a")
+                _cmp_terreno_a = st.number_input("Costo terreno A ($)", 0, 50_000_000, 800_000, 10_000, key="cmp_t_a")
+                _cmp_area_a    = st.number_input("Área terreno A (m²)", 50, 5000, 400, 10, key="cmp_area_a")
+                _cmp_pisos_a   = st.number_input("Pisos A", 1, 30, 8, 1, key="cmp_pisos_a")
+            with _cmp_zb:
+                st.markdown("#### Terreno B")
+                _cmp_zona_b    = st.selectbox("Distrito B", sorted(MERCADO.keys()), index=1, key="cmp_zona_b")
+                _cmp_terreno_b = st.number_input("Costo terreno B ($)", 0, 50_000_000, 900_000, 10_000, key="cmp_t_b")
+                _cmp_area_b    = st.number_input("Área terreno B (m²)", 50, 5000, 420, 10, key="cmp_area_b")
+                _cmp_pisos_b   = st.number_input("Pisos B", 1, 30, 9, 1, key="cmp_pisos_b")
+
+            st.markdown("#### Parámetros comunes")
+            _cmp_c1, _cmp_c2, _cmp_c3 = st.columns(3)
+            _cmp_pv   = _cmp_c1.number_input("Precio venta ($/m² vendible)", 800, 5000, 1800, 50, key="cmp_pv")
+            _cmp_cc   = _cmp_c2.number_input("Costo construcción ($/m² techado)", 500, 2000, 920, 10, key="cmp_cc")
+            _cmp_cus  = _cmp_c3.number_input("CUS (coef. utiliz. suelo)", 1.0, 15.0, 6.5, 0.5, key="cmp_cus",
+                                              help="Área techada = área terreno × CUS")
+
+            def _cmp_cabida(area, pisos, cus):
+                at = round(area * cus)
+                av = round(at * 0.73)
+                return {
+                    "total_unidades": max(round(av / 80), 1),
+                    "area_techada_total_m2": at,
+                    "area_vendible_m2": av,
+                    "num_pisos": pisos,
+                    "estac_residentes": max(round(av / 75), 0),
+                    "estac_visitas": 0,
+                    "estac_total": max(round(av / 75), 0),
+                    "depositos_total": max(round(av / 150), 0),
+                }
+
+            _cmp_fin_a = {"costo_terreno": _cmp_terreno_a, "precio_venta_m2": _cmp_pv,
+                          "costo_construccion": _cmp_cc, "include_alcabala": True,
+                          "include_dd": True, "tasa_ir": 29.5, "tasa_financ": 7.0,
+                          "fee_constructora": 10.0, "costo_sotano_m2": 450, "nombre_proyecto": "Terreno A"}
+            _cmp_fin_b = {**_cmp_fin_a, "costo_terreno": _cmp_terreno_b, "nombre_proyecto": "Terreno B"}
+
+            _cmp_cab_a = _cmp_cabida(_cmp_area_a, _cmp_pisos_a, _cmp_cus)
+            _cmp_cab_b = _cmp_cabida(_cmp_area_b, _cmp_pisos_b, _cmp_cus)
+
+            _ra = calcular_financiero(_cmp_cab_a, _cmp_fin_a, _cmp_zona_a)["resumen"]
+            _rb = calcular_financiero(_cmp_cab_b, _cmp_fin_b, _cmp_zona_b)["resumen"]
+
+            st.markdown("---")
+            st.markdown("#### Resultados comparados")
+
+            def _cmp_delta(va, vb, higher_is_better=True):
+                if vb == 0: return None
+                diff = va - vb
+                return f"+{diff:,.0f}" if (diff > 0) == higher_is_better else f"{diff:,.0f}"
+
+            _GOLD = "#B8904A"
+            _cmp_metrics = [
+                ("Ingresos Brutos",   f"${_ra['ingresos_brutos']:,.0f}",   f"${_rb['ingresos_brutos']:,.0f}"),
+                ("Costo Total",       f"${_ra['costo_total']:,.0f}",        f"${_rb['costo_total']:,.0f}"),
+                ("Utilidad Neta",     f"${_ra['utilidad_neta']:,.0f}",      f"${_rb['utilidad_neta']:,.0f}"),
+                ("Margen Neto",       f"{_ra['margen_pct']:.1f}%",          f"{_rb['margen_pct']:.1f}%"),
+                ("TIR anual (aprox)", f"{_ra['tir_anual_pct']:.1f}%",       f"{_rb['tir_anual_pct']:.1f}%"),
+                ("ROI",               f"{_ra['roi_pct']:.1f}%",             f"{_rb['roi_pct']:.1f}%"),
+                ("TIT terreno/ingr.", f"{_ra['tit_pct']:.1f}%",             f"{_rb['tit_pct']:.1f}%"),
+                ("Unidades",          str(_cmp_cab_a['total_unidades']),     str(_cmp_cab_b['total_unidades'])),
+                ("Área vendible",     f"{_cmp_cab_a['area_vendible_m2']:,} m²", f"{_cmp_cab_b['area_vendible_m2']:,} m²"),
+            ]
+            _BRD = "#E0DDD8"
+            _NH  = "#2C2C2C"
+            _tbl_cmp = (
+                f'<table style="width:100%;border-collapse:collapse;font-family:Inter,sans-serif;">'
+                f'<thead><tr>'
+                f'<th style="background:{_NH};color:#FFF;padding:10px 14px;font-size:11px;border:1px solid {_BRD};text-align:left;">Indicador</th>'
+                f'<th style="background:#1A3A6B;color:#FFF;padding:10px 14px;font-size:11px;border:1px solid {_BRD};text-align:center;">Terreno A — {_cmp_zona_a}</th>'
+                f'<th style="background:#6B1A1A;color:#FFF;padding:10px 14px;font-size:11px;border:1px solid {_BRD};text-align:center;">Terreno B — {_cmp_zona_b}</th>'
+                f'</tr></thead><tbody>'
+            )
+            for _lbl, _va, _vb in _cmp_metrics:
+                _tbl_cmp += (
+                    f'<tr><td style="padding:8px 14px;border:1px solid {_BRD};font-size:11px;font-weight:600;">{_lbl}</td>'
+                    f'<td style="padding:8px 14px;border:1px solid {_BRD};font-size:12px;font-weight:700;text-align:center;color:#1A3A6B;">{_va}</td>'
+                    f'<td style="padding:8px 14px;border:1px solid {_BRD};font-size:12px;font-weight:700;text-align:center;color:#6B1A1A;">{_vb}</td>'
+                    f'</tr>'
+                )
+            _tbl_cmp += '</tbody></table>'
+            st.markdown(_tbl_cmp, unsafe_allow_html=True)
+
+            # Ganador
+            _winner = "A" if _ra["margen_pct"] >= _rb["margen_pct"] else "B"
+            _wzone  = _cmp_zona_a if _winner == "A" else _cmp_zona_b
+            _wcolor = "#1A3A6B" if _winner == "A" else "#6B1A1A"
+            st.markdown(
+                f'<div style="margin-top:16px;padding:14px 18px;background:rgba(184,144,74,0.08);'
+                f'border-left:4px solid {_GOLD};border-radius:0 8px 8px 0;">'
+                f'<span style="font-size:13px;font-weight:700;color:{_GOLD};">Recomendación: </span>'
+                f'<span style="font-size:13px;color:{_wcolor};font-weight:700;">Terreno {_winner} ({_wzone})</span>'
+                f'<span style="font-size:12px;color:#7A7268;"> — mayor margen neto con los parámetros ingresados.</span>'
+                f'</div>', unsafe_allow_html=True)
 
 # ═══════════════════════════════════════════════════════
 # MÓDULO 2: PROYECTO LOGÍSTICO / INDUSTRIAL
@@ -10340,3 +10667,114 @@ elif tipo_op == "Calculadora Inversa":
                 f'<span style="color:#FFFFFF;font-weight:600;">${_val:,.0f} '
                 f'<span style="color:#8AA8C0;font-weight:400;">({pct:.1f}%)</span></span></div>',
                 unsafe_allow_html=True)
+
+# ═══════════════════════════════════════════════════════
+# MÓDULO 5: PORTFOLIO
+# ═══════════════════════════════════════════════════════
+elif tipo_op == "Portfolio":
+    st.markdown(
+        '<div style="font-size:9px;color:#B8904A;letter-spacing:4px;text-transform:uppercase;'
+        'font-weight:600;margin-bottom:4px;">Osterling Advisory</div>'
+        '<div style="font-size:26px;font-weight:700;color:#FFFFFF;letter-spacing:-0.5px;">'
+        '📁 Portfolio de Proyectos</div>'
+        '<div style="font-size:13px;color:#B0C0D0;margin-top:6px;margin-bottom:20px;">'
+        'Todos los proyectos guardados con KPIs consolidados e historial de versiones.</div>',
+        unsafe_allow_html=True)
+
+    _port_proyectos = listar_proyectos(con_resumen=True)
+
+    if not _port_proyectos:
+        st.info("No hay proyectos guardados aún. Analiza un proyecto y guárdalo para verlo aquí.")
+    else:
+        # Filtros
+        _pf1, _pf2, _pf3 = st.columns([2, 1, 1])
+        _port_tipos = sorted({getattr(p, "_tipo", "") for p in _port_proyectos if getattr(p, "_tipo", "")})
+        _port_filtro_tipo = _pf1.selectbox("Filtrar por tipo", ["Todos"] + _port_tipos, key="port_filtro_tipo")
+        _port_orden = _pf2.selectbox("Ordenar por", ["Fecha", "Margen", "TIR", "Utilidad"], key="port_orden")
+        _port_buscar = _pf3.text_input("Buscar proyecto", key="port_buscar", placeholder="nombre...")
+
+        _port_vis = [p for p in _port_proyectos if hasattr(p, "_resumen")]
+        if _port_filtro_tipo != "Todos":
+            _port_vis = [p for p in _port_vis if getattr(p, "_tipo", "") == _port_filtro_tipo]
+        if _port_buscar:
+            _port_vis = [p for p in _port_vis if _port_buscar.lower() in getattr(p, "_nombre", "").lower()]
+
+        if _port_orden == "Margen":
+            _port_vis.sort(key=lambda p: float(getattr(p, "_resumen", {}).get("margen_pct", 0) or 0), reverse=True)
+        elif _port_orden == "TIR":
+            _port_vis.sort(key=lambda p: float(getattr(p, "_resumen", {}).get("tir_anual_pct", 0) or 0), reverse=True)
+        elif _port_orden == "Utilidad":
+            _port_vis.sort(key=lambda p: float(getattr(p, "_resumen", {}).get("utilidad_neta", 0) or 0), reverse=True)
+
+        st.markdown(f"**{len(_port_vis)} proyectos**")
+        st.markdown("---")
+
+        # Cards grid — 2 columnas
+        _GOLD = "#B8904A"
+        _DARK = "#0A1628"
+        for i in range(0, len(_port_vis), 2):
+            _pcols = st.columns(2, gap="medium")
+            for j, p in enumerate(_port_vis[i:i+2]):
+                _rs  = getattr(p, "_resumen", {})
+                _tip = getattr(p, "_tipo", "—")
+                _zon = getattr(p, "_zona", "—")
+                _fec = getattr(p, "_fecha", "—")
+                _nom = getattr(p, "_nombre", p.name)
+
+                _mg  = _rs.get("margen_pct") or _rs.get("margen_neto") or 0
+                _tir = _rs.get("tir_anual_pct") or 0
+                _un  = _rs.get("utilidad_neta") or 0
+                _ing = _rs.get("ingresos_brutos") or _rs.get("costo_total") or 0
+
+                _mg_color = "#4CAF50" if float(_mg) >= 15 else ("#FFC107" if float(_mg) >= 10 else "#FF4444")
+                _tipo_color = {"inmobiliario": "#1A3A6B", "industrial": "#6B3A1A", "residencial": "#1A6B3A"}.get(_tip, "#444")
+
+                with _pcols[j]:
+                    st.markdown(
+                        f'<div style="background:linear-gradient(135deg,#1A2737,#1E2D3D);'
+                        f'border-radius:12px;padding:18px 20px;border:1px solid rgba(184,144,74,0.2);'
+                        f'margin-bottom:4px;">'
+                        f'<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">'
+                        f'<div style="font-size:13px;font-weight:700;color:#FFFFFF;line-height:1.3;max-width:70%;">{_nom}</div>'
+                        f'<div style="font-size:9px;font-weight:700;color:#FFF;background:{_tipo_color};'
+                        f'padding:3px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:1px;">{_tip}</div>'
+                        f'</div>'
+                        f'<div style="font-size:10px;color:#8AA8C0;margin-bottom:12px;">{_zon} · {_fec}</div>'
+                        f'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">'
+                        f'<div style="background:rgba(255,255,255,0.04);border-radius:6px;padding:8px 10px;">'
+                        f'<div style="font-size:16px;font-weight:800;color:{_mg_color};">{float(_mg):.1f}%</div>'
+                        f'<div style="font-size:9px;color:#8AA8C0;text-transform:uppercase;letter-spacing:1px;">Margen neto</div>'
+                        f'</div>'
+                        f'<div style="background:rgba(255,255,255,0.04);border-radius:6px;padding:8px 10px;">'
+                        f'<div style="font-size:16px;font-weight:800;color:#D4A853;">{float(_tir):.1f}%</div>'
+                        f'<div style="font-size:9px;color:#8AA8C0;text-transform:uppercase;letter-spacing:1px;">TIR anual</div>'
+                        f'</div>'
+                        f'<div style="background:rgba(255,255,255,0.04);border-radius:6px;padding:8px 10px;">'
+                        f'<div style="font-size:14px;font-weight:700;color:#FFFFFF;">${float(_un):,.0f}</div>'
+                        f'<div style="font-size:9px;color:#8AA8C0;text-transform:uppercase;letter-spacing:1px;">Utilidad neta</div>'
+                        f'</div>'
+                        f'<div style="background:rgba(255,255,255,0.04);border-radius:6px;padding:8px 10px;">'
+                        f'<div style="font-size:14px;font-weight:700;color:#FFFFFF;">${float(_ing):,.0f}</div>'
+                        f'<div style="font-size:9px;color:#8AA8C0;text-transform:uppercase;letter-spacing:1px;">Ingresos / Costo</div>'
+                        f'</div>'
+                        f'</div></div>',
+                        unsafe_allow_html=True)
+
+        # ── Tabla comparativa de todos los proyectos ──
+        if len(_port_vis) >= 2:
+            st.markdown("---")
+            st.markdown("#### Tabla comparativa")
+            _port_df_rows = []
+            for p in _port_vis:
+                _rs = getattr(p, "_resumen", {})
+                _port_df_rows.append({
+                    "Proyecto":    getattr(p, "_nombre", p.name),
+                    "Tipo":        getattr(p, "_tipo", "—"),
+                    "Zona":        getattr(p, "_zona", "—"),
+                    "Fecha":       getattr(p, "_fecha", "—"),
+                    "Margen (%)":  round(float(_rs.get("margen_pct") or 0), 1),
+                    "TIR (%)":     round(float(_rs.get("tir_anual_pct") or 0), 1),
+                    "Util. Neta":  f"${float(_rs.get('utilidad_neta') or 0):,.0f}",
+                    "Ingresos":    f"${float(_rs.get('ingresos_brutos') or 0):,.0f}",
+                })
+            st.dataframe(pd.DataFrame(_port_df_rows), hide_index=True, use_container_width=True)
