@@ -3457,6 +3457,58 @@ def generar_excel_factis(result: dict, cabida: dict, params: dict,
         _val_cell(ws4, i, 2, val, bg=bg)
         ws4.cell(row=i, column=2).alignment = Alignment(horizontal="left")
 
+    # ── Hoja 5: Sensibilidad Precio × Terreno ─────────────────────
+    ws5 = wb.create_sheet("Sensibilidad")
+    _sens_res = calcular_sensibilidad_terreno(cabida, fin_inputs, zona)
+    if _sens_res:
+        _df_mg, _df_tir, _s_precios, _s_terrenos, _s_p0, _s_t0 = _sens_res
+        ws5.column_dimensions["A"].width = 18
+        # Título
+        _tc = ws5.cell(row=1, column=1, value="MATRIZ ESTRATÉGICA — PRECIO DE VENTA × PRECIO DEL TERRENO")
+        _tc.font = Font(bold=True, size=11, color=WHITE)
+        _tc.fill = PatternFill("solid", fgColor=DARK)
+        _tc.alignment = Alignment(horizontal="left", vertical="center", wrap_text=True)
+        ws5.merge_cells(start_row=1, start_column=1, end_row=1, end_column=len(_s_precios)+1)
+        ws5.row_dimensions[1].height = 24
+        ws5.cell(row=2, column=1, value="Celda: Margen neto % · Verde ≥18% · Amarillo 12–18% · Rojo <12%").font = Font(size=8, italic=True, color="888888")
+        ws5.merge_cells(start_row=2, start_column=1, end_row=2, end_column=len(_s_precios)+1)
+        # Cabecera de columnas (precio de venta)
+        _hdr_fill(ws5, 3, 1, "Terreno ↓  /  Precio m² →", bg=DARK, fg="B8904A")
+        for ci, p in enumerate(_s_precios):
+            _is_base = abs(p - _s_p0) == min(abs(x - _s_p0) for x in _s_precios)
+            _bg = "1E3A5A" if _is_base else DARK
+            _hdr_fill(ws5, 3, ci+2, f"${p:,}/m²", bg=_bg)
+            ws5.column_dimensions[get_column_letter(ci+2)].width = 13
+        # Filas de datos
+        for ri, t in enumerate(_s_terrenos):
+            _is_base_row = abs(t - _s_t0) == min(abs(x - _s_t0) for x in _s_terrenos)
+            _rh_bg = "1E3A5A" if _is_base_row else DARK
+            _rh_fg = "B8904A" if _is_base_row else WHITE
+            _hdr_fill(ws5, ri+4, 1, f"${t:,.0f}", bg=_rh_bg, fg=_rh_fg)
+            for ci in range(len(_s_precios)):
+                mg  = float(_df_mg.iloc[ri, ci])
+                tir = float(_df_tir.iloc[ri, ci])
+                _is_base_col = abs(_s_precios[ci] - _s_p0) == min(abs(x - _s_p0) for x in _s_precios)
+                cell = ws5.cell(row=ri+4, column=ci+2,
+                                value=f"{mg:.0f}% mg / {tir:.0f}% TIR")
+                if mg >= 18:
+                    _fc, _bc = "1B5E20", "C8E6C9"
+                elif mg >= 12:
+                    _fc, _bc = "7A5500", "FFF9C4"
+                else:
+                    _fc, _bc = "B71C1C", "FFCDD2"
+                cell.fill = PatternFill("solid", fgColor=_bc)
+                cell.font = Font(bold=(_is_base_row and _is_base_col), color=_fc, size=9)
+                cell.alignment = Alignment(horizontal="center", vertical="center")
+                if _is_base_row and _is_base_col:
+                    from openpyxl.styles import Border as XlBorder, Side as XlSide
+                    _gold_side = XlSide(style="medium", color="B8904A")
+                    cell.border = XlBorder(top=_gold_side, bottom=_gold_side,
+                                           left=_gold_side, right=_gold_side)
+        ws5.row_dimensions[3].height = 18
+        for ri in range(len(_s_terrenos)):
+            ws5.row_dimensions[ri+4].height = 18
+
     buf = io.BytesIO()
     wb.save(buf)
     return buf.getvalue()
@@ -4160,6 +4212,84 @@ def generar_pdf_factis(result: dict, cabida: dict, params: dict,
     story.append(Spacer(1, 10))
     story.append(_chart_costos())
     story.append(Spacer(1, 10))
+
+    # ── Matriz estratégica Precio × Terreno ─────────────────────────
+    _mx_res = calcular_sensibilidad_terreno(cabida, fin_inputs, zona)
+    if _mx_res:
+        _mx_mg, _mx_tir, _mx_precios, _mx_terrenos, _mx_p0, _mx_t0 = _mx_res
+        story += _section("Matriz Estratégica — Precio de Venta × Precio del Terreno")
+        story.append(Paragraph(
+            "Margen neto % en cada combinación. "
+            "Verde ≥18% · Amarillo 12–18% · Rojo &lt;12%  |  Celda con borde dorado = escenario actual.",
+            S_SMALL))
+        story.append(Spacer(1, 6))
+        _NAV_C  = colors.HexColor("#0A1628")
+        _GOLD_C = colors.HexColor("#B8904A")
+        _GRN_C  = colors.HexColor("#1B5E20")
+        _YEL_C  = colors.HexColor("#7A5500")
+        _RED_C  = colors.HexColor("#B71C1C")
+        _GRN_BG = colors.HexColor("#C8E6C9")
+        _YEL_BG = colors.HexColor("#FFF9C4")
+        _RED_BG = colors.HexColor("#FFCDD2")
+
+        _col0 = min(range(len(_mx_precios)), key=lambda i: abs(_mx_precios[i] - _mx_p0))
+        _row0 = min(range(len(_mx_terrenos)), key=lambda i: abs(_mx_terrenos[i] - _mx_t0))
+
+        _mx_data  = []
+        _mx_style = [
+            ("FONTSIZE",    (0, 0), (-1, -1), 7),
+            ("ALIGN",       (0, 0), (-1, -1), "CENTER"),
+            ("VALIGN",      (0, 0), (-1, -1), "MIDDLE"),
+            ("TOPPADDING",  (0, 0), (-1, -1), 3),
+            ("BOTTOMPADDING",(0, 0), (-1, -1), 3),
+            ("GRID",        (0, 0), (-1, -1), 0.3, colors.HexColor("#2A3D52")),
+        ]
+        # Header row
+        _hdr_style = ParagraphStyle("mxh", fontSize=7, fontName="Helvetica-Bold",
+                                    textColor=colors.white, alignment=TA_CENTER)
+        _hdr_data = [Paragraph("Terreno / Precio m²", _hdr_style)]
+        for ci, p in enumerate(_mx_precios):
+            _fw = "Helvetica-Bold"
+            _fg = colors.HexColor("#B8904A") if ci == _col0 else colors.white
+            _bg_hdr = colors.HexColor("#1E3A5A") if ci == _col0 else _NAV_C
+            _mx_style.append(("BACKGROUND", (ci+1, 0), (ci+1, 0), _bg_hdr))
+            _hdr_data.append(Paragraph(f"${p:,}", ParagraphStyle(
+                f"mxhc{ci}", fontSize=7, fontName=_fw, textColor=_fg, alignment=TA_CENTER)))
+        _mx_data.append(_hdr_data)
+        _mx_style.append(("BACKGROUND", (0, 0), (0, 0), _NAV_C))
+        _mx_style.append(("BACKGROUND", (1, 0), (len(_mx_precios), 0), _NAV_C))
+
+        for ri, t in enumerate(_mx_terrenos):
+            _is_br = (ri == _row0)
+            _rh_bg = colors.HexColor("#1E3A5A") if _is_br else _NAV_C
+            _rh_fg = _GOLD_C if _is_br else colors.white
+            _mx_style.append(("BACKGROUND", (0, ri+1), (0, ri+1), _rh_bg))
+            _row_data = [Paragraph(f"${t:,.0f}", ParagraphStyle(
+                f"mxrl{ri}", fontSize=7, fontName="Helvetica-Bold",
+                textColor=_rh_fg, alignment=TA_CENTER))]
+            for ci in range(len(_mx_precios)):
+                mg  = float(_mx_mg.iloc[ri, ci])
+                tir = float(_mx_tir.iloc[ri, ci])
+                _is_bc = (ci == _col0)
+                if mg >= 18:   _bg_c, _fg_c = _GRN_BG, _GRN_C
+                elif mg >= 12: _bg_c, _fg_c = _YEL_BG, _YEL_C
+                else:          _bg_c, _fg_c = _RED_BG, _RED_C
+                _mx_style.append(("BACKGROUND", (ci+1, ri+1), (ci+1, ri+1), _bg_c))
+                _cell_txt = f"{mg:.0f}%\nTIR {tir:.0f}%"
+                if _is_br and _is_bc:
+                    _mx_style.append(("BOX", (ci+1, ri+1), (ci+1, ri+1), 1.5, _GOLD_C))
+                _row_data.append(Paragraph(_cell_txt, ParagraphStyle(
+                    f"mxc{ri}{ci}", fontSize=6.5, fontName="Helvetica-Bold",
+                    textColor=_fg_c, alignment=TA_CENTER, leading=8)))
+            _mx_data.append(_row_data)
+
+        _avail_w = W - 2 * M
+        _col_w   = _avail_w / (len(_mx_precios) + 1)
+        _mx_tbl  = Table(_mx_data, colWidths=[_col_w] * (len(_mx_precios) + 1),
+                         rowHeights=[16] * (len(_mx_terrenos) + 1))
+        _mx_tbl.setStyle(TableStyle(_mx_style))
+        story.append(_mx_tbl)
+        story.append(Spacer(1, 10))
 
     # Resultado final
     story += _section("Resumen de Resultado")
@@ -5611,7 +5741,7 @@ with st.sidebar:
     st.markdown("### MÓDULO DE ANÁLISIS")
     tipo_op = st.radio(
         "tipo_op_radio",
-        ["Proyecto Inmobiliario", "Proyecto Logístico / Industrial", "Inmueble Residencial", "Calculadora Inversa", "Portfolio"],
+        ["Proyecto Inmobiliario", "Proyecto Logístico / Industrial", "Inmueble Residencial", "Calculadora Inversa", "Portfolio", "Mercado"],
         key="tipo_operacion",
         label_visibility="collapsed",
     )
@@ -5648,8 +5778,14 @@ with st.sidebar:
             "KPIs · Historial · Comparativa",
             "Vista consolidada de todos los proyectos analizados y guardados. Compara KPIs entre proyectos y revisa el historial de versiones.",
         ),
+        "Mercado": (
+            "📊",
+            "Dashboard de Mercado Lima",
+            "Precios · Yields · Velocidad · Tendencias",
+            "Precios por m², yields de alquiler, velocidad de venta y benchmarks de construcción por distrito. Actualizado desde Google Sheets.",
+        ),
     }
-    _mico, _mtit, _mtag, _mdesc = _mod_ctx[tipo_op]
+    _mico, _mtit, _mtag, _mdesc = _mod_ctx.get(tipo_op, _mod_ctx["Proyecto Inmobiliario"])
     st.markdown(
         f'<div style="background:rgba(255,255,255,0.04);border-radius:9px;padding:11px 13px;'
         f'border:1px solid rgba(255,255,255,0.08);margin:6px 0 4px;">'
@@ -6940,7 +7076,7 @@ if tipo_op == "Proyecto Inmobiliario":
             </div>
         </div>""", unsafe_allow_html=True)
 
-        tabs = st.tabs(["Parámetros", "Cabida", "Financiero", "Competencia", "Flujo de Caja", "Legal", "Resumen", "Propuesta", "Comparador"])
+        tabs = st.tabs(["Parámetros", "Cabida", "Financiero", "Competencia", "Flujo de Caja", "Legal", "Resumen", "Propuesta", "Comparador", "Renta / Holding"])
 
         # ── TAB 1: PARÁMETROS ────────────────────────────
         with tabs[0]:
@@ -8683,6 +8819,174 @@ if tipo_op == "Proyecto Inmobiliario":
                 f'<span style="font-size:13px;color:{_wcolor};font-weight:700;">Terreno {_winner} ({_wzone})</span>'
                 f'<span style="font-size:12px;color:#7A7268;"> — mayor margen neto con los parámetros ingresados.</span>'
                 f'</div>', unsafe_allow_html=True)
+
+        # ── Tab 10: Renta / Holding ────────────────────────────────
+        with tabs[9]:
+            st.markdown('<div class="section-title">Análisis de Renta y Holding</div>', unsafe_allow_html=True)
+            st.caption("¿Conviene más vender o rentar? Compara la estrategia de venta contra mantener el activo y cobrar alquiler.")
+
+            _fin_ok = st.session_state.get("financ")
+            if not _fin_ok:
+                st.info("Completa primero el análisis financiero (tab Financiero) para ver este análisis.")
+            else:
+                _hr = _fin_ok["resumen"]
+                _hraw = _fin_ok.get("_raw", {})
+                _m_hold = MERCADO.get(zona_sel, {})
+                _tc_hold = float((st.secrets.get("mercado") or {}).get("tipo_cambio", 3.45))
+
+                # ── Parámetros de renta ────────────────────────────
+                st.markdown("#### Parámetros de la estrategia holding")
+                _hc1, _hc2, _hc3 = st.columns(3)
+                with _hc1:
+                    _h_alq_m2 = st.number_input(
+                        "Alquiler mercado ($/m²/mes)",
+                        min_value=1.0, max_value=50.0,
+                        value=float(_m_hold.get("alquiler_m2_mes", 8.0)),
+                        step=0.5, key="h_alq_m2",
+                        help="Renta mensual por m² vendible según mercado actual")
+                    _h_vac = st.number_input(
+                        "Vacancia estimada (%)", 0.0, 30.0, 7.0, 1.0, key="h_vac",
+                        help="% de unidades desocupadas en promedio")
+                with _hc2:
+                    _h_opex = st.number_input(
+                        "Gastos operativos (%)", 0.0, 40.0, 22.0, 1.0, key="h_opex",
+                        help="Administración, mantenimiento, seguros, predial. Típico Lima: 18–25%")
+                    _h_apre = st.number_input(
+                        "Apreciación anual (%)", 0.0, 15.0,
+                        float(_m_hold.get("variacion_anual_pct", 4.0)),
+                        0.5, key="h_apre",
+                        help="Apreciación esperada del valor del activo por año")
+                with _hc3:
+                    _h_horizon = st.selectbox(
+                        "Horizonte de análisis", [5, 7, 10, 15], index=1, key="h_horizon")
+                    _h_wacc = st.number_input(
+                        "Tasa descuento / WACC (%)", 5.0, 20.0, 9.0, 0.5, key="h_wacc",
+                        help="Costo de oportunidad del capital. Referencia Lima: 8–12%")
+
+                # ── Cálculos ───────────────────────────────────────
+                _av_hold  = _hr.get("m2_vendibles", 0)
+                _inv_hold = _hr.get("costo_total_sin_financ", 0)   # inversión total sin financiamiento
+                _util_vta = _hr.get("utilidad_neta", 0)
+                _ing_brut = _hr.get("ingresos_brutos", 0)
+
+                # Renta bruta anual
+                _rent_brut_anual = _av_hold * _h_alq_m2 * 12 * (1 - _h_vac / 100)
+                # NOI (Net Operating Income)
+                _noi          = _rent_brut_anual * (1 - _h_opex / 100)
+                # Cap rate
+                _cap_rate     = (_noi / _inv_hold * 100) if _inv_hold else 0
+                # Yield bruto sobre inversión
+                _yield_bruto  = (_rent_brut_anual / _inv_hold * 100) if _inv_hold else 0
+                # Payback (años para recuperar inversión solo con renta)
+                _payback_rent = (_inv_hold / _noi) if _noi > 0 else 999
+
+                # Valor terminal del activo
+                _val_terminal = _inv_hold * ((1 + _h_apre / 100) ** _h_horizon)
+                # Ganancia de capital al año N
+                _gan_capital  = _val_terminal - _inv_hold
+
+                # NPV holding: suma NOI descontado + valor terminal descontado
+                _wacc_d = _h_wacc / 100
+                _npv_hold = sum(_noi / (1 + _wacc_d) ** t for t in range(1, _h_horizon + 1))
+                _npv_hold += _val_terminal / (1 + _wacc_d) ** _h_horizon
+                _npv_hold -= _inv_hold
+
+                # NPV venta: utilidad neta ya realizada en año 1
+                _npv_venta = _util_vta / (1 + _wacc_d) - _inv_hold
+
+                # ── KPIs comparativos ──────────────────────────────
+                st.markdown("---")
+                _kh1, _kh2, _kh3, _kh4 = st.columns(4)
+                def _kpi_hold(col, label, value, suffix="", delta=None):
+                    col.metric(label, f"{value:,.1f}{suffix}" if isinstance(value, float) else f"{value:,}{suffix}", delta)
+
+                _kh1.metric("Renta bruta anual", f"${_rent_brut_anual:,.0f}")
+                _kh2.metric("NOI anual", f"${_noi:,.0f}")
+                _kh3.metric("Cap Rate", f"{_cap_rate:.1f}%",
+                            delta="Óptimo >7%" if _cap_rate >= 7 else "Bajo vs. Lima 6–9%")
+                _kh4.metric("Yield bruto s/inv.", f"{_yield_bruto:.1f}%")
+
+                _kh5, _kh6, _kh7, _kh8 = st.columns(4)
+                _kh5.metric("Payback renta", f"{_payback_rent:.1f} años")
+                _kh6.metric(f"Valor activo año {_h_horizon}", f"${_val_terminal:,.0f}")
+                _kh7.metric("Ganancia de capital", f"${_gan_capital:,.0f}",
+                            delta=f"+{_h_apre:.1f}%/año")
+                _kh8.metric(f"NPV holding {_h_horizon}a", f"${_npv_hold:,.0f}")
+
+                # ── Tabla comparativa Venta vs. Holding ───────────
+                st.markdown("---")
+                st.markdown("#### Venta inmediata vs. Holding")
+                _GOLD_H = "#B8904A"
+                _NAV_H  = "#0A1628"
+                _BRD_H  = "#2A3D52"
+                _comp_h = [
+                    ("Inversión total",             f"${_inv_hold:,.0f}",      f"${_inv_hold:,.0f}"),
+                    ("Retorno total",                f"${_util_vta:,.0f}",      f"${(_noi * _h_horizon + _gan_capital):,.0f}"),
+                    ("Margen / yield total",         f"{_hr.get('margen_pct',0):.1f}%", f"{(_noi*_h_horizon+_gan_capital)/_inv_hold*100:.1f}%"),
+                    ("NPV",                          f"${_npv_venta:,.0f}",     f"${_npv_hold:,.0f}"),
+                    ("Flujo año 1",                  f"${_util_vta:,.0f}",      f"${_noi:,.0f}"),
+                    (f"Flujo año {_h_horizon}",      "—",                       f"${_noi + _gan_capital:,.0f}"),
+                    ("Liquidez",                     "Alta (se vende)",         "Baja (activo ilíquido)"),
+                    ("Riesgo",                       "Bajo (ya ejecutado)",     "Mercado alquiler + vacancia"),
+                ]
+                _tbl_h = (
+                    f'<table style="border-collapse:collapse;width:100%;margin-top:10px;">'
+                    f'<thead><tr>'
+                    f'<th style="background:{_NAV_H};color:#8AA8C0;padding:8px 14px;font-size:10px;font-weight:600;text-align:left;border:1px solid {_BRD_H};">Métrica</th>'
+                    f'<th style="background:{_NAV_H};color:{_GOLD_H};padding:8px 14px;font-size:10px;font-weight:700;text-align:center;border:1px solid {_BRD_H};">Vender</th>'
+                    f'<th style="background:{_NAV_H};color:{_GOLD_H};padding:8px 14px;font-size:10px;font-weight:700;text-align:center;border:1px solid {_BRD_H};">Holding {_h_horizon}a</th>'
+                    f'</tr></thead><tbody>'
+                )
+                for _lh, _vv, _vh in _comp_h:
+                    _tbl_h += (
+                        f'<tr><td style="background:#0E1E2E;color:#8AA8C0;padding:7px 14px;font-size:11px;font-weight:600;border:1px solid {_BRD_H};">{_lh}</td>'
+                        f'<td style="background:#0E1E2E;color:#FFFFFF;padding:7px 14px;font-size:11px;font-weight:700;text-align:center;border:1px solid {_BRD_H};">{_vv}</td>'
+                        f'<td style="background:#0E1E2E;color:#FFFFFF;padding:7px 14px;font-size:11px;font-weight:700;text-align:center;border:1px solid {_BRD_H};">{_vh}</td>'
+                        f'</tr>'
+                    )
+                _tbl_h += '</tbody></table>'
+                st.markdown(_tbl_h, unsafe_allow_html=True)
+
+                # ── Recomendación ──────────────────────────────────
+                st.markdown("---")
+                if _npv_hold > _npv_venta and _cap_rate >= 6:
+                    _rec_txt = f"El holding a {_h_horizon} años genera mayor NPV (${_npv_hold:,.0f} vs. ${_npv_venta:,.0f}). Con un cap rate de {_cap_rate:.1f}%, el activo produce renta competitiva mientras se aprecia."
+                    _rec_color = "#1B5E20"
+                    _rec_bg = "rgba(27,94,32,0.1)"
+                elif _cap_rate >= 6:
+                    _rec_txt = f"El cap rate de {_cap_rate:.1f}% es atractivo pero la venta genera NPV más alto en el horizonte analizado. Considera el holding si el objetivo es flujo de caja recurrente."
+                    _rec_color = "#7A5500"
+                    _rec_bg = "rgba(122,85,0,0.1)"
+                else:
+                    _rec_txt = f"El cap rate de {_cap_rate:.1f}% está por debajo del mínimo recomendado (6%). La estrategia de venta genera mejor retorno ajustado por riesgo."
+                    _rec_color = "#B71C1C"
+                    _rec_bg = "rgba(183,28,28,0.1)"
+                st.markdown(
+                    f'<div style="padding:14px 18px;background:{_rec_bg};'
+                    f'border-left:4px solid {_rec_color};border-radius:0 8px 8px 0;margin-top:8px;">'
+                    f'<span style="font-size:12px;font-weight:700;color:{_rec_color};">Recomendación: </span>'
+                    f'<span style="font-size:12px;color:#C8D8E8;">{_rec_txt}</span>'
+                    f'</div>', unsafe_allow_html=True)
+
+                # ── Proyección anual ───────────────────────────────
+                st.markdown("---")
+                st.markdown("#### Proyección año a año")
+                _proj_rows = []
+                _val_acum = _inv_hold
+                for _yr in range(1, _h_horizon + 1):
+                    _val_acum *= (1 + _h_apre / 100)
+                    _noi_yr = _noi
+                    _cash_acum = _noi * _yr
+                    _total_ret = _cash_acum + (_val_acum - _inv_hold)
+                    _proj_rows.append({
+                        "Año": _yr,
+                        "Renta NOI": f"${_noi_yr:,.0f}",
+                        "Renta acum.": f"${_cash_acum:,.0f}",
+                        "Valor activo": f"${_val_acum:,.0f}",
+                        "Retorno total": f"${_total_ret:,.0f}",
+                        "Retorno %": f"{_total_ret/_inv_hold*100:.0f}%",
+                    })
+                st.dataframe(pd.DataFrame(_proj_rows), hide_index=True, use_container_width=True)
 
 # ═══════════════════════════════════════════════════════
 # MÓDULO 2: PROYECTO LOGÍSTICO / INDUSTRIAL
@@ -11009,3 +11313,202 @@ elif tipo_op == "Portfolio":
                     "Ingresos":    f"${float(_rs.get('ingresos_brutos') or 0):,.0f}",
                 })
             st.dataframe(pd.DataFrame(_port_df_rows), hide_index=True, use_container_width=True)
+
+# ═══════════════════════════════════════════════════════
+# MÓDULO 6: DASHBOARD DE MERCADO
+# ═══════════════════════════════════════════════════════
+elif tipo_op == "Mercado":
+    import plotly.graph_objects as go
+
+    st.markdown(
+        '<div style="font-size:9px;color:#B8904A;letter-spacing:4px;text-transform:uppercase;'
+        'font-weight:600;margin-bottom:4px;">Osterling Advisory</div>'
+        '<div style="font-size:26px;font-weight:700;color:#FFFFFF;letter-spacing:-0.5px;">'
+        '📊 Dashboard de Mercado — Lima</div>'
+        '<div style="font-size:13px;color:#B0C0D0;margin-top:6px;margin-bottom:20px;">'
+        'Precios, yields, velocidad de venta y benchmarks de construcción por distrito.</div>',
+        unsafe_allow_html=True)
+
+    # Preparar datos desde MERCADO dict
+    _mk_distritos = sorted(MERCADO.keys())
+    _mk_p2  = [MERCADO[d].get("precio_2br", 0) for d in _mk_distritos]
+    _mk_alq = [MERCADO[d].get("alquiler_m2_mes", 0) for d in _mk_distritos]
+    _mk_yld = [MERCADO[d].get("yield_mercado_pct", 0) for d in _mk_distritos]
+    _mk_vel = [MERCADO[d].get("velocidad_venta", 0) for d in _mk_distritos]
+    _mk_cc  = [MERCADO[d].get("costo_construccion", 0) for d in _mk_distritos]
+    _mk_var = [MERCADO[d].get("variacion_anual_pct", 0) for d in _mk_distritos]
+    _tc_mk  = float((st.secrets.get("mercado") or {}).get("tipo_cambio", 3.45))
+
+    # ── Filtro de distritos ─────────────────────────────────────────
+    _mk_sel = st.multiselect(
+        "Filtrar distritos (vacío = todos)",
+        options=_mk_distritos,
+        default=[],
+        key="mk_sel_distritos")
+    _mk_idx = [i for i, d in enumerate(_mk_distritos) if not _mk_sel or d in _mk_sel]
+    _mk_d   = [_mk_distritos[i] for i in _mk_idx]
+    _mk_sorted_p = sorted(zip(_mk_p2[i] for i in _mk_idx), reverse=True) if _mk_idx else []
+
+    # Re-extraer listas filtradas
+    _fd = [_mk_distritos[i] for i in _mk_idx]
+    _fp2  = [_mk_p2[i]  for i in _mk_idx]
+    _falq = [_mk_alq[i] for i in _mk_idx]
+    _fyld = [_mk_yld[i] for i in _mk_idx]
+    _fvel = [_mk_vel[i] for i in _mk_idx]
+    _fcc  = [_mk_cc[i]  for i in _mk_idx]
+    _fvar = [_mk_var[i] for i in _mk_idx]
+
+    # Ordenar por precio descendente
+    _ord = sorted(range(len(_fd)), key=lambda i: _fp2[i], reverse=True)
+    _fd   = [_fd[i]   for i in _ord]
+    _fp2  = [_fp2[i]  for i in _ord]
+    _falq = [_falq[i] for i in _ord]
+    _fyld = [_fyld[i] for i in _ord]
+    _fvel = [_fvel[i] for i in _ord]
+    _fcc  = [_fcc[i]  for i in _ord]
+    _fvar = [_fvar[i] for i in _ord]
+
+    if not _fd:
+        st.info("No hay datos de mercado disponibles.")
+    else:
+        _GOLD_MK = "#B8904A"
+        _NAV_MK  = "#0A1628"
+
+        # ── Gráfico 1: Precio de venta por distrito ─────────────────
+        _mkc1, _mkc2 = st.columns(2)
+        with _mkc1:
+            st.markdown("#### Precio de Venta — 2 dormitorios ($/m²)")
+            _colors_p2 = [_GOLD_MK if v >= 2500 else "#4A90C4" if v >= 1800 else "#7AA8C0" for v in _fp2]
+            _fig_p2 = go.Figure(go.Bar(
+                x=_fd, y=_fp2,
+                marker_color=_colors_p2,
+                text=[f"${v:,}" for v in _fp2],
+                textposition="outside",
+                textfont=dict(size=9, color="white"),
+            ))
+            _fig_p2.update_layout(
+                paper_bgcolor=_NAV_MK, plot_bgcolor="#0E1E2E",
+                font=dict(color="white", size=10),
+                yaxis=dict(gridcolor="#1E2D3D", title="$/m²"),
+                xaxis=dict(tickangle=-35),
+                margin=dict(l=0, r=0, t=10, b=60),
+                height=280,
+                showlegend=False,
+            )
+            st.plotly_chart(_fig_p2, use_container_width=True)
+
+        with _mkc2:
+            st.markdown("#### Yield de Mercado (%)")
+            _colors_yld = [_GOLD_MK if v >= 7 else "#4A90C4" if v >= 5.5 else "#C44A4A" for v in _fyld]
+            _fig_yld = go.Figure(go.Bar(
+                x=_fd, y=_fyld,
+                marker_color=_colors_yld,
+                text=[f"{v:.1f}%" for v in _fyld],
+                textposition="outside",
+                textfont=dict(size=9, color="white"),
+            ))
+            _fig_yld.add_hline(y=6.0, line_dash="dot", line_color="#B8904A",
+                               annotation_text="Mín. referencia 6%", annotation_font_size=9)
+            _fig_yld.update_layout(
+                paper_bgcolor=_NAV_MK, plot_bgcolor="#0E1E2E",
+                font=dict(color="white", size=10),
+                yaxis=dict(gridcolor="#1E2D3D", title="%"),
+                xaxis=dict(tickangle=-35),
+                margin=dict(l=0, r=0, t=10, b=60),
+                height=280,
+                showlegend=False,
+            )
+            st.plotly_chart(_fig_yld, use_container_width=True)
+
+        _mkc3, _mkc4 = st.columns(2)
+        with _mkc3:
+            st.markdown("#### Alquiler de Mercado ($/m²/mes)")
+            _fig_alq = go.Figure(go.Bar(
+                x=_fd, y=_falq,
+                marker_color=[_GOLD_MK if v >= 10 else "#4A90C4" for v in _falq],
+                text=[f"${v:.1f}" for v in _falq],
+                textposition="outside",
+                textfont=dict(size=9, color="white"),
+            ))
+            _fig_alq.update_layout(
+                paper_bgcolor=_NAV_MK, plot_bgcolor="#0E1E2E",
+                font=dict(color="white", size=10),
+                yaxis=dict(gridcolor="#1E2D3D", title="$/m²/mes"),
+                xaxis=dict(tickangle=-35),
+                margin=dict(l=0, r=0, t=10, b=60),
+                height=280, showlegend=False,
+            )
+            st.plotly_chart(_fig_alq, use_container_width=True)
+
+        with _mkc4:
+            st.markdown("#### Velocidad de Venta (unidades/mes)")
+            _fig_vel = go.Figure(go.Bar(
+                x=_fd, y=_fvel,
+                marker_color=[_GOLD_MK if v >= 3 else "#4A90C4" if v >= 1.5 else "#7AA8C0" for v in _fvel],
+                text=[f"{v:.1f}" for v in _fvel],
+                textposition="outside",
+                textfont=dict(size=9, color="white"),
+            ))
+            _fig_vel.update_layout(
+                paper_bgcolor=_NAV_MK, plot_bgcolor="#0E1E2E",
+                font=dict(color="white", size=10),
+                yaxis=dict(gridcolor="#1E2D3D", title="unid/mes"),
+                xaxis=dict(tickangle=-35),
+                margin=dict(l=0, r=0, t=10, b=60),
+                height=280, showlegend=False,
+            )
+            st.plotly_chart(_fig_vel, use_container_width=True)
+
+        # ── Scatter: Precio vs Yield ────────────────────────────────
+        st.markdown("#### Precio de Venta vs. Yield — Posicionamiento por Distrito")
+        _fig_sc = go.Figure(go.Scatter(
+            x=_fp2, y=_fyld,
+            mode="markers+text",
+            text=_fd,
+            textposition="top center",
+            textfont=dict(size=8, color="rgba(255,255,255,0.7)"),
+            marker=dict(
+                size=[max(8, v * 4) for v in _fvel],
+                color=_fp2,
+                colorscale=[[0, "#1E2D3D"], [0.5, "#4A90C4"], [1.0, "#B8904A"]],
+                showscale=True,
+                colorbar=dict(title="$/m²", tickfont=dict(size=8, color="white"),
+                              titlefont=dict(size=9, color="white")),
+                line=dict(color="rgba(255,255,255,0.3)", width=1),
+            ),
+            hovertemplate="<b>%{text}</b><br>Precio: $%{x:,}/m²<br>Yield: %{y:.1f}%<extra></extra>",
+        ))
+        _fig_sc.add_hline(y=6.0, line_dash="dot", line_color="#B8904A",
+                          annotation_text="Yield mín. 6%", annotation_font_size=9)
+        _fig_sc.update_layout(
+            paper_bgcolor=_NAV_MK, plot_bgcolor="#0E1E2E",
+            font=dict(color="white", size=10),
+            xaxis=dict(gridcolor="#1E2D3D", title="Precio de venta $/m²"),
+            yaxis=dict(gridcolor="#1E2D3D", title="Yield mercado %"),
+            margin=dict(l=0, r=40, t=10, b=40),
+            height=340,
+        )
+        st.plotly_chart(_fig_sc, use_container_width=True)
+        st.caption("Tamaño del punto = velocidad de venta (unidades/mes) · Color = precio m²")
+
+        # ── Tabla resumen ───────────────────────────────────────────
+        st.markdown("---")
+        st.markdown("#### Tabla Comparativa de Mercado")
+        _mk_table_rows = []
+        for i, d in enumerate(_fd):
+            _p1  = MERCADO[d].get("precio_1br", 0)
+            _p2  = MERCADO[d].get("precio_2br", 0)
+            _p3  = MERCADO[d].get("precio_3br", 0)
+            _mk_table_rows.append({
+                "Distrito":       d,
+                "1 dorm ($/m²)":  f"${_p1:,}",
+                "2 dorm ($/m²)":  f"${_p2:,}",
+                "3 dorm ($/m²)":  f"${_p3:,}",
+                "Alquiler m²/mes": f"${_falq[i]:.1f}",
+                "Yield (%)":      f"{_fyld[i]:.1f}%",
+                "Vel. venta":     f"{_fvel[i]:.1f} ud/mes",
+                "Costo const. m²": f"${_fcc[i]:,}",
+                "Variación anual": f"+{_fvar[i]:.1f}%",
+            })
+        st.dataframe(pd.DataFrame(_mk_table_rows), hide_index=True, use_container_width=True)
+        st.caption(f"Datos actualizados desde Google Sheets · Tipo de cambio: S/ {_tc_mk:.2f} · Fuente: CPUs Lima 2024–2026")
