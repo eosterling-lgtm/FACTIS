@@ -466,7 +466,7 @@ def calcular_terreno_maximo(inp: dict) -> dict:
     n_estac       = inp.get("n_estac", 0)
     n_depositos   = inp.get("n_depositos", 0)
     precio_m2     = inp.get("precio_m2", m.get("precio_2br", 0))
-    costo_const   = inp.get("costo_construccion", 920)
+    costo_const   = inp.get("costo_construccion", 700)
     costo_sotano  = inp.get("costo_sotano", 450)
     fee_constr    = inp.get("fee_constructora", 10.0) / 100
     tasa_financ   = inp.get("tasa_financ", 7.0)
@@ -483,13 +483,10 @@ def calcular_terreno_maximo(inp: dict) -> dict:
     c_arq          = area_techada * 10.5
     c_esp          = area_techada * 4.4
     c_supervision  = c_construccion * 0.005
-    c_permisos     = c_construccion * 0.005
-    c_gerencia     = ing_brutos * 0.060
-    c_gestion_com  = ing_brutos * 0.005
-    c_publicidad   = ing_brutos * 0.025
-    c_ventas       = ing_brutos * 0.030
-    c_postventa    = ing_brutos * 0.005
-    c_due_dilig    = 11500
+    c_permisos         = c_construccion * 0.015
+    c_gerencia         = c_construccion * 0.05
+    c_ventas_marketing = ing_brutos * 0.05
+    c_due_dilig        = 20000
     _meses_obra    = max(18, num_pisos * 2 + 8)
     c_financiero   = c_construccion * 0.40 * 0.50 * tasa_financ / 100 * (_meses_obra / 12)
 
@@ -500,8 +497,8 @@ def calcular_terreno_maximo(inp: dict) -> dict:
     # c_legales también sube 0.5% del terreno: factor_trans * 0.005 extra por cada $ de terreno
     factor_terreno = factor_trans * 1.005
 
-    C_fixed = (c_base_constr + c_supervision + c_legales_base + c_postventa + c_permisos
-               + c_gerencia + c_gestion_com + c_publicidad + c_ventas
+    C_fixed = (c_base_constr + c_supervision + c_legales_base + c_permisos
+               + c_gerencia + c_ventas_marketing
                + c_due_dilig + c_financiero)
 
     k = max(1 - tasa_ir, 0.01)
@@ -3119,7 +3116,7 @@ def calcular_financiero(cabida: dict, fin: dict, zona: str) -> dict:
     c_alcabala      = c_terreno_base * 0.03 if fin.get("include_alcabala", True) else 0
     c_notarial      = c_terreno_base * 0.003     # Gastos notariales: 0.3%
     c_registral     = c_terreno_base * 0.0015    # Gastos registrales: 0.15%
-    c_due_dilig     = 10000 if fin.get("include_dd", True) else 0
+    c_due_dilig     = 20000 if fin.get("include_dd", True) else 0
     c_terreno_total = c_terreno_base + c_alcabala + c_notarial + c_registral + c_due_dilig
 
     # ── Construcción ────────────────────────────────────
@@ -3135,12 +3132,9 @@ def calcular_financiero(cabida: dict, fin: dict, zona: str) -> dict:
     c_supervision  = c_construccion * 0.005      # Supervisión técnica: 0.5% costo directo
     c_costos_base  = c_terreno_total + c_construccion + c_arq + c_esp
     c_legales      = c_costos_base * 0.005       # Legales y contabilidad: 0.5%
-    c_permisos     = c_construccion * 0.005      # Permisos y licencias: 0.5%
-    c_gerenciamiento = ing_brutos * 0.060        # Gerenciamiento inmobiliario: 6% ingresos
-    c_gestion_com  = ing_brutos * 0.005          # Gestión comercial: 0.5% ingresos
-    c_publicidad   = ing_brutos * 0.025          # Publicidad y marketing: 2.5% ingresos
-    c_ventas_fee   = ing_brutos * 0.030          # Comisiones de venta: 3% ingresos
-    c_postventa    = ing_brutos * 0.005          # Post venta: 0.5% ingresos
+    c_permisos        = c_construccion * 0.015    # Permisos y licencias: 1.5% costo construcción
+    c_gerenciamiento  = c_construccion * 0.05    # Gerenciamiento inmobiliario: 5% costo construcción
+    c_ventas_marketing = ing_brutos * 0.05       # Ventas y marketing consolidado: 5% ingresos
 
     # ── Financiamiento (línea bancaria: 40% del costo construcción) ─
     # Costo financiero = interés sobre saldo promedio (50% de la línea durante el período de obra)
@@ -3152,8 +3146,7 @@ def calcular_financiero(cabida: dict, fin: dict, zona: str) -> dict:
 
     # ── Totales ─────────────────────────────────────────
     c_sin_financ = (c_terreno_total + c_construccion + c_arq + c_esp + c_supervision +
-                    c_legales + c_postventa + c_permisos +
-                    c_gerenciamiento + c_gestion_com + c_publicidad + c_ventas_fee)
+                    c_legales + c_permisos + c_gerenciamiento + c_ventas_marketing)
     c_total      = c_sin_financ + c_financiero
 
     utilidad_bruta = ing_brutos - c_total
@@ -3173,9 +3166,9 @@ def calcular_financiero(cabida: dict, fin: dict, zona: str) -> dict:
 
     # Métricas estratégicas
     be_precio_m2    = round(c_sin_financ / av) if av > 0 else 0
-    _otros_costos = (c_construccion + c_arq + c_esp + c_supervision + c_legales + c_postventa
-                     + c_permisos + c_gerenciamiento + c_gestion_com + c_publicidad
-                     + c_ventas_fee + c_due_dilig + c_notarial + c_registral)
+    _otros_costos = (c_construccion + c_arq + c_esp + c_supervision + c_legales
+                     + c_permisos + c_gerenciamiento + c_ventas_marketing
+                     + c_due_dilig + c_notarial + c_registral)
     _ir_factor      = max(1 - tasa_ir, 0.50)
     max_terreno_20  = max(0, round(ing_brutos * (1 - 0.20 / _ir_factor) - _otros_costos))
     max_terreno_15  = max(0, round(ing_brutos * (1 - 0.15 / _ir_factor) - _otros_costos))
@@ -3252,13 +3245,10 @@ def calcular_financiero(cabida: dict, fin: dict, zona: str) -> dict:
             "Arquitectura ($10.5/m²)":          round(c_arq),
             "Especialidades ($4.4/m²)":         round(c_esp),
             "Supervisión técnica (0.5%)":        round(c_supervision),
-            "Permisos y licencias (0.5%)":       round(c_permisos),
+            "Permisos y licencias (1.5%)":       round(c_permisos),
             "── COSTOS INMOBILIARIOS ──────────": 0,
-            "Gerenciamiento (6%)":              round(c_gerenciamiento),
-            "Gestión comercial (0.5%)":         round(c_gestion_com),
-            "Publicidad y marketing (2.5%)":    round(c_publicidad),
-            "Comisiones de venta (3%)":         round(c_ventas_fee),
-            "Post venta (0.5%)":                round(c_postventa),
+            "Gerenciamiento (5% construcción)": round(c_gerenciamiento),
+            "Ventas y marketing (5%)":          round(c_ventas_marketing),
             "Legales y contabilidad (0.5%)":    round(c_legales),
             "SUBTOTAL SIN FINANCIAMIENTO":      round(c_sin_financ),
             "Gasto financiero (banco)":         round(c_financiero),
@@ -3279,14 +3269,11 @@ def calcular_financiero(cabida: dict, fin: dict, zona: str) -> dict:
             "c_arq":             c_arq,
             "c_esp":             c_esp,
             "c_supervision":     c_supervision,
-            "c_legales":         c_legales,
-            "c_postventa":       c_postventa,
-            "c_permisos":        c_permisos,
-            "c_gerenciamiento":  c_gerenciamiento,
-            "c_gestion_com":     c_gestion_com,
-            "c_publicidad":      c_publicidad,
-            "c_ventas_fee":      c_ventas_fee,
-            "c_financiero":      c_financiero,
+            "c_legales":           c_legales,
+            "c_permisos":          c_permisos,
+            "c_gerenciamiento":    c_gerenciamiento,
+            "c_ventas_marketing":  c_ventas_marketing,
+            "c_financiero":        c_financiero,
             "c_ir":              c_ir,
             "ing_brutos":        ing_brutos,
         },
@@ -3493,6 +3480,8 @@ def generar_pdf_factis(result: dict, cabida: dict, params: dict,
                                     TableStyle, HRFlowable, KeepTogether, PageBreak,
                                     NextPageTemplate, BaseDocTemplate, Frame, PageTemplate)
     from reportlab.pdfgen import canvas as pdfgen_canvas
+    from reportlab.graphics.shapes import Drawing, Rect, String, Line, Group
+    from reportlab.graphics import renderPDF
 
     # ── Paleta ──────────────────────────────────────────────────
     NAV   = colors.HexColor("#1E2D3D")
@@ -3755,6 +3744,127 @@ def generar_pdf_factis(result: dict, cabida: dict, params: dict,
             ("RIGHTPADDING", (0, 0), (-1, -1), 8),
         ] + styles_ts))
         return t
+
+    def _chart_financiero() -> Drawing:
+        """Barras verticales: Ingresos / Costo / Utilidad Neta."""
+        cw  = float(W - 2 * M)
+        ch  = 58.0 * mm
+        d   = Drawing(cw, ch)
+
+        items = [
+            ("Ingresos Brutos",  r.get("ingresos_brutos", 0), "#1A4731"),
+            ("Costo Total",      r.get("costo_total",      0), "#1E2D3D"),
+            ("Utilidad Neta",    r.get("utilidad_neta",    0), "#B8904A"),
+        ]
+        n       = len(items)
+        max_v   = max(v for _, v, _ in items) or 1
+        pad_l   = 8.0
+        pad_r   = 8.0
+        axis_y  = 18.0
+        bar_top = ch - 14.0
+        bar_area_h = bar_top - axis_y
+        total_w = cw - pad_l - pad_r
+        bar_w   = total_w / (n * 2.2)
+        spacing = (total_w - n * bar_w) / (n + 1)
+
+        # fondo gris claro
+        d.add(Rect(0, 0, cw, ch,
+                   fillColor=colors.HexColor("#F5F2ED"), strokeColor=None))
+
+        # línea base
+        d.add(Line(pad_l, axis_y, cw - pad_r, axis_y,
+                   strokeColor=colors.HexColor("#D8D4CC"), strokeWidth=0.6))
+
+        for i, (lbl, val, hex_col) in enumerate(items):
+            x  = pad_l + spacing + i * (bar_w + spacing)
+            bh = (val / max_v) * bar_area_h if max_v > 0 else 0
+            fc = colors.HexColor(hex_col)
+
+            # barra
+            d.add(Rect(x, axis_y, bar_w, bh, fillColor=fc, strokeColor=None))
+
+            # valor encima de la barra
+            val_txt = _fmt(val)
+            d.add(String(x + bar_w / 2, axis_y + bh + 3, val_txt,
+                         fontName="Helvetica-Bold", fontSize=7.5,
+                         fillColor=colors.HexColor("#1E2D3D"),
+                         textAnchor="middle"))
+
+            # etiqueta debajo del eje
+            d.add(String(x + bar_w / 2, 5, lbl,
+                         fontName="Helvetica", fontSize=7,
+                         fillColor=colors.HexColor("#7A7268"),
+                         textAnchor="middle"))
+
+        # título del gráfico
+        d.add(String(pad_l, ch - 10, "RESUMEN FINANCIERO",
+                     fontName="Helvetica-Bold", fontSize=7,
+                     fillColor=colors.HexColor("#B8904A"),
+                     textAnchor="start"))
+        return d
+
+    def _chart_costos() -> Drawing:
+        """Barras horizontales: top 8 rubros de costo."""
+        _items = [(k, v) for k, v in det.items()
+                  if "Impuesto" not in k and v > 0]
+        _items.sort(key=lambda x: x[1], reverse=True)
+        _items = _items[:8]
+        if not _items:
+            return Drawing(1, 1)
+
+        cw     = float(W - 2 * M)
+        row_h  = 9.0 * mm
+        pad_t  = 10.0
+        n      = len(_items)
+        ch     = row_h * n + pad_t + 8.0
+        d      = Drawing(cw, ch)
+
+        # fondo
+        d.add(Rect(0, 0, cw, ch,
+                   fillColor=colors.HexColor("#F5F2ED"), strokeColor=None))
+
+        # título
+        d.add(String(4, ch - 8, "PRINCIPALES RUBROS DE COSTO",
+                     fontName="Helvetica-Bold", fontSize=7,
+                     fillColor=colors.HexColor("#B8904A"),
+                     textAnchor="start"))
+
+        lbl_w   = cw * 0.36
+        bar_max = cw * 0.45
+        val_x   = lbl_w + bar_max + 6
+        max_v   = _items[0][1] or 1
+
+        for i, (lbl, val) in enumerate(_items):
+            y  = ch - pad_t - (i + 1) * row_h
+            bw = (val / max_v) * bar_max
+
+            # fila alterna
+            bg = colors.HexColor("#ECEAE6") if i % 2 == 0 else colors.HexColor("#F5F2ED")
+            d.add(Rect(0, y, cw, row_h, fillColor=bg, strokeColor=None))
+
+            # etiqueta izquierda
+            lbl_s = (lbl[:30] + "…") if len(lbl) > 30 else lbl
+            d.add(String(6, y + row_h * 0.32, lbl_s,
+                         fontName="Helvetica", fontSize=7.5,
+                         fillColor=colors.HexColor("#2C2C2C"),
+                         textAnchor="start"))
+
+            # barra
+            bar_y = y + row_h * 0.18
+            bar_h = row_h * 0.60
+            d.add(Rect(lbl_w, bar_y, bw, bar_h,
+                       fillColor=colors.HexColor("#1E2D3D"), strokeColor=None))
+
+            # valor a la derecha
+            d.add(String(lbl_w + bw + 4, y + row_h * 0.32, _fmt(val),
+                         fontName="Helvetica-Bold", fontSize=7.5,
+                         fillColor=colors.HexColor("#1E2D3D"),
+                         textAnchor="start"))
+
+        # línea separadora título
+        d.add(Line(0, ch - pad_t, cw, ch - pad_t,
+                   strokeColor=colors.HexColor("#B8904A"), strokeWidth=0.6))
+        return d
 
     # ── Documento con portada especial ───────────────────────────
     doc = BaseDocTemplate(buf, pagesize=A4,
@@ -4043,6 +4153,12 @@ def generar_pdf_factis(result: dict, cabida: dict, params: dict,
 
     story += _section("Estructura de Costos")
     story.append(_cost_table(det))
+    story.append(Spacer(1, 14))
+
+    story += _section("Análisis Gráfico")
+    story.append(_chart_financiero())
+    story.append(Spacer(1, 10))
+    story.append(_chart_costos())
     story.append(Spacer(1, 10))
 
     # Resultado final
@@ -4407,14 +4523,10 @@ def generar_flujo(cabida: dict, result_financiero: dict, fin: dict, zona: str):
         if con_banco:
             fl[min(fin_obra, total_meses)] -= saldo_banco
 
-        # Costos de ventas + gerenciamiento
-        c_vtas = (raw["c_ventas_fee"] + raw["c_publicidad"]
-                  + raw["c_gerenciamiento"] + raw["c_gestion_com"])
+        # Costos de ventas + gerenciamiento (distribuidos durante período de ventas)
+        c_vtas = raw["c_ventas_marketing"] + raw["c_gerenciamiento"]
         for i in range(min(meses_venta, n_months)):
             fl[i] -= c_vtas / meses_venta
-
-        # Post venta
-        fl[min(fin_obra + 1, total_meses)] -= raw["c_postventa"]
 
         # Ingresos: PIE 10% | 20 cuotas 30% | saldo 60% al fin de obra
         precio_u      = raw["ing_brutos"] / n_unidades
@@ -5688,8 +5800,8 @@ with st.sidebar:
                                           min_value=0, max_value=15_000,
                                           value=int(st.session_state.get("cab_precio_venta_m2", MERCADO[zona]["precio_2br"])), step=100, key="cab_pventa_inp")
         costo_const_m2  = st.number_input("Costo construcción dptos / m² (USD)",
-                                          min_value=300, max_value=2_000,
-                                          value=int(st.session_state.get("cab_costo_const_m2", MERCADO[zona]["costo_construccion"])), step=25, key="cab_cconst_inp")
+                                          min_value=300, max_value=3_000,
+                                          value=int(st.session_state.get("cab_costo_const_m2", 700)), step=25, key="cab_cconst_inp")
         with st.expander("Costos avanzados"):
             costo_sotano_m2  = st.number_input("Costo sótano / m² (USD)", 200, 1000, 450, 25,
                                                 help="Costo por m² de sótano (excavación + estructura)")
@@ -5699,7 +5811,7 @@ with st.sidebar:
                                                 help="IR corporativo Perú: 29.5%")
             include_alcabala = st.checkbox("Incluir Alcabala (3%)", value=True,
                                             help="Impuesto de alcabala sobre precio del terreno")
-            include_dd       = st.checkbox("Incluir Due Diligence ($10,000)", value=True,
+            include_dd       = st.checkbox("Incluir Due Diligence ($20,000)", value=True,
                                             help="Acompaña todo el proyecto: títulos, registrales, notariales. Varía si el cliente tiene abogado in-house.")
 
         st.markdown("---")
@@ -8372,7 +8484,7 @@ if tipo_op == "Proyecto Inmobiliario":
             st.markdown("#### Parámetros comunes")
             _cmp_c1, _cmp_c2, _cmp_c3 = st.columns(3)
             _cmp_pv   = _cmp_c1.number_input("Precio venta ($/m² vendible)", 800, 5000, 1800, 50, key="cmp_pv")
-            _cmp_cc   = _cmp_c2.number_input("Costo construcción ($/m² techado)", 500, 2000, 920, 10, key="cmp_cc")
+            _cmp_cc   = _cmp_c2.number_input("Costo construcción ($/m² techado)", 300, 3000, 700, 25, key="cmp_cc")
             _cmp_cus  = _cmp_c3.number_input("CUS (coef. utiliz. suelo)", 1.0, 15.0, 6.5, 0.5, key="cmp_cus",
                                               help="Área techada = área terreno × CUS")
 
@@ -10550,7 +10662,7 @@ elif tipo_op == "Calculadora Inversa":
             500, 5000,
             int(_m_ci.get("precio_2br", 1800)),
             50, key="ci_precio_m2")
-        _ci_costo_c = st.number_input("Costo construcción ($/m² techado)", 500, 2000, 920, 10, key="ci_costo_c")
+        _ci_costo_c = st.number_input("Costo construcción ($/m² techado)", 300, 3000, 700, 25, key="ci_costo_c")
         _ci_tasa_f  = st.number_input("Tasa financiamiento (%)", 0.0, 15.0, 7.0, 0.5, key="ci_tasa_f")
 
         st.markdown("#### Margen objetivo")
@@ -10652,11 +10764,12 @@ elif tipo_op == "Calculadora Inversa":
         st.caption("Costos independientes del terreno (base de cálculo)")
         _ci_desglose = {
             "Construcción (inc. fee constructora)": _ci_r["c_construccion"],
-            "Gerenciamiento (6% ing.)": round(_ci_ing * 0.06),
-            "Comercialización (6% ing.)": round(_ci_ing * 0.065),
+            "Gerenciamiento (5% construcción)": round(_ci_r["c_construccion"] * 0.05),
+            "Ventas y marketing (5% ing.)":      round(_ci_ing * 0.05),
+            "Permisos y licencias (1.5% const.)": round(_ci_r["c_construccion"] * 0.015),
             "Diseño (arq. + esp.)": round(_ci_area_techada * (10.5 + 4.4)),
             "Costo financiero (est.)": _ci_r["c_financiero"],
-            "Due diligence + otros fijos": 11500,
+            "Due diligence + otros fijos": 20000,
         }
         for _lbl, _val in _ci_desglose.items():
             pct = _val / _ci_ing * 100 if _ci_ing > 0 else 0
