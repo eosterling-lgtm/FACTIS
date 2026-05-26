@@ -142,6 +142,28 @@ def cargar_proyecto(ref) -> dict:
     return {}
 
 
+def generar_link_compartido(proyecto_id: str) -> str:
+    """Genera token único, lo guarda en Supabase y retorna la URL completa."""
+    import uuid
+    token = uuid.uuid4().hex          # 32 chars hex sin guiones
+    sb = _get_supabase()
+    if sb and proyecto_id:
+        try:
+            # Intenta update en columna top-level share_token
+            sb.table("proyectos").update({"share_token": token}).eq("id", proyecto_id).execute()
+        except Exception:
+            try:
+                # Fallback: guarda dentro del JSONB datos
+                resp = sb.table("proyectos").select("datos").eq("id", proyecto_id).single().execute()
+                datos = dict((resp.data or {}).get("datos") or {})
+                datos["_share_token"] = token
+                sb.table("proyectos").update({"datos": datos}).eq("id", proyecto_id).execute()
+            except Exception:
+                return ""
+    base = (st.secrets.get("app") or {}).get("base_url", "http://localhost:8501")
+    return f"{base}?share={token}"
+
+
 def _irr_bisect(flujos, lo=-0.9999, hi=10.0, tol=1e-7, max_iter=300):
     """Bisection method to find monthly IRR."""
     def npv(r):
@@ -560,6 +582,16 @@ def _show_shared_view(token: str) -> None:
             proyecto = r.data
         except Exception:
             pass
+        if not proyecto:
+            try:
+                # Fallback: token guardado dentro del JSONB datos
+                r2 = sb.table("proyectos").select("*").execute()
+                for row in (r2.data or []):
+                    if (row.get("datos") or {}).get("_share_token") == token:
+                        proyecto = row
+                        break
+            except Exception:
+                pass
 
     if not proyecto:
         st.error("Este enlace no es válido o ya no está disponible.")
@@ -1537,6 +1569,48 @@ st.markdown("""
             box-shadow: 0 2px 12px rgba(30,45,61,0.07), 0 1px 3px rgba(30,45,61,0.05) !important;
         }
         .stButton button:hover { opacity: 1 !important; }
+    }
+
+    /* ── Sidebar: colapsa por defecto en móvil ── */
+    @media (max-width: 600px) {
+        section[data-testid="stSidebar"] {
+            transform: translateX(-100%) !important;
+            transition: transform 0.25s ease !important;
+        }
+        section[data-testid="stSidebar"][aria-expanded="true"] {
+            transform: translateX(0) !important;
+        }
+        /* Tablas HTML custom: scroll horizontal sin romper layout */
+        .stMarkdown table,
+        .stMarkdown div[style*="overflow"] {
+            overflow-x: auto !important;
+            -webkit-overflow-scrolling: touch !important;
+            display: block !important;
+            max-width: 100vw !important;
+        }
+        /* Matrices de sensibilidad y tablas de costos */
+        div[style*="overflow-x:auto"] {
+            max-width: calc(100vw - 24px) !important;
+        }
+        /* Métricas: 2 por fila en móvil */
+        [data-testid="stMetric"] {
+            min-width: 45% !important;
+        }
+        /* Download buttons: full width */
+        [data-testid="stDownloadButton"] button {
+            width: 100% !important;
+            min-height: 44px !important;
+        }
+        /* Ocultar texto largo en tabs en móvil (solo icono si hay) */
+        .stTabs [data-baseweb="tab"] span {
+            font-size: 10px !important;
+        }
+        /* Plotly charts: no desbordar */
+        .js-plotly-plot .plotly,
+        .js-plotly-plot {
+            max-width: 100% !important;
+            overflow: hidden !important;
+        }
     }
 </style>
 """, unsafe_allow_html=True)
@@ -7685,6 +7759,53 @@ if tipo_op == "Proyecto Inmobiliario":
                 st.markdown(_tbl, unsafe_allow_html=True)
                 st.caption("Margen/TIR/ROI: Verde = óptimo · Amarillo = aceptable · Rojo = revisar")
 
+                # ── Compartir con cliente ──────────────────────
+                st.markdown("---")
+                st.markdown('<div class="section-title">Compartir con Cliente</div>', unsafe_allow_html=True)
+                _shr_c1, _shr_c2 = st.columns([3, 1])
+                with _shr_c1:
+                    st.markdown(
+                        '<div style="font-size:11px;color:#8AA8C0;padding-top:6px;">'
+                        'Genera un link de solo lectura para compartir este análisis directamente con tu cliente. '
+                        'No requiere login. Válido mientras el proyecto esté guardado.</div>',
+                        unsafe_allow_html=True)
+                with _shr_c2:
+                    if st.button("🔗 GENERAR LINK", use_container_width=True, key="btn_share"):
+                        _proj_id = getattr(st.session_state.get("_proyecto_guardado"), "_id", None)
+                        if not _proj_id:
+                            # Guardar primero si no está guardado
+                            _nombre_auto = fin_run.get("nombre_proyecto") or f"Proyecto {zona_sel}"
+                            _estado_share = {
+                                "financ":       st.session_state.get("financ"),
+                                "cabida":       st.session_state.get("cabida"),
+                                "params":       st.session_state.get("params"),
+                                "financ_inputs":fin_run,
+                                "zona":         zona_sel,
+                                "resumen":      (st.session_state.get("financ") or {}).get("resumen"),
+                            }
+                            _proy_nuevo = guardar_proyecto(_nombre_auto, _estado_share, "inmobiliario", zona_sel)
+                            st.session_state["_proyecto_guardado"] = _proy_nuevo
+                            _proj_id = getattr(_proy_nuevo, "_id", None)
+                        if _proj_id:
+                            _link = generar_link_compartido(str(_proj_id))
+                            if _link:
+                                st.session_state["_share_link"] = _link
+                            else:
+                                st.warning("No se pudo generar el link. Verifica la conexión a Supabase.")
+                        else:
+                            st.warning("Guarda el proyecto primero para poder compartirlo.")
+
+                if st.session_state.get("_share_link"):
+                    _lnk = st.session_state["_share_link"]
+                    st.markdown(
+                        f'<div style="background:#0E1E2E;border:1px solid #B8904A;border-radius:8px;'
+                        f'padding:12px 16px;margin-top:8px;display:flex;align-items:center;gap:12px;">'
+                        f'<span style="font-size:10px;color:#8AA8C0;flex-shrink:0;">LINK:</span>'
+                        f'<code style="font-size:11px;color:#B8904A;word-break:break-all;flex:1;">{_lnk}</code>'
+                        f'</div>',
+                        unsafe_allow_html=True)
+                    st.caption("Copia este link y envíalo por WhatsApp o email. El cliente lo abre sin login.")
+
                 # ── Botones de descarga PDF + Excel ──────────
                 st.markdown("---")
                 _pdf_col1, _pdf_col2, _pdf_col3 = st.columns([2, 1, 1])
@@ -7932,6 +8053,67 @@ if tipo_op == "Proyecto Inmobiliario":
                 GRN     = "#1A5C32"
                 RED     = "#C0392B"
                 meses   = df_fl["Mes"].tolist()
+
+                # ── Cronograma Gantt ──────────────────────────────
+                st.markdown('<div class="section-title">Cronograma del Proyecto</div>', unsafe_allow_html=True)
+                _r_fl    = result_fl["resumen"]
+                _mo      = _r_fl.get("meses_obra", 18)
+                _mv      = _r_fl.get("meses_venta", 12)
+                _inicio_o = 3        # Due diligence + permisos previos a la obra
+                _fin_o   = _inicio_o + _mo
+                _fin_v   = _inicio_o + max(_mv, 6)
+                _total_g = max(_fin_o + 3, _fin_v + 2)
+
+                import plotly.express as px
+                _hoy    = datetime.date.today().replace(day=1)
+
+                def _m2d(m):
+                    yr  = _hoy.year + (_hoy.month + m - 1) // 12
+                    mo_ = (_hoy.month + m - 1) % 12 + 1
+                    return datetime.date(yr, mo_, 1).isoformat()
+
+                _gantt_rows = [
+                    {"Fase": "Due Diligence",        "Inicio": _m2d(0),       "Fin": _m2d(2),              "Etapa": "Gestión"},
+                    {"Fase": "Permisos / Licencias", "Inicio": _m2d(1),       "Fin": _m2d(_inicio_o),      "Etapa": "Gestión"},
+                    {"Fase": "Preventa",             "Inicio": _m2d(_inicio_o),"Fin": _m2d(_inicio_o + min(6, _mv)), "Etapa": "Comercial"},
+                    {"Fase": "Construcción",         "Inicio": _m2d(_inicio_o),"Fin": _m2d(_fin_o),         "Etapa": "Obra"},
+                    {"Fase": "Ventas activas",       "Inicio": _m2d(_inicio_o + 6),"Fin": _m2d(_fin_v),     "Etapa": "Comercial"},
+                    {"Fase": "Entrega y cierre",     "Inicio": _m2d(_fin_o),  "Fin": _m2d(_fin_o + 3),     "Etapa": "Entrega"},
+                ]
+                _gantt_df = pd.DataFrame(_gantt_rows)
+                _gantt_df["Inicio"] = pd.to_datetime(_gantt_df["Inicio"])
+                _gantt_df["Fin"]    = pd.to_datetime(_gantt_df["Fin"])
+
+                _fig_g = px.timeline(
+                    _gantt_df, x_start="Inicio", x_end="Fin", y="Fase", color="Etapa",
+                    color_discrete_map={
+                        "Gestión":   "#4A90C4",
+                        "Obra":      "#B8904A",
+                        "Comercial": "#1B5E20",
+                        "Entrega":   "#7A5500",
+                    },
+                )
+                _fig_g.update_yaxes(autorange="reversed", showgrid=False)
+                _fig_g.update_xaxes(showgrid=True, gridcolor="#1E2D3D")
+                _fig_g.update_traces(marker_line_width=0)
+                _fig_g.update_layout(
+                    paper_bgcolor="#0A1628",
+                    plot_bgcolor="#0E1E2E",
+                    font=dict(color="white", size=10),
+                    margin=dict(l=0, r=0, t=10, b=20),
+                    height=260,
+                    legend=dict(
+                        orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0,
+                        font=dict(size=10), bgcolor="rgba(0,0,0,0)"),
+                )
+                st.plotly_chart(_fig_g, use_container_width=True)
+
+                _gc1, _gc2, _gc3, _gc4 = st.columns(4)
+                _gc1.metric("Due diligence",   "2 meses")
+                _gc2.metric("Obra",            f"{_mo} meses")
+                _gc3.metric("Ventas",          f"{_mv} meses")
+                _gc4.metric("Duración total",  f"{_total_g} meses")
+                st.markdown("---")
 
                 # ── Bloque comparativo escenarios ──────────
                 st.markdown('<div class="section-title">Escenarios — Sin Banco vs Con Banco</div>',
