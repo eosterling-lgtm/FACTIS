@@ -1,0 +1,2428 @@
+“AÑO DEL BICENTENARIO DEL PERÚ: 200 AÑOS DE INDEPENDENCIA” 
+
+Miércoles 7 de julio de 2021
+
+RESOLUCIÓN MINISTERIAL Nº 188-2021-VIVIENDA
+
+NORMA TÉCNICA
+A.020 VIVIENDA DEL 
+REGLAMENTO NACIONAL
+DE EDIFICACIONES
+
+NORMAS  LEGALES
+
+SEPARATA ESPECIAL
+
+2
+
+NORMAS LEGALES
+
+Miércoles 7 de julio de 2021 
+
+/
+
+El Peruano 
+
+RESOLUCIÓN MINISTERIAL Nº 188-2021-VIVIENDA
+
+Lima, 06 de julio del 2021
+
+VISTOS:
+
+El  Informe  Nº  223-2021-VIVIENDA/VMVU-DGPRVU  de  la  Dirección  General  de  Políticas  y  Regulación  en  Vivienda 
+y  Urbanismo  (DGPRVU);  el  Informe  Técnico  -  Legal  Nº  014-2021-VIVIENDA/VMVU-DGPRVU-DV-JLHP-KCG  de  la 
+Dirección de Vivienda; el Informe Nº 002-2021-CPARNE de la Comisión Permanente de Actualización del Reglamento 
+Nacional  de  Ediﬁ caciones  (CPARNE);  el  Informe  Nº  452-2021-VIVIENDA/OGAJ  de  la  Oﬁ cina  General  de  Asesoría 
+Jurídica; y,
+
+CONSIDERANDO:
+
+Que, los artículos 5 y 6 de la Ley Nº 30156, Ley de Organización y Funciones del Ministerio de Vivienda, Construcción 
+y  Saneamiento  (MVCS),  establecen  que  este  Ministerio  es  el  órgano  rector  de  las  políticas  nacionales  y  sectoriales 
+dentro del ámbito de su competencia, entre otras, en materia de vivienda, que son de obligatorio cumplimiento por los 
+tres niveles de gobierno en el marco del proceso de descentralización y en todo el territorio nacional; asimismo, tiene 
+entre sus competencias exclusivas, dictar normas y lineamientos técnicos para la adecuada ejecución de las políticas 
+nacionales y sectoriales;
+
+Que, el numeral 2 del artículo 10 de la referida Ley señala que el MVCS tiene la función compartida de normar, aprobar, 
+ejecutar  y  supervisar  las  políticas  nacionales  sobre  ordenamiento  y  desarrollo  urbanístico,  habilitación  urbana  y 
+ediﬁ caciones, uso y ocupación del suelo urbano y urbanizable, en el ámbito de su competencia, en concordancia con las 
+leyes orgánicas de los gobiernos regionales y de municipalidades;
+
+Que,  el  literal  o)  del  artículo  66  del  Reglamento  de  Organización  y  Funciones  del  MVCS,  aprobado  por  el  Decreto 
+Supremo Nº 010-2014-VIVIENDA, establece que la DGPRVU tiene entre sus funciones, proponer actualizaciones del 
+Reglamento  Nacional  de  Ediﬁ caciones  (RNE),  en  coordinación  con  los  sectores  que  se  vinculen,  en  el  marco  de  los 
+Comités Técnicos de Normalización conforme a la normatividad vigente;
+
+Que, mediante el Decreto Supremo Nº 015-2004-VIVIENDA, se aprueba el Índice y la Estructura del RNE, aplicable a 
+las habilitaciones urbanas y a las ediﬁ caciones que se ejecuten a nivel nacional, estableciendo en sus artículos 1 y 3 que 
+corresponde al MVCS aprobar, mediante Resolución Ministerial, las normas técnicas de acuerdo al mencionado Índice y 
+sus variaciones según los avances tecnológicos;
+
+Que, por el Decreto Supremo Nº 011-2006-VIVIENDA, se aprueban sesenta y seis (66) normas técnicas del RNE, 
+entre ellas, la Norma Técnica A.020 “Vivienda”, contenida en el Numeral III.1 Arquitectura del Título III Ediﬁ caciones 
+del  RNE;  y,  se  constituye  la  CPARNE,  encargada  de  analizar  y  formular  las  propuestas  para  la  actualización  del 
+RNE;
+
+Que, por la Resolución Ministerial Nº 894-2008-VIVIENDA, se aprueba el Reglamento Interno de la CPARNE, en 
+cuyo  numeral  6.5  se  establece  como  una  de  sus  funciones,  evaluar  y  aprobar  los  proyectos  de  actualización  del 
+RNE;
+
+Que,  mediante  el  Informe  Nº  002-2021-CPARNE  de  fecha  8  de  abril  de  2021,  el  Presidente  de  la  CPARNE  eleva  la 
+propuesta de modiﬁ cación de la Norma Técnica A.020 “Vivienda” del RNE, la misma que ha sido materia de evaluación 
+y aprobación por la mencionada Comisión conforme al Acta de la Septuagésima Novena Sesión llevada a cabo el 25 de 
+febrero y el 4 de marzo de 2021;
+
+Que,  por  la  Resolución  Ministerial  Nº  134-2021-VIVIENDA,  se  dispuso  la  publicación  del  proyecto  de  Resolución 
+Ministerial  que  aprueba  la  modiﬁ cación  de  la  Norma  Técnica A.020  “Vivienda”  del  RNE,  en  el  portal  institucional  del 
+MVCS; dicho proyecto recibió comentarios y aportes de las personas interesadas, siendo la DGPRVU la encargada de 
+su consolidación;
+
+Que,  mediante  los  documentos  de  vistos,  la  DGPRVU  sustenta  la  propuesta  de  modiﬁ cación  de  la  Norma  Técnica 
+A.020  “Vivienda”  del  RNE,  la  cual  tiene  por  objeto  regular  las  condiciones  mínimas  de  diseño  que  deben  cumplir  las 
+ediﬁ caciones residenciales, con la ﬁ nalidad de cubrir las necesidades básicas de habitabilidad, funcionalidad y seguridad, 
+y que es de aplicación obligatoria a nivel nacional, para todas aquellas ediﬁ caciones residenciales que tienen como uso 
+principal o exclusivo la residencia;
+
+Que,  mediante  Informe  Nº  452-2021-VIVIENDA/OGAJ,  desde  el  punto  de  vista  legal,  la  Oﬁ cina  General  de Asesoría 
+Jurídica emite opinión favorable a la presente Resolución Ministerial, que modiﬁ ca la Norma Técnica A.020 “Vivienda” 
+del RNE;
+
+Que,  de  acuerdo  a  lo  expuesto  en  los  considerandos  precedentes,  corresponde  modiﬁ car  la  Norma  Técnica  A.020 
+“Vivienda”  del  RNE,  conforme  a  lo  señalado  por  la  DGPRVU  y  la  CPARNE,  a  ﬁ n  de  actualizar  y  complementar  su 
+contenido;
+
+De  conformidad  con  lo  dispuesto  en  la  Ley  Nº  30156,  Ley  de  Organización  y  Funciones  del  Ministerio  de  Vivienda, 
+Construcción  y  Saneamiento;  su  Reglamento  de  Organización  y  Funciones,  aprobado  por  el  Decreto  Supremo 
+Nº  010-2014-VIVIENDA,  modiﬁ cado  por  el  Decreto  Supremo  Nº  006-2015-VIVIENDA;  el  Decreto  Supremo                                                                
+
+ 
+El Peruano / 
+
+   Miércoles 7 de julio de 2021
+
+NORMAS LEGALES
+
+3
+
+Nº  015-2004-VIVIENDA,  que  aprueba  el  Índice  del  Reglamento  Nacional  de  Ediﬁ caciones;  el  Decreto  Supremo                                 
+Nº 011-2006-VIVIENDA, que aprueba sesenta y seis (66) Normas Técnicas del Reglamento Nacional de Ediﬁ caciones;
+
+SE RESUELVE:
+
+Artículo 1.- Modiﬁ cación de la Norma Técnica A.020 “Vivienda” del Reglamento Nacional de Ediﬁ caciones
+Modiﬁ car la Norma Técnica A.020 “Vivienda”, contenida en el Numeral III.1 Arquitectura del Título III Ediﬁ caciones del 
+Reglamento  Nacional  de  Ediﬁ caciones,  aprobada  por  el  Decreto  Supremo  Nº  011-2006-VIVIENDA,  cuyo  texto  forma 
+parte integrante de la presente Resolución Ministerial.
+
+Artículo 2.- Publicación y Difusión
+Publicar  la  presente  Resolución  Ministerial  y  la  Norma  Técnica  a  que  se  reﬁ ere  el  artículo  precedente,  en  el  Portal 
+Institucional  del  Ministerio  de  Vivienda,  Construcción  y  Saneamiento  (www.gob.pe/vivienda),  el  mismo  día  de  la 
+publicación de la Resolución Ministerial y la Norma Técnica en el diario oﬁ cial El Peruano.
+
+Regístrese, comuníquese y publíquese.
+
+SOLANGEL FERNÁNDEZ HUANQUI
+Ministra de Vivienda, Construcción y Saneamiento
+
+NORMA TÉCNICA A.020 VIVIENDA
+DEL REGLAMENTO NACIONAL DE EDIFICACIONES
+
+CAPÍTULO I
+
+ASPECTOS GENERALES
+
+Artículo 1.- Objeto y ﬁ nalidad
+La presente Norma Técnica tiene por objeto regular las condiciones mínimas de diseño que deben cumplir las ediﬁ caciones 
+residenciales, con la ﬁ nalidad de cubrir las necesidades básicas de habitabilidad, funcionalidad y seguridad.
+
+Artículo 2.- Ámbito de aplicación
+La presente Norma Técnica es de aplicación obligatoria a nivel nacional, para todas aquellas ediﬁ caciones residenciales, 
+que tienen como uso principal o exclusivo la residencia.
+
+Artículo 3.- Deﬁ nición de ediﬁ cación residencial
+
+3.1.  Ediﬁ cación destinada a albergar a personas o grupos familiares, en espacios cuyas características y dimensiones 
+son  suﬁ cientes  para  satisfacer  las  necesidades  y  funciones  de  aseo,  descanso,  alimentación  y  reunión,  en 
+condiciones seguras y saludables.
+
+3.2.  Las ediﬁ caciones pueden contar con espacios adicionales para su uso en actividades complementarias, y para 
+las funciones de almacenamiento de objetos domésticos y estacionamiento de vehículos. Los espacios incluyen 
+áreas techadas y no techadas y pueden ser provistos de manera aislada de la ediﬁ cación principal dentro del 
+predio.
+
+Artículo 4.- Tipologías
+
+4.1.  Las ediﬁ caciones residenciales pueden desarrollarse según la siguiente clasiﬁ cación:
+
+Cuadro Nº 01. Clasiﬁ cación de ediﬁ caciones residenciales
+
+Clasiﬁcación
+
+Tipología
+
+Ediﬁcación para grupos familiares
+
+Vivienda unifamiliar
+
+Vivienda bifamiliar
+
+Quinta
+
+Vivienda taller
+
+Vivienda multifamiliar
+
+Ediﬁcación para grupos de individuos
+
+Vivienda de uso colectivo
+
+Conjunto habitacional / residencial
+
+ 
+ 
+4
+
+NORMAS LEGALES
+
+Miércoles 7 de julio de 2021 
+
+/
+
+El Peruano 
+
+4.2.  Las  viviendas  de  uso  colectivo  pueden  desarrollarse  en  ediﬁ caciones  de  uso  exclusivo  para  grupos  de 
+individuos y/o en conjunto con ediﬁ caciones para grupos familiares de viviendas multifamiliares y conjuntos 
+residenciales.
+
+CAPÍTULO II
+
+CONDICIONES GENERALES DE HABITABILIDAD Y FUNCIONALIDAD
+
+Artículo 5.- Ubicación
+
+5.1.  Las ediﬁ caciones residenciales en zonas urbanas se ediﬁ can en áreas con zoniﬁ cación residencial o zoniﬁ cación 
+compatible con el uso residencial, según lo establecido en los planes de desarrollo urbano correspondientes. No 
+se puede ediﬁ car viviendas en zonas de riesgo no mitigable, así como en áreas de reserva naturales, recreación 
+pública, equipamiento urbano, para la red vial, redes de instalaciones de servicios públicos, o bajo líneas de alta o 
+media tensión.
+
+5.2.  Las viviendas unifamiliares pueden ediﬁ carse en zonas rurales, adyacentes al área de trabajo rural de las personas, 
+conforme a las características del clima y entorno, a excepción de zonas de riesgo no mitigable, declaradas por el 
+gobierno local correspondiente.
+
+Artículo 6.- Zonas bioclimáticas
+El diseño de las ediﬁ caciones residenciales debe ser capaz de responder a las características de la zona bioclimática en 
+la que se encuentran, según la zoniﬁ cación bioclimática que establece el RNE, tomando en cuenta las temperaturas y 
+precipitaciones máximas y mínimas de la zona.
+
+Artículo 7.- Densidad habitacional
+Para el cálculo de la densidad habitacional, el número de habitantes de un núcleo de vivienda, está en función al número 
+de dormitorios, según lo siguiente:
+
+Cuadro Nº 02. Densidad habitacional
+
+Vivienda
+
+De un dormitorio
+
+De dos dormitorios
+
+De tres dormitorios
+
+Número de personas
+
+2
+
+3
+
+4
+
+Con más de tres dormitorios para vivienda multifamiliar 
+y conjunto residencial
+
+1 persona adicional por dormitorio
+
+Vivienda de uso colectivo
+
+1 persona por dormitorio
+
+La densidad establecida es la base para determinar el número de personas, con la cual se pueden estimar los servicios 
+y equipamientos urbanos para los Planes de Desarrollo Urbano.
+
+Artículo 8.- Área techada mínima
+
+8.1.  Las áreas techadas mínimas de las unidades de vivienda son las siguientes:
+
+a) 
+
+b) 
+
+c) 
+
+El área techada mínima de una vivienda de uso colectivo, sin capacidad de ampliación (departamentos en 
+ediﬁ cios multifamiliares y/o conjuntos residenciales) es de 16.00 m², incluye al menos el área de descanso 
+y de aseo personal.
+La vivienda para grupos familiares sin capacidad de ampliación (departamentos en ediﬁ cios multifamiliares y/o 
+en conjuntos residenciales sujetos al régimen de propiedad exclusiva y propiedad común) es de 40.00 m².
+La vivienda unifamiliar en su forma inicial como módulo básico de vivienda con posibilidad de expansión es 
+de 25.00 m², el cual debe cumplir con los requisitos básicos que permitan desarrollar las funciones de estar-
+cocinar-dormir, aseo y lavado, sobre el lote; debiendo mantener su condición de módulo básico hasta que 
+sean ampliadas, para lo cual el diseño del proyecto debe considerar el terreno y el espacio adicional para la 
+ampliación de manera integral.
+
+8.2.  Para el caso de las áreas mínimas de las ediﬁ caciones residenciales que se ejecuten dentro de los programas de 
+
+vivienda promovidas por el Estado, aplican las normas técnicas correspondientes.
+
+Artículo 9.- Altura mínima de los ambientes
+
+9.1.  La altura libre mínima entre el piso terminado y el cielo raso, depende de la zona climática donde se ubica, no 
+
+debiendo ser menor a 2.30 m.
+
+9.2.  En los casos de viviendas con cubiertas inclinadas, la altura mínima indicada en el encuentro del muro con el cielo 
+raso del techo, puede reducirse hasta un mínimo de 1.80 m, siempre que la altura promedio de la habitación que 
+cubre, corresponda al mínimo normativo.
+
+ 
+El Peruano / 
+
+   Miércoles 7 de julio de 2021
+
+NORMAS LEGALES
+
+5
+
+9.3.  En ambientes de servicios higiénicos la altura mínima puede ser hasta 2.10 m.
+
+Artículo 10.- Dimensiones de los espacios
+
+10.1.  Las dimensiones de los espacios que conforman la vivienda, deben ser suﬁ cientes para albergar el mobiliario requerido 
+para cada función, permitir la circulación de las personas, el desarrollo de sus actividades, así como la evacuación en 
+caso de emergencia, las mismas que deben estar en concordancia con el número de personas que la habitan.
+
+10.2.  La organización de los espacios debe permitir la privacidad en el uso de los servicios higiénicos y tener la capacidad 
+
+para desarrollar las demás funciones de manera conjunta o independiente.
+
+10.3.  El número y características del mobiliario que se propone en el diseño, debe tener dimensiones acordes con el 
+cuerpo humano (antropometría). El anteproyecto y proyecto arquitectónico deben contener la ubicación tentativa 
+del mobiliario principal para las funciones que alberga.
+
+Artículo 11.- Iluminación y ventilación
+
+11.1.  Los  ambientes  que  conforman  toda  ediﬁ cación  residencial  deben  estar  dotados  de  iluminación  y  ventilación 
+natural, debiendo resolver mediante, al menos, una perforación en la envolvente que conforman dichos ambientes, 
+de forma vertical y/o cenital que permita la ventilación desde el exterior.
+
+11.2.  En los espacios donde se desempeñen varias funciones, se pueden resolver la iluminación y ventilación a través 
+
+de cualquiera de ellas.
+
+11.3.  Los ambientes de aseo, lavado, depósito, almacenamiento, hall, pasillos de circulación, cuarto de control, cuarto 
+de bombas, ambientes en sótanos, ambientes que por razones de seguridad no puedan tener vanos al exterior o 
+donde se realicen actividades en los que ingresen personas de manera eventual, pueden tener una solución de 
+iluminación artiﬁ cial y ventilación mecánica a través de ductos exclusivos u otros ambientes.
+
+11.4.  La iluminación y ventilación natural de los ambientes se debe captar a través de la vía pública, retiros laterales, 
+
+retiros posteriores, mediante un pozo dentro del predio y/o mediante separación entre ediﬁ caciones:
+
+a) 
+
+Pozo de luz en viviendas unifamiliares, quintas y viviendas taller:
+
+Cuadro Nº 03. Cálculo de pozo de luz
+
+Ambientes
+
+Distancia mínima
+
+Dormitorio, sala y comedor
+
+Cocina y patios de servicios techados
+
+2.00 m
+
+1.80 m
+
+b) 
+
+Pozo de luz en viviendas bifamiliares y multifamiliares:
+
+Las dimensiones del pozo de luz se calculan entre los paramentos de las ediﬁ caciones o hasta el límite de 
+propiedad y en función de la altura del paramento más bajo que conforma el pozo, del número de lados con 
+ediﬁ caciones propias y del uso de los ambientes que se sirven de él. Se considera como paramento más 
+bajo a cualquiera de los dos lados del pozo que hagan perpendicular con la distancia mínima requerida.
+
+Asimismo, las dimensiones mínimas del pozo de luz se calculan en función de la altura de la ediﬁ cación y 
+por tramos cada 18.00 m; dependiendo de la altura de la ediﬁ cación se considera cada tramo de manera 
+independiente, sumándose conforme aumenta la altura de la ediﬁ cación, según las siguientes fórmulas y 
+según el Anexo 1 de la presente Norma Técnica:
+
+Altura de la ediﬁcación
+
+Para los primeros 18.00 m
+
+Para los siguientes 18.00 m, 
+entre 19.00 m y 36.00 m
+
+Cuadro Nº 04. Cálculo de pozo de luz
+
+Tipo de pozos de luz
+
+Ambientes a iluminar y 
+ventilar
+
+Nº de lados del pozo
+
+Cálculo de la distancia 
+perpendicular respecto a la altura de 
+la ediﬁcación más baja opuesta
+
+A
+
+B
+
+A
+
+B
+
+A
+
+B
+
+A
+
+B
+
+1 y 2 lados
+
+3 y 4 lados
+
+1 y 2 lados
+
+3 y 4 lados
+
+30%
+
+25%
+
+35%
+
+30%
+
+15%
+
+13%
+
+25%
+
+16%
+
+ 
+ 
+ 
+ 
+6
+
+NORMAS LEGALES
+
+Miércoles 7 de julio de 2021 
+
+/
+
+El Peruano 
+
+Altura de la ediﬁcación
+
+Tipo de pozos de luz
+
+Ambientes a iluminar y 
+ventilar
+
+Nº de lados del pozo
+
+Cálculo de la distancia 
+perpendicular respecto a la altura de 
+la ediﬁcación más baja opuesta
+
+Para los siguientes 18.00 m, 
+entre 37.00 m y 54.00 m
+
+Para los siguientes 18.00 m, 
+entre 55.00 m y 72.00 m
+
+A
+
+B
+
+A
+
+B
+
+A
+
+B
+
+A
+
+B
+
+1 y 2 lados
+
+3 y 4 lados
+
+1 y 2 lados
+
+3 y 4 lados
+
+A= Dormitorios, salas y comedores.
+B= Cocinas y patios techados.
+
+Notas:
+
+10%
+
+10%
+
+15%
+
+13%
+
+10%
+
+10%
+
+15%
+
+13%
+
+i. 
+
+Los  pozos  están  compuestos  por  4  lados,  cada  uno  de  los  lados  pueden  estar  deﬁ nidos  por  líneas 
+quebradas o tramos. El número de lados al que hace referencia el cuadro Nº 4 se reﬁ ere a aquellos 
+lados deﬁ nidos por la propia ediﬁ cación.
+
+ii.  La distancia paralela al paramento del vano debe ser equivalente al 50% de la medida perpendicular, 
+resultante del cálculo según la tabla precedente siempre que en este sentido no hayan ambientes 
+que  se  doten  de  iluminación  y  ventilación  natural;  caso  contrario  debe  ser  resultado  de  su  propio 
+cálculo.
+
+iii.  Cuando la dimensión del pozo perpendicular al vano que sirve es inferior hasta en un 20% al mínimo 
+normativo, la dimensión en el otro sentido puede compensar dicho déﬁ cit, debiendo cumplir con el área 
+de pozo producto de las medidas normativas. Esta compensación también aplica en el sentido paralelo 
+al vano al cual se sirve.
+
+iv.  La altura del paramento más bajo que conforma el pozo se mide desde el alféizar de la ventana más 
+
+v. 
+
+baja o 1.00 m desde el nivel de piso terminado hasta la parte alta del parapeto superior.
+Las dimensiones mínimas del pozo de luz para viviendas bifamiliares debe ser de 2.00 m para ambientes 
+de dormitorio, sala y comedor, y 1.80 m para ambientes de cocina y patios de servicios techados.
+vi.  En todos los casos las dimensiones mínimas del cálculo del pozo de luz en vivienda multifamiliar deben 
+
+ser de 2.10 m.
+
+vii.  Las  dimensiones  de  un  pozo  de  luz  pueden  proyectar  variaciones  en  función  de  su  altura  tipo 
+retranques,  siempre  que  las  distancias  perpendiculares  a  los  vanos  materia  de  cálculo,  no  sean 
+menores a los cálculos que se requieren en relación a la altura del paramento más bajo que conforma 
+la ediﬁ cación.
+
+viii.  Para  todos  los  casos,  las  edificaciones  con  alturas  superiores  a  los  72.00  m,  se  considerará 
+0.10  m  de  distancia  perpendicular  adicional  del  pozo,  por  cada  metro  adicional  de  altura  de  la 
+edificación.
+
+c) 
+
+Separación entre ediﬁ caciones en conjuntos residenciales:
+
+Cuadro Nº 05. Separación entre ediﬁ caciones
+
+Ambientes
+
+Cálculo de la distancia perpendicular 
+respecto a la altura de la ediﬁcación 
+más baja opuesta
+
+Distancia mínima
+
+Distancia máxima 
+exigible
+
+A
+
+B
+
+30%
+
+25%
+
+5.00 m
+
+4.00 m
+
+20.00 m
+
+15.00 m
+
+A= Dormitorios, salas y comedores.
+B= Cocinas y patios techados.
+
+Notas:
+i. 
+
+La separación entre ediﬁ caciones, se calcula en relación de la distancia mínima perpendicular, medida 
+desde el punto central o eje del vano al muro perpendicular opuesto, medido desde el alféizar de la 
+ventana más baja o 1.00 m desde el nivel de piso terminado hasta la parte alta del parapeto superior.
+
+ii.  Cuando  las  ediﬁ caciones  cuenten  con  pozos  de  luz  interiores  y/o  cuando  los  vanos  se  encuentren 
+frente  a  los  límites  de  propiedades  laterales  o  posteriores,  la  distancia  se  calcula  en  relación  a  los 
+cálculos establecidos en el literal b) del presente artículo.
+
+iii.  En caso no existan vanos entre las ediﬁ caciones, la separación entre estas se calcula en función a la 
+actividad que se realice entre estas, pudiendo ser la separación estructural, pasajes de acceso, entre 
+otros.
+
+ 
+ 
+ 
+ 
+El Peruano / 
+
+   Miércoles 7 de julio de 2021
+
+NORMAS LEGALES
+
+7
+
+CAPÍTULO III
+
+CARACTERÍSTICAS DE LOS COMPONENTES
+
+Artículo 12.- Vanos de acceso y ventanas
+
+12.1.  Los  vanos  deben  tener  un  cierre  adecuado  a  las  condiciones  del  clima,  y  contar  con  carpintería  de  materiales 
+
+compatibles con los materiales del cerramiento.
+
+12.2.  Los vanos para la instalación de puertas de acceso, comunicación y salida de personas deben tener las siguientes 
+
+dimensiones mínimas:
+
+a) 
+b) 
+
+La altura mínima es de 2.10 m.
+Independientemente de su cálculo, los anchos mínimos de los vanos en que se instalen puertas son:
+
+Cuadro Nº 06. Ancho mínimo de los vanos
+
+Tipo de vano
+
+Ancho mínimo
+
+Acceso principal a una unidad vivienda
+
+Acceso a ambientes de descanso (dormir), reunión (estar), alimentación (cocinar y comer)
+
+Acceso a ambientes de aseo y servicios (baños)
+
+Acceso principal a una vivienda multifamiliar, de uso colectivo o conjunto residencial 
+
+0.90 m.
+
+0.80 m.
+
+0.70 m.
+
+1.20 
+
+.
+
+12.3.  En el caso de puertas de acceso a la ediﬁ cación residencial con más de una hoja de cierre, una de ellas no debe 
+
+tener menos de 1.00 m. de ancho.
+
+12.4.  Las dimensiones de los vanos destinados a iluminación y ventilación no deben ser menores al 10% de la superﬁ cie 
+de la habitación a la que sirven, debiendo presentar al menos una abertura hacia el exterior no menor al 5% de la 
+superﬁ cie de la habitación que se ventila.
+
+12.5.  Las ventanas presentan las siguientes características:
+
+a) 
+
+b) 
+
+c) 
+
+Los  vidrios  deben  ser  empleados  según  lo  establecido  en  la  Norma  Técnica  E.040,  Vidrio  del 
+RNE.
+Las ventanas deben ser de fácil operación y en todos los casos permitir su limpieza desde la habitación que 
+iluminan y ventilan.
+El alféizar de una ventana debe tener una altura mínima de 1.00 m. En caso que esta altura sea menor, en 
+la parte de la ventana entre el nivel del alféizar y 1.00 m, el vidrio debe ser ﬁ jo (según las características 
+antes mencionadas) o contar con una baranda de protección interior o exterior con elementos espaciados a 
+no más de 0.15 m.
+
+Artículo 13.- Pasajes de circulación
+Los  pasajes  de  circulación  de  las  viviendas,  permiten  conectar  ambientes  de  una  vivienda  o  viviendas  entre  sí.  Sin 
+perjuicio del cálculo de evacuación, la dimensión mínima del ancho de los pasajes y circulaciones interiores, medida entre 
+los paramentos que lo conforman, debe cumplir lo siguiente:
+
+Cuadro Nº 07. Ancho mínimo de los pasajes
+
+Tipo 
+
+Ancho mínimo
+
+Interiores de las viviendas
+
+De acceso hasta 2 viviendas
+
+De acceso hasta 4 viviendas
+
+Áreas comunes de acceso a las viviendas
+
+Artículo 14.- Materiales y acabados
+
+0.90 m.
+
+1.00 m.
+
+1.20 m.
+
+1.20 m.
+
+14.1.  Los  materiales  constitutivos  de  los  cerramientos  exteriores  deben  ser  estables,  mantener  un  comportamiento 
+resistente al fuego, dotar de protección acústica y evitar que el agua de lluvia o de riego de jardines ﬁ ltre hacia el 
+interior.
+
+14.2.  Los  acabados  de  pisos  deben  ser  resistentes  a  la  abrasión,  al  desgaste,  y  al  punzonamiento,  y  mantenerse 
+estables frente al ataque de ácidos domésticos. Los pisos exteriores deben ser antideslizantes. Los pisos de las 
+cocinas deben ser resistentes a la grasa y aceite.
+
+14.3.  Los  materiales  de  acabado  de  los  ambientes  para  servicios  sanitarios  y  cualquier  zona  húmeda  dentro  de  la 
+
+vivienda, deben ser antideslizantes en pisos e impermeables en paredes, y de superﬁ cie lavable.
+
+ 
+8
+
+Artículo 15.- Escaleras
+
+NORMAS LEGALES
+
+Miércoles 7 de julio de 2021 
+
+/
+
+El Peruano 
+
+15.1.  Las escaleras al interior de las viviendas, tienen las siguientes características:
+
+a) 
+
+b) 
+
+c) 
+
+d) 
+
+Deben tener un ancho libre mínimo de 0.90 m entre los muros que la conforman. Cuando se desarrollen en 
+un tramo con un lado abierto o en dos tramos sin muro intermedio, pueden tener un ancho libre mínimo de 
+0.80 m.
+Pueden ser del tipo caracol, tener pasos en abanico o de otro diseño, siempre que el paso tenga no menos 
+de 0.25 m a una distancia de 0.50 m del eje alrededor del cual se desarrollan los pasos.
+En todos los casos la escalera debe tener pasamanos por lo menos a uno de los lados a 1.00 m de altura. El 
+espacio entre el pasamanos y los pasos de la escalera deben contar con elementos de cierre que impidan 
+el paso de una esfera de 0.15 m.
+Las escaleras de acceso a ambientes de uso técnico, pueden ser del tipo “gato” con protección a partir de 
+2.10 m.
+
+15.2.  Las  escaleras  integradas  en  ediﬁ cios  multifamiliares  y  conjuntos  residenciales  de  uso  colectivo  o  grupos 
+
+familiares, tienen las siguientes características:
+
+a) 
+
+b) 
+c) 
+
+d) 
+
+e) 
+
+f) 
+
+g) 
+
+Son  los  elementos  de  circulación  vertical  en  ediﬁ caciones  en  general,  estas  no  están  aisladas  de  las 
+circulaciones horizontales y cuyo objetivo es evacuar el tránsito de las personas y mercancías entre pisos 
+de manera ﬂ uida y visible.
+Deben tener un ancho mínimo de 1.20 m entre muros que la conforman.
+Pueden  ser  consideradas  para  el  cálculo  y  el  sustento  como  medios  de  evacuación,  si  la  distancia  de 
+recorrido horizontal y vertical lo permite.
+El número de escaleras se determina por piso, según la distancia de recorrido del evacuante, medido desde 
+la puerta del departamento más alejada de la escalera, hasta el ingreso a un lugar seguro o el exterior y 
+según el aforo.
+El acceso al techo o áreas de equipos en azotea puede ser mediante una escalera del tipo gato, sólo para 
+dar mantenimiento al equipamiento de la ediﬁ cación.
+Cuando la azotea albergue áreas de uso común el acceso debe ser mediante la continuación de la escalera 
+de uso común.
+Para  viviendas  bifamiliares  o  cuando  sirva  de  acceso  a  dos  unidades  de  vivienda  en  piso  siguiente,  la 
+escalera exterior puede tener un ancho mínimo de 1.00 m entre muros que la conforman.
+
+15.3.  Las  escaleras  protegidas  son  aquellas  a  prueba  de  fuego  y  humos,  cuyo  objetivo  es  la  evacuación  de  las 
+
+personas; deben cumplir los siguientes requisitos:
+
+a) 
+
+b) 
+
+Se requiere cuando se excede la distancia máxima de recorrido establecido en la tabla de protección contra 
+incendios de la presente Norma Técnica.
+El número de escaleras necesarias está en función de la altura de la ediﬁ cación, distancia de recorrido y el 
+aforo total del piso, según lo establecido en la tabla de protección contra incendios de la presente Norma 
+Técnica.
+
+Artículo 16.- Ascensores
+Los  ascensores  son  un  medio  de  circulación  vertical,  obligatorio  en  ediﬁ cios  multifamiliares  y  conjuntos  residenciales 
+donde el acceso al quinto piso de la ediﬁ cación, se encuentre a una altura superior a 12.00 m sobre el nivel de ingreso a 
+la ediﬁ cación. Se permite subir mediante escalera a uno o dos niveles adicionales por el interior de la unidad de vivienda 
+a la que se accede o para acceder a la azotea desde una zona de uso común.
+
+Artículo 17.- Lotes en esquina
+Son los que se generan en el encuentro de dos vías vehiculares, peatonales y/o parque. El área libre establecida en el 
+parámetro urbanístico y ediﬁ catorio para este tipo de lote, puede reducirse según la normativa municipal, si el diseño 
+permite el desarrollo de las actividades dentro de la vivienda de manera adecuada.
+
+Artículo 18.- Azotea, parapetos y barandas
+
+18.1.  Las  azoteas  no  forman  parte  de  la  altura  de  ediﬁ cación,  pudiéndose  emplear  sobre  las  alturas  máximas 
+permitidas,  de  uso  exclusivo,  común  o  mixto  y  accederse  mediante  escaleras  y,  cuando  corresponda,  por 
+ascensores.
+
+18.2.  Las azoteas deben tener un sistema que permita el manejo de las aguas pluviales de manera que no afecten las 
+estructuras de la propia ediﬁ cación y de las colindantes, de acuerdo a las zonas lluviosas establecidas en la norma 
+correspondiente.
+
+18.3.  Se puede techar hasta un 50% del área de la azotea, debiendo considerar un retranque mínimo de 2.50 m del 
+
+límite exterior de la(s) fachada(s) de la ediﬁ cación dependiendo de la altura de la misma.
+
+18.4.  Las azoteas deben contar con parapetos o barandas con los elementos de protección correspondientes, a 1.10 m 
+de altura como mínimo, las mismas que pueden o no coincidir con el perímetro del área techada inferior. De limitar 
+con propiedades vecinas y entre muros divisorios de unidades inmobiliarias, no deben ser menores a 2.10 m de 
+altura. Las barandas deben tener una resistencia mínima de 100 kilos de carga horizontal puntual aplicada en el 
+punto medio del travesaño superior de la baranda.
+
+ 
+El Peruano / 
+
+   Miércoles 7 de julio de 2021
+
+NORMAS LEGALES
+
+9
+
+18.5.  La altura del parapeto o baranda de protección se mide desde el nivel accesible contiguo.
+
+18.6.  Las  azoteas  cuando  formen  parte  de  una  sola  vivienda  (ﬂ at,  dúplex  y/o  triplex),  puede  albergar  cualquier  uso 
+
+destinado a vivienda, sea principal o complementario.
+
+Artículo 19.- Muros y tabiques
+
+19.1.  Los tabiques exteriores o divisorios entre unidades inmobiliarias diferentes, deben tener características en función 
+
+de las condiciones climáticas externas y del comportamiento acústico al interior de los ambientes.
+
+19.2.  En el caso de los tabiques que alojen tuberías de agua o desagüe, estos deben tener un ancho que permita un 
+
+recubrimiento mínimo de 1 cm. entre la superﬁ cie del tubo y la cara exterior del tabique acabado.
+
+19.3.  La altura mínima de los tabiques divisorios de zonas no cubiertas (patios y jardines) entre viviendas, debe ser de 
+
+2.10 m contados a partir del piso terminado del ambiente con nivel más alto.
+
+19.4.  Los muros compartidos divisorios entre viviendas en ediﬁ caciones multifamiliares y conjuntos residenciales, 
+y  entre  estas  y  los  pasajes  de  circulación  común,  deben  ser  de  materiales  con  resistencia  al  fuego  de  60 
+minutos.
+
+Artículo 20.- Techos y cubiertas ligeras
+
+20.1.  Se  permite  la  instalación  de  cubiertas  ligeras  debidamente  sujetas  a  la  estructura,  debiendo  ser  herméticas 
+frente  a  lluvias  y  presentar  una  pendiente  conforme  a  lo  establecido  en  la  Norma  Técnica  CE.040,  Drenaje 
+Pluvial del RNE.
+
+20.2.  El  último  techo  de  la  ediﬁ cación,  debe  tener  un  comportamiento  térmico  que  disminuya  la  carga  térmica  de  la 
+
+radiación solar, así como la temperatura radiante en la cara interior del elemento horizontal.
+
+20.3.  Las cubiertas inclinadas deben permitir la reparación y mantenimiento.
+
+CAPÍTULO IV
+
+DOTACIÓN DE SERVICIOS
+
+Artículo 21.- Estacionamientos
+
+21.1.  El  estacionamiento  de  vehículos  constituye  una  función  complementaria  a  la  vivienda,  por  lo  tanto  debe  ser 
+considerada de manera conjunta en la ediﬁ cación de las viviendas o separada de ellas. Pueden ser o no techados.
+
+21.2.  El número de espacios para el estacionamiento de autos, y/o vehículos menores (motocicletas o bicicletas), debe 
+
+estar establecido en las normas correspondientes.
+
+21.3.  En  los  casos  que  la  norma  correspondiente  no  determine  el  número  de  espacios  para  el  estacionamiento  de 
+
+vehículos, se deben emplear lo siguiente:
+
+a) 
+b) 
+c) 
+
+1 estacionamiento cada (3) tres viviendas.
+1 estacionamiento cada (5) cinco unidades de viviendas de usos colectivo.
+1 estacionamiento para bicicletas por cada (3) tres viviendas.
+
+Los  estacionamientos  para  bicicletas  forman  parte  de  las  áreas  comunes  de  las  ediﬁ caciones  multifamiliares, 
+conjuntos residenciales y/o de uso colectivo.
+
+Artículo 22.- Servicios públicos
+
+22.1.  Las  viviendas  deben  contar  con  redes  de  instalaciones  de  agua,  redes  de  desagüe  y  redes  internas  que 
+provean de energía eléctrica a todos los espacios que conforman la vivienda, con una tensión de 220 voltios.
+
+22.2.  Los servicios de gas y telecomunicaciones, son parte de las instalaciones de la vivienda, solo en los casos que 
+existan redes públicas o tengan la factibilidad del servicio y se instalan de acuerdo con las normas sobre la materia.
+
+Artículo 23.- Servicios sanitarios
+
+23.1.  Las  ediﬁ caciones  para  vivienda  deben  estar  provistas  de  servicios  sanitarios,  según  las  siguientes  cantidades 
+
+mínimas:
+
+Cuadro Nº 08. Grupos Familiares
+
+Vivienda
+
+Aparatos
+
+Hasta 25.00 m²
+
+Más de 25.00 m²
+
+1 inodoro, 1 ducha y 1 lavadero
+
+1 
+
+inodoro, 1 lavatorio, 1 ducha y 1 lavadero
+
+ 
+ 
+ 
+10
+
+NORMAS LEGALES
+
+Miércoles 7 de julio de 2021 
+
+/
+
+El Peruano 
+
+23.2.  Los  ambientes  de  aseo  o  donde  se  encuentre  un  aparato  sanitario  deben  contar  con  una  válvula  de 
+control  y  un  sumidero  con  trampa  o  registro  capaz  de  recoger  el  agua  que  pudiera  fugar  en  caso  de  un 
+desperfecto.
+
+23.3.  Las montantes de desagüe deben estar alojadas en los ductos exclusivos, en los ductos de ventilación, en los 
+
+muros divisorios entre ambientes o en sus ensanches.
+
+23.4.  Pueden existir redes de agua y desagüe suspendidas bajo la losa que separa dos pisos, debiendo proveerse de 
+elementos que brinden el aislamiento acústico suﬁ ciente para reducir la molestia que genera el ruido derivado del 
+funcionamiento de los aparatos del piso superior.
+
+Artículo 24.- Ductos
+
+24.1.  Los ductos pueden servir para ventilación de ambientes de servicios sanitarios, despedir residuos sólidos o alojar 
+
+montantes de agua, desagüe, electricidad, telecomunicaciones o gas.
+
+24.2.  Los ductos no deben abrir hacia el interior de las escaleras protegidas. Para el caso de escaleras integradas no 
+
+aplica esta prohibición.
+
+24.3.  Las  montantes  verticales  de  agua  entre  el  sistema  de  bombeo  y  el  tanque  elevado  o  entre  estos  y  los 
+medidores  de  caudal,  así  como  las  montantes  de  electricidad  entre  el  medidor  y  los  tableros  de  distribución, 
+y  las  montantes  de  telecomunicaciones  entre  la  acometida  y  la  caja  de  distribución,  deben  estar  alojadas 
+en  ductos,  uno  de  cuyos  lados  debe  ser  accesible  con  el  ﬁ n  de  permitir  su  registro,  mantenimiento  y 
+reparación,  quedando  prohibido  que  por  un  mismo  ducto  pasen  las  montantes  húmedas  con  las  redes 
+eléctricas.
+
+Artículo 25.- Medidores de servicios
+
+25.1.  Toda vivienda debe contar con un medidor de consumo de agua, de energía eléctrica y, cuando se requiera, de 
+gas,  debiendo  instalarse  conforme  a  las  disposiciones  establecidas  por  las  entidades  prestadoras  de  servicios 
+competentes en materia de energía eléctrica, agua y gas.
+
+25.2.  Los  medidores  de  energía  eléctrica  y  gas  pueden  ser  instalados  en  áreas  comunes  de  las  ediﬁ caciones 
+multifamiliares, conjuntos residenciales y/o vivienda de uso colectivo, y pueden estar expuestos o dentro de un 
+ambiente cerrado de uso exclusivo para el registro y mantenimiento de estos.
+
+25.3.  En viviendas bifamiliares, multifamiliares, conjuntos residenciales y vivienda de uso colectivo, pueden instalarse 
+
+contómetros en áreas de uso común que permitan medir el consumo de manera individualizada.
+
+Artículo 26.- Residuos sólidos
+
+26.1.  Las  ediﬁ caciones  de  viviendas  multifamiliares,  conjuntos  residenciales  y/o  de  uso  colectivo,  deben  contar  con 
+ambientes exclusivos para almacenamiento de basura doméstica, considerando espacios para la segregación por 
+tipo, de los desechos reciclables, según las políticas establecidas por el MINAM y la NTP 900.058-2019 Gestión 
+de Residuos.
+
+26.2.  Las  dimensiones  de  los  ambientes  para  disposición  de  residuos  sólidos  son  las  resultantes  del  cálculo  de  los 
+requerimientos de los ocupantes de la ediﬁ cación, para un día de generación de residuos. La generación diaria 
+promedio de residuos sólidos es de 0.004 m3 (4 litros) por habitante.
+
+26.3.  Estos ambientes deben contar con ventilación directa al exterior o mediante medios mecánicos hacia zonas de uso 
+
+común, y estar acabado con materiales impermeables de fácil limpieza.
+
+26.4.  Asimismo, deben estar ubicados de manera que permitan tanto la disposición de los desechos por parte de los 
+habitantes de las viviendas, como el retiro de los contenedores hacia la vía pública o hasta los lugares de acopio 
+establecidos.
+
+CAPÍTULO V
+
+CONDICIONES COMPLEMENTARIAS
+
+Artículo 27.- Requisitos de seguridad
+
+27.1.  Las  características  de  los  componentes  de  seguridad  se  encuentran  especiﬁ cados  en  la  Norma Técnica A.130 
+Requisitos de Seguridad del RNE, por lo que, junto con la presente Norma Técnica, ambas normas constituyen 
+una unidad.
+
+27.2.  Los elementos de protección contra incendios con los que deben contar las ediﬁ caciones de uso residencial son 
+
+los siguientes:
+
+ 
+El Peruano / 
+
+   Miércoles 7 de julio de 2021
+
+NORMAS LEGALES
+
+11
+
+Cuadro Nº 09. Protección contra incendios
+
+Señalética / 
+Iluminación 
+de 
+emergencia
+
+Detectores 
+de humo / 
+alarma de 
+humo
+
+Central 
+de Alarma 
+contra 
+Incendios
+
+Extintores
+
+Red de agua 
+contra
+Incendios 
+/ bomba 
+contraincendios
+
+Rociadores
+
+Escalera Protegida
+(cualquiera de estas opciones)
+
+-
+
+1
+
+1
+
+-
+
+1
+
+1
+
+1
+
+1
+
+1
+
+1
+
+1
+
+1
+
+-
+
+-
+
+-
+
+2
+
+2
+
+3
+
+3
+
+3
+
+2
+
+3
+
+3
+
+3
+
+-
+
+-
+
+-
+
+-
+
+-
+
+4
+
+5
+
+5
+
+-
+
+4
+
+5
+
+5
+
+-
+
+-
+
+6
+
+6
+
+6
+
+7
+
+7
+
+7
+
+6
+
+7
+
+7
+
+7
+
+-
+
+-
+
+-
+
+-
+
+-
+
+8
+
+8
+
+8
+
+-
+
+8
+
+8
+
+8
+
+-
+
+-
+
+-
+
+-
+
+9
+
+9
+
+9
+
+-
+
+9
+
+9
+
+9
+
+-
+
+-
+
+-
+
+-
+
+-
+
+-
+
+-
+
+-
+
+10
+
+-
+
+-
+
+-
+
+10
+
+-
+
+-
+
+-
+
+11
+
+12
+
+13
+
+-
+
+-
+
+-
+
+-
+
+-
+
+-
+
+-
+
+-
+
+-
+
+-
+
+-
+
+12
+
+12
+
+13
+
+14
+
+15
+
+12
+
+13
+
+14
+
+15
+
+12
+
+12
+
+12
+
+-
+
+-
+
+13
+
+14
+
+15
+
+14
+
+14
+
+15
+
+15
+
+12
+
+13
+
+14
+
+15
+
+12
+
+12
+
+-
+
+-
+
+14
+
+15
+
+14
+
+15
+
+-
+
+11
+
+11
+
+-
+
+-
+
+-
+
+11
+
+-
+
+-
+
+-
+
+Tipología de 
+vivienda
+
+Altura
+
+-
+
+-
+
+-
+
+-
+
+Hasta 15.00m
+
+De más de 15.00m 
+hasta 30.00m
+
+De más de 30.00 hasta 
+60.00m
+
+Más de 60.00m
+
+Hasta 15.00m 
+
+De más de 15.00m 
+hasta 30.00m
+
+De más de 30.00 hasta 
+60.00m
+
+Más de 60.00m
+
+Unifamiliar
+
+Bifamiliar
+
+Quinta
+
+Taller
+
+Multifamiliar 
+y/o Conjunto 
+residencial
+
+De uso colectivo
+
+Notas:
+
+1. 
+2. 
+
+3. 
+
+4. 
+
+5. 
+
+6. 
+
+7. 
+
+8. 
+
+9. 
+
+En escaleras, rutas de evacuación y ambientes de uso común.
+En pasajes de circulación interior de la vivienda, sin integración a una central de alarma contra incendio. En áreas de taller 
+detector de humo o temperatura con alarma incorporada.
+En pasajes de circulación al interior de la vivienda o vestíbulo de dormitorios y cerca de la puerta de salida de la vivienda, 
+detector  de  humos  y  en  cocinas  detector  de  temperatura.  En  pasajes  de  circulación  común  y  en  sótanos,  detector  de 
+humos. Todos los detectores deben estar conectados a la central de alarma contra incendio.
+Estaciones manuales de alarma contra incendios al ingreso de cada vestíbulo previo en escaleras protegidas conectados 
+a la central de alarma contra incendios.
+Estaciones manuales de alarma contra incendios en pasajes y áreas comunes distanciados cada 20.00 m, conectadas 
+a  la  central  de  alarma  contra  incendios.  Central  de  alarma  contra  incendio  conectada  a  los  dispositivos  de  detección 
+de incendios, a la válvula de ﬂ ujo de agua del sistema de rociadores y al control de ascensores para uso de bomberos, 
+desactivación envío al nivel de descarga. Conectada a una fuente de energía alterna, no exclusiva.
+Extintores  ubicados  en  lugar  accesible  y  de  acuerdo  a  la  distancia  de  recorrido,  conforme  lo  establecido  en  la  NTP 
+350.043-1. Para quinta son exigibles para áreas comunes, y para vivienda taller en áreas destinadas a taller.
+Extintores ubicados junto a las salidas de cada nivel y conforme a lo establecido en la NTP 350.043-1 vigente, de acuerdo 
+a la distancia de recorrido en zonas comunes, ambientes de uso común y cuarto de bomba contra incendio.
+Red de agua contra incendio, con una distancia de 30.00 m desde la válvula angular en el interior de cada nivel de la 
+escalera protegida, hasta la puerta de la unidad de vivienda más alejada. Conexión para bomberos (válvula siamesa) en 
+el exterior del ediﬁ cio del frente del acceso a la ediﬁ cación. Bombas contra incendios mayores a 500 gpm que demuestren 
+conformidad,  mediante  una  certiﬁ cación  emitida  por  un  laboratorio  acreditado  por  la  Cooperación  Internacional  de 
+Acreditación de Laboratorios (ILAC) de la cual forma parte el Instituto Nacional de Calidad (INACAL), para este mismo 
+alcance,  y  alimentador  de  energía  con  medidor  exclusivo.  Cuarto  de  bombas  con  ingreso  mediante  exclusa  y  puerta 
+cortafuego RF 90’ y sistema de renovación de aire hacia zona adyacente. Gabinetes contra incendio en cada piso solo 
+para ediﬁ caciones de altura mayores a 60.00 m.
+Rociadores en sótanos de estacionamientos, cuya sumatoria de áreas techadas de todos los niveles sea igual o mayor a 
+1,000 m2, conectados a una red accionada por la bomba contra incendios certiﬁ cada por el fabricante, y cisterna de agua 
+contraincendios.
+
+10.  Rociadores en toda la ediﬁ cación, conectados a una red accionada por una bomba contra incendios y cisterna de agua 
+
+contra incendios.
+Escaleras integradas. La distancia máxima de recorrido del evacuante (medida de manera horizontal y vertical) desde 
+la  puerta  del  departamento  más  alejado  o  zona  común  de  uso  compartido  hasta  la  puerta  de  salida  al  exterior  de  la 
+ediﬁ cación, debe ser 56.00 m sin rociadores o 71.00 m con rociadores. También se permite escaleras cerradas.
+Escaleras protegidas con vestíbulo previo ventilado directamente al exterior.
+Escalera protegida con vestíbulo previo ventilado con sistema de inyección y extracción mecánica en cada nivel.
+Escalera protegida con vestíbulo previo ventilado con sistema de inyección y extracción mecánica centralizado y fuente 
+alterna de energía.
+Escalera abierta. Cuando la ediﬁ cación sea mayor a 30.00 m de altura, el diseño debe minimizar la percepción de vértigo.
+
+11. 
+
+12. 
+13. 
+14. 
+
+15. 
+
+ 
+12
+
+Otros:
+
+NORMAS LEGALES
+
+Miércoles 7 de julio de 2021 
+
+/
+
+El Peruano 
+
+a) 
+
+b) 
+
+c) 
+
+d) 
+
+Para efectos de los requisitos indicados en la presente tabla, la altura se considera desde el nivel de la vereda hasta el 
+nivel de piso terminado del último nivel de circulación común.
+La distancia máxima de recorrido del evacuante desde la puerta del departamento más alejado o zona común de uso 
+compartido hasta la puerta de la escalera protegida debe ser 34.00 m sin rociadores y 41.00 m con rociadores. Distancias 
+mayores requieren una escalera adicional.
+En los sótanos de estacionamientos de vehículos, la distancia máxima de recorrido desde el punto más alejado hasta la 
+escalera de evacuación o hasta la salida al exterior debe ser de 45.00 m sin rociadores y 60.00 m con rociadores.
+Las ediﬁ caciones de más de 60.00 m de altura deben contar como mínimo dos escaleras.
+
+Artículo 28.- Sistemas constructivos
+Las  viviendas  pueden  ediﬁ carse  con  sistemas  constructivos  tradicionales  o  no  convencionales,  aprobados  por  el 
+Ministerio de Vivienda, Construcción y Saneamiento.
+
+Artículo 29.- Sostenibilidad de la vivienda
+
+29.1.  Las ediﬁ caciones residenciales se deben ejecutar respetando el medio ambiente, debiéndose priorizar el empleo 
+de  energías  renovables  y  sistemas  de  eﬁ ciencia  energética  según  el  análisis  climático  de  la  zona  donde  se 
+ubiquen.
+
+29.2.  En las zonas donde la cantidad de horas de sol al año sea superior a 2,200, se pueden emplear sistemas de 
+generación de energía eléctrica mediante el empleo de paneles solares, debiéndose priorizar dicho sistema para 
+el uso de calentadores de agua, con la ﬁ nalidad de permitir el ahorro de energía para los ocupantes.
+
+29.3.  No es exigible el empleo de aguas residuales domésticas tratadas para el riego de jardines y áreas verdes.
+
+29.4.  En caso el proyecto considere el reúso de aguas residuales domésticas tratadas para la carga de inodoros, debe 
+proveer una red adicional de agua tratada, diseñada de manera que su uso solo pueda tener este ﬁ n y no pueda 
+ser empleada en otro consumo.
+
+29.5.  Los aparatos sanitarios, accesorios y la grifería deben considerar el consumo de agua de doble descarga y con un 
+
+máximo de 8 y 4 litros por descarga.
+
+Artículo 30.- Densiﬁ cación urbana
+En  las  zonas  consideradas  en  el  Plan  de  Desarrollo  Urbano  con  Zoniﬁ cación  Residencial  mayor  a  la  establecida 
+originalmente o en los proyectos de densiﬁ cación urbana, es posible incrementar el número preexistente de viviendas 
+sobre  un  lote.  En  este  caso  se  puede  hacer  uso  de  los  retiros  o  de  las  áreas  libres  para  ubicar  las  circulaciones 
+verticales de acceso a las nuevas viviendas, las mismas que deben respetar las características de la ediﬁ cación y del 
+entorno.
+
+ANEXO
+
+CÁLCULO DE POZO DE LUZ
+
+Cuadro Nº 10. Cálculos por tramos según la altura de la ediﬁ cación
+
+Altura en 
+metros
+
+TRAMO 1
+
+Pozo 1 a 2 lados
+
+Pozo 3 a 4 lados
+
+Perpendicular al vano
+
+Perpendicular al vano
+
+A
+
+30%
+
+B
+
+25%
+
+A
+
+35%
+
+B
+
+30%
+
+5
+
+6
+
+7
+
+8
+
+9
+
+10
+
+11
+
+12
+
+13
+
+14
+
+2.10
+
+2.10
+
+2.10
+
+2.40
+
+2.70
+
+3.00
+
+3.30
+
+3.60
+
+3.90
+
+4.20
+
+2.10
+
+2.10
+
+2.10
+
+2.10
+
+2.25
+
+2.50
+
+2.75
+
+3.00
+
+3.25
+
+3.50
+
+2.10
+
+2.10
+
+2.45
+
+2.80
+
+3.15
+
+3.50
+
+3.85
+
+4.20
+
+4.55
+
+4.90
+
+2.10
+
+2.10
+
+2.10
+
+2.40
+
+2.70
+
+3.00
+
+3.30
+
+3.60
+
+3.90
+
+4.20
+
+ 
+El Peruano / 
+
+   Miércoles 7 de julio de 2021
+
+NORMAS LEGALES
+
+13
+
+Altura en 
+metros
+
+TRAMO 1
+
+Pozo 1 a 2 lados
+
+Pozo 3 a 4 lados
+
+Perpendicular al vano
+
+Perpendicular al vano
+
+A
+
+30%
+
+B
+
+25%
+
+A
+
+35%
+
+B
+
+30%
+
+15
+
+16
+
+17
+
+18
+
+4.50
+
+4.80
+
+5.10
+
+5.40
+
+3.75
+
+4.00
+
+4.25
+
+4.50
+
+5.25
+
+5.60
+
+5.95
+
+6.30
+
+Altura en 
+metros
+
+TRAMO 2
+
+Pozo 1 a 2 lados
+
+Pozo 3 a 4 lados
+
+Perpendicular al vano
+
+Perpendicular al vano
+
+A
+
+15%
+
+B
+
+13%
+
+A
+
+25%
+
+B
+
+16%
+
+19
+
+20
+
+21
+
+22
+
+23
+
+24
+
+25
+
+26
+
+27
+
+28
+
+29
+
+30
+
+31
+
+32
+
+33
+
+34
+
+35
+
+36
+
+5.55
+
+5.70
+
+5.85
+
+6.00
+
+6.15
+
+6.30
+
+6.45
+
+6.60
+
+6.75
+
+6.90
+
+7.05
+
+7.20
+
+7.35
+
+7.50
+
+7.65
+
+7.80
+
+7.95
+
+8.10
+
+4.63
+
+4.76
+
+4.89
+
+5.02
+
+5.15
+
+5.28
+
+5.41
+
+5.54
+
+5.67
+
+5.80
+
+5.93
+
+6.06
+
+6.19
+
+6.32
+
+6.45
+
+6.58
+
+6.71
+
+6.84
+
+6.55
+
+6.80
+
+7.05
+
+7.30
+
+7.55
+
+7.80
+
+8.05
+
+8.30
+
+8.55
+
+8.80
+
+9.05
+
+9.30
+
+9.55
+
+9.80
+
+10.05
+
+10.30
+
+10.55
+
+10.80
+
+Altura en 
+metros
+
+TRAMO 3
+
+Pozo 1 a 2 lados
+
+Pozo 3 a 4 lados
+
+Perpendicular al vano
+
+Perpendicular al vano
+
+A
+
+10%
+
+B
+
+10%
+
+A
+
+15%
+
+B
+
+13%
+
+37
+
+38
+
+39
+
+40
+
+8.20
+
+8.30
+
+8.40
+
+8.50
+
+6.94
+
+7.04
+
+7.14
+
+7.24
+
+10.95
+
+11.10
+
+11.25
+
+11.40
+
+4.50
+
+4.80
+
+5.10
+
+5.40
+
+5.56
+
+5.72
+
+5.88
+
+6.04
+
+6.20
+
+6.36
+
+6.52
+
+6.68
+
+6.84
+
+7.00
+
+7.16
+
+7.32
+
+7.48
+
+7.64
+
+7.80
+
+7.96
+
+8.12
+
+8.28
+
+8.41
+
+8.54
+
+8.67
+
+8.80
+
+ 
+14
+
+NORMAS LEGALES
+
+Miércoles 7 de julio de 2021 
+
+/
+
+El Peruano 
+
+Altura en 
+metros
+
+TRAMO 3
+
+Pozo 1 a 2 lados
+
+Pozo 3 a 4 lados
+
+Perpendicular al vano
+
+Perpendicular al vano
+
+A
+
+10%
+
+B
+
+10%
+
+A
+
+15%
+
+B
+
+13%
+
+41
+
+42
+
+43
+
+44
+
+45
+
+46
+
+47
+
+48
+
+49
+
+50
+
+51
+
+52
+
+53
+
+54
+
+8.60
+
+8.70
+
+8.80
+
+8.90
+
+9.00
+
+9.10
+
+9.20
+
+9.30
+
+9.40
+
+9.50
+
+9.60
+
+9.70
+
+9.80
+
+9.90
+
+7.34
+
+7.44
+
+7.54
+
+7.64
+
+7.74
+
+7.84
+
+7.94
+
+8.04
+
+8.14
+
+8.24
+
+8.34
+
+8.44
+
+8.54
+
+8.64
+
+11.55
+
+11.70
+
+11.85
+
+12.00
+
+12.15
+
+12.30
+
+12.45
+
+12.60
+
+12.75
+
+12.90
+
+13.05
+
+13.20
+
+13.35
+
+13.50
+
+8.93
+
+9.06
+
+9.19
+
+9.32
+
+9.45
+
+9.58
+
+9.71
+
+9.84
+
+9.97
+
+10.10
+
+10.23
+
+10.36
+
+10.49
+
+10.62
+
+Altura en 
+metros
+
+TRAMO 4
+
+Pozo 1 a 2 lados
+
+Pozo 3 a 4 lados
+
+Perpendicular al vano
+
+Perpendicular al vano
+
+A
+
+10%
+
+B
+
+10%
+
+A
+
+15%
+
+B
+
+13%
+
+55
+
+56
+
+57
+
+58
+
+59
+
+60
+
+61
+
+62
+
+63
+
+64
+
+65
+
+66
+
+67
+
+68
+
+69
+
+70
+
+71
+
+72
+
+10.00
+
+10.10
+
+10.20
+
+10.30
+
+10.40
+
+10.50
+
+10.60
+
+10.70
+
+10.80
+
+10.90
+
+11.00
+
+11.10
+
+11.20
+
+11.30
+
+11.40
+
+11.50
+
+11.60
+
+11.70
+
+8.74
+
+8.84
+
+8.94
+
+9.04
+
+9.14
+
+9.24
+
+9.34
+
+9.44
+
+9.54
+
+9.64
+
+9.74
+
+9.84
+
+9.94
+
+10.04
+
+10.14
+
+10.24
+
+10.34
+
+10.44
+
+13.65
+
+13.80
+
+13.95
+
+14.10
+
+14.25
+
+14.40
+
+14.55
+
+14.70
+
+14.85
+
+15.00
+
+15.15
+
+15.30
+
+15.45
+
+15.60
+
+15.75
+
+15.90
+
+16.05
+
+16.20
+
+10.75
+
+10.88
+
+11.01
+
+11.14
+
+11.27
+
+11.40
+
+11.53
+
+11.66
+
+11.79
+
+11.92
+
+12.05
+
+12.18
+
+12.31
+
+12.44
+
+12.57
+
+12.70
+
+12.83
+
+12.96
+
+ 
+El Peruano / 
+
+   Miércoles 7 de julio de 2021
+
+NORMAS LEGALES
+
+15
+
+Gráﬁ co Nº 01. Casos de pozos de luz por lados
+
+(cid:3)
+
+(cid:3)
+
+ 
+16
+
+NORMAS LEGALES
+
+Miércoles 7 de julio de 2021 
+
+/
+
+El Peruano 
+
+Gráﬁ co Nº 02. Cálculo de pozos de luz
+
+1970041-1
+
+ 
+

@@ -1,0 +1,2090 @@
+“AÑO DEL BICENTENARIO DEL PERÚ: 200 AÑOS DE INDEPENDENCIA” 
+
+Jueves 8 de julio de 2021
+
+RESOLUCIÓN MINISTERIAL
+N° 191-2021-VIVIENDA
+
+NORMA TÉCNICA A.010, 
+CONDICIONES GENERALES 
+DE DISEÑO DEL REGLAMENTO 
+NACIONAL DE EDIFICACIONES
+
+NORMAS  LEGALES
+
+SEPARATA ESPECIAL
+
+2
+
+NORMAS LEGALES
+
+Jueves 8 de julio de 2021 
+
+/
+
+El Peruano 
+
+ 
+El Peruano / 
+
+   Jueves 8 de julio de 2021
+
+NORMAS LEGALES
+
+3
+
+RESOLUCIÓN MINISTERIAL
+N° 191-2021-VIVIENDA
+
+Lima, 7 de julio del 2021
+
+VISTOS:
+
+El Informe N° 222-2021-VIVIENDA/VMVU-DGPRVU, de la Dirección General de Políticas y Regulación en Vivienda y Urbanismo 
+(DGPRVU);  el  Informe Técnico  -  Legal  N°  042-2021-VIVIENDA/VMVU-DGPRVU-DV-JHA-KCG  de  la  Dirección  de  Vivienda; 
+el  Informe  N°  002-2021-CPARNE  de  la  Comisión  Permanente  de Actualización  del  Reglamento  Nacional  de  Ediﬁ caciones 
+(CPARNE); el Informe N° 456-2021-VIVIENDA/OGAJ, de la Oﬁ cina General de Asesoría Jurídica (OGAJ); y,
+
+CONSIDERANDO:
+
+Que, los artículos 5 y 6 de la Ley N° 30156, Ley de Organización y Funciones del Ministerio de Vivienda, Construcción y 
+Saneamiento (MVCS), establecen que este Ministerio es el órgano rector de las políticas nacionales y sectoriales dentro 
+del  ámbito  de  su  competencia,  entre  otros,  en  materia  de  vivienda,  que  son  de  obligatorio  cumplimiento  por  los  tres 
+niveles de gobierno en el marco del proceso de descentralización y en todo el territorio nacional; asimismo, tiene entre 
+sus competencias exclusivas, dictar normas y lineamientos técnicos para la adecuada ejecución y supervisión de las 
+políticas nacionales y sectoriales;
+
+Que, el numeral 2 del artículo 10 de la referida Ley señala que el MVCS, en el marco de sus competencias, desarrolla 
+la función compartida de normar, aprobar, ejecutar y supervisar las políticas nacionales sobre ordenamiento y desarrollo 
+urbanístico,  habilitación  urbana  y  ediﬁ caciones,  uso  y  ocupación  del  suelo  urbano  y  urbanizable,  en  el  ámbito  de  su 
+competencia, en concordancia con las leyes orgánicas de los gobiernos regionales y de municipalidades;
+
+Que,  el  literal  o)  del  artículo  66  del  Reglamento  de  Organización  y  Funciones  del  MVCS,  aprobado  por  el  Decreto 
+Supremo N° 010-2014-VIVIENDA, establece que la DGPRVU tiene entre sus funciones, proponer actualizaciones del 
+Reglamento  Nacional  de  Ediﬁ caciones  (RNE),  en  coordinación  con  los  sectores  que  se  vinculen,  en  el  marco  de  los 
+Comités Técnicos de Normalización conforme a la normatividad vigente;
+
+Que, mediante el Decreto Supremo N° 015-2004-VIVIENDA se aprueba el Índice y la Estructura del RNE, aplicable a las 
+Habilitaciones Urbanas y a las Ediﬁ caciones que se ejecuten en el territorio nacional, estableciendo en sus artículos 1 y 
+3 que corresponde al MVCS aprobar, mediante Resolución Ministerial, las normas técnicas de acuerdo al mencionado 
+Índice y sus variaciones según los avances tecnológicos;
+
+Que,  con  el  Decreto  Supremo  N°  011-2006-VIVIENDA,  se  aprueban  sesenta  y  seis  (66)  normas  técnicas  del  RNE, 
+entre  ellas,  la  Norma  Técnica  A.010,  Condiciones  Generales  de  Diseño,  modiﬁ cada  por  el  Decreto  Supremo  N° 
+005-2014-VIVIENDA, contenida en el Numeral III.1 Arquitectura del Título III Ediﬁ caciones del RNE; y, se constituye la 
+CPARNE, encargada de analizar y formular las propuestas para la actualización del RNE;
+
+Que, por la Resolución Ministerial N° 894-2008-VIVIENDA, se aprueba el Reglamento Interno de la CPARNE, en cuyo 
+numeral 6.5 se establece como una de sus funciones, evaluar y aprobar los proyectos de actualización del RNE;
+
+Que, a través del Informe N° 002-2021-CPARNE de fecha 08 de abril de 2021, el Presidente de la CPARNE eleva la 
+propuesta de modiﬁ cación de la Norma Técnica A.010, Condiciones Generales de Diseño del RNE, la misma que ha sido 
+materia de evaluación y aprobación por la CPARNE conforme al Acta de la Septuagésima Novena Sesión llevada a cabo 
+el 25 de febrero y el 04 de marzo de 2021;
+
+Que, mediante la Resolución Ministerial N° 136-2021-VIVIENDA, se dispuso la publicación del proyecto de Resolución 
+Ministerial que aprueba la modiﬁ cación de la Norma Técnica A.010, Condiciones Generales de Diseño del RNE en el 
+Portal  Institucional  del  MVCS,  recibiendo  sugerencias,  comentarios  y  aportes  de  las  personas  interesadas,  siendo  la 
+DGPRVU la encargada de su consolidación;
+
+Que,  con  los  documentos  de  vistos,  la  DGPRVU  sustenta  la  propuesta  de  modiﬁ cación  de  la  Norma  Técnica A.010, 
+Condiciones Generales de Diseño del RNE, la cual tiene por objeto establecer los criterios y requisitos mínimos que debe 
+cumplir el diseño arquitectónico de toda ediﬁ cación, con la ﬁ nalidad de garantizar el desarrollo de las actividades de las 
+personas otorgándoles condiciones de habitabilidad, seguridad y la protección del medio ambiente; dicha norma será de 
+aplicación para las ediﬁ caciones contempladas en el RNE y se complementa con las disposiciones vigentes emitidas por 
+los sectores correspondientes;
+
+Que, con el Informe N° 456-2021-VIVIENDA/OGAJ, desde el punto de vista legal, la OGAJ emite opinión favorable a la 
+presente Resolución Ministerial que modiﬁ ca la Norma Técnica A.010, Condiciones Generales de Diseño del RNE;
+
+Que,  de  acuerdo  a  lo  expuesto  en  los  considerandos  precedentes,  corresponde  modiﬁ car  la  Norma  Técnica A.010, 
+Condiciones Generales de Diseño del RNE, conforme a lo señalado por la DGPRVU y la CPARNE, a ﬁ n de actualizar y 
+complementar su contenido;
+
+De  conformidad  con  lo  dispuesto  en  la  Ley  N°  30156,  Ley  de  Organización  y  Funciones  del  Ministerio  de  Vivienda, 
+Construcción  y  Saneamiento;  su  Reglamento  de  Organización  y  Funciones,  aprobado  por  el  Decreto  Supremo 
+N°  010-2014-VIVIENDA,  modiﬁ cado  por  el  Decreto  Supremo  N°  006-2015-VIVIENDA;  el  Decreto  Supremo  N° 
+015-2004-VIVIENDA,  que  aprueba  el  Índice  del  Reglamento  Nacional  de  Ediﬁ caciones;  el  Decreto  Supremo  N° 
+011-2006-VIVIENDA,  que  aprueba  sesenta  y  seis  (66)  Normas  Técnicas  del  Reglamento  Nacional  de  Ediﬁ caciones, 
+modiﬁ cada por el Decreto Supremo N° 005-2014-VIVIENDA;
+
+SE RESUELVE:
+
+Artículo 1.- Modiﬁ cación de la Norma Técnica A.010, Condiciones Generales de Diseño del Reglamento Nacional 
+de Ediﬁ caciones
+
+ 
+4
+
+NORMAS LEGALES
+
+Jueves 8 de julio de 2021 
+
+/
+
+El Peruano 
+
+Modiﬁ car la Norma Técnica A.010, Condiciones Generales de Diseño, contenida en el Numeral III.1 Arquitectura del Título 
+III Ediﬁ caciones del Reglamento Nacional de Ediﬁ caciones, aprobada por el Decreto Supremo N° 011-2006-VIVIENDA, 
+modiﬁ cada por el Decreto Supremo N° 005-2014-VIVIENDA, cuyo texto forma parte integrante de la presente Resolución 
+Ministerial.
+
+Artículo 2.- Publicación y Difusión
+Publicar  la  presente  Resolución  Ministerial  y  la  Norma  Técnica  a  que  se  reﬁ ere  el  artículo  precedente,  en  el  Portal 
+Institucional  del  Ministerio  de  Vivienda,  Construcción  y  Saneamiento  (www.gob.pe/vivienda),  el  mismo  día  de  la 
+publicación de la Resolución Ministerial y la citada Norma Técnica en el diario oﬁ cial El Peruano.
+
+Regístrese, comuníquese y publíquese.
+
+SOLANGEL FERNÁNDEZ HUANQUI
+Ministra de Vivienda,
+Construcción y Saneamiento
+
+NORMA TÉCNICA A.010, 
+CONDICIONES GENERALES DE DISEÑO DEL REGLAMENTO NACIONAL DE EDIFICACIONES
+
+CAPÍTULO I
+
+ASPECTOS GENERALES
+
+Artículo 1.- Objeto
+La  presente  Norma Técnica  tiene  por  objeto  establecer  los  criterios  y  requisitos  mínimos  que  debe  cumplir  el  diseño 
+arquitectónico  de  toda  ediﬁ cación,  para  garantizar  el  desarrollo  de  las  actividades  de  las  personas  otorgándoles 
+condiciones de habitabilidad, seguridad y la protección del medio ambiente. 
+
+Artículo 2.- Ámbito de aplicación
+Es aplicable para las ediﬁ caciones contempladas en el Reglamento Nacional de Ediﬁ caciones (RNE) y se complementa 
+con las disposiciones vigentes emitidas por los sectores correspondientes.
+
+Artículo 3.- Criterios Básicos
+Los proyectos de ediﬁ cación cumplen con los siguientes criterios básicos:
+
+a) 
+b) 
+
+c) 
+
+d) 
+
+Tener condiciones mínimas de funcionalidad, seguridad y accesibilidad.
+Considerar, de acuerdo a las actividades que se realizan en ellos, las dimensiones de los ambientes, relaciones 
+entre espacios, circulaciones y condiciones de uso requeridos.
+Emplear sistemas constructivos con materiales normados, componentes y equipos de calidad que garanticen la 
+seguridad, resistencia estructural y durabilidad de las ediﬁ caciones.
+Proponer soluciones técnicas acorde a las características del clima, del paisaje, del suelo y del medio ambiente 
+general.
+
+CAPÍTULO II
+
+NORMATIVA EDIFICATORIA
+
+Artículo 4.- Parámetros urbanísticos y ediﬁ catorios
+
+4.1  
+
+4.2  
+
+Los  parámetros  urbanísticos  y  ediﬁ catorios  aplicables  a  los  predios  urbanos  corresponden  a  la  zoniﬁ cación 
+aprobada según el Plan de Desarrollo Urbano de la jurisdicción correspondiente, cuya información debe ser de 
+acceso público.
+Los Gobiernos Locales son responsables de facilitar a los administrados la información referida a los parámetros 
+urbanísticos y ediﬁ catorios.
+
+Artículo 5.- Propuestas alternativas
+
+5.1  
+
+5.2  
+
+Los proyectistas pueden proponer soluciones alternativas y/o innovadoras que satisfagan los criterios básicos 
+establecidos en el artículo 3 de la presente Norma Técnica, debiendo alcanzar los objetivos de forma equivalente 
+o superior a lo establecido en el presente RNE, para tal ﬁ n, se puede emplear la NFPA 101, Código de Seguridad 
+Humana, así como toda norma o códigos internacionales aplicables.
+En el caso de elementos de la ediﬁ cación que ameriten la resistencia al fuego, no se requiere de la homologación 
+si el elemento o sistema cuenta con informe de ensayo emitido por un laboratorio acreditado por un organismo 
+miembro  de  la  Cooperación  Internacional  de  Acreditación  de  Laboratorios  (ILAC),  de  la  cual  forma  parte  el 
+Instituto Nacional de Calidad (INACAL).
+
+Artículo 6.- Normativa en usos mixtos
+En  los  casos  que  se  permitan  y  se  propongan  ediﬁ caciones  con  usos  mixtos  compatibles,  cada  uso  propuesto  debe 
+cumplir  con  la  normativa  correspondiente,  pudiendo  compartir  las  áreas  de  ingreso  peatonal  y  vehicular,  rutas  de 
+circulación y evacuación, así como el acceso a los estacionamientos, primando las consideraciones de diseño del uso 
+más restrictivo para las áreas comunes.
+
+CAPÍTULO III
+
+RELACIÓN DE LA EDIFICACIÓN CON EL ENTORNO
+
+Artículo 7.- Accesos 
+
+7.1  
+
+Las  ediﬁ caciones  deben  contar,  por  lo  menos,  con  un  acceso  desde  la  vía  pública.  El  número  de  accesos  y 
+sus dimensiones se deﬁ nen de acuerdo con el uso de la ediﬁ cación. Los accesos pueden ser peatonales y/o 
+
+ 
+El Peruano / 
+
+   Jueves 8 de julio de 2021
+
+NORMAS LEGALES
+
+5
+
+7.2  
+
+7.3  
+
+vehiculares. En los accesos y salidas, los elementos móviles de cerramiento al accionarse, no deben invadir la 
+vía pública ni las áreas de uso público.
+El diseño de los accesos vehiculares en las ediﬁ caciones debe tomar en cuenta la existencia de árboles en la 
+vía pública que permita su adecuado uso o desarrollar soluciones alternativas que permitan su retiro, trasplante 
+y/o reemplazo reguladas por los Gobiernos Locales respectivos.
+Se  debe  permitir  la  accesibilidad  de  un  vehículo  de  atención  de  emergencia  (ambulancia  o  bomberos),  en 
+proyectos compuestos de ediﬁ caciones independientes, cuya distancia entre el ingreso al ediﬁ cio más alejado y 
+la vía pública, no debe ser mayor de 25.00 m, considerando un lugar de maniobra para el volteo de la unidad. La 
+altura, el ancho y el largo del vehículo de emergencia se desarrollan según lo siguiente:
+
+Cuadro N° 01
+
+Ediﬁ cación
+
+Vehículo de Emergencia
+
+Altura mínima 
+
+Ancho mínimo 
+
+Largo mínimo 
+
+Vivienda, oﬁ cinas y hospedaje 
+Ediﬁ caciones comerciales, industriales, salud, educación, servicios 
+comunales, recreación y deportes, transportes y comunicaciones.
+
+3.00 m
+
+4.50 m
+
+2.50 m 
+
+3.25 m 
+
+5.00 m 
+
+12.00 m 
+
+Artículo 8.- Retiros normativos
+
+8.1  
+
+Los retiros normativos tienen por ﬁ nalidad permitir la privacidad y seguridad de los ocupantes de la ediﬁ cación, 
+se deﬁ nen entre el límite de propiedad y el límite de la ediﬁ cación, los cuales se determinan en los parámetros 
+urbanísticos y ediﬁ catorios, aprobado por el Plan de Desarrollo Urbano; los retiros normativos pueden ser:
+
+a) 
+b) 
+
+c) 
+
+Frontales: Distancia mínima libre entre el lindero colindante con una vía pública y el límite de la ediﬁ cación.
+Laterales: Distancia mínima libre entre uno o ambos linderos laterales colindantes con otros predios y el límite de 
+la ediﬁ cación.
+Posteriores: Distancia mínima libre entre el lindero posterior con el límite de la ediﬁ cación.
+
+8.2  
+
+Instalaciones permitidas para retiros laterales y posteriores:
+
+a) 
+b) 
+c) 
+
+d) 
+
+e) 
+f) 
+
+Cercos opacos o transparentes
+Piscinas
+Captación  de  aire,  y/o  retiro  de  gases  de  los  sistemas  de  extracción  de  monóxido  de  los  estacionamientos 
+vehiculares ubicados en sótanos o semisótanos.
+Sistemas de administración de humos por extracción de uso exclusivo de emergencias por incendio en sótanos, 
+los cuales pueden ser descargados a nivel del piso de los retiros, utilizando descargas por rejillas de ventilación 
+y/o sistemas de ventilación mecánico con dispositivos de descarga a nivel de piso.
+Equipos mecánicos de ventilación.
+Estacionamientos para bicicletas y vehículos menores no motorizados con techos ligeros o sin techar de cualquier 
+material transparente o traslucido con un espesor menor a 10 mm.
+
+8.3 
+
+Instalaciones permitidas para retiros frontales:
+
+a) 
+b) 
+
+c) 
+d) 
+
+e) 
+
+f) 
+g) 
+h) 
+i) 
+
+j) 
+k) 
+l) 
+
+m) 
+n) 
+o) 
+
+p) 
+q) 
+r) 
+s) 
+t) 
+u) 
+v) 
+
+Gradas, rampas y/o plataforma elevadora para subir o bajar hasta 1.50 m a partir del nivel de vereda.
+Cisternas para agua y sus respectivos cuartos de bombas hasta una altura máxima de 1.50 m a partir del nivel 
+de vereda.
+Casetas de guardianía y su respectivo baño.
+Estacionamientos para vehículos motorizados y/o no motorizados con techos ligeros o sin techar de cualquier 
+material transparente o traslucido con un espesor menor a 10 mm.
+Estacionamientos en semisótano, cuyo nivel superior del techo no sobrepase 1.50 m por encima del nivel de la 
+vereda frente al lote.
+Cercos opacos y/o de vegetación y/o transparentes.
+Muretes para medidores de energía eléctrica.
+Reguladores y medidores de gas natural y gas licuado de petróleo (GLP).
+Almacenamiento enterrado de GLP y líquidos combustibles hasta una altura máxima de 1.50 m a partir del nivel 
+de vereda.
+Dispositivos de descarga (tomas de piso) y retorno (GLP y líquidos combustibles).
+Techos y/o aleros de protección para el acceso de personas.
+Escaleras abiertas a pisos superiores independientes, cuando estos constituyan ampliaciones de la ediﬁ cación 
+original solo para uso de vivienda. 
+Escaleras que desciendan a niveles inferiores.
+Piscinas y su respectivo cuarto de bombas hasta una altura máxima de 1.50 m a partir del nivel de vereda.
+Subestaciones eléctricas y ventilación de las mismas hasta una altura máxima de 1.50 m a partir del nivel de 
+vereda.
+Instalaciones de equipos y accesorios contra incendio.
+Descargas a nivel de piso de los sistemas de ventilación de humos en caso de incendio. 
+Captación de aire y equipos mecánicos de ventilación.
+Cuartos de residuos sólidos hasta una altura máxima de 1.50 m a partir del nivel de vereda.
+Terrazas de uso exclusivo o común hasta 1.50 m a partir del nivel de vereda.
+Cuarto de Telecomunicaciones hasta una altura máxima de 1.50 m a partir del nivel de vereda.
+Y  otras  debidamente  sustentadas  por  el  proyectista  hasta  una  altura  máxima  de  1.50  m  a  partir  del  nivel  de 
+vereda.
+
+Artículo 9.- Área techada y área libre
+
+9.1  
+
+a) 
+
+El  área  techada  se  encuentra  comprendida  dentro  de  la  poligonal  que  deﬁ ne  el  perímetro  de  la  ediﬁ cación  e 
+incluye lo siguiente:
+
+Los muros y la estructura de la envolvente hasta la cara exterior, hasta la cara interior del ducto de los muros que 
+conforman los ductos de ventilación, hasta la cara exterior de los muros que limitan con zonas comunes y hasta 
+el eje de los muros que limitan con otra unidad inmobiliaria.
+
+ 
+6
+
+b) 
+c) 
+
+9.2  
+
+NORMAS LEGALES
+
+Jueves 8 de julio de 2021 
+
+/
+
+El Peruano 
+
+El área techada de los espacios a doble o más altura se computan en el nivel más bajo de proyección del techo.
+Las escaleras se computan considerando el área bajo la escalera como área techada.
+
+No forman parte del área techada, los aleros, los balcones sin techo o alternados, jardineras, pérgolas, techos 
+tipo sol y sombra, las cubiertas ligeras de material transparente o translúcido, los elementos estructurales que 
+sobresalen de los paramentos, ni los elementos decorativos como cornisas, apliques o parasoles; tampoco se 
+considera como área techada la cisterna de agua.
+
+9.3  
+
+9.4  
+
+9.5  
+
+El área libre resultante sobre la cual no existen proyecciones de áreas techadas, incluye los ductos de instalaciones 
+y los espacios cedidos para juntas con ediﬁ caciones colindantes. No incluye el ducto del ascensor.
+En los casos que la normativa local exija un área libre mínima para uso residencial, esta se considera desde el 
+nivel a partir de cual el uso residencial ocupa todo el nivel.
+En terrenos en los que por sus características topográﬁ cas (en pendiente), algunos niveles de la ediﬁ cación se 
+encuentren desplazados del inferior, no se exige área libre mínima.
+
+(cid:3)
+
+Artículo 10.- Altura de ediﬁ cación 
+
+10.1   La  altura  máxima  de  la  ediﬁ cación,  expresada  en  metros,  se  determina  en  los  parámetros  urbanísticos  y 
+ediﬁ catorios,  correspondiente  a  la  zoniﬁ cación  aprobada  por  el  Plan  de  Desarrollo  Urbano. Asimismo,  con  la 
+ﬁ nalidad de homogenizar el perﬁ l urbano de la ciudad, se considera lo siguiente:
+
+a) 
+
+b) 
+
+c) 
+
+d) 
+
+e) 
+
+f) 
+
+En los casos de zoniﬁ cación residencial con usos compatibles, cuando la altura de la ediﬁ cación este indicada en 
+pisos, cada piso se considera de un máximo de 3.00 m. 
+En los casos de comercio, comunicación y transporte, hospedaje, oﬁ cinas, salud y sean compatibles con vivienda, 
+cuando la altura de la ediﬁ cación este indicada en pisos, cada piso se considera de un máximo de 4.00 m. 
+La altura de ediﬁ cación se mide desde el punto más alto de la vereda del frente del lote. En caso no exista vereda, 
+se mide desde el nivel de calzada más 0.15 m. La altura incluye los pisos retranqueados. 
+En terrenos en pendiente, la altura de ediﬁ cación se mide sobre la línea imaginaria que une el punto más alto del 
+lindero frontal con el equivalente en el lindero posterior a diferente altura. 
+No  se  contabilizan  paramentos  verticales  para  recubrimientos  de  equipos  en  el  último  nivel,  parapetos  y 
+construcciones en azoteas, tanques elevados, cuartos de máquinas, ni casetas de equipos electromecánicos. 
+En caso de implementarse pisos técnicos intermedios o sobre la azotea, éstos no se consideran como piso de la 
+ediﬁ cación.
+
+10.2   La  altura  generada  por  colindancia.  Tiene  como  ﬁ nalidad  homogenizar  el  perﬁ l  urbano  pre  existente  de  la 
+ciudad; es aplicado para determinar la altura de ediﬁ cación en metros que corresponde a un predio colindante a 
+un ediﬁ cio preexistente de mayor altura.
+Cuando  el  predio  colinde  lateralmente  con  una  ediﬁ cación  existente  de  mayor  altura  que  la  normativa 
+correspondiente, puede ediﬁ carse hasta el promedio entre dichas alturas, siempre que no supere el 50% de la 
+diferencia de ambas alturas.
+Cuando el predio colinde lateralmente con ediﬁ caciones existentes, a ambos lados frente a la vía, de mayor altura 
+que la normativa del predio materia de ediﬁ cación, puede ediﬁ carse hasta el promedio entre las alturas de los 
+predios colindantes.
+
+10.3 
+
+10.4 
+
+La  altura  generada  por  consolidación.  Cuando  el  predio  se  ubica  en  una  manzana  consolidada  y  la  altura 
+del 50% de los ediﬁ cios preexistentes en el frente de la manzana tienen una altura mayor al predio materia de 
+ediﬁ cación, se puede ediﬁ car hasta la altura promedio de los ediﬁ cios preexistentes, siempre que no supere el 
+50% de la diferencia de ambas alturas.
+La altura generada por compensación. Los Gobiernos Locales pueden establecer beneﬁ cios de altura generada 
+por  compensación  con  la  ﬁ nalidad  de  rescatar  áreas  para  el  uso  público,  para  el  desarrollo  de  actividades 
+recreativas, activas o pasivas.
+Estas ediﬁ caciones pueden ser de uso mixto, de acuerdo a la compatibilidad de uso que corresponda y siempre 
+cumpliendo los demás parámetros urbanísticos y ediﬁ catorios.
+
+10.5   Altura en lotes en esquina. Para el caso de una ediﬁ cación sobre un lote en esquina; la altura normativa sobre 
+la vía de ancho mayor puede voltear con esa altura hasta una distancia igual a la sección de vía menor más los 
+retiros normativos de la misma, medidos a partir del límite de la ediﬁ cación. 
+A partir de ese punto, la altura del resto de la ediﬁ cación se determina en base al criterio de colindancia.
+
+ 
+ 
+El Peruano / 
+
+   Jueves 8 de julio de 2021
+
+NORMAS LEGALES
+
+7
+
+Artículo 11.- Cercos
+Los cercos tienen como ﬁ nalidad la protección visual y/o auditiva y/o dar seguridad a los ocupantes de la ediﬁ cación, 
+debiendo tener las siguientes características:
+
+a) 
+
+b) 
+
+c) 
+
+d) 
+
+Pueden  estar  colocados  en  el  límite  de  propiedad,  pudiendo  ser  opacos  y/o  transparentes.  La  colocación  de 
+cercos opacos no varía la dimensión de los retiros exigibles. 
+Se pueden instalar conexiones para servicio de la ediﬁ cación (uso de bomberos, gas, petróleo, medidores, etc.) 
+siempre que no sobrepasen el límite de propiedad.
+Cuando se instalen dispositivos de seguridad que puedan poner en riesgo a las personas que transitan por la vía 
+pública, estos deben estar debidamente señalizados y/o sobre 2.30 m de altura.
+Se pueden instalar cajas para la recepción de documentos siempre que no sobrepasen el límite de propiedad.
+
+Artículo 12.- Ochavo
+En los frentes de lotes ubicados en esquinas formadas por la intersección de dos vías vehiculares, una de las cuales 
+presente una sección menor a 3.00 m medida desde la calzada hasta el límite del lote, se debe proyectar a nivel de la 
+vereda un retiro en diagonal denominado ochavo con una longitud mínima de 3.00 m, medida sobre la perpendicular de 
+la bisectriz del ángulo formado por los límites de propiedad correspondientes a las vías que forman la esquina. El ochavo 
+debe estar libre de todo elemento que obstaculice la visibilidad hasta una altura mínima de 2.30 m del nivel o cota más 
+alta de la vereda, para el adecuado desplazamiento de las personas y evitar accidentes de tránsito.
+Los  Gobiernos  Locales,  a  través  de  los  Planes  Especíﬁ cos,  pueden  determinar  las  zonas  donde  no  es  obligatorio 
+proyectar los ochavos.
+
+Artículo 13.- Volados
+Los volados tienen las siguientes características:
+
+a) 
+
+b) 
+
+c) 
+
+d) 
+
+Se puede ediﬁ car volados sobre el retiro frontal hasta 0.50 m, a partir de 2.30 m de altura, tomado a partir del 
+nivel del retiro.
+Únicamente en ambientes de balcones sin techo o alternados, así como en terrazas, el volado puede llegar hasta 
+un máximo de 0.80 m sobre el retiro frontal.
+Se puede considerar en la fachada de la ediﬁ cación elementos estructurales, elementos decorativos como frisos, 
+cornisas, zócalos, elementos de protección solar y otros abiertos, hasta un máximo de 0.30 m sobre la proyección 
+de los volados indicados en el literal a) del presente artículo. 
+En  las  ediﬁ caciones  sin  retiro  no  se  permiten  volados  sobre  la  vereda,  salvo  por  razones  vinculadas  al  perﬁ l 
+urbano  preexistente  para  ejecutar  balcones  sin  techo,  aleros  de  protección  para  lluvias,  cornisas  u  otros 
+elementos arquitectónicos.
+
+Artículo 14.- Cubiertas y azoteas
+
+14.1   Las ediﬁ caciones, en todos sus usos, pueden emplear azoteas sobre las alturas máximas permitidas, pudiendo 
+
+ser de uso exclusivo, común o mixto y accederse mediante escaleras y ascensores. 
+
+14.2   Se puede techar hasta un 50% del área de la azotea, debiendo considerar un retranque mínimo de 2.50 m del 
+
+límite exterior de la(s) fachada(s) de la ediﬁ cación. 
+
+14.3   Los parapetos de azotea hacia propiedades vecinas y entre muros divisorios de unidades inmobiliarias, deben 
+
+ser igual o mayor 1.80 m de altura.
+
+14.4   Los techos, azoteas y patios descubiertos en las ediﬁ caciones deben permitir el manejo de las aguas pluviales 
+
+en las zonas lluviosas.
+
+14.5   El agua de lluvias no puede verterse directamente sobre los terrenos o ediﬁ caciones de propiedad de terceros.
+
+Artículo 15.- Acabado exterior
+Para el caso de ediﬁ caciones con muros colindantes y patios que den a propiedad de terceros, a partir del segundo piso 
+deben tener como acabado exterior mínimo tarrajeado, pañetado y/o escarchado y/o pintura.
+
+Artículo 16.- Separación entre ediﬁ caciones 
+Toda ediﬁ cación debe guardar una distancia con otra ediﬁ cación en los siguientes casos:
+
+a) 
+
+b) 
+
+Entre  las  ediﬁ caciones  colindantes,  ya  sea  en  un  predio  o  en  dos  o  más  predios  también  colindantes,  por 
+razones  de  seguridad  sísmica  o  contra  incendios,  sujeta  a  la  compatibilidad  del  proyecto  con  las  respectivas 
+especialidades.
+Entre las ediﬁ caciones separadas por condiciones de iluminación y ventilación naturales, en uno o dos predios, 
+se establece en las normas especíﬁ cas del RNE. El cumplimiento de esta separación permite dar solución al 
+registro visual sin exigir requerimientos adicionales.
+
+CAPÍTULO IV
+
+RELACIÓN ENTRE AMBIENTES Y CIRCULACIÓN HORIZONTAL
+
+Artículo 17.- Requerimientos mínimos de los ambientes
+Las dimensiones, área y volumen, de los ambientes de las ediﬁ caciones deben ser las necesarias para:
+
+a) 
+b) 
+c) 
+d) 
+e) 
+f) 
+
+Realizar las funciones para las que son destinados.
+Albergar al número de personas propuesto para realizar dichas funciones.
+Tener el volumen de aire requerido por ocupante y garantizar su renovación natural y/o artiﬁ cial.
+Permitir la circulación de las personas, así como su evacuación en casos de emergencia. 
+Distribuir el mobiliario o equipamiento previsto sin obstruir la circulación y rutas de los evacuantes.
+Contar con iluminación natural y/o artiﬁ cial suﬁ ciente que garantice el adecuado uso de los ambientes.
+
+Artículo 18.- Alturas de ambientes
+
+18.1   Los ambientes con techos horizontales deben tener una altura mínima de piso terminado a cielo raso de 2.30 
+m para vivienda, 2.40 m para oﬁ cinas y hospedaje, 2.50 m para educación y servicios comunales, 2.70 m para 
+salud, 3.00 m para comercio, recreación y deportes, comunicación y transporte en los ambientes de espera, y 
+hasta el punto más bajo de la estructura en industria. En ambientes con techos inclinados las partes más bajas 
+pueden tener una altura menor debidamente sustentada.
+
+18.2   Los  baños  al  interior  de  las  viviendas  pueden  tener  espacios  con  una  altura  libre  menor  a  lo  indicado  en  el 
+párrafo precedente, siempre que permitan desarrollar la función correspondiente. Los ambientes para equipos 
+
+ 
+8
+
+NORMAS LEGALES
+
+Jueves 8 de julio de 2021 
+
+/
+
+El Peruano 
+
+o espacios para instalaciones mecánicas y depósitos pueden tener una altura mínima de 2.00 m siempre que 
+permitan el ingreso y permanencia de personas de pie (parados) para la instalación, reparación o mantenimiento.
+18.3   Las estructuras horizontales tales como vigas u otros elementos deben estar a una altura libre no menor a 2.10 
+m medida sobre el piso terminado, salvo que conformen divisiones o cerramientos de los ambientes y permitan 
+el desarrollo normal de la(s) actividad(es) que alberga(n). 
+
+Artículo 19.- Vanos
+
+19.1 Las dimensiones de los vanos para la instalación de puertas de acceso, comunicación y salida deben calcularse 
+según el uso de los ambientes a los que sirven y al tipo de usuario que las emplean. Su altura mínima debe 
+ser de 2.10 m. Se puede tener una altura menor en caso de la utilización de puertas cortafuego estandarizadas 
+debidamente certiﬁ cadas.
+
+19.2   Las  puertas  de  evacuación  son  aquellas  que  forman  parte  de  la  ruta  de  evacuación.  Las  puertas  de  uso 
+general  pueden  ser  usadas  como  puertas  de  evacuación.  La  puerta  de  salida  de  la  ediﬁ cación  es  permitida 
+para la descarga del propio piso, en caso se trate de un hall por el cual evacuan de pisos superiores el ancho 
+corresponde  a  la  capacidad  del  piso  de  mayor  ocupación.  Las  puertas  de  evacuación  deben  cumplir  con  los 
+siguientes requisitos:
+
+a) 
+
+b) 
+c) 
+d) 
+
+e) 
+
+f) 
+g) 
+
+h) 
+
+La sumatoria del ancho de los vanos de las puertas de evacuación, más los de uso general que se adecuen como 
+puertas de evacuación, deben permitir la evacuación del local al exterior o a una escalera protegida o pasaje de 
+evacuación. 
+No pueden estar cubiertas con materiales reﬂ ectantes o decoraciones que disimulen su ubicación.
+Deben abrir en el sentido de la evacuación cuando por esa puerta pasen más de cincuenta (50) personas.
+Cuando se ubiquen puertas a ambos lados de un pasaje de circulación deben abrir 180 grados y no invadir más 
+del 50% del ancho calculado como vía de evacuación.
+Las puertas giratorias no se consideran puertas de evacuación, a excepción de aquellas que cuenten con un 
+dispositivo para convertirlas en puertas batientes.
+Las puertas corredizas pueden permitir la evacuación de hasta diez (10) personas
+Pueden emplearse puertas de cristal, con el uso de vidrios de seguridad según las características reguladas en 
+la Norma Técnica E.040, Vidrio del RNE.
+Las puertas de las viviendas pueden abrir hacia adentro, al interior de la vivienda a la que sirven.
+
+Artículo 20.- Pasajes de circulación
+Los pasajes para el tránsito de personas deben cumplir con las siguientes características:
+
+a) 
+b) 
+
+Deben tener un ancho libre mínimo calculado en función del número de ocupantes a los que sirven.
+Sin perjuicio del cálculo de evacuación, la distancia mínima entre los muros que conforman el ancho de pasajes 
+y circulaciones horizontales interiores, son las siguientes:
+
+Cuadro N° 02
+
+Tipo de pasajes y circulaciones
+
+Interior de viviendas
+
+Pasajes que sirven de acceso hasta a dos viviendas
+
+Pasajes que sirven de acceso hasta a cuatro viviendas
+
+Áreas de trabajo interiores en oﬁ cinas
+
+Pasajes de servicio (que sirven de acceso a depósitos, a cuartos técnicos, a servicios higiénicos, 
+a ambientes auxiliares, entre otros, que permita el normal desplazamiento de equipo previsto para 
+mantenimiento, reparación o recambio de equipos)
+
+Establecimiento de hospedaje
+
+Locales comerciales, entre góndolas o anaqueles de consumo cotidiano, y para productos 
+especializados cuando las dimensiones del producto lo permitan.
+
+Locales de salud
+
+Locales educativos
+
+Distancia
+
+0.90 m.
+
+1.00 m.
+
+1.20 m.
+
+0.90 m.
+
+0.90 m.
+
+1.20 m.
+
+1.20 m.
+
+1.80 m.
+
+1.20 m.
+
+c) 
+
+Los pasajes que formen parte de una vía de evacuación deben carecer de obstáculos en el ancho requerido, 
+salvo que se trate de elementos de seguridad o cajas de paso de instalaciones ubicadas en las paredes, siempre 
+que no reduzcan en más de 0.15 m del ancho requerido.
+Para efectos de evacuación, la distancia de recorrido del evacuante (medida de manera horizontal y vertical) 
+desde  el  espacio  más  alejado  sujeto  a  ocupación,  hasta  el  lugar  seguro  (salida  de  escape,  área  de  refugio, 
+pasadizo compartimentado a prueba de fuego y humos o escalera protegida) es como máximo de 45.00 m sin 
+rociadores, o de 60.00 m con rociadores, pudiendo precisarse en las normas especíﬁ cas.
+
+Artículo 21.- Rampas
+Las rampas para personas deben tener las siguientes características:
+
+a) 
+
+b) 
+c) 
+
+Un  ancho  mínimo  de  1.00  m  incluyendo  pasamanos,  entre  los  paramentos  que  la  limitan.  En  ausencia  de 
+paramento, se considera la sección.
+La pendiente máxima es de 12%, de no regularse en las normas especíﬁ cas.
+Barandas según el ancho, siguiendo los mismos criterios que se emplea para una escalera.
+
+CAPÍTULO V
+
+CIRCULACIÓN VERTICAL
+
+Artículo 22.- Escaleras
+Las escaleras pueden ser de los siguientes tipos:
+
+a) 
+b) 
+
+Escaleras integradas
+Escaleras protegidas
+
+ 
+El Peruano / 
+
+   Jueves 8 de julio de 2021
+
+NORMAS LEGALES
+
+9
+
+Artículo 23.- Diseño de las escaleras
+
+23.1 Las escaleras en general están conformadas por tramos, descansos y barandas. Los tramos están formados por 
+
+gradas. Las gradas están conformadas por pasos y contrapasos. 
+
+23.2 Las condiciones de los componentes de las escaleras son:
+
+a) 
+
+b) 
+
+c) 
+d) 
+
+e) 
+
+Las escaleras cuentan con un máximo de diecisiete pasos entre descansos. Para escaleras lineales la longitud 
+mínima del descanso es de 0.90 m y para otros tipos de escaleras el ancho del descanso es igual o mayor al del 
+tramo de la escalera. 
+La dimensión mínima del paso debe ser:
+
+i. 
+ii. 
+iii. 
+
+0.25 m en vivienda e industria.
+0.28 m en hospedaje, comercio, oﬁ cinas y servicios comunales.
+0.30 m en salud, educación, recreación y deportes, y transportes y comunicaciones.
+
+La dimensión máxima del contrapaso debe ser 0.18 m. 
+El ancho establecido para las escaleras se mide entre los paramentos que la conforman, o entre sus límites en 
+caso de tener uno o los dos lados abiertos. El ancho del pasamanos no constituye una reducción del ancho de 
+la escalera, siempre que se encuentre dentro de la distancia de 10 cm a partir de la pared, a distancia mayor 
+requiere aumentar el ancho.
+En las escaleras integradas se permite pasos en diagonal o en ángulo, siempre que, a 0.30 m del inicio del paso, 
+este tenga cuando menos 0.28 m. 
+
+Artículo 24.- Escaleras integradas
+
+24.1   Las escaleras integradas son aquellas que no están aisladas de las circulaciones horizontales y su objetivo es 
+
+satisfacer las necesidades de tránsito de las personas. 
+
+24.2   Pueden ser utilizadas como parte de la ruta de evacuación, siempre que cumplan con la distancia máxima de 
+
+recorrido establecida en el literal c) del artículo 20. 
+
+(cid:3)
+(cid:3)
+
+(cid:3)
+
+24.3 
+
+Las escaleras integradas pueden ser de tipo caracol cuando comunique máximo a dos pisos o niveles continuos 
+y sirva a no más de cinco (5) personas, con pasamanos a ambos lados. 
+
+Artículo 25.- Escaleras protegidas
+
+25.1   Las escaleras protegidas son a prueba de fuego y humos constituyendo un lugar seguro. La ruta de evacuación 
+tiene como lugar de llegada la puerta de ingreso a estas escaleras. Dependiendo de su clasiﬁ cación, pueden 
+tener todos sus muros resistentes al fuego, en caso de estar ubicadas en el interior de las ediﬁ caciones, o tener 
+solo un muro resistente al fuego, en caso de ubicarse en el exterior de las ediﬁ caciones, cumpliendo cada una 
+con los requerimientos de su tipología.
+
+25.2  Son utilizadas para la evacuación de los ocupantes de la ediﬁ cación, así como para el acceso del personal de 
+respuesta a emergencias. Son obligatorias cuando se excede la distancia máxima de recorrido establecida en el 
+literal c) del artículo 20.
+
+25.3   Las escaleras protegidas deben cumplir los siguientes requisitos:
+
+a) 
+
+b) 
+
+Tener una ubicación y un diseño que permita la evacuación de los ocupantes en caso de emergencia de manera 
+rápida y segura.
+Ser  continuas  del  primer  al  último  piso  o  azotea,  pudiendo  ser  totalmente  verticales  o  tener  desplazamientos 
+horizontales sin perder la continuidad de la compartimentación cortafuego a excepción de las escaleras de tipo 
+abiertas.
+
+ 
+10
+
+NORMAS LEGALES
+
+Jueves 8 de julio de 2021 
+
+/
+
+El Peruano 
+
+(cid:3)
+
+(cid:3)
+
+(cid:3)
+(cid:48)(cid:56)(cid:53)(cid:50)(cid:54)(cid:3)(cid:38)(cid:50)(cid:53)(cid:55)(cid:36)(cid:41)(cid:56)(cid:40)(cid:42)(cid:50)(cid:3)
+(cid:36)(cid:53)(cid:40)(cid:36)(cid:3)(cid:38)(cid:50)(cid:48)(cid:51)(cid:36)(cid:53)(cid:55)(cid:44)(cid:48)(cid:40)(cid:49)(cid:55)(cid:36)(cid:39)(cid:36)(cid:3)(cid:38)(cid:50)(cid:53)(cid:55)(cid:36)(cid:41)(cid:56)(cid:40)(cid:42)(cid:50)(cid:3)
+
+(cid:3)
+
+c) 
+
+Entregar directamente a la vía pública o a un espacio compartimentado cortafuego que conduzca hacia la vía 
+pública. En el caso de vivienda cuya ediﬁ cación cuente con una sola escalera puede evacuar por pasajes de 
+circulación o el hall de ingreso, debidamente compartimentado.
+
+ 
+El Peruano / 
+
+   Jueves 8 de julio de 2021
+
+NORMAS LEGALES
+
+11
+
+d) 
+
+Contar con una barrera de contención que imposibilite que las personas que evacuen la ediﬁ cación, continúen 
+bajando accidentalmente a niveles inferiores al de la salida a la vía pública.
+
+e) 
+f) 
+
+g) 
+
+El vestíbulo previo debe tener dimensiones suﬁ cientes para permitir la maniobra de una camilla de emergencia. 
+Los vanos de las puertas de acceso hacia el vestíbulo previo y hacia la caja de escalera tienen un ancho mínimo 
+de 1.00 m.
+Las puertas de acceso deben abrir en la dirección del ﬂ ujo de evacuación de las personas y su radio de apertura 
+no puede ocupar más del 25% del área formada por el círculo que tiene como radio el ancho de la escalera.
+
+h) 
+
+i) 
+
+j) 
+
+k) 
+
+l) 
+
+m) 
+
+n) 
+
+o) 
+
+Tener un ancho libre mínimo entre paramentos o entre un paramento y el límite de la escalera de 1.20 m. Tener 
+pasamanos  instalados  a  ambos  lados  de  la  pared,  cuyas  dimensiones  no  reducen  el  ancho  de  la  escalera, 
+siempre que se encuentre dentro de la distancia de 10 cm a partir de la pared, a distancia mayor de separación 
+del pasamanos se requiere aumentar el ancho de la escalera.
+Al interior de las escaleras protegidas o del vestíbulo previo se permite la instalación de los sistemas de protección 
+contra incendios y los pases de conexión de la caja de escalera con el exterior deben contar con sellos cortafuego 
+de resistencia igual a la de la caja.
+El cerramiento de la escalera protegida debe tener resistencia al fuego, según lo siguiente:
+
+Hasta 15.00 m de altura medidos a nivel de piso: 60 minutos de resistencia al fuego.
+
+i. 
+ii.  Más de 15.00 m y 72.00 m de altura medidos a nivel de piso: 120 minutos de resistencia al fuego.
+iii.  Más de 72.00 m de altura medidos a nivel de piso: 180 minutos de resistencia al fuego.
+
+Las puertas de acceso a la escalera protegida deben contar con mecanismo de cierre automático y resistencia al 
+fuego según lo siguiente: 
+
+Hasta 15.00 m de altura: 45 minutos de resistencia al fuego.
+
+i.  
+ii.   Más de 15.00 m y 72.00 m de altura: 90 minutos de resistencia al fuego.
+iii.   Más de 72.00 m de altura: 135 minutos de resistencia al fuego.
+
+Las puertas de acceso desde el interior del vestíbulo previo hacia la caja de escalera (zona de gradas) deben 
+contar con resistencia al fuego mínima de 20 minutos.
+Dentro de la caja de escalera no debe existir ningún otro uso alguno, ni tener otro acceso que la(s) puerta(s) de 
+evacuación.
+Debe existir en cada nivel un pase de 0.20 m x 0.20 m, cuyo nivel superior está a 0.30 m del suelo, cerrado 
+con  material  frangible  cortafuego,  comunicado  directamente  entre  la  escalera  y  el  ambiente  al  cual  sirve  o  la 
+circulación del piso, el cual debe estar señalizado como pase de manguera desde el interior de la escalera o 
+ser visible y por el exterior un cartel para que no lo obstruyan con mobiliario. Este pase de manguera puede ser 
+cuadrado o circular. 
+Solo para las ediﬁ caciones de salud, servicios comunales, establecimientos penitenciarios, centros comerciales, 
+educación con más de 500 ocupantes, recreación y deportes con más de 1000 ocupantes, así como transportes 
+y comunicaciones, se debe considerar un espacio para albergar una silla de ruedas en la escalera. 
+
+ 
+12
+
+NORMAS LEGALES
+
+Jueves 8 de julio de 2021 
+
+/
+
+El Peruano 
+
+Artículo 26.- Tipologías de escaleras protegidas
+Las escaleras protegidas pueden ser de cinco tipos:
+
+a) 
+b) 
+c) 
+d) 
+e) 
+
+Con vestíbulo previo ventilado (B1) 
+Presurizada (B2)
+Abierta (B3)
+Cerrada (B4)
+Mixtas (B5)
+
+Artículo 27.- Escaleras con vestíbulo previo ventilado (B1)
+Las  escaleras  protegidas  con  vestíbulo  previo  ventilado  pueden  tener  ventilación  natural  o  a  través  de  un  sistema 
+mecánico, por lo cual existen dos tipos: 
+
+27.1   Escaleras protegidas con vestíbulo previo que ventila directo al exterior 
+
+Deben cumplir con los siguientes requisitos:
+
+a) 
+
+b) 
+
+La  apertura  del  vestíbulo  previo  debe  ser  hacia  un  lugar  abierto  y  no  debe  ubicarse  ninguna  otra  apertura  a 
+menos de 3.00 m de distancia.
+El  vano  del  vestíbulo  previo  hacia  el  exterior  no  debe  ser  menor  a  1.50  m2  sin  elementos  de  cierre,  y  sus 
+dimensiones son las resultantes del diseño. 
+
+27.2   Escaleras protegidas con vestíbulo previo con ventilación mecánica
+
+Cuentan con ventilación por medio de un sistema de extracción mecánica, con equipos en cada nivel o mediante 
+un sistema centralizado.
+Dentro del vestíbulo se instalan dos rejillas, una para inyectar aire y otra para extraer el humo, con las siguientes 
+características:
+
+a) 
+
+La rejilla para inyectar aire, debe ubicarse en la parte inferior del vestíbulo, a no más de 0.15 m del nivel del piso.
+
+ 
+El Peruano / 
+
+   Jueves 8 de julio de 2021
+
+NORMAS LEGALES
+
+13
+
+b) 
+
+c) 
+d) 
+e) 
+f) 
+
+g) 
+
+La rejilla para extraer humo, debe ubicarse en la parte superior del vestíbulo, a no más de 0.15 m debajo del nivel 
+del techo o cielorraso.
+La ubicación de las rejillas no debe ser obstruida por la puerta abierta del vestíbulo.
+El vestíbulo previo debe tener por lo menos un cambio de aire por minuto.
+La extracción de aire en el vestíbulo debe ser el 150% de la inyección.
+En  la  parte  superior  de  la  caja  de  escalera  debe  instalarse  un  dámper  de  alivio  de  presión,  con  capacidad 
+suﬁ ciente para descargar al menos 70.8 m3/min y se mantenga en su interior una presión positiva no menor a 
+0.00025 bar (0.10 pulgadas de agua) con todas las puertas entre la caja y el vestíbulo previo.
+No se requiere tener vestíbulo previo en el primer piso o nivel de descarga de la escalera.
+
+27.2.1 
+
+Las  escaleras  protegidas  con  vestíbulo  previo  y  equipos  de  inyección  y  de  extracción  mecánica  en 
+cada nivel, deben cumplir con los siguientes requisitos:
+
+a) 
+b) 
+
+c) 
+d) 
+
+e) 
+
+27.2.2 
+
+a) 
+
+b) 
+
+c) 
+
+Contar con un cerramiento a prueba de humos.
+Los  equipos  de  inyección  y  extracción  pueden  ventilar  directamente  al  exterior,  o  hacia  un  ducto 
+exclusivo para los equipos. Un ducto para inyección y otro ducto para extracción, ambos tienen que 
+tener cerramiento cortafuego.
+El vestíbulo previo puede ser cerrado o contar con iluminación natural.
+La distancia mínima entre los equipos de inyección de aire y la ventana más cercana de la ediﬁ cación 
+a la que sirve debe ser de 3.00 m.
+Los  equipos  de  inyección  y  extracción  de  todos  los  niveles  deben  ser  activados  automáticamente 
+en caso de emergencia a partir de un detector de humos ubicado a menos de 3.00 m del acceso al 
+vestíbulo previo, conectado, al igual que los equipos al sistema de detección y alarma contra incendio 
+de la ediﬁ cación.
+Las  escaleras  protegidas  con  vestíbulo  previo  y  sistema  de  inyección  y  de  extracción  mecánica 
+centralizado, deben cumplir con los siguientes requisitos:
+
+Los equipos de inyección y extracción de aire deben estar ubicados sobre el último nivel de la ediﬁ cación 
+y contar con un suministro de energía mediante conductores protegidos con resistencia al fuego no 
+menor a 120 minutos.
+Para ediﬁ caciones residenciales de más de 30.00 m de altura, así como en otras tipologías, la fuente 
+alterna de suministro de energía es de uso no exclusivo, para los equipos de inyección y extracción.
+Los equipos de inyección y extracción deben ser activados automáticamente en caso de emergencia a 
+partir de un detector de humos ubicado a menos de 3.00 m del acceso al vestíbulo previo, conectado, 
+al igual que los equipos al sistema de detección y alarma contra incendio de la ediﬁ cación.
+
+Artículo 28.- Escaleras Presurizadas (B2) 
+
+28.1   Las  escaleras  presurizadas  no  requieren  de  un  vestíbulo  previo,  se  ingresa  directo  a  la  caja  de  escalera, 
+
+cumpliendo con las características aplicables de requisitos de las escaleras protegidas.
+
+28.2   Debe cumplir con las siguientes características:
+
+a) 
+b) 
+c) 
+
+Contar con una rejilla de ingreso de aire a presión en cada nivel.
+Contar con un sistema mecánico que inyecte aire a presión dentro de la caja de la escalera.
+Las características de las escaleras presurizadas se indican en la Norma Técnica A.130, Requisitos de Seguridad 
+del RNE.
+
+ 
+14
+
+d) 
+e) 
+
+Estar cerradas al exterior.
+No están permitidas en ediﬁ caciones residenciales.
+
+NORMAS LEGALES
+
+Jueves 8 de julio de 2021 
+
+/
+
+El Peruano 
+
+Artículo 29.- Escaleras Abiertas (B3)
+Debe cumplir con las siguientes características:
+
+a) 
+b) 
+c) 
+
+d) 
+
+Están abiertas al exterior por lo menos en uno de sus lados con una superﬁ cie de al menos 1.50 m2 en cada piso.
+El vano abierto al exterior debe estar a una distancia de 3.00 m o más de un vano de la ediﬁ cación a la que sirve.
+La  separación  de  3.00  m  debe  ser  medida  horizontal  y  perpendicular  al  vano;  asimismo,  debe  mantener  la 
+resistencia al fuego de la escalera.
+Esta  escalera  también  es  aceptada  para  ediﬁ caciones  mayores  a  30.00  m  de  altura,  siempre  que  el  diseño 
+minimice la percepción de vértigo, referido al impacto visual de la altura sobre los evacuantes. 
+
+ 
+ 
+El Peruano / 
+
+   Jueves 8 de julio de 2021
+
+NORMAS LEGALES
+
+15
+
+(cid:3)
+
+Artículo 30.- Escaleras Cerradas (B4) 
+Deben cumplir con las siguientes características:
+
+a) 
+
+b) 
+
+c) 
+
+Todos  sus  lados  tienen  un  cerramiento  con  una  resistencia  no  menor  a  60  minutos,  incluyendo  la  puerta.  No 
+requiere de ningún tipo de ventilación mecánica.
+Son aceptadas únicamente en ediﬁ caciones no mayores de 15.00 m de altura, medida desde el nivel de vereda 
+hasta  el  último  nivel  de  piso  de  circulación  común  de  la  escalera,  y  protegidas  al  100%  por  un  sistema  de 
+rociadores. 
+En  el  caso  de  sótanos  puede  usarse  hasta  15.00  m  de  profundidad  con  plantas  protegidas  al  100%  por  un 
+sistema de rociadores. La distancia de profundidad no se restringe para el uso de estacionamiento.
+
+ 
+16
+
+NORMAS LEGALES
+
+Jueves 8 de julio de 2021 
+
+/
+
+El Peruano 
+
+Artículo 31.- Escaleras Mixtas (B5) 
+Deben cumplir con las siguientes características:
+
+a) 
+
+Se usa escaleras cerradas (B4) en sótanos y en los pisos superiores escaleras con vestíbulo previo ventilado 
+(B1).
+
+(cid:3)
+
+(cid:3)
+(cid:40)(cid:54)(cid:38)(cid:36)(cid:47)(cid:40)(cid:53)(cid:36)(cid:54)(cid:3)(cid:48)(cid:44)(cid:59)(cid:55)(cid:36)(cid:54)(cid:29)(cid:3)(cid:38)(cid:40)(cid:53)(cid:53)(cid:36)(cid:39)(cid:36)(cid:54)(cid:3)(cid:60)(cid:3)(cid:38)(cid:50)(cid:49)(cid:3)(cid:57)(cid:40)(cid:54)(cid:55)(cid:203)(cid:37)(cid:56)(cid:47)(cid:50)(cid:3)(cid:51)(cid:53)(cid:40)(cid:57)(cid:44)(cid:50)(cid:3)
+
+(cid:3)
+
+b) 
+
+Se  puede  utilizar  también  escaleras  cerradas  (B4)  en  sótanos  y  escaleras  presurizadas  (B2)  en  pisos 
+superiores,  siempre  y  cuando  en  el  primer  piso  o  nivel  de  descarga  de  la  escalera,  estén  separadas  por 
+muros  resistentes  al  fuego.  Se  debe  garantizar  que,  en  caso  de  incendios  en  sótanos,  el  humo  no  suba 
+a  pisos  superiores,  y  que  sea  hermética  para  que  la  presurización  de  la  escalera  en  pisos  superiores  se 
+mantenga.
+
+ 
+El Peruano / 
+
+   Jueves 8 de julio de 2021
+
+NORMAS LEGALES
+
+17
+
+(cid:3)
+
+(cid:3)
+(cid:40)(cid:54)(cid:38)(cid:36)(cid:47)(cid:40)(cid:53)(cid:36)(cid:54)(cid:3)(cid:48)(cid:44)(cid:59)(cid:55)(cid:36)(cid:54)(cid:29)(cid:3)(cid:38)(cid:40)(cid:53)(cid:53)(cid:36)(cid:39)(cid:36)(cid:54)(cid:3)(cid:60)(cid:3)(cid:51)(cid:53)(cid:40)(cid:54)(cid:56)(cid:53)(cid:44)(cid:61)(cid:36)(cid:39)(cid:36)(cid:54)(cid:3)
+
+Artículo 32.- Número de escaleras
+El número de escaleras en una ediﬁ cación se calcula en función al número de personas por nivel o piso (aforo), según la 
+distancia de recorrido del evacuante medido entre el punto más alejado del piso (en el caso de vivienda entre la puerta 
+de ingreso al departamento) hasta el ingreso a un lugar seguro o al exterior, según se trate de escaleras protegidas o 
+integradas, y la necesidad de contar con rutas alternativas de escape.
+
+a) 
+
+En  ediﬁ caciones  de  oﬁ cinas,  se  puede  contar  con  una  sola  escalera  siempre  que  se  cumplan  los  siguientes 
+requisitos:
+
+i. 
+
+ii. 
+
+iii. 
+
+Cuando no supere los 30.00 m de altura entre el nivel de acceso a la ediﬁ cación y el nivel más alto de 
+circulación común de la escalera.
+Cuando la distancia entre el lugar más alejado del último piso y la salida a la vía pública sea menor a 
+45.00 m sin rociadores o 60.00 m con rociadores; en el caso de escaleras integradas.
+Cuando  el  hall  del  primer  piso  cuente  con  protección  cortafuego  igual  al  de  la  caja  de  escalera,  y  la 
+distancia entre la puerta de la escalera y la salida a la vía pública sea menor a 15.00 m.
+
+ 
+18
+
+NORMAS LEGALES
+
+Jueves 8 de julio de 2021 
+
+/
+
+El Peruano 
+
+iv. 
+
+v. 
+
+vi. 
+
+Cuando la distancia entre el lugar más alejado del piso hasta la puerta de ingreso a la escalera protegida 
+sea menor a 30.00 m.
+Cuando la distancia entre el lugar más alejado del piso hasta la puerta de ingreso al vestíbulo previo sea 
+menor a 60.00 m y el área del piso con mayor dimensión, sea menor de 500 m2.
+Cuando el piso de mayor aforo tenga menos de 100 personas.
+
+b) 
+
+En  ediﬁ caciones  de  hospedaje,  se  requieren  como  mínimo  dos  escaleras  de  evacuación,  pudiendo 
+excepcionalmente contar con una sola escalera si se cumplen todos los siguientes requisitos:
+
+i. 
+
+ii. 
+iii. 
+iv. 
+v. 
+vi. 
+
+vii. 
+
+viii. 
+
+ix. 
+
+No mayor de 12 m de altura, medidos desde el nivel de vereda hasta el último nivel de piso de circulación 
+común de la escalera
+Presenta no más de 12 habitaciones por piso.
+La ediﬁ cación se encuentra protegida con sistema de rociadores.
+La escalera protegida no sirve a más de la mitad del nivel del piso inferior al nivel de descarga. 
+La distancia de recorrido desde la puerta de la habitación hasta la salida es menor de 10.70 m.
+La escalera se encuentra compartimentada o separada del resto del ediﬁ cio con muros de resistencia al 
+fuego de mínimo 60 minutos.
+En  toda  apertura  del  cerramiento  que  separa  la  escalera  del  ediﬁ cio  deberán  ubicarse  puertas  con 
+dispositivos de cierre automático y con resistencia al fuego para muros de 60 minutos.
+Todos  los  corredores  de  acceso  a  la  salida  deben  contar  con  una  resistencia  al  fuego  de  mínima  60 
+minutos.
+La  separación  tanto  vertical  como  horizontal  entre  las  habitaciones  deberán  tener  una  resistencia  al 
+fuego mínima de 30 minutos.
+
+c) 
+
+d) 
+
+En ediﬁ caciones que no cumplan con los requisitos antes indicados y para otras tipologías se requieren como 
+mínimo 02 escaleras.
+En  ediﬁ caciones  mayores  a  120  m  de  altura  entre  el  nivel  de  acceso  a  la  ediﬁ cación  y  el  nivel  más  alto  de 
+circulación común de la escalera, deben contar mínimo con 03 escaleras.
+
+Artículo 33.- Ubicación de las escaleras
+Cuando se requieran dos o más escaleras están deben cumplir los siguientes requisitos:
+
+a) 
+b) 
+
+c) 
+
+Deben ubicarse en rutas opuestas de evacuación.
+La distancia máxima de recorrido del evacuante, entre el punto más alejado de la ediﬁ cación hasta el ingreso a 
+un lugar seguro o al exterior, es de 45.00 m sin rociadores y 60.00 m con rociadores.
+La distancia mínima entre las puertas de los vestíbulos previos o de las escaleras protegidas es igual a un tercio 
+de la dimensión máxima del recorrido del evacuante.
+
+Artículo 34.- Ascensores
+
+34.1.  Los ascensores ubicados en las ediﬁ caciones deben cumplir con las siguientes condiciones:
+
+a) 
+
+b) 
+
+c) 
+
+d) 
+
+Son  obligatorios  a  partir  de  un  nivel  de  circulación  común  superior  a  12.00  m  sobre  el  nivel  del  ingreso  a  la 
+ediﬁ cación desde la vereda.
+Los ascensores deben entregar en los vestíbulos de distribución de los pisos a los que sirve. No se permiten 
+paradas en descansos intermedios de escaleras.
+Todos  los  ascensores,  sin  importar  el  tipo  de  ediﬁ cación  a  la  que  sirven,  deben  estar  interconectados  con  el 
+sistema de detección y alarma de incendios de la ediﬁ cación, que no permita el uso de los mismos en caso de 
+incendio, enviándolos automáticamente al nivel de salida.
+Todos los ascensores que comuniquen más de 7 pisos, medidos a partir del nivel del acceso desde la vía pública, 
+deben cumplir con un sistema de llave exclusiva para uso de bomberos, que permita a los bomberos el control 
+del ascensor desde el panel interno, eliminando cualquier dispositivo de llamada del ediﬁ cio.
+
+34.2.  Para el cálculo del número de ascensores, capacidad de las cabinas y velocidad, se debe considerar lo siguiente:
+
+a) 
+b) 
+c) 
+d) 
+e) 
+f) 
+
+Uso del ediﬁ cio.
+Número de pisos, altura de piso a piso y altura total.
+Área útil de cada piso.
+Número de ocupantes por piso.
+Número de personas visitantes.
+Tecnología a emplear.
+
+34.3  El  cálculo  del  número  de  ascensores  es  responsabilidad  del  profesional  responsable  y  del  fabricante  de  los 
+equipos. Este cálculo forma parte de los documentos del proyecto, considerando lo previsto en la Norma EM.070, 
+Transporte Mecánico del RNE.
+
+Artículo 35.- Elementos de protección para aberturas en altura
+Todas  las  aberturas  al  exterior,  mezanines,  costados  abiertos  de  escaleras,  descansos,  pasajes  abiertos,  rampas, 
+balcones, terrazas, y ventanas de ediﬁ cios, que se encuentren a una altura superior a 1.00 m sobre el suelo adyacente 
+deben estar provistas de barandas o antepechos de solidez suﬁ ciente para evitar la caída fortuita de personas, debiendo 
+tener las siguientes características:
+
+a) 
+
+b) 
+
+c) 
+
+d) 
+
+e) 
+
+Una altura mínima de 1.00 m, medida desde el nivel de piso interior terminado. En caso de tener una diferencia 
+sobre  el  suelo  adyacente  de  11.00  m  o  más,  la  altura  es  de  1.10  m  como  mínimo.  En  el  caso  de  azotea,  la 
+altura es de 1.10 m como mínimo. Deben resistir una sobrecarga horizontal, aplicada en cualquier punto de su 
+estructura, superior a 50 kg por metro lineal, salvo en el caso de áreas de uso común en ediﬁ cios de uso público 
+en que dicha resistencia no puede ser menor a 100 kg por metro lineal.
+En los tramos inclinados de escaleras la altura mínima de baranda es de 0.85 m medida verticalmente desde la 
+arista entre el paso y el contrapaso.
+Las barandas transparentes y abiertas tienen sus elementos de soporte u ornamentales dispuestos de manera 
+tal que no permitan el paso de una esfera de 0.15 m de diámetro entre ellos.
+Se exceptúan de lo dispuesto en este artículo las áreas cuya función se impide con la instalación de barandas o 
+antepechos, tales como andenes de descarga.
+No aplica para muro cortina de las ediﬁ caciones.
+
+ 
+El Peruano / 
+
+   Jueves 8 de julio de 2021
+
+NORMAS LEGALES
+
+19
+
+ACONDICIONAMIENTO DE LOS AMBIENTES DE LA EDIFICACIÓN
+
+CAPÍTULO VI
+
+Artículo 36.- Iluminación natural
+
+36.1   Los  ambientes  de  las  ediﬁ caciones  cuentan  con  componentes  que  aseguren  la  iluminación  natural  necesaria 
+para el uso por sus ocupantes. Los vanos tienen un área suﬁ ciente como para garantizar un nivel de iluminación 
+en función al uso proyectado. Se permite la iluminación natural por medio de teatinas o tragaluces.
+
+36.2   Los ambientes destinados a cocinas, servicios sanitarios, pasajes de circulación, depósitos y almacenamiento 
+
+pueden iluminar a través de otros ambientes.
+
+36.3   Los  pasajes  de  circulación  que  sirven  para  evacuación,  y  en  general  las  rutas  de  evacuación  pueden  tener 
+
+iluminación natural, iluminación artiﬁ cial o una combinación de ambas.
+
+Artículo 37.- Iluminación artiﬁ cial
+Todos los ambientes de la ediﬁ cación cuentan con medios artiﬁ ciales de iluminación en los que las luminarias factibles de 
+ser instaladas deben proporcionar los niveles de iluminación para la función que se desarrolla en ellos.
+
+Artículo 38.- Ventilación natural
+
+38.1   Todos los ambientes deben tener al menos un vano que permita la entrada de aire desde el exterior. Los ambientes 
+destinados  a  servicios  sanitarios,  pasajes  de  circulación,  depósitos,  cuartos  de  control,  ambientes  que  por 
+razones de seguridad no puedan tener acceso a vanos al exterior, halls, ambientes en sótanos y almacenamiento 
+o donde se realicen actividades en los que ingresen personas de manera eventual, pueden tener una solución de 
+ventilación mecánica a través de ductos exclusivos u otros ambientes.
+
+38.2   Los elementos de ventilación de los ambientes deben tener el área de abertura del vano hacia el exterior no 
+
+menor al 5% de la superﬁ cie de la habitación que se ventila. 
+
+38.3   Los patios o pozos de luz deben cubrir el requerimiento de iluminación y ventilación de cada uso, pueden estar 
+techados en el último nivel con una cubierta transparente y dejando un área abierta para ventilación, a los lados, 
+superior al 50% del área del pozo. Esta cubierta no reduce el área libre.
+
+Artículo 39.- Ventilación por sistemas mecánicos
+
+39.1   Los  ambientes  que  en  su  condición  de  funcionamiento  normal  no  tengan  ventilación  directa  hacia  el  exterior, 
+
+deben contar con un sistema mecánico de renovación de aire. 
+
+39.2   Los servicios sanitarios, almacenes y depósitos pueden ser ventilados por medios mecánicos o mediante ductos 
+
+de ventilación.
+
+Artículo 40.- Sistemas de aire acondicionado
+
+40.1   Los sistemas de aire acondicionado proveen aire a una temperatura de 24°C ± 2°C, medida en bulbo seco y una 
+humedad relativa de 50% ± 5%. Los sistemas tienen ﬁ ltros mecánicos para tener una adecuada limpieza del aire.
+40.2   En  los  locales  en  que  se  instale  un  sistema  de  aire  acondicionado,  que  requiera  condiciones  herméticas,  se 
+instalan rejillas de ventilación de emergencia hacia áreas exteriores con un área cuando menos del 2% del área 
+del ambiente.
+
+Artículo 41.- Aislamiento térmico
+
+41.1   Los  ambientes  deben  contar  con  un  grado  de  aislamiento  térmico  y  acústico,  del  exterior,  considerando  la 
+
+localización de la ediﬁ cación, que le permita el uso óptimo, de acuerdo con la función que se desarrolla en él.
+
+41.2   Los requisitos para lograr un suﬁ ciente aislamiento térmico, en zonas en las que la temperatura descienda por 
+
+debajo de los 12°Celsius son los siguientes:
+
+a) 
+
+b) 
+
+Los paramentos exteriores deben ejecutarse con materiales aislantes que permitan mantener el nivel de confort 
+al interior de los ambientes, bien sea por medios mecánicos o naturales.
+Las puertas y ventanas al exterior deben permitir un cierre hermético.
+
+Artículo 42.- Aislamiento acústico
+
+42.1   Los ambientes en los que se desarrollen funciones generadoras de ruido deben ser aislados de manera que no 
+
+interﬁ eran con las funciones que se desarrollen en las ediﬁ caciones vecinas. 
+
+42.2   Todas  las  instalaciones  mecánicas,  cuyo  funcionamiento  pueda  producir  ruidos  o  vibraciones  molestas  a  los 
+ocupantes de una ediﬁ cación deben estar dotados de los dispositivos que aíslen las vibraciones de la estructura, 
+y contar con el aislamiento acústico que evite la transmisión de ruidos molestos hacia el exterior.
+
+Artículo 43.- Residuos sólidos
+
+43.1   Las  ediﬁ caciones  deben  implementar  ambientes  para  almacenamiento  de  residuos  sólidos  en  contenedores 
+
+necesarios para la cantidad de basura generada en un día por la población, según lo siguiente: 
+
+a) 
+b) 
+
+En uso residencial, la generación diaria de residuos sólidos es de 0.004 m3 (4 litros) por habitante.
+Usos no residenciales en los que no se haya establecido norma especíﬁ ca, a razón de 0.004 m3/m2 techado, sin 
+incluir los estacionamientos. 
+
+43.2   Las características de los ambientes para almacenamiento de residuos sólidos son las siguientes:
+
+a) 
+
+b) 
+c) 
+d) 
+
+Las dimensiones son las necesarias para colocar el número de contenedores necesarios y permitir la manipulación 
+de  los  recipientes  llenos.  Debe  preverse  un  espacio  para  la  colocación  de  carretillas  o  herramientas  para  su 
+manipulación.
+Las paredes y pisos son de materiales de fácil limpieza.
+El sistema de ventilación es natural o mecánico, protegido contra el ingreso de roedores.
+Los  cuartos  que  reciban  basura  a  través  de  ductos  deben  ser  resistentes  al  fuego  por  1  hora  y  disponer  de 
+protección por rociadores.
+
+ 
+20
+
+NORMAS LEGALES
+
+Jueves 8 de julio de 2021 
+
+/
+
+El Peruano 
+
+CAPÍTULO VII
+
+DUCTOS
+
+Artículo 44.- Ductos para ventilación
+Los ductos de ventilación para servicios sanitarios deben cumplir con los siguientes requisitos:
+
+a) 
+
+b) 
+
+c) 
+
+d) 
+
+e) 
+
+Las  dimensiones  de  los  ductos  se  calculan  a  razón  de  0.036  m2  por  inodoro  de  cada  servicio  sanitario  que 
+ventilan por piso, con un mínimo de 0.24 m2.
+Cuando  los  ductos  de  ventilación  alojen  montantes  de  agua,  desagüe  o  electricidad,  deben  incrementarse  la 
+sección del ducto en función del diámetro de los montantes. 
+Cuando los techos sean accesibles para personas, los ductos de 0.36 m2 o más deben contar con un sistema de 
+protección que evite la caída accidental de una persona.
+Los ductos para ventilación, en ediﬁ caciones de más de 15.00 metros de altura, deben contar con un sistema de 
+extracción mecánica en cada ambiente que se sirve del ducto o un sistema de extracción eólica en el último nivel.
+Se  debe  evitar  que  el  incendio  se  propague  por  los  ductos  de  ventilación,  los  cuales  deben  diseñarse  con 
+soluciones  de  tipo  horizontal  o  vertical  con  dispositivos  internos  que  eviten  el  ingreso  de  los  humos  en  pisos 
+superiores  al  del  incendio,  considerando  el  uso  de  trampas  de  humo,  dámpers  o  artefactos  similares  para  el 
+control del mismo.
+
+(cid:55)(cid:85)(cid:68)(cid:80)(cid:83)(cid:68)(cid:3)(cid:71)(cid:72)(cid:3)(cid:75)(cid:88)(cid:80)(cid:82)(cid:86)(cid:3)(cid:72)(cid:81)(cid:3)(cid:71)(cid:88)(cid:70)(cid:87)(cid:82)(cid:86)(cid:3)
+
+Artículo 45.- Ducto para instalaciones
+
+45.1 
+
+Los ductos verticales en los que se alojen montantes de electricidad, comunicaciones y gas deben tener un lado 
+abierto hacia un ambiente de uso común, para la instalación y mantenimiento.
+
+45.2   Los ductos que contengan montantes de agua o desagüe deben estar abiertos en la parte inferior, hacia una zona 
+de acceso libre para efectos de instalación, mantenimiento, reparación o remoción, además de contar en la parte 
+más baja con un sumidero conectado a la red pública del diámetro del montante más grande.
+
+45.3   Estos ductos no pueden ubicarse dentro del vestíbulo previo ni en la caja de escalera.
+
+Artículo 46.- Ductos de residuos sólidos
+
+46.1   Las ediﬁ caciones deben contar con un sistema de recolección y almacenamiento de basura o material residual, 
+
+para lo cual deben tener ambientes para la disposición de los desperdicios.
+
+46.2   El  sistema  de  recolección  de  residuos  sólidos  en  la  ediﬁ cación  puede  ser  mediante  ductos  directamente 
+conectados a un cuarto de almacenamiento, o mediante el empleo de bolsas que se disponen directamente en 
+contenedores, las cuales pueden estar dentro o fuera de la ediﬁ cación, pero dentro del lote.
+
+46.3   En caso de implementar ductos de basura, sus características son las siguientes:
+
+a) 
+
+b) 
+
+c) 
+
+d) 
+
+e) 
+
+Sus dimensiones mínimas de la sección del ducto son: ancho 0.50 m largo 0.50 m, y deben estar revestidos 
+interiormente con material liso y de fácil limpieza.
+La boca de recepción de basura debe estar cubierta con una compuerta metálica contra incendio y estar ubicada 
+de manera que no impida el paso de la descarga de los pisos superiores. No pueden ubicarse en las cajas de 
+escaleras protegidas.
+La  boca  de  recepción  de  basura  debe  ser  atendida  desde  un  espacio  propio  con  puerta  de  cierre,  al  cual  se 
+accede desde el vestíbulo de distribución. La parte inferior de la boca de recepción de basura debe estar ubicada 
+a 0.80 m del nivel de cada piso y tiene una dimensión mínima de 0.40 m por 0.40 m.
+El extremo superior del ducto de basura debe sobresalir por encima del nivel del último techo y estar protegido 
+del ingreso de roedores y de la lluvia, pero permitiendo su fácil ventilación.
+Los ductos de basura deben construirse con materiales resistentes al fuego por 1 hora como mínimo, las puertas 
+que comuniquen al ducto deben contar con un mecanismo de cierre automático y seguro.
+
+CAPÍTULO VIII
+
+OCUPANTES EN UNA EDIFICACIÓN
+
+Artículo 47.- Cálculo del número de ocupantes
+
+47.1   El cálculo de ocupantes de una ediﬁ cación se realiza según lo establecido los índices de ocupación para cada 
+tipo, según las Normas Técnicas A.020, A.030, A.040, A.050, A.060, A.070, A.080, A.090, A.100 y A.110 del RNE.
+47.2   El número de ocupantes es de aplicación exclusiva para el cálculo de las salidas de emergencia, pasajes de 
+
+circulación de personas, ascensores, dotación de servicios sanitarios, ancho y número de escaleras.
+
+47.3   En caso de ediﬁ caciones con dos o más usos se calcula el número de ocupantes correspondiente a cada área 
+según  su  uso.  Cuando  en  una  misma  área  se  contemplen  usos  diferentes  debe  considerarse  el  número  de 
+ocupantes más exigente.
+
+ 
+El Peruano / 
+
+   Jueves 8 de julio de 2021
+
+NORMAS LEGALES
+
+21
+
+CAPÍTULO IX
+
+SERVICIOS SANITARIOS
+
+Artículo 48.- Dotación
+
+48.1  El número de aparatos y servicios sanitarios para las ediﬁ caciones están establecidos en las normas especíﬁ cas 
+
+según cada uso.
+
+48.2  El número y características de los servicios sanitarios accesibles están establecidos en la Norma Técnica A.120, 
+
+Accesibilidad Universal en Ediﬁ caciones del RNE.
+
+48.3   Las ediﬁ caciones que contengan varias unidades inmobiliarias independientes deben contar con medidores de 
+agua por cada unidad. Los controles de medición interna deben estar ubicados en lugares en los que sea posible 
+su lectura desde las áreas comunes.
+
+Artículo 49.- Requisitos mínimos 
+Los servicios sanitarios de las ediﬁ caciones deben cumplir con los siguientes requisitos:
+
+a) 
+
+b) 
+
+c) 
+
+d) 
+e) 
+
+f) 
+g) 
+
+La distancia máxima de recorrido de un usuario para acceder a un servicio sanitario de uso común debe ser de 
+50.00 m siempre que no se indique en las normas especíﬁ cas.
+Los  materiales  de  acabado  de  los  ambientes  para  servicios  sanitarios  deben  ser  antideslizantes  en  pisos  e 
+impermeables en paredes, y de superﬁ cie lavable. 
+Todos los ambientes en los que se instalen servicios sanitarios deben contar con sumideros, para evacuar el 
+agua de una posible inundación.
+Los aparatos sanitarios deben ser de bajo consumo de agua.
+Los sistemas de control de paso del agua, en servicios sanitarios de uso público, deben ser de cierre automático 
+o de válvula ﬂ uxométrica.
+Debe evitarse el registro visual del interior de los ambientes con servicios sanitarios de uso público.
+Las  puertas  de  los  ambientes  con  servicios  sanitarios  de  uso  público  deben  contar  con  un  sistema  de  cierre 
+automático mediante brazo hidráulico.
+
+CAPÍTULO X
+
+ESTACIONAMIENTOS
+
+Artículo 50.- Características 
+
+50.1   Los estacionamientos vehiculares que deben considerarse son para automóviles y camionetas para el transporte 
+
+de personas con hasta 7 asientos. 
+
+50.2   Para el estacionamiento de otro tipo de vehículos con mayor capacidad, es requisito efectuar los cálculos de 
+
+espacios de estacionamiento y maniobras según sus características.
+
+Artículo 51.- Dotación 
+
+51.1   Toda  ediﬁ cación  debe  proyectarse  con  una  dotación  mínima  de  estacionamientos  dentro  del  lote  en  que  se 
+ediﬁ ca, de acuerdo a su uso y según lo establecido en el Plan de Desarrollo Urbano. Estos espacios pueden 
+estar ubicados en sótano, semisótano, a nivel del suelo o en piso alto y constituyen un uso complementario al 
+uso principal de la ediﬁ cación.
+
+51.2   Los estacionamientos están ubicados dentro de la misma ediﬁ cación a la que sirven, y solo en casos excepcionales 
+
+por déﬁ cit de estacionamiento, se ubican en predios distintos.
+
+Articulo 52.- Excepción de requerimiento de estacionamientos dentro del predio
+
+52.1   Las presentes excepciones se dan, cuando no es posible el acceso de los vehículos requeridos al inmueble que 
+
+requiere estacionamientos, por alguno de los siguientes motivos:
+
+a) 
+b) 
+
+c) 
+d) 
+e) 
+
+f) 
+
+g) 
+h) 
+
+Por estar el inmueble frente a una vía peatonal.
+Por tratarse de remodelaciones de inmuebles con o sin cambio de uso, que no permitan colocar la cantidad de 
+estacionamientos requerida.
+Proyectos o programas de densiﬁ cación urbana.
+Intervenciones en monumentos históricos o inmuebles de valor monumental.
+Ediﬁ caciones nuevas en zonas monumentales, en las que la ejecución de obras en el subsuelo, ponga en peligro 
+las ediﬁ caciones vecinas.
+En lotes de tamaño menor al lote normativo, que en la obra nueva no permita la colocación de parqueos para 
+lograr su máxima coeﬁ ciente de construcción.
+Existencia de árbol en la vía pública que no permita el acceso al cajón de estacionamiento.
+Otros, que estén contemplados en el Plan de Desarrollo Urbano.
+
+52.2   Los espacios de estacionamientos requeridos son adquiridos para la aprobación del proyecto de ediﬁ cación en 
+predios que se encuentren a una distancia no mayor a 300.00 m de la ediﬁ cación que origina el déﬁ cit, mediante 
+la modalidad que establezca el Gobierno Local correspondiente, o resolverse de acuerdo a lo establecido en el 
+Plan de Desarrollo Urbano. 
+
+Artículo 53.- Condiciones de las zonas de estacionamientos
+
+53.1   Las zonas destinadas a estacionamiento de vehículos deben cumplir con las siguientes condiciones:
+
+a) 
+
+El acceso y salida a una zona de estacionamiento puede proponerse de manera conjunta o separada. El ingreso 
+de vehículos debe respetar las siguientes dimensiones entre paramentos:
+
+Estacionamiento exclusivo para uso de vivienda, oﬁ cinas y hospedaje
+1)  Hasta 40 vehículos 
+2)  De 41 a 60 vehículos  
+3)  De 61 hasta 500 vehículos 
+4)  Más de 500 vehículos  
+
+3.00 m.
+3.25 m.
+6.00 m.
+12.00 m. 
+
+: 
+:  
+: 
+: 
+
+ 
+ 
+ 
+ 
+ 
+22
+
+b) 
+
+c) 
+
+d) 
+
+e) 
+
+NORMAS LEGALES
+
+Jueves 8 de julio de 2021 
+
+/
+
+El Peruano 
+
+Estacionamiento para comercio y otros
+
+1)  Hasta 40 vehículos 
+2)  De 41 a 300 vehículos  
+3)  Más de 300 vehículos 
+
+: 
+: 
+: 
+
+3.25 m.
+6.00 m.
+12.00 m. 
+
+(en uno o dos accesos)
+
+(*) Para efectos del cálculo no se computan las motos ni bicicletas.
+
+Las puertas de los ingresos a estacionamientos pueden estar ubicadas en el límite de propiedad siempre que 
+la apertura de la puerta no invada la vereda, de lo contrario deben estar ubicadas a una distancia suﬁ ciente que 
+permita la apertura de la puerta sin interferir con el tránsito de personas por la vereda.
+Las rampas de acceso a sótanos, semisótanos o pisos superiores deben tener una pendiente no mayor a 15% 
+y  superﬁ cie  rugosa  o  bruñada.  Las  rampas  deben  iniciarse  a  una  distancia  mínima  de  3.00  m  del  límite  de 
+propiedad, cuya pendiente máxima de 6%.
+Los  accesos  de  vehículos  a  zonas  de  estacionamiento  pueden  estar  ubicados  en  los  retiros,  siempre  que  la 
+solución no afecte el tránsito de vehículos por la vía desde la que se accede.
+El radio de giro de las rampas debe ser de 5.00 m medidos al eje del carril de circulación vehicular.
+
+53.2   El acceso a estacionamientos con más de 150 vehículos puede cortar la vereda, para lo cual deben contar con 
+
+rampas a ambos lados. De existir una berma o jardín debe desarrollarse una rampa en esta sección.
+
+Artículo 54.- Diseño de espacios de estacionamientos
+
+54.1  Se considera uso privado a todo aquel estacionamiento que forme parte de un proyecto de vivienda, hospedaje, 
+
+servicios, oﬁ cinas y/o cualquier otro uso que demande una baja rotación. 
+Las características de los espacios de estacionamientos de uso privado son las siguientes: 
+
+a) 
+
+Dimensiones libres mínimas del cajón de estacionamiento:
+
+Descripción
+
+Estacionamiento individual
+
+02 Estacionamientos contiguos
+
+03 o más estacionamientos contiguos
+
+Estacionamiento en paralelo
+
+Cuadro N° 03
+
+Ancho de
+cajón
+
+2.70 m
+
+2.50 m
+
+2.40 m
+
+2.40 m
+
+Largo de
+cajón
+
+Altura
+libre
+
+5.00 m (*)
+
+2.10 m (***)
+
+5.40 m (**)
+
+2.10 m
+
+(*) El cajón puede desarrollarse en una pendiente de hasta 6%.
+(**) El estacionamiento paralelo en esquina sin posibilidad de estacionar en retroceso debe tener una longitud 7.20 m (Gráﬁ co A). 
+
+b) 
+
+c) 
+
+d) 
+e) 
+
+f) 
+
+g) 
+
+Los  elementos  estructurales  y  de  instalaciones  pueden  ocupar  hasta  el  5%  del  ancho  del  estacionamiento, 
+cuando éste presenta dimensiones mínimas; en dicho supuesto, estos elementos no deben colocarse dentro de 
+la zona de 2.80 m respecto del eje transversal del cajón de estacionamiento (Gráﬁ co C).
+La distancia mínima entre los espacios de estacionamiento opuestos o entre la parte posterior de un espacio de 
+estacionamiento y la pared de cierre opuesta son de 6.00 m (Gráﬁ co B). 
+No se permite estacionamiento en zonas que formen parte de la ruta de evacuación
+El estacionamiento doble, en el que se ubica un vehículo tras otro, se contabilizan para alcanzar el número de 
+estacionamientos exigido en el Plan de Desarrollo Urbano, pero constituyen una sola unidad inmobiliaria. En este 
+caso, su longitud puede ser 9.50 m.
+No se deben ubicar espacios de estacionamiento en un radio de 10.00 m de un hidrante ni a 3.00 m de una 
+conexión de bomberos (siamesa de inyección).
+En  caso  se  ubiquen  estacionamientos  en  ángulo  respecto  del  eje  de  la  maniobra,  se  toma  las  dimensiones 
+señaladas en el Gráﬁ co D.
+
+54.2  Se considera uso púbico a todo aquel estacionamiento que sea complemento de ediﬁ caciones comprendidas en 
+las tipologías deﬁ nidas en las Normas Técnicas A.040, A.050, A.060, A.070, A.090, A.100 y A.110 del RNE y para 
+ediﬁ caciones dedicadas exclusivamente a estacionamiento de vehículos.
+Las características de los espacios de estacionamientos de uso público son las siguientes: 
+
+a) 
+
+Dimensiones libres mínimas del cajón de estacionamiento:
+
+Cuadro N° 04
+
+Descripción
+
+Ancho de
+cajón
+
+Largo de
+cajón
+
+Altura
+libre
+
+Estacionamiento individual
+
+02 Estacionamientos contiguos
+
+03 o más estacionamientos contiguos
+
+Estacionamiento en paralelo
+
+3.00 m
+
+2.60 m
+
+2.50 m
+
+2.50 m
+
+5.00 m (*)
+
+2.10 m
+
+6.00 m (**)
+
+2.10 m
+
+(*) El cajón puede desarrollarse en una pendiente de hasta 6%.
+(**) Estacionamiento paralelo en esquina sin posibilidad de estacionar en retroceso el largo 7.20 m. (Graﬁ co A). 
+
+ 
+ 
+ 
+ 
+El Peruano / 
+
+   Jueves 8 de julio de 2021
+
+NORMAS LEGALES
+
+23
+
+b) 
+
+c) 
+
+d) 
+
+e) 
+
+f) 
+
+Los  elementos  estructurales  y  de  instalaciones  pueden  ocupar  hasta  el  5%  del  ancho  del  estacionamiento, 
+cuando éste presenta dimensiones mínimas; en dicho supuesto, no deben colocarse dentro de la zona de 2.80 
+m respecto del eje transversal del cajón de estacionamiento (Gráﬁ co C).
+La distancia mínima entre los espacios de estacionamiento opuestos o entre la parte posterior de un espacio de 
+estacionamiento y la pared de cierre opuesta son de 6.50 m (Gráﬁ co B).
+Los espacios de estacionamiento no deben invadir, ni ubicarse frente a las rutas de ingreso o evacuación de las 
+personas. 
+No  se  debe  ubicar  espacios  de  estacionamiento  en  un  radio  de  10.00  m  de  un  hidrante  ni  a  3.00  m  de  una 
+conexión de bomberos (siamesa de inyección).
+Debe considerarse en el acceso y circulación, el ancho, altura y radio de giro de las unidades del Cuerpo de 
+Bomberos.
+
+(cid:24)(cid:17)(cid:23)(cid:19)(cid:3)(cid:18)(cid:3)(cid:25)(cid:17)(cid:19)(cid:19)(cid:3)
+
+(cid:21)(cid:17)(cid:23)(cid:19)(cid:3)(cid:18)(cid:3)(cid:21)(cid:17)(cid:24)(cid:19)(cid:3)
+
+(cid:3)
+(cid:3)
+(cid:3)
+
+(cid:42)(cid:85)(cid:105)(cid:73)(cid:76)(cid:70)(cid:82)(cid:3)(cid:36)(cid:3)
+
+(cid:42)(cid:85)(cid:105)(cid:73)(cid:76)(cid:70)(cid:82)(cid:3)(cid:37)(cid:3)
+
+(cid:42)(cid:85)(cid:105)(cid:73)(cid:76)(cid:70)(cid:82)(cid:3)(cid:38)(cid:3)
+
+ 
+24
+
+(cid:3)
+
+(cid:3)
+(cid:3)
+(cid:3)
+
+NORMAS LEGALES
+
+Jueves 8 de julio de 2021 
+
+/
+
+El Peruano 
+
+(cid:42)(cid:85)(cid:105)(cid:73)(cid:76)(cid:70)(cid:82)(cid:3)(cid:38)(cid:3)
+
+(cid:3)
+
+(cid:42)(cid:85)(cid:105)(cid:73)(cid:76)(cid:70)(cid:82)(cid:3)(cid:39)(cid:3)
+
+Artículo 55.- Ventilación en zonas de estacionamientos
+
+55.1   La ventilación de las zonas de estacionamiento de vehículos, cualquiera sea su dimensión debe estar garantizada, 
+
+de manera natural o mecánica. 
+
+55.2   Las zonas de estacionamiento dependiendo del número de sótanos y de la rotación de vehículos derivada de la 
+
+frecuencia de uso y de la existencia o no de medios naturales de ventilación cruzada.
+
+55.3   A partir del cuarto sótano, también debe dotarse de sistemas de inyección de aire fresco.
+
+Artículo 56.- Uso de montavehículos y sistemas mecanizados
+
+56.1   El número de montavehículos es sustentado con una memoria de cálculo de tráﬁ co, sobre la base de un tiempo 
+estimado de espera menor a 5 minutos. El ingreso al montavehículos, debe contar con un espacio de espera en 
+el lote, ubicado en la zona de ingreso a la ediﬁ cación.
+También  es  permitido  el  uso  de  sistemas  mecánicos  o  robotizados  de  ayuda  (elevadores)  para  permitir 
+estacionamiento de dos o tres niveles (un vehículo sobre el otro) en una sola planta, para semisótanos, sótanos, 
+a nivel de suelo, y en pisos altos.
+
+56.2 
+
+56.3   El uso del montavehículos es permitido para autos, motos y bicicletas.
+
+Artículo 57.- Estacionamientos de bicicletas y motos
+
+57.1 
+
+Los  estacionamientos  para  bicicletas  deben  ubicarse  a  una  distancia  máxima  de  50.00  m  del  acceso  a  la 
+ediﬁ cación. El acceso es en la misma ubicación y usando la misma rampa de acceso vehicular. Las dimensiones 
+libres mínimas requeridas de un módulo de estacionamiento para bicicletas son:
+
+Cuadro N° 05
+
+Ancho
+
+Largo
+
+0.75 m cada uno
+
+2.00 m cada uno
+
+Los módulos deben contar con una estructura de apoyo que permita la sujeción y amarre de las bicicletas. El 
+proyectista puede sustentar soluciones de diseño para la ubicación del número de bicicletas en las ediﬁ caciones, 
+según la dotación requerida.
+
+57.2  En caso se proyecten estacionamientos para motos, las dimensiones libres mínimas requeridas son:
+
+Cuadro N° 06
+
+Ancho
+
+Largo
+
+1.50 m cada uno
+
+2.50 m cada uno
+
+Artículo 58.- Señalización de zonas de estacionamientos 
+
+58.1   En todos los estacionamientos, se debe colocar señalización relativa a los sentidos de la circulación vehicular y de 
+información al peatón. Deben distinguirse los espacios de estacionamiento, así como los pasillos de circulación 
+de vehículos, peatones y las áreas de maniobras. 
+
+58.2   Los accesos que den a la vía pública están dotados de las señales de circulación preceptivas para advertencias 
+
+de peatones y vehículos.
+
+1970636-1
+
+ 
+
