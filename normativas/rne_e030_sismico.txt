@@ -1,0 +1,304 @@
+
+=== RNE NORMA E.030 — DISEÑO SISMORRESISTENTE ===
+=== Reglamento Nacional de Edificaciones — Perú ===
+=== Versión vigente: DS 003-2016-VIVIENDA + modificatoria DS 031-2019-VIVIENDA ===
+=== Fuente: Compilación de conocimiento normativo RNE — referencia profesional ===
+
+ALCANCE: Establece las condiciones mínimas para que las edificaciones diseñadas
+según sus requerimientos tengan un comportamiento sísmico acorde con los principios:
+  1. Evitar pérdida de vidas humanas
+  2. Asegurar la continuidad de los servicios básicos
+  3. Minimizar los daños a la propiedad
+
+PRINCIPIO BÁSICO: El sismo de diseño tiene una probabilidad de 10% de ser
+excedido en 50 años (período de retorno: 475 años).
+
+---
+
+=== CAPÍTULO I — ZONIFICACIÓN SÍSMICA ===
+
+ZONAS SÍSMICAS DEL PERÚ (Art. 10):
+  El país se divide en 4 zonas sísmicas (de mayor a menor peligro):
+
+  +--------+------------------+----------------------------------------+
+  | Zona   | Factor Z         | Departamentos / Regiones              |
+  +--------+------------------+----------------------------------------+
+  | Zona 4 | Z = 0.45         | Lima, Ica, Arequipa, Moquegua,         |
+  |        | (más alta)       | Tacna, Ancash (costa), Ayacucho (costa)|
+  +--------+------------------+----------------------------------------+
+  | Zona 3 | Z = 0.35         | La Libertad, Lambayeque, Piura,        |
+  |        |                  | Tumbes, Loreto (norte), Ucayali,       |
+  |        |                  | partes de Junín, Cusco, Huancavelica   |
+  +--------+------------------+----------------------------------------+
+  | Zona 2 | Z = 0.25         | San Martín, Amazonas, Cajamarca,       |
+  |        |                  | Huánuco, Pasco, partes internas        |
+  +--------+------------------+----------------------------------------+
+  | Zona 1 | Z = 0.10         | Loreto, Madre de Dios, zonas altas    |
+  |        | (más baja)       | amazónicas alejadas de fallas          |
+  +--------+------------------+----------------------------------------+
+
+  LIMA METROPOLITANA: ZONA 4 — Z = 0.45
+
+  Factor Z representa la aceleración máxima del terreno (fracción de g = 9.8 m/s²)
+  con probabilidad de 10% de ser excedida en 50 años.
+  Para Lima: aceleración máxima de diseño = 0.45 × 9.8 = 4.41 m/s²
+
+---
+
+=== CAPÍTULO II — PARÁMETROS DE SITIO ===
+
+PERFIL DE SUELO (Art. 12-15):
+  +-------+---------------------+-------------------------------------------+
+  | Tipo  | Descripción         | Características                          |
+  +-------+---------------------+-------------------------------------------+
+  | S0    | Roca dura           | Vs* > 1500 m/s                           |
+  | S1    | Roca o suelo        | 500 m/s < Vs ≤ 1500 m/s                 |
+  |       | muy rígido          |                                           |
+  | S2    | Suelo intermedio    | 180 m/s < Vs ≤ 500 m/s                  |
+  | S3    | Suelo blando        | Vs ≤ 180 m/s o depósitos de arena        |
+  |       |                     | saturada o arcillas blandas              |
+  | S4    | Condiciones         | Arcillas muy blandas (> 20 m espesor),   |
+  |       | excepcionales       | suelos sueltos saturados — estudio EMS   |
+  +-------+---------------------+-------------------------------------------+
+  *Vs = velocidad de onda de corte promedio en los primeros 30 m
+
+  FACTOR DE AMPLIFICACIÓN DEL SUELO (S) — Para Lima Zona 4:
+  +-------+-------+------------------------------------------+
+  | Suelo | S     | Ts (período predominante del suelo)      |
+  +-------+-------+------------------------------------------+
+  | S0    | 0.80  | Ts = 0.3 s  · TL = 3.0 s               |
+  | S1    | 1.00  | Ts = 0.4 s  · TL = 2.5 s               |
+  | S2    | 1.05  | Ts = 0.6 s  · TL = 2.0 s               |
+  | S3    | 1.10  | Ts = 1.0 s  · TL = 1.6 s               |
+  | S4    | Estudio especial (EMS obligatorio)             |
+  +-------+-------+------------------------------------------+
+
+  SUELOS EN LIMA METROPOLITANA (referencia general):
+    Miraflores / San Isidro (zona litoral): S3 predominante (rellenos y suelos blandos)
+    San Isidro (zona golf): S2 (suelos arenosos compactos)
+    La Molina / Surco (zona alta): S2-S3 (depósitos aluviales)
+    Callao: S3-S4 (suelos portuarios, rellenos, nivel freático alto)
+    Ate / Huachipa: S2 (gravas aluviales del río Rímac)
+    Villa El Salvador / Lurín: S3 (arenas eólicas y marinas)
+    Chorrillos (zona baja): S3 (rellenos y suelos blandos costeros)
+
+  RECOMENDACIÓN: Siempre obtener Estudio de Mecánica de Suelos (EMS) específico
+  del predio antes de diseñar — no usar suelo genérico para proyectos reales.
+
+---
+
+=== CAPÍTULO III — FACTOR DE USO (U) ===
+
+CATEGORÍAS DE EDIFICACIONES (Art. 16):
+  +----------+-------+---------------------------------------------------+
+  | Categoría| U     | Tipo de edificación                              |
+  +----------+-------+---------------------------------------------------+
+  | A1       | Undef.| Hospitales, clínicas, estaciones de bomberos,    |
+  |          | (aislam| cuarteles militares, plantas de agua y energía,  |
+  |          | sísm.)| centros de operaciones de emergencia              |
+  |          |       | → Aislamiento sísmico obligatorio en Zona 4      |
+  +----------+-------+---------------------------------------------------+
+  | A2       | 1.50  | Hospitales menores, colegios, institutos,         |
+  |          |       | centros de salud, almacenes de alimentos          |
+  |          |       | de emergencia, comunicaciones                     |
+  +----------+-------+---------------------------------------------------+
+  | B        | 1.30  | Museos, bibliotecas, archivos, estadios,          |
+  |          |       | establecimientos industriales > 5,000 m²,         |
+  |          |       | edificios de más de 15 pisos                      |
+  +----------+-------+---------------------------------------------------+
+  | C        | 1.00  | Edificaciones comunes: viviendas, oficinas,       |
+  |          |       | hoteles, restaurantes, depósitos,                 |
+  |          |       | instalaciones industriales cuya falla no          |
+  |          |       | compromete la vida de las personas                |
+  +----------+-------+---------------------------------------------------+
+
+  NOTA CLAVE: Edificios de más de 15 pisos son Categoría B (U=1.30).
+  Esto afecta directamente el diseño estructural y el costo de construcción.
+
+AISLAMIENTO SÍSMICO OBLIGATORIO (Art. 16 Nota):
+  Edificaciones Categoría A1 ubicadas en Zona 4: aislamiento sísmico EN BASE obligatorio.
+  (Introducido en modificatoria DS 003-2016 — antes era opcional)
+
+---
+
+=== CAPÍTULO IV — SISTEMAS ESTRUCTURALES ===
+
+COEFICIENTE BÁSICO DE REDUCCIÓN (R0) POR SISTEMA ESTRUCTURAL (Art. 23):
+  +---------------------------------------------+-----+
+  | Sistema Estructural                          | R0  |
+  +---------------------------------------------+-----+
+  | Acero: pórticos especiales resistentes (SMF)| 8   |
+  | Acero: pórticos ordinarios (OMF)            | 4   |
+  | Acero: pórticos con arr. excéntrico (EBF)   | 7   |
+  | Acero: pórticos con arr. concéntrico (SCBF) | 6   |
+  | Concreto armado: muros estructurales         | 6   |
+  | Concreto armado: pórticos                   | 8   |
+  | Concreto armado: dual (pórticos + muros)    | 7   |
+  | Concreto armado: muros de ductilidad limitada| 4   |
+  | Albañilería confinada / armada               | 3   |
+  | Madera (por esfuerzos admisibles)            | 7   |
+  +---------------------------------------------+-----+
+
+  R (definitivo) = R0 × Ia × Ip
+    Ia = factor de irregularidad en altura
+    Ip = factor de irregularidad en planta
+
+SISTEMAS MÁS USADOS EN LIMA PARA EDIFICIOS COMERCIALES/INDUSTRIALES:
+  Naves industriales:     Pórticos de acero + tijerales (R0=8 para SMF)
+  Torres de oficinas:     Concreto dual (pórticos + muros) R0=7
+  Edificios residenciales: Muros de concreto o dual R0=6-7
+  Almacenes logísticos:   Pórticos de acero (naves) R0=6-8
+
+---
+
+=== CAPÍTULO V — IRREGULARIDADES ESTRUCTURALES ===
+
+IRREGULARIDADES EN ALTURA (Tabla 8 — Art. 24):
+  Reducen el factor R:
+  +-------------------------------+--------+
+  | Tipo de Irregularidad         | Ia     |
+  +-------------------------------+--------+
+  | Piso débil (resistencia < 80%)| 0.75   |
+  | Piso blanda (rigidez < 70%)   | 0.75   |
+  | Irregularidad de masa         | 0.90   |
+  | Geometría vertical            | 0.90   |
+  | Discontinuidad del sistema    | 0.80   |
+  | Sin irregularidad             | 1.00   |
+  +-------------------------------+--------+
+
+IRREGULARIDADES EN PLANTA (Tabla 9 — Art. 24):
+  +-------------------------------+--------+
+  | Tipo de Irregularidad         | Ip     |
+  +-------------------------------+--------+
+  | Esquinas entrantes (> 20%)    | 0.90   |
+  | Discontinuidad de diafragma   | 0.85   |
+  | Torsión (Δmáx/Δprom > 1.3)   | 0.75   |
+  | Torsión extrema (> 1.5)       | 0.60   |
+  | Sin irregularidad             | 1.00   |
+  +-------------------------------+--------+
+
+RESTRICCIONES IMPORTANTES (Art. 24):
+  En Zona 4 y Zona 3: NO se permiten estructuras con las siguientes combinaciones:
+  - Irregularidad extrema de torsión + piso débil/blando
+  - Categoría A o B + irregularidades múltiples
+  RECOMENDACIÓN: Diseñar edificios regulares en Lima para maximizar R y reducir refuerzo.
+
+---
+
+=== CAPÍTULO VI — REQUISITOS PARA EDIFICIOS ALTOS EN LIMA ===
+
+DEFINICIÓN DE EDIFICIO ALTO EN E.030:
+  No existe definición explícita, pero la norma establece tratamiento especial para:
+  - Edificios con periodo fundamental T > 3.0 s (generalmente > 25-30 pisos en concreto)
+  - Edificios Categoría B (> 15 pisos → U = 1.30)
+  - Edificios con irregularidades en zona de alta sismicidad
+
+ANÁLISIS DINÁMICO (Art. 28-33):
+  Obligatorio en:
+  - Edificios irregulares (cualquier número de pisos)
+  - Edificios regulares de más de 30 m de altura en Zona 4
+  - Estructuras especiales, puentes, tanques, depósitos
+
+  Métodos:
+  a) Análisis Modal Espectral (más común): CQC o SRSS para combinación de modos
+  b) Análisis Tiempo-Historia (para estructuras especiales/sensibles)
+
+CORTANTE BASAL MÍNIMO (Art. 29):
+  El cortante basal obtenido del análisis dinámico no puede ser menor al:
+  - 80% del cortante estático (estructura regular)
+  - 90% del cortante estático (estructura irregular)
+  Si es menor: escalar todos los resultados dinámicos.
+
+JUNTA DE SEPARACIÓN SÍSMICA (Art. 34):
+  Entre edificios adyacentes o entre partes del mismo edificio:
+  s = 3/4 × (d1 + d2)  donde d1 y d2 son los desplazamientos de cada estructura
+  Mínimo: s/10 = h/500 · mínimo absoluto 3 cm
+  En la práctica Lima: 5-10 cm comunes en edificios medianos; 15-20 cm en torres
+
+DESPLAZAMIENTOS LATERALES ADMISIBLES (Art. 32):
+  Deriva máxima admisible de entrepiso (Δ/h):
+  +-----------------------------+------------------+
+  | Material / Sistema          | Deriva máxima   |
+  +-----------------------------+------------------+
+  | Concreto armado             | 0.007 (7‰)      |
+  | Acero                       | 0.010 (10‰)     |
+  | Albañilería confinada       | 0.005 (5‰)      |
+  | Madera                      | 0.010 (10‰)     |
+  | Edificios con muros rígidos | 0.007           |
+  +-----------------------------+------------------+
+  Ejemplo Lima Zona 4, S3, concreto:
+    Δ/h ≤ 0.007 → Para piso de 3.0 m: despl. relativo máximo = 21 mm
+
+REQUISITOS PARA EDIFICIOS > 50 M DE ALTURA (criterio profesional):
+  - Análisis dinámico obligatorio
+  - Verificación de efectos P-Delta (segundo orden)
+  - Estudio de viento (aunque en Lima no suele controlar el diseño)
+  - EMS profundo con estudio de licuefacción si S3/S4
+  - Revisión por par de ingenieros independientes (recomendado)
+  - Cimentaciones profundas (pilotes en zonas S3): profundidad 15-25 m típico en Lima
+
+---
+
+=== CAPÍTULO VII — CIMENTACIONES EN LIMA (referencia E.030 + E.050) ===
+
+TIPO DE CIMENTACIÓN SEGÚN SUELO Y CARGA:
+  +-------------------+------------------+-----------------------------+
+  | Suelo Lima        | Edificio         | Cimentación típica          |
+  +-------------------+------------------+-----------------------------+
+  | S1 (roca/grava)   | Cualquier altura | Zapatas o plateas           |
+  | S2 (arenogravel.) | Hasta 15 pisos   | Plateas o zapatas conectadas|
+  | S2 (arenogravel.) | > 15 pisos       | Pilotes o platea profunda   |
+  | S3 (arena/arcilla)| Hasta 5 pisos    | Platea compensada           |
+  | S3 (arena/arcilla)| > 5 pisos        | Pilotes o plateas profundas |
+  | S4 (blando)       | Cualquier altura | Pilotes + estudio especial  |
+  +-------------------+------------------+-----------------------------+
+
+  Nivel freático en Lima:
+    Miraflores/San Isidro litoral: 4-8 m profundidad
+    Callao: 1-3 m profundidad (muy superficial)
+    Ate/Huachipa: 8-15 m (favorable para sótanos)
+    La Molina: 15-25 m o más (muy favorable)
+
+CAPACIDAD PORTANTE TÍPICA EN LIMA:
+  Suelos tipo S1 (Ate/Lurín gravas): 3.0-5.0 kg/cm²
+  Suelos tipo S2 (La Molina, San Borja): 2.0-3.5 kg/cm²
+  Suelos tipo S3 (Miraflores, San Isidro litoral): 0.8-1.5 kg/cm²
+
+---
+
+=== CAPÍTULO VIII — IMPLICANCIAS PRÁCTICAS PARA PROYECTOS EN LIMA ===
+
+1. LIMA ZONA 4 ES UNA DE LAS MÁS ALTAS DEL PERÚ:
+   Z=0.45 implica que el diseño sísmico controla la estructura (no viento, no carga vertical).
+   Todo proyecto en Lima debe tener un ingeniero estructural que conozca E.030.
+
+2. SUELO S3 EN ZONAS LITORALES = COSTO ESTRUCTURAL MAYOR:
+   S=1.10 vs S=1.00 → 10% más de fuerza sísmica → más refuerzo en muros y columnas
+   Aumento de costo estructural estimado: 5-10% respecto a S2.
+
+3. EDIFICIOS > 15 PISOS = CATEGORÍA B (U=1.30):
+   30% más de fuerza sísmica que edificio equivalente de < 15 pisos.
+   Implicación: columnas y muros más gruesos → menor área vendible en plantas inferiores.
+   El salto de 15 a 16 pisos puede aumentar costo de estructura 15-25%.
+
+4. DERIVAS Y RESTRICCIONES DE TABIQUERÍA:
+   Deriva máxima de 7‰ en concreto → tabiques de albañilería en muros interiores
+   deben aislarse de la estructura (junta de separación) para no ser dañados.
+   Costo adicional: sistema de tabiques con separación sísmica en toda la altura.
+
+5. JUNTAS SÍSMICAS EN EDIFICIOS IRREGULARES:
+   Edificios en L, T, U o con alas largas: considerar junta sísmica entre módulos.
+   Junta visible en fachada → impacto estético y constructivo.
+
+6. LICUEFACCIÓN EN CALLAO Y ZONA COSTERA:
+   En Callao (S4): riesgo de licuefacción documentado en terremotos pasados.
+   Proyectos en Callao: EMS con análisis de licuefacción obligatorio.
+   Solución: pilotes hasta estrato firme (20-30 m) + platea de cimentación.
+
+7. AISLADORES SÍSMICOS (Categoría A1):
+   Hospitales nuevos en Lima deben tener aislamiento sísmico base.
+   Costo adicional: USD 300-500/m² de área de planta del edificio (solo aisladores).
+   Beneficio: reducción de daño sísmico, continuidad operativa post-sismo.
+
+FUENTE: RNE Norma E.030 — DS 003-2016-VIVIENDA y modificatoria DS 031-2019-VIVIENDA.
+Complementado con Norma E.050 (Suelos y Cimentaciones) y práctica estructural Lima.

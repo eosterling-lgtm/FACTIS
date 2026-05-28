@@ -1,0 +1,609 @@
+
+=== VIVIENDA DE INTERÉS SOCIAL (VIS) — NORMATIVA COMPLETA PERÚ ===
+Compilado: Mayo 2026 | Fuente: MVCS, Fondo MiVivienda, SUNAT, normativa vigente
+Referencia base: DS 003-2015-VIVIENDA, DS 010-2018-VIVIENDA, Ley 27829, Ley 29090
+
+NOTA DE VIGENCIA: Los valores en UIT se actualizan cada año por DS del MEF.
+  UIT 2024 = S/ 5,150   |   UIT 2025 = S/ 5,350   |   UIT 2026 = S/ 5,500 (valor referencial)
+  Siempre verificar el DS MEF del año en curso para UIT vigente.
+
+================================================================================
+
+--- 1. DEFINICIÓN OFICIAL DE VIS Y VIP ---
+
+VIVIENDA DE INTERÉS SOCIAL (VIS):
+  Base legal: Art. 3 del DS 003-2015-VIVIENDA (Reglamento de la Ley VIS)
+              Ley N° 27829 — Ley del Bono Familiar Habitacional (y modificatorias)
+              DS 008-2022-VIVIENDA (última modificación de topes de precio)
+  Definición: Vivienda cuyo valor de adquisición o construcción no supera el tope
+              establecido por el MVCS, dirigida a familias en situación de pobreza
+              o pobreza extrema que no poseen vivienda propia.
+  Precio máximo VIS:  25 UIT
+    Al UIT 2025 (S/ 5,350):  S/ 133,750  ≈  USD 36,000
+    Al UIT 2026 (S/ 5,500):  S/ 137,500  ≈  USD 37,500
+  Nota: el Fondo MiVivienda amplió el concepto de VIS para el Crédito MiVivienda
+        hasta 35 UIT (ver sección 3). La VIS "pura" para Techo Propio/BFH = 25 UIT.
+
+VIVIENDA DE INTERÉS PRIORITARIO (VIP):
+  Base legal: DS 003-2015-VIVIENDA, Art. 3; DS 008-2022-VIVIENDA
+  Definición: Segmento más crítico de la VIS, dirigido a la población de menores
+              ingresos (pobreza extrema). Precio máximo = 14 UIT.
+    Al UIT 2025:  S/ 74,900   ≈  USD 20,000
+    Al UIT 2026:  S/ 77,000   ≈  USD 21,000
+  Nota: VIP es subconjunto de VIS. Todo VIP es VIS pero no todo VIS es VIP.
+
+CUADRO RESUMEN — SEGMENTOS:
+  ┌─────────────────────┬─────────────┬──────────────┬─────────────────────────┐
+  │ Segmento            │ Tope (UIT)  │ Tope S/ 2025 │ Programa principal      │
+  ├─────────────────────┼─────────────┼──────────────┼─────────────────────────┤
+  │ VIP                 │ 14 UIT      │  S/ 74,900   │ Techo Propio (BFH)      │
+  │ VIS / Techo Propio  │ 25 UIT      │  S/ 133,750  │ Techo Propio (BFH)      │
+  │ VIS / MiVivienda    │ 35 UIT      │  S/ 187,250  │ Crédito MiVivienda Verde│
+  └─────────────────────┴─────────────┴──────────────┴─────────────────────────┘
+
+DIFERENCIA CLAVE VIS vs. VIP:
+  VIP (≤ 14 UIT): BFH más alto, familias sin ingresos formales aceptadas,
+                   ubicación típica en proyectos gubernamentales / periurbanos.
+  VIS (14–25 UIT): BFH estándar, familias con ingresos bajos pero formalizables,
+                   más factible en terrenos privados con subsidio BFH.
+  "VIS ampliada" MiVivienda (25–35 UIT): no accede a BFH Techo Propio, pero sí
+                   al Bono del Buen Pagador (BBP) y crédito a tasa subsidiada.
+
+================================================================================
+
+--- 2. PROGRAMAS DEL ESTADO VINCULADOS A VIS ---
+
+=== 2A. TECHO PROPIO ===
+
+Ente rector: Fondo MiVivienda S.A. (sociedad de economía mixta)
+Base legal: Ley N° 27829 (crea BFH); DS 001-2002-VIVIENDA y modificatorias
+Objetivo: Facilitar acceso a vivienda a familias con ingresos hasta S/ 3,626/mes
+          que no poseen vivienda propia y no han recibido subsidio habitacional.
+
+MODALIDADES:
+
+  A. AVN — Adquisición de Vivienda Nueva
+     Descripción: Compra de vivienda nueva construida por promotor privado
+                  habilitado en proyectos inscritos ante el Fondo MiVivienda.
+     Precio del inmueble: desde S/ 60,000 hasta S/ 133,750 (25 UIT @ UIT 2025)
+     BFH que aplica: BFH AVN (ver tabla abajo)
+     Financiamiento complementario: crédito complementario de IFI participante
+     Enganche mínimo: 0% (la diferencia entre BFH y precio = crédito IFI)
+
+  B. CSP — Construcción en Sitio Propio
+     Descripción: El beneficiario ya posee terreno (inscrito en RRPP, sin carga)
+                  y construye vivienda con empresa constructora inscrita.
+     Terreno: debe estar registrado a nombre del beneficiario, libre de cargas.
+     Valor máximo construcción: hasta 25 UIT (S/ 133,750) incluyendo proyecto,
+                                 materiales, mano de obra, y titulación.
+     BFH que aplica: BFH CSP
+
+  C. MMB — Mejoramiento de Vivienda
+     Descripción: Ampliación o mejoramiento de vivienda existente que cumple
+                  condiciones mínimas de habitabilidad (estructura sólida).
+     Valor máximo de obra: S/ 18,450 (valor referencial 2024; actualizable)
+     BFH que aplica: BFH MMB (el más bajo de los tres)
+
+REQUISITOS GENERALES PARA POSTULAR A TECHO PROPIO:
+  1. Ser peruano o extranjero con residencia permanente.
+  2. No ser propietario de vivienda ni de terreno habilitado (ni cónyuge).
+  3. Ingresos familiares brutos ≤ S/ 3,626/mes (verificar actualización anual).
+  4. No haber recibido subsidio habitacional del Estado peruano.
+  5. Contar con DNI vigente (titular y cónyuge/conviviente de ser el caso).
+  6. En AVN: Inscribirse al proyecto elegido y pre-calificar ante IFI.
+  7. En CSP: Presentar título de propiedad del terreno libre de gravámenes.
+
+=== 2B. BONO FAMILIAR HABITACIONAL (BFH) ===
+
+Base legal: Ley N° 27829; DS 001-2002-VIVIENDA y modificatorias sucesivas.
+            DS 008-2022-VIVIENDA (actualiza montos).
+Naturaleza: Subsidio no reembolsable del Estado. No es crédito ni préstamo.
+            Se entrega una sola vez en la vida al núcleo familiar.
+
+MONTOS BFH VIGENTES (referencia 2024–2025, en UIT y S/ al UIT 2025 = S/ 5,350):
+
+  ┌──────────────────────────────┬────────────┬──────────────┬──────────────────┐
+  │ Modalidad                    │ UIT        │ S/ (UIT2025) │ Observación      │
+  ├──────────────────────────────┼────────────┼──────────────┼──────────────────┤
+  │ BFH AVN — precio ≤ 14 UIT   │ 5.0 UIT    │  S/ 26,750   │ Segmento VIP     │
+  │ BFH AVN — precio 14–20 UIT  │ 4.7 UIT    │  S/ 25,145   │ VIS estándar     │
+  │ BFH AVN — precio 20–25 UIT  │ 4.0 UIT    │  S/ 21,400   │ VIS estándar     │
+  │ BFH CSP                     │ 4.7 UIT    │  S/ 25,145   │ En terreno propio│
+  │ BFH MMB                     │ 2.0 UIT    │  S/ 10,700   │ Mejoramiento     │
+  └──────────────────────────────┴────────────┴──────────────┴──────────────────┘
+
+  NOTA IMPORTANTE: Los montos del BFH se ajustan periódicamente por DS.
+  Verificar en: https://www.mivivienda.com.pe (sección Techo Propio) o
+                Resolución Directoral del Fondo MiVivienda vigente.
+
+PROCESO BFH AVN (flujo para desarrollador privado):
+  1. Desarrollador inscribe proyecto ante Fondo MiVivienda (SISFOH).
+  2. Familias postulan, califican ingresos, obtienen Certificado de Inscripción.
+  3. Familia elige vivienda en proyecto habilitado, firma contrato de compraventa.
+  4. Fondo MiVivienda desembolsa BFH directamente al desarrollador.
+  5. IFI (banco/financiera) desembolsa crédito complementario si precio > BFH.
+  6. Desarrollador entrega vivienda terminada (habitable, con servicios).
+
+=== 2C. CRÉDITO MIVIVIENDA ===
+
+Ente rector: Fondo MiVivienda S.A.
+Base legal: Ley N° 26912 (crea Fondo MiVivienda); DS 007-2012-EF y modificatorias.
+Objetivo: Crédito hipotecario a tasa subsidiada para familias que superan el
+          umbral Techo Propio pero necesitan acceso a financiamiento asequible.
+
+CARACTERÍSTICAS:
+  Precio del inmueble: S/ 67,500 hasta S/ 187,250 (aprox. 12.6 UIT – 35 UIT)
+                       (rango exacto varía por resolución vigente del Fondo)
+  Tasa de interés: 7.5%–10% anual en soles (depende de IFI intermediaria)
+                   vs. tasa libre de mercado hipotecario: 10%–15% anual en soles
+  Plazo: hasta 20 años
+  Financiamiento máximo: hasta 90% del valor del inmueble (10% mínimo de enganche)
+  Bono del Buen Pagador (BBP): subsidio adicional no reembolsable de S/ 17,500
+    (precio inmueble ≤ S/ 168,600) o S/ 9,500 (precio ≤ S/ 187,250).
+    Condición BBP: pagar puntualmente primeras 12 cuotas.
+  Moneda: soles (S/) — ya no se otorga en dólares.
+  Edad máxima: que al vencimiento del crédito el titular no supere 70 años.
+
+CRÉDITO MIVIVIENDA VERDE (adicional):
+  Inmuebles con certificación de sostenibilidad (ahorro agua, energía solar, etc.)
+  reciben tasa preferencial adicional de hasta 0.5% anual menos.
+  Incentivo para desarrolladores: diferencial de valor inmueble ~3%–5%.
+
+=== 2D. MICONSTRUCCIÓN ===
+
+Descripción: Crédito para construir en terreno propio, sin acceso a BFH.
+             Complementa CSP cuando los ingresos superan el umbral Techo Propio.
+Monto: hasta S/ 187,250 (35 UIT aprox.)
+Plazo: hasta 15 años
+Intermediario: IFI participantes del Fondo MiVivienda
+Garantía: hipoteca sobre el terreno (debe estar inscrito en RRPP).
+
+================================================================================
+
+--- 3. REQUISITOS URBANÍSTICOS Y ARQUITECTÓNICOS PARA PROYECTOS VIS ---
+
+=== BASE LEGAL ARQUITECTÓNICA ===
+  Norma A.020 del RNE — Vivienda
+  DS 010-2018-VIVIENDA — Reglamento Especial de Habilitación Urbana y Edificación
+  DS 003-2015-VIVIENDA — Reglamento del Programa Techo Propio
+  Ley 29090 — Ley de Regulación de Habilitaciones Urbanas y Edificaciones
+  RDN 010-2006-VIVIENDA/VMCS-DNC (Norma IS.010 — Instalaciones Sanitarias)
+
+=== ÁREA MÍNIMA DE VIVIENDA ===
+
+  VIS estándar (RNE Norma A.020, Art. 5):
+    Área mínima unitaria: 40 m² (área techada útil)
+    Dormitorios mínimos: 1 (sala-comedor, cocina, SS.HH. incluidos)
+
+  VIS con DS 010-2018-VIVIENDA (Reglamento Especial):
+    Área mínima reducida: 35 m² en programas especiales VIS/VIP
+    Altura mínima interior: 2.30 m (igual que RNE A.010)
+    Aplicable solo a proyectos inscriptos como VIS ante el MVCS.
+
+  RESPUESTA DIRECTA: ¿Puede ser menor a 40 m²?
+    SÍ, puede llegar a 35 m² bajo el DS 010-2018-VIVIENDA para proyectos VIS/VIP
+    con tramitación ante MVCS. Para proyectos sin inscripción VIS, el mínimo RNE
+    es 40 m².
+
+=== ZONIFICACIÓN COMPATIBLE CON VIS ===
+
+  Zonas donde SE PUEDE construir VIS (uso residencial):
+    RDM  — Residencial Densidad Media (principal zona VIS Lima)
+    RDA  — Residencial Densidad Alta
+    RDB  — Residencial Densidad Baja (menos común, densidad insuficiente)
+    ZRP  — Zona de Reglamentación Especial con fines residenciales
+    ZRE  — Zona de Reglamentación Especial (previa compatibilidad de uso)
+
+  Zonas NO compatibles:
+    Industrial (I1, I2, I3)
+    Comercial Zonal/Metropolitano sin componente residencial explícito
+    Agrícola
+    Protección Ecológica / Área Verde
+
+  NOTA para Lima Metropolitana:
+    La mayoría de actividad VIS se da en RDM (densidades 500–2,200 hab/ha según
+    PDU distrital). Verificar PDU / plano de zonificación de cada municipio.
+
+=== DENSIDADES ===
+
+  Densidad normativa: definida en PDU/PAT del gobierno local (IMP Lima, PDM).
+  Referencia típica para VIS en RDM Lima:
+    Densidad neta: 500–1,300 hab/ha (varía por distrito)
+    Equivale a: ~140–360 viviendas/ha asumiendo 3.5 hab/vivienda
+    Para proyectos VIS de ~50 m²: 140–360 unidades/ha es el rango habitual.
+
+  En zonas periurbanas (SJL, Villa María del Triunfo, Carabayllo, Puente Piedra):
+    Densidades autorizadas suelen ser RDM o menor; promotores tramitan cambios
+    de zonificación o se acogen a proyectos de habilitación progresiva.
+
+=== ESTACIONAMIENTOS ===
+
+  RNE Norma A.020 (Vivienda) + DS 010-2018-VIVIENDA:
+    Estacionamiento en VIS: NO obligatorio cuando:
+      (a) El proyecto está inscrito como VIS ante el MVCS/Fondo MiVivienda, O
+      (b) Se acoge al DS 010-2018-VIVIENDA (Reglamento Especial), O
+      (c) El PDU distrital exonera a proyectos VIS de la dotación mínima.
+    Para viviendas NO VIS en RDM: 1 estacionamiento c/ 2 viviendas (típico Lima).
+
+  IMPLICANCIA PRÁCTICA:
+    La exoneración de estacionamiento en VIS libera entre 12–18 m² por vehículo,
+    mejorando la ratio de vendible vs. área total y reduciendo costo de estructura.
+
+=== ÁREAS COMUNES MÍNIMAS ===
+
+  RNE Norma A.020 + Norma GH.020 (Componentes de Diseño Urbano):
+    Área libre mínima en multifamiliar: 30% del área del lote (norma general)
+    En proyectos VIS bajo DS 010-2018-VIVIENDA: puede reducirse a 20%
+      (sujeto a aprobación municipal y certificación VIS).
+    Circulaciones: mínimo 1.20 m en pasillos de acceso a viviendas.
+    Hall de ingreso edificio: mínimo 1.80 m × 1.80 m (acceso a escalera).
+    Cuarto de basura: 1 recipiente × cada 5 viviendas; área mínima 0.60 m² × unidad.
+
+=== SERVICIOS BÁSICOS OBLIGATORIOS ===
+
+  Todo proyecto VIS debe contar con:
+    Agua potable: conexión a red pública o sistema colectivo aprobado por SEDAPAL
+                  (o EPS equivalente). Cisterna y/o conexión directa.
+    Desagüe: conexión a red pública o biodigestor aprobado por autoridad sanitaria.
+    Electricidad: conexión a red pública ENOSA/Luz del Sur/Enel/distribuidora local.
+    Gas natural o GLP: no obligatorio en VIS, pero GN favorece calificación Verde.
+    Telecomunicaciones: ductos para cableado estructurado y fibra (obligatorio en
+                        edificaciones > 3 pisos según DS 020-2016-MTC).
+
+================================================================================
+
+--- 4. INCENTIVOS MUNICIPALES Y TRIBUTARIOS ---
+
+=== ALCABALA — PRIMERA VIVIENDA ===
+
+  Base legal: Ley de Tributación Municipal (DS 156-2004-EF), Art. 25 y 26.
+  Regla general: Alcabala = 3% del valor de transferencia (sobre exceso de 10 UIT).
+    Las primeras 10 UIT del valor de transferencia están EXONERADAS de alcabala.
+    Al UIT 2025: primeros S/ 53,500 exonerados → en VIS a S/ 133,750:
+      Base imponible alcabala = S/ 133,750 − S/ 53,500 = S/ 80,250
+      Alcabala = 3% × S/ 80,250 = S/ 2,408 (pagado por el comprador).
+
+  Exoneración adicional primera vivienda:
+    La Ley no otorga exoneración adicional genérica por "primera vivienda".
+    Sin embargo, algunos municipios (via Ordenanza) establecen reducciones del
+    50%–100% de alcabala para compradores en programas Techo Propio.
+    Verificar ordenanza vigente del municipio donde se ubica el proyecto.
+
+=== IMPUESTO A LA RENTA — DEDUCCIÓN DE INTERESES HIPOTECARIOS ===
+
+  Base legal: Ley N° 30734 (2018) — "Ley que reconoce el derecho de las
+             personas naturales a la devolución del IR por intereses hipotecarios".
+             DL 1258 (2016) — modificó LIR, Art. 46.
+  Alcance: personas naturales con renta de quinta o cuarta categoría.
+  Beneficio: deducción de hasta 3 UIT adicionales por concepto de:
+             (a) intereses de crédito hipotecario para primera vivienda,
+             (b) más otros conceptos (alquiler, ESSALUD trabajadores del hogar, etc.)
+    Monto: 3 UIT × 30% = ahorro fiscal anual de hasta 0.9 UIT
+    Al UIT 2025: ahorro máximo ≈ S/ 4,815 anuales.
+  Condición: primera vivienda, crédito hipotecario inscrito en SUNARP.
+  No aplica si: vivienda adquirida al contado o no está hipotecada.
+
+=== BENEFICIOS MUNICIPALES PARA PROYECTOS VIS ===
+
+  Licencias de edificación:
+    DS 010-2018-VIVIENDA, Art. 9: los proyectos VIS inscritos ante el MVCS pueden
+    acogerse a la Licencia de Edificación Modalidad C simplificada.
+    Plazo de revisión: 15 días hábiles (vs. 30–45 días de proyectos estándar).
+    Silencio positivo: si la municipalidad no responde en plazo, la licencia
+                       se considera aprobada (Ley 29090, Art. 26).
+
+  Arbitrios municipales:
+    No existe exoneración legal genérica nacional de arbitrios para VIS.
+    Algunos municipios (SJL, Villa El Salvador, Carabayllo) han establecido
+    vía Ordenanza reducciones del 20%–50% en arbitrios de predios VIS
+    durante los primeros 3 años de habitabilidad.
+
+  Predial:
+    Ley de Tributación Municipal, Art. 17: Predial tasa 0.2%–1% del valor del predio.
+    VIS no tiene exoneración específica de predial a nivel nacional.
+    Excepción: pensionistas (≥ 60 años, ingreso ≤ 1 UIT/mes) → exoneración de 50 UIT
+               de la base imponible del predial (puede aplicar a compradores VIS mayores).
+
+  IGV en venta de primera vivienda VIS:
+    Las ventas de primera vivienda por constructora/inmobiliaria habitual están
+    GRAVADAS con IGV (18%). Sin embargo, en la práctica el precio VIS ya incluye
+    el IGV y el BFH lo financia, por lo que el impacto sobre el comprador final
+    es neutro en los programas Techo Propio.
+    Crédito fiscal IGV para el desarrollador: el promotor puede recuperar el IGV
+    de los insumos de construcción a través del crédito fiscal (IGV de ventas
+    compensado con IGV de compras).
+
+================================================================================
+
+--- 5. MARCO LEGAL COMPLETO ---
+
+  LEY N° 27829 (2002) — Ley del Bono Familiar Habitacional
+    Crea el BFH como subsidio no reembolsable del Estado.
+    Establece el Fondo MiVivienda como ente administrador.
+    Define las modalidades: AVN, CSP (originalmente), MMB.
+    Modificada por: Ley 28309, Ley 28564, Ley 29454, DS 008-2022-VIVIENDA.
+
+  LEY N° 26912 (1998) — Ley de Capitalización Inmobiliaria / Crea Fondo MiVivienda
+    Crea el Fondo MiVivienda como fideicomiso del Estado.
+    Luego convertido en sociedad de economía mixta (Fondo MiVivienda S.A.).
+    Habilita el crédito MiVivienda a través de IFI intermediarias.
+
+  LEY N° 29090 (2007) — Ley de Regulación de Habilitaciones Urbanas y Edificaciones
+    Clasifica modalidades de licencias (A, B, C, D).
+    Introduce silencio positivo para licencias de edificación.
+    Establece los requisitos documentarios para habilitación urbana.
+    Modificada por Ley 29300, Ley 29476, Ley 30494, DL 1426 (2018).
+
+  DECRETO LEGISLATIVO N° 1177 (2015) — Régimen de Arrendamiento para Vivienda
+    Crea el contrato de arrendamiento con opción de compra para vivienda.
+    Establece el "Arrendamiento-Venta" como figura legal.
+    Aplica a vivienda nueva de promotores privados, incluyendo proyectos VIS.
+    Norma reglamentaria: DS 017-2015-VIVIENDA.
+    Relevancia VIS: permite a promotores ofrecer modalidad "alquiler con opción
+                    de compra" en unidades VIS sin financiamiento hipotecario inicial.
+
+  DS 003-2015-VIVIENDA — Reglamento Programa Techo Propio (y modificatorias)
+    Define VIS y VIP (precios tope en UIT).
+    Establece los requisitos del beneficiario y del promotor inscrito.
+    Regula el desembolso del BFH y las responsabilidades post-entrega.
+
+  DS 010-2018-VIVIENDA — Reglamento Especial de Habilitación Urbana y Edificación
+    Norma clave para proyectos VIS: habilita condiciones especiales de diseño.
+    Permite área mínima de 35 m² (vs. 40 m² RNE estándar).
+    Exonera de dotación de estacionamientos en proyectos VIS.
+    Reduce área libre mínima a 20% (vs. 30% en proyectos estándar).
+    Simplifica procedimientos de licencia para proyectos VIS inscritos en MVCS.
+    Establece modalidades de habilitación urbana progresiva.
+
+  DS 008-2022-VIVIENDA — Actualización de valores y topes BFH
+    Actualiza montos del BFH a valores vigentes.
+    Redefine tramos de precio (VIP / VIS) en concordancia con UIT actualizada.
+
+  NORMA A.020 DEL RNE — Vivienda
+    Establece condiciones mínimas de diseño para vivienda unifamiliar y multifamiliar.
+    Área mínima de vivienda: 40 m² (reducible a 35 m² con DS 010-2018-VIVIENDA en VIS).
+    Ambientes mínimos: sala-comedor, cocina, SS.HH., dormitorio(s).
+    Iluminación y ventilación: mínimo 8% del área del ambiente para iluminación,
+                                5% para ventilación (en aplicación de A.010).
+
+  DS 006-2014-VIVIENDA — Plan Nacional de Vivienda "Vivienda para Todos"
+    Marco de política habitacional de mediano plazo.
+    Establece déficit habitacional cuantitativo y cualitativo como objetivos.
+    Define rol del Estado (BFH) y privados (promotores inscritos).
+
+  DL 1351 (2017) / DS 002-2017-VIVIENDA — Bonos de Arrendamiento
+    Bono de Arrendamiento para Vivienda: subsidio al alquiler de vivienda VIS.
+    Monto: hasta 3 UIT/año (S/ 16,050 al UIT 2025).
+    Aplica a familias del Registro Nacional de Beneficiarios del MVCS.
+    (Programa de menor escala, menos masivo que BFH).
+
+================================================================================
+
+--- 6. DISTRITOS DE LIMA CON MAYOR ACTIVIDAD VIS ---
+
+ZONAS DE MAYOR ACTIVIDAD VIS / PROYECTOS TECHO PROPIO:
+
+  ┌──────────────────────────┬──────────┬─────────────────┬──────────────────────┐
+  │ Distrito / Zona          │ Cono     │ Precio terreno  │ Zonificación típica  │
+  │                          │          │ aprox. (US$/m²) │                      │
+  ├──────────────────────────┼──────────┼─────────────────┼──────────────────────┤
+  │ San Juan de Lurigancho   │ Este     │ USD 150–350     │ RDM, algunas RDA     │
+  │ Carabayllo               │ Norte    │ USD 120–250     │ RDM, ZRE             │
+  │ Puente Piedra            │ Norte    │ USD 100–200     │ RDM, RDB             │
+  │ Villa El Salvador        │ Sur      │ USD 150–280     │ RDM                  │
+  │ Villa María del Triunfo  │ Sur      │ USD 130–260     │ RDM                  │
+  │ Lurlurín / Pachacámac    │ Sur      │ USD 90–180      │ RDM, agrícola        │
+  │ Ate (zonas interiores)   │ Este     │ USD 200–400     │ RDM, ZRE             │
+  │ Chorrillos (periferia)   │ Sur      │ USD 200–350     │ RDM                  │
+  │ El Agustino              │ Este     │ USD 250–400     │ RDM, I1 convertible  │
+  └──────────────────────────┴──────────┴─────────────────┴──────────────────────┘
+
+COMPATIBILIDAD TERRENO–PRECIO VIS:
+  Para que un proyecto AVN sea financieramente viable con BFH:
+    El terreno debe permitir una densidad suficiente para amortizar el costo del suelo.
+  Regla práctica:
+    Precio terreno máximo recomendable VIS: USD 200–250/m² de terreno
+    (con densidades de 300–600 viviendas/ha y área vivienda ~45–55 m²)
+    En terrenos a USD 300+/m², el margen se comprime severamente o es inviable.
+
+ZONAS CON PROYECTOS VIS ACTIVOS (referencia 2023–2025):
+  "Los Parques de San Juan" (SJL) — proyectos en copropiedad con APP.
+  "Villa Club" (Pachacámac) — proyecto masivo Besco/Edifica (aprox. 5,000 unidades).
+  Proyectos en Carabayllo km 20–30 Panamericana Norte: varios promotores privados.
+  Ladrillos y bloques en Puente Piedra: proyectos de 4–5 pisos sin ascensor (≤ 5 pisos).
+
+================================================================================
+
+--- 7. ANÁLISIS FINANCIERO DE UN PROYECTO VIS TÍPICO ---
+
+=== SUPUESTOS DEL CASO BASE ===
+  Terreno: 2,500 m² en zona RDM (SJL o Carabayllo)
+  Densidad: 400 viviendas/ha → 100 unidades en 2,500 m²
+  Área vivienda: 45 m² (área techada vendible)
+  Tipología: multifamiliar 5 pisos, sin ascensor, sin estacionamiento
+  Precio de venta: S/ 115,000/unidad (≈ 21.5 UIT @ UIT2025 — dentro de VIS 25 UIT)
+
+ESTRUCTURA DE COSTOS ESTIMADA (por unidad de 45 m²):
+  ┌─────────────────────────────────────┬──────────┬──────────────────────────┐
+  │ Concepto                            │ S/       │ Nota                     │
+  ├─────────────────────────────────────┼──────────┼──────────────────────────┤
+  │ Terreno (USD 200/m² × 2,500 m²     │          │                          │
+  │  ÷ 100 uds × TC 3.75)              │  18,750  │ = USD 5,000/unidad        │
+  │ Construcción (S/ 1,800/m² × 45 m²) │  81,000  │ incl. estructuras, elect,│
+  │                                     │          │ sanitarios, acabados VIS │
+  │ Proyecto + supervisión (4%)         │   3,600  │ sobre costo construcción │
+  │ Habilitación urbana + RRPP          │   2,000  │ trámites, inscripción    │
+  │ Costos comerciales (3%)             │   3,450  │ ventas, marketing        │
+  │ Gastos financieros (3%)             │   3,450  │ costo del capital / IGV  │
+  │ Gastos generales / GG (5%)         │   5,750  │ gastos indirectos        │
+  ├─────────────────────────────────────┼──────────┼──────────────────────────┤
+  │ COSTO TOTAL ESTIMADO / UNIDAD       │ 118,000  │                          │
+  ├─────────────────────────────────────┼──────────┼──────────────────────────┤
+  │ PRECIO DE VENTA                     │ 115,000  │                          │
+  ├─────────────────────────────────────┼──────────┼──────────────────────────┤
+  │ MARGEN BRUTO                        │  -3,000  │ NEGATIVO en este caso    │
+  └─────────────────────────────────────┴──────────┴──────────────────────────┘
+
+  CONCLUSIÓN DEL CASO BASE: Con terreno a USD 200/m², unidades de 45 m² a
+  21.5 UIT, el margen es negativo o nulo. Se necesita optimizar.
+
+=== ESCENARIOS QUE HACEN VIABLE UN VIS ===
+
+  ESCENARIO 1 — Terreno más barato (USD 120/m²):
+    Costo terreno/unidad: S/ 11,250 → Costo total: S/ 110,500 → Margen: +S/ 4,500 (+3.9%)
+    Viable a escala; requiere volumen alto (≥ 200 unidades).
+
+  ESCENARIO 2 — Densidad mayor (600 uds/ha → 150 uds en 2,500 m²):
+    Costo terreno/unidad: S/ 12,500 → Costo total: S/ 112,800 → Margen: +S/ 2,200 (+1.9%)
+    Bajo, solo funciona con costos de estructura muy optimizados.
+
+  ESCENARIO 3 — Precio en borde superior VIS (25 UIT = S/ 133,750):
+    Margen = S/ 133,750 − S/ 118,000 = S/ 15,750 (+13.3%)  ← EL MEJOR ESCENARIO
+    Condición: terreno a USD 200/m² y precio al tope de VIS.
+
+  ESCENARIO 4 — MiVivienda (35 UIT = S/ 187,250):
+    Sale del segmento BFH; aplica BBP (S/ 17,500).
+    Costo construcción puede subir a S/ 2,200/m² (mejores acabados, ~50 m²):
+    Costo total estimado/unidad: S/ 140,000–155,000 → Margen: S/ 32,000–47,000 (+21%–30%)
+    MUCHO MEJOR MARGEN — pero ya no es VIS pura, es el segmento MiVivienda.
+
+COMPARACIÓN VIS vs. RESIDENCIAL ESTÁNDAR:
+  ┌──────────────────────┬───────────────┬──────────────────┬──────────────────┐
+  │ Indicador            │ VIS (25 UIT)  │ MiVivienda (35U) │ Residencial STD  │
+  ├──────────────────────┼───────────────┼──────────────────┼──────────────────┤
+  │ Precio venta/unidad  │ S/ 133,750    │ S/ 187,250       │ S/ 250,000+      │
+  │ Precio venta/m²      │ S/ 2,972/m²   │ S/ 3,745/m²      │ S/ 4,500–8,000   │
+  │ Costo construc./m²   │ S/ 1,700–1,900│ S/ 2,000–2,300   │ S/ 2,200–3,500   │
+  │ Subsidio Estado      │ BFH S/26,750  │ BBP S/17,500     │ Ninguno          │
+  │ Estacionamiento      │ No obligatorio│ Parcial          │ 1 c/1–2 viviendas│
+  │ Área mínima          │ 35–40 m²      │ 40–50 m²         │ 60–100+ m²       │
+  │ Margen bruto est.    │ 3%–14%        │ 18%–28%          │ 20%–40%          │
+  │ Riesgo de ventas     │ Bajo (BFH)    │ Bajo–Medio       │ Medio–Alto       │
+  │ Velocidad de ventas  │ Alta          │ Alta–Media       │ Media            │
+  │ Capital necesario    │ Bajo          │ Medio            │ Alto             │
+  └──────────────────────┴───────────────┴──────────────────┴──────────────────┘
+
+COSTO DE CONSTRUCCIÓN VIS — RANGOS REFERENCIALES (Lima, 2024–2025):
+  Vivienda VIS acabados básicos (4–5 pisos, sin ascensor):  S/ 1,600–1,900/m²
+  Vivienda VIS con certificación sostenible (MiVivienda Verde): S/ 1,900–2,100/m²
+  Comparación: vivienda residencial media Lima: S/ 2,200–2,800/m²
+  Comparación: vivienda premium Miraflores/San Isidro: S/ 3,500–5,000/m²
+
+================================================================================
+
+--- 8. IMPLICACIONES PARA EL DESARROLLADOR ---
+
+=== QUÉ HACE ATRACTIVO UN PROYECTO VIS ===
+
+  1. SEGURIDAD DE PAGO: El BFH lo paga el Estado directamente al promotor.
+     No hay riesgo de que el comprador no consiga financiamiento post-firma.
+     El riesgo crediticio del comprador lo asume la IFI (banco), no el promotor.
+
+  2. VELOCIDAD DE VENTAS: La demanda de VIS es estructuralmente alta y continua.
+     El déficit habitacional de Lima supera 600,000 unidades (cualitativo+cuantitativo).
+     El promotor vende por lotes ("bandas") a medida que cumple etapas constructivas.
+
+  3. PALANCA DE TIERRA BARATA: En zonas periurbanas (Carabayllo, Puente Piedra,
+     SJL) el terreno a USD 100–180/m² hace viable el modelo a 20–25 UIT/unidad.
+
+  4. ESCALA Y VOLUMEN: Un proyecto de 500–1,000 unidades con márgenes del 8%–12%
+     puede generar más TIR que 50 unidades residenciales a 30% de margen si el
+     ciclo de rotación del capital es más rápido (24–30 meses vs. 36–48 meses).
+
+  5. MENOS INVERSIÓN EN PRODUCTO: acabados básicos, sin lobby de lujo, sin lobby
+     de guardianía complejo, sin ascensores en ≤ 5 pisos, sin estacionamiento.
+     Reduce inversión inicial y tiempo de construcción.
+
+  6. FINANCIAMIENTO BANCARIO DISPONIBLE: Banco de la Nación, BCP, BBVA, Scotiabank,
+     Interbank y Caja Huancayo participan activamente como IFI del Fondo MiVivienda.
+     Los bancos están dispuestos a financiar proyectos VIS inscritos ante el Fondo.
+
+=== QUÉ HACE POCO ATRACTIVO UN PROYECTO VIS (RIESGOS Y LIMITACIONES) ===
+
+  1. MARGEN DELGADO: El tope de precio comprime duramente la utilidad.
+     A 25 UIT y terreno > USD 200/m², el proyecto puede ser inviable.
+     Cualquier sobrecosto de construcción, retraso o subida de insumos lo destruye.
+
+  2. BUROCRACIA DE INSCRIPCIÓN: El promotor debe inscribirse ante el Fondo MiVivienda
+     como "Entidad Técnica" o "Promotor habilitado". Proceso: 30–90 días.
+     Requiere cumplir normas de diseño VIS, auditorías de obra, informes de avance.
+
+  3. RESTRICCIONES DE PRECIO: No se puede subir el precio después de la inscripción.
+     Si los costos de construcción suben (acero, cemento), el promotor absorbe el delta.
+
+  4. RESTRICCIONES DE TERRENO PARA CSP: el beneficiario debe tener terreno propio
+     inscrito en RRPP. En zonas informales (AA.HH. sin saneamiento) el BFH no aplica
+     hasta que el terreno esté titulado (involucrar a COFOPRI puede tomar años).
+
+  5. DEPENDENCIA DEL PRESUPUESTO ESTATAL: el BFH depende de asignación presupuestal
+     anual del MEF al Fondo MiVivienda. En años de ajuste fiscal, el cupo de BFH
+     puede agotarse o reducirse, dejando proyectos en marcha sin desembolso.
+
+  6. UBICACIÓN PERIFÉRICA: zonas compatibles con VIS suelen tener déficit de
+     infraestructura (vías, transporte, colegios). Esto no afecta la viabilidad
+     legal, pero sí la percepción de valor y la velocidad de ventas a largo plazo.
+
+=== CUÁNDO TIENE SENTIDO HACER VIS (vs. Proyecto Estándar) ===
+
+  HACER VIS cuando:
+    - Se tiene acceso a terreno a USD 100–180/m² en zona RDM periurbana.
+    - Se puede escalar a 200+ unidades (economías de escala en construcción).
+    - El promotor ya está inscrito o puede inscribirse en el Fondo MiVivienda.
+    - El modelo de negocio es rotación de capital rápida, no margen unitario alto.
+    - Se tiene equipo con experiencia en gestión de proyectos Techo Propio / BFH.
+    - Se busca posicionamiento social / ESG (impacto, acceso a fondos verdes).
+
+  NO HACER VIS cuando:
+    - El terreno cuesta > USD 250/m² (el modelo no cierra).
+    - El proyecto es < 100 unidades (burocracia no se amortiza).
+    - No se tiene experiencia con el Fondo MiVivienda (aprendizaje costoso).
+    - La zona tiene problemas de saneamiento / títulos / riesgo geológico.
+    - Se busca margen > 20% unitario (ir a MiVivienda 35 UIT o residencial estándar).
+
+  EL "SWEET SPOT" PERUANO: segmento MiVivienda (25–35 UIT, S/133,750–187,250)
+    No es VIS pura (sin BFH pleno), pero combina:
+    - BBP estatal (S/17,500) que apalanca las ventas.
+    - Mejor margen que VIS pura (18%–28% vs. 3%–14%).
+    - Menor riesgo que residencial estándar.
+    - Alta demanda sostenida (NSE C y D con empleo formal).
+    Este segmento es donde la mayoría de promotores privados medianos se posiciona.
+
+================================================================================
+
+--- GLOSARIO RÁPIDO ---
+
+  AVN     : Adquisición de Vivienda Nueva (modalidad Techo Propio)
+  BBP     : Bono del Buen Pagador (subsidio MiVivienda por pago puntual)
+  BFH     : Bono Familiar Habitacional (subsidio no reembolsable Techo Propio)
+  CSP     : Construcción en Sitio Propio (modalidad Techo Propio)
+  DL      : Decreto Legislativo (emitido por el Ejecutivo con delegación)
+  DS      : Decreto Supremo (norma reglamentaria del Poder Ejecutivo)
+  EPS     : Empresa Prestadora de Servicios de Saneamiento (agua/desagüe)
+  IFI     : Institución Financiera Intermediaria (banco que canaliza crédito)
+  IMP     : Instituto Metropolitano de Planificación (Lima Metropolitana)
+  MEF     : Ministerio de Economía y Finanzas
+  MMB     : Mejoramiento de Vivienda (modalidad Techo Propio)
+  MVCS    : Ministerio de Vivienda, Construcción y Saneamiento
+  NSE     : Nivel Socioeconómico
+  PAT     : Plan de Acondicionamiento Territorial
+  PDU     : Plan de Desarrollo Urbano
+  RDA     : Residencial Densidad Alta (zonificación)
+  RDB     : Residencial Densidad Baja (zonificación)
+  RDM     : Residencial Densidad Media (zonificación)
+  RNE     : Reglamento Nacional de Edificaciones
+  RRPP    : Registros Públicos (SUNARP)
+  SISFOH  : Sistema de Focalización de Hogares (base de datos de pobreza MEF)
+  SUNARP  : Superintendencia Nacional de Registros Públicos
+  TC      : Tipo de cambio (S/ por USD)
+  TIR     : Tasa Interna de Retorno
+  UIT     : Unidad Impositiva Tributaria (DS MEF, actualización anual enero)
+  VIP     : Vivienda de Interés Prioritario (tope ≤ 14 UIT)
+  VIS     : Vivienda de Interés Social (tope ≤ 25 UIT para Techo Propio)
+  ZRE     : Zona de Reglamentación Especial
+  ZRP     : Zona de Recreación Pública
+
+================================================================================
+FIN DEL DOCUMENTO
+Actualizar valores UIT y montos BFH anualmente (enero de cada año).
+Última revisión: Mayo 2026
+================================================================================

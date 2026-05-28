@@ -1,0 +1,271 @@
+
+=== RNE NORMA A.070 — COMERCIO ===
+=== Reglamento Nacional de Edificaciones — Perú ===
+=== Vigente: DS 011-2006-VIVIENDA y modificatorias ===
+=== Fuente: Compilación de conocimiento normativo RNE — referencia profesional ===
+
+ALCANCE: Edificaciones destinadas a actividades de intercambio comercial de bienes
+y servicios, tanto minoristas como mayoristas. Incluye tiendas, galerías, centros
+comerciales, supermercados, mercados, restaurantes y locales afines.
+
+---
+
+=== CAPÍTULO I — CLASIFICACIÓN Y TIPOLOGÍAS ===
+
+TIPOS DE EDIFICACIÓN COMERCIAL (Art. 3):
+
+  TIENDA INDEPENDIENTE:
+    Establecimiento comercial en predio independiente o en edificio de usos mixtos.
+    Una o múltiples plantas. No forma parte de centro comercial.
+
+  GALERÍA COMERCIAL:
+    Conjunto de locales comerciales agrupados en edificio, con circulación común interna.
+    Puede ser horizontal (galerías peatonales) o vertical (galerías en altura).
+
+  TIENDA POR DEPARTAMENTOS (DEPARTAMENTOS STORE):
+    Gran superficie comercial con múltiples categorías de productos bajo una marca.
+    Generalmente ancla de centros comerciales.
+
+  CENTRO COMERCIAL:
+    Conjunto de locales y/o tiendas con gestión común, estacionamientos compartidos,
+    áreas de servicios comunes y administración centralizada.
+    Incluye: mall, power center, strip mall, outlet.
+
+  SUPERMERCADO:
+    Establecimiento de autoservicio alimentario de gran superficie.
+
+  MERCADO MAYORISTA:
+    Establecimiento para comercio en volumen, con descarga y almacenamiento intensivo.
+
+  MERCADO MINORISTA:
+    Mercado público o privado de abasto, con puestos individuales.
+
+  RESTAURANTE / COMIDA RÁPIDA / PATIO DE COMIDAS:
+    Clasificados según capacidad de atención, tipo de preparación y aforo.
+
+---
+
+=== CAPÍTULO II — CONDICIONES DE DISEÑO ===
+
+ALTURA MÍNIMA (Art. 8):
+  Edificaciones comerciales: 3.00 m piso terminado a cielo raso
+  Primera planta de centro comercial / supermercado: 4.00-5.00 m (práctica de mercado)
+  Tiendas ancla: 6.00-8.00 m libres (exigencia de operadores internacionales)
+
+RETIROS (según PDU municipal):
+  Zona comercial en Lima — valores típicos:
+    Retiro frontal:    5.00 m (avenidas principales) / 0-3 m (calles locales)
+    Retiro lateral:    0-3 m (depende de zonificación y tipo de vía)
+    Retiro posterior:  3.00 m
+  Centros comerciales: retiro frontal generalmente absorbido por playa de estacionamiento
+  Strip malls / Power Centers: frente comercial sobre línea de propiedad o con retiro mínimo
+
+ACCESOS (Art. 11):
+  Acceso independiente para público y para personal/proveedores
+  Acceso para vehículos: separado del acceso peatonal
+  Galerías comerciales: el ingreso puede ser también salida en establecimientos < 1,000 m²
+  Centros comerciales: mínimo 2 accesos en fachadas distintas para locales > 5,000 m² de área útil
+
+CIRCULACIONES INTERNAS (Art. 12):
+  Pasaje de circulación principal (galería/mall): mínimo 3.00 m de ancho
+  Pasaje de circulación secundario:              mínimo 2.40 m
+  Pasaje entre módulos de mercado minorista:     mínimo 2.40 m
+  Corredor frente a tienda ancla:                según diseño (generalmente 8-12 m)
+  Distancia máxima de evacuación sin rociadores: 45 m
+  Distancia máxima de evacuación con rociadores: 60 m
+
+ESCALERAS (Art. 14):
+  Comercio: paso mínimo 0.28 m · contrapaso máximo 0.18 m
+  Ancho mínimo en establecimientos de uso público: 1.20 m libre entre pasamanos
+  Escaleras de evacuación en CC: 1.50 m mínimo
+
+ASCENSORES (Art. 15):
+  Cuando existe más de un nivel comercial de acceso público: ascensor obligatorio
+  Dimensiones mínimas de cabina para comercio: 1.00 m × 1.20 m
+  Centros comerciales con > 4 pisos: mínimo 2 ascensores
+
+---
+
+=== CAPÍTULO III — AFORO ===
+
+CÁLCULO DE AFORO (Art. 7) — personas por m² de área efectiva:
+  +--------------------------------+------------------------+-------------------+
+  | Tipo de establecimiento        | m² por persona        | Área de referencia|
+  +--------------------------------+------------------------+-------------------+
+  | Tienda independiente           | 5.0 m²/persona        | Exposición/ventas |
+  | Galería comercial (locales)    | 2.0 m²/persona        | Área de local     |
+  | Tienda por departamentos       | 3.0 m²/persona        | Área de ventas    |
+  | Centro comercial               | 3.0 m²/persona        | Área de ventas    |
+  | Supermercado                   | 2.5 m²/persona        | Área de ventas    |
+  | Mercado mayorista              | 5.0 m²/persona        | Área de ventas    |
+  | Mercado minorista              | 2.0 m²/persona        | Área de ventas    |
+  | Restaurante con mesas          | 1.5 m²/persona        | Área de mesas     |
+  | Patio de comidas               | 1.5 m²/persona        | Área de mesas     |
+  | Bar / Discoteca                | 1.0 m²/persona        | Área de bar/pista |
+  | Gimnasio                       | 4.5 m²/persona        | Área de equipos   |
+  | Salón de juegos / Casino       | 2.0 m²/persona        | Área de juegos    |
+  | Cocinas / Áreas de servicio    | 10.0 m²/persona       | Área de cocina    |
+  | Área de caja / Servicio        | No aplica aforo directo|                   |
+  +--------------------------------+------------------------+-------------------+
+
+USO DEL AFORO:
+  - Cálculo de salidas de emergencia y ancho total de evacuación
+  - Cálculo de dotación de servicios higiénicos
+  - Cumplimiento de ratios de estacionamiento
+  - Presentación ante INDECI para licencia y certificado ITSE
+
+---
+
+=== CAPÍTULO IV — ESTACIONAMIENTOS ===
+
+DOTACIÓN REQUERIDA (Art. 24):
+  La norma A.070 fija la dotación en función del número de personas (personal + público).
+  Complementariamente, los PDU municipales pueden fijar ratios por m² de área útil.
+
+  +--------------------------------+---------------------------+----------------------+
+  | Tipo de establecimiento        | Personal                  | Público              |
+  +--------------------------------+---------------------------+----------------------+
+  | Tienda independiente           | 1 est. c/ 6 personas      | 1 est. c/ 10 personas|
+  | Tienda por depart. / CC        | 1 est. c/ 5 personas      | 1 est. c/ 10 personas|
+  | Complejo comercial             | 1 est. c/ 10 personas     | 1 est. c/ 10 personas|
+  | Supermercado / Mayorista       | 1 est. c/ 10 personas     | 1 est. c/ 10 personas|
+  | Mercado minorista              | 1 est. c/ 20 personas     | 1 est. c/ 20 personas|
+  | Restaurante                    | 1 est. c/ 10 personas     | 1 est. c/ 10 personas|
+  | Locales con asientos fijos     | —                         | 1 est. c/ 15 asientos|
+  +--------------------------------+---------------------------+----------------------+
+
+  RATIOS ALTERNATIVOS USADOS EN PDU LIMA (m² de área útil):
+  +-------------------------------+-------------------------------+
+  | Uso                           | Ratio orientativo (Lima)     |
+  +-------------------------------+-------------------------------+
+  | Centro comercial (GLA)        | 1 est. c/ 35-50 m² de GLA   |
+  | Tienda de conveniencia        | 4-6 cajones mínimos          |
+  | Supermercado                  | 1 est. c/ 25-35 m² de ventas |
+  | Restaurante                   | 1 est. c/ 5-8 m² de mesas   |
+  | Gimnasio / Sala de clases     | 1 est. c/ 10-15 m²           |
+  +-------------------------------+-------------------------------+
+
+DIMENSIONES DE CAJONES (A.010 Art. 54 — uso público):
+  Individual:           3.00 m × 5.00 m · altura libre 2.10 m
+  2 contiguos:          2.60 m × 5.00 m
+  3 o más contiguos:    2.50 m × 5.00 m
+  Circulación entre filas opuestas: 6.50 m mínimo
+  Discapacitados:       3.80 m × 5.00 m (1 cada 25 cajones ordinarios, mínimo 1)
+
+ESTACIONAMIENTOS PARA DISCAPACITADOS (A.120):
+  Señalización horizontal y vertical obligatoria
+  Acceso directo a ingresos del establecimiento sin diferencias de nivel
+  Dimensiones: 3.80 m ancho × 5.00 m largo
+
+ESTACIONAMIENTO DE CAMIONES / PROVEEDORES:
+  Área de carga/descarga de proveedores: separada del área de estacionamiento público
+  Debe realizarse íntegramente dentro del lote
+  Supermercados y CC: muelle de descarga techado, con sistema de andén elevado
+
+---
+
+=== CAPÍTULO V — SERVICIOS HIGIÉNICOS ===
+
+DOTACIÓN DE SSHH (Art. 22 y Cuadro de la norma):
+  Calculados en función del aforo total.
+  Leyenda: L=lavatorio, u=urinario, I=inodoro
+
+  EMPLEADOS (por turno):
+  +------------------+---------------------------+----------------------+
+  | N° Empleados     | Hombres                   | Mujeres              |
+  +------------------+---------------------------+----------------------+
+  | 1 – 6            | 1L + 1I                   | 1L + 1I              |
+  | 7 – 25           | 1L + 1u + 1I              | 1L + 1I              |
+  | 26 – 75          | 2L + 2u + 2I              | 2L + 2I              |
+  | 76 – 200         | 3L + 3u + 3I              | 3L + 3I              |
+  | +100 adicionales | +1L +1u +1I               | +1L +1I              |
+  +------------------+---------------------------+----------------------+
+
+  PÚBLICO (por aforo):
+  +------------------+---------------------------+----------------------+
+  | Aforo            | Hombres                   | Mujeres              |
+  +------------------+---------------------------+----------------------+
+  | Hasta 100        | 1L + 1u + 1I              | 1L + 1I              |
+  | 101 – 250        | 2L + 2u + 2I              | 2L + 2I              |
+  | 251 – 500        | 3L + 3u + 3I              | 3L + 3I              |
+  | +200 adicionales | +1L +1u +1I               | +1L +1I              |
+  +------------------+---------------------------+----------------------+
+
+  SSHH de discapacitados: 1 batería accesible por piso, separada o al interior de batería general.
+  Bebederos: 1 cada 200 personas en áreas de afluencia masiva.
+
+DOTACIÓN DE AGUA (Art. 23):
+  Tienda, galería: 6 litros/m²/día de área útil
+  Supermercado: 15 litros/m²/día
+  Restaurante: 40 litros/m²/día de área de mesas (+ 40 L/m² cocina)
+  Mercado: 15 litros/puesto/día
+
+---
+
+=== CAPÍTULO VI — SEGURIDAD Y EMERGENCIAS ===
+
+SALIDAS DE EMERGENCIA (A.130):
+  Ancho mínimo de salida: 0.90 m
+  Ancho calculado: 1 módulo de salida (0.60 m) por cada 250 personas
+  Distancia máxima de recorrido de evacuación:
+    Sin rociadores: 45 m
+    Con rociadores: 60 m
+  Número mínimo de salidas de emergencia:
+    Locales hasta 500 personas: 2 salidas
+    501-1,000 personas: 3 salidas
+    Más de 1,000 personas: 4 salidas como mínimo
+
+ROCIADORES (NFPA 13):
+  Centros comerciales > 1,000 m²: sistema de rociadores obligatorio
+  Supermercados, cines, discotecas: rociadores obligatorios
+
+CERTIFICADO ITSE (Inspección Técnica de Seguridad en Edificaciones):
+  Para locales de espectáculo público: ITSE obligatoria antes de apertura
+  Básica: locales < 500 personas
+  Detalle: locales 500-3,000 personas
+  Multidisciplinaria: locales > 3,000 personas
+
+---
+
+=== CAPÍTULO VII — NORMAS COMPLEMENTARIAS APLICABLES ===
+
+  A.120 — Accesibilidad Universal: rampas, señalética, SSHH accesibles
+  A.130 — Requisitos de Seguridad: evacuación, escaleras pressurizadas
+  IS.010 — Sanitarias: dotación de agua y desagüe
+  EC.020 — Redes de Distribución de Energía Interior
+
+ESTUDIO DE IMPACTO VIAL (EIV):
+  Obligatorio para establecimientos > 500 m² en vías arteriales o colectoras
+  (varía por ordenanza municipal en Lima — algunos distritos desde 1,000 m²)
+
+---
+
+=== IMPLICANCIAS PRÁCTICAS PARA DESARROLLADOR INMOBILIARIO EN LIMA ===
+
+1. DISEÑO DE ESTACIONAMIENTO EN CENTROS COMERCIALES:
+   - El ratio de estacionamiento es el factor más restrictivo en predios urbanos
+   - Lima: ratio común 1 est./35 m² GLA para mall regional; 1/25 m² para power center
+   - Estacionamiento subterráneo: costo adicional aprox. USD 8,000-12,000/cajón vs. superficie
+   - Estacionamiento en superficie: requiere lote grande pero abarata costo de construcción
+
+2. AFORO Y SSHH — RELACIÓN DIRECTA:
+   - Calcular aforo real para dimensionar correctamente baterías de SSHH
+   - SSHH públicos mal dimensionados = rechazo de ITSE = retraso en apertura
+
+3. ALTURA LIBRE MÍNIMA PARA OPERADORES:
+   - Tiendas moda (fast fashion): 4.50-5.00 m libres mínimo
+   - Supermercado: 6.00 m libres mínimo (racks + sistemas de frío)
+   - Tienda por departamentos: 4.00-4.50 m libres por nivel
+   - Restaurante/patio comidas: 4.00 m libres (extractores + ductos)
+
+4. ACCESOS Y LOGÍSTICA DE PROVEEDORES:
+   - Supermercados y tiendas ancla: muelle de descarga separado del acceso de clientes
+   - Horario de descarga nocturno: diseñar acceso independiente para no conflicto con clientes
+
+5. COMPATIBILIDAD ZONAL:
+   - Zona Comercial ZC: todos los usos comerciales
+   - Zona de Comercio Vecinal ZCV: tiendas menores, sin CC ni supermercados > 2,000 m²
+   - Zona Residencial con comercio compatible: revisar PDU distrital caso a caso
+
+FUENTE: RNE Norma A.070 (DS 011-2006-VIVIENDA y modificatorias), A.010, A.120, A.130.
+Complementado con práctica de mercado comercial Lima 2023-2024.

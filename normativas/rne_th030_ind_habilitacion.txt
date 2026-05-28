@@ -1,0 +1,340 @@
+
+=== RNE NORMA TH.030 — HABILITACIONES PARA USO INDUSTRIAL ===
+=== + GH.020 — COMPONENTES DE DISEÑO URBANO (extracto aplicable) ===
+=== Reglamento Nacional de Edificaciones — Perú ===
+=== Vigente: DS 011-2006-VIVIENDA y modificatorias ===
+=== Fuente: Compilación de conocimiento normativo RNE — referencia profesional ===
+
+ALCANCE TH.030: Establece las características y requisitos que deben cumplir las
+habilitaciones urbanas destinadas predominantemente a usos industriales.
+Se aplica a nuevas habilitaciones industriales y a la regularización de habilitaciones
+existentes. Comprende: parques industriales, zonas industriales, corredores industriales.
+
+ALCANCE GH.020: Define los componentes básicos del diseño urbano incluyendo
+trazado de vías, dimensiones de lotes, aportes para equipamientos y servicios.
+
+---
+
+=== PARTE I: NORMA TH.030 — HABILITACIONES INDUSTRIALES ===
+
+=== CAPÍTULO I — TIPOS DE HABILITACIÓN INDUSTRIAL ===
+
+CLASIFICACIÓN POR TIPO DE INDUSTRIA (Art. 2-3):
+  +------+----------------------------------+----------------+----------------+
+  | Tipo | Clasificación de Industria       | Lote mínimo    | Frente mínimo  |
+  +------+----------------------------------+----------------+----------------+
+  | I1   | Industria Elemental y            | 300 m²         | 10 ml          |
+  |      | Complementaria (Artesanal)       |                |                |
+  +------+----------------------------------+----------------+----------------+
+  | I2   | Industria Liviana                | 1,000 m²       | 20 ml          |
+  +------+----------------------------------+----------------+----------------+
+  | I3   | Gran Industria / Mediana         | 2,500 m²       | 30 ml          |
+  +------+----------------------------------+----------------+----------------+
+  | I4   | Industria Pesada Básica          | Según estudio  | Según estudio  |
+  |      |                                  | específico     | específico     |
+  +------+----------------------------------+----------------+----------------+
+
+  NOTA: Estos son los lotes mínimos para la HABILITACIÓN (subdivisión del suelo).
+  El tamaño real del lote en una zona industrial puede ser mayor según el PDU.
+  Para parques industriales privados: el promotor define el mínimo loteable según mercado.
+
+INDUSTRIA 4.0 / LOGÍSTICA (referencia práctica 2024):
+  Lotes para logística prime en Lima: generalmente 5,000-50,000 m² en parques industriales
+  Lotes Big Box: 20,000-100,000 m² (usuario único, built-to-suit)
+
+---
+
+=== CAPÍTULO II — APORTES URBANÍSTICOS ===
+
+APORTES OBLIGATORIOS (Art. 6):
+  Todos los tipos (I1, I2, I3): aplicar los siguientes aportes del área bruta habilitada:
+
+  +----------------------------+---------+-------------------------------------------+
+  | Destino del aporte         | % Área  | Observaciones                             |
+  +----------------------------+---------+-------------------------------------------+
+  | Parques Zonales            | 1%      | Entregado al SERPAR o municipio           |
+  | Otros Fines (equipamiento) | 2%      | Entregado al municipio provincial         |
+  | TOTAL DE APORTES           | 3%      |                                           |
+  +----------------------------+---------+-------------------------------------------+
+
+  COMPARACIÓN CON HABILITACIONES RESIDENCIALES:
+  Residencial de baja densidad: hasta 13% de aportes (parques + educación + recreación)
+  Residencial de alta densidad: 8-10%
+  Industrial: solo 3% → ventaja financiera significativa para el promotor industrial
+
+  REDENCIÓN EN DINERO: Si el área de aporte es < 800 m²: puede redimirse en dinero.
+  Valor de redención: por tasación del terreno a valor de mercado.
+  En zonas industriales Lima: USD 50-150/m² según ubicación (vs USD 200-500 en residencial)
+
+ENTIDADES RECEPTORAS (Art. 6):
+  Parques zonales: SERPAR (Lima Metropolitana) o municipio provincial
+  Otros fines / Educación: Municipio Provincial o Distrital
+  En parques industriales privados: los aportes se materializan dentro del parque
+  (áreas verdes internas, vías de acceso, servicios comunes)
+
+---
+
+=== CAPÍTULO III — VÍAS EN HABILITACIONES INDUSTRIALES ===
+
+SECCIONES VIALES MÍNIMAS (Art. 8-10):
+  +------------------------+------------------+---------------------+----------------------+
+  | Tipo de vía            | Sección total    | Calzada             | Vereda/Berma        |
+  +------------------------+------------------+---------------------+----------------------+
+  | Vía Local Principal    | 20.00 m          | 2 × 7.00 m          | 2 × 3.00 m           |
+  | Vía Local Secundaria   | 16.80 m          | 2 × 5.40 m          | 2 × 3.00 m           |
+  | Vía de Servicio        | No especificada; | Según tipo de tráfico pesado              |
+  |                        | mínimo 8.00 m    |                                           |
+  +------------------------+------------------+---------------------+----------------------+
+
+  NOTA: Los anchos son para vías públicas dentro de la habilitación industrial.
+  Vías de parques industriales privados: pueden tener dimensiones mayores según proyecto.
+
+  CRITERIOS DE DISEÑO VIAL PARA TRÁFICO PESADO:
+  Tráiler 48': ancho 2.60 m + espejos → requiere carril de al menos 4.00 m
+  Giro de tráiler: radio exterior 15.00-18.00 m
+  Para giro completo en intersección: sección vial mínima 14.00 m por sentido
+
+FRENTE MÁXIMO DE MANZANA (Art. 9):
+  I1, I2, I3: frente máximo de manzana = 400 m
+  I4: sin límite normativo (definido por proyecto)
+  NOTA: En parques industriales de nave continua (strip industrial), la manzana puede
+  ser la totalidad del parque — se interpretan como vías privadas internas.
+
+RADIOS DE GIRO EN INTERSECCIONES (Art. 11):
+  Vías locales industriales: radio de ochavo ≥ 5.00 m en esquina de calzada
+  Accesos a lotes industriales grandes: radio ≥ 10.00 m para giro de tráiler
+
+---
+
+=== CAPÍTULO IV — AISLAMIENTO DE ZONAS INDUSTRIALES ===
+
+SEPARACIÓN REQUERIDA (Art. 12-14):
+  I1: puede estar en el mismo predio o zona mixta; sin aislamiento especial
+  I2: debe estar separada de zona residencial por una Vía Local Secundaria (≥ 16.80 m de sección)
+  I3: debe contar con jardín separador mínimo de 30.00 m de ancho entre la zona industrial
+      y cualquier zona residencial o comercial. El jardín separador puede ser
+      parte del área de aporte.
+  I4: aislamiento según Estudio de Impacto Ambiental aprobado; generalmente
+      separación > 500 m de zonas habitadas.
+
+MURO PERIMETRAL (Art. 15):
+  Parques industriales: muro perimetral de seguridad obligatorio
+  Altura mínima: 2.50 m
+  Material: concreto, albañilería o similar; puede complementarse con cerco electrónico
+
+BARRERA VERDE:
+  I3: jardín separador de 30 m puede incluir barrera vegetal (árboles ≥ 5 m altura)
+  Especificación: mínimo 2 hileras de árboles + césped + arbustos
+  Mantenimiento a cargo del propietario industrial
+
+---
+
+=== CAPÍTULO V — INFRAESTRUCTURA Y SERVICIOS ===
+
+AGUA POTABLE:
+  La habilitación industrial debe proveerse de agua potable con los siguientes criterios:
+  - Conexión a red pública existente, o
+  - Sistema propio con pozo + planta de tratamiento (previa aprobación de SUNASS)
+  Dotación mínima: 100 L/trabajador/día (A.060 Art. 20)
+  Para parques industriales: reserva hídrica para sistema contra incendios separada de consumo
+
+DESAGÜE Y TRATAMIENTO:
+  Conexión a red pública o planta de tratamiento propia
+  Efluentes industriales: tratamiento primario obligatorio antes de descarga a red pública
+  Grasas y aceites (talleres, industria automotriz): trampa de grasas obligatoria
+  Efluentes con metales pesados: tratamiento especializado (no verter a red)
+
+ENERGÍA ELÉCTRICA:
+  La habilitación industrial debe incluir:
+  - Subestación eléctrica de entrada (si > 10 lotes o > 5,000 m² de área habilitada)
+  - Red de distribución eléctrica (soterrada en habilitaciones nuevas > 2013)
+  - Alumbrado público en vías internas
+
+GAS NATURAL:
+  Conexión según disponibilidad de red de Calidda (Lima Metropolitana)
+  Parques industriales en Lurín/Chilca: conexión disponible en corredores principales
+  Ventaja competitiva: costo energético 30-50% menor que GLP para procesos industriales
+
+TELECOMUNICACIONES:
+  Ductos para cableado de telecomunicaciones en vías de habilitación
+  Fibra óptica: disponible en zonas industriales consolidadas (Ate, Callao, Lurín)
+
+---
+
+=== PARTE II: NORMA GH.020 — COMPONENTES DE DISEÑO URBANO ===
+=== (Extracto aplicable a proyectos comerciales, industriales y mixtos) ===
+
+=== SECCIÓN A — SISTEMA VIAL ===
+
+CLASIFICACIÓN VIAL (Art. 4-8):
+  +------------------------+---------------------+------------------------------------------+
+  | Tipo de Vía            | Sección típica      | Función                                  |
+  +------------------------+---------------------+------------------------------------------+
+  | Vía Expresa             | 40-60 m             | Circulación de largo recorrido; sin acceso|
+  | (autopista/panamericana)|                     | directo a lotes                          |
+  | Vía Arterial            | 25-40 m             | Conecta sectores urbanos; acceso lateral  |
+  |                         |                     | con restricciones                        |
+  | Vía Colectora           | 18-25 m             | Distribuye entre arterial y local         |
+  | Vía Local Principal     | 16-20 m             | Acceso directo a lotes; usos residenciales|
+  |                         |                     | y/o comerciales                          |
+  | Vía Local Secundaria    | 12-16 m             | Acceso a lotes pequeños                  |
+  | Pasaje Peatonal         | 4-8 m               | Solo peatones                            |
+  +------------------------+---------------------+------------------------------------------+
+
+SECCIÓN TÍPICA DE VÍA LOCAL PRINCIPAL (Art. 7):
+  Ancho total: 18.00 m
+  Composición:
+    - Calzada central: 7.20 m (2 × 3.60 m) + berma central 1.80 m (si dos calzadas)
+    - Vereda: 2.40 m (mínimo) a cada lado
+    - Jardín separador: 1.00-2.00 m (según sección total)
+
+  Sección mínima vía local residencial:
+    + Calzada: 6.00 m (2 carriles)
+    + 2 × veredas: 2 × 1.80 m
+    + Total: 9.60 m → sección total mínima 10 m (con jardín)
+
+RETIRO DE FACHADA (GH.020 Art. 12):
+  Retiro frontal fijado por PDU distrital — GH.020 establece los rangos:
+    Vía expresa / arterial: retiro ≥ 5.00 m (avenidas principales)
+    Vía colectora:          retiro ≥ 3.00 m
+    Vía local:              retiro 0-3.00 m según PDU
+  El retiro no forma parte de la sección vial pero es parte del perfil urbano.
+
+SECCIÓN VIAL PARA VÍAS CON CICLOVÍA:
+  Adición de carril ciclovía: 1.50 m (unidireccional) o 2.50 m (bidireccional)
+  Lima Plan Lima 2040: vías arteriales principales deben incluir ciclovía
+
+---
+
+=== SECCIÓN B — APORTES URBANÍSTICOS ===
+
+APORTES PARA HABILITACIONES URBANAS (GH.020 + TH.010/TH.020/TH.030):
+  Los aportes varían según el tipo de habilitación:
+
+  HABILITACIÓN RESIDENCIAL DE BAJA DENSIDAD (R2/R3):
+  +---------------------------+---------+
+  | Destino                   | %       |
+  +---------------------------+---------+
+  | Recreación Pública        | 8%      |
+  | Parques Zonales (SERPAR)  | 2%      |
+  | Educación (MINEDU)        | 2%      |
+  | Otros Fines               | 1%      |
+  | TOTAL                     | 13%     |
+  +---------------------------+---------+
+
+  HABILITACIÓN RESIDENCIAL DE ALTA DENSIDAD (R5/R6/R7/R8):
+  +---------------------------+---------+
+  | Recreación Pública        | 8%      |
+  | Parques Zonales           | 1%      |
+  | Otros Fines               | 1%      |
+  | TOTAL                     | 10%     |
+  +---------------------------+---------+
+
+  HABILITACIÓN COMERCIAL:
+  +---------------------------+---------+
+  | Recreación Pública        | 3%      |
+  | Otros Fines               | 2%      |
+  | TOTAL                     | 5%      |
+  +---------------------------+---------+
+
+  HABILITACIÓN INDUSTRIAL (TH.030):
+  +---------------------------+---------+
+  | Parques Zonales           | 1%      |
+  | Otros Fines               | 2%      |
+  | TOTAL                     | 3%      |
+  +---------------------------+---------+
+
+  RESUMEN COMPARATIVO:
+  +---------------------------+---------+-------------------------------------------+
+  | Tipo de habilitación      | Total % | Implicancia financiera                    |
+  +---------------------------+---------+-------------------------------------------+
+  | Residencial baja densidad | 13%     | Mayor costo; área vendible = 87% bruto    |
+  | Residencial alta densidad | 10%     | Área vendible = 90% bruto                 |
+  | Comercial                 | 5%      | Área rentable/vendible = 95% bruto        |
+  | Industrial                | 3%      | Área vendible/loteable = 97% bruto        |
+  +---------------------------+---------+-------------------------------------------+
+
+REDENCIÓN EN DINERO (Art. 15 GH.020):
+  Cuando el área a aportar resulta menor que el área mínima requerida para
+  ser funcional como equipamiento (generalmente < 800 m²), puede redimirse en dinero.
+  Valor de redención: tasación arancelaria o de mercado (el mayor).
+  En proyectos de gran escala: frecuente negociación con municipio para
+  aportes en zona específica del distrito (no necesariamente en el predio).
+
+---
+
+=== SECCIÓN C — DISEÑO DE MANZANAS Y LOTES ===
+
+MANZANAS (GH.020 Art. 10):
+  Longitud máxima de frente de manzana:
+    Residencial: 300 m
+    Comercial:   300 m
+    Industrial:  400 m (TH.030)
+  Dimensiones mínimas de manzana: según vías que la delimitan y usos previstos
+
+LOTES (GH.020 Art. 11):
+  En habilitaciones nuevas, los lotes resultantes deben acceder directamente a vía pública.
+  Lotes sin frente a vía pública: acceso mediante pasaje mínimo 4.00 m ancho.
+  Lote irregular: la forma debe permitir inscribir un rectángulo con frente = frente mínimo
+    y profundidad = 60% del frente mínimo (criterio de forma mínima usable).
+
+LOTIZACIÓN EN PROYECTOS MIXTOS:
+  Un mismo predio puede subdividirse con diferentes zonificaciones si el PDU lo permite.
+  Frente mínimo de cada sub-lote según su uso (industrial, comercial, residencial).
+
+---
+
+=== SECCIÓN D — ÁREAS DE RECREACIÓN Y EQUIPAMIENTO ===
+
+PARQUES Y ÁREAS VERDES (GH.020 Art. 16-18):
+  Área mínima por parque para ser funcional: 800 m²
+  Dimensión mínima: el ancho no debe ser inferior al 25% del largo
+  Porcentaje de área verde dentro del parque: ≥ 60% del área total del parque
+  Arborización: mínimo 1 árbol por cada 9 m² de área verde del parque
+
+  EQUIPAMIENTO EN PARQUES ZONALES:
+  Pista de trote o caminata:   Perímetro ≥ 400 m
+  Áreas de juegos infantiles:  ≥ 200 m² en parques > 2,000 m²
+  Estacionamiento asociado:    1 cajón por cada 50 m² de área de equipamiento activo
+
+EQUIPAMIENTO URBANO (Otros Fines — Art. 20):
+  El área de aporte de "Otros Fines" puede destinarse a:
+  - Sede municipal o centro cívico
+  - Postas médicas
+  - Equipamiento educativo complementario
+  - Comisarías
+  En parques industriales privados: generalmente se negocia el destino con la municipalidad
+
+---
+
+=== IMPLICANCIAS PRÁCTICAS PARA DESARROLLADOR EN LIMA ===
+
+1. EFICIENCIA FINANCIERA DE LA ZONIFICACIÓN INDUSTRIAL:
+   Solo 3% de aportes vs 10-13% residencial → en un proyecto de 100,000 m² brutos:
+   Industrial: 97,000 m² loteables
+   Residencial alta densidad: 90,000 m² loteables
+   Diferencia: 7,000 m² adicionales → a USD 150/m² = USD 1.05M de valor adicional.
+
+2. LOTE MÍNIMO INDUSTRIAL I2 (1,000 m²) — COMPATIBILIDAD CON MERCADO:
+   Mercado logístico Lima demanda lotes de 3,000-10,000 m² mínimo para operadores.
+   Lotes de 1,000 m² se usan para: talleres, depósitos pequeños, industria artesanal.
+   Parques industriales de clase A: lotes desde 5,000 m² (sin límite máximo).
+
+3. VÍA LOCAL SECUNDARIA I2 (16.80 m) — DISEÑO DE PARQUE INDUSTRIAL:
+   Vías internas de parque industrial deben tener al menos 16.80 m para I2.
+   Práctica recomendada: 20.00-24.00 m para maniobrabilidad de tráiler en parques prime.
+   Inversión en vialidad interna: aprox. USD 80-150/m² de vía terminada.
+
+4. AISLAMIENTO I3 (30 m de jardín separador):
+   Este requisito consume superficie significativa en predios urbanos → I3 se desarrolla
+   preferentemente en zonas alejadas de residencias (Lurín, Chilca, Huachipa este).
+   El jardín separador puede ser parte del área de aporte (reduces impacto).
+
+5. OPORTUNIDAD DE HABILITACIÓN EN ZONAS DE EXPANSIÓN:
+   Lurín y Chilca: zonas de habilitación industrial activa 2020-2026
+   Costo de habilitación industrial en Lurín: USD 30-60/m² (agua, luz, vías)
+   Precio de venta post-habilitación: USD 120-200/m² (lote habilitado)
+   Margen bruto de habilitación: USD 60-140/m² sobre costo de terreno + habilitación
+
+FUENTE: RNE Norma TH.030 y GH.020 (DS 011-2006-VIVIENDA y modificatorias).
+Complementado con normas GH.010, TH.010, TH.020 y práctica de habilitación Lima 2023-2024.

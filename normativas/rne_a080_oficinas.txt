@@ -1,0 +1,302 @@
+
+=== RNE NORMA A.080 — OFICINAS ===
+=== Reglamento Nacional de Edificaciones — Perú ===
+=== Vigente: DS 011-2006-VIVIENDA y modificatorias ===
+=== Fuente: Compilación de conocimiento normativo RNE — referencia profesional ===
+
+ALCANCE: Edificaciones destinadas a la prestación de servicios de carácter
+administrativo, técnico, financiero, de gestión o afines, donde el trabajo se
+desarrolla principalmente mediante el uso de información y comunicaciones.
+Incluye: oficinas independientes, pisos de oficinas, edificios corporativos,
+sedes empresariales, coworking, consultorios.
+
+---
+
+=== CAPÍTULO I — CLASIFICACIÓN ===
+
+TIPOS DE EDIFICACIÓN DE OFICINAS:
+
+  OFICINA INDEPENDIENTE:
+    Unidad de uso exclusivo para una organización. Puede estar en edificio
+    de uso mixto (oficinas + comercio + residencia).
+
+  EDIFICIO CORPORATIVO / TORRE DE OFICINAS:
+    Edificación de uso exclusivo o predominante para oficinas. Uno o múltiples
+    inquilinos. Generalmente con áreas comunes, lobby, SSHH comunes por piso.
+
+  EDIFICIO DE USOS MIXTOS CON COMPONENTE OFICINAS:
+    Planta baja comercial + pisos intermedios de oficinas + pisos superiores residenciales.
+    Requiere núcleos de circulación independientes por uso.
+
+  COWORKING / OFICINA FLEX:
+    Sin definición específica en RNE. Se aplica norma A.080 como uso de oficinas.
+    Densidad de ocupación mayor al estándar (ratio 1 persona/5-7 m² en coworking
+    vs. 1/9.5 m² RNE).
+
+  CONSULTORIO MÉDICO / PROFESIONAL:
+    Se rige por A.080 para aspectos de diseño general. Consultorios médicos
+    además deben cumplir norma A.050 (Salud) para aspectos sanitarios y funcionales.
+
+---
+
+=== CAPÍTULO II — CONDICIONES DE DISEÑO ===
+
+ÁREA MÍNIMA DE AMBIENTES (Art. 4):
+  La norma A.080 no fija un área mínima de unidad de oficina.
+  Área mínima de uso recomendada en mercado Lima:
+    Módulo de oficina compartida:  9.5 m² (1 persona — ratio norma)
+    Oficina pequeña individual:    20-30 m²
+    Módulo ejecutivo estándar:     40-60 m²
+    Piso completo en torre:        400-1,500 m² por planta tipo
+
+AFORO (Art. 6):
+  1 persona cada 9.5 m² de área útil de oficina
+  NOTA: Este ratio es para cálculo de SSHH, evacuación y estacionamientos.
+  En práctica de diseño, el ratio de planeamiento es diferente:
+    Open plan estándar (planeamiento): 1 persona / 10-12 m² de área rentable
+    Oficina celular (planeamiento):    1 persona / 15-20 m² de área rentable
+    Coworking:                         1 persona / 5-7 m² de área usable
+
+ALTURA MÍNIMA (Art. 7):
+  2.40 m piso terminado a cielo raso
+  NOTA DE MERCADO: Esta es la altura mínima legal. En el mercado peruano:
+    Oficina clase C:        2.50-2.60 m de piso a cielo raso
+    Oficina clase B:        2.70-2.80 m
+    Oficina clase A:        2.80-3.00 m
+    Edificio Prime/A+:      3.00 m o más; altura libre piso a losa ≥ 3.50 m
+  La diferencia piso-a-losa vs. piso-a-cielo-raso:
+    Losa = estructura bruta (referencia para calcular pisos)
+    Cielo raso = piso terminado superior al inferior (lo que el inquilino ve)
+    Diferencia típica: 0.50-0.80 m (instalaciones + cielo raso)
+
+VENTILACIÓN NATURAL (Art. 5):
+  Vanos de apertura: mínimo 10% del área del ambiente
+  Edificios con aire acondicionado central: pueden no tener ventana operable, pero
+  deben garantizar el caudal de aire fresco mediante sistema mecánico.
+
+PUERTAS (Art. 10):
+  Ingreso principal al edificio / piso de oficinas: mínimo 1.00 m de ancho
+  Otras dependencias (oficinas internas):            mínimo 0.90 m de ancho
+  Altura mínima de puertas: 2.10 m
+  Acceso para discapacitados (A.120): puerta principal ≥ 1.20 m con bisagra libre
+  Espacio de aproximación: 1.20 m libre frente a la puerta (no invadido)
+
+PASAJES DE CIRCULACIÓN (A.010 Art. 20):
+  Pasaje principal de distribución de pisos de oficina: 1.20 m mínimo
+  Pasaje secundario entre módulos:                      0.90 m mínimo
+  Zonas de evacuación: ver cálculo por aforo (A.130)
+
+ESCALERAS (A.010 Art. 23):
+  Paso mínimo: 0.28 m · Contrapaso máximo: 0.18 m
+  Ancho mínimo entre pasamanos (uso público/oficinas): 1.20 m
+  Escaleras de evacuación en torres de oficinas: 1.20 m mínimo libre
+
+---
+
+=== CAPÍTULO III — ASCENSORES ===
+
+OBLIGATORIEDAD (Art. 16 A.010 y práctica):
+  Ascensor obligatorio cuando el acceso al 4to piso o superior está a más de 12.00 m
+  sobre el nivel de ingreso.
+  Oficinas: práctica estándar obliga ascensor en edificios de 3+ pisos.
+
+DIMENSIONES DE CABINA MÍNIMA (NTP):
+  Pasajeros (oficinas):   1.10 m × 1.40 m
+  Con accesibilidad:      1.10 m × 1.40 m (puerta ≥ 0.90 m libre)
+  Carga / servicio:       1.50 m × 2.10 m
+
+CAPACIDAD Y NÚMERO (criterio de diseño):
+  +-------------------------+--------------------------------+
+  | Área total de oficinas  | N° mínimo de ascensores       |
+  +-------------------------+--------------------------------+
+  | Hasta 1,500 m²          | 1 ascensor                    |
+  | 1,500 – 4,000 m²        | 2 ascensores                  |
+  | 4,000 – 8,000 m²        | 3 ascensores                  |
+  | +4,000 m² adicionales   | +1 ascensor por cada 4,000 m²|
+  +-------------------------+--------------------------------+
+  Tiempo de espera promedio aceptable: ≤ 30 segundos (estándar clase A)
+  Cálculo de tráfico: 12% de la población del edificio en 5 minutos pico (intervalo = capacidad/12%)
+
+ASCENSOR DE SERVICIO:
+  En edificios > 5 pisos: recomendado ascensor de servicio / carga separado
+  En edificios corporativos clase A: obligatorio por contrato de arrendamiento típico
+
+---
+
+=== CAPÍTULO IV — ESTACIONAMIENTOS ===
+
+DOTACIÓN REQUERIDA (Art. 9 A.080 y PDU municipal):
+  La norma A.080 no fija un ratio específico — remite al PDU municipal.
+  La Ordenanza 620-MML (Lima Metropolitana) y PDU distritales fijan los ratios.
+
+  RATIOS TÍPICOS EN LIMA (uso más frecuente en parámetros municipales):
+  +------------------------------------+-------------------------------+
+  | Distrito / Tipo                    | Ratio de estacionamiento     |
+  +------------------------------------+-------------------------------+
+  | San Isidro (financiero)            | 1 est. c/ 40-50 m² área útil |
+  | Miraflores                         | 1 est. c/ 40-50 m² área útil |
+  | Surco / La Molina                  | 1 est. c/ 50-60 m² área útil |
+  | San Borja                          | 1 est. c/ 40-50 m² área útil |
+  | Lince / Jesús María                | 1 est. c/ 50-60 m² área útil |
+  | Edificio prime clase A+            | 1 est. c/ 30-35 m² (mercado) |
+  +------------------------------------+-------------------------------+
+
+  ESTUDIO DE IMPACTO VIAL (EIV) — Art. 8 A.080:
+  Obligatorio para edificios con más de 5,000 m² de área útil de oficinas.
+
+DIMENSIONES DE CAJONES (A.010 Art. 54 — uso privado):
+  Individual:           2.70 m × 5.00 m · altura libre 2.10 m
+  2 contiguos:          2.50 m × 5.00 m
+  3 o más contiguos:    2.40 m × 5.00 m
+  En paralelo:          2.40 m × 5.40 m
+  Circulación entre filas: 6.00 m mínimo
+  Discapacitados:       3.80 m × 5.00 m (1 cada 25 cajones, mínimo 1)
+
+ESTACIONAMIENTOS EN SÓTANOS:
+  Número de sótanos: según estudio estructural y nivel freático
+  Lima: nivel freático variable — San Isidro/Miraflores: 4-8 m profundidad
+  Costo de sótano adicional: aprox. USD 6,000-10,000/cajón (estructura + impermeabilización)
+  Altura libre en sótano: mínimo 2.10 m (A.010); práctica 2.30-2.50 m (camionetas SUV)
+
+---
+
+=== CAPÍTULO V — SERVICIOS HIGIÉNICOS ===
+
+DOTACIÓN (Art. 11 A.080):
+  Por aforo calculado (1 persona/9.5 m²) o por número de ocupantes reales.
+  Leyenda: L=lavatorio, u=urinario, I=inodoro
+
+  +------------------+---------------------------+----------------------+
+  | N° Ocupantes     | Hombres                   | Mujeres              |
+  +------------------+---------------------------+----------------------+
+  | 1 – 6            | 1L + 1I                   | 1L + 1I              |
+  | 7 – 20           | 1L + 1u + 1I              | 1L + 1I              |
+  | 21 – 60          | 2L + 2u + 2I              | 2L + 2I              |
+  | 61 – 150         | 3L + 3u + 3I              | 3L + 3I              |
+  | +100 adicionales | +1L +1u +1I               | +1L +1I              |
+  +------------------+---------------------------+----------------------+
+
+  SSHH por piso en edificio de oficinas: obligatorio si el piso tiene uso autónomo
+  SSHH para discapacitados: 1 batería accesible por cada piso con atención al público
+  Duchas: recomendadas en edificios con más de 100 empleados (LEED requirement)
+  Cuarto de lactancia: recomendado en edificios > 150 empleados (Ley 29896)
+
+DOTACIÓN DE AGUA (IS.010):
+  Oficinas: 20 litros por persona por día
+  Restaurante/cafetería dentro de edificio: 40 litros/m² de área de mesas
+
+---
+
+=== CAPÍTULO VI — ILUMINACIÓN ===
+
+NIVELES MÍNIMOS DE ILUMINACIÓN (Art. 5 y estándares NTP):
+  +------------------------------+------------------+-------------------+
+  | Ambiente                     | Ilum. natural    | Artificial mínima |
+  +------------------------------+------------------+-------------------+
+  | Áreas de trabajo / open plan | 10% área ambiente| 300-500 lux       |
+  | Pasillos y circulaciones     | Deseable         | 150-200 lux       |
+  | Salas de reuniones           | Deseable         | 300-500 lux       |
+  | Recepción / lobbies          | Deseable         | 200-300 lux       |
+  | SSHH                         | Opcional         | 150 lux           |
+  | Estacionamientos             | N/A              | 50-100 lux        |
+  | Escaleras de emergencia      | N/A              | 100 lux (+ emerg.)|
+  +------------------------------+------------------+-------------------+
+  Estándar LEED para certificación: uniformidad de iluminación ≤ 3:1 (máx/mín)
+
+---
+
+=== CAPÍTULO VII — PROTECCIÓN CONTRA INCENDIOS ===
+
+SISTEMA DE DETECCIÓN Y ALARMA:
+  Obligatorio en edificios de uso público de 3 o más pisos
+  Central de alarma: en edificios > 5,000 m² totales
+
+ROCIADORES (NFPA 13):
+  Obligatorios en edificios de más de 15 m de altura (> 5 pisos aprox.)
+  En áreas de archivo/documentos: sistema de gas limpio preferible a agua
+
+ESCALERAS PRESSURIZADAS:
+  Obligatorias en edificios > 15 m de altura hasta el último piso habitable
+  1 escalera de evacuación por cada 1,200 m² de área por piso (o fracción)
+  Alternativa: 2 escaleras en extremos opuestos del edificio
+
+GENERADOR DE EMERGENCIA:
+  Obligatorio en edificios > 5 pisos o con ascensores
+  Capacidad mínima: equipos de emergencia + ascensor + iluminación de evacuación
+  Torres clase A: generador para 100% de cargas críticas (+ UPS para datos)
+
+---
+
+=== CAPÍTULO VIII — EDIFICIOS DE OFICINAS PRIME — ESTÁNDARES DE MERCADO LIMA ===
+
+CLASIFICACIÓN DE MERCADO (CBRE / Colliers / JLL Lima):
+
+  CLASE A+/PRIME:
+    - Altura libre: ≥ 3.00 m piso a cielo raso
+    - Piso a losa: ≥ 3.60-3.80 m
+    - Planta libre sin columnas intermedias (vano libre ≥ 8 m)
+    - Losa técnica / piso elevado: 10-15 cm
+    - Eficiencia mínima: 80-85% (área rentable / área bruta por piso)
+    - Ratio estacionamiento: 1/30-35 m²
+    - Velocidad ascensores: ≥ 1.5 m/s
+    - Sistema BMS (Building Management System)
+    - Certificación LEED o EDGE deseable
+
+  CLASE A:
+    - Altura libre: 2.80-3.00 m
+    - Eficiencia: 75-82%
+    - Ratio estacionamiento: 1/40-50 m²
+    - Sistemas de AA central, detección y rociadores
+
+  CLASE B:
+    - Altura libre: 2.60-2.80 m
+    - Eficiencia: 70-78%
+    - AA split o fan-coil
+    - Sin certificación verde
+
+  CLASE C:
+    - Altura libre: 2.40-2.60 m
+    - Eficiencia: 65-75%
+    - Instalaciones básicas
+
+EFICIENCIA DE PLANTA (factor de carga — Load Factor):
+  Eficiencia = Área Rentable (BOMA) / Área Bruta por Piso
+  Pérdidas típicas: núcleo (ascensores, escaleras, SSHH, cuartos técnicos)
+  Lima estándar: 75-80% eficiencia en torres nuevas
+  Edificios ineficientes: 65-70% (plantas pequeñas, mucho perímetro, núcleos grandes)
+
+PASILLOS CORREDORES PARA MULTI-INQUILINO:
+  Corredor común en piso multi-tenant: 1.80-2.40 m de ancho
+  Ingreso individual a oficina: puerta de 0.90-1.00 m con marco y acceso directo desde corredor
+
+---
+
+=== IMPLICANCIAS PRÁCTICAS PARA DESARROLLADOR INMOBILIARIO EN LIMA ===
+
+1. RATIO ESTACIONAMIENTO = FACTOR RESTRICTIVO EN TERRENOS PEQUEÑOS:
+   - Terreno 1,000 m² en San Isidro → edificio 8,000 m² área útil →
+     requiere 160-200 cajones (a 1/40-50 m²) → 4-5 sótanos de 35-40 cajones cada uno
+   - Evaluar siempre: ¿el terreno soporta los sótanos necesarios?
+
+2. ALTURA DE ENTREPISO — IMPACTO EN NÚMERO DE PISOS:
+   - Entrepiso de 3.50 m (clase A): para 30 pisos = 105 m total + sótanos
+   - Entrepiso de 4.00 m (prime): para 30 pisos = 120 m → puede requerir E.030 especial
+
+3. EFICIENCIA VS. RENTA:
+   - Cada 1% de mejora en eficiencia en 10,000 m² GBA = 100 m² adicionales rentables
+   - A USD 20/m²/mes = USD 24,000/año adicionales → impacto significativo en valoración
+
+4. ESTUDIO DE IMPACTO VIAL:
+   - Obligatorio por norma para > 5,000 m² útiles
+   - En San Isidro y Miraflores: exigido por municipio desde proyectos menores
+   - Puede generar obligaciones de mejoramiento vial que impactan el costo del proyecto
+
+5. ZONAS CON MAYOR DEMANDA DE OFICINAS EN LIMA (2024):
+   - San Isidro (CBD): renta prime USD 18-22/m²/mes
+   - Miraflores: USD 15-20/m²/mes
+   - Surco/Monterico: USD 12-16/m²/mes
+   - San Borja / Surquillo: USD 10-15/m²/mes
+   - Absorción neta Lima: ~50,000-80,000 m² GLA/año (referencia pre-pandemia)
+
+FUENTE: RNE Norma A.080 (DS 011-2006-VIVIENDA y modificatorias), A.010, A.120, A.130.
+Complementado con estándares de mercado de oficinas Lima 2023-2024.
