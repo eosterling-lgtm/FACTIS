@@ -1,5 +1,20 @@
 # SOLUM — Contexto de proyecto para Claude Code
 
+## PROTOCOLO DE INICIO DE SESIÓN (OBLIGATORIO)
+
+Al comenzar cualquier sesión en este proyecto, ANTES de responder cualquier pregunta:
+
+1. Confirmar que `app.py` existe en este directorio (archivo único ~15,000 líneas)
+2. Tener presente que la carpeta `normativas/` contiene 31 archivos de texto con toda la normativa activa
+3. El conocimiento normativo, de mercado y financiero ya está embebido en los prompts del API de Claude — NO preguntar al usuario por datos que deberían conocerse
+4. Aplicar directamente: RINs, normas, benchmarks, precios de mercado, lógica financiera
+
+**Si el usuario pregunta por estacionamientos en San Isidro → aplicar RIN San Isidro directamente (sin preguntar).**
+**Si el usuario menciona un distrito → buscar en normativas/ el RIN correspondiente.**
+**Si el usuario pregunta precios → usar MERCADO dict en app.py línea ~2687 o mercado_residencial_lima_urbania_2025.txt.**
+
+---
+
 ## Quién es el usuario
 
 **Enrique (Kike) Osterling** — advisory inmobiliario, Osterling Advisory.
@@ -7,6 +22,7 @@
 - Clientes: fondos de inversión, compañías de seguros, grupos económicos, empresas de renombre.
 - Interlocución directa con C-level y gerencias de adquisiciones.
 - Todo output debe ser ejecutivo, profesional, orientado a criterios financieros/riesgo institucional.
+- **No hacer preguntas que el propio conocimiento normativo/financiero ya puede responder.**
 
 ---
 
@@ -19,6 +35,8 @@ App Streamlit de pre-factibilidad inmobiliaria. Archivo único: `app.py` (~15,00
 **Principio de diseño:** La app hace el 90% del trabajo de pre-factibilidad. No busca exactitud milimétrica. Números deben ser defendibles y coherentes con la realidad del mercado limeño.
 
 **Flujo:** Certificado de parámetros → cabida arquitectónica (IA) → modelo financiero con banco → reporte PDF/Excel para C-level/banco.
+
+**Filosofía de conocimiento:** El conocimiento adicional (negociación, valorización, due diligence, normativa) se integra como contexto IA (prompts + archivos normativas/), NO como nuevas pestañas en la UI. App igual por fuera → IA mucho más inteligente por dentro.
 
 ---
 
@@ -40,6 +58,7 @@ App Streamlit de pre-factibilidad inmobiliaria. Archivo único: `app.py` (~15,00
 | `_geo_poligono_tabular/dxf(...)` | Polígono Shapely desde medidas o DXF |
 | `_geo_aplicar_retiros(...)` | Aplica retiros al polígono del lote |
 | `_gen_massing_3d_solid(...)` | Massing 3D sólido con tipologías por piso (Plotly) |
+| `_load_norm(filename)` (~línea 3287) | Carga archivos normativas/ cacheados por sesión Streamlit |
 
 **Cliente Anthropic:** `max_retries=0, timeout=120.0`, modelo `claude-sonnet-4-6`
 
@@ -50,6 +69,60 @@ App Streamlit de pre-factibilidad inmobiliaria. Archivo único: `app.py` (~15,00
 ## Distritos con RIN integrado en generate_cabida
 
 San Isidro · Miraflores · Jesús María · Cercado de Lima · San Borja · Santa Anita · Surco · Surquillo · Villa El Salvador · San Juan de Lurigancho
+
+**GAP PENDIENTE:** No hay RIN para Callao ni San Martín de Porres — los dos hubs industriales activos del portfolio Osterling. Agregarlos cuando se consiga la ordenanza.
+
+---
+
+## Índice completo de normativas/ (31 archivos)
+
+### RINs por distrito (estacionamientos + parámetros locales)
+| Archivo | Contenido |
+|---|---|
+| `rin_san_isidro.txt` | RIN San Isidro (resumen operativo) |
+| `rin_san_isidro_completo.txt` | Ord. 523-MSI completa (343k chars) — FUENTE PRIMARIA |
+| `rin_miraflores.txt` | RIN Miraflores |
+| `rin_jesus_maria.txt` | RIN Jesús María |
+| `rin_cercado_lima.txt` | RIN Cercado de Lima |
+| `rin_san_borja.txt` | RIN San Borja |
+| `rin_santa_anita.txt` | RIN Santa Anita |
+| `rin_surco.txt` | RIN Santiago de Surco |
+| `rin_surquillo.txt` | RIN Surquillo |
+| `rin_villa_el_salvador.txt` | RIN Villa El Salvador |
+| `rin_san_juan_lurigancho.txt` | RIN San Juan de Lurigancho |
+| `rin_lince.txt` | RIN Lince |
+| `rin_magdalena.txt` | RIN Magdalena del Mar |
+| `rin_la_victoria.txt` | RIN La Victoria |
+
+### RNE — Reglamento Nacional de Edificaciones
+| Archivo | Norma | Contenido |
+|---|---|---|
+| `rne_g040_definiciones.txt` | G.040 | Definiciones técnicas (51k chars) |
+| `rne_a010_condiciones.txt` | A.010 | Condiciones generales de diseño (79k chars) |
+| `rne_a020_vivienda.txt` | A.020 | Norma de vivienda (48k chars) |
+| `rne_a060_industria.txt` | A.060 | Industria |
+| `rne_a070_comercio.txt` | A.070 | Comercio |
+| `rne_a080_oficinas.txt` | A.080 | Oficinas |
+| `rne_e030_sismico.txt` | E.030 | Diseño sismorresistente |
+| `rne_th010_hab_residencial.txt` | TH.010 | Habilitaciones residenciales (13k chars) |
+| `rne_th030_ind_habilitacion.txt` | TH.030 | Habilitaciones industriales |
+| `rne_gh020_diseno_urbano.txt` | GH.020 | Diseño urbano (26k chars) |
+| `rne_nacional.txt` | RNE general | Reglamento Nacional síntesis |
+| `vis_vivienda_interes_social.txt` | VIS | Vivienda de interés social |
+
+### Ordenanzas MML y zonificación Lima
+| Archivo | Contenido |
+|---|---|
+| `ord_mml_933.txt` | Ord. 933-MML — zonificación Lima (254k chars) |
+| `ord_mml_1015.txt` | Ord. 1015-MML — parámetros urbanísticos (325k chars) |
+| `ord_mml_1144.txt` | Ord. 1144-MML — La Molina y zona sur (287k chars) |
+| `referencias_lima.txt` | Marco normativo general Lima — parámetros por zona/distrito |
+
+### Mercado e Industrial
+| Archivo | Contenido |
+|---|---|
+| `mercado_residencial_lima_urbania_2025.txt` | Urbania INDEX Lima Nov 2025 — precios venta/alquiler/rentabilidad por distrito |
+| `benchmarks_industrial.txt` | Costos nave, Parque Logístico 47 ($291.5/m²), rentas prime Lima, KPIs |
 
 ---
 
@@ -75,6 +148,22 @@ San Isidro · Miraflores · Jesús María · Cercado de Lima · San Borja · San
 ### Renta de mercado Prime Lima
 - Rango: $5.50–$7.50/m²/mes
 - Hubs: Villa El Salvador, Lurín, SJL, Callao, Cercado de Lima
+
+### Referencia: Parque Logístico 47 (proyecto real llave en mano)
+- Área nave: 14,315m², terreno: 18,789m², ocupación: 76.2%
+- Costo construcción (sin terreno): $291.5/m² nave
+- Renta: $6.5/m²/mes — Yield bruto: 26.8%
+- Plazo construcción: 120 días (estructura metálica prefabricada)
+
+### Costos de nave por tipo (Lima, USD/m² nave construida)
+| Tipo | Costo |
+|---|---|
+| Almacén básico (<10m clara) | $180–220/m² |
+| Estándar (10–12m) | $220–260/m² |
+| Clase A (12–15m) | $270–310/m² |
+| Cross-docking | $380–500/m² |
+| Manufactura (losa reforzada) | $350–450/m² |
+| Patios/maniobras | $60–90/m² |
 
 ### Precio máximo de terreno (orientativo)
 | Propósito | VES/Lurín | Lógica |
@@ -103,6 +192,64 @@ San Isidro · Miraflores · Jesús María · Cercado de Lima · San Borja · San
 
 ### Regla buy vs. rent
 Si renta mercado = $7.00/m²/mes → costo efectivo compra debe ser < $7.00/m²/mes para justificar compra. Target optimizado: ~$6.00/m²/mes.
+
+---
+
+## Precios de mercado residencial Lima — Noviembre 2025 (Urbania INDEX)
+
+**Tipo de cambio referencial: ~3.75 S/./USD (referencial); TC app: 3.45 S/./USD**
+
+### Venta (S/./m²)
+| Distrito | S/./m² |
+|---|---|
+| San Isidro | 9,231 |
+| Barranco | 9,161 |
+| Miraflores | 8,670 |
+| Jesús María | 7,574 |
+| Lince | 7,318 |
+| San Borja | 7,147 |
+| Magdalena del Mar | 6,908 |
+| Surquillo | 6,807 |
+| Lima Index | 6,806 |
+| Santiago de Surco | 6,690 |
+| Pueblo Libre | 6,279 |
+| San Miguel | 6,147 |
+| Chorrillos | 5,718 |
+| La Molina | 5,337 |
+
+### Alquiler (S/./mes, 100m², 3 hab)
+| Distrito | S/./mes |
+|---|---|
+| Barranco | 4,098 |
+| San Isidro | 3,847 |
+| Miraflores | 3,587 |
+| Lima Index | 3,185 |
+| San Borja | 2,757 |
+| Santiago de Surco | 2,732 |
+| La Molina | 2,566 |
+
+### Rentabilidad bruta (top)
+La Molina 6.3% · Surquillo 6.1% · Chorrillos 5.7% · Lima Index 5.25% · San Isidro 5.0%
+
+---
+
+## RIN San Isidro — Lógica de aplicación (Ord. 523-MSI)
+
+### Deduce el Ámbito desde las áreas de las unidades:
+- Unidades 40–80m² → Ámbito A (densidad alta, zona Javier Prado)
+- Unidades 80–150m² → Ámbito B (densidad media, zona Basadre, Pezet, Golf)
+- Unidades 150m²+ → Ámbito C (densidad baja, zona Orrantia, Monterrico)
+
+### Ratios de estacionamiento (residencial):
+| Ámbito | Residentes | Visitas |
+|---|---|---|
+| A | 1 cada 1 und | 10% del total |
+| B | 1.5 cada 1 und | 15% del total |
+| C | 2 cada 1 und | 20% del total |
+
+### Cálculo de sótanos (app):
+- 20m² por cochera (incluye circulaciones)
+- `c_obra_sotanos = estac_total × 20 × costo_sotano_m2 (default $450/m²)`
 
 ---
 
@@ -175,6 +322,10 @@ Si renta mercado = $7.00/m²/mes → costo efectivo compra debe ser < $7.00/m²/
 - HTML report division by zero → `_ct = r.get('costo_total') or 1`
 - Depósitos: 1 por unidad (no 0.6)
 - Loading messages en lenguaje natural
+- pdfminer (NO poppler) para extracción de PDFs — poppler falla en macOS 13 Tier 3
+- `--server.headless true` al lanzar Streamlit (evita prompt de email)
+
+---
 
 ## Instrucciones de desarrollo
 
@@ -183,3 +334,11 @@ Si renta mercado = $7.00/m²/mes → costo efectivo compra debe ser < $7.00/m²/
 - Cuando algo es estimación, documentarlo en observaciones para que el usuario lo sepa
 - Priorizar números defendibles y coherentes con mercado limeño
 - No agregar features, refactors ni abstracciones más allá de lo solicitado
+- El conocimiento nuevo (negociación, due diligence, valorización) va en normativas/ como .txt, NO como tabs de UI
+
+---
+
+## GitHub
+
+Repositorio: https://github.com/eosterling-lgtm/FACTIS.git (branch: main)
+Para sincronizar a otra máquina: `git clone https://github.com/eosterling-lgtm/FACTIS.git`
