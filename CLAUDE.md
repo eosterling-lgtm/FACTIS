@@ -5,7 +5,7 @@
 Al comenzar cualquier sesión en este proyecto, ANTES de responder cualquier pregunta:
 
 1. Confirmar que `app.py` existe en este directorio (archivo único ~15,000 líneas)
-2. Tener presente que la carpeta `normativas/` contiene 31 archivos de texto con toda la normativa activa
+2. Tener presente que la carpeta `normativas/` contiene **54 archivos** de texto con toda la normativa activa — **LEER `CONOCIMIENTO_INDUSTRIAL_SOLUM.md` para cualquier consulta industrial**
 3. El conocimiento normativo, de mercado y financiero ya está embebido en los prompts del API de Claude — NO preguntar al usuario por datos que deberían conocerse
 4. Aplicar directamente: RINs, normas, benchmarks, precios de mercado, lógica financiera
 
@@ -70,11 +70,11 @@ App Streamlit de pre-factibilidad inmobiliaria. Archivo único: `app.py` (~15,00
 
 San Isidro · Miraflores · Jesús María · Cercado de Lima · San Borja · Santa Anita · Surco · Surquillo · Villa El Salvador · San Juan de Lurigancho
 
-**GAP PENDIENTE:** No hay RIN para Callao ni San Martín de Porres — los dos hubs industriales activos del portfolio Osterling. Agregarlos cuando se consiga la ordenanza.
+**GAP PENDIENTE:** No hay RIN para Callao. SMP tiene datos de mercado en `CONOCIMIENTO_INDUSTRIAL_SOLUM.md` (zona Av. Tomás Valle, zonificación I2/CZ) pero sin ordenanza distrital completa.
 
 ---
 
-## Índice completo de normativas/ (31 archivos)
+## Índice completo de normativas/ (54 archivos)
 
 ### RINs por distrito (estacionamientos + parámetros locales)
 | Archivo | Contenido |
@@ -97,32 +97,53 @@ San Isidro · Miraflores · Jesús María · Cercado de Lima · San Borja · San
 ### RNE — Reglamento Nacional de Edificaciones
 | Archivo | Norma | Contenido |
 |---|---|---|
+| `rne_g010_consideraciones.txt` | G.010 | Consideraciones generales |
 | `rne_g040_definiciones.txt` | G.040 | Definiciones técnicas (51k chars) |
 | `rne_a010_condiciones.txt` | A.010 | Condiciones generales de diseño (79k chars) |
+| `rne_a011_criterios_eiv.txt` | A.011 | Estudio de Impacto Vial — obligatorio gran/mediana industria |
 | `rne_a020_vivienda.txt` | A.020 | Norma de vivienda (48k chars) |
-| `rne_a060_industria.txt` | A.060 | Industria |
-| `rne_a070_comercio.txt` | A.070 | Comercio |
-| `rne_a080_oficinas.txt` | A.080 | Oficinas |
+| `rne_a060_industria.txt` | A.060 | Industria (resumen) |
+| `rne_a060_industria_full.txt` | A.060 | Industria completa — SSHH, agua, ruido, alturas, estac. |
+| `rne_a070_comercio.txt` | A.070 | Comercio (resumen) |
+| `rne_a070_comercio_full.txt` | A.070 | Comercio completo |
+| `rne_a080_oficinas.txt` | A.080 | Oficinas (resumen) |
+| `rne_a080_oficinas_full.txt` | A.080 | Oficinas completo |
+| `rne_a120_accesibilidad.txt` | A.120 | Accesibilidad — obligatorio >1,000 m² (RM 075-2023) |
+| `rne_a130_seguridad.txt` | A.130 | Seguridad en uso — evacuación, señalética (3,298 chars) |
 | `rne_e030_sismico.txt` | E.030 | Diseño sismorresistente |
-| `rne_th010_hab_residencial.txt` | TH.010 | Habilitaciones residenciales (13k chars) |
-| `rne_th030_ind_habilitacion.txt` | TH.030 | Habilitaciones industriales |
+| `rne_e050_suelos.txt` | E.050 | Mecánica de suelos — obligatorio >3 pisos en VES |
+| `rne_em070_elevadores.txt` | EM.070 | Instalaciones de transporte vertical |
+| `rne_gh010_hab_urbana.txt` | GH.010 | Habilitaciones urbanas generales |
 | `rne_gh020_diseno_urbano.txt` | GH.020 | Diseño urbano (26k chars) |
+| `rne_is010_sanitarias.txt` | IS.010 | Instalaciones sanitarias — dotaciones industriales (0.5 L/m²/turno) |
 | `rne_nacional.txt` | RNE general | Reglamento Nacional síntesis |
+| `rne_th010_hab_residencial.txt` | TH.010 | Habilitaciones residenciales (13k chars) |
+| `rne_th010_hab_residencial_full.txt` | TH.010 | Habilitaciones residenciales completo |
+| `rne_th020_hab_comercial.txt` | TH.020 | Habilitaciones comerciales |
+| `rne_th030_ind_habilitacion.txt` | TH.030 | Habilitaciones industriales (resumen) |
+| `rne_th030_hab_industrial_full.txt` | TH.030 | Habilitaciones industriales completo — lotes, frentes, aportes |
 | `vis_vivienda_interes_social.txt` | VIS | Vivienda de interés social |
 
 ### Ordenanzas MML y zonificación Lima
 | Archivo | Contenido |
 |---|---|
-| `ord_mml_933.txt` | Ord. 933-MML — zonificación Lima (254k chars) |
-| `ord_mml_1015.txt` | Ord. 1015-MML — parámetros urbanísticos (325k chars) |
+| `ord_mml_893.txt` | Ord. 893-MML — Reajuste Integral Zonificación Cercado de Lima (2005) |
+| `ord_mml_933.txt` | Ord. 933-MML — zonificación general Lima ATN I (254k chars) — base para VES, SJL, SMP, Lurín |
+| `ord_mml_1012.txt` | Ord. 1012-MML — Índice de Usos Miraflores (ATN III) |
+| `ord_mml_1015.txt` | Ord. 1015-MML — parámetros urbanísticos ATN II/III (325k chars) |
 | `ord_mml_1144.txt` | Ord. 1144-MML — La Molina y zona sur (287k chars) |
+| `ord_mml_indice_usos_area1.txt` | Índice de Usos ATN-I (230k chars, notación 0-5) |
+| `indice_usos_atni.txt` | Índice de Usos ATN-I COMPLETO (392k chars, 6,349 actividades, P/H notation) — **FUENTE PRIMARIA** |
 | `referencias_lima.txt` | Marco normativo general Lima — parámetros por zona/distrito |
+| `certificados_parametros_lima.txt` | Colección de CPUEs reales — San Luis CZ, Miraflores CM, Callao I2, SJL I2, SMP I2, VES CZ, Lurín I2 |
+| `imp_planos_zonificacion.txt` | Nota sobre mapas de zonificación (no integrables como texto) |
 
 ### Mercado e Industrial
 | Archivo | Contenido |
 |---|---|
+| `CONOCIMIENTO_INDUSTRIAL_SOLUM.md` | **BASE DE CONOCIMIENTO INDUSTRIAL COMPLETA** — zonificación I1-I4, A.060, EIV, índice usos, parámetros por distrito, benchmarks mercado 2025, transacciones reales, operadores Lurín, perspectivas 2025-2028 |
 | `mercado_residencial_lima_urbania_2025.txt` | Urbania INDEX Lima Nov 2025 — precios venta/alquiler/rentabilidad por distrito |
-| `benchmarks_industrial.txt` | Costos nave, Parque Logístico 47 ($291.5/m²), rentas prime Lima, KPIs |
+| `benchmarks_industrial.txt` | Parque Logístico 47 ($291.5/m² all-in, 13.6m, payback 3.74 años) + costos nave + rentas + métricas Lurín 2025 + transacciones reales VES Aldea 8/9/10 |
 
 ---
 
@@ -156,14 +177,18 @@ San Isidro · Miraflores · Jesús María · Cercado de Lima · San Borja · San
 - Plazo construcción: 120 días (estructura metálica prefabricada)
 
 ### Costos de nave por tipo (Lima, USD/m² nave construida)
-| Tipo | Costo |
-|---|---|
-| Almacén básico (<10m clara) | $180–220/m² |
-| Estándar (10–12m) | $220–260/m² |
-| Clase A (12–15m) | $270–310/m² |
-| Cross-docking | $380–500/m² |
-| Manufactura (losa reforzada) | $350–450/m² |
-| Patios/maniobras | $60–90/m² |
+| Tipo | Rango mercado | Referencia real |
+|---|---|---|
+| Almacén básico (<10m clara) | $180–325/m² | — |
+| Estándar (10–12m) | $220–430/m² | — |
+| Clase A (12–15m, Lurín estándar) | $430–650/m² | Simétrica: $909/m² all-in (incl. terreno) |
+| Clase A (12–15m, VES/otros) | $270–310/m² | Parque Logístico 47: $291.5/m² all-in |
+| Cross-docking (múltiples docks) | $380–500/m² | — |
+| Manufactura (losa reforzada) | $350–450/m² | — |
+| Cámara frigorífica (con equipos) | $675–1,215/m² | — |
+| Patios/maniobras (losa forklift) | $60–90/m² | — |
+
+**Nota:** El rango $430-650/m² es el costo de CONSTRUCCIÓN de nave en Lurín 2024-2025 (investigación Cushman & Wakefield + Colliers mayo 2026). El $291.5/m² de Parque Logístico 47 corresponde a un proyecto llave en mano VES 2024 con datos verificados de constructora. Ambos son válidos; la diferencia refleja calidad de acabados, especificaciones estructurales y zona.
 
 ### Precio máximo de terreno (orientativo)
 | Propósito | VES/Lurín | Lógica |
@@ -192,6 +217,75 @@ San Isidro · Miraflores · Jesús María · Cercado de Lima · San Borja · San
 
 ### Regla buy vs. rent
 Si renta mercado = $7.00/m²/mes → costo efectivo compra debe ser < $7.00/m²/mes para justificar compra. Target optimizado: ~$6.00/m²/mes.
+
+---
+
+## Zonas industriales Lima — Parámetros por distrito (2025)
+
+### Lurín — Hub logístico líder Lima Sur
+| KPI | Valor |
+|---|---|
+| Precio terreno (MacrOpolis / parque) | $140–200/m² |
+| Precio terreno (lotización fuera parque) | $120–187/m² |
+| Renta nave Clase A (h>12m, sprinklers) | $5.5–8.5/m²/mes |
+| Renta promedio mercado 2025 | $6.1–6.4/m²/mes |
+| Vacancia (Q3 2025) | 11.9% |
+| Participación demanda Lima | 54% |
+| Cap rate / Yield Clase A | 8–10% |
+| Zonificación habitual | I2 (lote mín 1,000m²) |
+| Normativa base | Ord. 933-MML-2006 + Ord. 1814-MML (plano feb.2024) |
+
+**Operadores instalados:** Ransa, Mercado Libre (CD 3,000m²), Cirion Data Center LIM2 (12,000m²), Alicorp, Molitalia, Natura, Yanbal, Ecolab, MacrOpolis (350+ empresas, 1.1M m² ocupados)  
+**Proyectos 2025:** Simétrica 22,381m² Clase A ($20M, entregado abr.2025), MacrOpolis Fase 3 (75,000m² en 2 fases)
+
+### Villa El Salvador (VES) — Hub consolidado, escasez de suelo
+| KPI | Valor |
+|---|---|
+| Precio terreno lotes grandes (~30,000m²) | $140–175/m² |
+| Precio terreno lotes pequeños/residencial | $300–400/m² |
+| Renta nave industrial | $5.0–7.0/m²/mes |
+| Vacancia | Saturado / oferta limitada |
+| Participación demanda Lima | 27% |
+| Zonificación CZ (Certificado N°137-2025) | 4 PISOS FIJOS — no usa fórmula 1.5(a+r) |
+| Retiro frontal CZ | 1.50 ml |
+| Almacenes logísticos en CZ | PERMITIDOS (Índice Usos ATN-I) |
+| Geotécnico | Obligatorio >3 pisos (suelo arenoso) |
+
+**Transacciones reales verificadas (Aldea Logística, 2023-2024):**
+- Aldea 8: 32,992m² — $5,278,741 — **$160/m²** — Ex: Fam. Wong — 2023
+- Aldea 9: 32,785m² — $5,650,000 — **$172/m²** — Ex: Autorex — 2023
+- Aldea 10: 35,000m² — $4,900,000 — **$140/m²** — Ex: Celima — 2024
+- **Conclusión: lotes industriales grandes VES = $140–172/m². El rango $300-400/m² es para lotes pequeños.**
+
+**Vecinos Aldea:** BSF Almacenes del Perú, DINET S.A., CD Saga Falabella, Aldea Logística Global
+
+### Chilca — Próximo frontier logístico Lima Sur
+| KPI | Valor |
+|---|---|
+| Precio terreno | $65–120/m² |
+| Renta nave | $3.5–5.5/m²/mes |
+| Vacancia | 34.1% (alta oferta disponible) |
+| Participación demanda Lima | 19% |
+| Perspectiva | Desplaza a Lurín y Huachipa en oferta disponible (Cushman & Wakefield nov.2025) |
+
+### Comparativo rápido Lurín vs. Chilca vs. VES
+| Zona | Terreno | Renta | Vacancia | Demanda |
+|---|---|---|---|---|
+| Lurín | $140-200/m² | $5.5-8.5 | 11.9% | 54% |
+| Chilca | $65-120/m² | $3.5-5.5 | 34.1% | 19% |
+| VES | $140-175/m² (lotes grandes) | $5.0-7.0 | Saturado | 27% |
+| Huachipa | $130-135/m² | $4.5-6.0 | — | — |
+
+### SJL / SMP (nodos emergentes)
+- **SJL (San Juan de Lurigancho):** Corredor Huachipa-Lurigancho. Renta $4.5–6.0/m²/mes. Suelo más económico, acceso en desarrollo.
+- **SMP (San Martín de Porres):** Zona Av. Tomás Valle. Uso mixto CZ/I2. Distancias cortas a Puerto Callao.
+
+### Métricas macro Lima industrial (2025)
+- Absorción neta anual: 83,000–95,000 m²/año
+- Pipeline 2025: +500,000 m² proyectados (88% Lima Sur + Callao)
+- Anillo Vial Periférico: construcción desde 2026 → reduce distancia Lurín-Callao significativamente
+- Cold chain: mercado US$510M en 2025, proyectado US$625M en 2026
+- E-commerce Perú: gasto digital $37B en 2024, proyectado $60B en 2027
 
 ---
 
@@ -240,16 +334,17 @@ La Molina 6.3% · Surquillo 6.1% · Chorrillos 5.7% · Lima Index 5.25% · San I
 - Unidades 80–150m² → Ámbito B (densidad media, zona Basadre, Pezet, Golf)
 - Unidades 150m²+ → Ámbito C (densidad baja, zona Orrantia, Monterrico)
 
-### Ratios de estacionamiento (residencial):
+### Ratios de estacionamiento (residencial, Ord. 523-MSI Anexo 02):
 | Ámbito | Residentes | Visitas |
 |---|---|---|
-| A | 1 cada 1 und | 10% del total |
-| B | 1.5 cada 1 und | 15% del total |
-| C | 2 cada 1 und | 20% del total |
+| A (≤80m²) | 2 cada 1 und | 25% del total |
+| B (80–160m²) | 2 cada 1 und | 15% del total |
+| C (>160m²) | 2 cada 1 und | 15% del total |
+| D (unifamiliar) | 1 cada 1 und | 10% del total |
 
 ### Cálculo de sótanos (app):
-- 20m² por cochera (incluye circulaciones)
-- `c_obra_sotanos = estac_total × 20 × costo_sotano_m2 (default $450/m²)`
+- 25m² por cochera (incluye circulaciones)
+- `c_obra_sotanos = estac_total × 25 × costo_sotano_m2 (default $450/m²)`
 
 ---
 

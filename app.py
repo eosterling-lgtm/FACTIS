@@ -553,10 +553,11 @@ def calcular_terreno_maximo(inp: dict) -> dict:
     ing_brutos   = ing_dptos + ing_estac + ing_deposito
 
     c_obra_dptos   = area_techada * costo_const
-    c_obra_sotanos = n_estac * 20 * costo_sotano   # 20 m² área techada por cochera
+    c_obra_sotanos = n_estac * 25 * costo_sotano   # 25 m² área techada por cochera (validado: Clemente X 335)
     c_construccion = (c_obra_dptos + c_obra_sotanos) * (1 + fee_constr)
-    c_arq          = area_techada * 10.5
-    c_esp          = area_techada * 4.4
+    c_arq          = area_techada * inp.get("costo_arq_m2", 5.94)
+    c_esp          = area_techada * inp.get("costo_esp_m2", 7.92)
+    c_factib       = inp.get("costo_factibilidades", 17000)
     c_supervision  = c_construccion * 0.005
     c_permisos         = c_construccion * 0.015
     c_gerencia         = c_construccion * 0.05
@@ -565,7 +566,7 @@ def calcular_terreno_maximo(inp: dict) -> dict:
     _meses_obra    = 24 if num_pisos > 20 else (12 if num_pisos <= 5 else 16)
     c_financiero   = c_construccion * 0.75 * tasa_financ / 100 * (_meses_obra / 12)
 
-    c_base_constr  = c_construccion + c_arq + c_esp
+    c_base_constr  = c_construccion + c_arq + c_esp + c_factib
     c_legales_base = (c_due_dilig + c_base_constr) * 0.005
     # factor de transacción: alcabala 3% + notarial 0.3% + registral 0.15%
     factor_trans   = 1 + 0.03 + 0.003 + 0.0015  # 1.0345
@@ -574,7 +575,7 @@ def calcular_terreno_maximo(inp: dict) -> dict:
 
     C_fixed = (c_base_constr + c_supervision + c_legales_base + c_permisos
                + c_gerencia + c_ventas_marketing
-               + c_due_dilig + c_financiero)
+               + c_due_dilig + c_factib + c_financiero)
 
     k = max(1 - tasa_ir, 0.01)
 
@@ -2921,7 +2922,7 @@ MERCADO = {
     },
     "San Isidro": {                                # Urbania: 9,231 S./m² → $2,676/m² (TC 3.45)
         "precio_1br": 2945, "precio_2br": 2785, "precio_3br": 2570,
-        "precio_estac": 17000, "precio_deposito": 6000,
+        "precio_estac": 15000, "precio_deposito": 2500,
         "costo_construccion": 875,               # Boutique RDB mid-premium — referencia Clemente X / CAPECO 2025
         "velocidad_venta": 0.80, "duracion_base_meses": 24,
         "alquiler_m2_mes": 11.2, "yield_mercado_pct": 5.0, "variacion_anual_pct": 0.7,
@@ -3450,7 +3451,7 @@ def generate_cabida(params: dict, config: dict) -> dict:
     if colind_izq or colind_der:
         _colind_max  = max(colind_izq or 0, colind_der or 0)
         _base_pisos  = int(params_cabida.get("pisos_max") or 5)
-        _pisos_calc  = math.ceil((_colind_max + _base_pisos) / 2)
+        _pisos_calc  = int((_colind_max + _base_pisos) / 2)  # Art.6.3 Ord.523-MSI: floor — decimal no sube al entero superior
         # Sobreescribir en la copia que recibe Claude — no es sugerencia, es valor fijo
         params_cabida["pisos_max"] = _pisos_calc
         partes = []
@@ -3460,7 +3461,7 @@ def generate_cabida(params: dict, config: dict) -> dict:
             f"\n\nCOLINDANTES VERIFICADOS EN CAMPO: {' | '.join(partes)}.\n"
             f"REGLA DE COLINDANCIA APLICADA (cálculo determinístico):\n"
             f"  colindante más alto = {_colind_max} pisos | altura base norma = {_base_pisos} pisos\n"
-            f"  pisos_max = ceil(({_colind_max} + {_base_pisos}) / 2) = {_pisos_calc} pisos\n"
+            f"  pisos_max = floor(({_colind_max} + {_base_pisos}) / 2) = {_pisos_calc} pisos\n"
             f"  *** pisos_max YA ha sido actualizado a {_pisos_calc} en los parámetros. "
             f"USA EXACTAMENTE {_pisos_calc} PISOS. NO uses la altura base original. ***"
         )
@@ -3729,9 +3730,9 @@ INSTRUCCIONES:
    estac_residentes = total_unidades × ratio_norma (usar el ratio que indica el CPU: San Isidro Ámbito A/B/C = 2 est./viv., Ámbito D/CF = 1 est./viv.; otros distritos según RNE o CPU adjunto).
    estac_visitas: aplica EXACTAMENTE lo que indica el parámetro estac_visitas_norma del CPU. {estac_visitas_instruccion}
    estac_total = estac_residentes + estac_visitas.
-   CÁLCULO DE SÓTANOS — área techada por cochera = 20 m² (cajón + circulación directa).
-   area_neta_sotano = area_techada_piso_m2 × 0.78 (descuenta 22% para rampa de acceso, muros estructurales y cuarto de máquinas).
-   cocheras_por_sotano = floor(area_neta_sotano / 20).
+   CÁLCULO DE SÓTANOS — área techada por cochera = 25 m² (cajón + circulación directa, validado Clemente X 335: 900m²/36 coch.).
+   area_neta_sotano = area_terreno × 0.87 (sótanos excavan el área total del lote; el 13% descuenta rampa de acceso, muros perimetrales y cuarto de máquinas).
+   cocheras_por_sotano = floor(area_neta_sotano / 25).
    num_sotanos = ceil(estac_total / cocheras_por_sotano).
    IMPORTANTE: num_sotanos debe ser el número REAL necesario para alojar físicamente estac_total cocheras — no uses 1 o 2 por defecto sin verificar la capacidad.
 7. NO apliques beneficios normativos adicionales que no estén explícitamente indicados en el certificado de parámetros adjunto. Si en la normativa del distrito o en los documentos detectas beneficios potenciales (por cuadrante de ubicación, frente a parque, lote esquina, zona especial, etc.), repórtalos ÚNICAMENTE en el campo "observaciones" con el prefijo "BENEFICIO POTENCIAL — requiere verificación". El usuario y su equipo técnico/legal decidirán si los incorporan.
@@ -3786,7 +3787,37 @@ Devuelve SOLO este JSON:
     if not response.content:
         raise ValueError("json_parse_error: API devolvió respuesta vacía")
     text = response.content[0].text.strip()
-    return parse_json_safe(text)
+    cab = parse_json_safe(text)
+
+    # ── POST-PROCESO: corregir inconsistencias del output de la IA ──────────
+    # 1. area_vendible = suma real de áreas de tipologías (ground truth)
+    #    La IA a veces reporta area_vendible inconsistente con las unidades listadas.
+    _sum_tip = sum(float(u.get("area_total_m2") or 0) for u in (cab.get("unidades") or []))
+    if _sum_tip > 0:
+        _ac = float(cab.get("area_comunes_m2") or 0)
+        cab["area_vendible_m2"]    = round(_sum_tip, 1)
+        cab["area_techada_total_m2"] = round(_sum_tip + _ac, 1)
+
+    # 2. num_sotanos: recalcular con fórmula determinística (validada Clemente X 335)
+    #    area_neta_sotano = area_terreno × 0.87  (sótanos excavan lote completo)
+    #    cocheras_por_sotano = floor(area_neta / 25)
+    _area_t  = float(params.get("area_terreno_m2") or 0)
+    _estac_t = int(cab.get("estac_total") or 0)
+    if _area_t > 0 and _estac_t > 0:
+        _coch_x_sot = max(1, int(_area_t * 0.87 / 25))
+        _sot_correcto = -(-_estac_t // _coch_x_sot)   # ceil sin importar
+        if cab.get("num_sotanos", 0) != _sot_correcto:
+            _sot_orig = cab.get("num_sotanos", "?")
+            cab["num_sotanos"] = _sot_correcto
+            _obs = cab.get("observaciones") or []
+            _obs.append(
+                f"Sótanos corregidos: {_area_t:.0f}m²×0.87/25m²/coch"
+                f"={_coch_x_sot} coch/sótano → ceil({_estac_t}/{_coch_x_sot})="
+                f"{_sot_correcto} (IA reportó {_sot_orig})"
+            )
+            cab["observaciones"] = _obs
+
+    return cab
 
 
 def analizar_legal(partida_bytes: bytes | None, puhr_bytes: bytes | None,
@@ -4187,8 +4218,10 @@ def calcular_financiero(cabida: dict, fin: dict, zona: str) -> dict:
     # ── Ingresos ────────────────────────────────────────
     precio_m2    = fin.get("precio_venta_m2") if fin.get("precio_venta_m2", 0) > 0 else m.get("precio_2br", 0)
     ing_dptos    = av * (precio_m2 or 0)
-    ing_estac    = cabida.get("estac_residentes", 0) * m.get("precio_estac", 0)
-    ing_deposito = cabida.get("depositos_total", 0) * m.get("precio_deposito", 0)
+    _pe = fin.get("precio_estac") or m.get("precio_estac", 0)
+    _pd = fin.get("precio_deposito") or m.get("precio_deposito", 0)
+    ing_estac    = cabida.get("estac_residentes", 0) * _pe
+    ing_deposito = cabida.get("depositos_total", 0) * _pd
     ing_brutos   = ing_dptos + ing_estac + ing_deposito
 
     # ── Terreno ─────────────────────────────────────────
@@ -4202,14 +4235,15 @@ def calcular_financiero(cabida: dict, fin: dict, zona: str) -> dict:
 
     # ── Construcción ────────────────────────────────────
     c_obra_dptos   = at * (fin.get("costo_construccion", 0) or 0)
-    c_sotanos_area = cabida.get("estac_total", 0) * 20   # 20 m² área techada por cochera
+    c_sotanos_area = cabida.get("estac_total", 0) * 25   # 25 m² área techada por cochera (validado: Clemente X 335, 900m²/36 coch.)
     c_obra_sotanos = c_sotanos_area * fin.get("costo_sotano_m2", 450)
     c_constructora = (c_obra_dptos + c_obra_sotanos) * fin.get("fee_constructora", 10.0) / 100
     c_construccion = c_obra_dptos + c_obra_sotanos + c_constructora
 
-    # ── Costos Inmobiliarios — BOE validado (U. del Pacífico / Boro Fleischmann) ─
-    c_arq          = at * 10.5                   # Arquitectura: $10.5/m² construido
-    c_esp          = at * 4.4                    # Especialidades: $4.4/m² construido
+    # ── Costos Inmobiliarios — calibrado Clemente X 335 (UP Advisory Board 2025) ─
+    c_arq          = at * (fin.get("costo_arq_m2") or 5.94)    # $5.94/m² → $15,000 en 2,525m² (ref. NÓMENA)
+    c_esp          = at * (fin.get("costo_esp_m2") or 7.92)    # $7.92/m² → $20,000 en 2,525m² (sanitario+eléct.+gas)
+    c_factib       = fin.get("costo_factibilidades") or 17000  # Estudios pre-proyecto (≠ DD terreno)
     c_supervision  = c_construccion * 0.005      # Supervisión técnica: 0.5% costo directo
     c_costos_base  = c_terreno_total + c_construccion + c_arq + c_esp
     c_legales      = c_costos_base * 0.005       # Legales y contabilidad: 0.5%
@@ -4224,8 +4258,8 @@ def calcular_financiero(cabida: dict, fin: dict, zona: str) -> dict:
     c_financiero   = c_construccion * 0.75 * fin.get("tasa_financ", 9.0) / 100 * (_meses_obra_prel / 12)
 
     # ── Totales ─────────────────────────────────────────
-    c_sin_financ = (c_terreno_total + c_construccion + c_arq + c_esp + c_supervision +
-                    c_legales + c_permisos + c_gerenciamiento + c_ventas_marketing)
+    c_sin_financ = (c_terreno_total + c_construccion + c_arq + c_esp + c_factib +
+                    c_supervision + c_legales + c_permisos + c_gerenciamiento + c_ventas_marketing)
     c_total      = c_sin_financ + c_financiero
 
     utilidad_bruta = ing_brutos - c_total
@@ -4245,7 +4279,7 @@ def calcular_financiero(cabida: dict, fin: dict, zona: str) -> dict:
 
     # Métricas estratégicas
     be_precio_m2    = round(c_sin_financ / av) if av > 0 else 0
-    _otros_costos = (c_construccion + c_arq + c_esp + c_supervision + c_legales
+    _otros_costos = (c_construccion + c_arq + c_esp + c_factib + c_supervision + c_legales
                      + c_permisos + c_gerenciamiento + c_ventas_marketing
                      + c_due_dilig + c_notarial + c_registral + c_demolicion)
     _ir_factor      = max(1 - tasa_ir, 0.50)
@@ -4330,8 +4364,8 @@ def calcular_financiero(cabida: dict, fin: dict, zona: str) -> dict:
             "Sótanos":                         round(c_obra_sotanos),
             f"Fee constructora ({(fin.get('fee_constructora') or 10):.0f}%)": round(c_constructora),
             "── COSTOS TÉCNICOS ───────────────": 0,
-            "Arquitectura ($10.5/m²)":          round(c_arq),
-            "Especialidades ($4.4/m²)":         round(c_esp),
+            f"Arquitectura (${fin.get('costo_arq_m2') or 5.94:.2f}/m²)":  round(c_arq),
+            f"Especialidades (${fin.get('costo_esp_m2') or 7.92:.2f}/m²)": round(c_esp),
             "Supervisión técnica (0.5%)":        round(c_supervision),
             "Permisos y licencias (1.5%)":       round(c_permisos),
             "── COSTOS INMOBILIARIOS ──────────": 0,
@@ -8432,8 +8466,7 @@ with st.sidebar:
         nombre_proyecto = st.text_input(
             "Nombre del proyecto",
             placeholder="Ej: Torres Las Camelias — Miraflores",
-            key="nombre_proyecto",
-            help="Aparece en la portada del reporte PDF")
+            key="nombre_proyecto")
         _cab_zona_keys = list(MERCADO.keys())
         _cab_zona_saved = st.session_state.get("cab_zona_sel", "Miraflores")
         _cab_zona_default = _cab_zona_keys.index(_cab_zona_saved) if _cab_zona_saved in _cab_zona_keys else min(20, len(_cab_zona_keys) - 1)
@@ -8478,44 +8511,39 @@ with st.sidebar:
                             break
                     st.success("Datos extraídos. Revisa y ajusta antes de ejecutar.")
                     st.rerun()
-        st.caption("Completa o adiciona información del inmueble para enriquecer el análisis.")
+        with st.expander("Medidas del lote", expanded=False):
+            st.caption("Completa o adiciona información del inmueble para enriquecer el análisis.")
+            col_fr, col_fo = st.columns(2)
+            override_frente = col_fr.number_input("Frente (ml)", min_value=0.0, max_value=500.0,
+                                                  value=float(st.session_state.get("cab_override_frente", 0.0)), step=0.5,
+                                                  key="cab_frente_inp")
+            override_fondo  = col_fo.number_input("Fondo (ml)",  min_value=0.0, max_value=500.0,
+                                                  value=float(st.session_state.get("cab_override_fondo", 0.0)), step=0.5,
+                                                  key="cab_fondo_inp")
 
-        col_fr, col_fo = st.columns(2)
-        override_frente = col_fr.number_input("Frente (ml)", min_value=0.0, max_value=500.0,
-                                              value=float(st.session_state.get("cab_override_frente", 0.0)), step=0.5,
-                                              help="Frente del lote en metros lineales", key="cab_frente_inp")
-        override_fondo  = col_fo.number_input("Fondo (ml)",  min_value=0.0, max_value=500.0,
-                                              value=float(st.session_state.get("cab_override_fondo", 0.0)), step=0.5,
-                                              help="Fondo del lote en metros lineales", key="cab_fondo_inp")
+            _area_calc = round(override_frente * override_fondo, 1) if override_frente > 0 and override_fondo > 0 else 0.0
+            if _area_calc > 0:
+                st.markdown(f"Área calculada: **{_area_calc:,.1f} m²** (frente × fondo)")
 
-        _area_calc = round(override_frente * override_fondo, 1) if override_frente > 0 and override_fondo > 0 else 0.0
-        if _area_calc > 0:
-            st.caption(f"Área calculada: **{_area_calc:,.1f} m²** (frente × fondo)")
+            override_area = st.number_input("Área del terreno (m²)", min_value=0.0, max_value=50000.0,
+                                            value=float(st.session_state.get("cab_override_area", _area_calc)), step=10.0, key="cab_area_inp")
+            override_al   = st.number_input("Área libre mínima (%)", min_value=0.0, max_value=80.0,
+                                            value=0.0, step=5.0,
+                                            key="cab_override_al_inp")
 
-        override_area = st.number_input("Área del terreno (m²)", min_value=0.0, max_value=50000.0,
-                                        value=float(st.session_state.get("cab_override_area", _area_calc)), step=10.0,
-                                        help="0 = usar el valor extraído del certificado. Se completa automáticamente si ingresas frente y fondo.", key="cab_area_inp")
-        override_al   = st.number_input("Área libre mínima (%)", min_value=0.0, max_value=80.0,
-                                        value=0.0, step=5.0,
-                                        help="0 = usar el valor extraído del certificado",
-                                        key="cab_override_al_inp")
-
-        st.markdown("---")
-        st.markdown("### COLINDANTES")
-        st.caption("Norma por Colindancia — Se activa cuando las edificaciones colindantes superan la altura permitida, otorgando beneficio de altura al proyecto.")
-        _col_izq, _col_der = st.columns(2)
-        colind_izq = _col_izq.number_input("Colindante izq. (pisos)", min_value=0, max_value=40,
-                                            value=0, step=1,
-                                            help="0 = sin edificación colindante izquierda",
-                                            key="cab_colind_izq_inp")
-        colind_der = _col_der.number_input("Colindante der. (pisos)", min_value=0, max_value=40,
-                                            value=0, step=1,
-                                            help="0 = sin edificación colindante derecha",
-                                            key="cab_colind_der_inp")
-        if colind_izq > 0 or colind_der > 0:
-            _col_max = max(colind_izq, colind_der)
-            st.caption(f"Regla colindancia: edificio a analizar podrá alcanzar hasta el promedio "
-                       f"con el colindante más alto ({_col_max} pisos). Claude calculará la altura permitida.")
+        with st.expander("Colindantes", expanded=False):
+            st.caption("Norma por Colindancia — Se activa cuando las edificaciones colindantes superan la altura permitida, otorgando beneficio de altura al proyecto.")
+            _col_izq, _col_der = st.columns(2)
+            colind_izq = _col_izq.number_input("Colindante izq. (pisos)", min_value=0, max_value=40,
+                                                value=0, step=1,
+                                                key="cab_colind_izq_inp")
+            colind_der = _col_der.number_input("Colindante der. (pisos)", min_value=0, max_value=40,
+                                                value=0, step=1,
+                                                key="cab_colind_der_inp")
+            if colind_izq > 0 or colind_der > 0:
+                _col_max = max(colind_izq, colind_der)
+                st.caption(f"Regla colindancia: edificio a analizar podrá alcanzar hasta el promedio "
+                           f"con el colindante más alto ({_col_max} pisos). Claude calculará la altura permitida.")
 
         st.markdown("---")
         st.markdown("### DATOS FINANCIEROS")
@@ -8542,24 +8570,48 @@ with st.sidebar:
         _ref_p1 = MERCADO.get(zona, {}).get("precio_1br", 0)
         _ref_p2 = MERCADO.get(zona, {}).get("precio_2br", 0)
         _ref_p3 = MERCADO.get(zona, {}).get("precio_3br", 0)
+        _m_zona = MERCADO.get(zona, {})
+        _def_estac = int((_financ_inputs_ss.get("precio_estac") or 0) or _m_zona.get("precio_estac", 0))
+        _def_dep   = int((_financ_inputs_ss.get("precio_deposito") or 0) or _m_zona.get("precio_deposito", 0))
+        _col_pe, _col_pd = st.columns(2)
+        with _col_pe:
+            precio_estac_inp = st.number_input(
+                "Precio cochera (USD)", min_value=0, max_value=100_000,
+                value=_def_estac, step=500, key="cab_precio_estac_inp")
+        with _col_pd:
+            precio_deposito_inp = st.number_input(
+                "Precio depósito (USD)", min_value=0, max_value=50_000,
+                value=_def_dep, step=250, key="cab_precio_deposito_inp")
         costo_const_m2  = st.number_input("Costo construcción dptos / m² (USD)",
                                           min_value=300, max_value=3_000,
                                           step=25, key="cab_cconst_inp")
         with st.expander("Costos avanzados"):
             costo_sotano_m2 = st.number_input("Costo sótano / m² (USD)", 200, 1000, 450, 25,
-                                                help="Costo por m² de sótano (excavación + estructura)",
                                                 key="cab_costo_sotano_inp")
+            _fi_arq = float((_financ_inputs_ss.get("costo_arq_m2") or 5.94))
+            _fi_esp = float((_financ_inputs_ss.get("costo_esp_m2") or 7.92))
+            _fi_fac = int((_financ_inputs_ss.get("costo_factibilidades") or 17000))
+            _col_arq, _col_esp = st.columns(2)
+            with _col_arq:
+                costo_arq_m2 = st.number_input(
+                    "Planos arquitectura / m² (USD)", 1.0, 50.0, _fi_arq, 0.5,
+                    key="cab_costo_arq_inp")
+            with _col_esp:
+                costo_esp_m2 = st.number_input(
+                    "Especialidades / m² (USD)", 1.0, 50.0, _fi_esp, 0.5,
+                    key="cab_costo_esp_inp")
+            costo_factibilidades = st.number_input(
+                "Factibilidades (USD)", 0, 100_000, _fi_fac, 1000,
+                key="cab_costo_factib_inp")
             _estructura_opts = ["Terreno como aporte (estándar)", "Banco financia terreno (con track record)"]
             _estructura_sel  = st.radio(
                 "Estructura de financiamiento",
                 _estructura_opts, index=0,
-                help="Estándar: promotor aporta terreno libre y banco financia solo obra. Con track record: banco financia saldo terreno + obra.",
                 key="cab_estructura_financ_inp")
             estructura_financ = "estandar" if _estructura_sel == _estructura_opts[0] else "con_terreno"
             if estructura_financ == "con_terreno":
                 aporte_propio_pct = st.number_input(
                     "Aporte inicial terreno (%)", 10.0, 40.0, 20.0, 5.0,
-                    help="% del precio del terreno que el promotor paga con equity en la firma de la minuta",
                     key="cab_aporte_propio_inp")
             else:
                 aporte_propio_pct = 100.0
@@ -8573,46 +8625,36 @@ with st.sidebar:
             pct_preventa_banco = st.number_input(
                 "Preventa mínima exigida por banco (%)", 10.0, 50.0,
                 float(_fi_sb.get("pct_preventa_banco", 30.0)), 5.0,
-                key="cab_pct_preventa_banco_inp",
-                help="% de unidades vendidas que el banco exige antes de liberar el primer desembolso de construcción. Estándar Perú: 30%. Varía según track record del promotor.")
+                key="cab_pct_preventa_banco_inp")
             _req_sb  = max(1, _m_sb.ceil(_n_unid_sb * pct_preventa_banco / 100))
             _auto_pv = max(1, _m_sb.ceil(_req_sb / _vel_sb))
             st.caption(f"Preventa requerida: {_req_sb} unidades ({pct_preventa_banco:.0f}%) · velocidad {_vel_sb:.1f}/mes → {_auto_pv} meses calculado")
             _pv_override = st.number_input(
                 "Meses de preventa (0 = automático)", 0, 36,
                 int(_fi_sb.get("meses_preventa_override") or 0),
-                1, key="cab_meses_preventa_inp",
-                help="0 = automático según proyecto. 1 = promotor con cartera activa que logra preventa en el lanzamiento. Boutique/exclusivo: 1–2 meses es viable.")
+                1, key="cab_meses_preventa_inp")
             meses_preventa_override = int(_pv_override) if _pv_override > 0 else None
             _n_pisos_sb   = int((st.session_state.get("cabida") or {}).get("num_pisos", 7) or 7)
             _obra_auto_sb = 24 if _n_pisos_sb > 20 else (12 if _n_pisos_sb <= 5 else 16)
             _obra_override = st.number_input(
                 "Plazo de construcción (0 = automático)", 0, 60,
                 int(_fi_sb.get("meses_obra_override") or 0),
-                1, key="cab_meses_obra_inp",
-                help=f"0 = automático según pisos ({_n_pisos_sb}p → {_obra_auto_sb} meses). "
-                     f"Ajusta si el cronograma del constructor es más conservador o agresivo.")
+                1, key="cab_meses_obra_inp")
             st.caption(f"Plazo auto: {_obra_auto_sb} meses · {_n_pisos_sb} piso{'s' if _n_pisos_sb != 1 else ''}")
             meses_obra_override = int(_obra_override) if _obra_override > 0 else None
             pct_mktg_preventa = st.number_input(
                 "Costo marketing preventa (% de ventas+gerenc.)", 0.5, 10.0,
                 float(_fi_sb.get("pct_mktg_preventa", 2.0)), 0.5,
-                key="cab_pct_mktg_pv_inp",
-                help="% de los costos de ventas/gerenciamiento que se adelanta en preventa con equity (sala de ventas, web, imagen)")
+                key="cab_pct_mktg_pv_inp")
             fee_constructora = st.number_input("Fee constructora (%)", 0.0, 20.0, 10.0, 0.5,
-                                                help="Honorarios sobre costo directo de obra",
                                                 key="cab_fee_constructora_inp")
             tasa_ir          = st.number_input("Impuesto a la Renta (%)", 0.0, 40.0, 29.5, 0.5,
-                                                help="IR corporativo Perú: 29.5%",
                                                 key="cab_tasa_ir_inp")
             include_alcabala = st.checkbox("Incluir Alcabala (3%)", value=True,
-                                            help="Impuesto de alcabala sobre precio del terreno",
                                             key="cab_include_alcabala_inp")
             include_dd       = st.checkbox("Incluir Due Diligence ($10,000)", value=True,
-                                            help="Acompaña todo el proyecto: títulos, registrales, notariales. Varía si el cliente tiene abogado in-house.",
                                             key="cab_include_dd_inp")
             include_demo     = st.checkbox("Incluir costo demolición", value=False,
-                                            help="Marcar si el terreno tiene edificación existente a demoler",
                                             key="cab_include_demo_inp")
             if include_demo:
                 _area_t_demo = int((st.session_state.params or {}).get("area_terreno", 500)) if st.session_state.get("params") else 500
@@ -8621,7 +8663,6 @@ with st.sidebar:
                     min_value=0, max_value=500_000,
                     value=int(_area_t_demo * 60),
                     step=1_000,
-                    help=f"Referencia: $60/m² de terreno · terreno {_area_t_demo} m² → ~${_area_t_demo*60:,}",
                     key="cab_costo_demo_inp",
                 )
             else:
@@ -8844,11 +8885,9 @@ with st.sidebar:
         with st.expander("Estructura de Compra / Pago", expanded=True):
             _tiene_opcion = st.checkbox("Incluir opción de compra", value=True, key="prop_opcion")
             if _tiene_opcion:
-                _dias_opcion = st.number_input("Plazo opción (días)", 1, 360, 90, 15, key="prop_dias_opcion",
-                                               help="Plazo para aprobación del anteproyecto")
+                _dias_opcion = st.number_input("Plazo opción (días)", 1, 360, 90, 15, key="prop_dias_opcion")
                 _pct_opcion  = st.number_input("Monto opción (% del precio)", 0.0, 20.0, 0.0, 0.5,
-                                               format="%.1f", key="prop_pct_opcion",
-                                               help="Porcentaje abonado al firmar la opción (imputable al precio)")
+                                               format="%.1f", key="prop_pct_opcion")
             else:
                 _dias_opcion = 0
                 _pct_opcion  = 0.0
@@ -8884,13 +8923,14 @@ with st.sidebar:
         _ind3_done = st.session_state.get("ind_analizado") is True
         _ind4_done = _ind3_done
         _steps_ind = [
-            ("Terreno & Nave",    "Zona, área, tipo de nave",    _ind1_done),
-            ("Costos",            "Construcción, indirectos",     _ind2_done),
-            ("Análisis",          "Yield, DSCR, Payback",         _ind3_done),
-            ("Reporte",           "Resumen ejecutivo PDF",        _ind4_done),
+            ("Terreno",        "Ubicación, área, costo",       _ind1_done),
+            ("Proyecto",       "Nave, actividad, % techada",   _ind2_done),
+            ("Análisis",       "Uso, renta, yield, DSCR",      _ind3_done),
+            ("Financiamiento", "Terreno + obra",               _ind3_done),
+            ("Reporte",        "Resumen ejecutivo PDF",        _ind4_done),
         ]
-        _cur_ind = next((i for i, (_, _, d) in enumerate(_steps_ind) if not d), 4)
-        _ind_html = "".join([_sp(i,l,s,d,i==_cur_ind,i==3) for i,(l,s,d) in enumerate(_steps_ind)])
+        _cur_ind = next((i for i, (_, _, d) in enumerate(_steps_ind) if not d), 5)
+        _ind_html = "".join([_sp(i,l,s,d,i==_cur_ind,i==4) for i,(l,s,d) in enumerate(_steps_ind)])
         st.markdown(
             f'<div style="background:rgba(255,255,255,0.04);border-radius:10px;padding:12px 14px 10px;'
             f'border:1px solid rgba(255,255,255,0.08);margin-bottom:10px;">'
@@ -8922,8 +8962,8 @@ with st.sidebar:
                 '</div></div>',
                 unsafe_allow_html=True)
 
-        # ── 1 · UBICACIÓN ──────────────────────────────────
-        _step_header("1", "Ubicación")
+        # ── 1 · TERRENO ─────────────────────────────────────
+        _step_header("1", "Terreno")
         with st.expander("📄 Importar datos desde documento"):
             st.caption("Sube una ficha técnica, brochure o plano del terreno — la IA extrae área, ubicación y tipo de nave para pre-llenar los campos automáticamente.")
             _ind_doc_up = st.file_uploader(
@@ -8968,8 +9008,7 @@ with st.sidebar:
 
         ind_ubicacion = st.text_input("Dirección / Zona",
             placeholder="Ej: Av. Las Torres 1240, Lurín",
-            key="ind_ubicacion",
-            help="Dirección o zona industrial del proyecto")
+            key="ind_ubicacion")
         ind_zona_lima = st.selectbox("Zona industrial Lima",
             [
                 "Lurín / Pachacámac",
@@ -8989,11 +9028,8 @@ with st.sidebar:
                 "Chorrillos",
                 "Otro",
             ],
-            key="ind_zona_lima",
-            help="Zona de mercado industrial para benchmarks de renta")
+            key="ind_zona_lima")
 
-        # ── 2 · TERRENO ─────────────────────────────────────
-        _step_header("2", "Terreno")
         ind_col1, ind_col2 = st.columns(2)
         ind_frente = ind_col1.number_input("Frente (ml)", 0.0, 1000.0, 0.0, 0.5, key="ind_frente")
         ind_fondo  = ind_col2.number_input("Fondo (ml)",  0.0, 1000.0, 0.0, 0.5, key="ind_fondo")
@@ -9015,12 +9051,11 @@ with st.sidebar:
                                             50_000, key="ind_costo_terreno")
         st.caption(f"= **${ind_costo_terreno:,.0f}** USD")
 
-        # ── 3 · PROYECTO ────────────────────────────────────
-        _step_header("3", "Proyecto")
+        # ── 2 · PROYECTO ────────────────────────────────────
+        _step_header("2", "Proyecto")
         ind_pct_techada = st.number_input(
             "% Área techada (nave)",
-            min_value=30.0, max_value=95.0, value=75.0, step=5.0, key="ind_pct_techada",
-            help="Generalmente 75–80% del terreno. El remanente son patios y maniobras.")
+            min_value=30.0, max_value=95.0, value=75.0, step=5.0, key="ind_pct_techada")
         _ind_nave = ind_area * ind_pct_techada / 100
         _ind_libre = ind_area * (1 - ind_pct_techada / 100)
         st.caption(f"Nave: **{_ind_nave:,.0f} m²** · Patios/maniobras: **{_ind_libre:,.0f} m²**")
@@ -9072,14 +9107,12 @@ with st.sidebar:
             _act_idx_default = _ACT_NORM_CATS.index(_saved_cat)
         ind_act_categoria = st.selectbox(
             "Categoría de actividad (normativa RNE A.060)",
-            _ACT_NORM_CATS, index=_act_idx_default, key="ind_act_categoria",
-            help="Clasifica la actividad para validar compatibilidad con la zonificación seleccionada.")
+            _ACT_NORM_CATS, index=_act_idx_default, key="ind_act_categoria")
         ind_actividad_desc = st.text_area(
             "Descripción específica de la actividad",
             value=st.session_state.get("ind_actividad_desc", ""),
             placeholder="Ej: Almacenamiento y distribución de productos farmacéuticos refrigerados…",
-            height=68, key="ind_actividad_desc",
-            help="Se incluirá en el informe PDF del proyecto.")
+            height=68, key="ind_actividad_desc")
 
         # Compatibilidad normativa
         _zona_sel = st.session_state.get("ind_zona_ind", "I2")
@@ -9123,64 +9156,24 @@ with st.sidebar:
 
         with st.expander("Costos de construcción"):
             ind_zona_ind = st.selectbox("Zonificación (referencia)",
-                ["I1", "I2", "I3", "I4", "OU"], index=1, key="ind_zona_ind",
-                help="Uso referencial. No afecta el cálculo de área.")
+                ["I1", "I2", "I3", "I4", "OU"], index=1, key="ind_zona_ind")
             ind_costo_nave = st.number_input(
                 "Costo nave (USD/m²)",
-                min_value=1, max_value=2000, value=max(1, _def_nave), step=25, key="ind_costo_nave",
-                help=_help_nave)
+                min_value=1, max_value=2000, value=max(1, _def_nave), step=25, key="ind_costo_nave")
             ind_costo_piso = st.number_input(
                 "Costo patios / maniobras (USD/m²)",
-                min_value=0, max_value=500, value=80, step=10, key="ind_costo_piso",
-                help="Losa de concreto para circulación de montacargas/camiones. Ref. Lima: $60–90/m².")
+                min_value=0, max_value=500, value=80, step=10, key="ind_costo_piso")
             ind_pct_indirectos = st.number_input(
                 "Costos indirectos (%)",
-                min_value=0.0, max_value=30.0, value=5.0, step=0.5, key="ind_pct_indirectos",
-                help="Permisos, licencias, supervisión, diseño, gestión. Ref: 5–8% sobre costo directo.")
+                min_value=0.0, max_value=30.0, value=5.0, step=0.5, key="ind_pct_indirectos")
 
-        # ── 4 · FINANCIAMIENTO DEL TERRENO ──────────────────
-        _step_header("4", "Financiamiento del Terreno")
-        ind_alcabala = st.checkbox("Incluir Alcabala (3%)", value=True, key="ind_alcabala",
-                                   help="3% sobre valor del terreno — transferencia de propiedad en Perú")
-        ind_dp_terreno = st.number_input(
-            "Downpayment terreno (%)", 0.0, 100.0,
-            float(st.session_state.get("ind_dp_terreno", 40.0)), 5.0,
-            key="ind_dp_terreno",
-            help="Porcentaje del (terreno + alcabala) que se paga al contado")
-        ind_tasa_terreno = st.number_input(
-            "Tasa crédito terreno (% anual)", 0.0, 30.0,
-            float(st.session_state.get("ind_tasa_terreno", 8.0)), 0.25,
-            key="ind_tasa_terreno")
-        ind_plazo_terreno = st.number_input(
-            "Plazo crédito terreno (años)", 1, 30,
-            int(st.session_state.get("ind_plazo_terreno", 10)), 1,
-            key="ind_plazo_terreno")
-
-        # ── 5 · FINANCIAMIENTO DE LA OBRA ───────────────────
-        _step_header("5", "Financiamiento de la Obra")
-        ind_dp_const = st.number_input(
-            "Downpayment construcción (%)", 0.0, 100.0,
-            float(st.session_state.get("ind_dp_const", 30.0)), 5.0,
-            key="ind_dp_const",
-            help="Porcentaje del costo de construcción + indirectos que se paga al contado")
-        ind_tasa_const = st.number_input(
-            "Tasa crédito construcción (% anual)", 0.0, 30.0,
-            float(st.session_state.get("ind_tasa_const", 9.0)), 0.25,
-            key="ind_tasa_const")
-        ind_plazo_const = st.number_input(
-            "Plazo crédito construcción (años)", 1, 20,
-            int(st.session_state.get("ind_plazo_const", 8)), 1,
-            key="ind_plazo_const")
-
-        # ── 6 · ANÁLISIS ─────────────────────────────────────
-        _step_header("6", "Análisis de Uso")
+        # ── 3 · ANÁLISIS DE USO ──────────────────────────────
+        _step_header("3", "Análisis de Uso")
         ind_uso = st.radio("Propósito del activo",
-            ["Uso directo", "Inversión"], key="ind_uso",
-            help="Uso directo: compra para operar. Inversión: compra para arrendar.")
+            ["Uso directo", "Inversión"], key="ind_uso")
         ind_renta = st.number_input(
             "Renta de mercado (USD/m²/mes)",
-            0.0, 50.0, 6.5, 0.25, key="ind_renta",
-            help="Ref. Lima: $5.5–7.0/m²/mes para almacenes logísticos")
+            0.0, 50.0, 6.5, 0.25, key="ind_renta")
         ind_tipo_contrato = st.radio(
             "Tipo de contrato", ["Anual", "Plurianual (3+ años)"],
             horizontal=True, key="ind_tipo_contrato")
@@ -9189,14 +9182,42 @@ with st.sidebar:
         if ind_tipo_contrato == "Plurianual (3+ años)":
             _ica1, _ica2 = st.columns(2)
             ind_ajuste_pct    = _ica1.number_input(
-                "Ajuste anual (%)", 0.0, 10.0, 3.0, 0.5, key="ind_ajuste_pct",
-                help="Incremento de renta acordado. Ref. índice Lima: ~3% anual")
+                "Ajuste anual (%)", 0.0, 10.0, 3.0, 0.5, key="ind_ajuste_pct")
             ind_inicio_ajuste = _ica2.selectbox(
-                "Año de inicio del ajuste", [2, 3], key="ind_inicio_ajuste",
-                help="Contratos 3 años: ajuste en año 2 o 3 según lo pactado")
+                "Año de inicio del ajuste", [2, 3], key="ind_inicio_ajuste")
 
-        # ── 7 · DOCUMENTOS ──────────────────────────────────
-        _step_header("7", "Documentos")
+        # ── 4 · FINANCIAMIENTO ───────────────────────────────
+        _step_header("4", "Financiamiento")
+        ind_alcabala = st.checkbox("Incluir Alcabala (3%)", value=True, key="ind_alcabala")
+        with st.expander("Crédito terreno", expanded=False):
+            ind_dp_terreno = st.number_input(
+                "Downpayment (%)", 0.0, 100.0,
+                float(st.session_state.get("ind_dp_terreno", 40.0)), 5.0,
+                key="ind_dp_terreno")
+            ind_tasa_terreno = st.number_input(
+                "Tasa (% anual)", 0.0, 30.0,
+                float(st.session_state.get("ind_tasa_terreno", 8.0)), 0.25,
+                key="ind_tasa_terreno")
+            ind_plazo_terreno = st.number_input(
+                "Plazo (años)", 1, 30,
+                int(st.session_state.get("ind_plazo_terreno", 10)), 1,
+                key="ind_plazo_terreno")
+        with st.expander("Crédito obra", expanded=False):
+            ind_dp_const = st.number_input(
+                "Downpayment (%)", 0.0, 100.0,
+                float(st.session_state.get("ind_dp_const", 30.0)), 5.0,
+                key="ind_dp_const")
+            ind_tasa_const = st.number_input(
+                "Tasa (% anual)", 0.0, 30.0,
+                float(st.session_state.get("ind_tasa_const", 9.0)), 0.25,
+                key="ind_tasa_const")
+            ind_plazo_const = st.number_input(
+                "Plazo (años)", 1, 20,
+                int(st.session_state.get("ind_plazo_const", 8)), 1,
+                key="ind_plazo_const")
+
+        # ── 5 · DOCUMENTOS & FOTOS ──────────────────────────
+        _step_header("5", "Documentos & Fotos")
         st.caption("Sube los documentos del proyecto para análisis de factibilidad")
         _ind_secrets_key = (st.secrets.get("anthropic", {}) or {}).get("api_key", "")
         if not _ind_secrets_key and not st.session_state.get("api_key_input"):
@@ -9223,25 +9244,23 @@ with st.sidebar:
             run_ind_docs = False
             st.caption("Adjunta al menos un documento para habilitar el análisis.")
 
-        # ── 8 · FOTOS ───────────────────────────────────────
-        _step_header("8", "Fotos del Inmueble")
-        st.caption("Las fotos se incluyen en el reporte")
-        _ind_fotos = st.file_uploader(
-            "Sube fotos del terreno / nave",
-            type=["jpg", "jpeg", "png", "webp"],
-            accept_multiple_files=True,
-            key="ind_fotos_upload",
-        )
-        if _ind_fotos:
-            st.session_state["ind_fotos_bytes"] = [f.read() for f in _ind_fotos]
-            st.session_state["ind_fotos_nombres"] = [f.name for f in _ind_fotos]
-            cols_if = st.columns(min(len(_ind_fotos), 3))
-            for _ifi, _ifup in enumerate(_ind_fotos[:3]):
-                cols_if[_ifi].image(_ifup, use_container_width=True)
+        with st.expander("Fotos del inmueble", expanded=False):
+            st.caption("Las fotos se incluyen en el reporte")
+            _ind_fotos = st.file_uploader(
+                "Sube fotos del terreno / nave",
+                type=["jpg", "jpeg", "png", "webp"],
+                accept_multiple_files=True,
+                key="ind_fotos_upload",
+            )
+            if _ind_fotos:
+                st.session_state["ind_fotos_bytes"] = [f.read() for f in _ind_fotos]
+                st.session_state["ind_fotos_nombres"] = [f.name for f in _ind_fotos]
+                cols_if = st.columns(min(len(_ind_fotos), 3))
+                for _ifi, _ifup in enumerate(_ind_fotos[:3]):
+                    cols_if[_ifi].image(_ifup, use_container_width=True)
 
         st.markdown("---")
-        st.markdown("### INSTRUCCIONES AL ANÁLISIS")
-        st.caption("Lo que escribas aquí guía a la IA — tipo de nave, restricciones, preferencias del cliente.")
+        st.caption("Instrucciones al análisis — tipo de nave, restricciones, preferencias del cliente.")
         ind_sugerencias = st.text_area(
             label="instrucciones_ind",
             placeholder="Ej: priorizar altura libre de 12m, acceso para tráileres, cámara frigorífica en sector norte...",
@@ -9379,8 +9398,7 @@ with st.sidebar:
         _res_zona_saved = st.session_state.get("res_zona_sel", "")
         _res_zona_idx = _res_zona_keys.index(_res_zona_saved) if _res_zona_saved in _res_zona_keys else min(20, len(_res_zona_keys) - 1)
         res_zona = st.selectbox("Ubicación", _res_zona_keys,
-                                 index=_res_zona_idx, key="res_zona_sel",
-                                 help="Selecciona el distrito para comparar con datos de mercado Urbania 2025")
+                                 index=_res_zona_idx, key="res_zona_sel")
         _m_res = MERCADO.get(res_zona, {})
 
         # ── 2 · INMUEBLE ───────────────────────────────────
@@ -9425,10 +9443,8 @@ with st.sidebar:
         # ── 4 · FINANCIAMIENTO ──────────────────────────────
         _step_header("4", "Financiamiento")
         res_pct_pie = st.number_input("Pago inicial / Down Payment (%)", 0.0, 100.0, 20.0, 1.0,
-                                       help="Porcentaje que pagas de tu propio capital",
                                        key="res_pct_pie_inp")
         res_tasa = st.number_input("Tasa de interés anual (%)", 0.0, 30.0, 8.5, 0.25,
-                                    help="Tasa efectiva anual del crédito hipotecario",
                                     key="res_tasa_inp")
         res_plazo = st.number_input("Plazo del crédito (años)", 1, 30, 20, 1,
                                     key="res_plazo_inp")
@@ -9437,8 +9453,7 @@ with st.sidebar:
         _step_header("5", "Propósito")
         res_uso = st.radio("¿Para qué?",
             ["Vivienda propia", "Inversión para alquilar", "Evaluación para venta"],
-            key="res_uso_radio",
-            help="Define el análisis y los documentos que se generarán")
+            key="res_uso_radio")
 
         if res_uso in ["Inversión para alquilar", "Evaluación para venta"]:
             _alq_sugerido = round(_m_res.get("alquiler_m2_mes", 0) * res_m2 / 50) * 50
@@ -9454,11 +9469,9 @@ with st.sidebar:
                 if res_tipo_contrato == "Plurianual (3+ años)":
                     _rca1, _rca2 = st.columns(2)
                     res_ajuste_pct    = _rca1.number_input(
-                        "Ajuste anual (%)", 0.0, 10.0, 3.0, 0.5, key="res_ajuste_pct",
-                        help="Incremento de renta acordado. Ref. índice Lima: ~3% anual")
+                        "Ajuste anual (%)", 0.0, 10.0, 3.0, 0.5, key="res_ajuste_pct")
                     res_inicio_ajuste = _rca2.selectbox(
-                        "Año de inicio del ajuste", [2, 3], key="res_inicio_ajuste",
-                        help="Contratos 3 años: ajuste en año 2 o 3 según lo pactado")
+                        "Año de inicio del ajuste", [2, 3], key="res_inicio_ajuste")
             else:
                 res_alquiler      = 0
                 res_tipo_contrato = "Anual"
@@ -9466,8 +9479,7 @@ with st.sidebar:
                 res_inicio_ajuste = 2
             res_gastos = st.number_input("Gastos mensuales (USD)", 0, 5_000,
                                           max(int(res_precio * 0.004 / 12), 50), 10,
-                                          key="res_gastos_inp",
-                                          help="Mantenimiento, administración, arbitrios, seguro (~4% anual del valor)")
+                                          key="res_gastos_inp")
         else:
             res_alquiler      = 0
             res_gastos        = 0
@@ -9816,18 +9828,18 @@ elif run:
     if (colind_izq or 0) > 0 or (colind_der or 0) > 0:
         _base_p  = int(st.session_state.params.get("pisos_max") or 5)
         _max_col = max(colind_izq or 0, colind_der or 0)
-        _pisos_col = math.ceil((_max_col + _base_p) / 2)
+        _pisos_col = int((_max_col + _base_p) / 2)  # Art.6.3 Ord.523-MSI: floor — decimal no sube al entero superior
         st.session_state.params["pisos_max"] = _pisos_col
         # Inyectar nota normativa con base legal y fórmula
         _dist_col = str(st.session_state.params.get("distrito", "")).lower()
         if "san isidro" in _dist_col:
-            _base_legal_col = "Ord. 523-MSI — Reglamento de Parámetros Urbanísticos y Edificatorios de San Isidro, Norma de Colindancia"
+            _base_legal_col = "Ord. 523-MSI Art.6.3 — Reglamento de Parámetros Urbanísticos y Edificatorios de San Isidro, Norma de Colindancia"
         else:
             _base_legal_col = "PDU del distrito / CPU — Regla de Colindancia (el proyecto puede alcanzar el promedio con la edificación colindante más alta)"
         _nota_colind = (
             f"Regla de Colindancia aplicada: colindante más alto = {_max_col} pisos | "
             f"altura base del certificado = {_base_p} pisos → "
-            f"pisos permitidos = ⌈({_max_col} + {_base_p}) ÷ 2⌉ = {_pisos_col} pisos. "
+            f"pisos permitidos = floor(({_max_col} + {_base_p}) ÷ 2) = {_pisos_col} pisos. "
             f"Base legal: {_base_legal_col}."
         )
         _notas_prev = [n for n in st.session_state.params.get("notas_altura", []) if "Colindancia" not in str(n)]
@@ -9850,8 +9862,11 @@ elif run:
         "precio_1br":         m.get("precio_1br", 0),
         "precio_2br":         m.get("precio_2br", 0),
         "precio_3br":         m.get("precio_3br", 0),
-        "precio_estac":       m.get("precio_estac", 0),
-        "precio_deposito":    m.get("precio_deposito", 0),
+        "precio_estac":       precio_estac_inp if precio_estac_inp > 0 else m.get("precio_estac", 0),
+        "precio_deposito":    precio_deposito_inp if precio_deposito_inp > 0 else m.get("precio_deposito", 0),
+        "costo_arq_m2":       costo_arq_m2,
+        "costo_esp_m2":       costo_esp_m2,
+        "costo_factibilidades": costo_factibilidades,
         "tasa_financ":        9.0,
         "estructura_financ":  estructura_financ,
         "aporte_propio_pct":  aporte_propio_pct,
@@ -10081,12 +10096,14 @@ if tipo_op == "Proyecto Inmobiliario":
                 if _p_fondo_explicit > 0:
                     _p_fondo_geo = round(_p_fondo_explicit, 1)
                 else:
-                    # Sin fondo explícito: arrancar con fondo = frente (lote cuadrado).
-                    # El usuario ajusta el fondo real; el área del certificado sirve de referencia.
+                    # Sin fondo explícito: asumir fondo = frente (lote regular).
+                    # Usuario debe corregir subiendo plano o tabulando medidas.
                     _p_fondo_geo = round(_p_frente_geo, 1)
+                # Lados: área ÷ frente (profundidad real). Si no hay área, usar fondo como fallback.
+                _p_lado_geo = round(_p_area_geo / _p_frente_geo, 1) if _p_area_geo > 0 else _p_fondo_geo
                 st.session_state["geo_fondo"] = _p_fondo_geo
-                st.session_state["geo_izq"]   = _p_fondo_geo
-                st.session_state["geo_der"]   = _p_fondo_geo
+                st.session_state["geo_izq"]   = _p_lado_geo
+                st.session_state["geo_der"]   = _p_lado_geo
 
             _geo_modo = st.radio(
                 "Fuente de medidas",
@@ -10148,8 +10165,9 @@ if tipo_op == "Proyecto Inmobiliario":
                 _huella_ms = float((c.get("area_techada_piso_m2") or
                                     st.session_state.get("geo_huella", 0)) if c else
                                    st.session_state.get("geo_huella", 0))
-                if _estac_ms > 0 and _huella_ms > 0:
-                    _coch_ms  = max(1, int(_huella_ms * 0.78 // 20))
+                _area_lote_ms = float(_poly_lote.area if _poly_lote else 0)
+                if _estac_ms > 0 and _area_lote_ms > 0:
+                    _coch_ms  = max(1, int(_area_lote_ms * 0.87 / 25))
                     _sot_calc = -(-_estac_ms // _coch_ms)
                 else:
                     _sot_calc = int((c.get("num_sotanos") or 0) if c else 0)
@@ -10158,8 +10176,7 @@ if tipo_op == "Proyecto Inmobiliario":
                     st.session_state["_geo_sot_synced"] = _sot_calc
                 _g_sotanos = _rg5.number_input("N° sótanos",          min_value=0,   value=int(st.session_state.get("geo_n_sotanos", max(_sot_calc, 1)) or 1), step=1, key="geo_n_sotanos")
 
-                _g_h_piso = st.number_input("Altura piso a piso (m)", min_value=2.40, max_value=4.00, value=2.65, step=0.05, key="geo_h_piso",
-                                             help="Altura libre entre losas. Lima residencial estándar: 2.65m")
+                _g_h_piso = st.number_input("Altura piso a piso (m)", min_value=2.40, max_value=4.00, value=2.65, step=0.05, key="geo_h_piso")
 
                 _poly_huella = _geo_aplicar_retiros(_poly_lote, _g_ret_f, _g_ret_l, _g_ret_p)
                 _frente_val  = st.session_state.get("geo_frente_val", 0.0)
@@ -10174,13 +10191,10 @@ if tipo_op == "Proyecto Inmobiliario":
                 _cos_delta = f"máx. norma {_cos_max:.0f}%" if _al_min_pct > 0 else None
                 _mc1, _mc2, _mc3, _mc4 = st.columns(4)
                 _mc1.metric("Área del lote",            f"{_mg.get('area_lote_m2', 0):,.0f} m²")
-                _mc2.metric("Huella edificable",        f"{_mg.get('area_huella_efectiva_m2', 0):,.0f} m²",
-                            help="Huella con retiros, limitada al COS máximo normativo")
+                _mc2.metric("Huella edificable",        f"{_mg.get('area_huella_efectiva_m2', 0):,.0f} m²")
                 _mc3.metric("Coef. de Ocupación (COS)", f"{_cos_real:.1f}%", delta=_cos_delta,
-                            delta_color="inverse",
-                            help=f"Área techada planta baja / área total del terreno. COS máx. normativo: {_cos_max:.0f}%")
-                _mc4.metric("Área techada máx.",        f"{_mg.get('at_sobre_m2', 0):,.0f} m²",
-                            help="Huella efectiva × pisos — techo duro para la cabida IA")
+                            delta_color="inverse")
+                _mc4.metric("Área techada máx.",        f"{_mg.get('at_sobre_m2', 0):,.0f} m²")
 
                 # Guardar techo duro en session_state para pasarlo a la IA
                 st.session_state["geo_at_max"] = _mg.get("at_sobre_m2", 0)
@@ -10261,8 +10275,7 @@ if tipo_op == "Proyecto Inmobiliario":
                 col3.metric("Departamentos",     str(c.get('total_unidades', 0)))
                 col4.metric("Estacionamientos",  str(_estac_sot),
                             delta=f"{_n_sot} sótano{'s' if _n_sot != 1 else ''}" if _n_sot else None,
-                            delta_color="off",
-                            help=f"Total incluye residentes y visitas. Requiere {_n_sot} nivel{'es' if _n_sot != 1 else ''} de sótano ({_estac_sot} cocheras × 20 m²/cajón · huella neta {_huella_sot*0.78:.0f} m²).")
+                            delta_color="off")
 
                 _al_m2 = c.get("area_libre_m2", 0) or 0
                 _ac_m2 = c.get("area_comunes_m2", 0) or 0
@@ -10273,12 +10286,9 @@ if tipo_op == "Proyecto Inmobiliario":
                 _pct_libre = round(_al_m2 / _lote_m2 * 100, 1) if _lote_m2 > 0 else 0
                 colA, colB, colC, colD = st.columns(4)
                 colA.metric("Área libre", f"{_al_m2:,.0f} m²",
-                            delta=f"{_pct_libre:.0f}% del lote",
-                            help="Espacio no techado — jardines, circulación, patios")
-                colB.metric("Área común", f"{_ac_m2:,.0f} m²",
-                            help="Halls, pasillos, escaleras, lobby, cuartos de servicio (~8–12% del área construida)")
-                colC.metric("Eficiencia vendible", f"{_pct_vend:.1f}%",
-                            help="Área vendible / área techada. Ref. Lima: 75–80%")
+                            delta=f"{_pct_libre:.0f}% del lote")
+                colB.metric("Área común", f"{_ac_m2:,.0f} m²")
+                colC.metric("Eficiencia vendible", f"{_pct_vend:.1f}%")
                 colD.metric("Área lote", f"{_lote_m2:,.0f} m²")
 
                 st.markdown('<div class="section-title">Mix de Tipologías</div>', unsafe_allow_html=True)
@@ -10387,14 +10397,10 @@ if tipo_op == "Proyecto Inmobiliario":
 
                 st.markdown('<div class="section-title">KPIs de Eficiencia</div>', unsafe_allow_html=True)
                 _kc1, _kc2, _kc3, _kc4 = st.columns(4)
-                _kc1.metric("AV/AT sobre rasante", f"{_av_at_sobre}%",
-                            help="Área vendible / área techada sobre rasante. Ref.: 75-80%")
-                _kc2.metric("AV/AT total (c/sótanos)", f"{_av_at_total}%",
-                            help="Área vendible / área techada total. Ref. real Lima: 60-74%")
-                _kc3.metric("Autos / vivienda", f"{_autos_viv}",
-                            help="Cocheras residentes / departamentos (ratio normativo). Las visitas se cuentan aparte.")
-                _kc4.metric("Depósitos / vivienda", f"{round(c.get('depositos_total',0)/_unidades,2)}",
-                            help="Ratio depósitos sobre total de unidades residenciales")
+                _kc1.metric("AV/AT sobre rasante", f"{_av_at_sobre}%")
+                _kc2.metric("AV/AT total (c/sótanos)", f"{_av_at_total}%")
+                _kc3.metric("Autos / vivienda", f"{_autos_viv}")
+                _kc4.metric("Depósitos / vivienda", f"{round(c.get('depositos_total',0)/_unidades,2)}")
 
                 # ── Cuadro normativo: aforo / residuos / bicicletas ──
                 if unidades:
@@ -10501,11 +10507,9 @@ if tipo_op == "Proyecto Inmobiliario":
                 col_s1, col_s2 = st.columns([3, 1])
                 with col_s1:
                     tasa = st.slider("Tasa financiamiento bancario (%)", 0.0, 15.0,
-                                     float(fi.get("tasa_financ", 9.0)), step=0.5,
-                                     help="Costo anual del crédito constructor")
+                                     float(fi.get("tasa_financ", 9.0)), step=0.5)
                 with col_s2:
-                    st.metric("Velocidad de mercado", f"{m_data.get('velocidad_venta', 1.0):.2f} und/mes",
-                              help="Absorción promedio del mercado en la zona")
+                    st.metric("Velocidad de mercado", f"{m_data.get('velocidad_venta', 1.0):.2f} und/mes")
 
                 fin_run = {
                     "costo_terreno":      fi.get("costo_terreno", 0),
@@ -10580,10 +10584,10 @@ if tipo_op == "Proyecto Inmobiliario":
                 col1, col2, col3, col4, col5, col6 = st.columns(6)
                 col1.metric("Ingresos brutos",   fmt_usd(r.get("ingresos_brutos", 0)))
                 col2.metric("Utilidad bruta",    fmt_usd(r.get("utilidad_bruta", 0)),  delta=f"{r.get('margen_bruto_pct', 0)}% bruto")
-                col3.metric(f"IR ({r.get('ir_pct', 29.5)}%)", fmt_usd(r.get("costo_ir", 0)), help="Impuesto a la Renta 29.5%")
+                col3.metric(f"IR ({r.get('ir_pct', 29.5)}%)", fmt_usd(r.get("costo_ir", 0)))
                 col4.metric("Utilidad neta",     fmt_usd(r.get("utilidad_neta", 0)),  delta=f"{r.get('margen_pct', 0)}% neto")
                 col5.metric("ROI / TIR",         f"{r.get('roi_pct', 0)}% / {r.get('tir_anual_pct', 0)}%")
-                col6.metric("Break-even m²",     f"${r.get('be_precio_m2', 0):,}",    help="Precio mínimo/m² para cubrir todos los costos")
+                col6.metric("Break-even m²",     f"${r.get('be_precio_m2', 0):,}")
 
                 # ── Viabilidad del proyecto ──────────────────────────
                 _tit = r.get("tit_pct", 0) or 0
@@ -10622,8 +10626,7 @@ if tipo_op == "Proyecto Inmobiliario":
                 st.markdown('<div class="section-title">Timeline Estimado</div>', unsafe_allow_html=True)
                 col1, col2, col3 = st.columns(3)
                 col1.metric("Meses de obra",          f"{r.get('meses_obra', 0)} meses")
-                col2.metric("Meses de ventas",         f"{r.get('meses_venta', 0)} meses",
-                            help=f"A {m_data.get('velocidad_venta',1.0):.2f} und/mes (ASEI 2024)")
+                col2.metric("Meses de ventas",         f"{r.get('meses_venta', 0)} meses")
                 col3.metric("Duración total proyecto", f"{r.get('meses_proyecto', 0)} meses")
 
                 # ── Detalle ingresos / costos + tipologías ─
@@ -10931,7 +10934,7 @@ if tipo_op == "Proyecto Inmobiliario":
                     st.caption(f"**{_e2n or 'Escenario 2'}**")
                     _e2p = st.number_input("Precio venta m²", 800, 8000,
                                            min(max(int(fin_run["precio_venta_m2"] * 1.10), 800), 8000), 50,
-                                           key="esc2_p", help="Precio de venta por m² vendible")
+                                           key="esc2_p")
                     _e2c = st.number_input("Costo construcción m²", 400, 3000,
                                            int(fin_run["costo_construccion"]), 50, key="esc2_c")
                     _e2t = st.number_input("Terreno ($)", 0, 50_000_000,
@@ -11225,10 +11228,10 @@ if tipo_op == "Proyecto Inmobiliario":
                 st.plotly_chart(_fig_g, use_container_width=True)
 
                 _gc1, _gc2, _gc3, _gc4, _gc5 = st.columns(5)
-                _gc1.metric("Preventa",        f"{_preventa_m} meses", help=f"Plazo para alcanzar {_pct_pv_lbl:.0f}% pre-vendido y activar banco")
+                _gc1.metric("Preventa",        f"{_preventa_m} meses")
                 _gc2.metric("Obra",            f"{_mo} meses")
-                _gc3.metric("Plazo ventas",    f"{_mv} meses", help="Meses para colocar todas las unidades al ritmo de mercado")
-                _gc4.metric("Post-obra",       f"{_post_obra} meses", help="Meses adicionales para liquidar inventario tras fin de obra (máx. 6)")
+                _gc3.metric("Plazo ventas",    f"{_mv} meses")
+                _gc4.metric("Post-obra",       f"{_post_obra} meses")
                 _gc5.metric("Duración total",  f"{_total_g} meses")
                 st.markdown("---")
 
@@ -12081,26 +12084,21 @@ if tipo_op == "Proyecto Inmobiliario":
                         "Alquiler mercado ($/m²/mes)",
                         min_value=1.0, max_value=50.0,
                         value=float(_m_hold.get("alquiler_m2_mes", 8.0)),
-                        step=0.5, key="h_alq_m2",
-                        help="Renta mensual por m² vendible según mercado actual")
+                        step=0.5, key="h_alq_m2")
                     _h_vac = st.number_input(
-                        "Vacancia estimada (%)", 0.0, 30.0, 7.0, 1.0, key="h_vac",
-                        help="% de unidades desocupadas en promedio")
+                        "Vacancia estimada (%)", 0.0, 30.0, 7.0, 1.0, key="h_vac")
                 with _hc2:
                     _h_opex = st.number_input(
-                        "Gastos operativos (%)", 0.0, 40.0, 22.0, 1.0, key="h_opex",
-                        help="Administración, mantenimiento, seguros, predial. Típico Lima: 18–25%")
+                        "Gastos operativos (%)", 0.0, 40.0, 22.0, 1.0, key="h_opex")
                     _h_apre = st.number_input(
                         "Apreciación anual (%)", -10.0, 15.0,
                         float(max(-10.0, min(15.0, _m_hold.get("variacion_anual_pct", 4.0)))),
-                        0.5, key="h_apre",
-                        help="Apreciación esperada del valor del activo por año")
+                        0.5, key="h_apre")
                 with _hc3:
                     _h_horizon = st.selectbox(
                         "Horizonte de análisis", [5, 7, 10, 15], index=1, key="h_horizon")
                     _h_wacc = st.number_input(
-                        "Tasa descuento / WACC (%)", 5.0, 20.0, 9.0, 0.5, key="h_wacc",
-                        help="Costo de oportunidad del capital. Referencia Lima: 8–12%")
+                        "Tasa descuento / WACC (%)", 5.0, 20.0, 9.0, 0.5, key="h_wacc")
 
                 # ── Cálculos ───────────────────────────────────────
                 _av_hold  = _hr.get("m2_vendibles", 0)
@@ -12557,8 +12555,7 @@ elif tipo_op == "Proyecto Logístico / Industrial":
             else:
                 _ind_geo_file = st.file_uploader(
                     "Cargar plano perimétrico (.dxf / .pdf)",
-                    type=["dxf", "pdf"], key="ind_geo_dxf_file",
-                    help="DXF: extracción automática del perímetro. PDF: referencia visual — tabula las medidas manualmente.")
+                    type=["dxf", "pdf"], key="ind_geo_dxf_file")
                 if _ind_geo_file:
                     if _ind_geo_file.name.lower().endswith(".pdf"):
                         st.info("PDF cargado como referencia. Para análisis 3D automático sube el archivo DXF/DWG exportado desde AutoCAD o adjunta las medidas en 'Tabular medidas'.")
@@ -12603,8 +12600,7 @@ elif tipo_op == "Proyecto Logístico / Industrial":
                 _ig_h_nave = _irg_h.number_input(
                     "Altura al hombro (m)", min_value=3.0, max_value=25.0,
                     value=float(st.session_state.get("ind_geo_h_nave_val", _h_default)),
-                    step=0.5, key="ind_geo_h_nave",
-                    help=f"Rango sugerido para esta actividad: {_h_min:.0f}–{_h_max:.0f}m")
+                    step=0.5, key="ind_geo_h_nave")
                 st.session_state["ind_geo_h_nave_val"] = _ig_h_nave
 
                 # Retiros fijos en 0 — la huella declarada ES la ocupación de la nave
@@ -12620,10 +12616,8 @@ elif tipo_op == "Proyecto Logístico / Industrial":
                 _imc1, _imc2, _imc3, _imc4 = st.columns(4)
                 _imc1.metric("Área del lote",            f"{_img.get('area_lote_m2', 0):,.0f} m²")
                 _imc2.metric("Huella edificable",        f"{_img.get('area_huella_efectiva_m2', 0):,.0f} m²")
-                _imc3.metric("Coef. de Ocupación (COS)", f"{_img.get('cos_real_pct', 0):.1f}%",
-                             help="Área techada planta baja / área total del terreno")
-                _imc4.metric("Área libre",               f"{max(0, _img.get('area_lote_m2',0) - _img.get('area_huella_efectiva_m2',0)):,.0f} m²",
-                             help="Patios de maniobra, estacionamientos, jardín separador")
+                _imc3.metric("Coef. de Ocupación (COS)", f"{_img.get('cos_real_pct', 0):.1f}%")
+                _imc4.metric("Área libre",               f"{max(0, _img.get('area_lote_m2',0) - _img.get('area_huella_efectiva_m2',0)):,.0f} m²")
 
                 # Validación radio de giro tráileres
                 _ig_frente_check = st.session_state.get("ind_geo_frente_val", 0.0) or (_img.get("area_lote_m2", 0) ** 0.5)
@@ -13888,10 +13882,8 @@ elif tipo_op == "Inmueble Residencial":
             pm1, pm2, pm3 = st.columns(3)
             pm1.metric("Precio pagado / m²", f"${_ppm2_r:,.0f}/m²")
             pm2.metric("Mediana zona (Urbania)", f"${_ref_r:,}/m²",
-                       delta=f"{_diff_r:+.1f}% vs. mercado",
-                       help="Fuente: Índice Urbania Lima, Noviembre 2025")
-            pm3.metric("Precio justo estimado", f"${int(r.get('m2',0) * _ref_r):,}",
-                       help="Área × mediana de zona")
+                       delta=f"{_diff_r:+.1f}% vs. mercado")
+            pm3.metric("Precio justo estimado", f"${int(r.get('m2',0) * _ref_r):,}")
 
             st.markdown(
                 f'<div style="background:{_sem_bg};border:1px solid {_sem_color};border-left:4px solid {_sem_color};'
@@ -13912,13 +13904,11 @@ elif tipo_op == "Inmueble Residencial":
             _alq_actual = r.get("alquiler_mes", 0)
 
             am1, am2, am3 = st.columns(3)
-            am1.metric("Alquiler mercado estimado", f"${_alq_ref_mes:,.0f}/mes",
-                       help=f"${r.get('alquiler_mercado_m2',0):.1f} USD/m²/mes · Fuente: Urbania nov-25")
+            am1.metric("Alquiler mercado estimado", f"${_alq_ref_mes:,.0f}/mes")
             am2.metric("Alquiler ingresado", f"${_alq_actual:,.0f}/mes" if _alq_actual > 0 else "No aplica")
             if _alq_actual > 0 and _alq_ref_mes > 0:
                 _diff_alq = (_alq_actual - _alq_ref_mes) / _alq_ref_mes * 100
-                am3.metric("Diferencial vs. mercado", f"{_diff_alq:+.1f}%",
-                           help="Positivo = renta sobre mercado · Negativo = renta bajo mercado")
+                am3.metric("Diferencial vs. mercado", f"{_diff_alq:+.1f}%")
 
             # ── Yield benchmark ─────────────────────────────────
             st.markdown('<div class="section-title">Rentabilidad vs. Mercado</div>', unsafe_allow_html=True)
@@ -13929,8 +13919,7 @@ elif tipo_op == "Inmueble Residencial":
             ym1, ym2, ym3, ym4 = st.columns(4)
             ym1.metric("Yield bruto este inmueble", f"{_yield_this:.1f}%")
             ym2.metric("Yield neto este inmueble", f"{_yield_neto:.1f}%")
-            ym3.metric(f"Yield promedio zona", f"{_yield_mkt:.1f}%",
-                       help="Fuente: Índice Urbania Lima, Noviembre 2025")
+            ym3.metric(f"Yield promedio zona", f"{_yield_mkt:.1f}%")
             if _yield_this > 0 and _yield_mkt > 0:
                 _beat = _yield_this - _yield_mkt
                 ym4.metric("Diferencial", f"{_beat:+.1f}pp",
@@ -13944,10 +13933,8 @@ elif tipo_op == "Inmueble Residencial":
             _var_label = "Distrito en alza" if _var >= 3 else ("Estable" if abs(_var) <= 1 else "Distrito en baja")
 
             td1, td2 = st.columns(2)
-            td1.metric("Variación anual precio zona", f"{_var:+.1f}%",
-                       help="Fuente: Índice Urbania Lima, Noviembre 2025")
-            td2.metric("Inflación 12m (Perú)", "+1.4%",
-                       help="Fuente: Banco Central de Perú · nov-25")
+            td1.metric("Variación anual precio zona", f"{_var:+.1f}%")
+            td2.metric("Inflación 12m (Perú)", "+1.4%")
 
             _real_var = _var - 1.4
             st.markdown(
