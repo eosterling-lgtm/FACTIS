@@ -9114,7 +9114,7 @@ with st.sidebar:
         ind_fondo  = ind_col2.number_input("Fondo (ml)",  0.0, 1000.0, 0.0, 0.5, key="ind_fondo")
         _ind_area_calc = round(ind_frente * ind_fondo, 1) if ind_frente > 0 and ind_fondo > 0 else 0.0
         if _ind_area_calc > 0:
-            st.caption(f"Área calculada: **{_ind_area_calc:,.0f} m²**")
+            st.markdown(f'<div style="font-size:11px;color:#B8904A;font-weight:600;margin-top:-4px;">= {_ind_area_calc:,.0f} m²</div>', unsafe_allow_html=True)
             if st.session_state.get("ind_area_auto", True):
                 st.session_state["ind_area_val"] = _ind_area_calc
         _ind_area_default = st.session_state.get("ind_area_val", 5000.0)
@@ -9128,7 +9128,7 @@ with st.sidebar:
         ind_costo_terreno = st.number_input("Costo del terreno (USD)", 1, 100_000_000,
                                             max(1, int(st.session_state.get("ind_costo_terreno") or 1_000_000)),
                                             50_000, key="ind_costo_terreno")
-        st.caption(f"= **${ind_costo_terreno:,.0f}** USD")
+        st.markdown(f'<div style="font-size:11px;color:#B8904A;font-weight:600;margin-top:-6px;">= ${ind_costo_terreno:,.0f} USD</div>', unsafe_allow_html=True)
 
         # ── 2 · PROYECTO ────────────────────────────────────
         _step_header("2", "Proyecto")
@@ -9146,115 +9146,47 @@ with st.sidebar:
             ["Almacén Logístico", "Nave Industrial", "Cross-docking", "Producción / Manufactura"],
             key="ind_tipo")
 
-        # ── Actividad a realizar + validación normativa ──────
-        _ACT_NORM_CATS = [
-            "Almacenamiento / Logística general",
-            "Centro de distribución / Cross-docking",
-            "Almacenamiento frigorífico (cámara fría)",
-            "Manufactura liviana / Ensamblaje",
-            "Producción de alimentos y bebidas",
-            "Taller / Metalmecánica / Carpintería",
-            "Manufactura mediana / Plásticos / Pinturas",
-            "Almacén de productos inflamables / Solventes",
-            "Manufactura pesada / Ensamblaje automotriz",
-            "Química industrial / Petroquímica leve",
-            "Industria especial / Residuos peligrosos",
-            "Otro (especificar en descripción)",
-        ]
-        _ACT_ZONA_MIN = {
-            "Almacenamiento / Logística general":           "I1",
-            "Centro de distribución / Cross-docking":       "I1",
-            "Almacenamiento frigorífico (cámara fría)":     "I1",
-            "Manufactura liviana / Ensamblaje":             "I1",
-            "Producción de alimentos y bebidas":            "I1",
-            "Taller / Metalmecánica / Carpintería":         "I2",
-            "Manufactura mediana / Plásticos / Pinturas":   "I2",
-            "Almacén de productos inflamables / Solventes": "I2",
-            "Manufactura pesada / Ensamblaje automotriz":   "I3",
-            "Química industrial / Petroquímica leve":       "I3",
-            "Industria especial / Residuos peligrosos":     "I4",
-            "Otro (especificar en descripción)":            "I1",
+        # ── Actividad — campo único: descripción + búsqueda automática en Índice ATN-I ──
+        _TIPO_ZONA_MIN = {
+            "Almacén Logístico":        "I1",
+            "Nave Industrial":          "I1",
+            "Cross-docking":            "I1",
+            "Producción / Manufactura": "I2",
         }
         _ZONA_ORDEN = {"I1": 1, "I2": 2, "I3": 3, "I4": 4, "OU": 0}
-        _ACT_NOTAS = {
-            "Producción de alimentos y bebidas":            "Requiere habilitación DIGESA/SENASA adicional.",
-            "Almacén de productos inflamables / Solventes": "Requiere ITSE (Inspección Técnica de Seguridad) de alta peligrosidad.",
-            "Industria especial / Residuos peligrosos":     "Requiere EIA y permiso ambiental MINAM. Solo I4.",
-            "Química industrial / Petroquímica leve":       "Requiere EIA Semidetallado (OEFA) y seguro ambiental.",
-            "Manufactura pesada / Ensamblaje automotriz":   "Requiere evaluación de vibraciones y emisiones (I3 mín.).",
-        }
-        _act_idx_default = 0
-        _saved_cat = st.session_state.get("ind_act_categoria")
-        if _saved_cat in _ACT_NORM_CATS:
-            _act_idx_default = _ACT_NORM_CATS.index(_saved_cat)
-        ind_act_categoria = st.selectbox(
-            "Categoría de actividad (normativa RNE A.060)",
-            _ACT_NORM_CATS, index=_act_idx_default, key="ind_act_categoria")
+
         ind_actividad_desc = st.text_area(
-            "Descripción específica de la actividad",
+            "Actividad a desarrollar",
             value=st.session_state.get("ind_actividad_desc", ""),
             placeholder="Ej: Almacenamiento y distribución de productos farmacéuticos refrigerados…",
             height=68, key="ind_actividad_desc")
 
-        # ── Búsqueda en Índice de Usos ATN-I ──────────────────
-        _ind_busq = st.text_input(
-            "Buscar en Índice de Usos ATN-I",
-            placeholder="Ej: almacén, farmacéutico, textil, metalmecánica…",
-            key="ind_busq_atni")
-        if _ind_busq and len(_ind_busq.strip()) >= 3:
-            _zona_busq = st.session_state.get("ind_zona_ind", "I2")
-            _res_idx = _buscar_actividad_indice(_ind_busq, _zona_busq)
-            if _res_idx:
-                with st.expander(f"Índice ATN-I — {len(_res_idx)} actividades encontradas", expanded=True):
-                    for _ri in _res_idx:
-                        _c = _ri["compat"]
-                        _z_parts = []
-                        for _z, _v in sorted(_ri["zones"].items()):
-                            if _v in ("P", "H"):
-                                _z_parts.append(_z.replace("I-", "I") + ("✓" if _v == "P" else "~"))
-                        _z_str = " · ".join(_z_parts)
-                        if _c == "P":
-                            _badge = (f'<span style="background:#1A4731;color:#fff;border-radius:3px;'
-                                      f'padding:1px 6px;font-size:10px;font-weight:700;">✓ PERMITIDO en {_zona_busq}</span>')
-                        elif _c == "H":
-                            _badge = (f'<span style="background:#7A4F1A;color:#fff;border-radius:3px;'
-                                      f'padding:1px 6px;font-size:10px;font-weight:700;">~ COMPATIBLE en {_zona_busq}</span>')
-                        else:
-                            _badge = (f'<span style="background:#4A5870;color:#fff;border-radius:3px;'
-                                      f'padding:1px 6px;font-size:10px;">— NO en {_zona_busq}</span>')
-                        st.markdown(
-                            f'<div style="border-bottom:1px solid #EEF0F4;padding:5px 2px 6px;">'
-                            f'<div style="font-size:11px;font-weight:600;color:#1A2233;">{_ri["desc"].title()}</div>'
-                            f'<div style="font-size:10px;color:#6B7685;margin-top:1px;">{_z_str}</div>'
-                            f'<div style="margin-top:3px;">{_badge}</div>'
-                            f'</div>', unsafe_allow_html=True)
-            else:
-                st.caption("Sin coincidencias — prueba otro término (ej: 'almacen', 'textil').")
-
-        # Compatibilidad normativa
+        # Semáforo de compatibilidad (derivado de tipo de nave)
         _zona_sel = st.session_state.get("ind_zona_ind", "I2")
-        _zona_min = _ACT_ZONA_MIN.get(ind_act_categoria, "I1")
+        _zona_min = _TIPO_ZONA_MIN.get(st.session_state.get("ind_tipo", "Almacén Logístico"), "I1")
         _ord_sel  = _ZONA_ORDEN.get(_zona_sel, 0)
         _ord_min  = _ZONA_ORDEN.get(_zona_min, 1)
         if _zona_sel == "OU":
-            _norm_color = "#7A1A1A"; _norm_bg = "#FFF0F0"
-            _norm_msg = f"⛔ Zonificación OU no es compatible con uso industrial. Verificar certificado."
+            _norm_icon, _norm_label, _norm_color, _norm_bg = "⛔", "INCOMPATIBLE", "#C44A4A", "rgba(196,74,74,0.12)"
+            _norm_sub = "Zonificación OU no admite uso industrial — verificar certificado."
         elif _ord_sel >= _ord_min:
-            _norm_color = "#1A4731"; _norm_bg = "#E8F5EE"
-            _norm_msg = f"✓ {ind_act_categoria} es compatible con zonificación {_zona_sel} (mínimo requerido: {_zona_min})"
+            _norm_icon, _norm_label, _norm_color, _norm_bg = "✓", "COMPATIBLE", "#1A7A4A", "rgba(26,122,74,0.12)"
+            _norm_sub = f"Zona {_zona_sel} · mínimo requerido {_zona_min} · Ord. 933-MML ATN-I"
         elif _ord_sel == _ord_min - 1:
-            _norm_color = "#7A4F1A"; _norm_bg = "#FFF8EE"
-            _norm_msg = f"⚠ Actividad requiere mínimo {_zona_min} — verificar Índice de Usos del PDU distrital. Zonificación actual: {_zona_sel}"
+            _norm_icon, _norm_label, _norm_color, _norm_bg = "⚠", "CONDICIONADO", "#B8862E", "rgba(184,134,46,0.12)"
+            _norm_sub = f"Zona {_zona_sel} — requiere mínimo {_zona_min}. Verificar PDU distrital."
         else:
-            _norm_color = "#7A1A1A"; _norm_bg = "#FFF0F0"
-            _norm_msg = f"⛔ Actividad requiere {_zona_min} como mínimo. Zonificación {_zona_sel} no es compatible."
-        _norm_extra = _ACT_NOTAS.get(ind_act_categoria, "")
+            _norm_icon, _norm_label, _norm_color, _norm_bg = "⛔", "INCOMPATIBLE", "#C44A4A", "rgba(196,74,74,0.12)"
+            _norm_sub = f"Requiere {_zona_min} mínimo — zona {_zona_sel} no es suficiente."
         st.markdown(
-            f'<div style="background:{_norm_bg};border-left:3px solid {_norm_color};border-radius:4px;'
-            f'padding:8px 12px;margin:6px 0 10px;font-size:11px;color:{_norm_color};">'
-            f'{_norm_msg}'
-            + (f'<br><span style="opacity:0.8;">{_norm_extra}</span>' if _norm_extra else "")
-            + '</div>', unsafe_allow_html=True)
+            f'<div style="background:{_norm_bg};border-radius:6px;padding:8px 12px;margin:6px 0 10px;'
+            f'display:flex;align-items:flex-start;gap:10px;">'
+            f'<span style="font-size:15px;line-height:1.2;">{_norm_icon}</span>'
+            f'<div>'
+            f'<div style="font-size:10px;font-weight:700;letter-spacing:1px;color:{_norm_color};">{_norm_label}</div>'
+            f'<div style="font-size:10px;color:#A8B8C8;margin-top:1px;">{_norm_sub}</div>'
+            f'</div></div>', unsafe_allow_html=True)
+        ind_act_categoria = st.session_state.get("ind_tipo", "Almacén Logístico")
 
         _COSTO_DEFAULTS = {
             "Almacén Logístico":        (280, "Estructura metálica portal frame, 12–14m clara, losa industrial. "
@@ -9536,7 +9468,7 @@ with st.sidebar:
                        _m_res.get("precio_3br", 0)) * res_m2
         _ref_m2_display = (_m_res.get("precio_2br", 0) if "2" in res_dormitorios else
                            (_m_res.get("precio_1br", 0) if "1" in res_dormitorios else _m_res.get("precio_3br", 0)))
-        st.caption(f"Valor mercado: **${_ref_m2_display:,}/m²** — Ref. total: ${_precio_ref:,.0f}")
+        st.markdown(f'<div style="font-size:11px;color:#B8904A;font-weight:600;margin-top:-4px;">Mercado: ${_ref_m2_display:,}/m² · Ref. total ${_precio_ref:,.0f}</div>', unsafe_allow_html=True)
 
         res_precio = st.number_input("Precio de compra (USD)", 1, 10_000_000,
                                       max(1, int(st.session_state.get("res_precio_k", max(int(_precio_ref / 10000) * 10000, 50000)))), 5_000, format="%d", key="res_precio_k")
@@ -9573,7 +9505,7 @@ with st.sidebar:
         if res_uso in ["Inversión para alquilar", "Evaluación para venta"]:
             _alq_sugerido = round(_m_res.get("alquiler_m2_mes", 0) * res_m2 / 50) * 50
             if res_uso == "Inversión para alquilar":
-                st.caption(f"Mercado zona sugiere: **${_alq_sugerido:,}/mes** (${_m_res.get('alquiler_m2_mes', 0):.1f}/m²/mes)")
+                st.markdown(f'<div style="font-size:11px;color:#B8904A;font-weight:600;margin-top:-4px;">Mercado: ${_alq_sugerido:,}/mes · ${_m_res.get("alquiler_m2_mes", 0):.1f}/m²/mes</div>', unsafe_allow_html=True)
                 res_alquiler = st.number_input("Renta mensual (USD)", 0, 20_000,
                                                 int(st.session_state.get("res_alq_k", int(_alq_sugerido))), 50, key="res_alq_inp")
                 res_tipo_contrato = st.radio(
@@ -12609,10 +12541,148 @@ elif tipo_op == "Proyecto Logístico / Industrial":
             }}, 350);
             </script>""", height=0)
 
-        ind_tabs = st.tabs(["Parámetros", "Financiero", "Flujo de Caja", "Comparativa", "Factibilidad", "Análisis IA"])
+        ind_tabs = st.tabs(["Resumen Ejecutivo", "Parámetros", "Financiero", "Flujo de Caja", "Comparativa", "Factibilidad", "Análisis IA"])
+
+        # TAB 0: RESUMEN EJECUTIVO
+        with ind_tabs[0]:
+            _NAV = "#1E2D3D"; _GOLD = "#B8904A"; _BRD = "#2E3F52"
+
+            # ── Semáforo global ───────────────────────────────────
+            fac_re = st.session_state.get("industrial_factibilidad") or {}
+            _sem_g = fac_re.get("semaforo_global", "")
+            _SEM_CFG = {
+                "verde":    ("#107040", "rgba(16,112,64,0.12)",   "✓ SIN ALERTAS CRÍTICAS"),
+                "amarillo": ("#9A6E10", "rgba(154,110,16,0.12)",  "⚠ CON OBSERVACIONES"),
+                "rojo":     ("#8B1A1A", "rgba(139,26,26,0.12)",   "⛔ ALERTAS CRÍTICAS"),
+            }
+            if _sem_g in _SEM_CFG:
+                _sc, _sbg, _slbl = _SEM_CFG[_sem_g]
+                st.markdown(
+                    f'<div style="background:{_sbg};border-left:4px solid {_sc};border-radius:8px;'
+                    f'padding:14px 20px;margin-bottom:18px;display:flex;align-items:center;gap:14px;">'
+                    f'<div style="font-size:24px;line-height:1;">{_slbl.split()[0]}</div>'
+                    f'<div><div style="font-size:11px;font-weight:700;letter-spacing:1.5px;color:{_sc};">'
+                    f'{" ".join(_slbl.split()[1:])}</div>'
+                    f'<div style="font-size:11px;color:{_sc};opacity:0.75;margin-top:2px;">'
+                    f'{fac_re.get("resumen_tecnico","")}</div></div></div>',
+                    unsafe_allow_html=True)
+
+            # ── Parámetros clave ──────────────────────────────────
+            st.markdown('<div class="section-title">Parámetros del Activo</div>', unsafe_allow_html=True)
+            _re_cols = st.columns(4)
+            _re_cols[0].metric("Tipo de nave",    r.get("tipo_nave", "—"))
+            _re_cols[1].metric("Zonificación",     r.get("zonificacion", "—"))
+            _re_cols[2].metric("Área nave",        f"{r.get('area_nave',0):,.0f} m²")
+            _re_cols[3].metric("Área lote",        f"{r.get('area_terreno',0):,.0f} m²")
+            _re_cols2 = st.columns(4)
+            _re_cols2[0].metric("Costo total",     f"${r.get('costo_total',0):,.0f}")
+            _re_cols2[1].metric("Costo/m² nave",   f"${r.get('costo_por_m2_nave',0):,.0f}/m²")
+            _re_cols2[2].metric("Yield bruto",     f"{r.get('yield_bruto',0):.1f}%")
+            _re_cols2[3].metric("Payback",         f"{r.get('payback_anos',0):.1f} años" if r.get('payback_anos',0) > 0 else "—")
+            if r.get("actividad_descripcion"):
+                st.markdown(
+                    f'<div style="font-size:11px;color:#8A9BAD;margin-top:4px;">'
+                    f'Actividad declarada: <em>{r["actividad_descripcion"]}</em></div>',
+                    unsafe_allow_html=True)
+
+            # ── Sustento normativo ────────────────────────────────
+            st.markdown('<div class="section-title" style="margin-top:18px;">Sustento Normativo y Técnico</div>', unsafe_allow_html=True)
+
+            def _norm_row(icon, titulo, estado, base_legal, detalle=""):
+                _col_ic = "#1A7A4A" if icon == "✓" else ("#C44A4A" if icon == "⛔" else "#B8862E")
+                st.markdown(
+                    f'<div style="border-left:3px solid {_col_ic};padding:10px 14px;margin-bottom:10px;'
+                    f'background:rgba(255,255,255,0.03);border-radius:0 6px 6px 0;">'
+                    f'<div style="display:flex;align-items:baseline;gap:8px;">'
+                    f'<span style="font-size:14px;color:{_col_ic};">{icon}</span>'
+                    f'<span style="font-size:12px;font-weight:700;color:#C8D8E8;">{titulo}</span>'
+                    f'<span style="font-size:11px;color:#8A9BAD;margin-left:auto;">{estado}</span></div>'
+                    + (f'<div style="font-size:10px;color:#6B8098;margin-top:4px;">'
+                       f'Base legal: <strong style="color:#8A9BAD;">{base_legal}</strong></div>' if base_legal else "")
+                    + (f'<div style="font-size:11px;color:#A8B8C8;margin-top:3px;">{detalle}</div>' if detalle else "")
+                    + '</div>', unsafe_allow_html=True)
+
+            # 1. Zonificación vs. tipo de nave
+            _zona_r = r.get("zonificacion", "I2")
+            _tipo_r = r.get("tipo_nave", "Almacén Logístico")
+            _zona_ok = _zona_r not in ("OU",) and not (_zona_r == "I1" and _tipo_r == "Producción / Manufactura")
+            _norm_row(
+                "✓" if _zona_ok else "⛔",
+                f"Zonificación {_zona_r} — {_tipo_r}",
+                "COMPATIBLE" if _zona_ok else "INCOMPATIBLE",
+                "Ord. 933-MML-2006 · Índice de Usos ATN-I (RDM/RDA/VT/CV/CZ/CM/I-1/I-2/I-3/I-4)",
+                f"La zonificación {_zona_r} permite almacenes y naves logísticas per Índice Usos ATN-I." if _zona_ok
+                else f"Actividad requiere zonificación superior — verificar PDU distrital.")
+
+            # 2. Área libre / patios de maniobra
+            _area_libre_r = r.get("area_libre", 0)
+            _patio_ok = _area_libre_r >= 900
+            _norm_row(
+                "✓" if _patio_ok else "⚠",
+                "Patio de maniobras y circulación",
+                f"{_area_libre_r:,.0f} m² disponibles",
+                "RNE A.060 Art. 10 · Radio de giro tráiler = 30×30m mínimo (900 m²)",
+                f"{'Cumple' if _patio_ok else 'Insuficiente —'} el radio de giro de tráileres requiere mínimo 900 m² de área libre.")
+
+            # 3. EIV — Estudio de Impacto Vial
+            _area_nave_r = r.get("area_nave", 0)
+            _eiv_req = _area_nave_r >= 1500
+            _norm_row(
+                "⚠" if _eiv_req else "✓",
+                "Estudio de Impacto Vial (EIV)",
+                "REQUERIDO" if _eiv_req else "No requerido",
+                "RNE A.011 · Resolución Ministerial 167-2023-MTC/14",
+                f"Nave de {_area_nave_r:,.0f} m² {'supera el umbral — EIV obligatorio ante municipio y MTC antes de licencia.' if _eiv_req else 'está bajo el umbral de 1,500 m² — sin exigencia de EIV.'}")
+
+            # 4. DSCR bancario
+            _dscr_r = r.get("dscr", 0)
+            _dscr_ok = _dscr_r == 0 or _dscr_r >= 1.20
+            _norm_row(
+                "✓" if _dscr_ok else "⛔",
+                f"DSCR (cobertura del servicio de deuda): {_dscr_r:.2f}x" if _dscr_r > 0 else "DSCR — sin financiamiento",
+                "APROBABLE" if _dscr_ok else "OBSERVADO",
+                "Estándar banca comercial Lima · BCP, BBVA, Scotiabank: DSCR mínimo 1.20x",
+                f"{'Supera el mínimo bancario de 1.20x.' if _dscr_ok and _dscr_r > 0 else ('Sin crédito declarado.' if _dscr_r == 0 else 'Por debajo del mínimo — banco observará la operación.')}")
+
+            # 5. Yield vs. mercado
+            _yld_r = r.get("yield_bruto", 0)
+            _yld_ok = _yld_r >= 8.0
+            _norm_row(
+                "✓" if _yld_ok else ("⚠" if _yld_r >= 5 else "⛔"),
+                f"Yield bruto: {_yld_r:.1f}%",
+                "SOBRE MERCADO" if _yld_r >= 10 else ("EN MERCADO" if _yld_ok else "BAJO MERCADO"),
+                "Benchmarks Lima 2025 · Cushman & Wakefield / Colliers — Lurín Clase A: 8–10% bruto",
+                f"Ref. Parque Logístico 47 (Lima VES, 14,315 m², Clase A): yield bruto 26.8% · Lurín mercado: 8–10%.")
+
+            # 6. Acceso pesado (si hay factibilidad)
+            _acceso = fac_re.get("restricciones_acceso", "")
+            if _acceso:
+                _norm_row("⚠", "Acceso y circulación pesada", "VER NOTA",
+                          "RNE A.060 Art. 8 · Vías habilitadas para carga mayor",
+                          _acceso)
+
+            # 7. Si hay factibilidad registral
+            _est_reg = fac_re.get("estado_registral", "")
+            if _est_reg:
+                _norm_row("✓", "Estado registral (SUNARP)", "VERIFICADO", "SUNARP — partida registral", _est_reg)
+
+            # ── Conclusión ejecutiva (del Análisis IA si ya fue generado) ──
+            _memo_re = st.session_state.get("ind_resumen") or {}
+            if _memo_re.get("perfil_activo") or _memo_re.get("conclusion"):
+                st.markdown('<div class="section-title" style="margin-top:18px;">Conclusión del Análisis</div>', unsafe_allow_html=True)
+                _concl = _memo_re.get("conclusion") or _memo_re.get("perfil_activo", "")
+                st.markdown(
+                    f'<div style="background:rgba(184,144,74,0.07);border-left:3px solid #B8904A;'
+                    f'border-radius:0 8px 8px 0;padding:14px 18px;font-size:12px;color:#C8D8E8;line-height:1.7;">'
+                    f'{_concl}</div>', unsafe_allow_html=True)
+            else:
+                st.markdown(
+                    '<div style="font-size:11px;color:#6B8098;margin-top:16px;font-style:italic;">'
+                    'Genera el Análisis IA (última pestaña) para obtener la conclusión narrativa del advisory board.</div>',
+                    unsafe_allow_html=True)
 
         # TAB 1: PARÁMETROS / GEOMETRÍA + RESUMEN
-        with ind_tabs[0]:
+        with ind_tabs[1]:
             # ── GEOMETRÍA DEL LOTE INDUSTRIAL ────────────────────
             st.markdown('<div class="section-title">Geometría del Lote</div>', unsafe_allow_html=True)
 
@@ -12897,7 +12967,7 @@ elif tipo_op == "Proyecto Logístico / Industrial":
                     unsafe_allow_html=True)
 
         # TAB 2: FINANCIERO
-        with ind_tabs[1]:
+        with ind_tabs[2]:
             # ── Compra vs. Arrendamiento ──────────────────────
             st.markdown('<div class="section-title">Compra vs. Arrendamiento</div>', unsafe_allow_html=True)
             st.caption("Referencia orientativa — el profesional aplica su criterio según la industria, perfil del inquilino y estructura del deal.")
@@ -13074,7 +13144,7 @@ elif tipo_op == "Proyecto Logístico / Industrial":
                         )
 
         # TAB 3: FLUJO DE CAJA
-        with ind_tabs[2]:
+        with ind_tabs[3]:
             if r.get('uso') == "Inversión" and r.get('flujo_anual'):
                 st.markdown('<div class="section-title">Score de Viabilidad</div>', unsafe_allow_html=True)
 
@@ -13211,7 +13281,7 @@ elif tipo_op == "Proyecto Logístico / Industrial":
                 )
 
         # TAB 4: COMPARATIVA
-        with ind_tabs[3]:
+        with ind_tabs[4]:
             # Multi-project comparison
             cmp_list = st.session_state.ind_comparativa
             if cmp_list:
@@ -13398,7 +13468,7 @@ elif tipo_op == "Proyecto Logístico / Industrial":
                 st.markdown('<div class="alert-legal">Ingresa la renta de mercado equivalente en el panel izquierdo para activar la comparativa Comprar vs. Arrendar.</div>', unsafe_allow_html=True)
 
         # TAB 6: MEMORANDUM ADVISORY BOARD
-        with ind_tabs[5]:
+        with ind_tabs[6]:
             memo = st.session_state.get("ind_resumen")
             if not memo:
                 st.markdown(
@@ -13526,7 +13596,7 @@ elif tipo_op == "Proyecto Logístico / Industrial":
                     st.rerun()
 
         # TAB 5: FACTIBILIDAD
-        with ind_tabs[4]:
+        with ind_tabs[5]:
             fac = st.session_state.get("industrial_factibilidad")
             if not fac:
                 st.markdown(
