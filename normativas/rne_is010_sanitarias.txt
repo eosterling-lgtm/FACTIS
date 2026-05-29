@@ -1,0 +1,1105 @@
+SUB-TÍTULO III.3
+INSTALACIONES SANITARIAS
+NORMA IS.010
+INSTALACIONES SANITARIAS PARA EDIFICACIONES
+1. GENERALIDADES
+1.1. ALCANCE
+Esta Norma contiene los requisitos mínimos para el diseño de las instalaciones
+sanitarias para edificaciones en general. Para los casos no contemplados en la presente
+Norma, el ingeniero sanitario, fijará los requisitos necesarios para el proyecto específico,
+incluyendo en la memoria descriptiva la justificación y fundamentación correspondiente.
+1.2. CONDICIONES GENERALES PARA EL DISEÑO DE INSTALACIONES
+SANITARIAS PARA EDIFICACIONES
+a) Para efectos de la presente norma, la instalación sanitaria comprende las
+instalaciones de agua, agua contra incendio, aguas residuales y ventilación.
+b) El diseño de las instalaciones sanitarias debe ser elaborado y autorizado por un
+ingeniero sanitario colegiado.
+c) El diseño de las instalaciones sanitarias debe ser elaborado en coordinación con el
+proyectista de arquitectura, para que se considere oportunamente las condiciones
+mas adecuadas de ubicación de los servicios sanitarios, ductos y todos aquellos
+elementos que determinen el recorrido de las tuberías así como el dimensionamiento
+y ubicación de tanque de almacenamiento de agua entre otros; y con el responsable
+del diseño de estructuras, de tal manera que no comprometan sus elementos
+estructurales, en su montaje y durante su vida útil; y con el responsable de las
+instalaciones electromecánicas para evitar interferencia.
+1.3. DOCUMENTOS DE TRABAJO
+Todo proyecto de instalaciones sanitarias para una edificación, deberá llevar la firma del
+Ingeniero Sanitario Colegiado.
+La documentación del proyecto que deberá presentar para su aprobación constará de:
+a) Memoria descriptiva que incluirá:
+- Ubicación.
+- Solución adoptada para la fuente de abastecimiento de agua y evacuación de
+desagüe y descripción de cada uno de los sistemas.
+b) Planos de:
+- Sistema de abastecimiento de agua potable: instalaciones interiores,
+instalaciones exteriores y detalles a escalas convenientes y esquemas
+isométricos cuando sea necesario.
+- Sistema de desagües; instalaciones interiores, instalaciones exteriores y detalles
+a escalas convenientes y esquemas isométricos, cuando sea necesario.
+- Sistema de agua contra incendio, riego, evacuación pluvial etc., cuando las
+condiciones así lo exijan.
+1.4. SERVICIOS SANITARIOS
+
+1.4.1. CONDICIONES GENERALES
+a) Los aparatos sanitarios deberán instalarse en ambientes adecuados, dotados de
+amplia iluminación y ventilación previendo los espacios mínimos necesarios para su
+uso, limpieza, reparación, mantenimiento e inspección.
+b) Toda edificación estará dotada de servicios sanitarios con el número y tipo de
+aparatos sanitarios que se establecen en 1.7.
+c) En los servicios sanitarios para uso publico, los inodoros deberán instalarse en
+espacios independientes de carácter privado.
+d) En las edificaciones de uso público, se debe considerar servicios sanitarios para
+discapacitados.
+1.4.2. NÚMERO REQUERIDO DE APARATOS SANITARIOS
+El número y tipo de aparatos sanitarios que deberán ser instalados en los servicios
+sanitarios de una edificación será proporcional al número de usuarios, de acuerdo con
+lo especificado en los párrafos siguientes:
+a) Todo núcleo básico de vivienda unifamiliar, estará dotado, por lo menos de: un
+inodoro, una ducha y un lavadero.
+b) Toda casa- habitación o unidad de vivienda, estará dotada, por lo menos, de: un
+servicio sanitario que contara cuando menos con un inodoro, un lavatorio y una
+ducha. La cocina dispondrá de un lavadero.
+c) Los locales comerciales o edificios destinados a oficinas o tiendas o similares,
+deberán dotarse como mínimo de servicios sanitarios en la forma, tipo y número que
+se especifica a continuación:
+- En cada local comercial con área de hasta 60 m2 se dispondrá por lo menos, de
+un servicio sanitario dotado de inodoro y lavatorio.
+- En locales con área mayor de 60 m2 se dispondrá de servicios sanitarios
+separados para hombres y mujeres, dotados como mínimo de los aparatos
+sanitarios que indica la Tabla Nº 1.
+Cuando se proyecte usar servicios sanitarios comunes a varios locales se cumplirán
+los siguientes requisitos:
+- Se proveerán servicios sanitarios separados debidamente identificados para
+hombres y mujeres; ubicados en lugar accesible a todos los locales a servir,
+respetando siempre la tabla anterior.
+- La distancia entre cualquiera de los locales comerciales y los servicios sanitarios,
+no podrá ser mayor de 40m en sentido horizontal ni podrá mediar más de un piso
+entre ellos, en sentido vertical.
+- En los centros comerciales, supermercados y complejos dedicados al comercio,
+se proveerá para el público, servicios sanitarios separados para hombres y
+mujeres en la siguiente proporción indicada en la Tabla Nº 2.
+
+d) En los restaurantes, cafeterías, bares, fuentes de soda y similares, se proveerán
+servicios sanitarios para los trabajadores, de acuerdo a lo especificado en el numeral
+4.2c. Para el público se proveerá servicios sanitarios como sigue:
+Los locales con capacidad de atención simultánea hasta de 15 personas, dispondrán
+por lo menos de un servicio sanitario dotado de un inodoro y un lavatorio. Cuando la
+capacidad sobrepase de 15 personas, dispondrán de servicios separados para
+hombres y mujeres de acuerdo con la Tabla Nº 3.
+e) En las plantas industriales, todo lugar de trabajo debe estar provisto de servicios
+sanitarios adecuados y separados para cada sexo. La relación mínima que debe
+existir entre el número de trabajadores y el de servicios sanitarios se señala en la
+Tabla Nº 4.
+f) En los locales educacionales, se proveerán servicios sanitarios según lo especificado
+en la Tabla Nº 5, de conformidad con lo estipulado en la Resolución Jefatural Nº 338-
+INIED-83 (09.12.83).
+
+Para el presente cuadro se ha tomado como referencia de calculo, que la matricula
+promedio es de 50% hombres y 50% mujeres.
+g) Ambientes de Estimulación Temprana.
+h) Ambientes para aulas de Educación Inicial y aulas con retardo mental.
+i) Ambientes para alumnos de primaria en las excepcionalidades de audición y lenguaje
+y ceguera o visión sub-normal.
+j) En los locales destinatarios para depósitos de materiales y/o equipos, se proveerán
+servicios sanitarios según lo dispuesto en los numerales 4.2c y 4.2e.
+k) Para locales de hospedaje, se proveerá de servicios sanitarios, de conformidad con
+el Reglamento de Establecimientos de Hospedaje DS Nº 006-73-IC/ DS., según
+como sigue:
+
+- En los hoteles de 5 estrellas, cada dormitorio estará dotado de: servicio sanitario
+compuesto de tina y ducha, inodoro, bidé o similar y lavatorio. Las habilitaciones
+dobles dispondrán de dos lavatorios.
+- En los hoteles de 4 estrellas, el 75% de los dormitorios como mínimo, estarán
+dotados de: tina y ducha, inodoro, bidé o similar y lavatorio; el 25% restante,
+compuesto de ducha, lavatorio e inodoro.
+- En hoteles de 3 estrellas, el 25% de los dormitorios estarán dotados de: tina y
+ducha, inodoro, bidé o similar y el 75% restante, compuesto de ducha, lavatorio
+e inodoro.
+- En hoteles de 2 estrellas, hostales, hostales residenciales, moteles de 1, 2, y 3
+estrellas, y centros vacacionales de 3 estrellas; todas las habitaciones tendrán
+servicios sanitarios compuestos de ducha, lavatorio e inodoro.
+- En hoteles de 1 estrella, el 50% de las habitaciones estarán dotadas de servicios
+sanitarios compuestos de ducha, lavatorio e inodoro y el 50% restante de
+lavatorio. Por cada cinco habitaciones no dotadas de servicio sanitario, existirá
+en cada piso como mínimo dos servicios sanitarios compuestos de ducha
+independiente, lavatorio y dos inodoros.
+- En los hostales y hostales residenciales de 2 estrellas, el 30% de las
+habitaciones, estarán dotadas de servicio sanitario con inodoro, ducha y
+lavatorio y el 70% restante, con lavatorio.
+- En los hostales y hostales residenciales de 1 estrella; en cada planta y por cada
+7 habitaciones se instalaran dos servicios sanitarios con ducha independiente,
+lavatorio e inodoro.
+- En los centros vacacionales de 2 estrellas, el 50% de los dormitorios estarán
+dotados de servicios sanitarios privados compuestos de ducha, lavatorio e
+inodoro y el 50% restante, con lavatorio. Por cada cinco habitaciones se
+instalaran baños comunes independientes para hombres y mujeres compuestos
+de ducha independiente, lavatorio e inodoro. En el servicio sanitario de hombres
+deberá instalarse un urinario.
+- En cada piso de todos los locales de hospedaje se instalará un botadero.
+- En todos los locales de hospedaje se proveerá para el personal, servicios
+sanitarios independientes para hombre y mujeres, en lugares convenientes, tal
+como se señala en la Tabla Nº 6.
+- En todos los locales de hospedaje se instalarán servicios sanitarios en las
+proximidades a los lugares de reunión, independientes para hombres y mujeres,
+tal como se señala en la Tabla Nº 7.
+- Las cocinas dotadas de por lo menos 2 lavaderos.
+l) Los locales destinados para servicios de alimentación colectiva, deberán estar
+dotadas de servicios sanitarios independientes para hombres y mujeres, tal como se
+señala en la Tabla Nº 8.
+
+- Las cocinas estarán dotadas de por lo menos dos lavaderos.
+m) En hospitales, clínicas y similares, se considerará el tipo y servicios sanitarios, que
+se señalan a continuación:
+- Unidad de Administración
+a) Para oficinas principales (Dirección o similar):
+- Unidad de Consulta Externa
+a) Para uso público
+b) Para uso de discapacitados se considerará un servicio sanitario para cada sexo.
+c) Para uso del personal.
+- Unidad de Hospitalización
+
+a) Para salas individuales:
+Adicionalmente se instalará un lavatorio especial para Médico.
+b) Para salas colectivos:
+Adicionalmente se instalará un lavatorio especial para Médico.
+c) Para uso del personal.
+d) Para las visitas
+- Servicios Generales
+Para trabajadores de servicios generales (nutrición y dieta, lavandería y repostería,
+mantenimiento, sala de máquina y otros). La dotación de aparatos sanitarios se
+regirá según la tabla siguiente:
+- Vivienda
+En habitaciones individuales con servicios higiénicos incorporados se contará con
+un inodoro, un lavatorio, una ducha. En viviendas colectivas, los servicios higiénicos
+constarán de los siguientes aparatos:
+n) En los locales deportivos, se proveerá servicios sanitarios para deportistas y personal
+conexo, de acuerdo a la Tabla Nº 9.
+
+o) En las playas, se proveerá de servicios sanitarios, según lo especificado en el DS
+98-68-CGS, el cual establece lo siguiente:
+El número de servicios sanitarios se distribuirán en baterías con inodoros, duchas y
+urinarios, con una distancia máxima entre baterías de 200 m. Los inodoros estarán
+en comportamiento separados, las duchas serán colectivas pero separadas para
+hombres y mujeres de acuerdo a la Tabla Nº 10.
+p) En los establecimientos de baños para uso público, los servicios sanitarios estarán
+separados para hombres y mujeres. Los inodoros deberán tener compartimentos
+separados con puerta. El número de aparatos sanitarios se calculará de acuerdo a
+la Tabla Nº 11.
+
+q) En los locales para espectáculos deportivos públicos de concurrencia masiva
+(Estadios, Coliseos, etc.), los servicios sanitarios se acondicionaran en baterías por
+cada 2000 espectadores separadas para hombres y mujeres, teniendo en cuenta
+que la concurrencia de mujeres es aproximadamente 1/3 del total de espectadores.
+Los inodoros tendrán comportamientos separados, con puerta. El número de
+aparatos sanitarios se calculará conforme a la Tabla Nº 12.
+r) En mercados, para el personal de servicios, se proveerá de servicios sanitarios como
+se indica a continuación:
+Para el público se proveerá servicios sanitarios separados para hombres y mujeres
+en la siguiente proporción:
+s) En las obras de edificación en construcción, se proveerán de servicios sanitarios
+conectados a la red pública o pozo séptico, de acuerdo a lo establecido por la Norma
+Básica de Seguridad e Higiene en Obras de Edificación (RS 021-83-TR, del
+23.03.83), según la Tabla Nº 13.
+t) En las estaciones de expendio de combustible y en playas de estacionamiento se
+proveerá de servicios sanitarios como se indica en la tabla siguiente:
+
+2. AGUA FRIA
+2.1. INSTALACIONES
+a) El sistema de abastecimiento de agua de una edificación comprende las instalaciones
+interiores desde el medidor o dispositivo regulador o de control, sin incluirlo, hasta
+cada uno de los puntos de consumo.
+b) El sistema de abastecimiento de agua fría para una edificación deberá ser diseñado,
+tomando en cuenta las condiciones bajo las cuales el sistema de abastecimiento
+público preste servicio.
+c) Las instalaciones de agua fría deben ser diseñadas y construidas de modo que
+preserven su calidad y garanticen su cantidad y presión de servicio en los puntos de
+consumo.
+d) En toda nueva edificación de uso múltiple o mixto: viviendas, oficinas, comercio u
+otros similares, la instalación sanitaria para agua fría se diseñará obligatoriamente
+para posibilitar la colocación de medidores internos de consumo para cada unidad
+de uso independiente, además del medidor general de consumo de la conexión
+domiciliaria, ubicado en el interior del predio.
+e) En general, los medidores internos deben ser ubicados en forma conveniente y de
+manera tal que estén adecuadamente protegidos, en un espacio impermeable de
+dimensiones suficientes para su instalación o remoción en caso de ser necesario.
+De fácil acceso para eventuales labores de verificación, mantenimiento y lectura.
+f) En caso que exista suficiente presión en la red pública externa, dependiendo del
+número de niveles de la edificación, los medidores de consumo podrán ser
+instalados en un banco de medidores, preferentemente al ingreso de la edificación,
+desde el cual se instalarán las tuberías de alimentación para unidad de uso.
+g) En caso de que el diseño de la instalación sanitaria interior del edificio se realice con
+un sistema de presión con cisterna y tanque elevado o se use un sistema de presión
+con tanque hidroneumático, los medidores de consumo podrán ser ubicados en
+espacios especiales diseñados para tal fin dentro de la edificación.
+h) Se podrá considerar la lectura centralizada remota, desde un panel ubicado
+convenientemente y de fácil acceso en el primer piso. En este caso además de lo
+que indica el inciso e del presente artículo, deberá preverse un espacio para el panel
+de lectura remota y ductos para la instalación de cables de transmisión desde los
+registros de lectura de los medidores.
+i) Las instalaciones de lectura remota se ciñeran a las exigencias de las normas
+internacionales en tanto se emitan normas nacionales correspondientes, o en su
+defecto, siguiendo las especificaciones técnicas de los proveedores.
+j) Se podrán disponer de un abastecimiento de agua para fines industriales
+exclusivamente, siempre que:
+- Dicho abastecimiento tenga redes separadas sin conexión alguna con el sistema
+de agua para consumo humano, debidamente diferenciadas; y
+- Se advierta a los usuarios mediante avisos claramente marcados y distribuidos en
+lugares visibles y adecuados. Los letreros legibles dirán: Peligro agua no apta para
+consumo humano.
+k) No se permitirá la conexión directa desde la red pública de agua, a través de bombas
+u otros aparatos mecánicos de elevación.
+l) El sistema de alimentación y distribución de agua de una edificación estará dotado de
+válvulas de interrupción, como mínimo en los siguientes puntos:
+- Inmediatamente después de la caja del medidor de la conexión domiciliaria y del
+medidor general.
+- En cada piso, alimentador o sección de la red de distribución interior.
+- En cada servicio sanitario, con mas de tres aparatos.
+- En edificaciones de uso público masivo, se colocará una llave de interruptor en la
+tubería de abasto de cada inodoro o lavatorio.
+
+m) No deberán instalarse válvulas en el piso o en lugares inundables.
+2.2. DOTACIONES
+Las dotaciones diarias mínimas de agua para uso doméstico, comercial, industrial, riego
+de jardines u otros fines, serán los que se indican a continuación:
+a) Las dotaciones de agua para viviendas unifamiliares
+estarán de acuerdo con el área total del lote según la siguiente Tabla.
+Estas cifras incluyen dotación doméstica y riego de jardines.
+b) Los edificios multifamiliares deberán tener una dotación de agua para consumo
+humano, de acuerdo con el número de dormitorios de cada departamento, según la
+siguiente Tabla.
+c) Los establecimientos de hospedaje deberán tener una dotación de agua, según la
+siguiente Tabla.
+Las dotaciones de agua para riego y servicios anexos a los establecimientos de que
+trata este artículo, tales como restaurantes, bares, lavanderías, comercios, y similares
+se calcularán adicionalmente de acuerdo con lo estipulado en esta Norma para cada
+caso.
+d) La dotación de agua para restaurantes estará en función del área de los
+Comedores, según la siguiente tabla
+
+e) En establecimientos donde también se elaboren alimentos para ser consumidos fuera
+del local, se calculará para ese fin una dotación de 8 litros por cubierto preparado.
+f) La dotación de agua para locales educacionales y residencias estudiantiles,
+según la siguiente tabla.
+Las dotaciones de agua para riego de áreas verdes, piscinas y otros fines se calcularán
+adicionalmente, de acuerdo con lo estipulado en esta Norma para cada caso.
+g) Las dotaciones de agua para locales de espectáculos o centros de reunión,
+cines, teatros, auditorios, discotecas, casinos, salas de baile y espectáculos al aire
+libre y otros similares, según la siguiente tabla.
+h) Las dotaciones de agua para piscinas y natatorios de recirculación y de flujo
+constante o continuo, según la siguiente tabla.
+La dotación de agua requerida para los aparatos sanitarios en los vestuarios y cuartos
+de aseo anexos a la piscina, se calculará adicionalmente a razón de 30 L/d por m2 de
+proyección horizontal de la piscina. En aquellos casos que contemplen otras actividades
+recreacionales, se aumentará proporcionalmente esta dotación.
+i) La dotación de agua para oficinas se calculará a razón de 6 L/d por m2 de área
+útil del local.
+j) La dotación de agua para depósitos de materiales, equipos y artículos
+manufacturados, se calculará a razón de 0,50 L/d por m2 de área útil del local y por
+
+cada turno de trabajo de 8 horas o fracción. Para oficinas anexas, el consumo de las
+mismas se calculará adicionalmente de acuerdo a lo estipulado en esta Norma para
+cada caso, considerándose una dotación mínima de 500 L/d.
+k) La dotación de agua para locales comerciales dedicados a comercio de
+mercancías secas, será de 6 L/ d por m2 de área útil del local, considerándose una
+dotación mínima de 500 L /d.
+l) La dotación de agua para mercados y establecimientos, para la venta de carnes,
+pescados y similares serán de 15 L/d por m2 de área del local. La dotación de agua
+para locales anexos al mercado, con instalaciones sanitarias separadas, tales como
+restaurantes y comercios, se calculará adicionalmente de acuerdo con lo estipulado
+en esta Norma para cada caso.
+m) El agua para consumo industrial deberá calcularse de acuerdo con la naturaleza
+de la industria y su proceso de manufactura. En los locales industriales la dotación
+de agua para consumo humano en cualquier tipo de industria, será de 80 litros por
+trabajador o empleado, por cada turno de trabajo de 8 horas o fracción. La dotación
+de agua para las oficinas y depósitos propios de la industria, servicios anexos, tales
+como comercios, restaurantes, y riego de áreas verdes, etc. se calculará
+adicionalmente de acuerdo con lo estipulado en esta Norma para cada caso.
+n) La dotación de agua para plantas de producción, e industrialización de leche será
+según la siguiente tabla.
+o) La dotación de agua para las estaciones de servicio, estaciones de gasolina,
+garajes y parques de estacionamiento de vehículos, según la siguiente tabla.
+El agua necesaria para oficinas y venta de repuestos, riego de áreas verdes y servicios
+anexos, tales como restaurantes y fuentes de soda, se calculará adicionalmente de
+acuerdo con lo estipulado en esta Norma para cada caso.
+p) Las dotaciones de agua para edificaciones destinadas al alojamiento de
+animales, tales como caballerizas, establos, porquerizas, granjas y similares, según
+la siguiente tabla
+
+Las cifras anteriores no incluyen las dotaciones de agua para riego de áreas verdes y
+otras instalaciones.
+q) La dotación de agua para mataderos públicos o privados estará de acuerdo con
+el número y clase de animales a beneficiar, según la siguiente tabla.
+r) La dotación de agua para bares, fuentes de soda, cafeterías y similares, según la
+siguiente tabla.
+s) La dotación de agua para locales de salud como: hospitales, clínicas de
+hospitalización, clínicas dentales, consultorios médicos y similares, según la
+siguiente tabla.
+El agua requerida para servicios especiales, tales como riego de áreas verdes, viviendas
+anexas, servicios de cocina y lavandería se calcularán adicionalmente de acuerdo con
+lo estipulado en esta Norma.
+t) La dotación de agua para lavanderías, lavanderías al seco, tintorerías y similares,
+según la siguiente tabla.
+Tipo de local Dotación diaria
+Lavandería 40 L/Kg de ropa
+Lavandería en seco, tintorería y 30 L/Kg de ropa
+similares
+u) La dotación de agua para áreas verdes será de 2 L/d por m2. No se requerirá
+incluir áreas pavimentadas, enripiadas u otras no sembradas para los fines de esta
+dotación.
+
+2.3. RED DE DISTRIBUCIÓN
+a) Los diámetros de las tuberías de distribución se calcularán con el método Hunter
+(Método de Gastos Probables), salvo aquellos establecimientos en donde se
+demande un uso simultáneo, que se determinará por el método de consumo por
+aparato sanitario. Para dispositivos, aparatos o equipos especiales, se seguirá la
+recomendación de los fabricantes.
+b) Podrá utilizarse cualquier otro método racional para calcular tuberías de distribución,
+siempre que sea debidamente fundamentado.
+c) La presión estática máxima no debe ser superior a 50 m de columna de agua (0,490
+MPa).
+d) La presión mínima de salida de los aparatos sanitarios será de 2 m de columna de
+agua (0,020 MPa) salvo aquellos equipados con válvulas semiautomáticas, automáticas
+o equipos especiales en los que la presión estará dada por las recomendaciones de los
+fabricantes.
+e) Las tuberías de distribución de agua para consumo humano enterradas deberán
+alejarse lo más posible de los desagües; por ningún motivo esta distancia será menor
+de 0,50 m medida horizontal, ni menos de 0,15 m por encima del desagüe. Cuando las
+tuberías de agua para consumo humano crucen redes de aguas residuales, deberán
+colocarse siempre por encima de éstos y a una distancia vertical no menor de 0,15 m.
+Las medidas se tomarán entre tangentes exteriores más próximas.
+f) Para el cálculo del diámetro de las tuberías de distribución, la velocidad mínima será
+de 0,60 m/s y la velocidad máxima según la siguiente tabla.
+Diámetro (mm) Velocidad Máxima(m/s)
+15(1/2”) 1.90
+20(3/4”) 2.20
+25(1”) 2.48
+321 (¼”) 2.85
+40 y mayores(1 ½ y 3.00
+mayores)
+g) Las tuberías de agua fría deberán ubicarse teniendo en cuenta el aspecto estructural
+y constructivo de la edificación, debiendo evitarse cualquier daño o disminución de la
+resistencia de los elementos estructurales.
+h) Las tuberías verticales deberán ser colocadas en ductos o espacios especialmente
+previstos para tal fin y cuyas dimensiones y accesos deberán ser tales que permitan su
+instalación, revisión, reparación, remoción y mantenimiento.
+i) Se podrá ubicar en el mismo ducto la tubería de agua fría y agua caliente siempre que
+exista una separación mínima de 0,15 m entre sus generatrices más próximas.
+j) Se permitirá la ubicación de alimentadores de agua y montantes de aguas residuales
+o de lluvia, en un mismo ducto vertical o espacios, siempre que exista una separación
+mínima de 0,20 m entre sus generatrices más próximas.
+k) Las tuberías colgadas o adosadas deberán fijarse a la estructura evitando que se
+produzcan esfuerzos secundarios en las tuberías.
+l) Las tuberías enterradas deberán colocarse en zanjas de dimensiones tales que
+permitan su protección y fácil instalación.
+2.4. ALMACENAMIENTO Y REGULACIÓN.
+a) Los depósitos de agua deberán ser diseñados y construidos en forma tal que
+preserven la calidad del agua.
+b) Toda edificación ubicada en sectores donde el abastecimiento de agua pública no
+sea continuo o carezca de presión suficiente, deberá estar provisto obligatoriamente de
+depósitos de almacenamiento que permitan el suministro adecuado a todas las
+
+instalaciones previstas. Tales depósitos podrán instalarse en la parte baja (cisternas) en
+pisos intermedios o sobre la edificación (tanque elevado).
+c) Cuando sólo exista tanque elevado, su capacidad será como mínimo igual a la
+dotación diaria, con un volumen no menor a 1000 L.
+d) Cuando sólo exista cisterna, su capacidad será como mínimo igual a la dotación
+diaria, con un volumen no menor de 1000 L.
+e) Cuando sea necesario emplear una combinación de cisterna, bombas de elevación y
+tanque elevado, la capacidad de la primera no será menor de las ¾ partes de la dotación
+diaria y la del segundo no menor de 1/3 de dicha volumen.
+f) En caso de utilizar sistemas hidroneumáticos, el volumen mínimo será igual al
+consumo diario con un volumen mínimo de 1000L
+g) Los depósitos de almacenamiento deberán ser construidos de material resistente y
+paredes impermeabilizadas y estarán dotados de los dispositivos necesarios para su
+correcta operación y mantenimiento.
+h) Las cisternas deberán ubicarse a una distancia mínima de 1m de muros medianeros
+y desagües. En caso de no poder cumplir con la distancia mínima, se diseñará un
+sistema de protección que evite la posible contaminación del agua de la cisterna.
+i) La distancia vertical entre el techo del depósito y el eje del tubo de entrada de agua,
+dependerá del diámetro de este y de los dispositivos de control, no pudiendo ser menor
+de 0,20 m.
+j) La distancia vertical entre los ejes de tubos de rebose y entrada de agua será igual al
+doble del diámetro del primero y en ningún caso menor de 0,15 m.
+k) La distancia vertical entre los ejes del tubo de rebose y el máximo nivel de agua será
+igual al diámetro de aquel y nunca inferior a 0,10 m.
+l) El agua proveniente del rebose de los depósitos, deberá disponerse en forma
+indirecta, mediante brecha de aire de 0,05 m de altura mínima sobre el piso, techo u
+otro sitio de descarga.
+m) EL diámetro del tubo de rebose, se calculará hidráulicamente, no debiendo ser menor
+que lo indicado en la siguiente tabla.
+n) El diámetro de la tubería de alimentación se calculará para garantizar el volumen
+mínimo de almacenamiento diario.
+o) El control de los niveles de agua en los depósitos, se hará por medio de interruptores
+automáticos que permitan:
+- Arrancar la bomba cuando el nivel de agua en el tanque elevado, descienda hasta la
+mitad de la altura útil.
+- Parar la bomba cuando el nivel de agua en el tanque elevado, ascienda hasta el nivel
+máximo previsto.
+- Parar la bomba cuando el nivel de agua en la cisterna descienda hasta 0,05 m por
+encima de la parte superior de la canastilla de succión.
+- En los depósitos que se alimentan directamente de la red pública deberá colocarse
+control del nivel.
+p) La capacidad adicional de los depósitos de almacenamiento para los fines de control
+de incendios, deberá estar de acuerdo con lo previsto en el item 4.
+q) La tubería de aducción o de impulsión al tanque de almacenamiento deberá estar a
+0,10 m por lo menos por encima de la parte superior de las correspondientes tuberías
+de rebose.
+2.5. ELEVACIÓN
+
+a) Los equipos de bombeo que se instalen dentro de las edificaciones deberán ubicarse
+en ambientes que satisfagan los siguientes requisitos:
+- Altura mínima: 1,60 m. - Espacio libre alrededor del equipo suficiente para su
+fácil operación, reparación y mantenimiento.
+- Piso impermeable con pendiente no menor del 2% hacia desagües previstos.
+- Ventilación adecuada.
+Los equipos que se instalen en el exterior, deberán ser protegidos adecuadamente
+contra la intemperie.
+b) Los equipos de bombeo deberán ubicarse sobre estructuras de concreto,
+adecuadamente proyectadas para absorber las vibraciones.
+c) En la tubería de impulsión, inmediatamente después de la bomba deberá instalarse
+una válvula de retención y una válvula de interrupción. En la tubería de succión con
+presión positiva se instalará una válvula de interrupción.
+En el caso que la tubería de succión no trabaje bajo carga positiva, deberá instalarse
+una válvula de retención.
+d) Salvo en el caso de viviendas unifamiliares, el sistema de bombeo deberá contar
+como mínimo con dos equipos de bombeo de funcionamiento alternado.
+e) La capacidad de cada equipo de bombeo debe ser equivalente a la máxima demanda
+simultánea de la edificación y en ningún caso inferior a la necesaria para llenar el tanque
+elevado en dos horas. Si el equipo es doble cada bomba podrá tener la mitad de la
+capacidad necesaria, siempre que puedan funcionar ambas bombas simultáneamente
+en forma automática, cuando lo exija la demanda.
+f) El sistema hidroneumático deberá estar dotado de los dispositivos mínimos
+adecuados para su correcto funcionamiento:
+- Cisterna
+- Electrobombas
+- Tanque de presión
+- Interruptor de presión para arranque y parada a presión mínima y máxima.
+- Manómetro.
+- Válvula de seguridad.
+- Válvulas de interrupción que permitan la operación y mantenimiento del equipo.
+- Dispositivo de drenaje del tanque con su respectiva válvula.
+- Compresor o un dispositivo automático cargador de aire de capacidad adecuada.
+g) El volumen del tanque de presión se calculará en función del caudal, de las presiones
+máxima y mínima y las características de funcionamiento.
+3. AGUA CALIENTE
+3.1. INSTALACIONES
+a) Las instalaciones de agua caliente de una edificación, deberán satisfacer las
+necesidades de consumo y seguridad contra accidentes. Se deberá considerar un
+espacio independiente y seguro para el equipo de producción de agua caliente.
+b) Deberán instalarse dispositivos destinados a controlar el exceso de presión de los
+sistemas de producción de agua caliente. Dichos dispositivos se ubicarán en los equipos
+de producción, o en las tuberías de agua fría o caliente próximas a él, siempre que no
+existan válvulas entre los dispositivos y el equipo; y se graduarán dé tal modo que
+puedan operar a una presión de 10% mayor que la requerida para el normal
+funcionamiento del sistema.
+c) Deberá instalarse una válvula de retención en la tubería de abastecimiento de agua
+fría. Dicha válvula no podrá ser colocada entre el equipo de producción de agua caliente
+y el dispositivo para controlar el exceso de presión.
+d) Deberán instalarse dispositivos destinados a controlar el exceso de temperatura en
+los sistemas de producción de agua caliente.
+
+e) Los escapes de vapor o agua caliente, provenientes de los dispositivos de seguridad
+y control, deberán disponerse en forma indirecta al sistema de drenaje, ubicando los
+sitios de descarga en lugares que no causen accidentes.
+f) El sistema de alimentación y distribución de agua caliente estará dotado de válvulas
+de interrupción como mínimo en los siguientes puntos:
+- Inmediatamente después del calentador, en el ingreso de agua fría y salida de agua
+caliente.
+- En cada servicio sanitario.
+3.2. DOTACIONES
+La dotación de agua caliente serán las que se establecen a continuación. Las cantidades
+que se fijan son parte de las dotaciones de agua establecidos en el item 7 de la presente
+norma.
+a) Residencias unifamiliares y multifamiliares, según
+la siguiente tabla.
+Más de 5, a razón de 80 L/d, por dormitorio adicional.
+b) Establecimientos de hospedaje, según la siguiente tabla
+Esta cifra no incluye las dotaciones para otros servicios anexos, tales como
+restaurantes, bares, salones de baile, peluquerías y lavanderías, que se calculará
+adicionalmente de acuerdo con lo establecido en esta Norma para cada caso.
+c) Restaurantes, según la siguiente tabla
+En aquellos restaurantes donde se elaboran alimentos para ser consumidos fuera del
+local, se calculará una dotación complementaria a razón de 3 litros por cubierto
+preparado para este fin.
+d) Locales educacionales y residencias estudiantiles.
+e) Gimnasios.
+f) Hospitales, clínicas y similares, según la siguiente tabla
+
+3.3. DISTRIBUCIÓN
+a) La distribución de agua caliente desde el equipo de producción a los aparatos
+sanitarios o puntos requeridos, se puede realizar con o sin retorno de agua caliente.
+b) El sistema sin retorno se permitirá solamente en instalaciones con calentadores
+individuales.
+c) El sistema con retorno deberá utilizarse en aquellos edificios donde se instalen
+equipos centrales de producción de agua caliente.
+d) Las tuberías de alimentación de agua caliente se calcularán de acuerdo con lo
+establecido en el item 7.
+3.4. EQUIPOS DE PRODUCCIÓN DE AGUA CALIENTE
+Para el cálculo de la capacidad del equipo de producción de agua caliente, así como
+para el cálculo de la capacidad del tanque de almacenamiento, se utilizarán las
+relaciones que se indican a continuación, en base a la dotación de agua caliente diaria
+asignada, según la siguiente tabla.
+Las capacidades del equipo de producción de agua caliente y del tanque de
+almacenamiento, podrán también determinarse en base a los gastos por aparatos
+sanitarios.
+4. AGUA CONTRA INCENDIO
+4.1. SISTEMAS
+Los sistemas a emplearse para combatir incendios serán:
+a) Alimentadores y gabinetes contra incendio equipados con mangueras para uso de los
+ocupantes de la edificación.
+b) Alimentadores y gabinetes contra incendio equipados con mangueras para uso de los
+ocupantes de la edificación y salida contra incendio para ser utilizada por el Cuerpo
+de Bomberos de la ciudad.
+c) Alimentadores y mangueras para uso combinado de los ocupantes del edificio y del
+Cuerpo de Bomberos.
+d) Rociadores automáticos.
+e) Otros sistemas.
+
+4.2. SISTEMA DE TUBERÍA Y DISPOSITIVOS PARA SER USADOS POR LOS
+OCUPANTES DE EDIFICIO
+Será obligatorio el sistema de tuberías y dispositivos para ser usado por los ocupantes
+del edificio, en todo aquel que sea de más de 15 metros de altura o cuando las
+condiciones de riesgo lo ameritan, debiendo cumplir los siguientes requisitos:
+a) La fuente de agua podrá ser la red de abastecimiento público o fuente propia del
+edificio, siempre que garantice el almacenamiento previsto en el sistema.
+b) El almacenamiento de agua en la cisterna o tanque para combatir incendios debe ser
+por lo menos de 25 m3.
+c) Los alimentadores deben calcularse para obtener el caudal que permita el
+funcionamiento simultaneo de dos mangueras, con una presión mínima de 45 m
+(0.441 MPa) en el punto de conexión de manguera más desfavorable.
+El diámetro mínimo será 100 mm (4") d) La salida de los alimentadores deberá ser
+espaciados en forma tal, que todas las partes de los ambientes del edificio puedan
+ser alcanzadas por el chorro de las mangueras.
+e) La longitud de la manguera será de 30m con un diámetro de 40 mm(1 ½")
+f) Antes de cada conexión para manguera se instalará una válvula de globo recta o de
+ángulo. La conexión para manguera será de rosca macho.
+g) Los alimentadores deberán conectarse entre sí mediante una tubería cuyo diámetro
+no sea inferior al del alimentador de mayor diámetro.
+h) Al pie de cada alimentador, se instalará una purga con válvula de control.
+i) Las bombas de agua contra incendio, deberán llevar control de arranque para
+funcionamiento automático.
+j) La alimentación eléctrica a las bombas de agua contra incendio, deberá ser
+independiente, no controlada por el interruptor general del edificio, e interconectada
+al grupo electrógeno de emergencia del edificio, en caso de tenerlo.
+k) Se instalaran «uniones siamesas» con rosca macho y válvula de retención en sitios
+accesibles de la fachada del edificio para la conexión de las mangueras que
+suministrarán el agua del exterior.
+4.3. SISTEMA DE TUBERÍA Y DISPOSITIVOS PARA SER USADOS POR EL
+CUERPO DE BOMBEROS
+Se instalarán sistemas de tuberías y dispositivos para ser usados por el Cuerpo de
+Bomberos de la ciudad, en las plantas industriales, edificios de más de 50 m de altura y
+toda otra edificación que por sus características especiales, lo requiera. Tales sistemas
+deben cumplir con los siguientes requisitos:
+a) Se instalarán «siameses inyección» con rosca macho y válvula de retención en sitio
+accesible de la fachada del edificio para la conexión de las mangueras que
+suministrarán el agua desde los hidrantes o carros bomba.
+b) Se instalarán alimentadores espaciados en forma tal, que todas las partes de los
+ambientes del edificio puedan ser alcanzadas por el chorro de agua.
+c) Los alimentadores deben calcularse para el caudal de dos salidas y una presión
+mínima de 45 m en el punto de conexión de mangueras más desfavorables.
+d) El almacenamiento de agua en los tanques, para combatir incendios, debe ser por lo
+menos de 40 m3 adecuándose al caudal y tamaño posible del incendio, según el
+Gráfico para Agua Contra Incendio de Sólidos (Lámina N° 3).
+Cuando sea posible se permitirá el almacenamiento conjunto entre uno o más locales
+que en caso de siniestro puedan ser usados por los bomberos.
+Las mangueras tendrán una longitud de hasta 60 m y 65 mm (2 ½") de diámetro. Se
+considerará un caudal mínimo de 10 L/s y deberán alojarse en gabinetes adecuados
+en cada piso, preferentemente en los corredores de acceso a las escaleras.
+e) Cuando el almacenamiento sea común para el agua para consumo y la reserva para
+el sistema contra incendios, deberá instalarse la salida del agua para consumo de
+
+manera tal que se reserve siempre el saldo de agua requerida para combatir el
+incendio.
+f) Cada bocatoma para mangueras interiores, estará dotada de llave de compuerta o de
+ángulo. La conexión para dichas mangueras será de rosca macho con el diámetro
+correspondiente.
+g) Los alimentadores deberán conectarse entre sí, mediante una tubería cuyo diámetro
+no sea inferior al del alimentador de mayor diámetro. Al pie de cada alimentador se
+instalará una de purga con válvula de control.
+4.4. SISTEMAS DE ROCIADORES AUTOMÁTICOS
+Se instalarán sistemas de rociadores automáticos en los siguientes casos:
+a) Edificaciones de más de dos pisos usadas para manufactura, almacenaje de
+materiales o mercadería combustible y con área superior a los 1000 m2 de
+construcción.
+b) Playas de estacionamiento cerradas y techadas de mas de 18 m de altura y de área
+mayor a los 1000m2 de construcción resistente al fuego, u 800 m2 de construcción
+incombustible con protección o 600m2 de construcción incombustible sin protección
+o combustible de construcción pesada.
+c) Talleres de reparación automotriz de mas de un piso o ubicados bajo pisos de otra
+ocupancia que exceda 1000 m2 de construcción resistente al fuego, 800 m2 de
+construcción incombustible con protección, 600 m2 de construcción incombustible sin
+protección o combustible de construcción pesada.
+d) Talleres de reparación automotriz de una planta que exceda 1500 m2 de construcción
+resistente al fuego, 1200 m2 de construcción incombustible con protección, 900 m2
+de construcción incombustible sin protección o combustible de construcción pesada,
+o 600 m2 de construcción combustible ordinaria.
+4.5. SISTEMAS DE DRENAJE
+Los sistemas de drenaje deberán considerar la evacuación del agua utilizada en el
+combate del incendio.
+
+5. AGUA PARA RIEGO
+5.1. DISPOSICIONES GENERALES
+a) Las instalaciones para riego podrán ser diseñadas formando parte del sistema de
+distribución de agua de la edificación, o en forma independiente del mismo.
+b) El riego de las áreas verdes correspondientes a la edificación podrá hacerse por
+inundación, con puntos de conexión para mangueras dotadas de sus
+correspondientes válvulas, por aspersión y por otros sistemas.
+c) En el diseño de las instalaciones de riego, con puntos de agua para mangueras, se
+adoptarán los valores según Tabla.
+La distancia entre los puntos de conexión de manguera será de 1,4 de la longitud de la
+manguera.
+d) En el diseño de instalaciones de riego con rociadores o aspersores fijos se adoptará
+lo siguiente:
+- Diámetro mínimo de alimentación de cada rociador: 15 mm (1/2").
+- Presión mínima en el punto de alimentación de cada rociador: 12 m (0,118 MPa).
+- Gasto mínimo de cada rociador: 0,06 L/s.
+
+e) En el diseño de instalaciones de riego con rociadores o aspersores rotatorios, se
+adoptará lo siguiente:
+- Diámetro mínimo de alimentación de cada rociador: 20 mm (3/4")
+- Presión mínima en el punto de alimentación de cada rociador: 20 m (0,196 MPa)
+- Gasto mínimo de cada rociador: 0,10 L/s.
+f) Las instalaciones de riego podrán ser operadas por secciones, mediante la adecuada
+instalación de válvulas.
+g) Los sistemas de riego deberán estar provistos de dispositivos adecuados, para
+prevenir posibles conexiones cruzadas por efecto de la existencia de presiones
+negativas en la red de alimentación.
+h) Las válvulas o grifos para conectar mangueras, deberán sobresalir no menos de 0,15
+m sobre el nivel del piso.
+6. DESAGÜE Y VENTILACIÓN
+6.1. DISPOSICIONES GENERALES
+a) El sistema integral de desagüe deberá ser diseñado y construido en forma tal que las
+aguas servidas sean evacuadas rápidamente desde todo aparato sanitario, sumidero
+u otro punto de colección, hasta el lugar de descarga con velocidades que permitan
+el arrastre de las excretas y materias en suspensión, evitando obstrucciones y
+depósitos de materiales.
+b) Se deberá prever diferentes puntos de ventilación, distribuidos en tal forma que
+impida la formación de vacíos o alzas de presión, que pudieran hacer descargar las
+trampas.
+c) Las edificaciones situadas donde exista un colector público de desagüe, deberán
+tener obligatoriamente conectadas sus instalaciones domiciliarias de desagüe a
+dicho colector. Esta conexión de desagüe a la red pública se realizará mediante caja
+de registro o buzón de dimensiones y de profundidad apropiadas, de acuerdo a lo
+especificado en esta Norma.
+d) El diámetro del colector principal de desagües de una edificación, debe calcularse
+para las condiciones de máxima descarga.
+e) Todo sistema de desagüe deberá estar dotado de suficiente número de elementos de
+registro, a fin de facilitar su limpieza y mantenimiento.
+f) Para desagües provenientes de locales industriales u otros, cuyas características
+físicas y químicas difieran de los del tipo doméstico, deberán sujetarse estrictamente
+a lo que se establece en el Reglamento de Desagües Industriales vigente, aprobado
+por Decreto Supremo N° 28-60-S.A.P.L. del 29.11.60, antes de su descarga a la red
+pública.
+g) Cuando las aguas residuales provenientes del edificio o parte de este, no puedan ser
+descargadas por gravedad a la red pública, deberá instalarse un sistema adecuado
+de elevación, para su descarga automática a dicha red.
+6.2. RED DE COLECCIÓN
+a) Los colectores se colocarán en tramos rectos.
+b) Los colectores enterrados situados en el nivel inferior y paralelos a las cimentaciones,
+deberán estar ubicados, en forma tal, que el plano formado por el borde inferior de la
+cimentación y el colector, forme un ángulo de menos de 45° con la horizontal.
+Cuando un colector enterrado cruce una tubería de agua deberá pasar por debajo de
+ella y la distancia vertical entre la parte inferior de la tubería de agua y la clave del
+colector, no será menor de 0,15 m.
+c) Los empalmes entre colectores y los ramales de desagüe, se harán a un ángulo no
+mayor de 45°, salvo que se hagan en un buzón o caja de registro.
+
+La pendiente de los colectores y de los ramales de desagüe interiores será uniforme
+y no menor de 1% para diámetros de 100 mm (4") y mayores; y no menor de 1,5%
+para diámetros de 75 mm (3") o inferiores.
+Las dimensiones de los ramales de desagüe, montantes y colectores se calcularán
+tomando como base el gasto relativo que pueda descargar cada aparato.
+El cálculo de los ramales, montantes y colectores de desagüe se determinará por el
+método de unidades de descarga.
+Podrá utilizarse cualquier otro método racional para calcular los ramales, montantes
+y colectores, siempre que sea debidamente fundamentado.
+d) Al calcular el diámetro de los conductos de desagüe se tendrá en cuenta lo siguiente:
+- El diámetro mínimo que reciba la descarga de un inodoro será de 100 mm (4").
+- El diámetro de una montante no podrá ser menor que el de cualquiera de los
+ramales horizontales que en él descarguen.
+- El diámetro de un conducto horizontal de desagüe no podrá ser menor que el de
+cualquiera de los orificios de salida de los aparatos que en él descarguen.
+e) Cuando se requiera dar un cambio de dirección a una montante, los diámetros de la
+parte inclinada y del tramo inferior de la montante se calcularán de la siguiente
+manera:
+- Si la parte inclinada forma un ángulo de 45° o más con la horizontal, se calculará
+como si fuera una montante.
+- Si la parte inclinada forma un ángulo menor de 45° con la horizontal, se calculará
+tomando en cuenta el número de unidades de descarga que pasa por el tramo
+inclinado como si fuera un colector con pendiente de 4%
+- Por debajo de la parte inclinada, la montante en ningún caso tendrá un diámetro
+menor que el tramo inclinado.
+- Los cambios de dirección por encima del más alto ramal horizontal de desagüe, no
+requieren aumento de diámetro.
+f) Las montantes deberán ser colocadas en ductos o espacios especialmente previstos
+para tal fin y cuyas dimensiones y accesos permitan su instalación, reparación,
+revisión o remoción.
+g) Se permitirá utilizar un mismo ducto o espacio para la colocación de las tuberías de
+desagüe y agua, siempre que exista una separación mínima de 0,20 m entre sus
+generatrices más próximas.
+h) Se permitirá el uso de colectores existentes para servir a nuevas construcciones,
+solamente cuando su inspección demuestre que estén en buenas condiciones y
+cumplan lo establecido en esta Norma.
+i) Todo punto de contacto entre el sistema de desagüe y los ambientes (punto de
+colección abierto), deberá estar protegido por un sello de agua con una altura no
+inferior de 0,05 m, ni mayor de 0,10 m, contenido en un dispositivo apropiado (trampa
+o sifón).
+j) Todo registro deberá ser del diámetro de la tubería a la que sirve. En caso de tuberías
+de diámetro mayor de 100 mm (4"), se instalará un registro de 100 mm (4") como
+mínimo.
+Los registros se ubicarán en sitios fácilmente accesibles.
+Cuando las tuberías vayan ocultas o enterradas, los registros, deberán extenderse
+utilizando conexiones de 45°, hasta terminar a ras con la pared o piso acabado.
+La distancia mínima entre la tangente del tapón de cualquier registro y una pared,
+techo o cualquier otro elemento que pudiera obstaculizar la limpieza del sistema, será
+de 0,10 m.
+Se colocará registros por lo menos en:
+- Al comienzo de cada ramal horizontal de desagüe o colector.
+- Cada 15 m en los conductos horizontales de desagüe
+- Al pie de cada montante, salvo cuando ella descargue a una caja de registro o buzón
+distante no más de 10 m.
+
+- Cada dos cambios de direcciones en los conductos horizontales de desagüe.
+- En la parte superior de cada ramal de las trampas «U».
+k) Se instalarán cajas de registro en las redes exteriores en todo cambio de dirección,
+pendiente, material o diámetro y cada 15 m de largo como máximo, entramos rectos.
+Las dimensiones de las cajas se determinarán de acuerdo a los diámetros de las
+tuberías y a su profundidad, según la tabla siguiente:
+Para profundidades mayores se deberá utilizar cámaras de inspección según NTE S.070
+Redes de Aguas Residuales.
+l) Cuando las aguas residuales contengan grasa, aceite, material inflamable, arena,
+tierra, yeso u otros sólidos o líquidos objetables que pudieran afectar el buen
+funcionamiento del sistema de evacuación del edificio u otro sistema público, será
+necesario la instalación de interceptores o separadores u otro sistema de tratamiento.
+m) La capacidad, tipo, dimensiones y ubicación de los interceptores y separadores,
+estará de acuerdo con el uso respectivo.
+n) Se instalarán separadores de grasa en los conductos de desagüe de lavaderos,
+lavaplatos u otros aparatos sanitarios instalados en restaurantes, cocinas de hoteles,
+hospitales y similares, donde exista el peligro de introducir en el sistema de desagüe,
+grasa en cantidad suficiente para afectar el buen funcionamiento de éste.
+o) Se instalarán separadores de aceite en el sistema de desagüe de estaciones de
+servicio, talleres de mecánica de vehículos motorizados y otros edificios, donde
+exista el peligro de introducir aceite y otros lubricantes al sistema a la red de aguas
+residuales, ya sea en forma accidental o voluntaria.
+p) Se instalarán interceptores de arena, vidrio, pelos, hilos u otros sólidos en el sistema
+de desagüe de embotelladores, lavanderías y otros establecimientos sujetos a la
+descarga voluntaria o accidental de sólidos objetables.
+q) Los interceptores y separadores deberán estar provistos de ventilación en forma
+similar a otros aparatos sanitarios.
+El tubo de ventilación tendrá un diámetro mínimo de 50mm (2") Los interceptores se
+ubicarán en sitios donde puedan ser inspeccionados y limpiados con facilidad. No se
+permitirá colocar encima o inmediato a ellos maquinarias o equipos que pudiera
+impedir su adecuado mantenimiento. La boca de inspección será de dimensiones
+adecuadas.
+r) Los aparatos sanitarios, depósitos o partes del sistema de agua, con dispositivos que
+descarguen al sistema de desagüe de la edificación, lo harán en forma indirecta, a
+fin de evitar conexiones cruzadas o interferencias entre los sistemas de distribución
+de agua para consumo humano y de redes de aguas residuales.
+La descarga de desagüe indirecto se hará de acuerdo con los siguientes requisitos:
+- La tubería de descarga se llevará hasta una canaleta, caja, sumidero, embudo y
+otro dispositivo adecuado, provisto de sello de agua y su correspondiente
+ventilación.
+- Deberá dejarse una brecha o interruptor de aire entre la salida de la tubería de
+descarga y el dispositivo receptor, el que no podrá ser menor de dos veces el
+diámetro de la tubería de descarga.
+
+- Las canaletas, cajas, sumideros, embudos y otros dispositivos deberán instalarse
+en lugares bien ventilados y de fácil acceso. Estos dispositivos estarán dotados de
+rejillas o tapas removibles cuando ello sea requerido para seguridad de las
+personas.
+s) No se permitirá descargar los aparatos sanitarios dotados de descarga de desagüe
+indirecto en ningún otro aparato sanitario.
+t) Los desagües provenientes de los siguientes equipos, deberán descargar en los
+conductos de desagüe en forma indirecta:
+- Esterilizadores, recipientes y equipos similares de los laboratorios, hospitales y
+clínicas.
+- Refrigeradoras comerciales, tuberías de rebose de tanques y similares, equipos
+provistos de válvula de alivio o seguridad.
+- Todos aquellos que se considere inconvenientes en resguardo de la salud pública.
+6.3. ALMACENAMIENTO DE AGUAS RESIDUALES
+El sistema de bombeo de aguas residuales, deberá cumplir con los siguientes requisitos:
+a) Su capacidad no será mayor que el volumen equivalente a un ¼ de la dotación diaria,
+ni menor que el equivalente a 1/24 de la dotación diaria.
+b) Deberá estar prevista de un sistema de ventilación que evite la acumulación de gases.
+Cuando ello no se logre, las instalaciones eléctricas del ambiente deberán ser a
+prueba de explosión.
+c) Deberá estar dotada de una boca de inspección.
+d) Cuando se proyecten cámara húmeda y cámara seca, se deberá proveer ventilación
+forzada para ambas cámaras, El sistema de ventilación deberá proveer como mínimo
+seis cambios de aire por hora bajo operación continua o un cambio en dos minutos
+bajo operación intermitente.
+e) Deberá preveerse la eliminación de los desagües que se acumulen en la cámara
+seca.
+6.4. ELEVACIÓN
+El equipo de bombeo deberá instalarse en lugar de fácil acceso, ventilación e
+iluminación adecuada.
+Los equipos de bombeo deberán cumplir los siguientes requisitos:
+a) Que permita el paso de sólidos.
+b) La capacidad total de bombeo deberá ser por lo menos el 150% del gasto máximo
+que recibe la cámara de bombeo.
+c) El número mínimo de equipos será de dos, de funcionamiento alternado. La
+capacidad de cada uno será igual al gasto máximo.
+d) El gasto se determinará utilizando el método de unidades de descarga u otro método
+aprobado.
+e) La tubería de descarga estará dotada de una válvula de interrupción y una válvula de
+retención.
+Los motores de los equipos de elevación deberán ser accionados por los niveles en
+la cámara de bombeo. Se proveerán además controles manuales y dispositivos de
+alarma para sobre nivel.
+Cuando el suministro normal de energía no garantice un servicio continuo a los
+equipos de bombeo en hoteles, hospitales y similares, deberán proveerse fuentes de
+energía independientes.
+6.5. VENTILACIÓN
+
+El sistema de desagüe debe ser adecuadamente ventilado, de conformidad con los
+párrafos siguientes, a fin de mantener la presión atmosférica en todo momento y
+proteger el sello de agua de cada una de las unidades del sistema.
+El sello de agua deberá ser protegido contra sifonaje, mediante el uso adecuado de
+ramales de ventilación, tubos auxiliares de ventilación, ventilación en conjunto,
+ventilación húmeda o una combinación de estos métodos.
+En el caso de uso de ventilación por tuberías que permiten la salida o entrada de aire
+del exterior del edificio, se aplicarán los siguientes criterios:
+a) Los tubos de ventilación deberán tener una pendiente uniforme no menor de 1%
+en forma tal que el agua que pudiere condensarse en ellos, escurra a un
+conducto de desagüe o montante.
+b) Los tramos horizontales de la tubería de ventilación deberán quedar a una altura
+no menor de 0,15 m por encima de la línea de rebose del aparato sanitario más
+alto al cual ventilan.
+c) La distancia máxima entre la salida de un sello de agua y el tubo de ventilación
+correspondiente, según siguiente Tabla:
+Diámetro del conducto del Distancia máxima entre el sello y el
+desagüe tubo de ventilación(m)
+40 ( 1 ½”) 1,10
+50 ( 2”) 1,50
+75 ( 3”) 1,80
+100 ( 4”) 3,00
+Esta distancia se medirá a lo largo del conducto de desagüe, desde la salida del sello
+de agua hasta la entrada del tubo de ventilación.
+d) Toda montante de desagüe deberá prolongarse al exterior, sin disminuir su
+diámetro. En el caso de que termine en una terraza accesible o utilizada para
+cualquier fin, se prolongará por encima del piso hasta una altura no menor de
+1,80 m. Cuando la cubierta del edificio sea un techo o terraza inaccesible, la
+montante será prolongada por encima de éste, 0,15 m como mínimo.
+En caso de que la distancia entre la boca de una montante y una ventana, puerta
+u otra entrada de aire al edificio sea menor de 3 m horizontalmente, el extremo
+superior de la montante deberá quedar como mínimo a 0,60 m, por encima de la
+entrada del aire.
+La unión entre la montante y la cubierta del techo o terraza deberá ser a prueba
+de filtraciones.
+e) La tubería principal de ventilación se instalará vertical, sin quiebres en lo posible
+y sin disminuir su diámetro.
+f) El extremo inferior del tubo principal de ventilación deberá ser conectado
+mediante un tubo auxiliar de ventilación a la montante de aguas residuales, por
+debajo del nivel de conexión del ramal de desagüe más bajo.
+El extremo superior del tubo de ventilación se podrá conectar a la montante
+principal, a una altura no menor de 0,15 m por encima de la línea de rebose del
+aparato sanitario más alto.
+g) En los edificios de gran altura se requerirá conectar la montante al tubo principal
+de ventilación por medio de tubos auxiliares de ventilación, a intervalos de 5
+pisos, contados a partir del último piso hacia abajo.
+h) El diámetro del tubo auxiliar de ventilación a que se refiere el numeral anterior,
+será igual al del tubo principal de ventilación. Las conexiones a éste y la
+montante de aguas residuales deberán hacerse por medio de accesorio tipo «Y»
+en la forma siguiente:
+- Las conexiones a la montante de aguas residuales se harán por debajo
+del ramal horizontal proveniente del piso correspondiente.
+
+- Las conexiones al tubo de ventilación principal se harán a no menos de
+1,0 m por encima del piso correspondiente.
+i) El diámetro del tubo de ventilación principal se determinará tomando en cuenta
+su longitud total, el diámetro de la montante correspondiente y el total de
+unidades de descarga ventilada, según siguiente Tabla.
+j) Cuando una montante tenga en su recorrido un cambio de dirección de 45° o
+más con la vertical, será necesario ventilar los tramos de la montante que queden
+por encima y por debajo de dicho cambio. Estos tramos podrán ventilarse
+separadamente según lo especificado en el inciso i) del presente artículo, o bien
+se podrá ventilar por medio de tubos auxiliares de ventilación, uno para el tramo
+superior inmediatamente antes del cambio y otro para el tramo inferior. Cuando
+el cambio de dirección de la montante sea menor de 45° con la vertical, no se
+requerirá la ventilación auxiliar.
+k) Para la ventilación individual de aparatos sanitarios, el diámetro de la tubería de
+ventilación será igual a la mitad del diámetro del conducto de desagüe al cual
+ventila y no menor de 50 mm ("2") Cuando la ventilación individual va conectada
+a un ramal horizontal común de ventilación, su diámetro y longitud se
+determinarán según siguiente Tabla.
+
+l) Se permitirá utilizar un tubo común de ventilación para servir dos aparatos
+sanitarios, en los casos que se señalan a continuación, siempre que el diámetro
+del tubo de ventilación y la distancia máxima cumplan con lo establecido en el
+inciso c) del presente artículo.
+- Dos aparatos sanitarios tales como lavatorios, lavaderos de cocina o de
+ropa instaladas en el mismo piso y conectados al ramal de desagüe a un
+mismo nivel.
+- Dos aparatos sanitarios ubicados en el mismo piso, pero conectados a la
+montante o ramal vertical de desagüe a diferentes niveles, siempre que
+el diámetro de dicho ramal o montante sea de un tamaño mayor que el
+requerido por el aparato superior y no menor que el requerido por el
+aparato inferior.
+m) La prolongación de la montante o tubería de desagüe por encima del último
+ramal, podrá servir como único medio de ventilación para lavatorios y lavaderos
+siempre que cumpla con las distancias máximas establecidas en el inciso c) del
+presente artículo.
+n) Para el caso de ventilación común, para mas de dos aparatos podrá usarse la
+ventilación en circuito, siempre que cumpla los requisitos establecidos en el
+presente artículo.
+o) El diámetro del tubo de ventilación en circuito se calculará en función de su
+longitud y sobre la base del diámetro del ramal horizontal de desagüe, según la
+Tabla del inciso m).
+Dicho diámetro no podrá ser menor que la mitad del diámetro del ramal horizontal
+de desagüe correspondiente y en ningún caso menor de 50 mm ( 2").
+p) Es obligatorio instalar tubos auxiliares de ventilación en los siguientes casos:
+- En la ventilación de la montante.
+- En la ventilación en circuito.
+- En todos aquellos otros casos en que sea necesario asegurar el buen
+funcionamiento del sistema.
+- El diámetro mínimo del tubo auxiliar de ventilación será la mitad del
+diámetro del ramal de desagüe a que está conectado.
+q) Aquellos aparatos sanitarios que no pueden ser ventilados de acuerdo a las
+distancias máximas establecidos en el inciso e) del presente artículo, tales como
+lavaderos y otros similares, deberán descargar en forma indirecta a un sumidero
+de piso, caja u otro dispositivo apropiadamente ventilado.
+En el caso de uso de ventilación por Válvula de Admisión de Aire que permite la
+entrada de aire a las tuberías de desagüe del interior del edificio, se aplicarán los
+siguientes criterios:
+OBJETO Y USO DE LA VÁLVULA DE ADMISIÓN DE AIRE:
+a) El propósito de una Válvula de Admisión de Aire consiste en ofrecer un método
+que permita la entrada de aire al sistema de drenaje sin utilizar una ventilación
+abierta al aire exterior y evitar el escape de los gases del drenaje al interior del
+edificio.
+b) La válvula cuenta con una sola vía y está diseñada para permitir la entrada de
+aire a la tubería de drenaje al desarrollarse presiones negativas. El dispositivo
+cierra por gravedad y sella la terminal de ventilación a una presión diferencial de
+cero (sin condiciones de flujo), así como bajo presiones internas positivas.
+c) Está diseñada para resolver el sistema de ventilación primaria (de la bajante),
+secundaria (de los desagües) y terciaria (por aparato sanitario), sin necesidad
+de atravesar cubiertas, ni espacio adicional para tuberías de ventilación.
+
+d) La Válvula de Admisión de Aire puede emplearse en edificaciones familiares,
+multifamiliares o comerciales.
+INSTALACIÓN:
+e) Está permitido que las ventilaciones individuales, derivadas y de circuito
+terminen con una conexión a una Válvula de Admisión de Aire.
+f) Toda estructura en la que se instalen sistemas de ventilación debe contar con
+cuando menos una ventilación primaria al exterior. La ventilación de tubo
+principal debe correr tan directamente como sea posible del drenaje del edificio
+hasta el aire exterior.
+g) La Válvula de Admisión de Aire solamente ventila elementos en la misma planta
+del edificio conectadas a un ramal horizontal, el cual deberá conectarse a la
+montante con un máximo de 4 salidas en edificaciones de hasta tres pisos de
+altura.
+Para ramales con más de 4 salidas, se podrá hacer uso de una Válvula de
+Admisión de Aire siempre que se cuente con un “respiradero de ventilación
+auxiliar” según los siguientes casos:
+- De 5 a 10 salidas: instalar un respiradero de ventilación auxiliar en un
+punto del desagüe adyacente a la montante, según lo indica el punto I.
+e)
+- De 11 a 20 salidas: instalar un respiradero de ventilación auxiliar en un
+punto del desagüe adyacente a la montante y otro en el punto medio del
+sistema, según lo indica el punto I. e)
+h) Para prevenir el sifonaje inducido en un ramal de lavatorios, la Válvula de
+Admisión de Aire se instalará entre los dos lavatorios más lejanos al respiradero.
+i) La Válvula de Admisión de Aire debe colocarse dentro de la longitud desarrollada
+máxima permitida para la ventilación y debe colocarse cuando menos 10 cm por
+encima del ramal horizontal del drenaje, 15 cm por encima de cualquier material
+aislante y dentro de 15 grados de la vertical.
+j) La capacidad máxima de la válvula no deberá exceder los siguientes límites
+según el tipo de sistema en el cual trabajen:
+- Ventilación primaria y secundaria: 32 L/s a -250 Pa.
+- Ventilación terciaria: 7,50 L/s a -250 Pa.
+k) La Válvula de Admisión de Aire está hecha para instalarse en ambientes
+ventilados dentro de los confines de una construcción (bajo un lavabo, en un
+altillo, en los ductos de las instalaciones, en el falso techo o debajo de una rejilla
+empotrada) y no debe estar al exterior de la estructura.
+l) El rango de temperaturas al que debe usarse la válvula está comprendido entre
+-40°C y 60°C.
+m) La Válvula de Admisión de Aire debe quedar accesible para su inspección y
+servicio.
+6.6. SISTEMA DE ELIMINACIÓN SANITARIA DE EXCRETA
+a) Letrina sanitaria
+Podrá utilizarse letrinas sanitarias en las habilitaciones urbanas que no cuenten con
+sistemas de eliminación de excretas con arrastre de agua (sistemas de alcantarillado),
+siempre que cumpla con los requisitos establecidos en las normas correspondientes:
+7. AGUA DE LLUVIA
+
+7.1. RECOLECCIÓN
+a) Cuando no exista un sistema de alcantarillado pluvial y la red de aguas residuales no
+haya sido diseñada para recibir aguas de lluvias, no se permitirá descargar este tipo
+de aguas a la red de aguas residuales. Estas deberán disponerse al sistema de
+drenaje o áreas verdes existentes.
+b) Los receptores de agua de lluvia estarán provistos de rejillas de protección contra el
+arrastre de hojas, papeles, basura y similares. El área total libre de las rejillas, será
+por lo menos dos veces el área del conducto de elevación.
+c) Los diámetros de las montantes y los ramales de colectores para aguas de lluvia
+estarán en función del área servida y de la intensidad de la lluvia.
+d) Los diámetros de las canaletas semicirculares se calcularán tomando en cuenta el
+área servida, intensidad de lluvia y pendiente de la canaleta.
+e) La influencia que puedan tener las aguas de lluvias en las cimentaciones deberán
+preverse realizando las obras de drenaje necesarias.
+f) La capacidad de las bombas de las cámaras de bombeo se calculará teniendo en
+cuenta la máxima intensidad de lluvia registrada, de los últimos años.
+7.2. ALMACENAMIENTO Y ELEVACIÓN
+El volumen de almacenamiento estará de acuerdo a la intensidad y frecuencia de lluvias.
+El sistema de elevación deberá considerar lo señalado en los artículos 22 y 23 de la
+presente Norma.
+
+Para calcular tuberías de distribución que conduzcan agua fría solamente o agua fría
+más el gasto de agua a ser calentada, se usarán las cifras indicadas en la primera
+columna. Para calcular diámetros de tuberías que conduzcan agua fría o agua caliente
+a un aparato sanitario que requiera de ambas, se usarán las cifras indicadas en la
+segunda y tercera columna.
+Para calcular tuberías de distribución que conduzcan agua fría solamente o agua fría
+más el gasto de agua a ser calentada, se usarán las cifras indicadas en la primera
+columna. Para calcular diámetros de tuberías que conduzcan agua fría o agua caliente
+a un aparato sanitario que requiera de ambas, se usarán las cifras indicadas en la
+segunda y tercera columna.
+(*) Debe asumirse este número de unidades de gasto por cada salida.
+
+-
+
+ANEXO 10
+SIMBOLOGÍA
+SÍMBOLOS GRÁFICOS
+Los símbolos gráficos, no incluidos en la Lámina N°1, deben indicarse en los planos del
+proyecto
+
+ANEXO 11
+DEFINICIONES
+- Alimentación (tubería de.).- Tubería comprendida entre el medidor y la válvula de
+flotador en el depósito de almacenamiento, o el inicio de la red de distribución, en el
+caso de no existir depósito.
+- Alimentador.- Tubería que abastece a los ramales.
+- Agua servida o desagüe.- Agua que carece de potabilidad, proveniente del uso
+doméstico, industrial o similar.
+- Baño público.- Establecimiento para el servicio de higiene personal.
+- Cisterna. - Depósito de almacenamiento ubicado en la parte baja de una edificación.
+- Colector.- Tubería horizontal de un sistema de desagüe que recibe la descarga de los
+ramales o montantes.
+- Conexión cruzada.- Conexión física entre dos sistemas de tuberías, uno de los cuales
+contiene agua potable y el otro agua de calidad desconocida, donde el agua puede
+fluir de un sistema a otro.
+- Diámetro nominal.- Medida que corresponde al diámetro exterior, mínimo de una
+tubería.
+- Gabinete contra incendio.- Salida del sistema contra incendio, que consta de
+manguera, válvula y pitón.
+- Hidrante.- Grifo contra incendio.
+- Impulsión (tubería.).- Tubería de descarga del equipo de bombeo.
+
+- Instalación exterior.- Conjunto de elementos que conforman los sistemas de
+abastecimiento y distribución de agua, evacuación de desagües e instalaciones
+sanitarias especiales, ubicadas fuera de la edificación y que no pertenecen al sistema
+público.
+- Instalación interior.- Conjunto de elementos que conforman los sistemas de
+abastecimiento y distribución de agua, evacuación de desagües, su ventilación, e
+instalaciones sanitarias especiales, ubicados dentro de la edificación.
+- Montante.- Tubería vertical de un sistema de desagüe que recibe la descarga de los
+ramales.
+- Ramal de agua.- Tubería comprendida entre el alimentador y la salida a los servicios.
+- Ramal de desagüe.- Tubería comprendida entre la salida del servicio y el montante
+o colector.
+- Red de distribución.- Sistema de tuberías compuesto por alimentadores y ramales.
+- Servicio sanitario.- Ambiente que alberga uno o más aparatos sanitarios.
+- Sifonaje.- Es la rotura o pérdida del sello hidráulico de la trampa (sifón), de un aparato
+sanitario, como resultado de la pérdida de agua contenida en ella.
+- Succión (tubería de.).- Tubería de ingreso al equipo de bombeo.
+- Tanque elevado.- Depósito de almacenamiento de agua que da servicio por gravedad.
+

@@ -1,0 +1,3298 @@
+NORMA A.130
+REQUISITOS DE SEGURIDAD
+GENERALIDADES
+Artículo 1.- Las edificaciones, de acuerdo con su uso y número de ocupantes,
+deben cumplir con los requisitos de seguridad y prevención de siniestros que tienen
+como objetivo salvaguardar las vidas humanas y preservar el patrimonio y la
+continuidad de la edificación.
+CAPITULO I
+SISTEMAS DE EVACUACIÓN
+Artículo 2.- El presente capitulo desarrollará todos los conceptos y cálculos
+necesarios para asegurar un adecuado sistema de evacuación dependiendo del tipo y
+uso de la edificación. Estos son requisitos mínimos que deberán ser aplicados a las
+edificaciones.
+Artículo 3.- Todas las edificaciones tienen una determinada cantidad de personas
+en función al uso, la cantidad y forma de mobiliario y/o el área de uso disponible para
+personas. Cualquier edificación puede tener distintos usos y por lo tanto variar la
+cantidad de personas y el riesgo en la misma edificación siempre y cuando estos usos
+estén permitidos en la zonificación establecida en el Plan Urbano.
+El cálculo de ocupantes de una edificación se hará según lo establecido para cada tipo
+en las normas específicas A.020, A.030, A.040, A.050, A.060, A.070, A.080, A.090,
+A.100 y A.110.
+En los tipos de locales en donde se ubique mobiliario especifico para la actividad a la
+cual sirve, como butacas, mesas, maquinaria (cines, teatros, estadios, restaurantes,
+hoteles, industrias), deberá considerarse una persona por cada unidad de mobiliario.
+La comprobación del cálculo del número de ocupantes (densidad), deberá estar
+basada en información estadística para cada uso de la edificación, por lo que los
+propietarios podrán demostrar aforos diferentes a los calculados según los estándares
+establecidos en este reglamento.
+El Ministerio de Vivienda en coordinación con las Municipalidades y las Instituciones
+interesadas efectuarán los estudios que permitan confirmar las densidades
+establecidas para cada uso.
+Artículo 4.- Sin importar el tipo de metodología utilizado para calcular la cantidad de
+personas en todas las áreas de una edificación, para efectos de cálculo de cantidad de
+personas debe utilizarse la sumatoria de todas las personas (evacuantes). Cuando
+exista una misma área que tenga distintos usos deberá utilizarse para efectos de
+cálculo, siempre el de mayor densidad de ocupación.
+Ninguna edificación puede albergar mayor cantidad de gente a la establecida en el
+aforo calculado.
+SUB-CAPITULO I
+PUERTAS DE EVACUACIÓN
+
+Artículo 5.- Las salidas de emergencia deberán contar con puertas de evacuación
+de apertura desde el interior accionadas por simple empuje. En los casos que por
+razones de protección de los bienes, las puertas de evacuación deban contar con
+cerraduras con llave, estas deberán tener un letrero iluminado y señalizado que
+indique “Esta puerta deberá permanecer sin llave durante las horas de trabajo”.
+Artículo 6.- Las puertas de evacuación pueden o no ser de tipo cortafuego,
+dependiendo su ubicación dentro del sistema de evacuación. El giro de las puertas
+deben ser siempre en dirección del flujo de los evacuantes, siempre y cuando el
+ambiente tenga más de 50 personas.
+Artículo 7.- La fuerza necesaria para destrabar el pestillo de una manija (cerradura)
+o barra antipánico será de 15 libras. La fuerza para empujar la puerta en cualquier
+caso no será mayor de 30 libras fuerza.
+Artículo 8.- Dependiendo del planteamiento de evacuación, las puertas que se
+ubiquen dentro de una ruta o como parte de una ruta o sistema de evacuación podrán
+contar con los siguientes dispositivos:
+a) Brazo cierra puertas: Toda puerta que forme parte de un cerramiento contrafuego
+incluyendo ingresos a escaleras de evacuación, deberá contar con un brazo cierra
+puertas aprobado para uso en puertas cortafuego
+b) En caso se tengan puertas de doble hoja con cerrajería de un punto y cierra
+puertas independientes, deberá considerarse un dispositivo de ordenamiento de
+cierre de puertas.
+c) Manija o tirador: Las puertas que no requieran barra antipánico deberán contar
+con una cerradura de manija. Las manijas para puertas de evacuación deberán
+ser aprobadas y certificadas para uso de personas con discapacidad.
+d) Barra antipánico: Serán obligatorias, únicamente para carga de ocupantes mayor
+a 100 personas en cualquier caso y en locales de reunión mayores de 50
+personas, locales de Salud y áreas de alto riesgo con más de 5 personas. La
+altura de la barra en la puerta deberá estar entre 30” a 44”. Las barras antipánico
+requeridas en puertas con resistencia al fuego deben tener una certificación.
+Artículo 9.- Cerraduras para salida retardada: Los dispositivos de salida retardada
+pueden ser utilizados en cualquier lugar excepto: áreas de reunión, centros educativos
+y edificaciones de alto riesgo, siempre y cuando la edificación se encuentre totalmente
+equipada con un sistema de rociadores y un sistema de detección y alarma de
+incendio adicionalmente deberán cumplir con las siguientes condiciones:
+a) De producirse una alarma de incendio o una perdida de energía hacia el
+dispositivo, debe eliminarse el retardo.
+b) El dispositivo debe tener la capacidad para ser desbloqueado manualmente por
+medio de una señal desde un centro de control.
+c) El pestillo de la barra de retardo deberá liberarse en un tiempo no mayor de quince
+segundos de aplicarse una fuerza máxima de 15 libras durante 1 segundo en la
+barra. Luego de abrirse el dispositivo solo podrá activarse (armar) nuevamente de
+forma manual.
+d) Debe instalarse un letrero con letras de 0.25 m de alto, a 0.30 m. sobre la barra de
+apertura, que indique “Presione la barra hasta que suene la alarma. La puerta se
+abrirá en 15 segundos.”
+e) La puerta de escape debe contar con iluminación de emergencia
+f) Los evacuantes de una edificación no podrán encontrar más de un dispositivo de
+retardo en toda la vía de evacuación.
+
+Artículo 10.- Las Puertas Cortafuego tendrán una resistencia equivalente a ¾ de la
+resistencia al fuego de la pared, corredor o escalera a la que sirve y deberán ser a
+prueba de humo. Solo se aceptarán puertas aprobadas y certificadas para uso
+cortafuego. Todo los dispositivos como marco, bisagras cierra puertas, manija
+cerradura o barra antipánico que se utilicen en estas puertas deberán contar con una
+certificación de aprobación para uso en puertas cortafuego, de la misma resistencia de
+la puerta a la cual sirven.
+Artículo 11.- En casos especiales cuando se utilicen mirillas, visores o vidrios como
+parte de la puerta o puertas íntegramente de vidrio deberán ser aprobadas y
+certificadas como dispositivos a prueba de fuego de acuerdo al rango necesario.
+Todas las puertas y marcos cortafuego deberán llevar en lugar visible el número de
+identificación; y rótulo de resistencia al fuego. Las puertas cortafuego deberán tener el
+anclaje del marco siguiendo las especificaciones del fabricante de acuerdo al material
+del muro.
+SUB-CAPITULO II
+MEDIOS DE EVACUACIÓN
+Artículo 12.- Los medios de evacuación son componentes de una edificación,
+destinados a canalizar el flujo de ocupantes de manera segura hacia la vía pública o a
+áreas seguras para su salida durante un siniestro o estado de pánico colectivo.
+Artículo 13.- En los pasajes de circulación, escaleras integradas, escaleras de
+evacuación, accesos de uso general y salidas de evacuación, no deberá existir
+ninguna obstrucción que dificulte el paso de las personas, debiendo permanecer libres
+de obstáculos.
+Artículo 14.- Deberán considerarse de forma primaria las evacuaciones horizontales
+en, Hospitales, clínicas, albergues, cárceles, industrias y para proporcionar protección
+a discapacitados en cualquier tipo de edificación.
+Las evacuaciones horizontales pueden ser en el mismo nivel dentro de un edificio o
+aproximadamente al mismo nivel entre edificios siempre y cuando lleven a un área de
+refugio definidos por barreras contra fuego y humos.
+El área de refugio a la cual esta referida el párrafo anterior, debe tener como mínimo
+una escalera cumpliendo los requerimientos para escaleras de evacuación.
+Las áreas de refugio deben tener una resistencia al fuego de 1 hora para edificaciones
+de hasta 3 niveles y de 2 horas para edificaciones mayores de 4 niveles.
+Artículo 15.- Se considerará medios de evacuación, a todas aquellas partes de una
+edificación proyectadas para canalizar el flujo de personas ocupantes de la edificación
+hacia la vía pública o hacia áreas seguras, como pasajes de circulación, escaleras
+integradas, escaleras de evacuación, accesos de uso general y salidas de evacuación.
+Artículo 16.- Las rampas serán consideradas como medios de evacuación siempre y
+cuando la pendiente no sea mayor a 12%. Deberán tener pisos antideslizantes y
+barandas de iguales características que las escaleras de evacuación.
+Artículo 17.- Solo son permitidos los escapes por medios deslizantes en
+instalaciones de tipo industrial de alto riesgo y sean aprobadas por la Autoridad
+Competente.
+
+Artículo 18.- No se consideran medios de evacuación los siguientes medios de
+circulación:
+g) Ascensores
+h) Rampas de accesos vehiculares que no tengan veredas peatonales y/o cualquier
+rampa con pendiente mayor de 12%.
+i) Escaleras mecánicas
+j) Escalera tipo caracol: (Solo son aceptadas para riesgos industriales que permitan
+la comunicación exclusivamente de un piso a otro y que la capacidad de
+evacuación no sea mayor de cinco personas. Para casos de vivienda unifamiliar,
+son permitidas como escaleras de servicio y para edificios de vivienda solo se
+aceptan al interior de un duplex y con una extensión no mayor de un piso a otro).
+k) Escalera de gato
+Artículo 19.- Los ascensores constituyen una herramienta de acceso para el personal
+del Cuerpo de Bomberos, por lo cual en edificaciones mayores de 10 niveles es
+obligatorio que todos los ascensores cuenten con:
+a) Sistemas de intercomunicadores
+b) Llave maestra de anulación de mando
+c) Llave de bombero que permita el direccionamiento del ascensor únicamente
+desde el panel interno del ascensor, eliminando cualquier dispositivo de llamada
+del edificio.
+SUB-CAPITULO III
+CALCULO DE CAPACIDAD DE MEDIOS DE EVACUACIÓN
+Artículo 20.- Para calcular el número de personas que puede estar dentro de una
+edificación en cada piso y área de uso, se emplearán las tablas de número de
+ocupantes que se encuentran en las normas A.20 a la A.110 según cada tipología.
+La carga de ocupantes permitida por piso no puede ser menor que la división del área
+del piso entre el coeficiente de densidad, salvo en el caso de ambientes con mobiliario
+fijo o sustento expreso o estadístico de acuerdo a usos similares.
+Artículo 21.- Se debe calcular la máxima capacidad total de edificio sumando las
+cantidades obtenidas por cada piso, nivel o área.
+Artículo 22.- Determinación del ancho libre de los componentes de evacuación:
+Ancho libre de puertas y rampas peatonales: Para determinar el ancho libre de la
+puerta o rampa se debe considerar la cantidad de personas por el área piso o nivel
+que sirve y multiplicarla por el factor de 0.005 m por persona. El resultado debe ser
+redondeado hacia arriba en módulos de 0.60 m.
+La puerta que entrega específicamente a una escalera de evacuación tendrá un
+ancho libre mínimo medido entre las paredes del vano de 1.00 m.
+Ancho libre de pasajes de circulación: Para determinar el ancho libre de los pasajes
+de circulación se sigue el mismo procedimiento, debiendo tener un ancho mínimo de
+1.20 m. En edificaciones de uso de oficinas los pasajes que aporten hacia una ruta de
+escape interior y que reciban menos de 50 personas podrán tener un ancho de 0.90
+m.
+
+Ancho libre de escaleras: Debe calcularse la cantidad total de personas del piso que
+sirven hacia una escalera y multiplicar por el factor de 0.008 m por persona.
+Artículo 23.- En todos los casos las escaleras de evacuación no podrán tener un
+ancho menor a 1.20 m.
+Cuando se requieran escaleras de mayor ancho deberá instalarse una baranda por
+cada dos módulos de 0,60 m. El número mínimo de escalera que requiere una
+edificación se establece en la Norma A.010 del presente Reglamento Nacional de
+Edificaciones.
+Artículo 24.- El factor de cálculo de centros de salud, asilos, que no cuenten con
+rociadores será de 0.015 m por persona en escaleras y de 0.013 m por persona, para
+puertas y rampas.
+Artículo 25.- Los tiempos de evacuación solo son aceptados como una referencia y
+no como una base de cálculo. Esta referencia sirve como un indicador para evaluar la
+eficiencia de las evacuaciones en los simulacros, luego de la primera evacuación
+patrón.
+Artículo 26.- La cantidad de puertas de evacuación, pasillos, escaleras está
+directamente relacionado con la necesidad de evacuar la carga total de ocupantes del
+edificio y teniendo adicionalmente que utilizarse el criterio de distancia de recorrido
+horizontal de 45.0 m para edificaciones sin rociadores y de 60.0 m para edificaciones
+con rociadores.
+Para riesgos especiales se podrán sustentar distancias de recorrido mayor basado en
+los requisitos adicionales que establece el Código NFPA 101.
+Artículo 27.- Para calcular la distancia de recorrido del evacuante deberá ser medida
+desde el punto más alejado del recinto hasta el ingreso a un medio seguro de
+evacuación. (Puerta, pasillo, o escalera de evacuación protegidos contra fuego y
+humos)
+Artículo 28.- Para centros comerciales o complejos comerciales, mercados
+techados, salas de espectáculos al interior de los mismos, deberán considerarse los
+siguientes criterios de evacuación:
+a) Las tiendas por departamentos, Supermercados y Sala de Espectáculos, no deben
+aportar evacuantes al interior del centro comercial o complejo comercial cuando no
+consideren un pasadizo protegido contra fuego entre la tienda por departamentos
+y las tiendas menores, de manera que colecte la evacuación desde la puerta de
+salida de la tienda por departamentos al exterior del centro comercial. Caso
+contrario deberán ser autónomas en su capacidad de evacuación.
+b) Deben tener como mínimo los siguientes requerimientos de evacuación.
+ Número de ocupantes mayores de 500
+No menos de 3 salidas
+y no más de 1000 personas
+ Número de ocupantes mayor de 1000
+No menos de 4 salidas
+personas
+c) Los centros comerciales, complejos comerciales, tiendas por departamento o
+similares no podrán evacuar mas del 50% del número de ocupantes por una
+misma salida.
+
+d) Es permitido el uso de propagandas, mostradores, puntos de ventas en los
+ingresos siempre y cuando, estos no invadan el ancho requerido de evacuación,
+que no es equivalente al ancho disponible. Dichos elementos deberán estar
+convenientemente anclados con el fin de evitar que se conviertan en una
+obstrucción durante la evacuación.
+e) En tiendas por departamentos, mercados techados, supermercados, con un área
+comercial mayor a 2800 m2 por planta, deberá tener por lo menos un pasadizo de
+evacuación con un ancho no menor a 1.50 m.
+SUB-CAPITULO IV
+REQUISITOS DE LOS SISTEMAS DE PRESURIZACIÓN DE ESCALERAS
+Artículo 29.- El ventilador y el punto de toma de aire deben ubicarse en un área libre
+de riesgo de contaminación por humos, preferentemente en el exterior o azotea de la
+edificación.
+Artículo 30.- No es permitida la instalación del ventilador en sótanos o lugares
+cerrados, donde un incendio adyacente pueda poner en riesgo la extracción de aire,
+cargando la escalera de humo. El sistema debe contar con inyección de aire para cada
+piso. La diferencia de presión mínima de diseño entre el interior y el exterior de la caja
+de la escalera debe ser de 0.05 pulgadas de columna de agua y el máximo de 0.45
+pulgadas de columna de agua para edificios protegidos al 100% con rociadores.
+Artículo 31.- El cálculo para el diseño de la escalera se debe realizar teniendo en
+cuenta como mínimo la puerta de salida en el nivel de evacuación y puertas
+adicionales dependiendo del numero de pisos, cantidad de personas evacuando, u
+otra condición que obligue a considerar una puerta abierta por un tiempo prolongado.
+La máxima fuerza requerida para abrir cada una de las puertas de la caja de la
+escalera no deberá exceder las 30 lbf.
+Artículo 32.- La succión y descarga de aire de los sopladores o ventiladores debe
+estar dotada de detectores de humo interconectados con el sistema de detección y
+alarmas del edificio de tal manera que se detenga automáticamente en caso de que
+ingrese humo por el rodete. El ventilador deberá ser activado automáticamente ante la
+activación de cualquier dispositivo del sistema de detección y alarma. Como mínimo
+deberá activarse por medio de detectores de humo ubicados en cada acceso a las
+escaleras de escape a no menos de 3.0 m de las puertas de escape.
+Artículo 33.- La interconexión con el sistema de alarmas y detección (cables) debe
+tener una protección cortafuego para mínimo 2 horas.
+Artículo 34.- La alimentación de energía para los motores del ventilador debe contar
+con dos fuentes independientes, de transferencia automática. Las rutas de dichos
+suministros deben ser independientes y protegidos contrafuego por 2 horas. La
+transferencia de la fuente de alimentación primaria a la secundaria se debe realizar
+dentro de los 30 segundos posteriores a la falla de fuente primaria. Se debe separar la
+llave de control de los motores de presurización de forma que el contactor general no
+actúe sobre esta alimentación. Todos los cables de suministro eléctrico desde el
+tablero de alimentación hasta la entrada a motor del ventilador deben contar con una
+protección cortafuego para mínimo 2 horas.
+Artículo 35.- El ventilador deberá cumplir con los siguientes requisitos:
+
+a) Listado o equivalente.
+b) Preferentemente del tipo centrifugo radial.
+c) En el caso de que el ventilador sea impulsado por medio de fajas el número de
+estas debe ser cuando menos 1.5 veces el numero de fajas requeridas para el
+servicio de diseño.
+d) Todo ventilador impulsado por medio de fajas debe tener cuando menos dos fajas
+e) Los cálculos para la selección y la curva del fabricante deben formar parte de los
+documentos entregados.
+f) Bajo ningún motivo el motor operará por encima de la potencia de placa. La
+potencia de trabajo se determinará mediante una medición de campo con tres
+puertas abiertas.
+g) El motor impulsor debe tener cuando menos un factor de servicio de 1.15
+h) El ventilador debe contar con guardas protectoras para las fajas.
+i) El ventilador debe contar con una base para aislar vibraciones.
+Artículo 36.- Los dampers y los ductos deberán cumplir con los siguientes requisitos:
+a) Los dampers deben ser listados según UL 555S.
+b) Los rodamientos de los dampers deben ser auto lubricados o de bronce.
+c) Las hojas deben ser galvanizadas
+d) Los ductos pueden ser de hierro, acero, aluminio, cobre, concreto, baldosas o
+mampostería según sea el caso.
+e) Cuando los ductos se encuentren expuestos dentro del edificio deberán tener un
+cerramiento contrafuego de 2 horas.
+CAPITULO II
+SEÑALIZACIÓN DE SEGURIDAD
+Artículo 37.- La cantidad de señales, los tamaños, deben tener una proporción lógica
+con el tipo de riesgo que protegen y la arquitectura de la misma. Las dimensiones de
+las señales deberán estar acordes con la NTP 399.010-1 y estar en función de la
+distancia de observación.
+Artículo 38.- Los siguientes dispositivos de seguridad no son necesarios que cuenten
+con señales ni letreros, siempre y cuando no se encuentren ocultos, ya que de por si
+constituyen equipos de forma reconocida mundialmente, y su ubicación no requiere
+de señalización adicional. Como son:
+a) Extintores portátiles
+b) Estaciones manuales de alarma de incendios
+c) Detectores de incendio
+d) Gabinetes de agua contra incendios
+e) Válvulas de uso de Bomberos ubicadas en montantes
+f) Puertas cortafuego de escaleras de evacuación
+g) Dispositivos de alarma de incendios
+Artículo 39.- Todos los locales de reunión, edificios de oficinas, hoteles, industrias,
+áreas comunes en edificios de vivienda deberán estar provistos obligatoriamente de
+señalización a lo largo del recorrido así como en cada medio de evacuación, de
+acuerdo con la NTP 399-010-1, para su fácil identificación; además de cumplir con las
+siguientes condiciones:
+
+a) Todas las puertas a diferencia de las puertas principales y que formen parte de la
+ruta de evacuación deberá estar señalizadas con la palabra SALIDA, de acuerdo a
+NTP 399-010-1
+b) En cada lugar donde la continuidad de la ruta de evacuación no sea visible, se
+deberá colocar señales direccionales de salida.
+c) Se colocará una señal de NO USAR EN CASOS DE EMERGENCIA en cada uno
+de los ascensores, ya que no son considerados como medios de evacuación.
+d) Cada señal deberá tener una ubicación tamaño y color distintivo y diseño que sea
+fácilmente visible y que contraste con la decoración.
+e) Las señales no deberán ser obstruidas por maquinaria, mercaderías, anuncios
+comerciales, etc.
+f) Deberán ser instaladas a una altura que permita su fácil visualización.
+g) Deberán tener un nivel de iluminación natural o artificial igual a 50 lux.
+h) El sistema de señalización deberá funcionar en forma continua o en cualquier
+momento que se active la alarma del edificio.
+Artículo 40.- Todos los medios de evacuación deberán ser provistos de iluminación
+de emergencia que garanticen un periodo de 1 ½ hora en el caso de un corte de fluido
+eléctrico y deberán cumplir con las siguientes condiciones:
+a) Asegurar un nivel de iluminación mínimo de 10 lux medidos en el nivel del suelo.
+b) En el caso de transferencia de energía automática el tiempo máximo de demora
+deberá ser de 10 segundos.
+c) La iluminación de emergencia deberá ser diseñada e instalada de manera que si
+falla una bombilla no deje áreas en completa oscuridad.
+d) Las conexiones deberán ser hechas de acuerdo al CNE Tomo V Art. 7.1.2.1
+e) El sistema deberá ser alimentado por un circuito que alimente normalmente el
+alumbrado en el área y estar conectado antes que cualquier interruptor local, de
+modo que se asegure que ante la falta de energía en el área se enciendan las
+luces.
+Artículo 41.- Las salidas de evacuación en establecimientos con concurrencia de
+público deberán contar con señales luminosas colocadas sobre el dintel de del vano.
+Las rutas de evacuación contarán con unidades de iluminación autónomas con
+sistema de baterías, con una duración de 60 minutos, ubicadas de manera que
+mantengan un nivel de visibilidad en todo el recorrido de la ruta de escape.
+CAPITULO III
+PROTECCION DE BARRERAS CONTRA EL FUEGO
+Artículo 42.- Clasificación de estructuras por su resistencia al fuego
+Para clasificarse dentro del tipo ”resistentes al fuego”, la estructura, muros resistentes
+y muros perimetrales de cierre de la edificación, deberán tener una resistencia al fuego
+mínima de 4 horas, y la tabiquería interior no portante y los techos, una resistencia al
+fuego mínima de 2 horas.
+Artículo 43.- Para clasificarse dentro del tipo “semiresistentes al fuego”, la estructura,
+muros resistentes y muros perimetrales de cierre de la edificación deberán tener una
+resistencia al fuego mínima de 2 horas, y la tabiquería interior no portante y techos,
+una resistencia al fuego mínima de1 hora.
+Artículo 44.- Para clasificarse dentro del tipo “incombustible con protección”, los
+muros perimetrales de cierre de la edificación deberá tener una resistencia al fuego
+
+mínima de 2 horas, y la estructura muros resistentes, techos y tabiquería interior, una
+resistencia al fuego mínima de 1 hora.
+Artículo 45.- La estructura de las construcciones con elementos de madera del “tipo
+combustible de construcción pesada” se reputara que tiene duración bajo la acción del
+fuego de una hora.
+Artículo 46.- Estructuras clasificadas por su Resistencia al fuego
+a) Construcciones de muros portantes.
+b) Construcciones aporticadas de concreto.
+c) Construcciones especiales de concreto.
+d) Construcciones con elementos de acero,
+Artículo 47.- Estructuras no clasificadas por su resistencia al fuego
+a) Construcciones con elementos de madera de la clasificación combustible de
+la construcción ordinaria.
+b) Construcciones con elementos de acero, de la clasificación sin protección.
+c) Las construcciones de adobe o suelo estabilizado con parámetros y techos
+ligeros.
+TABLA Nº 1
+TABLAS DE RECUBRIMIENTOS MÍNIMOS DE PROTECCION AL FUEGO EN
+ELEMENTOS ESTRUCTURALES
+RECUBRIMIENTO MÍNIMO POR
+MATERIAL AISLANTE (EN
+PULGADAS) CATEGORIAS
+ELEMENTOS MATERIAL Resistencia Semi Incombust.
+ESTRUCTURALES AISLANTE al Resist. al Con
+PROTEGIDOS Fuego Fuego Protección
+(6 Hrs) (6 Hrs) (1 Hrs)
+Armaduras en vigas y
+Concreto
+columnas de concreto 1 1/2 1 ½ 1 1/2
+Estructural
+armado.
+Armadura en viguetas de Concreto
+1 1/4 1 3/4
+concreto estructural
+Armaduras y amarres en Concreto 3/4
+1 ¾
+losas de pisos y techos estructural
+Columnas de acero y
+Concreto
+todos los elementos de 2 1/2 1 ½ 1
+estructural
+tijerales principales
+Concreto
+Elementos de 6 x 6 2 1 1
+estructural
+Concreto
+Elementos de 6 x 8 1 1/2 1 1
+estructural
+Concreto
+Elementos de 12 x 12 2 1 1
+estructural
+Vigas de acero
+Concreto
+Tendones en vigas pre o 4 2 ½ 1 1/2
+estructural
+post esforzadas
+
+Tendones en placas pre o Concreto
+1 ½ 1
+post esforzadas estructural
+Este espesor se protegerá contra descascaramiento con estribos con espaciamiento
+no mayor al peralte del elemento, debiendo estos estribos tener un recubrimiento neto
+de 1 pulgada.
+Artículo 48.- Clasificación de los pisos o techos por su resistencia al fuego.
+TABLA Nº 2
+TABLAS DE ESPESORES MÍNIMOS PARA PROTECCION AL FUEGO EN PISOS,
+TECHOS Y CIELO RASO
+ESPESOR MÍNIMO TOTAL EN
+PULGADAS CATEGORIAS
+CONSTRUCCIO Resistencia Semi Incombust.
+CONSTRUCCION N DE CIELO al Resist. al Con
+DE PISOS O TECHOS RASO Fuego Fuego Protección
+(4 Hrs) (2 Hrs) (1 Hrs)
+Losa de concreto. Ninguno 6 1/2 4 1/2 3 1/2
+Enlucido de
+yeso o mortero
+Losa de concreto. 6 4 3
+contra el fondo
+del techo
+Enlucido de
+Aligerado de viguetas de 6” de
+yeso o mortero
+concreto estructural y ladrillo y 2”
+contra el fondo
+ladrillo hueco de techos de losa
+del techo
+Aligerado de viguetas de 5 ½ (4” de
+concreto estructural y Ninguno ladrillo 1
+ladrillo hueco de techos ½” de losa)
+Cielo raso
+suspendido de
+vermicurita de
+3 2
+Viguetas de concreto 1” de espesor
+(sólo losa) (sólo losa)
+mínimo colgado
+6” debajo de las
+viguetas
+Cielo raso
+enlucido en
+malla 2”
+incombustible (sólo losa)
+Viguetas de acero con asegurada 2 ¼” Combustibl
+losa de concreto contra el fondo (sólo losa) e
+de las viguetas Construcci
+de espesor ón pesada
+mínimo 5/8” y
+mortero 1:3
+Artículo 49.- Clasificación de las paredes y tabiques por su resistencia al fuego:
+TABLA Nº 3
+TABLAS DE ESPESORES MÍNIMOS PARA PROTECCION AL FUEGO EN
+PAREDES Y TABIQUES
+
+ESPESOR MÍNIMO TOTAL EN
+PULGADAS CATEGORIAS
+Resistencia Semi Incombust.
+MATERIALES DE CONSTRUCCIO
+al Resist. al Con
+PAREDES O TABIQUES N
+Fuego Fuego Protección
+(4 Hrs) (2 Hrs) (1 Hrs)
+Sólido sin
+Concreto armado 6 1/2 4 1/2 3 1/2
+enlucir
+Ladrillos
+Ladrillos de arcilla cocida
+sólidos sin 8 6 4
+calcáreos o de:
+enlucir
+Espesor
+mínimo de
+8
+cascarón 2 ¼”
+sin enlucir
+Espesor
+Bloques huecos de mínimo de
+12
+concreto cascarón 1 3/4”
+sin enlucir
+Espesor
+mínimo de
+8 6
+cascarón 1 3/8”
+sin enlucir
+Dos celdas
+mínimo dentro
+del espesor de
+7 5
+la pared,
+enlucido en
+Ladrillos huecos de arcilla ambas caras
+cocida, no portantes Tres celdas
+mínimo dentro
+del espesor de
+12
+la pared,
+enlucido en
+ambas caras
+Enlucido o sin
+Bloqueo 6 4 3
+enlucir
+Armazón
+Tabique sólido de mortero
+interno 2
+o yeso
+incombustible
+Paneles de yeso prensado 2
+Artículo 50.- Cuando se requieran instalar selladores cortafuego, deberá presentarse
+un proyecto específico para tal fin, indicando los tipos, formas y materiales que
+atraviesan el cerramiento cortafuego.
+Artículo 51.- Solo se pueden utilizar materiales selladores, de acuerdo a la
+configuración que cada fabricante haya sometido a pruebas y que la composición del
+conjunto a proteger se encuentre descritos en el directorio de UL vigente.
+CAPITULO IV
+SISTEMAS DE DETECCIÓN Y ALARMA DE INCENDIOS
+Artículo 52.- La instalación de dispositivos de Detección y Alarma de incendios tiene
+como finalidad principal, indicar y advertir las condiciones anormales, convocar el
+
+auxilio adecuado y controlar las facilidades de los ocupantes para reforzar la
+protección de la vida humana.
+La Detección y Alarma se realiza con dispositivos que identifican la presencia de calor
+o humo y a través, de una señal perceptible en todo el edificio protegida por esta
+señal, que permite el conocimiento de la existencia de una emergencia por parte de
+los ocupantes.
+Artículo 53.- Todas las edificaciones que deban ser protegidas con un sistema de
+detección y alarma de incendios, deberán cumplir con lo indicado en esta Norma y en
+el estándar NFPA 72 en lo referente a diseño, instalación, pruebas y mantenimiento.
+Artículo 54.- Los equipos que se estandarizan en esta norma no pueden ser
+variados, en ninguna otra regulación. Los sistemas de detección y alarma de incendios
+deberán contar con supervisión constante en el área a la cual protegen, con personal
+entrenado en el manejo del sistema.
+Los sistemas que reporten las señales de alarma, supervisión y avería hacia lugares
+fuera de la propiedad protegida, atendidos de manera continua y que brindan el
+servicio de monitoreo no será necesario que cuenten con supervisión constante en el
+área protegida.
+Artículo 55.- Todo sistema de detección y alarma de incendios, deberá contar con
+dos fuentes de suministro de energía, de acuerdo con el CNE Tomo V, Capítulo 7. Los
+circuitos, cableados y equipos deberán encontrarse protegidos de daños por corrientes
+inducidas de acuerdo a lo establecido en el CNE.
+Artículo 56.- Los sistemas de detección y alarma de incendios, deberán
+interconectarse de manera de controlar, monitorear o supervisar a otros sistemas de
+protección contra incendios o protección a la vida como son:
+a) Dispositivos de detección de incendios
+b) Dispositivos de alarma de incendios
+c) Detectores de funcionamiento de sistemas de extinción de incendios.
+d) Monitoreo de funcionamiento de sistemas de extinción de incendios.
+e) Válvulas de la red de agua contra incendios.
+f) Bomba de agua contra incendios.
+g) Control de ascensores para uso de bomberos
+h) Desactivación de ascensores
+i) Sistemas de presurización de escaleras.
+j) Sistemas de administración de humos
+k) Liberación de puertas de evacuación
+l) Activación de sistemas de extinción de incendios.
+Artículo 57.- Los dispositivos de alarmas acústicas deben ser audibles en la totalidad
+del local, y podrán ser accionados en forma automática por los detectores, puesto de
+control o desde los pulsadores distribuidos en la edificación. Esta instalación de alarma
+audible deberá complementarse con adecuadas señales ópticas, cuando así lo
+requieran las características de los ocupantes del mismo.
+Artículo 58.- Los dispositivos de detección de incendios automáticos y manuales,
+deberán ser seleccionados e instalados de manera de minimizar las falsas alarmas.
+Cuando los dispositivos de detección se encuentren sujetos a daños mecánicos o
+vandalismo, deberán contar con una protección adecuada y aprobada para el uso.
+
+Artículo 59.- Los dispositivos de detección de incendios deberán estar instalados de
+forma tal que se encuentren sostenidos de forma independiente de su fijación a los
+conductores de los circuitos. Los dispositivos de detección de incendios deberán ser
+accesibles para el mantenimiento y pruebas periódicas.
+Artículo 60.- Únicamente es permitida la instalación de detectores de humo de
+estación simple (detectores a pilas), para usos en edificaciones residenciales y al
+interior de las viviendas.
+Artículo 61.- Para la selección y ubicación de los dispositivos de detección de
+incendios deberá tomarse en cuenta los siguientes condiciones:
+a) Forma y superficie del techo.
+b) Altura del techo.
+c) Configuración y contenido del área a proteger.
+d) Características de la combustión de los materiales presentes en el área
+protegida.
+e) Ventilación y movimiento de aire.
+f) Condiciones medio ambientales
+Artículo 62.- Los dispositivos de detección de incendios deberán ser instalados de
+acuerdo a las indicaciones del fabricante y las buenas prácticas de ingeniería. Las
+estaciones manuales de alarma de incendios deberán ser instaladas en las paredes a
+no menos de 1.10 m ni a más de 1.40 m.
+Artículo 63.- Las estaciones manuales de alarma de incendios deberán distribuirse
+en la totalidad del área protegida, libre de obstrucciones y fácilmente accesible.
+Deberán instalarse estaciones manuales de alarma de incendios en el ingreso a cada
+una de las salidas de evacuación de cada piso.
+Se adicionarán estaciones manuales de alarma de incendios de forma que la máxima
+distancia de recorrido horizontal en el mismo piso, hasta la estación manual de alarma
+de incendios no supere los 60.0 m.
+Artículo 64.- Únicamente será obligatoria la señalización de las estaciones manuales
+de alarma de incendios que no sean claramente visibles y por exigencia de la
+Autoridad Competente.
+Artículo 65.- Cuando se instalen cobertores en las estaciones manuales de alarma
+de incendios, con el fin de evitar falsas alarmas o para protección del medio ambiente,
+estos deben ser aprobados para el uso por la Autoridad Competente
+PROTECCIÓN CONTRA INCENDIOS EN LOS DIVERSOS USOS
+CAPITULO V
+VIVIENDA
+Artículo 66.- Las edificaciones de vivienda Multifamiliar o Conjunto Residencial de
+más de 5 niveles, deberá contar con una red de agua contra incendios y extintores
+portátiles, así como un sistema de detección y alarma de incendios.
+
+Artículo 67.- Las edificaciones de vvivienda Multifamiliar de más de 5 niveles hasta
+10 niveles, podrán tener una red de agua contra incendio de tipo Montante Seca con
+un diámetro no menor de Ø 100 mm., y salidas valvuladas de 65 mm. en cada nivel al
+interior de la escalera de evacuación, de acuerdo a lo estipulado en la presente
+Norma. si cumple con los siguientes requisitos:
+a) Cuenta con una escalera de evacuación de acuerdo a lo indicado en la
+Norma A-010
+b) Cuenta con un hidrante contra incendios de la red pública, a no más de 75.0
+m de distancia, medidos de la conexión de bomberos (Siamesa).
+c) La localidad donde se ubicará la edificación cuenta con una Compañía de
+Bomberos.
+Artículo 68.- En caso de que la edificación cuente con áreas de estacionamiento
+subterráneas cuya sumatoria de áreas techadas considerando los espacios de
+estacionamiento, las circulaciones y los depósitos, sea mayor a 750 m2, se requerirá
+rociadores automáticos de agua contra incendios, de acuerdo a lo estipulado en la
+Norma NFPA 13.
+Solo en los casos de edificaciones de uso residencial, no es necesaria la instalación
+de bombas contra incendios ni reservas de agua, pudiendo en su reemplazo
+conectarse con la red pública de agua siempre y cuando ésta sea de suministro
+confiable.
+Artículo 69.- Las edificaciones de vivienda multifamiliar de más de 10 hasta 20
+niveles, deberá estar equipada con los siguientes componentes:
+a) Sistema de agua contra incendios presurizada con diámetro no menor a Ø
+100 mm. (4”) con válvula angular de 65 mm. (2 1/ ”) en cada nivel para uso
+2
+del Cuerpo de Bomberos, de acuerdo a lo estipulado en la presente Norma.
+b) Gabinetes de mangueras contra incendios de Ø 40 mm. (1 1/2”) en todos los
+niveles, ubicados de tal manera que la totalidad de cada área pueda ser
+alcanzada por la manguera de acuerdo a lo estipulado en la presente
+Norma.
+c) Bomba contra incendios de arranque automático con un caudal no menor a
+946 l/min. (250 gpm.) con una presión no menor de 4.14 bar (60 psi) en el
+punto más desfavorable, de acuerdo a lo estipulado en la presente Norma.
+Cuando la edificación presente otros riesgos distintos al de vivienda como
+parte de la misma, y sea obligatorio el uso de rociadores la capacidad de
+bombeo y reserva de agua contra incendio, deberán ser calculados para el
+máximo riesgo y máxima demanda.
+d) La reserva de agua contra incendios, será dimensionada en base al máximo
+riesgo, la cual no será menor a 28 metros cúbicos de volumen útil y
+exclusivo
+e) Estaciones manuales, sistema de detección de humos en hall de
+ascensores, así como alarmas de incendios según lo estipulado en la
+presente Norma.
+Artículo 70.- Las edificaciones de vivienda multifamiliar de más de 20 niveles deberá
+estar equipada con los siguientes componentes:
+a) Sistema de agua contra incendios presurizada con diámetro no menor a Ø
+150 mm. (4”) con válvula angular de 65 mm. (21/ ”) en cada nivel para uso
+2
+del Cuerpo de Bomberos, de acuerdo a lo estipulado en la presente Norma,
+en cada escalera de evacuación
+
+b) Gabinetes de mangueras contra incendios de Ø 40 mm. (11/ ”) en todos los
+2
+niveles ubicados de tal manera que la totalidad de cada área pueda ser
+alcanzada por la manguera de acuerdo a lo estipulado en la presente
+Norma.
+c) Bomba contra incendios de arranque automático de acuerdo al estándar de
+la NFPA 20 y el volumen de reserva según NFPA 13.
+d) Se debe instalar en todo el edificio un sistema de rociadores automáticos,
+de acuerdo a lo estipulado en el estándar de la norma NFPA 13.
+e) Reserva de agua contra incendios será dimensionada según el estándar
+NFPA 13
+f) Estaciones manuales, Sistema de detección de humos en hall de
+ascensores, así como alarmas de incendios según lo estipulado en la
+presente Norma.
+CAPITULO VI
+HOSPEDAJES
+Artículo 71.- Las edificaciones destinadas a hospedajes deben cumplir como mínimo
+con los requisitos de seguridad que se establecen en los cuadros de los anexos A, B,
+C, D, E y F, del presente capítulo.
+Artículo 72.- Los sistemas de evacuación serán diseñados y calculados en función a
+los requerimientos que establecen el Código de la NFPA 101 en el capitulo de
+Edificaciones de Hospedaje.
+Artículo 73.- Dependiendo de la clasificación y altura de la edificación de hospedaje
+se establece la necesidad de sistemas de agua contra incendios.
+En caso de que la edificación cuente con playas de estacionamiento subterráneas,
+cuya sumatoria de áreas sean mayores a 500 m2 y/o 250 m2 de depósitos o servicios
+generales (área sumada) se requerirá rociadores automáticos de agua contra
+incendios de acuerdo a lo estipulado en el estándar NFPA 13.
+Artículo 74.- En donde existan cocinas y esto obligue a la necesidad de ductos de
+evacuación de grasas y humos, estos deberán encontrarse dentro de un ducto
+cortafuego de una hora de resistencia, evitando recorridos horizontales y reduciendo al
+máximo las curvas.
+Artículo 75.- Donde se requieran bombas contra incendios, estas serán diseñadas,
+instaladas, probadas y mantenidas de acuerdo con la Standard NFPA 20. Cuando se
+decida instalar bombas alimentadas por energía eléctrica esta deberá contar con 2
+fuentes de suministro eléctrico y un panel de transferencia automático de acuerdo con
+el Código Eléctrico Nacional.
+Artículo 76.- Los hoteles de 4 y 5 estrellas deberán contar con un ambiente
+denominado Centro de Control desde donde se pueda administrar la evacuación de la
+edificación y todos los sistemas de seguridad. El área mínima deberá ser tal que
+permita albergar todo el equipamiento del Centro de Control y adicionalmente permitir
+a los Bomberos administrar una emergencia. Esta área deberá estar ubicada en el
+primer o segundo nivel con acceso directo, desde la vía pública y con una puerta
+rotulada como “Centro de Control”.
+Artículo 77.- Cuando los hoteles requieran la utilización de helipuertos estos deberán
+contar con su protección contra incendios adecuado al tipo de riesgo, para el caso de
+un sistema de generación espuma portátil AFFF, éste nunca será menor a 2
+
+descargas simultáneas de 216 lt/min. por 15 minutos de generación. El sistema de
+balizaje será normado por OACI.
+Artículo 78.- Cuando los hoteles tengan en su interior, adyacente o como parte de el,
+casinos, coliseos, centros de convenciones, restaurantes, centros comerciales, lugares
+de entretenimiento u otros espacios de uso público, deberán contar como mínimo con
+la protección requerida para el hotel, tal como se detalla en los anexos A, B, C, D, E y
+F del presente capítulo.
+Artículo 79.- Las instalaciones de almacenamiento, abastecimiento y distribución de
+gas natural, gas licuado de petróleo y líquidos combustibles deberán diseñarse e
+instalarse de acuerdo con la regulación nacional vigente de acuerdo con la Ley
+Orgánica de Hidrocarburos No 26221.
+Artículo 80.- Cuando se decida la instalación de un sistema de administración de
+humos y/o sistemas de evacuación horizontal, deberá cumplirse con el Código NFPA
+101 y Estándar NFPA 92.
+INFRAESTRUCTURA MINIMA PARA UN ESTABLECIMIENTO DE HOSPEDAJE
+CLASIFICADO COMO HOTEL
+REQUISITOS MINIMOS 5 4 3 2 1
+Sistema de detección y
+alarma de incendios obligatorio obligatorio obligatorio obligatorio obligatorio
+centralizado
+Sistema de evacuación
+obligatorio obligatorio - - -
+por voz (3 idiomas)
+Teléfono de Bomberos obligatorio obligatorio - - -
+Señalización e iluminación
+obligatorio obligatorio obligatorio obligatorio obligatorio
+de emergencia
+Extintores portátiles obligatorio obligatorio obligatorio obligatorio obligatorio
+Sistema de agua contra
+incendios
+1. Hasta 5 niveles obligatorio obligatorio - - -
+Obligatorio(1Obligatorio(1Obligatorio(1
+2. Mas de 5 niveles obligatorio obligatorio
+) ) )
+Sistema automático de
+rociadores
+Ver Nota
+1. Hasta 4 niveles Ver Nota (2) - - -
+(2)
+2. Entre 5 y 10 niveles obligatorio obligatorio Ver Nota (3) - -
+3. Mas de 10 niveles obligatorio obligatorio obligatorio obligatorio obligatorio
+(1) Los hoteles de 1, 2 y 3 estrellas de 5 hasta 8 niveles podrán tener una red de
+agua contra incendio de tipo Montante Seca con un diámetro no menor de Ø
+100 mm, y salidas valvuladas de 65 mm. en cada nivel al interior de la escalera
+de escape, de acuerdo a lo estipulado en la Norma Requisitos de Seguridad. si
+cumple los siguientes requisitos:
+i. Contar con escalera de evacuación de acuerdo a lo indicado en
+la Norma A 010
+ii. Contar con un hidrante contra incendios de la red pública a no
+más de 75 m. de distancia medidos de la conexión de bomberos
+(Siamesa).
+
+iii. La localidad donde se ubicará la edificación deberá contar con
+una Compañía de Bomberos
+(2) No serán requeridos sistemas automáticos de rociadores, cuando todos los
+dormitorios para huéspedes cuenten con una puerta que abra directamente
+hacia el exterior, a nivel de la vía publica o del terreno, o hacia un acceso a
+una salida exterior que cumpla con que el lado largo del balcón, porche,
+galería o espacio similar se encuentre abierto por lo menos en un 50%,
+dispuesto para impedir la acumulación de humos y además cumplir con los
+requisitos establecidos en el Código NFPA 101
+(3) No serán requeridos sistemas automáticos de rociadores siempre y cuando :
+ La distancia de recorrido del evacuante no sea mayor a 12.0 m medidos
+desde la puerta de la habitación hasta la salida de evacuación mas
+cercana, o
+ La distancia de recorrido del evacuante no sea mayor a 30.0 m medidos
+desde la puerta de la habitación hasta la salida de evacuación más
+cercana, además cuente la edificación con 2 rutas de evacuación y no
+existan corredores sin salida de más de 12.0 m de distancia de
+evacuación.
+INFRAESTRUCTURA MINIMA PARA UN ESTABLECIMIENTO DE HOSPEDAJE
+CLASIFICADO COMO APART-HOTEL
+REQUISITOS MINIMOS 5 4 3
+Sistema de detección y alarma
+obligatorio obligatorio obligatorio
+de incendios centralizado
+Sistema de evacuación por voz obligatorio obligatorio -
+Teléfono de Bombero obligatorio obligatorio -
+Señalización e iluminación de
+obligatorio obligatorio obligatorio
+emergencia
+Extintores portátiles obligatorio obligatorio obligatorio
+Red húmeda de agua contra
+incendios y gabinetes de
+mangueras
+1. Hasta 4 niveles obligatorio obligatorio -
+2. Mas de 5 niveles obligatorio obligatorio obligatorio
+Sistema automático de
+rociadores
+1. Hasta 4 niveles Ver Nota (1) Ver Nota (1) -
+2. Entre 5 y 10 niveles obligatorio obligatorio Ver Nota (2)
+3. Mas de 10 niveles obligatorio obligatorio obligatorio
+(1) No serán requeridos sistemas automáticos de rociadores cuando todos los
+dormitorios para huéspedes cuenten con una puerta que abra directamente
+hacia el exterior, a nivel de la vía publica o del terreno, o hacia un acceso a
+una salida exterior que cumpla con que el lado largo del balcón, porche,
+galería o espacio similar se encuentre abierto por lo menos en un 50%,
+dispuesto para impedir la acumulación de humos y además cumplir con los
+requisitos establecidos en el Código NFPA 101
+
+(2) No serán requeridos sistemas automáticos de rociadores siempre y cuando :
+ La distancia de recorrido del evacuante no sea mayor a 12 m medidos
+desde la puerta de la habitación hasta la salida de evacuación mas
+cercana, o
+ La distancia de recorrido del evacuante no sea mayor a 30 m medidos
+desde la puerta de la habitación hasta la salida de evacuación más
+cercana, además cuente la edificación con 2 rutas de evacuación y no
+existan corredores sin salida de más de 12 m de distancia de evacuación.
+INFRAESTRUCTURA MINIMA PARA UN ESTABLECIMIENTO DE HOSPEDAJE
+CLASIFICADO COMO HOSTAL
+REQUISITOS MINIMOS 3 2 1
+Sistema de detección y alarma
+obligatorio obligatorio obligatorio
+de incendios centralizado
+Señalización e iluminación de
+obligatorio obligatorio obligatorio
+emergencia
+Extintores portátiles obligatorio obligatorio obligatorio
+Red húmeda de agua contra
+incendios y gabinetes de
+mangueras
+1. Hasta 5 niveles - - -
+2. Mas de 5 niveles Obligatorio(1) Obligatorio(1) Obligatorio(1)
+Sistema automático de
+rociadores
+1. Hasta 4 niveles - - -
+2. Entre 5 y 10 niveles Ver Nota (2) - -
+3. Mas de 10 niveles obligatorio obligatorio obligatorio
+(1) Los Hostales de 1, 2 y 3 estrellas de 5 hasta 8 niveles podrán tener una red
+de agua contra incendio de tipo Montante Seca con un diámetro no menor de
+Ø 100 mm., y salidas valvuladas de 65 mm. en cada nivel al interior de la
+escalera de escape, de acuerdo a lo estipulado en la Norma Requisitos de
+Seguridad si cumple los siguientes requisitos:
+a) Contar con escalera de evacuación de acuerdo a lo indicado
+en la Norma A 010
+b) Contar con un hidrante contra incendios de la red pública a no
+más de 75.0 m. de distancia medidos de la conexión de
+bomberos (Siamesa).
+c) La localidad donde se ubicará la edificación deberá contar con
+una Compañía de Bomberos
+(2) No serán requeridos sistemas automáticos de rociadores siempre y cuando:
+
+ La distancia de recorrido del evacuante no sea mayor a 12.0 m. medidos
+desde la puerta de la habitación hasta la salida de evacuación mas
+cercana, o
+ La distancia de recorrido del evacuante no sea mayor a 30.0 m. medidos
+desde la puerta de la habitación hasta la salida de evacuación más
+cercana, además cuente la edificación con 2 rutas de evacuación y no
+existan corredores sin salida de más de 12.0 m. de distancia de
+evacuación.
+INFRAESTRUCTURA MINIMA PARA UN ESTABLECIMIENTO DE HOSPEDAJE
+CLASIFICADO COMO RESORT
+REQUISITOS MINIMOS 5 4 3
+Sistema de detección y alarma de
+obligatorio obligatorio Obligatorio
+incendios centralizado
+Sistema de evacuación por voz obligatorio obligatorio -
+Señalización e iluminación de
+obligatorio obligatorio Obligatorio
+emergencia
+Extintores portátiles obligatorio obligatorio Obligatorio
+Red húmeda de agua contra
+incendios y gabinetes de
+mangueras
+1. Hasta 4 niveles obligatorio obligatorio -
+2. Mas de 5 niveles obligatorio obligatorio Obligatorio
+Sistema automático de rociadores
+1. Hasta 4 niveles Ver Nota (1) Ver Nota (1) -
+2. Entre 5 y 10 niveles obligatorio obligatorio Ver Nota (2)
+3. Mas de 10 niveles obligatorio obligatorio obligatorio
+(1) No serán requeridos sistemas automáticos de rociadores cuando todos los
+dormitorios para huéspedes cuenten con una puerta que abra directamente
+hacia el exterior, a nivel de la vía publica o del terreno, o hacia un acceso a
+una salida exterior que cumpla con que el lado largo del balcón, porche,
+galería o espacio similar se encuentre abierto por lo menos en un 50%,
+dispuesto para impedir la acumulación de humos y además cumplir con los
+requisitos establecidos en el Código NFPA 101
+(2) No serán requeridos sistemas automáticos de rociadores siempre y cuando :
+ La distancia de recorrido del evacuante no sea mayor a 12.0 m medidos
+desde la puerta de la habitación hasta la salida de evacuación mas
+cercana, o
+ La distancia de recorrido del evacuante no sea mayor a 30.0 m medidos
+desde la puerta de la habitación hasta la salida de evacuación más
+cercana, además cuente la edificación con 2 rutas de evacuación y no
+existan corredores sin salida de más de 12.0 m de distancia de
+evacuación.
+INFRAESTRUCTURA MINIMA PARA UN ESTABLECIMIENTO DE HOSPEDAJE
+CLASIFICADO COMO ECOLODGE
+
+REQUISITOS MINIMOS
+Sistema de detección de incendios a
+obligatorio
+pilas en los dormitorios
+Iluminación de emergencia en los
+lugares que cuenten con red de obligatorio
+energía eléctrica
+Extintores portátiles obligatorio
+INFRAESTRUCTURA MINIMA PARA UN ESTABLECIMIENTO DE HOSPEDAJE
+CLASIFICADO COMO ALBERGUE
+REQUISITOS MINIMOS
+Sistema de detección y alarma de
+obligatorio
+incendios centralizado
+Señalización e iluminación de
+obligatorio
+emergencia
+Extintores portátiles obligatorio
+CAPITULO VII
+SALUD
+Artículo 81.- Las edificaciones de Salud deberán cumplir con los siguientes requisitos
+mínimos de seguridad los cuales aplican a todas las áreas internas de la edificación
+como cafetería, tienda de regalos, sala de reuniones y/o áreas complementarias.
+Señalización
+Sistema Detección y
+TIPO DE e Iluminación Extintores Sistema de
+Contra Alarma
+EDIFICACION de Portátiles Rociadores
+Incendios Centralizado
+emergencia
+Hospital (400
+Obligatorio Obligatorio Obligatorio Obligatorio Obligatorio
+camas o mas)
+Hospital (150 a 399
+Obligatorio Obligatorio Obligatorio Obligatorio Obligatorio
+camas)
+Hospital (50 a 149
+Obligatorio Obligatorio Obligatorio Obligatorio Obligatorio
+camas)
+Hospital (menos de
+Obligatorio Obligatorio - Obligatorio (1) Obligatorio
+50)
+Centro de Salud Obligatorio Obligatorio - Obligatorio (1) Obligatorio (2)
+Puesto de Salud Obligatorio Obligatorio - - -
+Centro Hemodador Obligatorio Obligatorio - - -
+a. Obligatorio cuando la edificación tiene 3 niveles o mas
+b. Obligatorio cuando la edificación tienen 2 o mas niveles
+Artículo 82.- Todo local de salud tipo hospital deberá tener al menos una división
+resistente al fuego por piso de hospitalización que genere áreas de refugio de acuerdo
+con:
+
+ De 3 niveles o menos = mínimo 1 hora de resistencia contra fuego
+ De 4 niveles o mas = mínimo 2 horas de resistencia contra fuego
+ Cada área de refugio generada deberá tener como mínimo una salida o escalera
+de evacuación.
+ Para estimar el área mínima de refugio deberá considerarse:
+ En hospitales o lugares de reposo = 2.8 m2 por persona
+ En instalaciones con pacientes en silla de ruedas = 1.4 m2 por persona
+ En los pisos que no alberguen pacientes internados ni pacientes en camilla =
+0.5 m2 por persona
+Artículo 83.- Todo local de salud tipo hospital deberá tener cerramientos contrafuego
+de 1 hora en locales de 3 pisos o menos y 2 horas en locales de 4 pisos y más para
+las siguientes áreas:
+ Salas de operación
+ Salas de cuidado intensivo
+ Salas de Diálisis
+Artículo 84.- Todo local de salud de 2 o más niveles deberá contar con teléfono para
+bomberos y un sistema de evacuación por voz.
+Artículo 85.- Los laboratorios en locales de salud en donde se utilicen materiales
+inflamables, combustibles o riesgosos considerados como de riesgo severo deberán
+estar protegidos de acuerdo con la norma NFPA 99, Standard for Health Care
+Facilities.
+Artículo 86.- Las áreas de riesgo en locales de Salud deberán ser protegidas con
+cerramiento contrafuego de:
+ Salas de calderas y de calefactores alimentados a combustible: 1 hora
+ Lavanderías centrales más de 10 m2 de superficie: 1 hora
+ Laboratorios usando materiales inflamables o combustibles distintos a riesgo
+severo: Puertas con cierre automático
+ Laboratorios usando materiales clasificados de riesgo severo:1 hora
+ Talleres de pintura que emplean sustancias y materiales riesgosos distintos a
+riesgo severo: 1 hora
+ Talleres de mantenimiento de la planta física: 1 hora
+ Salas donde se guarda la ropa para lavar :1 hora
+ Almacenes de materiales combustibles entre 4.5 m2 y 10.0 m2 : Sin requerimiento
+ Salas de almacenamiento con más de 10 m2 de superficie para almacenamiento
+de materiales combustibles :1 hora
+ Salas de recolección de residuos :1 hora
+ Todos los muros internos y particiones en los locales de salud de 4 pisos o más
+deberán ser de materiales incombustibles o de combustión limitada.
+Artículo 87.- Las dimensiones de las puertas y escaleras de evacuación deberá
+cumplir lo establecido en la norma de requisitos de Seguridad.
+El ancho mínimo de un puerta de evacuación ubicado en un pasadizo será de 1.20 m.
+cuando conduzca en un solo sentido a un área de refugio y de 2.40 m cuando divida el
+área en dos zonas de refugio. En este ultimo caso, las hojas de las puertas deberán
+abrir en sentidos opuestos.
+Artículo 88.- Las escaleras de evacuación deben permitir el giro de una camilla
+considerando que miden 0.60 m. por 2.50 m. de largo.
+
+CAPITULO VIII
+COMERCIO
+Artículo 89.- Las edificaciones de comercio deberán cumplir con los siguientes
+requisitos mínimos de seguridad:
+Señalización
+Sistema Detección
+e Extintore Sistema
+TIPO DE de y Alarma
+Iluminación s Contra
+EDIFICACION Rociadore Centralizad
+de Portátiles Incendios
+s o
+emergencia
+Tienda
+Tienda de área
+techada total - Obligatorio - - -
+menor a 100 m2
+Tienda área
+techada total Obligatori
+Obligatorio - - Obligatorio(1)
+mayor a 100 m2 y o
+menor a 750 m2
+Tienda de área
+techada total Obligatori
+Obligatorio Obligatorio(2) - Obligatorio
+mayor a 750 m2 y o
+menor a 1500 m2
+Tienda de planta
+Obligatori
+techada de área Obligatorio Obligatorio Obligatorio Obligatorio
+o
+mayor a 1500 m2
+Conjunto de
+Tiendas
+Conjunto de
+tiendas de un solo
+Obligatori
+nivel y menor a Obligatorio - - Obligatorio
+o
+500 m2 de área de
+techada
+Conjunto de
+tiendas de un solo
+Obligatori
+nivel y área Obligatorio - Obligatorio Obligatorio
+o
+techada entre 500
+m2 y 1000 m2
+Conjunto de
+tiendas de un solo
+Obligatori Obligatorio
+nivel y área Obligatorio Obligatorio Obligatorio
+o (2)
+techada mayor a
+1000 m2
+Conjunto de
+tiendas entre dos y
+Obligatori
+tres niveles, con Obligatorio - - Obligatorio
+o
+área menor a 1000
+m2 en total
+Conjunto de
+tiendas entre dos y
+Obligatori Obligatori
+tres niveles, con Obligatorio - Obligatorio
+o o
+área mayor a 1000
+m2 en total
+Conjunto de Obligatorio Obligatori Obligatorio Obligatori Obligatorio
+
+Señalización
+Sistema Detección
+e Extintore Sistema
+TIPO DE de y Alarma
+Iluminación s Contra
+EDIFICACION Rociadore Centralizad
+de Portátiles Incendios
+s o
+emergencia
+tiendas de mas de o o
+tres niveles
+Galería Comercial Obligatori
+Obligatorio - - Obligatorio
+(7) o
+Tiendas por Obligatori
+Obligatorio Obligatorio Obligatorio Obligatorio
+departamentos o
+Centro Comercial
+Centro comercial
+de área menor a
+500 m2 por piso y Obligatori
+Obligatorio - - Obligatorio
+no mas de 3 o
+niveles – Ver Nota
+3
+Centro comercial
+de área menor a Obligatori
+Obligatorio - Obligatorio Obligatorio
+500 m2 por piso y o
+mas de 3 niveles
+Centro comercial
+de área mayor a
+500 m2 y menor de
+Obligatori
+1500 m2 por piso y Obligatorio - Obligatorio Obligatorio
+o
+no mas de 3
+niveles - Ver Nota
+3
+Centro Comercial
+de área mayor a
+Obligatorio Obligatorio Obligatorio Obligatorio Obligatorio
+1500 m2, por piso -
+Ver Nota 4
+Complejo Obligatori
+Obligatorio Obligatorio Obligatorio Obligatorio
+comercial o
+Mercados
+Mayoristas (3)
+Obligatori
+Con techo común Obligatorio Obligatorio Obligatorio Obligatorio
+o
+Sin techo común
+Obligatori
+(puestos Obligatorio - Obligatorio Obligatorio
+o
+independientes)
+Supermercados
+Supermercados de
+un solo nivel y Obligatori
+Obligatorio - - Obligatorio
+menor a 1000 m2 o
+de área de venta
+
+Señalización
+Sistema Detección
+e Extintore Sistema
+TIPO DE de y Alarma
+Iluminación s Contra
+EDIFICACION Rociadore Centralizad
+de Portátiles Incendios
+s o
+emergencia
+Supermercados de
+un solo nivel y
+Obligatori Obligatorio(
+área de venta Obligatorio - Obligatorio
+o 2)
+mayor a 1000 m2 y
+menor de 2000 m2
+Supermercados de
+un solo nivel Obligatori
+Obligatorio Obligatorio Obligatorio Obligatorio
+mayor a 2000 m2 o
+de área de venta
+Supermercados
+entre uno y tres
+Obligatori
+niveles, con área Obligatorio - - Obligatorio
+o
+menor a 1000 m2
+por piso
+Supermercados
+de mas de tres
+Obligatori Obligatori
+niveles y área Obligatorio - Obligatorio
+o o
+menor a 1000 m2
+por piso
+Supermercados
+de mas de un nivel Obligatori Obligatori
+Obligatorio Obligatorio Obligatorio
+y área mayor a o o
+1000 m2 por piso
+Mercados
+Minoristas
+Obligatori Obligatori
+Con techo común Obligatorio - Obligatorio
+o o
+Sin techo común
+Obligatori Obligatorio
+(puestos Obligatorio - -
+o (5)
+independientes)
+Restaurantes,
+cafeterías y
+bares
+Restaurantes de
+área total
+- Obligatorio - - -
+construida menor
+a 75 m2
+Restaurantes de
+área total
+Obligatorio Obligatori
+construida mayor - - -
+(6) o
+a 75 m2 y menor
+a 300 m2
+Restaurantes de
+área total Obligatori
+Obligatorio - - Obligatorio
+construida mayor o
+a 300 m2
+1) A partir de 250 m2 de área.
+
+2) Cuando los requerimientos de agua (caudal y presión) del sistema de rociadores
+puedan ser abastecidos por el servicio de agua de la localidad, estos podrán
+conectarse directamente con la red pública, siempre y cuando exista una
+compañía de bomberos en la localidad.
+3) Es requisito obligatorio contar con hidrantes que provean un caudal total mínimo
+de 750 gpm. (caudales sumados).
+4) Serán requeridos hidrantes de la red publica con un caudal suficiente para el
+máximo riesgo, de acuerdo con la formula ISO.
+5) Únicamente estaciones manuales y alarma de incendios
+6) Cuando las rutas de evacuación así lo exijan
+7) Para construcciones de un solo nivel, para edificaciones de 2 o más niveles se
+aplicaran los requerimientos de protección contra incendios de los Conjuntos de
+Tiendas.
+Artículo 90.- Las Galerías Comerciales y Conjunto de Tiendas de no mas de 3
+niveles, deberán contar con una separación contra fuegos no menor de 1 hora, de
+manera de agrupar locales que tengan un máximo 20.0 m lineales de frente.
+Las paredes posteriores colindantes con otra tienda, deberá tener separación corta
+fuego con una resistencia mínima de 1 hora. No se requiere compartimentación corta
+fuego en el frente de la tienda.
+Artículo 91.- Las Galerías Comerciales y Conjunto de Tiendas de 4 niveles o mas,
+deberán contar con una separación contra fuegos no menor de 2 horas, de manera de
+agrupar locales que tengan un máximo 20.0 m. lineal de frente.
+Las paredes posteriores colindantes con otra tienda, deberá tener una separación
+corta fuego con una resistencia mínima de 2 horas. No se requiere compartimentación
+corta fuego en el frente de la tienda.
+Artículo 92.- Las edificaciones comerciales deberán contar con el número de
+escaleras de evacuación y salidas de emergencia necesarias, de acuerdo con el
+cálculo de evacuación establecido en la norma A.070.
+Artículo 93.- En Centros Comerciales bajo un mismo techo estructural, la distancia
+máxima de recorrido es de 45.0 m a una salida de evacuación o de la edificación
+cuando no se cuenta con un sistema de rociadores y de 60.0 m. cuando la edificación
+cuenta con rociadores.
+Artículo 94.- En edificaciones de uso de Centro Comercial bajo un mismo techo
+estructural, se podrá tener una distancia máxima de recorrido de 60.0 m. adicionales,
+tomados desde la puerta de salida de la tienda hasta la salida más cercana de la
+edificación, siempre y cuando se cuente con los siguientes componentes:
+a) Rociadores instalados en el 100% del Centro Comercial, incluyendo áreas
+comunes de circulación techadas.
+b) Sistema de administración de humos de acuerdo con la Guía NFPA 92B.
+c) Compartimentación contra fuego no menor de 1 hora entre locales, para
+centros comerciales de 3 pisos o menos, y de 2 horas para 4 pisos o más.
+Artículo 95.- Cuando la puerta de salida al exterior no sea claramente visible, desde
+algún punto del local, deberá colocarse la señalización respectiva.
+Artículo 96.- Toda edificación comercial, que cuenta con áreas bajo nivel del piso,
+con un área total mayor de 250 m2, deberá contar con un sistema automático de
+rociadores. Cuando los requerimientos de agua (caudal y presión) del sistema de
+
+rociadores puedan ser abastecidos por el servicio de agua de la localidad, estos
+podrán conectarse directamente con la red pública, siempre y cuando exista una
+compañía de bomberos en la localidad.
+Artículo 97.- Los sistemas de detección y alarma, deberán reportar a un lugar con
+personal entrenado las 24 horas, o reportar vía telefónica a un punto que cumpla con
+estos requisitos.
+Artículo 98.- En caso de tiendas ubicadas al interior de centros comerciales,
+complejos comerciales, galerías comerciales, estas deberán cumplir con los requisitos
+de protección contra incendios con del local donde se ubican.
+CAPITULO IX
+OFICINAS
+Artículo 99.- Las edificaciones para uso de oficinas deberán cumplir con los
+siguientes requisitos de seguridad:
+Planta
+Planta Planta
+Techada
+Techada Techada
+REQUISITOS MINIMOS mayor a
+menor a mayor a
+280 m2 y
+280 m2 560 m2
+560 m2
+Sistema de detección y alarma
+de incendios centralizado
+1. Hasta 4 niveles Solo alarma obligatorio obligatorio
+2. Mas de 5 niveles obligatorio obligatorio obligatorio
+Señalización e iluminación de
+obligatorio obligatorio obligatorio
+emergencia
+Extintores portátiles obligatorio obligatorio obligatorio
+Red húmeda de agua contra
+incendios y gabinetes de
+mangueras
+1. Hasta 4 niveles - - obligatorio
+2. Mas de 5 niveles obligatorio obligatorio obligatorio
+Sistema automático de
+rociadores
+1. Hasta 4 niveles - - obligatorio
+2. Mas de 5 niveles obligatorio obligatorio obligatorio
+CAPITULO X
+EQUIPOS Y MATERIALES PARA SISTEMAS DE AGUA CONTRA INCENDIOS
+SUB-CAPITULO I
+GENERALIDADES
+Artículo 100.- Las edificaciones deben ser protegidas con un sistema contra incendios
+en función al tipo, área, altura y clasificación de riesgo, estos sistemas requieren de
+una serie de partes, piezas y equipamiento que es necesario estandarizar, para que
+
+puedan ser compatibles y ser utilizados por el Cuerpo de Bomberos y permitir los
+planes de apoyo mutuo entre empresas e instituciones.
+Artículo 101.- Los equipos que se estandarizan en esta norma no pueden ser
+variados, en ninguna otra regulación.
+Se aceptaran solo piezas de fabrica, construidas como un conjunto, no se aceptaran
+equivalentes, piezas o partes que modifiquen, o sirvan como ampliación, conexión o
+cualquier otro dispositivo que se utilice con el propósito de adecuar o modificar los
+dispositivos regulados en el presente capitulo.
+Artículo 102.- Los distintos sistemas de protección contra incendios, que se
+establecen en la presente Norma deben ser diseñados bajo estándares confiables de
+reconocido prestigio internacional, y mientras en el país no se desarrollen estándares
+nacionales, se utilizaran los siguientes:
+a) Para el diseño, e instalación de sistemas de rociadores automáticos, de tipo
+cerrado y con bulbo, se utilizara la norma NFPA 13
+b) Para el diseño e instalación de sistemas de rociadores especiales, llamados
+spray, sin bulbo, y utilizados para el enfriamiento de recipientes y
+estructuras, se utilizara la norma NFPA 15
+c) Cuando los sistemas de suministro de agua se desarrollen sin la necesidad
+de un sistema de bombeo, a través de un tanque elevado, se utilizara la
+norma NFPA 24
+d) Cuando el suministro de agua se desarrolle utilizando una bomba, se debe
+utilizara la norma NFPA 20, tanto para motores petroleros o eléctricos.
+Cuando la energía se base en corriente eléctrica
+e) Cuando se requiere obligatoriamente una fuente alterna, el sistema de
+energía debe ser diseñado e instalado según NFPA 70.
+f) Para sistemas de bombeo menores a 500 gpm no se requieren bombas de
+tipo listadas UL. Pueden utilizarse sistemas de bombeo que dispongan de
+una certificación independiente al fabricante que garantice la capacidad de
+la curva de bombeo.
+g) Cuando el sistema de alimentación de agua provenga directamente de la
+red pública, sin necesidad de bomba ni reserva de agua contra incendio se
+instalaran sistemas de doble check con medidor de caudal según NFPA 24.
+h) Para el diseño e instalación de montantes y gabinetes de agua contra
+incendios, se utilizará el estándar NFPA 14.
+Artículo 103.- Las roscas que deben utilizarse en cualquier dispositivo de combate de
+incendios tanto para abastecimiento, descarga de agua o combate de incendios,
+tendrán 9 hilos por pulgada para roscas NH de 40 mm. (11/ ”) de diámetro y 7 ½ hilos
+2
+por pulgada para roscas NH de 65 mm. (2 1/ ”) de diámetro.
+2
+Artículo 104.- Los casos no contemplados en la presente Norma podrán ser referidos
+a los códigos y estándares pertinentes de la NFPA con la autorización de la Autoridad
+Competente.
+SUB-CAPITULO II
+CONEXIÓN DE BOMBEROS
+Artículo 105.- El dispositivo de conexión, mediante el cual las unidades del Cuerpo de
+Bomberos suministran agua al interior de las tuberías de las redes de agua contra
+incendios, sistemas de rociadores o cualquier otro sistema de extinción de incendios
+en base a agua, de forma de suministrar un caudal adicional de agua para la extinción
+de un incendio, deberá cumplir con los siguientes requisitos:
+
+a) Todo sistema de agua contra incendios, sin importar el tamaño, debe contar
+con Conexión para Bomberos.
+b) La Conexión para Bomberos debe ser visible, de fácil acceso e identificable
+y preferentemente ubicarse en la fachada más próxima a la vía pública.
+c) El espacio circundante de la Conexión para Bomberos, debe ser amplio en
+sus cuatro lados, de forma tal que permita la rápida conexión de mangueras
+sin obstrucción o restricción alguna.
+d) La distancia con relación al piso no debe ser menor de 0.30 m ni mayor de
+1.20 m medidos ambos desde el nivel de piso terminado al borde inferior de
+los acoples.
+e) Las bocas de inyección deben ser orientadas de forma directa y
+perpendicular hacia la pista donde se ubicará la unidad del Cuerpo de
+Bomberos.
+f) Se debe instalar una Conexión para Bomberos por cada sistema que tenga
+la edificación. La ubicación debe preferirse cercana a los hidrantes de la vía
+publica.
+g) No deberán existir válvulas de control entre la Conexión de Bomberos y el
+sistema contra incendios. Deberá instalarse una válvula check listada en
+cada Conexión de Bomberos.
+h) Las Conexiones de Bomberos deberán tener al menos 2 conexiones de 65
+mm. (2 ½”) de rosca continua NHS. Adicionalmente debe tener la cantidad
+de entradas (ingresos) que requiera el sistema de agua, el cual debe ser
+calculado para el máximo caudal que demande el máximo riesgo, a razón de
+945 L/min (250 gpm) por cada entrada (ingreso).
+i) En edificaciones de vivienda multifamiliar con área por nivel no mayor a 300
+m2, y de altura no mayor a 10 niveles se podrá utilizar Conexión para
+Bomberos de una sola entrada.
+Artículo 106.- Los sistemas de rociadores, espuma, diluvio, y/o cualquier otro sub
+sistema de protección contra incendios basado en agua, que no se muestre hacia la
+vía publica y/o se encuentren en el interior de la edificación en el primer piso,
+requieren contar también con Conexión para Bomberos, con una capacidad de
+abastecimiento para el 100% de demanda del sistema de agua que requiere el sistema
+especifico que alimenta. Estos caudales no son sumatorias por cada sub sistema,
+debiendo utilizarse solo el riesgo hidráulicamente más demandante en caudal.
+Artículo 107.- Las Conexiones para Bomberos, pueden ser del tipo poste,
+empotradas, adosadas, de pared, en acabados de materiales diversos, no deben ser
+pintadas y no es necesario que sean de color rojo.
+La ubicación en la fachada de la edificación, debe ser tal que permita su uso, sin
+dificultar maniobras de evacuación de personas, ni ingreso a la edificación tanto a pie
+como con unidades de bomberos.
+Artículo 108.- Las Conexiones para Bomberos, deben ser compatibles con las
+mangueras del Cuerpo de Bomberos, en una conexión de rosca hembra, de giro
+permanente. Es obligatorio que cada uno de los ingresos cuente con una tapa, esta
+puede ser del tipo tapón macho, o de tapas fabricadas específicamente de su uso
+(tapas frangibles)
+SUB-CAPITULO III
+VALVULAS
+
+Artículo 109.- Las Válvulas de Sectorización y Control son equipos que aíslan un
+tramo o una red de tuberías, de manera que interrumpen el suministro de agua desde
+la fuente de bombeo hacia las montantes o dispositivos de extinción de incendios.
+Las válvulas deberán ser del tipo indicadoras y listadas para uso en sistemas de
+protección contra incendios y podrán ser de los siguientes tipos:
+Válvulas de compuerta de vástago expuesto ascendente y volante no ascendente con
+sentido de cierre y apertura convencional, tipo cuña y bonete empernado.(OS&Y), con
+las siguientes características:
+a) Válvulas de tipo OS&Y deben ser utilizadas en las succión y descarga de la
+bomba principal, así como en todos los sub sistemas que se requieran. Solo
+podrán utilizarse válvulas reconocidas por un Certificador para uso de redes
+de agua contra incendios.
+b) Deben estar provistas de cadena y candado asegurando el flujo de ingresos
+y salidas hacia y desde el SCI y cuando se disponga de un sistema de
+detección y alarma, deberán ser monitoreados por el mismo.
+c) No son permitidas en sistemas de agua contra incendio, otras válvulas de
+sectorización, sobre el nivel de piso que las válvulas de vástago expuesto;
+salvo otro tipo de válvula aprobado por un certificador para equipos contra
+incendios.
+d) Cuando, no puedan ser instaladas válvulas indicadoras de poste se podrán
+utilizar válvulas de vástago expuesto, en buzones adecuados, con
+dimensiones suficientes, que permita el acceso, mantenimiento y reemplazo
+de la unidad sin dificultad para el operador.
+Válvulas Indicadoras de Poste (PIV), con las siguientes condiciones:
+a) Este tipo de válvula debe ser utilizada solo para sectorizar redes de agua
+contra incendios enterradas.
+b) Se les debe proveer de candado, y ser monitoreadas por el sistema
+centralizado de detección y alarma de incendios.
+c) Estas válvulas no deben ser utilizadas para sectorizar partes de un sistema
+como hidrantes, sistemas de rociadores o montantes.
+Válvulas tipo Check, con las siguientes características
+a) Son aquellas que permite el flujo de agua en una sola dirección.
+b) En sistemas de agua contra incendio solo podrán utilizarse válvulas checks
+aprobadas para uso contra incendios, así mismo debe tenerse en
+consideración la posición y horizontalidad o verticalidad del sistema de
+tuberías a la que sirven.
+c) Cuando sea necesaria la instalación de válvulas check, estas debe ser
+ubicadas en lugares que permitan su mantenimiento y purga.
+Válvulas Reductoras de Presión, con las siguientes condiciones:
+a) Cuando se requieran válvulas reductoras de presión no serán permitidas
+válvulas estranguladoras de flujo.
+b) Siempre deberán tener un manómetro aguas arriba y aguas abajo de la
+válvula
+Válvulas Angulares y Rectas
+
+a) Todas las válvulas para uso de gabinetes, casetas, uso de bomberos o
+brigadas contra incendios deben ser listadas para el tipo de sistema al que
+sirven, ya sea húmedo o seco. No es permitido el uso de válvulas de
+sistemas secos en redes húmedas.
+b) Las válvulas permitidas son de forma angular o recta, de tipo compuerta o
+globo. No se permiten el uso de válvulas de apertura rápida, de media o un
+cuarto de vuelta, ni ninguna otra que cuya apertura o cierre requiera de
+menos de 5 segundos.
+c) Las válvulas a ser utilizadas en sistemas de agua contra incendio, deben ser
+del tipo aprobadas, por UL o cualquier certificador equivalente.
+d) Las válvulas no necesariamente deben ir en gabinetes, y cuando se decida
+su uso en un gabinete, este debe tener las dimensiones mínimas que
+permita la conexión y desconexión de forma rápida de mangueras, así como
+la manipulación de la válvula, con un espacio mínimo de 2,50 m. alrededor
+del manubrio.
+e) Las válvulas de 65 mm. (2½”) de diámetro que se instalen en las montantes
+de agua contra incendio en edificios no deben ir dentro de un gabinete.
+SUB-CAPITULO IV
+GABINETES, CASETAS Y ACCESORIOS
+Artículo 110.- Los Gabinetes de Mangueras Contra Incendios son Cajas que
+contienes en su interior la manguera, pitón y la válvula de control, del tamaño
+necesario para contenerlos y utilizarlos, diseñado de forma que no interfiera con el uso
+de los equipos que contiene.
+Artículo 111.- Los gabinetes contra incendios tendrán en su interior una manguera de
+40 mm. (1 ½”) de diámetro y 30.0 metros de longitud, así como un pitón de
+combinación. Los pitones de chorro sólido no serán permitidos al interior del gabinete.
+Se pueden utilizar mangueras de 15.0 metros de longitud cuando el riesgo así lo
+requiera y el área disponible no permita el tendido y uso de mangueras de 30.0
+metros.
+Cuando se requieran pitones de chorro sólido. Estos pueden ser utilizados, pero no
+como conexión directa de uso en gabinetes, y tendrán que ser valvulados en el mismo
+piton.
+Artículo 112.- Los gabinetes contra incendios pueden ser adosados, empotrados o
+recesados, con o sin puerta, de vidrio o sólida o cualquier combinación de estos. Los
+materiales de acabado pueden ser cualquiera que se requiera acorde con los
+materiales de arquitectura donde se ubica el gabinete. La puerta de los gabinetes no
+podrán tener llave, ni ningún dispositivo que impida su apertura directa.
+Artículo 113.- Donde se utilicen gabinetes del tipo romper-el-vidrio, deberá instalarse
+de forma segura, el dispositivo usado para poder romper el vidrio, deberá ubicarse en
+un lugar adyacente al gabinete y de libre disposición.
+Artículo 114.- Los gabinetes se deben señalizar de acuerdo con la NTP 399.010-1
+cuando no sean visibles y cuando tengan puerta sólida. Adicionalmente todos los
+
+gabinetes sin excepción deben indicar como medida de precaución lo siguiente :
+“Equipo contra incendio solo para ser utilizado por personal entrenado”
+Artículo 115.- Los gabinetes pueden tener válvula de 40 mm. (1½”) recta o angular,
+también pueden tener salida de 65 mm. (2 ½”), con reductor de 65 mm. a 40 mm. (21/ ”
+2
+a 11/ ”) o ambas válvulas.
+2
+Artículo 116.- Las válvulas de los gabinetes deberán ubicarse a una altura no menor
+de 0.90 m ni mayor a 1.50 m sobre el nivel del piso, medidos al eje de la válvula.
+Artículo 117.- Cuando una edificación no es protegida por un sistema de rociadores,
+deben instalarse la cantidad de gabinetes necesarios para que la manguera pueda
+llegar a cubrir todas las áreas, con un recorrido real de 25.0 metros y un chorro
+adicional de 7.0 metros, luego de voltear en esquinas.
+No está permitida la ubicación de gabinetes en base a radio de cobertura.
+Artículo 118.- La ubicación de extintores no necesariamente obedece a la ubicación
+de gabinetes. No es necesario instalar extintores en el interior de las cajas de
+gabinetes, ni equipamiento como hachas, barretas, o linternas. Al interior del gabinete
+solo son necesarios la válvula, la manguera y el pitón.
+Artículo 119.- Cuando se decida por la instalación de gabinetes con rack porta
+mangueras, este debe ser del tipo que permita ser utilizado por una sola persona,
+contar con brazo de ajuste de manguera y ser listado.
+Artículo 120.- Es permitido en uso de mangueras colocadas sobre rack porta
+mangueras, directamente a la montante o ramal de abastecimiento sin el uso del
+gabinetes.
+Artículo 121.- Dentro del gabinete, la válvula en cualquier posición (totalmente abierta
+o totalmente cerrada), debe tener al menos 25.4 mm, (1”) de distancia con el gabinete,
+de manera de permitir la operación de la manija de la válvula.
+Artículo 122.- Las Casetas Contra Incendios tienen como propósito almacenar, cerca
+al riesgo, equipo contra incendios de primera respuesta y así como complementario.
+Se ubicaran en función al tipo de instalación y edificación, pueden de dimensiones y
+formas variadas.
+Artículo 123.- Cuando se utilicen mangueras pre-conectadas en este tipo de casetas,
+debe utilizarse hasta una distancia máxima de 90.0 metros, pudiendo ser una
+combinación de mangueras de 65 mm (2 ½”) y 40 mm (1 ½”), los pitones serán del
+tipo de combinación (chorro-niebla) y valvulados.
+Artículo 124.- Las Mangueras Contra Incendio pueden ser de tipo chaqueta simple o
+doble chaqueta, extraídas. Su número y ubicación están en función al tipo y tamaño
+del riesgo, clasificación del riesgo de la edificación, tipos de maniobras para el
+combate del incendio, requerimiento del asegurador, durabilidad y confiabilidad entre
+otros factores. Este requerimiento será definido y especificado en cada proyecto por el
+proyectista.
+Para riesgos industriales no serán aceptadas las mangueras denominadas para uso
+de rack o porta manguera (Rack & Real), salvo en áreas de oficinas administrativas o
+riesgos clasificados como “Ligero”
+
+Artículo 125.- En instalaciones industriales en donde predominen los derivados de
+hidrocarburos, solventes, alcoholes, se deben utilizar mangueras extruidas de material
+sintético
+Artículo 126.- En gabinetes contra incendio se utilizaran solo mangueras de 40 mm.
+(1½”) de diámetro, las mangueras de 65 mm. (2 ½”) solo se permiten en Casetas
+Contra Incendios. También son permitas mangueras de 45 mm. (1 ¾”) de pulgadas
+con acoples de 40 mm. (1 1/2”).
+Artículo 127.- Los acoples deben fijarse a la manguera mediante el un anillo a presión,
+garantizados para una presión de trabajo mínima de 10,34 bar (150 psi.)
+Artículo 128.- Los Pitones Contra Incendio son equipos utilizados para el combate de
+incendios, el cual se instala al final de la manguera, y deben cumplir con lo siguiente:
+a) Deben ser listados para el uso.
+b) El galonaje que se utilice para el cálculo del caudal de los pitones debe ser
+medido a 6,89 bar (100 psi).
+c) En edificaciones, la presión que debe calcularse en la punta del pitón
+descargando al máximo caudal será de 4,14 bar (100 psi) No se aceptaran
+cálculos hidráulicos que no tengan como presión mínima 60 psi medidos en
+la descarga del pitón a máximo caudal de diseño del pitón que se utiliza.
+d) En instalaciones donde deban enfriarse tanques de almacenamiento de
+combustibles de diámetro mayor a 10 m o tanques de GLP de capacidad
+mayor a los 7,570 litros (2,000 galones) medidos en volumen de agua, es
+necesario disponer de no menos 2 pitones de chorro sólido de 1 324,75
+l/min (350 gpm) cada uno y un monitor por cada pitón para efectos de
+enfriamiento a distancia de la zona de impacto de la llama, en adición al
+sistema de diluvio según el estándar NFPA 15.
+Artículo 129.- Las Salidas son las salidas con válvulas de apertura y cierre de 65 mm
+(2 ½”) de diámetro, con válvulas rectas o angulares, húmedas o secas, según sea el
+diseño de la red y que se ubican como parte de una red de agua contra incendios, en
+lugares estratégicos para uso exclusivo de bomberos.
+Artículo 130.- En edificaciones donde se requiera de montantes de agua contra
+incendios, se ubicara una salida válvulada para uso de bomberos por cada nivel y por
+cada montante.
+SUBCAPITULO V
+HIDRANTES
+Artículo 131.- Los Hidrantes de Vía Publica deben ser solamente abastecidos por el
+sistema de agua de servicio público.
+No es permitida la instalación de hidrantes abastecidos desde una red privada interna
+y que se encuentren conectados a la misma bomba y reserva del sistema de agua
+contra incendio, salvo en actividades mineras y petroleras, donde no exista Cuerpo de
+Bomberos y el caudal demandante por hidrantes haya sido considerado, en adición al
+requerimiento de agua del sistema que abastece la red de agua contra incendio.
+Artículo 132.- Los hidrantes deben ser instalados preferiblemente en las esquinas de
+las calles, con las bocas de salida ubicadas hacia la pista, en donde se estacionará el
+camión contra incendios. La válvula de sectorización deberá ubicarse a una distancia
+
+no mayor de 1.00 m. No es permitido el uso de válvulas indicadoras de poste (PIV)
+como válvulas de sectorización.
+Artículo 133.- Los hidrantes deben ser instalados con una distancia no mayor de 100
+metros entre ellos, y pueden instalarse hidrantes intermedios si el sistema así lo
+requiere.
+Solo en áreas clasificadas como residenciales con viviendas o edificios residenciales
+de máximo 9 pisos de altura, se podrán instalar hidrantes cada 200 metros de
+distancia
+Artículo 134.- El caudal de abastecimiento que requiere cada hidrante o la suma de
+varios en las misma manzana o adyacente, según clasifica la NTP 350.102 debe ser
+como mínimo el siguiente caudal:
+Áreas residenciales requieren de 250 gpm.
+Áreas Residenciales en edificios mayores de 5 niveles requieren 500 gpm.
+Áreas de industria Liviana requieren 750 gpm
+Áreas de industria pesada requieren 1000 gpm
+Áreas de industria de Alto riesgo requieren 1000 gpm por hidrante y sumando
+los caudales de 3 hidrantes requieren 3000 gpm
+Áreas comerciales con edificios de más de 5 niveles y 500 m2 de planta
+requieren 1000 gpm
+Centro comerciales de mas de 5000 m2, con tiendas por departamentos de
+mas de 3000 m2 (área total), sumándolos caudales de 3 hidrantes requieren
+2000 gpm.
+Artículo 135.- La tubería de alimentación para hidrantes, no podrá ser menor de :
+ 4” de diámetro para hidrantes menores a 1890 l/min
+ 6” de diámetro para hidrantes menores a 2830 l/min
+ 8” de diámetro para hidrantes menores a 3780 l/min
+Artículo 136.- En donde se requieran hidrantes con capacidad mayor de 2830 l/min.
+(750 gpm), estos deben tener una salida tipo macho de 146 mm. de acuerdo con la
+NTP 350.102.
+Artículo 137.- Los hidrantes existentes en la vía pública, al inicio de un nuevo
+proyecto, son la base de cálculo mínima, los requerimientos adicionales de caudales y
+numero de hidrantes que se determinen por cada riesgo, deberán ser adquiridos a la
+empresa responsable del suministros de agua de la localidad. Una vez instalados, solo
+pueden ser utilizados en caso de incendio por el Cuerpo de Bomberos del Perú
+Artículo 138.- Hidrantes de poste de tipo cuerpo seco, solo pueden ser utilizados en
+distritos y regiones en donde la temperatura descienda a 4 grados centígrados y
+pudiera haber congelamiento. En otras áreas geográficas no deben ser instalados.
+Artículo 139.- Hidrantes de poste de tipo cuerpo húmedo, son obligatorios de instalar
+a partir del año 2007 en todas las ciudades en donde no exista posibilidad de
+congelamiento. Deben dejarse con la válvula de control siempre abierta.
+Artículo 140.- Hidrantes subterráneos, solo pueden ser utilizados en riesgos
+especiales en donde la maquinaria y movimiento pone en riesgo al hidrante de poste,
+por golpe, tales como aeropuertos, puertos, patios de maniobra de contenedores,
+entre otros similares. Cuando se instalen estos deben se señalizados en la tapa con la
+palabra “Grifo Contra Incendios” o “Hidrante”.
+
+SUB-CAPITULO VI
+TUBERÍAS ENTERRADAS
+Artículo 141.- Toda tubería que esté en contacto directo con el suelo. En el caso de
+tuberías instaladas en túneles o trincheras estas deben referirse a la parte de tuberías
+aéreas.
+Artículo 142.- Las tuberías enterradas deben estar listadas para su uso en sistemas
+contra incendios y deben satisfacer los siguientes estándares de fabricación:
+Materiales y Dimensiones Estándar
+Hierro Dúctil
+ Cement Mortar Lining for ductile Iron Pipe and Fittings for AWWA C104
+Water
+ Polyethylene Encasement for Ductile Iron Pipe systems AWWA C105
+ Ductile Iron and gray Iron fittings , 3-in. through 48-in. for AWWA C110
+water and other liquids
+ Rubber-Gasket joints for ductile Iron Pressure Pipe and AWWA C111
+Fittings
+ Flanged ductile Iron Pipe with ductile Iron or Gray Iron AWWA C115
+threaded flanges
+ Ductile Iron Pipe, centrifugally case for water AWWA C151
+ standard for the Installation of ductile iron water mains and AWWA C600
+their appurtenances
+Acero – Ver Articulo 53
+ Steel Water pipe 6 in. and larger AWWA C200
+ Coal-Tar Protective Coatings and linnings for steel water AWWA C203
+pipelines enamel and tape – hot applied
+ Cement-Mortar Protective Lining and Coating for Steel Water AWWA C205
+Pipe 4 in. and larger – shop applied
+ Steel Pipe Flanges for Waterworks Service – sizes 4 in thriugh AWWA C207
+144 in.
+ Field welding of steel water pipe AWWA C206
+ Dimensions for fabricated steel water pipe fittings AWWA C208
+ A Guide for Steel Pipe Design and Installation AWWA M11
+Concreto
+ Reinforced concrete Pressure Pipe , steel-cylinder type for AWWA C300
+water and other liquids
+ Prestressed concrete Pressure Pipe , steel-cylinder type for AWWA C301
+water and other liquids
+ Reinforced concrete Pressure Pipe , steel-cylinder type for AWWA C302
+water and other liquids
+ Reinforced concrete Pressure Pipe , steel-cylinder type, AWWA C303
+Prestressed for water and other liquids
+ Asbestos-Cement Distribution Pipe , 4 in. through 16 in. for AWWA C400
+water and other liquids
+ Standard Practice for selection of Asbestos-Cement Water AWWA C401
+Pipe
+ Cemente-Mortar Lining of Water Pipe Lines 4 in. and larger – AWWA C602
+in place
+Plásticos
+ Polyvinyl Chloride (PVC) Pressure Pipe 4 in. through 12 in. for AWWA C900
+
+Materiales y Dimensiones Estándar
+water and other liquids
+Cobre
+ Specification for seamless copper tube ASTM B 75
+ Specification for seamless copper water tube ASTM B 88
+ Requirements for wrought seamless copper and copper-alloy ASTM B 251
+tube
+Artículo 143.- El uso de tuberías de acero en redes enterradas no es aceptado, salvo
+que sea listada para ser enterrada y de uso del servicio contra incendios. Las tuberías
+de acero en uso externo como conexión para el departamento de bomberos son
+permitidas siempre y cuando se protejan internamente y externamente. Estas tuberías
+de acero sólo pueden usarse entre la válvula check y la siamesa de inyección.
+Artículo 144.- En el caso de los recubrimientos y /o forrado de las tuberías
+enterradas este se debe realizar de acuerdo con las siguientes normas:
+Materiales Estándar
+ Cement Mortar Lining for ductile Iron Pipe and Fittings for
+AWWA C104
+Water
+ Polyethylene Encasement for Ductile Iron Pipe systems AWWA C105
+ Coal-Tar Protective Coating and Linings for Steel Water
+AWWA C203
+Pipelines Enamel and Tape – Hot Applied
+ Cement-Mortar Protective Lining and Coating for Steel Water
+AWWA C205
+Pipe 4 in. and larger – Shop applied
+ Cement-Mortar Lining of Water Pipe Lines 4 in. and Larger –
+AWWA C602
+in place
+Artículo 145.- Los accesorios para tuberías enterradas deben cumplir con los
+siguientes estándares:
+Material Estándar
+Hierro fundido
+ cast iron Threaded fittings , Class 125 and 250 ASME B16.4
+ Cast Iron Pipe Flanges and Flanged Fittings ASME B16.1
+ Malleable Iron Threaded Fittings Class 150 and 300 ASME B16.3
+Acero
+ Factory-Made wrought steel Buttweld Fittings ASME B16.9
+ Buttwelding Ends for Pipe , Valves , Flanges and Fittings ASME B16.25
+ Specification for Piping Fittings of wrought carbon steel and ASME A 234
+alloy steel for moderate temperatures
+ Steel Pipe Flanges , Socket Welded and Threaded ASME B16.5
+ Forged Steel Fittings , Socket Welded and Threaded ASME B16.11
+Cobre
+ Wrought copper and Bronze solder joint pressure Fittings ASME B16.22
+ Cast bronze Solder Joint Pressure Fittings ASME B16.18
+Plástico
+ Chlorinated polyvinyl Chloride (CPVC) specification for ASTM F 437
+schedule 80 CPVC threaded fittings
+ Specification for schedule 40 CPVC Socket-Type Fittings ASTM F 438
+ Specification for schedule 80 CPVC Socket-Type Fittings ASTM F 439
+Artículo 146.- Todas las tuberías enterradas deberán restringir el movimiento de todo
+codo, curva, doblez, reducción, T o tapón mediante bloques de concreto diseñados
+
+con este fin. Dichos bloques no pueden ser fabricados de una resistencia no menor a
+la que se obtiene mediante una mezcla de una parte de cemento , dos y media parte
+de arena y cinco partes de piedra.
+SUB-CAPITULO VII
+TUBERÍAS AÉREAS
+Artículo 147.- Las tuberías usadas para sistemas contra incendios deben exceder o
+por lo menos igualar los requerimientos establecidos por alguno de los siguientes
+estándares de fabricación:
+Materiales y Dimensiones Estándar
+Tubería metálica:
+ Specifications for black and hot-dipped zinc-coated (galvanized)
+ASTM A 795
+welded and seamless steel pipe for fire protection use
+ Specification for welded and seamless steel pipe ANSI/ASTM A 53
+ Wrought steel pipe ANSI/ASME
+B36.10M
+ Specification for electric resistance-welded steel pipe ASTM A 135
+Tuberías de cobre:
+ Specification for seamless copper tube ASTM B 75
+ Specification for seamless copper water tube ASTM B 88
+ Specification for general requirements for wrought seamless
+ASTM B 251
+copper and copper-alloy tube
+ Fluxes for soldering applications of copper and copper-alloy tube ASTM B 813
+ Brazing filler metar (classification BCuP-4) AWS A5.8
+ Solder metal , 95-5 (tin-antimony-grade 95TA) ASTM B 32
+ Alloy metals ASTM B 446
+No metalicos
+ Nonmetalic piping specification for special listed chlorinated
+ASTM F 442
+polyvinyl
+ Specification for special listed polybutylene (PB) pipe ASTM D 3309
+Artículo 148.- Los accesorios para tuberías aéreas deben cumplir con los siguientes
+estándares:
+Materiales y Dimensiones Estándar
+Hierro fundido
+ cast iron Threaded fittings , Class 125 and 250 ASME B16.4
+ Cast Iron Pipe Flanges and Flanged Fittings ASME B16.1
+ Malleable Iron Threaded Fittings Class 150 and 300 ASME B16.3
+Hierro ductile
+ Malleable Iron threaded fittings, class 150 and 300 steel ASME B16.3
+ Factory-made wrought steel buttweld fittings ASME B16.9
+
+Materiales y Dimensiones Estándar
+ Buttwelding end for pipe, valves, flanges, and fittings ASME B16.25
+ Specification for pipping fittings wrought carbon steel and alloy
+ASTM A 235
+steel for moderate and elevated temperatures
+ Steel pipe flanges and flanged fittings ASME B16.5
+ Forged steel fittings, socket welded and threaded copper ASME B16.11
+ Wrought copper and copper alloy solder joint pressure fittings ASME B16.22
+ Cast copper alloy solder joint pressure fittings ASME B16.18
+ Chlorinated polivynil chlorid (CPVC) specification for schedule 80
+ASTM F 437
+CPVC threaded fittings
+ Specification for schedule 40 CPVC socket-type fittings ASTM F 438
+ Specification for schedule 80 CPVC socket-type fittings ASTM F 439
+Artículo 149.- Todo procedimiento de soldadura que se realice en redes de tuberías
+aéreas debe ser acorde con AWS B2.1.
+SUB-CAPITULO VIII
+SUMINISTRO DE AGUA CONTRA INCENDIOS
+Artículo 150.- Los diferentes tipos de fuente de suministro de agua contra incendios,
+deberán contar con la aprobación de la Autoridad Competente.
+Artículo 151.- Interconexión con la red publica de agua. Donde se cumplan los
+requisitos de caudal / presión, sea aprobado por la Autoridad Competente y sea
+permitido por el presente RNE son permitidas las conexiones de la red de agua contra
+incendios de las edificaciones con la red pública de agua de la localidad.
+Artículo 152.- Bombas de Agua Contra Incendios. Una instalación de bomba de agua
+contra incendios consiste en el conjunto formado por la bomba, motor, tablero
+controlador y reserva de agua. Deberá ser diseñada e instalada de acuerdo al
+estándar NFPA 20.
+Artículo 153.- En edificaciones, donde sean requeridas bombas contra incendios con
+caudales menores a 499 gpm, estas no necesitan ser listadas para uso contra
+incendios.
+Artículo 154.- Las bombas centrífugas horizontales para uso contra incendios,
+únicamente serán permitidas aquellas instaladas con presión positiva en la succión.
+Artículo 155.- En sistemas de bombeo de arranque automático, deberá instalarse una
+bomba de mantenimiento de presión (jockey pump), la cual no necesita ser listada
+para uso contra incendios.
+Artículo 156.- En edificaciones que cuenten con una bomba contra incendios con
+motor eléctrico, la fuente de alimentación eléctrica deberá ser independiente, no
+controlada por el interruptor general del edificio y cumplir con lo estipulado en el
+Capítulo 7 del Código Nacional Eléctrico – Tomo V (CNE)
+En edificaciones residenciales, que cuenten con bombas de agua contra incendios con
+motor eléctrico, no será obligatoria la instalación de la fuente secundaria de energía
+solicitada en el CNE.
+
+Artículo 157.- Tanque Elevado: Cuando se utilicen tanque elevado, como fuente de
+abastecimiento de los sistemas de agua contra incendios, estos deberán ser
+diseñados de acuerdo con el estándar NFPA 22.
+Artículo 158.- Cuando el almacenamiento sea común para el agua de consumo y la
+reserva para el sistema contra incendios, deberá instalarse la salida del agua para
+consumo de manera tal que se reserve siempre el saldo de agua requerida para
+combatir el incendio.
+Artículo 159.- Un sistema de agua contra de incendios de tipo montante húmeda se
+define como aquella que tiene todas sus tuberías llenas de agua la cual requiere una
+fuente de abastecimiento permanente capaz de satisfacer la demanda del sistema.
+Artículo 160.- Un sistema de agua contra incendios de tipo montante seca se define
+como aquella que sus tuberías pueden o no estar llena de agua, y que no están
+conectadas directamente a una fuente de abastecimiento capaz de satisfacer la
+demanda del sistema. Esto se utilizan generalmente con el agua proveniente de las
+autobombas del Cuerpo de Bomberos.
+SUB-CAPITULO IX
+ROCIADORES
+Artículo 161.- Será obligatoria la instalación de sistemas de rociadores en las
+edificaciones en donde sean requerido por las Normas particulares de cada tipo de
+edificación.
+Artículo 162.- Los rociadores deberán ser diseñados, instalados y mantenidos de
+acuerdo a lo indicado en el estándar NFPA 13.
+SUB-CAPITULO X
+EXTINTORES PORTÁTILES
+Artículo 163.- Toda edificación en general, salvo viviendas unifamiliares, debe ser
+protegida con extintores portátiles, de acuerdo con la NTP 350.043-1, en lo que se
+refiere al tipo de riesgo que protege, cantidad, distribución, tamaño, señalización y
+mantenimiento.
+Artículo 164.- Únicamente para extintores de Polvo Químico Seco, se reconocerá
+como agentes extintores, los siguientes:
+ Bicarbonato de sodio al 92% de porcentaje en peso
+ Bicarbonato de potasio al 90% de porcentaje en peso
+ Fosfato mono amónico al 75% de porcentaje en peso
+Artículo 165.- En toda edificación donde se utilicen freidoras, planchas y/o cualquier
+otro dispositivo para fritura deberán utilizar extintores de Clasificación K.
+CAPÍTULO XI
+ALMACENES
+SUBCAPÍTULO I
+CAMPO DE APLICACIÓN
+Artículo 166.- La presente Norma es aplicable a almacenes para mercancías secas,
+perecibles o no perecibles, refrigeradas o no refrigeradas, líquidos (inflamables,
+combustibles o no combustibles), y materiales peligrosos. También es aplicable a un
+
+recinto que contenga menos de 120 galones (en envases o tanques) de líquidos
+combustibles o inflamables.
+Esta norma no es aplicable para el almacenamiento de hidrocarburos y sus derivados,
+ya que están normados en los distintos reglamentos de la Ley Orgánica de
+Hidrocarburos Nº 26221 y de sus normas modificatorias.
+SUBCAPÍTULO II
+REFERENCIAS NORMATIVAS
+Artículo 167.- Se toman como referencia para el adecuado uso de este documento a
+las Normas Técnicas Peruanas. En caso de no existir éstas, se deberán cumplir las
+normas nacionales, regionales o internacionales Las siguientes normas contienen
+disposiciones que al ser citadas en este texto constituyen requisitos de esta Norma,
+asimismo, se deben considerar los documentos vigentes:
+ Ley Orgánica de Hidrocarburos (Ley Nº 26221).
+ Ley que regula el Transporte Terrestre de Materiales y Residuos Peligrosos
+(Ley N° 28256).
+SUBCAPÍTULO III
+GLOSARIO
+Artículo 168.- Para los propósitos de esta norma, se aplican las siguientes
+definiciones:
+1. Almacén: Recinto donde se guardan mercancías.
+2. Mercancía.- Bienes, productos, materias primas e insumos, incluyendo
+material de embalaje y contenedores, los cuales determinan la clasificación de la
+mercancía.
+3. Material no combustible: Aquel material que no puede arder ni encenderse,
+tales como los que se componen de acero, hierro, arcilla (ladrillos, tejas, etc.),
+concreto, pizarra, vidrio, yeso, piedra, tierra (adobe) y otros aprobados por una Norma
+Técnica Peruana o a falta de esta, una norma técnica internacional de reconocido uso.
+4. Mercancía Perecible: Aquella que por su naturaleza y/o atendiendo a su fecha
+de vigencia tiene vida útil limitada.
+5. Mercancía Refrigerada: Aquella que por su naturaleza debe transportarse o
+almacenarse por debajo de la temperatura ambiente.
+6. Mercancía Peligrosa: Aquella que por su naturaleza contiene materias u
+objetos que presentan riesgo para la salud, para la seguridad o que pueden producir
+daños en el medio ambiente, en las propiedades o a las personas.
+7. Muro Cortafuego: Cerramiento que tiene una clasificación de resistencia al
+fuego.
+La resistencia al fuego de un elemento constructivo se refiere a la habilidad de
+mantener su estabilidad y capacidad funcional, la estanqueidad, el aislamiento térmico
+y cualquier otro requisito de resistencia al fuego relativo a su uso, por un periodo de
+tiempo determinado bajo las condiciones de ensayos de resistencia al fuego
+normalizado, de NTP ISO 834-1, ASTM E119, ISO 834, BS 476 y/o EN 1363. La
+certificación de resistencia al fuego deberá ser emitida por un laboratorio de ensayos
+de resistencia al fuego debidamente acreditado. La clasificación de resistencia al fuego
+de un elemento será el periodo de tiempo durante el cual las cuatro condiciones
+siguientes se cumplen de manera simultánea.
+1. Estabilidad estructural
+2. Aislamiento térmico
+3. Estanqueidad de llama y gases
+4. No emisión de gases inflamables por la cara no expuesta
+
+Nota: Se considerará que los términos “corta fuego” y “contra fuego” son equivalentes
+al término
+“resistencia al fuego”.
+8. Grupo A: Los siguientes materiales se consideran como Plásticos Grupo A:
+ ABS (copolímero de acrilonitrilo-butadieno-estireno)
+ Acetal (poliformaldehido)
+ Acrílico (polimetil metacrilato)
+ Caucho butílico
+ EPDM (caucho de etilen-propileno)
+ FRP (poliéster reforzado con fibra de vidrio)
+ Caucho natural (si está expandido)
+ Caucho nitrilo (caucho acrilonitrilo-butadieno)
+ PET (poliéster termoplástico)
+ Polibutadieno
+ Policarbonato
+ Poliéster elastómero
+ Polietileno
+ Polipropileno
+ Poliestireno
+ Poliuretano
+ PVC (cloruro de polivinilo – altamente plastificado, con contenido de
+plastificador mayor que el 20%)
+ SAN (acrilonitrilo estireno)
+ SBR (Caucho de estireno-butadieno).
+9. Grupo B: Los siguientes materiales deberán clasificarse como Grupo B:
+ Celulósicos (acetato de celulosa, butiro-acetato de celulosa, etil celulosa)
+ Caucho de cloropreno
+ Fluoroplástico (ECTFE – copolímero etileno-clorotrifluoro-etileno; ETFE –
+copolímero de etileno-tetrafluoroetileno; FEP – copolímero de etilen propileno fluorado)
+ Caucho natural (no expandido)
+ Nylon (nylon 6, nylon 6/6)
+ Caucho siliconado
+10. Grupo C: Los siguientes materiales deberán clasificarse como Grupo C:
+ Fluoroplásticos (PCTFE – policlorotrifluo-roetileno; PTFE-
+politetrafluoroetileno)
+ Melamina (melamina formaldehído)
+ Fenólico
+ PVC (cloruro de polivinilo – flexible – PVC con contenido de plastificador hasta
+el 20%)
+ PVDC (cloruro de polivinilideno)
+ PVF (fluoruro de polivinilo)
+ Urea (urea formaldehído).
+11. Altura de Almacenamiento: Máxima altura medida desde el nivel de piso
+terminado hasta la parte superior de la mercancía, para la que los productos pueden
+ser almacenados manteniendo la separación necesaria del techo y/o vigas y debajo de
+los rociadores
+SUBCAPÍTULO IV
+TIPOS Y CLASIFICACION DE ALMACENES
+
+Artículo 169.- Los almacenes, en función a su cobertura se clasifican de la siguiente
+manera:
+1. Almacén No Techado Abierto o cerrado con muros: Aquel donde se almacenan
+mercancías expuestas directamente al medio ambiente.
+2. Almacén Techado: Aquel donde se almacenan mercancías en espacios
+protegidos mediante un techo. Incluye los siguientes tipos.
+2.1 Almacén Techado Cerrado.- Recinto con paredes y techos, con una resistencia
+estructural al fuego de acuerdo al tipo de riesgo según la Tabla 01.
+Tabla 01: Tiempo mínimo permitido de resistencia al fuego para los elementos
+estructurales: pórticos, muros, arcos, losas
+El proceso de ensayo para determinar la resistencia al fuego debe seguir lo indicado
+en la última edición de la NTP ISO 834-1.
+Notas:
+NP: No permitido
+2: Mayores a 3,7 metros de altura de carga de combustible.
+3: Clasificación de riesgos establecidos en norma A-010 edición 2009, Artículo 25.
+ Almacenes techados con una altura de almacenamiento igual o menor a 3,70 m
+ Almacenes techados con una altura de almacenamiento mayor a 3,70 m y
+menor a 7,60 m
+ Almacenes techados con una altura de almacenamiento mayor a 7,60 m
+ Almacenes refrigerados
+ Almacenes de mercancías peligrosas
+ Almacenes de líquidos inflamables o combustibles
+2.2 Almacén Techado Abierto: Deberá tratarse como almacén no techado
+Artículo 170.- Las mercancías, en función a su combustibilidad, se clasifican de la
+siguiente manera:
+
+1. Clase I: Mercancías no combustibles que cumplen con las siguientes
+características:
+ Están almacenadas sobre parrillas o parihuelas.
+ Están almacenadas en líneas simples de cartones corrugados con o sin
+divisiones de cartón (con o sin parrillas o parihuelas).
+ Están embaladas en envolturas selladas al vacío o en papel (con o sin
+parrillas o parihuelas)
+2. Clase II: Mercancías No Combustibles que están embaladas en cajas
+sólidas de madera, de cartón corrugado de varias capas o de un material equivalente
+(con o sin parrillas o parihuelas)
+3. Clase III: Mercancías Combustibles que cumplen con las siguientes
+características:
+ Fabricadas de madera, papel, fibras naturales o plásticos incluidos en el Grupo
+C.
+ Embaladas en cajas de cartones o madera.
+ Con o sin parrillas o parihuelas de apoyo.
+ Mercancías que contengan hasta 5% en peso o volumen (lo que sea menor) de
+plásticos de los Grupos A y B.
+4. Clase IV: Mercancías Combustibles que cumplen con las siguientes
+características:
+ Fabricadas total o parcialmente de plásticos.
+ Que contengan fluidos hechos a partir de plásticos.
+ Fabricadas de plásticos sin empaque.
+NOTA: Para la identificación y definición de la Clasificación de Mercancías, ver
+ANEXO 01.
+SUBCAPÍTULO V
+CONSIDERACIONES DE PROTECCIÒN CONTRA INCENDIOS.
+Artículo 171.- Los materiales, productos y mercaderías que se almacenen dentro de
+un almacén techado, pueden ser ubicados utilizando cualquiera de las formas y
+arreglos de almacenamiento que establecen los estándares para la instalación de
+sistemas de rociadores automáticos (UNE-EN 12845 o NFPA 13) al respecto,
+debiendo considerar las distancias mínimas entre estantes, pasillos, racks, techos
+entre otros criterios que establece la norma.
+SUBCAPÍTULO VI
+REQUISITOS TÉCNICOS PARA LA PROTECCION DE ALMACENES
+1.1 ALMACENES NO TECHADOS CON MERCADERIA NO CLASIFICADA
+COMO MATERIAL PELIGROSO.
+Artículo 172.- Los almacenes no techados, según el área de uso destinada para
+almacenamiento deben contar con una red de agua contra incendios según la Tabla
+02.
+Tabla 02: Área de Almacenes No Techados que requieren protección mediante una
+Red de Agua Contra incendios
+
+ÁREA MÍNIMA QUE
+RIESGO / TIPO REQUIERE PROTECCIÓN
+(m2)
+Clase I 5 000
+Clase II 4 000
+Clase III 2 500
+Clase IV 1 000
+Fardos de Algodón 2 500
+Papel en rollos 2 000
+Papel de reciclaje 2 000
+Plásticos 900
+Cajas y paletas vacías (madera) 1 000
+Llantas 1 000
+Patio de contenedores 10 000
+NOTA: El área mínima que requiere protección incluye el área de almacenamiento y la
+circulación interior.
+Artículo 173.- Para la protección de estos almacenes se deberá contar con una
+cobertura de gabinetes o casetas de mangueras hasta 120 m de recorrido.
+El volumen de agua será calculado en función al máximo requerimiento según
+riesgo/tipo, forma de almacenamiento y cantidad de producto, considerando un tiempo
+mínimo de suministro de 90 minutos.
+El caudal mínimo será de 1892.70 litros por minuto (500 galones por minuto).
+Artículo 174.- Todo almacén no techado, debe ser protegido con extintores portátiles
+y/o rodantes de acuerdo a la NTP-350.043-1.
+1.2 ALMACENES NO TECHADOS DE MATERIALES PELIGROSOS
+Artículo 175.- Las mercancías deben ser almacenadas en función al tipo de riesgo, no
+juntando ni almacenando productos que reaccionan entre sí y/o que no son
+compatibles, de acuerdo a las guías NFPA 49 - Tabla de Productos Químicos
+Peligrosos de Uso Común y NFPA 491 - Guía de Reacciones Químicas Peligrosas,
+entre otra información aplicable.
+Artículo 176.- Los Materiales Peligrosos que reaccionan con el agua o cuyos vapores
+generados por el agua vaporizada del proceso de extinción o por factores
+climatológicos que generen nubes tóxicas (como el caso de insecticidas, pesticidas,
+entre otros), deben ser almacenados por separado bajo techo y señalizando de
+manera visible “NO USAR AGUA EN CASO DE INCENDIO”.
+El agente extintor a utilizarse deberá ser el establecido en la Hoja de Seguridad del
+Producto (MSDS - Material Safety Data Sheet).
+Artículo 177.- Los Materiales Peligrosos no pueden ser almacenados directamente
+sobre el suelo o piso; debe instalarse una protección de tipo permanente, impermeable
+y que resista el trabajo pesado de vehículos, camiones, montacargas, etc. Así mismo
+debe proveer estabilidad a la carga almacenada. La decisión del tipo de suelo o piso
+
+que se utilice debe estar en función a la agresividad y reacción química de los
+productos que se almacenen.
+Artículo 178.- Todo piso terminado, donde se almacene un Material Peligroso, debe
+contar con un sistema de drenaje que asegure la recolección de líquidos derramados
+y/o agua de extinción de incendios, para el máximo riesgo. El agua colectada debe
+recibir un tratamiento que garantice la calidad del fluido que se evacue finalmente.
+Artículo 179.- Cualquier almacenamiento de materiales peligrosos que contenga
+líquidos o gases (inflamables o combustibles), con un área mayor a 1 000 m2 debe
+contar con un sistema de agua contra incendios.
+Todo almacén no techado de materiales peligrosos, debe ser protegido con extintores
+portátiles y/o rodantes de acuerdo a la NTP-350.043-1: EXTINTORES PORTATILES.
+Selección, distribución, inspección, mantenimiento, recarga y prueba hidrostática.
+1.3 ALMACENES TECHADOS CON UNA ALTURA DE MERCANCÍAS IGUAL O
+MENOR A 3,70 m.
+Artículo 180.- El almacenamiento que no supera una altura de 3,70 m y que resulta
+secundario con respecto a otro grupo de uso de ocupación, se protegerá conforme al
+uso principal.
+Artículo 181.- Cuando el almacenamiento constituye el principal o único uso de
+ocupación, será protegido según la Tabla 03:
+Tabla 03: Requerimiento mínimo de Protección Contra Incendios para Almacenes
+Techados, de altura menor a 3,70 m y que constituye el principal o único uso de
+ocupación
+Sistema
+Sistema Detecci Extintor
+Tipo de Área de Sistema
+agua ón de es Señalizaci
+Mercanc almacenamie rociador
+(gabinete incendi Portátile ón
+ía nto (m2) es
+s) os / s
+alarma
+0-2500 NO NO SI SI SI
+Clase I
+›2501 NO SI SI SI SI
+0-2500 NO NO SI SI SI
+Clase II
+›2501 NO SI SI SI SI
+0-1500 NO SI SI SI SI
+Clase III
+›1501 SI SI SI SI SI
+0-1000 NO SI SI SI SI
+Clase IV
+›1001 SI SI SI SI SI
+Nota: Para almacenamientos de mercancías mixtas se aplicará el requerimiento de
+protección más exigente.
+Artículo 182.- En ningún caso se permitirá una altura de almacenamiento de la
+mercancía mayor que la utilizada para el dimensionamiento del sistema de protección
+contra incendio
+Artículo 183.- Los requerimientos de volumen de descarga y tiempo de duración
+deberán tomarse de la Tabla “Almacenamiento misceláneo de menos de 3.70 m. de
+altura, curvas de diseño” de la NFPA 13.
+
+Artículo 184.- Para distancias de recorrido con fines de evacuación en áreas de
+almacenamiento ver Norma A.010 Condiciones generales de diseño, art. 25 inciso c).
+1.4 ALMACENES TECHADOS CON UNA ALTURA DE MERCANCÍAS MAYOR A
+3,70 m. Y MENOR A 7,60 m.
+Artículo 185.- Los almacenes Clase I a IV, con mercancías acomodadas en cualquiera
+de sus formas (en paletas, a granel, en racks, etc.), excepto los de Materiales
+Peligrosos y líquidos combustibles o inflamables, deben ser protegidos de acuerdo a la
+Tabla 04.
+Tabla 04: Requerimiento mínimo de Protección Contra Incendios para Almacenes
+Techados, de altura mayor a 3,70 m. y menor a 7,60 m.
+Sistema
+Sistema Detecci Extintor
+Tipo de Área de Sistema
+agua ón de es Señalizaci
+Mercan almacenami rociador
+(gabinete incendi Portátile ón
+cía ento (m2) es
+s) os / s
+alarma
+0-2500 NO NO SI SI SI
+Clase I
+›2501 NO SI SI SI SI
+0-2500 NO NO SI SI SI
+Clase II
+›2501 SI SI SI SI SI
+0-1500 NO SI SI SI SI
+Clase III
+›1501 SI SI SI SI SI
+0-1000 NO SI SI SI SI
+Clase IV ›1001 SI SI SI SI SI
+1.5 ALMACENES TECHADOS CON UNA ALTURA DE MERCANCÍAS MAYOR A
+7,60 m. DE ALTURA
+Artículo 186.- Los almacenamientos con una altura de carga Clase I a IV, con rack
+simple, doble, múltiple, portátil o con separación sólida (división de niveles) y/o
+paletizado y/o en pilas y/o tipo cajones (bin box), salvo de Materiales Peligrosos y
+Líquidos Combustibles e Inflamables, serán protegidos de acuerdo a la Tabla 05
+Tabla 05: Requerimiento mínimo de Protección Contra Incendios para Almacenes
+Techados de altura mayor a 7,60 m.
+Sistema
+Sistema Detecci Extintor
+Tipo de Área de Sistema
+agua ón de es Señalizaci
+Mercan almacenami rociador
+(gabinet incendi Portátile ón
+cía ento (m2) es
+es) os / s
+alarma
+Clase I 1500 SI SI SI SI SI
+Clase II 1000 SI SI SI SI SI
+Clase III 1000 SI SI SI SI SI
+Clase
+500 SI SI SI SI SI
+IV
+
+Artículo 187.- Los almacenamientos de áreas menores a las establecidas en las
+Tablas 03 y 04, deben ser protegidas con:
+1. Sistema de detección y alarma de incendios.
+2. Sistema de agua contra incendios en base a gabinete para cargas combustibles de
+Clase III y Clase IV.
+3. Extintores portátiles según NTP 350.043 EXTINTORES PORTATILES. Selección,
+distribución, inspección, mantenimiento, recarga y prueba hidrostática.
+4. Señalización según NTP 399.010-1 SEÑALES DE SEGURIDAD. Colores,
+símbolos, formas y dimensiones de señales de seguridad.
+1.6 ALMACENES TECHADOS DE MATERIALES PELIGROSOS
+Artículo 188.- Los almacenes mayores a 250 metros cuadrados, destinados para
+carga y/o mercadería y/o productos peligrosos, deberán ser diseñados y protegidos
+según establece la NFPA 5000 (Building Construction and Safety Code – Código de
+Seguridad y Construcción de Edificios), basado en el grado de peligrosidad, cantidad
+de mercancía almacenada y de acuerdo al Anexo 02.
+1.7 ALMACENES TECHADOS DE LIQUIDOS COMBUSTIBLES E
+INFLAMABLES
+Artículo 189.- Deben ser protegidos bajo el Código NFPA 30 - Código de Líquidos
+Inflamables y Combustibles:
+ Todo almacenamiento, manipulación, uso de líquidos inflamables y/o
+combustibles (incluidos líquidos de limpieza), en áreas mayores a 1 000 metros
+cuadrados.
+ Almacenes que incluyan áreas de proceso, manipuleo, embotellado y/o
+embolsado, mayores a 200 metros cuadrados.
+Todo almacenamiento, manipulación, uso de líquidos inflamables y/o combustibles
+(incluidos líquidos de limpieza), en áreas menores de 1 000 metros cuadrados deberá
+cumplir con la legislación nacional de hidrocarburos del Ministerio de Energía y Minas.
+Artículo 190.- Los muros perimétricos de este tipo de almacenamiento requieren una
+resistencia estructural mínima al fuego de tres horas. Los elementos estructurales
+deberán cumplir con la Tabla 06.
+Tabla 06: Tiempo mínimo permitido de resistencia al fuego para los elementos
+estructurales: pórticos, muros, arcos, losas.
+TIEMPO DE RESISTENCIA AL FUEGO MINIMA PERMITIDA PARA LOS
+ELEMENTOS ESTRUCTURALES:
+PORTICOS, MUROS, ARCOS, LOSAS
+Tiempo de resistencia al fuego mínimo en minutos
+para:
+Sótanos Pisos superiores
+Uso de la Sistema
+edificación de
+rociadores Profundidad del Altura del piso superior sobre el
+sótano más bajo nivel de descarga de los
+(NPT) ocupantes
+>10m ≤10m ≤ ≤ ≤ >60 m
+5m 21m 60m
+ALMACENES
+⁽²⁾
+Bajo riesgo ⁽³⁾ NO 120 90 60 90 120 NP
+
+SI 120 90 60 90 90 120
+Moderado NO 180 120 90 120 180 NP
+riesgo ⁽³⁾ SI 120 90 60 90 120 180
+Alto riesgo ⁽³⁾ NO NP NP 120 180 NP NP
+Líquidos NO NP NP 180 180 NP NP
+inflamables y
+SI NP NP 120 120 180 NP
+combustibles ⁽³⁾
+El proceso de ensayo para determinar la resistencia al fuego debe seguir lo indicado
+en la última edición de la NTP ISO 834-1.
+Notas:
+NP: No permitido
+2: Mayores a 3,7 metros de altura de carga de combustible.
+3: Clasificación de riesgos establecidos en norma A-130 edición 2009, Artículo 25.
+Estos requerimientos solo son aplicables cuando los muros perimetrales de este tipo
+de almacén colindan con otras áreas dentro del mismo predio.
+La resistencia al fuego de los muros perimétricos y los elementos estructurales no es
+requerida cuando el almacén se ubica, con relación a otros riesgos, a una distancia tal
+que el colapso estructural y/o la propagación del incendio no afecten otras áreas o
+edificios del mismo predio.
+Artículo 191.- Estos almacenes deben tener una separación libre y no techada mínima
+de 6 metros con predios vecinos, permitiendo la circulación de las unidades del
+Cuerpo de Bomberos en forma permanente entre el almacén de líquidos combustibles
+e inflamables y los muros colindantes de los predios vecinos.
+1.8 ALMACENES TECHADOS DE MERCANCÍA REFRIGERADA
+Artículo 192.- Los almacenes de mercancía refrigerada con una altura de
+almacenamiento mayor a 3,70 metros y un área mayor a 2 500 metros cuadrados,
+independientemente de la temperatura a la cual operen, requieren ser protegidos con
+un sistema de rociadores de tipo seco.
+Artículo 193.- En este tipo de almacenes se requiere disponer de un sistema de
+alarma de incendios.
+Artículo 194.- Al interior de los almacenes refrigerados con una temperatura de
+operación inferior a cero grados Celsius no se deben instalar extintores portátiles,
+estos deberán ubicarse al exterior.
+CAPÍTULO XII
+CENTROS DE DIVERSIÓN
+SUB-CAPÍTULO I
+GLOSARIO
+Artículo 195.- Para los propósitos de esta norma, se aplican las siguientes
+definiciones:
+ Centro de Diversión – Tipo A: Establecimiento para escuchar música grabada o
+en vivo, para bailar y que no cuenta con efectos de luces (movimiento y/o colores),
+efectos especiales u otros.
+
+El establecimiento puede ser una edificación independiente o formar parte de otra
+mayor.
+ Centro de Diversión – Tipo B: Establecimiento para escuchar música grabada o
+en vivo, para bailar y que sí cuenta con efectos de luces (movimiento y/o colores),
+efectos especiales u otros.
+El establecimiento puede ser una edificación independiente o formar parte de otra
+mayor.
+ Centro de Diversión – Tipo C: Establecimiento para escuchar música grabada o
+en vivo, que cuenta con efectos de luces (movimiento y/o colores) y no cuenta con
+pista de baile.
+El establecimiento puede ser una edificación independiente o formar parte de otra
+mayor.
+ Casinos y/o Tragamonedas: Establecimiento donde se juega con máquinas
+tragamonedas y/o con juegos de casino. El establecimiento puede ser una edificación
+independiente o formar parte de otra mayor.
+ Sala de Espectáculos (No Deportivos): Establecimiento donde el público
+presencia actuaciones, representaciones, exhibiciones, proyecciones o audiciones,
+con un aforo de 50 o más personas. El establecimiento puede ser una edificación
+independiente o formar parte de otra mayor.
+SUBCAPÌTULO II
+CENTROS DE DIVERSION - TIPO A
+Artículo 196.- La máxima distancia de recorrido desde el punto más lejano hasta la vía
+de evacuación será de 45 metros para Centro de Diversión – Tipo A no protegidos con
+rociadores y 60 metros para Centro de Diversión – Tipo A protegidos con rociadores.
+Artículo 197.- Además de lo indicado anteriormente, deberán cumplir con los
+siguientes requisitos mínimos de seguridad:
+ÁREA(1) MAYOR
+ÁREA(1) ÁREA(1)
+A 250 m2 y
+REQUISITOS MÍNIMOS MENOR A 250 MAYOR A
+MENOR A 750
+m2 750 m2
+m2
+Sistema de detección y
+alarma de incendios Solo alarma Obligatorio Obligatorio
+centralizado
+Iluminación de emergencia Obligatorio Obligatorio Obligatorio
+Señalización de emergencia Obligatorio Obligatorio Obligatorio
+Extintores portátiles(4) Obligatorio Obligatorio Obligatorio
+Red húmeda de agua contra
+incendios y gabinetes de - - Obligatorio
+mangueras
+Sistema de rociadores Obligatorio(2) (3) Obligatorio(2) (3) Obligatorio
+(1) El término “ÁREA” esta referido al espacio dedicado exclusivamente al uso
+“Centro de Diversión – Tipo A”.
+(2) Aplicado para aquel “Centro de Diversión – Tipo A” ubicado en sótanos, de
+acuerdo a la Norma G.040 Definiciones.
+(3) Cuando los requerimientos de agua (caudal y presión) del sistema de
+rociadores puedan ser abastecidos por el servicio de agua de la localidad, éstos
+podrán conectarse directamente con la red pública, siempre que el sistema de
+
+abastecimiento sea confiable y cuando exista una compañía de bomberos en la
+localidad.
+(4) Se debe utilizar extintores que contengan agentes de extinción para tipo de
+fuego “A”, “B”, “C”, que no causen problemas de visión, respiración y que no sean
+conductores eléctricos, de acuerdo a las Normas Técnicas Peruanas del INDECOPI.
+No esta permitido el uso de extintores portátiles con agentes de polvo químico seco.
+SUB-CAPÍTULO III
+CENTROS DE DIVERSIÓN – TIPO B
+Artículo 198.- No están permitidos los Centros de Diversión – Tipo B ubicados bajo el
+nivel de descarga de evacuación y cerrados con paramentos ciegos de cualquier
+material, en todo su perímetro.
+Artículo 199.- No están permitidos el uso de dispositivos de alarma de incendios con
+luces estroboscópicas.
+Artículo 200.- La máxima distancia de recorrido desde el punto más lejano a la vía de
+evacuación será de 20 metros para Centros de Diversión – Tipo B no protegidos con
+rociadores y 45 metros para Centros de Diversión – Tipo B protegidos con rociadores.
+Todo material de construcción usado en cualquier tipo de edificación, ya sea
+estructural o no estructural, con características de combustibilidad y/o velocidad de
+propagación de llama más severas que las de la madera (establecidos según las
+normas NFPA 259 y ASTM E84 o equivalentes), deberá estar recubierto por una
+barrera de una resistencia al fuego mínima de 15 minutos, de modo de evitar el
+crecimiento acelerado de un incendio.
+Artículo 201.- Además de lo indicado anteriormente, deberán cumplir con los
+siguientes requisitos mínimos de seguridad:
+ÁREA(1)
+ÁREA(1) ÁREA(1)
+MAYOR A 100
+REQUISITOS MÍNIMOS MENOR A 100 MAYOR A
+m2 y MENOR A
+m2 350 m2
+350 m2
+Sistema de detección y alarma
+Obligatorio Obligatorio Obligatorio
+de incendios centralizado
+Iluminación de emergencia Obligatorio Obligatorio Obligatorio
+Señalización de emergencia Obligatorio Obligatorio Obligatorio
+Extintores portátiles(3) Obligatorio Obligatorio Obligatorio
+Red húmeda de agua contra
+incendios y gabinetes de - Obligatorio Obligatorio
+mangueras
+Sistema de rociadores - - Obligatorio(2)
+(1) El término “ÁREA” está referido al espacio dedicado exclusivamente al uso
+“Centro de Diversión – Tipo B”.
+(2) Cuando los requerimientos de agua (caudal y presión) del sistema de
+rociadores puedan ser abastecidos por el servicio de agua de la localidad, éstos
+podrán conectarse directamente con la red pública, siempre que el sistema de
+abastecimiento sea confiable y cuando exista una compañía de bomberos en la
+localidad.
+
+(3) Se debe utilizar extintores que contengan agentes de extinción para tipo de
+fuego “A”, “B”, “C”, que no causen problemas de visión, respiración y que no sean
+conductores eléctricos, de acuerdo a las Normas Técnicas Peruanas del INDECOPI.
+No esta permitido el uso de extintores portatiles con agentes de polvo química seco.
+SUB-CAPÍTULO IV
+CENTROS DE DIVERSIÓN – TIPO C
+Artículo 202.- La protección contra incendios, así como los materiales de construcción
+de todos los Centros de Diversión – Tipo C que no cuenten con efectos especiales de
+luces, deberán contar con un sistema de alarma de incendios.
+Artículo 203.- No están permitidos el uso de dispositivos de alarma de incendios con
+luces estroboscópicas.
+Artículo 204.- La máxima distancia de recorrido desde el punto más lejano a la vía de
+evacuación será de 45 metros para Centros de Diversión – Tipo C no protegidos con
+rociadores y 60 metros para Centros de Diversión – Tipo C protegidos con rociadores.
+Artículo 205.- Además a lo indicado anteriormente, los Centros de Diversión – Tipo C
+deberán cumplir con los siguientes requisitos mínimos de seguridad:
+ÁREA(1) MAYOR
+ÁREA(1) ÁREA(1)
+A 300 m2 y
+REQUISITOS MÍNIMOS MENOR A 300 MAYOR A
+MENOR A 750
+m2 750 m2
+m2
+Sistema de detección y
+alarma de incendios Obligatorio Obligatorio Obligatorio
+centralizado
+Iluminación de emergencia Obligatorio Obligatorio Obligatorio
+Señalización de emergencia Obligatorio Obligatorio Obligatorio
+Extintores portátiles(4) Obligatorio Obligatorio Obligatorio
+Red húmeda de agua contra
+incendios y gabinetes de - - Obligatorio
+mangueras
+Sistema de rociadores - Obligatorio(2) (3) Obligatorio(3)
+(1) El término “ÁREA” está referido al espacio dedicado exclusivamente al uso
+“Centro de Diversión – Tipo C”.
+(2) Únicamente aquellos ubicados en sótanos.
+(3) Cuando los requerimientos de agua (caudal y presión) del sistema de
+rociadores puedan ser abastecidos por el servicio de agua de la localidad, éstos
+podrán conectarse directamente con la red pública, siempre que el sistema de
+abastecimiento sea confiable y cuando exista una compañía de bomberos en la
+localidad.
+(4) Se debe utilizar extintores que contengan agentes de extinción para tipo de
+fuego “A”, “B”, “C”, que no causen problemas de visión, respiración y que no sean
+conductores eléctricos, de acuerdo a las Normas Técnicas Peruanas del INDECOPI.
+No esta permitido el uso de extintores portátiles con agentes de polvo químico seco.
+SUB-CAPÍTULO V
+CENTROS DE DIVERSIÓN – CASINOS Y/O TRAGAMONEDAS
+
+Artículo 206.- La protección contra incendios, así como los materiales de construcción
+de los casinos y tragamonedas, deberá cumplir con lo indicado en el presente sub-
+capítulo, así como con la legislación de otros sectores, que no se oponga a lo indicado
+específicamente en el presente Sub-Capítulo.
+Artículo 207.- En el caso de locales de casinos y/o tragamonedas ubicados al interior
+de un edificio con otro uso (como hotel, centro comercial, restaurante, entre otros) con
+medios de evacuación comunes y compartiendo la misma estructura del edificio,
+deberán cumplir con los requisitos de protección contra incendios que sean más
+exigentes.
+Artículo 208.- Las edificaciones dedicadas a casinos y/o tragamonedas deberán
+cumplir con los siguientes requisitos mínimos de seguridad:
+ÁREA(1)
+ÁREA(1) ÁREA(1)
+MAYOR A 100
+REQUISITOS MÍNIMOS MENOR A 100 MAYOR A 750
+m2 y MENOR A
+m2 m2
+750 m2
+Sistema de detección y alarma
+- Obligatorio Obligatorio
+de incendios centralizado
+Iluminación de emergencia Obligatorio Obligatorio Obligatorio
+Señalización de emergencia Obligatorio Obligatorio Obligatorio
+Extintores portátiles(4) Obligatorio Obligatorio Obligatorio
+Red húmeda de agua contra
+incendios y gabinetes de - - Obligatorio
+mangueras
+Sistema de rociadores - Obligatorio(2)(3) Obligatorio
+(1) El término “ÁREA” se encuentra referido a la sumatoria de todos los niveles
+del casino y/o tragamonedas.
+(2) Únicamente aquellos ubicados bajo el nivel del piso
+(3) Cuando los requerimientos de agua (caudal y presión) del sistema de
+rociadores puedan ser abastecidos por el servicio de agua de la localidad, éstos
+podrán conectarse directamente con la red pública, siempre que el sistema de
+abastecimiento sea confiable y cuando exista una compañía de bomberos en la
+localidad.
+(4) Se debe utilizar extintores que contengan agentes de extinción para tipo de
+fuego “A”, “B”, “C”, que no causen problemas de visión, respiración y que no sean
+conductores eléctricos, de acuerdo a las Normas Técnicas Peruanas del INDECOPI.
+No esta permitido el uso de extintores portátiles con agentes de polvo químico seco.
+Artículo 209.- Deberán contar con el número de escaleras de evacuación y salidas de
+emergencia necesarias, de acuerdo con el cálculo de evacuación establecido en el
+artículo 22 de la presente norma.
+Artículo 210.- En el caso de locales de casinos y/o tragamonedas que se ubiquen al
+interior de otro tipo de uso, bajo un mismo techo estructural, la distancia máxima de
+recorrido debe ser de 45 metros a una salida de evacuación o a la salida de la
+edificación cuando no cuenta con un sistema de rociadores y de 60 metros cuando la
+edificación cuenta con rociadores.
+Artículo 211.- En el caso de locales de casinos y/o tragamonedas que se ubiquen al
+interior de otro tipo de uso, bajo un mismo techo estructural, se podrá tener una
+distancia máxima de recorrido de 60 metros adicionales, tomados desde la puerta de
+
+salida del casino o tragamonedas hasta la salida mas cercana de la edificación,
+siempre y cuando se cuente con los siguientes componentes:
+a) Rociadores instalados en el 100% de la edificación que contiene al casino o
+tragamonedas, incluyendo áreas comunes de circulación techadas.
+b) Sistema de administración de humos de acuerdo con el Estándar NFPA 92 –
+Estándar para sistemas de control de humo.
+c) Compartimentación contra fuego no menor de 1 hora entre usos, para
+edificaciones de 3 pisos o menos, y de 2 horas para 4 pisos o más.
+Artículo 212.- En caso que la edificación cuente con áreas de estacionamientos
+subterráneas cuya sumatoria de áreas techadas, considerando los espacios de
+estacionamientos, las circulaciones y los depósitos sea mayor a 750 metros
+cuadrados, se requerirán rociadores automáticos de agua contra incendios, de
+acuerdo a lo estipulado en la última edición del estándar NFPA 13.
+SUB-CAPÍTULO VI
+SALAS DE ESPECTACULOS (NO DEPORTIVOS)
+Artículo 213.- En el caso de locales de salas de espectáculos (no deportivos), tal
+como se define en el artículo 2 de la Norma A.100 Recreación y Deportes, ubicados al
+interior de un edificio con otro uso (como hotel, centro comercial, restaurante, entre
+otros), con medios de evacuación comunes y compartiendo la misma estructura del
+edificio, deberán cumplir con los requisitos de protección contra incendios que sean
+más exigentes.
+Artículo 214.- Las edificaciones dedicadas a las Salas de Espectáculos deberán
+cumplir con los siguientes requisitos mínimos de seguridad:
+ÁREA(1) MAYOR
+ÁREA(1) ÁREA(1)
+A 100 m2 y
+REQUISITOS MÍNIMOS MENOR A 100 MAYOR A 750
+MENOR A 750
+m2 m2
+m2
+Sistema de detección y
+alarma de incendios - Obligatorio Obligatorio
+centralizado
+Iluminación de emergencia Obligatorio Obligatorio Obligatorio
+Señalización de
+Obligatorio Obligatorio Obligatorio
+emergencia
+Extintores portátiles(4) Obligatorio Obligatorio Obligatorio
+Red húmeda de agua
+contra incendios y - - Obligatorio
+gabinetes de mangueras
+Sistema de rociadores - Obligatorio(2)(3) Obligatorio
+(1) El término “ÁREA” se encuentra referido a la sumatoria de todos los niveles
+de la Sala de Espectáculos
+(2) Únicamente en el escenario
+(3) Cuando los requerimientos de agua (caudal y presión) del sistema de
+rociadores puedan ser abastecidos por el servicio de agua de la localidad, éstos
+podrán conectarse directamente con la red pública, siempre que el sistema de
+
+abastecimiento sea confiable y cuando exista una compañía de bomberos en la
+localidad.
+(4) Se debe utilizar extintores que contengan agentes de extinción para tipo de
+fuego “A”, “B”, “C”, que no causen problemas de visión, respiración y que no sean
+conductores eléctricos, de acuerdo a las Normas Técnicas Peruanas del INDECOPI.
+No esta permitido el uso de extintores portátiles con agentes de polvo químico seco.
+Artículo 215.- Deberán contar con el número de escaleras de evacuación y salidas de
+emergencia necesarias, de acuerdo con el cálculo de evacuación establecido en el
+Artículo 22 la presente norma.
+Artículo 216.- En el caso de Salas de Espectáculos que se ubiquen al interior de otro
+tipo de uso bajo un mismo techo estructural, la distancia máxima de recorrido debe ser
+de 45 metros a una salida de evacuación o a la salida de la edificación cuando no
+cuenta con un sistema de rociadores y de 60 metros cuando la edificación cuenta con
+rociadores.
+Artículo 217.- En el caso de Salas de Espectáculos que se ubiquen al interior de otro
+tipo de uso, bajo un mismo techo estructural, se podrá tener una distancia máxima de
+recorrido de 60 metros adicionales, tomados desde la puerta de salida de la Sala hasta
+la salida mas cercana de la edificación, siempre y cuando se cuente con los siguientes
+componentes:
+a) Rociadores instalados en el 100% de la edificación que contiene a la sala de
+espectáculo, incluyendo áreas comunes de circulación techadas.
+b) Sistema de administración de humos de acuerdo con Estándar NFPA 92–
+Estándar para sistemas de control de humo.
+c) Compartimentación contra fuego no menor de 1 hora entre usos, para
+edificaciones de 3 pisos o menos, y de 2 horas para 4 pisos o más.
+Artículo 218.- En caso que la edificación cuente con áreas de estacionamientos
+subterráneas cuya sumatoria de áreas techadas, considerando los espacios de
+estacionamientos, las circulaciones y los depósitos sea mayor a 750 metros
+cuadrados, se requerirán rociadores automáticos de agua contra incendios, de
+acuerdo a lo estipulado en la última edición del estándar NFPA 13.
+
+ANEXO 01: Clasificación de Mercancías (Fuente: Estandard NFPA 13, versión
+2007)
+
+ANEXO 02: Máximas Cantidades Permitidas (MCP) de Materiales Riesgosos por Área de Control (Fuente: Standard NFPA 5000,
+versión 2006).
+Tabla 01: Máximas Cantidades Permitidas (MCP) de Materiales Riesgosos por Área de Control a
+En uso –
+Nivel de Almacenaje En uso – Sistema Cerrado Sistemas Abiertos
+conteni
+Clase
+do de
+Libras Galones Gas Libras Galones Libras Galones
+Alto
+sólido líquido b sólido líquido Gas b sólido líquido
+Riesgo
+(pie3) (lb) (pie3) (pie3) (lb) (pie3) (pie3) (lb)
+Combustible II 2 ó 3 120 g , h 120 h 30 h
+líquido c , d , e , f IIIA 2 ó 3 NA 330 g , h NA NA 330 h NA NA 80 h
+IIIB NA 13200 g , i 13200 i 13200 i
+Fuegos de 1.4G 3 125 c, j , k NA NA 125 c, j , k NA NA 125 c, j , k NA
+artificio
+Líquido Inflamabl 2 NA 45 h NA NA 45 h NA NA 10 h
+criogénico e 3 NA 45 h NA NA 45 h NA NA 10 h
+Oxidante
+Explosivos NA 1 1g , l , m , n (1) g , l , n NA ¼ l (¼) l NA ¼ l (¼) l
+Gas inflamable d Gaseoso 2 NA NA 1000 NA NA 1000g , NA NA
+Licuado 2 NA 30 g , h g , h NA 30 g , h h NA NA
+Petróleo
+2 NA 300 o , p NA NA 300 NA NA NA
+licuado
+NA NA
+(GLP)
+Líquido IA 30 g , h 30 h 10 h
+inflamable c , d , f , IB y IC 2 ó 3 NA 120 g , h NA NA 120 g , h NA NA 30 g , h
+q Combinad
+120 g , h , r 120 h , r 30 h , r
+o
+(IA, IB,
+IC)
+Sólido inflamable NA 3 125 g , h NA NA 125 h NA NA 125 h NA
+Peróxido Detonable 1 1 g , l (1) g , l NA ¼ l (¼) l NA ¼ l (¼) l
+orgánico s/clasifica
+r
+1 5 g , h (5) g , h NA 1 h (1) h NA 1 h (1) h
+I
+2 50 g , h (50) g , h NA 50 h (50) h NA 50 h (10) h
+II
+3 125 g , h (125) g , h NA 125 h (125) h NA 125 h (25) h
+
+En uso –
+Nivel de Almacenaje En uso – Sistema Cerrado Sistemas Abiertos
+conteni
+Clase
+do de
+Libras Galones Gas Libras Galones Libras Galones
+Alto
+sólido líquido b sólido líquido Gas b sólido líquido
+Riesgo
+(pie3) (lb) (pie3) (pie3) (lb) (pie3) (pie3) (lb)
+III NA NL NL NA NL NL NA NL NL
+IV NA NL NL NA NL NL NA NL NL
+V
+Oxidante 4 1 1 g , l (1) g , l NA ¼ l (¼) l NA ¼ l (¼) l
+3 j 2 ó 3 10 g , h (10) g , h NA 2 h (2) h NA 2 h (2) h
+2 3 250 g , h (250) g , h NA 250 h (250) h NA 250 h (50) h
+1 NA 4000 g , i (4000)g , i NA 4000 i (4000) i NA 4000 i (1000) i
+Gas oxidante Gaseoso 3 NA NA 1500 NA NA 1500g , NA NA
+Licuado NA NA 15 g , h g , h NA 15 g , h h NA NA
+NA NA
+Pirofórico NA 2 4 g , l (4) g , l 50 g , l 1 l (1) l 10 g , l 0 0
+Inestable 4 1 1 g , l (1) g , l 10 g , l ¼ l (¼) l 2 g , l ¼ l (¼) l
+(reactivo) 3 1 ó 2 5 g , h (5) g , h 50 g , 1 h (1) h 10 g , h 1 h (1) h
+2 2 50 g , h (50) g , h h 50 h (50) h 750 g , h 10 h (10) h
+1 NA NL NL 750 g NL NL NL NL NL
+, h
+NL
+Acua-reactivo 3 2 5 g , h (5) g , h NA 5 h (5) h NA 1 h (1) h
+2 3 50 g , h (50) g , h NA 50 h (50) h NA 10 h (10) h
+1 NA NL NL NA NL NL NA NL NL
+Corrosivo NA 4 5000 g , h 500 g , h 810g, 5000 h 500 h 810g, h, 1000 h 100 h
+h, s s
+Altamente tóxico NA 4 10 g , h (10) g , h 20 h , t 10 h (10) h 20 h , t 3 h (3) h
+Tóxico NA 4 500 g , h (500) g , h 810 g 500 h (500) h 810 g , h 125 h (125) h
+, h
+Para unidades del sistema internacional SI, 1 lb = 0,454 kg; 1 pie3 = 0,0283 m3; 1 gal = 3,785 L.
+NA: No aplicable. NL: No limitado.
+a. Consultar Límites para ocupaciones especiales, para excepciones a las cantidades tabuladas. Para el uso en áreas de control,
+consultar 34.2.4. de la NFPA 5 000. Los valores en tablas que figuren entre paréntesis corresponden al nombre de la unidad consignada
+
+entre paréntesis en la parte superior de la columna. La cantidad agregada en uso y almacenaje no debe exceder a la cantidad listada
+como almacenaje. Adicionalmente, las cantidades en ocupaciones específicas no deben exceder los límites consignados en Límites
+para ocupaciones especiales
+b. Medido a 70º F (21º C) y 14,7 PSI (30 kPa).
+c. Dentro de un edificio, un sistema de almacenaje de combustible líquido que esté conectado a un sistema de tuberías para
+combustible podrá tener como capacidad máxima 660 gal (2.500 L), habiendo previsto que tal sistema cumpla con la norma NFPA 31,
+Norma para instalación de equipos para combustión de petróleo.
+d. Los líquidos inflamables y combustibles así como los gases inflamables dentro de los tanques de combustible para equipos
+móviles o vehículos podrán exceder a la MCP siempre que el equipo sea almacenado y operado de acuerdo con el respectivo Código
+contra Fuegos.
+e. En almacenaje y ocupaciones de riesgo bajo y ordinario, se requiere que el almacenaje de Clase II para combustibles líquidos
+esté limitado a un cantidad máxima de 1.375 gal (5204 L); se requerirá para combustibles líquidos Clase IIIA un almacenaje limitado a
+una cantidad máxima de 2.750 gal (10409 L); y se requerirá para combustibles líquidos Clase IIIB un almacenaje limitado a una cantidad
+máxima de 13.750 gal (52044 L) siempre que sea almacenado de acuerdo con todos los requisitos en NFPA 30 aplicado en almacenes
+para todo propósito.
+f. La cantidad de combustible para aeronaves en hangares deberá estar de acuerdo con NFPA 409, Norma sobre Hangares para
+Aeronaves.
+g. Se permite que todas las cantidades se incrementen en 100% cuando se encuentre almacenado en gabinetes aprobados,
+gabinetes para gas, recintos para escape, magazines explosivos, o latas de seguridad, tal cual sea apropiado con el material
+almacenado, de acuerdo con NFPA 1. En los casos en que también pueda aplicarse la nota de pie h, el incremento indicado por ambas
+notas de pie podrá ser aplicado acumulativamente.
+h. Se permite que las máximas cantidades se incrementen en 100% para los edificios equipados completamente con un sistema
+automático de rociadores de acuerdo con NFPA 13, Norma para la Instalación de Sistemas de Rociadores. En los casos en que también
+pueda aplicarse la nota de pie g , el incremento indicado por ambas notas de pie podrá ser aplicado acumulativamente.
+i. Las cantidades permitidas no estarán limitadas para edificios completamente equipados con un sistema automático de rociadores
+de acuerdo con NFPA 13.
+j. Una cantidad máxima para sólidos de 200 lb (91 kg) o para oxidantes líquidos Clase 3 de 20 gal (76L) será permitido siempre
+que tales materiales sean necesarios para propósitos de mantenimiento, para la operación o saneamiento de equipos. Se requiere que
+los contenedores de almacenamiento y el método de almacenaje sean aprobados.
+k. A menos que sea conocido el peso real del componente pirotécnico de los fuegos de artificio 1.4G, el 25% del peso bruto de los
+fuegos de artificio, incluyendo el empaque, podrá ser usado para determinar el peso de los fuegos de artificio para los propósitos de esta
+Tabla.
+l. Sólo estará permitido en edificios equipados completamente con un sistema automático de rociadores de acuerdo con NFPA 13.
+m. Para la pólvora negra, impelente sin humo, y fulminantes para cebar armas pequeños almacenados o exhibidos dentro de
+ocupaciones mercantiles ó almacenados dentro de viviendas para una o dos familias podrán exceder la cantidad especificada por esta
+Tabla, siempre que tales almacenajes cumplan con los requisitos de la DICSCAMEC.
+
+n. En lugar del máximo permitido para la cantidad límite por área de control, se requerirá que el máximo para la cantidad agregada
+máxima por edificio para dispositivos explosivos especiales dentro de ocupaciones industriales, mercantiles y de almacenaje, será de 50
+lb (23 kg).
+o. Se requerirá que las locaciones para almacenaje adicionales se encuentren separadas por un mínimo de 300 pies (92 m).
+p. En ocupaciones mercantiles, el almacenaje para el gas licuefactado de petróleo estará limitado a un máximo de 200 lb (91 kg) en
+contenedores para GLP de capacidad nominal de 1 lb (0,45 kg).
+q. En almacenaje y ocupaciones de riesgo bajo y ordinario, no se permite el almacenaje de líquidos inflamables de la Clase IA, y se
+requerirá que el almacenaje combinado para líquidos inflamables de Clase IB y Clase IC esté limitado a una cantidad de 660 gal (2500 L)
+siempre que el almacenaje se realce conforme de acuerdo con todos los requisitos en NFPA 30 aplicado en almacenes para todo
+propósito.
+r. Conteniendo no más de la cantidad máxima permitida por área de control de líquidos inflamables de la Clase IA, Clase IB, o Clase
+IC.
+s. Un cilindro único conteniendo 150 lb (68 kg) o menos de amoníaco anhidro dentro de un área de control única en un edificio sin
+rociadores, será considerado como la cantidad máxima permitida. Dos cilindros, cada uno conteniendo 150 lb (68 kg) o menos, en un
+área de control única serán considerados como la cantidad máxima permitida, habiendo previsto que el edificio esté equipado
+completamente con un sistema automático de rociadores de acuerdo con la norma NFPA 13.
+t. Sólo está permitido en los casos en que se almacene en gabinetes para gases de escape ó recintos para escapes, tal como se
+especifica en NFPA 1.
+Límites para ocupaciones especiales. Las cantidades máximas permitidas para materiales riesgosos por área de control en
+ocupaciones destinadas para ensamblajes, cuidados ambulatorios de salud, negocios, educativos, guarderías, cuidados de la salud,
+detención y correccional, así como residencial, que consistan en alojamiento y habitaciones para casas, hoteles, dormitorios,
+apartamentos, y conjuntos residenciales así como instalaciones para cuidados de la salud deberán cumplir con lo especificado desde la
+Tabla 02(a) hasta la Tabla 02(h).
+
+Tabla 02 (a): Máximas Cantidades Permitidas (MCP) de Materiales Riesgosos por Área de
+Control en Ocupaciones para Ensamblaje
+Gas a
+Material Clase Sólido Líquido (a NTP)
+Líquido Inflamable y I y II combinados NP 10 gal NP
+combustible b , c IIIA NP 60 gal NP
+IIIB NP 120 gal NP
+Líquido criogénico Inflamable NP 10 gal NP
+Oxidante NP 10 gal NP
+Explosivos d , e , f , g NP NP NP NP
+Gas inflamable c , h Gaseoso NP NP NP
+Lícuefactado NP 20 lb NP
+Fuegos de artificio 1.4G NP NP NP
+domésticos
+Sólido inflamable NP 5 lb NP NP
+Oxidantes 4 NP NP NP
+3 10 lb i 1 gal i NP
+2 250 lb 25 gal NP
+1 4 000 lb 400 gal NP
+Gas oxidante h Gaseoso NP NP NP
+Licuefactado NP 15 gal NP
+Peróxidos orgánicos Detonable sin NP NP NP
+clasificar NP NP NP
+I NP NP NP
+II 1 500 lb 1 500 lb NP
+III 100 000 lb 100 000 NP
+IV NL lb NP
+V NL
+Materiales pirofóricos NP 1 lb 1 lb NP
+Reactivos inestables 4 ¼ lb ¼ lb NP
+3 1 lb 1 lb NP
+2 10 lb 10 lb NP h
+1 NL NL NP
+Acua-reactivos 3 1 lb 1 lb NP
+2 10 lb 10 lb NP
+1 NL NL NP
+Corrosivos NP 1 000 lb 100 gal NP
+Altamente tóxicos NP 3 lb 3 gal NP j
+Tóxicos NP 125 lb 125 gal NP j
+Para unidades del sistema internacional SI, 1 lb = 0,454 kg; 1 gal = 3,785 L; 1 pie3 = 0,0283 m3.
+NTP: Normal temperatura y presión [medidos a 70° F (21° C) y 14,7 PSI (30 kPa)].
+NP: No permitido. NL: No limitado.
+a. Cantidades ilimitadas de gas serán permitidos en su uso por parte de personal médico o
+para emergencias médicas.
+b. Almacenaje de una combinación de líquidos de la Clase I y Clase II por encima de 10 gal
+(38 L) ó de líquidos de la Clase IIIA en más de 60 gal (227 L) se permitirá en los casos en los que
+
+se almacenen dentro de gabinetes de seguridad con una cantidad agregada que no exceda los
+180 gal (681 L).
+c. Combustibles dentro del tanque de equipos móviles en operación podrá exceder a la
+cantidad específica en el caso que el equipo sea operado de acuerdo con su Código contra
+Fuegos.
+d. El uso de materiales explosivos requeridos por entidades estatales, mientras comprometan
+el desempeño normal o en emergencia en intervenciones no será limitado. El almacenaje de
+materiales explosivos deberá estar de acuerdo con los requisitos de la DICSCAMEC.
+e. El almacenaje y uso de materiales explosivos en medicinas y agentes médicos en las
+formas prescritas por las autoridades estatales competentes no serán limitativos.
+f. El almacenaje y empleo de dispositivos activados por impelentes o herramientas
+industriales activados por impelentes que son objeto de fabricación, importación o distribuidas
+para cumplir su propósito previsto, deberán estar limitados a 50 lb (23 kg) de peso neto del
+explosivo.
+g. El almacenamiento de municiones para armas pequeñas y de sus componentes están
+permitidos en tanto estén de acuerdo con los requisitos de la DICSCAMEC.
+h. Combustibles o gas oxidante usado para mantenimiento, reparación y la operación de
+equipos no deberá exceder los 250 pie3 (7,1 m3).
+i. Una cantidad máxima para sólidos de 200 lb (91 kg) o para oxidantes líquidos Clase 3 de
+20 gal (76 L) será permitido siempre que tales materiales sean necesarios para propósitos de
+mantenimiento, para la operación o saneamiento de equipos. Se requiere que los contenedores de
+almacenamiento y el método de almacenaje sean aprobados.
+j. Cilindros de gas que no excedan los 20 pie3 (0,57 m3) en NTP son permitidos dentro de
+gabinetes de gas o campanas concentradoras de humos.
+
+Tabla 02 (b) Máximas Cantidades Permitidas (MCP) de Materiales Riesgosos por Área de
+Control en Ocupaciones para Cuidado Ambulatorio de la Salud
+Gas a
+Material Clase Sólido Líquido (a NTP)
+Líquido Inflamable y I y II combinados NP 10 gal NP
+combustible b , c IIIA NP 60 gal NP
+IIIB NP 120 gal d NP
+Líquido criogénico Inflamable NP 10 gal NP
+Oxidante NP 10 gal NP
+Explosivos e , f , g NP NP NP NP
+Gas inflamable c , h Gaseoso NP NP NP
+Licuefactado NP 20 lb NP
+Fuegos de artificio 1.4G NP NP NP
+domésticos
+Sólido inflamable NP 5 lb NP NP
+Oxidantes 4 NP NP NP
+3 10 lb i 1 gal i NP
+2 250 lb 25 gal NP
+1 4 000 lb d 400 gal d NP
+Gas oxidante Gaseoso NP NP Por NFPA
+99, Norma
+de
+Instalaciones
+Licuefactado NP 15 gal
+para cuidado
+de Salud
+NP
+Peróxidos orgánicos Detonable sin NP NP NA
+clasificar NP NP NA
+I NP NP NA
+II 1 500 lb 1 500 lb NA
+III 100 000 lb 100 000 NA
+IV NL lb NA
+V NL
+Materiales pirofóricos NP 1 lb 1 lb NP
+Reactivos inestables 4 NP NP NP
+3 NP NP NP
+2 10 lb 10 lb NP h
+1 NL NL NP
+Acua-reactivos 3 1 lb 1 lb NA
+2 10 lb 10 lb NA
+1 NL NL NA
+Corrosivos NP 1 000 lb 100 gal NP
+Altamente tóxicos NP 3 lb 3 gal NP j
+Tóxicos NP 125 lb 125 gal NP j
+Para unidades del sistema internacional SI, 1 lb = 0,454 kg; 1 gal = 3,785 L; 1 pie3 = 0,0283 m3.
+NTP: Normal temperatura y presión [medidos a 70° F (21° C) y 14,7 PSI (30 kPa)].
+NP: No permitido. NA: No aplicable. NL: No limitado.
+
+a. Cantidades ilimitadas de gas serán permitidos en su uso por parte de personal médico o
+para emergencias médicas.
+b. Almacenaje de una combinación de líquidos de la Clase I y Clase II por encima de 10 gal
+(38 L) ó de líquidos de la Clase IIIA en más de 60 gal (227 L) se permitirá en los casos en los que
+se almacenen dentro de gabinetes de seguridad con una cantidad agregada que no exceda los
+180 gal (681 L).
+c. Combustibles dentro del tanque de equipos móviles en operación podrá exceder a la
+cantidad específica en el caso que el equipo sea operado de acuerdo con su Código contra
+Fuegos.
+d. Las cantidades permitidas no estarán limitadas para edificios completamente equipados
+con un sistema automático de rociadores de acuerdo con NFPA 13.
+e. El uso de materiales explosivos requeridos por entidades estatales, mientras comprometan
+el desempeño normal o en emergencia en intervenciones no será limitado. El almacenaje de
+materiales explosivos deberá estar de acuerdo con los requisitos de la DICSCAMEC.
+f. El almacenaje y uso de materiales explosivos en medicinas y agentes médicos en las
+formas prescritas por las autoridades estatales competentes no serán limitativos.
+g. El almacenaje y empleo de dispositivos activados por impelentes o herramientas
+industriales activados por impelentes que son objeto de fabricación, importación o distribuidas
+para cumplir su propósito previsto, deberán estar limitados a 50 lb (23 kg) de peso neto del
+explosivo.
+h. Combustibles o gas oxidante usado para mantenimiento, reparación y la operación de
+equipos no deberá exceder los 250 pie3 (7,1 m3).
+i. Una cantidad máxima para sólidos de 200 lb (91 kg) o para oxidantes líquidos Clase 3 de
+20 gal (76 L) será permitido siempre que tales materiales sean necesarios para propósitos de
+mantenimiento, para la operación o saneamiento de equipos. Se requiere que los contenedores de
+almacenamiento y el método de almacenaje sean aprobados.
+j. Cilindros de gas que no excedan los 20 pie3 (0,57 m3) en NTP son permitidos dentro de
+gabinetes de gas o campanas concentradoras de humos.
+
+Tabla 02 (c) Máximas Cantidades Permitidas (MCP) de Materiales Riesgosos por Área de
+Control en Ocupaciones para Negocios
+Gas a
+Material Clase Sólido Líquido (a NTP)
+Líquido Inflamable y I y II combinados NP 10 gal NP
+combustible b , c IIIA NP 60 gal NP
+IIIB NP 120 gal NP
+Líquido criogénico Inflamable NP 10 gal NP
+Oxidante NP 10 gal NP
+Explosivos d , e , f , g NP ¼ lb ¼ lb NP
+Gas inflamable c Gaseoso NP NP 1 000
+Lícuefactado NP 20 lb pie3
+NP
+Fuegos de artificio 1.4G NP NP NP
+domésticos
+Sólido inflamable NP 5 lb NP NP
+Oxidantes 4 NP NP NP
+3 10 lb h 1 gal h NP
+2 250 lb 25 gal NP
+1 4 000 lb 400 gal NP
+Gas oxidante Gaseoso NP NP 1 500
+Licuefactado NP 15 gal pie3
+NP
+Peróxidos orgánicos Detonable sin NP NP NP
+clasificar NP NP NP
+I NP NP NP
+II 1 500 lb 1 500 lb NP
+III 100 000 lb 100 000 lb NP
+IV NL NL NP
+V
+Materiales pirofóricos NP 1 lb 1 lb 10 pie3
+Reactivos inestables 4 ¼ lb ¼ lb 2 pie3
+3 1 lb 1 lb 10 pie3
+2 10 lb 10 lb 750 pie3
+1 NL NL NL
+Acua-reactivos 3 1 lb 1 lb NP
+2 10 lb 10 lb NP
+1 NL NL NP
+Corrosivos NP 1 000 lb 100 gal 810 pie3
+Altamente tóxicos i NP 3 lb 3 lb 20 pie3
+Tóxicos i NP 125 lb 125 lb 810 pie3
+Para unidades del sistema internacional SI, 1 lb = 0,454 kg; 1 gal = 3,785 L; 1 pie3 = 0,0283 m3.
+NTP: Normal temperatura y presión [medidos a 70° F (21° C) y 14,7 PSI (30 kPa)].
+NP: No permitido. NL: No limitado.
+a. Cantidades ilimitadas de gas serán permitidos en su uso por parte de personal médico o
+para emergencias médicas.
+
+b. Almacenaje de una combinación de líquidos de la Clase I y Clase II por encima de 10 gal
+(38 L) ó de líquidos de la Clase IIIA en más de 60 gal (227 L) se permitirá en los casos en los que
+se almacenen dentro de gabinetes de seguridad con una cantidad agregada que no exceda los
+180 gal (681 L).
+c. Combustibles dentro del tanque de equipos móviles en operación podrá exceder a la
+cantidad específica en el caso que el equipo sea operado de acuerdo con su Código contra
+Fuegos.
+d. El uso de materiales explosivos requeridos por entidades estatales, mientras comprometan
+el desempeño normal o en emergencia en intervenciones no será limitado. El almacenaje de
+materiales explosivos deberá estar de acuerdo con los requisitos de la DICSCAMEC.
+e. El almacenaje y uso de materiales explosivos en medicinas y agentes médicos en las
+formas prescritas por las autoridades estatales competentes no serán limitativos.
+f. El almacenaje y empleo de dispositivos activados por impelentes o herramientas
+industriales activados por impelentes que son objeto de fabricación, importación o distribuidas
+para cumplir su propósito previsto, deberán estar limitados a 50 lb (23 kg) de peso neto del
+explosivo.
+g. El almacenamiento de municiones para armas pequeñas y de sus componentes están
+permitidos en tanto estén de acuerdo por la DICSCAMEC.
+h. Una cantidad máxima para sólidos de 200 lb (91 kg) o para oxidantes líquidos Clase 3 de
+20 gal (76 L) será permitido siempre que tales materiales sean necesarios para propósitos de
+mantenimiento, para la operación o saneamiento de equipos. Se requiere que los contenedores de
+almacenamiento y el método de almacenaje sean aprobados.
+i. Cilindros de gas que no excedan los 20 pie3 (0,57 m3) en NTP son permitidos dentro de
+gabinetes de gas o campanas concentradoras de humos.
+Tabla 02 (d) Máximas Cantidades Permitidas (MCP) de Materiales Riesgosos por Área de
+Control en Ocupaciones para Educación
+Gas a
+Material Clase Sólido Líquido (a NTP)
+Líquido Inflamable y I y II combinados NP 10 gal NP
+combustible b , c IIIA NP 60 gal NP
+IIIB NP 120 gal d NP
+Líquido criogénico Inflamable NP 10 gal NP
+Oxidante NP 10 gal NP
+Explosivos c , f , g , h NP NP NP NP
+Gas inflamable c , i Gaseoso NP NP NP
+Lícuefactado j NP 20 lb NP
+Fuegos de artificio 1.4G NP NP NP
+domésticos
+Sólido inflamable NP 5 lb NP NP
+Oxidantes 4 NP NP NP
+3 10 lb k 1 gal k NP
+2 250 lb 25 gal NP
+1 4 000 lb d 400 gal d NP
+Gas oxidante i Gaseoso NP NP NP
+Licuefactado NP 15 gal NP
+Peróxidos orgánicos Detonable sin NP NP NP
+clasificar NP NP NP
+I NP NP NP
+II 1 500 lb 1 500 lb NP
+
+III 100 000 lb 100 000 lb NP
+IV NL NL NP
+V
+Materiales pirofóricos NP NP NP NP
+Reactivos inestables 4 NP NP 2 pie3
+3 NP NP NP
+2 10 lb 10 lb NP i
+1 NL NL NP
+Acua-reactivos 3 1 lb 1 lb NA
+2 10 lb 10 lb NA
+1 NL NL NA
+Corrosivos NP 1 000 lb 100 gal NP
+Altamente tóxicos NP 3 lb 3 lb NP j
+Tóxicos NP 125 lb 125 lb NP j
+Para unidades del sistema internacional SI, 1 lb = 0,454 kg; 1 gal = 3,785 L; 1 pie3 = 0,0283 m3 ;
+1 pie = 0,3048 m.
+NTP: Normal temperatura y presión [medidos a 70° F (21° C) y 14,7 PSI (30 kPa)].
+NP: No permitido. NL: No limitado. NA: No aplicable.
+a. Cantidades ilimitadas de gas serán permitidos en su uso por parte de personal médico o
+para emergencias médicas.
+b. Almacenaje de una combinación de líquidos de la Clase I y Clase II por encima de 10 gal
+(38 L) ó de líquidos de la Clase IIIA en más de 60 gal (227 L) se permitirá en los casos en los que
+se almacenen dentro de gabinetes de seguridad con una cantidad agregada que no exceda los
+180 gal (681 L).
+c. Combustibles dentro del tanque de equipos móviles en operación podrá exceder a la
+cantidad específica en el caso que el equipo sea operado de acuerdo con su Código contra
+Fuegos.
+d. Las cantidades permitidas no estarán limitadas para edificios completamente equipados
+con un sistema automático de rociadores de acuerdo con NFPA 13.
+e. El uso de materiales explosivos requeridos por entidades estatales, mientras comprometan
+el desempeño normal o en emergencia en intervenciones no será limitado. El almacenaje de
+materiales explosivos deberá estar de acuerdo con los requisitos de la DICSCAMEC.
+f. El almacenaje y uso de materiales explosivos en medicinas y agentes médicos en las
+formas prescritas por las autoridades estatales competentes no serán limitativos.
+g. El almacenaje y empleo de dispositivos activados por impelentes o herramientas
+industriales activados por impelentes que son objeto de fabricación, importación o distribuidas
+para cumplir su propósito previsto, deberán estar limitados a 50 lb (23 kg) de peso neto del
+explosivo.
+h. El almacenamiento de municiones para armas pequeñas y de sus componentes están
+permitidos en tanto estén de acuerdo con los requisitos de la DICSCAMEC.
+i. Combustibles o gas oxidante usado para mantenimiento, reparación y la operación de
+equipos no deberá exceder los 250 pie3 (7,1 m3).
+j. Sólo para almacenaje en laboratorios; con la posibilidad de emplear unidades adicionales
+de 20 lb en los casos que se disponga de una separación de 20pies (6,1 m).
+k. Una cantidad máxima para sólidos de 200 lb (91 kg) o para oxidantes líquidos Clase 3 de
+20 gal (76 L) será permitido siempre que tales materiales sean necesarios para propósitos de
+mantenimiento, para la operación o saneamiento de equipos. Se requiere que los contenedores de
+almacenamiento y el método de almacenaje sean aprobados.
+l. Cilindros de gas que no excedan los 20 pie3 (0,57 m3) en NTP son permitidos dentro de
+gabinetes de gas o campanas concentradoras de humos.
+
+Tabla 02 (e) Máximas Cantidades Permitidas (MCP) de Materiales Riesgosos por Área de
+Control en Ocupaciones para Guarderías
+Gas a
+Material Clase Sólido Líquido (a NTP)
+Líquido Inflamable y I y II combinados NP 10 gal NP
+combustible b , c IIIA NP 60 gal NP
+IIIB NP 120 gal d NP
+Líquido criogénico Inflamable NP 10 gal NP
+Oxidante NP 10 gal NP
+Explosivos c , f , g NP NP NP NP
+Gas inflamable c , h Gaseoso NP NP NP
+Licuefactado NP 20 lb NP
+Fuegos de artificio 1.4G NP NP NP
+domésticos
+Sólido inflamable NP 5 lb NP NP
+Oxidantes 4 NP NP NP
+3 10 lb d 1 gal i NP
+2 250 lb 25 gal NP
+1 4 000 lb d 400 gal d NP
+Gas oxidante h Gaseoso NP NP NP
+Licuefactado NP 15 gal NP
+Peróxidos orgánicos Detonable sin NP NP NP
+clasificar NP NP NP
+I NP NP NP
+II 1 500 lb 1 500 lb NP
+III 100 000 lb 100 000 lb NP
+IV NL NL NP
+V
+Materiales pirofóricos NP NP NP NP
+Reactivos inestables 4 NP NP NP
+3 NP NP NP
+2 10 libras 10 libras NP h
+1 NL NL NP
+Acua-reactivos 3 1 lb 1 lb NA
+2 10 lb 10 lb NA
+1 NL NL NA
+Corrosivos NP 1 000 lb 100 gal NP
+Altamente tóxicos NP 3 lb 3 lb NP j
+Tóxicos NP 125 lb 125 lb NP j
+Para unidades del sistema internacional SI, 1 lb = 0,454 kg; 1 gal = 3,785 L; 1 pie3 = 0,0283 m3.
+NTP: Normal temperatura y presión [medidos a 70° F (21° C) y 14,7 PSI (30 kPa)].
+NP: No permitido. NL: No limitado. NA: No aplicable.
+a. Cantidades ilimitadas de gas serán permitidos en su uso por parte de personal médico o
+para emergencias médicas.
+b. Almacenaje de una combinación de líquidos de la Clase I y Clase II por encima de 10 gal
+(38 L) ó de líquidos de la Clase IIIA en más de 60 gal (227 L) se permitirá en los casos en los que
+
+se almacenen dentro de gabinetes de seguridad con una cantidad agregada que no exceda los
+180 gal (681 L).
+c. Combustibles dentro del tanque de equipos móviles en operación podrá exceder a la
+cantidad específica en el caso que el equipo sea operado de acuerdo con su Código contra
+Fuegos.
+d. Las cantidades permitidas no estarán limitadas para edificios completamente equipados
+con un sistema automático de rociadores de acuerdo con NFPA 13.
+e. El uso de materiales explosivos requeridos por entidades estatales, mientras comprometan
+el desempeño normal o en emergencia en intervenciones no será limitado. El almacenaje de
+materiales explosivos deberá estar de acuerdo con los requisitos de la DICSCAMEC.
+f. El almacenaje y uso de materiales explosivos en medicinas y agentes médicos en las
+formas prescritas por las autoridades estatales competentes no serán limitativos.
+g. El almacenaje y empleo de dispositivos activados por impelentes o herramientas
+industriales activados por impelentes que son objeto de fabricación, importación o distribuidas
+para cumplir su propósito previsto, deberán estar limitados a 50 lb (23 kg) de peso neto del
+explosivo.
+h. Combustibles o gas oxidante usado para mantenimiento, reparación y la operación de
+equipos no deberá exceder los 250 pie3 (7,1 m3).
+i. Una cantidad máxima para sólidos de 200 lb (91 kg) o para oxidantes líquidos Clase 3 de
+20 gal (76 L) será permitido siempre que tales materiales sean necesarios para propósitos de
+mantenimiento, para la operación o saneamiento de equipos. Se requiere que los contenedores de
+almacenamiento y el método de almacenaje sean aprobados.
+j. Cilindros de gas que no excedan los 20 pie3 (0,57 m3) en NTP son permitidos dentro de
+gabinetes de gas o campanas concentradoras de humos.
+
+Tabla 02 (f) Máximas Cantidades Permitidas (MCP) de Materiales Riesgosos por Área de
+Control en Ocupaciones para Cuidados de la Salud
+Gas a
+Material Clase Sólido Líquido (a NTP)
+Líquido Inflamable y I y II combinados NP 10 gal NP
+combustible b , c IIIA NP 60 gal NP
+IIIB NP 120 gal d NP
+Líquido criogénico Inflamable NP 10 gal NP
+Oxidante NP 10 gal NP
+Explosivos c , f , g NP NP NP NP
+Gas inflamable c , e , f , g , h Gaseoso NP NP NP
+Licuefactado i NP 20 lb NP
+Fuegos de artificio 1.4G NP NP NP
+domésticos
+Sólido inflamable NP 5 lb NP NP
+Oxidantes 4 NP NP NP
+3 10 lb j 1 gal j NP
+2 250 lb 25 gal NP
+1 4 000 lb d 400 gal d NP
+Gas oxidante Gaseoso NP NP Por
+Licuefactado NP 15 gal NFPA
+99NP
+Peróxidos orgánicos Detonable sin NP NP NP
+clasificar NP NP NP
+I NP NP NP
+II 1 500 lb 1 500 lb NP
+III 100 000 lb 100 000 lb NP
+IV NL NL NP
+V
+Materiales pirofóricos NP NP NP NP
+Reactivos inestables 4 NP NP NP
+3 NP NP NP
+2 10 lb 10 lb NP h
+1 NL NL NP
+Acua-reactivos 3 1 lb 1 lb NA
+2 10 lb 10 lb NA
+1 NL NL NA
+Corrosivos NP 1 000 lb 100 gal NP
+Altamente tóxicos NP 3 lb 3 lb NP k
+Tóxicos NP 125 lb 125 lb NP k
+Para unidades del sistema internacional SI, 1 lb = 0,454 kg; 1 gal = 3,785 L; 1 pie3 = 0,0283 m3.
+NTP: Normal temperatura y presión [medidos a 70° F (21° C) y 14,7 PSI (30 kPa)].
+NP: No permitido. NL: No limitado. NA: No aplicable.
+a. Cantidades ilimitadas de gas serán permitidos en su uso por parte de personal médico o
+para emergencias médicas.
+b. Almacenaje de una combinación de líquidos de la Clase I y Clase II por encima de 10 gal
+(38 L) ó de líquidos de la Clase IIIA en más de 60 gal (227 L) se permitirá en los casos en los que
+
+se almacenen dentro de gabinetes de seguridad con una cantidad agregada que no exceda los
+180 gal (681 L).
+c. Combustibles dentro del tanque de equipos móviles en operación podrá exceder a la
+cantidad específica en el caso que el equipo sea operado de acuerdo con su Código contra
+Fuegos.
+d. Las cantidades permitidas no estarán limitadas para edificios completamente equipados
+con un sistema automático de rociadores de acuerdo con NFPA 13.
+e. El uso de materiales explosivos requeridos por entidades estatales, mientras comprometan
+el desempeño normal o en emergencia en intervenciones no será limitado. El almacenaje de
+materiales explosivos deberá estar de acuerdo con los requisitos de la DICSCAMEC.
+f. El almacenaje y uso de materiales explosivos en medicinas y agentes médicos en las
+formas prescritas por las autoridades estatales competentes no serán limitativos.
+g. El almacenaje y empleo de dispositivos activados por impelentes o herramientas
+industriales activados por impelentes que son objeto de fabricación, importación o distribuidas
+para cumplir su propósito previsto, deberán estar limitados a 50 lb (23 kg) de peso neto del
+explosivo.
+h. Combustibles o gas oxidante usado para mantenimiento, reparación y la operación de
+equipos no deberá exceder los 250 pie3 (7,1 m3).
+i. Sólo para almacenaje en laboratorios; con la posibilidad de emplear unidades adicionales
+de 20 lb en los casos que se disponga de una separación de 20pies (6,1 m).
+j. Una cantidad máxima para sólidos de 200 lb (91 kg) o para oxidantes líquidos Clase 3 de
+20 gal (76 L) será permitido siempre que tales materiales sean necesarios para propósitos de
+mantenimiento, para la operación o saneamiento de equipos. Se requiere que los contenedores de
+almacenamiento y el método de almacenaje sean aprobados.
+k. Cilindros de gas que no excedan los 20 pie3 (0,57 m3) en NTP son permitidos dentro de
+gabinetes de gas o campanas concentradoras de humos.
+
+Tabla 02 (g) Máximas Cantidades Permitidas (MCP) de Materiales Riesgosos por Área de
+Control en Ocupaciones para Detención y Correccionales a
+Gas a
+Material Clase Sólido Líquido (a NTP)
+Líquido Inflamable y I y II combinados NP 10 gal NP
+combustible b , c IIIA NP 60 gal NP
+IIIB NP 120 gal NP
+Líquido criogénico Inflamable NP 10 gal NP
+Oxidante NP 10 gal NP
+Explosivos d , c , f , g NP NP NP NP
+Gas inflamable c , h Gaseoso NP NP NP
+Licuefactado NP 20 lb NP
+Fuegos de artificio 1.4G NP NP NP
+domésticos
+Sólido inflamable NP 5 lb NP NP
+Oxidantes 4 NP NP NP
+3 10 lb i 1 gal i NP
+2 250 lb 25 gal NP
+1 4 000 lb 400 gal NP
+Gas oxidante h Gaseoso NA NP NP
+Licuefactado NA 15 gal NP
+Peróxidos orgánicos Detonable sin NP NP NP
+clasificar NP NP NP
+I NP NP NP
+II 1 500 lb 1 500 lb NP
+III 100 000 lb 100 000 lb NP
+IV NL NL NP
+V
+Materiales pirofóricos NP NP NP NP
+Reactivos inestables 4 NP NP NP
+3 NP NP NP
+2 10 lb 10 lb NP h
+1 NL NL NP
+Acua-reactivos 3 1 lb 1 lb NP
+2 10 lb 10 lb NP
+1 NL NL NP
+Corrosivos NP 1 000 lb 100 gal NP
+Altamente tóxicos NP 3 lb 3 lb NP j
+Tóxicos NP 125 lb 125 lb NP j
+Para unidades del sistema internacional SI, 1 lb = 0,454 kg; 1 gal = 3,785 L; 1 pie3 = 0,0283 m3.
+NTP: Normal temperatura y presión [medidos a 70° F (21° C) y 14,7 PSI (30 kPa)].
+NP: No permitido. NL: No limitado.
+a. Cantidades ilimitadas de gas serán permitidos en su uso por parte de personal médico o
+para emergencias médicas.
+b. Almacenaje de una combinación de líquidos de la Clase I y Clase II por encima de 10 gal
+(38 L) ó de líquidos de la Clase IIIA en más de 60 gal (227 L) se permitirá en los casos en los que
+
+se almacenen dentro de gabinetes de seguridad con una cantidad agregada que no exceda los
+180 gal (681 L).
+c. Combustibles dentro del tanque de equipos móviles en operación podrá exceder a la
+cantidad específica en el caso que el equipo sea operado de acuerdo con su Código contra
+Fuegos.
+d. El uso de materiales explosivos requeridos por entidades estatales, mientras comprometan
+el desempeño normal o en emergencia en intervenciones no será limitado. El almacenaje de
+materiales explosivos deberá estar de acuerdo con los requisitos de la DICSCAMEC.
+e. El almacenaje y uso de materiales explosivos en medicinas y agentes médicos en las
+formas prescritas por las autoridades estatales competentes no serán limitativos.
+f. El almacenaje y empleo de dispositivos activados por impelentes o herramientas
+industriales activados por impelentes que son objeto de fabricación, importación o distribuidas
+para cumplir su propósito previsto, deberán estar limitados a 50 lb (23 kg) de peso neto del
+explosivo.
+g. El almacenamiento de municiones para armas pequeñas y de sus componentes están
+permitidos en tanto estén de acuerdo con los requisitos de la DICSCAMEC.
+h. Combustibles o gas oxidante usado para mantenimiento, reparación y la operación de
+equipos no deberá exceder los 250 pie3 (7,1 m3).
+i. Una cantidad máxima para sólidos de 200 lb (91 kg) o para oxidantes líquidos Clase 3 de
+20 gal (76 L) será permitido siempre que tales materiales sean necesarios para propósitos de
+mantenimiento, para la operación o saneamiento de equipos. Se requiere que los contenedores de
+almacenamiento y el método de almacenaje sean aprobados.
+j. Cilindros de gas que no excedan los 20 pie3 (0,57 m3) en NTP son permitidos dentro de
+gabinetes de gas o campanas concentradoras de humos.
+
+Tabla 02 (h) Máximas Cantidades Permitidas (MCP) de Materiales Riesgosos por Área de
+Control en Ocupaciones para Detención y Correccionales a
+Gas a
+Material Clase Sólido Líquido (a NTP)
+Líquido Inflamable y I y II combinados NP 10 gal NP
+combustible b , c IIIA NP 60 gal NP
+IIIB NP 120 gal NP
+Líquido criogénico Inflamable NP 10 gal NP
+Oxidante NP 10 gal NP
+Explosivos d , c , f , g NP NP NP NP
+Gas inflamable c , h Gaseoso NP NP NP
+Licuefactado i NP 20 lb NP
+Fuegos de artificio 1.4G NP NP NP
+domésticos
+Sólido inflamable NP 5 lb NP NP
+Oxidantes 4 NP NP NP
+3 10 lb j 1 gal j NP
+2 250 lb 25 gal NP
+1 4 000 lb 400 gal NP
+Gas oxidante h Gaseoso NA NP NP
+Licuefactado NA 15 gal NP
+Peróxidos orgánicos Detonable sin NP NP NP
+clasificar NP NP NP
+I NP NP NP
+II 1 500 lb 1 500 lb NP
+III 100 000 lb 100 000 lb NP
+IV NL NL NP
+V
+Materiales pirofóricos NP 1 lb 1 lb 1 lb
+Reactivos inestables 4 ¼ lb ¼ lb NP
+3 1 lb 1 lb NP
+2 10 lb 10 lb NP h
+1 NL NL NP
+Acua-reactivos 3 1 lb 1 lb NA
+2 10 lb 10 lb NA
+1 NL NL NA
+Corrosivos NP 1 000 lb 100 gal NP
+Altamente tóxicos NP 3 lb 3 lb NP k
+Tóxicos NP 125 lb 125 lb NP k
+Para unidades del sistema internacional SI, 1 lb = 0,454 kg; 1 gal = 3,785 L; 1 pie3 = 0,0283 m3.
+NTP: Normal temperatura y presión [medidos a 70° F (21° C) y 14,7 PSI (30 kPa)].
+NP: No permitido. NL: No limitado. NA: No aplicable.
+a. Cantidades ilimitadas de gas serán permitidos en su uso por parte de personal médico o
+para emergencias médicas.
+b. Almacenaje de una combinación de líquidos de la Clase I y Clase II por encima de 10 gal
+(38 L) ó de líquidos de la Clase IIIA en más de 60 gal (227 L) se permitirá en los casos en los que
+
+se almacenen dentro de gabinetes de seguridad con una cantidad agregada que no exceda los
+180 gal (681 L).
+c. Combustibles dentro del tanque de equipos móviles en operación podrá exceder a la
+cantidad específica en el caso que el equipo sea operado de acuerdo con su Código contra
+Fuegos.
+d. El uso de materiales explosivos requeridos por entidades estatales, mientras comprometan
+el desempeño normal o en emergencia en intervenciones no será limitado. El almacenaje de
+materiales explosivos deberá estar de acuerdo con los requisitos de la DICSCAMEC.
+e. El almacenaje y uso de materiales explosivos en medicinas y agentes médicos en las
+formas prescritas por las autoridades estatales competentes no serán limitativos.
+f. El almacenaje y empleo de dispositivos activados por impelentes o herramientas
+industriales activados por impelentes que son objeto de fabricación, importación o distribuidas
+para cumplir su propósito previsto, deberán estar limitados a 50 lb (23 kg) de peso neto del
+explosivo.
+g. El almacenamiento de municiones para armas pequeñas y de sus componentes están
+permitidos en tanto estén de acuerdo con los requisitos de la DICSCAMEC.
+h. Combustibles o gas oxidante usado para mantenimiento, reparación y la operación de
+equipos no deberá exceder los 250 pie3 (7,1 m3).
+i. No se permitirán contenedores para almacenaje que excedan una capacidad de 2,7 lb (1,2
+kg) de agua.
+j. Una cantidad máxima para sólidos de 200 lb (91 kg) o para oxidantes líquidos Clase 3 de
+20 gal (76 L) será permitido siempre que tales materiales sean necesarios para propósitos de
+mantenimiento, para la operación o saneamiento de equipos. Se requiere que los contenedores de
+almacenamiento y el método de almacenaje sean aprobados.
+k. Cilindros de gas que no excedan los 20 pie3 (0,57 m3) en NTP son permitidos dentro de
+gabinetes de gas o campanas concentradoras de humos.
+

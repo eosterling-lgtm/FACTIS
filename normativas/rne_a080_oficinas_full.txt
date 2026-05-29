@@ -1,0 +1,129 @@
+NORMA A.080
+OFICINAS
+CAPITULO I
+ASPECTOS GENERALES
+Artículo 1.- Se denomina oficina a toda edificación destinada a la prestación de
+servicios administrativos, técnicos, financieros, de gestión, de asesoramiento y afines
+de carácter público o privado.
+Artículo 2.- La presente norma tiene por objeto establecer las características que
+deben tener las edificaciones destinadas a oficinas:
+Los tipos de oficinas comprendidos dentro de los alcances de la presente norma son:
+- Oficina independiente: Edificación de uno o más niveles, que puede o no formar
+parte de otra edificación.
+- Edificio corporativo: Edificación de uno o varios niveles, destinada a albergar
+funciones prestadas por un solo usuario.
+CAPITULO II
+CONDICIONES DE HABITABILIDAD Y FUNCIONALIDAD
+Artículo 3.- Las condiciones de habitabilidad y funcionalidad se refieren a aspectos de
+uso, accesibilidad, ventilación e iluminación.
+Las edificaciones para oficinas, deberán cumplir con los requisitos establecidos en la
+Norma A.010 “Consideraciones Generales de Diseño” y en la Norma A.130 “Requisitos
+de Seguridad”.
+Artículo 4.- Las edificaciones para oficinas deberán contar con iluminación natural o
+artificial, que garantice el desempeño de las actividades que se desarrollarán en ellas.
+La iluminación artificial recomendable deberá alcanzar los siguientes niveles de
+iluminación en el plano de trabajo:
+Áreas de trabajo en oficinas 250 luxes
+Vestíbulos 150 luxes
+Estacionamientos 30 luxes
+Circulaciones 100 luxes
+Ascensores 100 luxes
+Servicios higiénicos 75 luxes
+Artículo 5.- Las edificaciones para oficinas podrán contar optativa o simultáneamente
+con ventilación natural o artificial.
+En caso de optar por ventilación natural, el área mínima de la parte de los vanos que
+abren para permitir la ventilación, deberá ser superior al 10% del área del ambiente
+que ventilan.
+Artículo 6 - El número de ocupantes de una edificación de oficinas se calculará a
+razón de una persona cada 9.5 m2.
+
+Articulo 7.- La altura libre mínima de piso terminado a cielo raso en las edificaciones
+de oficinas será de 2.40 m.
+Artículo 8.- Los proyectos de edificios corporativos o de oficinas independientes con
+mas de 5,000 m2 de área útil deberán contar con un estudio de impacto vial que
+proponga una solución que resuelva el acceso y salida de vehículos.
+CAPITULO III
+CARACTERISTICAS DE LOS COMPONENTES
+Articulo 9.- Las edificaciones para oficinas, independientemente de sus dimensiones
+deberán cumplir con la norma A.120 “Accesibilidad para personas con discapacidad”
+Artículo 10.- Las dimensiones de los vanos para la instalación de puertas de acceso,
+comunicación y salida deberán calcularse según el uso de los ambientes a los que dan
+acceso y al número de usuarios que las empleará, cumpliendo los siguientes
+requisitos:
+a) La altura mínima será de 2.10 m.
+b) Los anchos mínimos de los vanos en que se instalarán puertas serán:
+Ingreso principal 1.00 m.
+Dependencias interiores 0.90 m
+Servicios higiénicos 0.80 m.
+Artículo 11.- Deberán contar con una puerta de acceso hacia la azotea, con
+mecanismos de apertura a presión, en el sentido de la evacuación.
+Artículo 12.- El ancho de los pasajes de circulación dependerá de la longitud del
+pasaje desde la salida más cercana y el número de personas que acceden a sus
+espacios de trabajo a través de los pasajes.
+Artículo 13.- Las edificaciones destinadas a oficinas deberán cumplir los siguientes
+requisitos:
+a) El número y ancho de las escaleras esta determinado por el cálculo de evacuación
+para casos de emergencia.
+b) Las escaleras estarán aisladas del recinto desde el cual se accede mediante una
+puerta a prueba de fuego, con sistema de apertura a presión (barra antipánico) en
+la dirección de la evacuación y cierre automático. No serán necesarias las barras
+antipánico en puertas por las que se evacuen menos de 50 personas.
+CAPITULO IV
+DOTACIÓN DE SERVICIOS
+Artículo 14.- Los ambientes para servicios higiénicos deberán contar con sumideros
+de dimensiones suficientes como para permitir la evacuación de agua en caso de
+aniegos accidentales.
+La distancia entre los servicios higiénicos y el espacio más alejado donde pueda
+trabajar una persona, no puede ser mayor de 40 m. medidos horizontalmente, ni
+puede haber más de un piso entre ellos en sentido vertical.
+
+Artículo 15.- Las edificaciones para oficinas, estarán provistas de servicios sanitarios
+para empleados, según lo que se establece a continuación:
+Número de ocupantes Hombres Mujeres Mixto
+De 1 a 6 empleados 1L, 1u, 1I
+De 7 a 20 empleados 1L, 1u, 1I 1L,1I
+De 21 a 60 empleados 2L, 2u, 2I 2L, 2I
+De 61 a 150 empleados 3L, 3u, 3I 3L, 3I
+Por cada 60 empleados adicionales 1L, 1u, 1I 1L,1I
+L: Lavatorio U: Urinario I: Inodoro
+Artículo 16.- Los servicios sanitarios podrán ubicarse dentro de las oficinas
+independientes o ser comunes a varias oficinas, en cuyo caso deberán encontrase en
+el mismo nivel de la unidad a la que sirven, estar diferenciados para hombres y
+mujeres, y estar a una distancia no mayor a 40m. medidos desde el punto más alejado
+de la oficina a la que sirven.
+Los edificios de oficinas y corporativos contarán adicionalmente con servicios
+sanitarios para empleados y para publico según lo establecido en la Norma A.070
+“Comercio” del presente Reglamento, cuando se tengan previstas funciones
+adicionales a las de trabajo administrativo, como auditorios y cafeterías.
+Artículo 17.- La dotación de agua a garantizar para el diseño de los sistemas de
+suministro y almacenamiento son:
+Riego de jardines 5 lts. x m2 x día
+Oficinas 20 lts. x persona x día
+Tiendas 6 lts. x persona x día
+Artículo 18.- Los servicios higiénicos para personas con discapacidad serán
+obligatorios a partir de la exigencia de contar con tres artefactos por servicio, siendo
+uno de ellos accesible a personas con discapacidad.
+En caso se proponga servicios separados exclusivos para personas con discapacidad
+sin diferenciación de género, este deberá ser adicional al número de aparatos exigible.
+Artículo 19.- Las edificaciones de oficinas deberán tener estacionamientos dentro del
+predio sobre el que se edifica. El número mínimo de estacionamientos quedará
+establecido en los planes urbanos distritales o provinciales.
+La dotación de estacionamientos deberá considerar espacios para personal, para
+visitantes y para los usos complementarios.
+Artículo 20.- Cuando no sea posible tener el numero de estacionamientos requerido
+dentro del predio, por tratarse de remodelaciones de edificaciones construidas al
+amparo de normas que han perdido su vigencia o por encontrarse en zonas
+monumentales, se podrá proveer los espacios de estacionamiento en predios
+cercanos según lo que norme la Municipalidad Distrital respectiva en la que se
+encuentre la edificación.
+Artículo 21.- Deberá proveerse espacios de estacionamiento accesibles para los
+vehículos que transportan o son conducidos por personas con discapacidad, a razón
+de 1 cada 50 estacionamientos requeridos.
+
+Su ubicación será la más cercana al ingreso y salida de personas, debiendo existir una
+ruta accesible.
+Artículo 22.- Los estacionamientos en sótanos que no cuenten con ventilación natural,
+deberán contar con un sistema de extracción mecánica, que garantice la renovación
+del aire.
+Articulo 23.- Se proveerá un ambiente para basura de destinará un área mínima de
+0.01 m3 por m2 de área de útil de oficina, con un área mínima de 6 m2.

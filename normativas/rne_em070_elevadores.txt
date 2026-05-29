@@ -1,0 +1,765 @@
+AÑO DE LA LUCHA CONTRA LA CORRUPCIÓN Y LA IMPUNIDAD Martes 12 de marzo de 2019
+RESOLUCIÓN MINISTERIAL
+N° 084-2019-VIVIENDA
+NORMA TÉCNICA EM. 070
+TRANSPORTE MECÁNICO
+DEL REGLAMENTO NACIONAL
+DE EDIFICACIONES
+SEPARATA ESPECIAL
+
+2 NORMAS LEGALES Martes 12 de marzo de 2019 / El Peruano
+
+El Peruano / Martes 12 de marzo de 2019 NORMAS LEGALES 3
+RESOLUCIÓN MINISTERIAL
+Nº 084-2019-VIVIENDA
+Lima, 11 de marzo de 2019
+VISTOS, el Memorándum N° 198-2019-VIVIENDA/VMCS-DGPRCS de la Dirección General de Políticas y Regulación en
+Construcción y Saneamiento; el Informe N° 112-2019-VIVIENDA/VMCS-DGPRCS-DC de la Dirección de Construcción; el
+Informe Nº 005-2018-CPARNE de la Comisión Permanente de Actualización del Reglamento Nacional de Edifi caciones;
+y,
+CONSIDERANDO:
+Que, el artículo 6 de la Ley Nº 30156, Ley de Organización y Funciones del Ministerio de Vivienda, Construcción y
+Saneamiento - MVCS, establece que este Ministerio es el órgano rector de las políticas nacionales y sectoriales dentro
+de su ámbito de competencia, que son de obligatorio cumplimiento por los tres niveles de gobierno en el marco del
+proceso de descentralización, y en todo el territorio nacional y tiene entre otras competencias exclusivas el dictar normas
+y lineamientos técnicos para la adecuada ejecución de las políticas nacionales y sectoriales;
+Que, el numeral 1 del artículo 9 de la citada Ley establece entre las funciones exclusivas del MVCS, desarrollar y
+aprobar tecnologías, metodologías o mecanismos que sean necesarios para el cumplimiento de las políticas nacionales
+y sectoriales, en el ámbito de su competencia;
+Que, el literal d) del artículo 82 del Reglamento de Organización y Funciones del MVCS, aprobado por Decreto Supremo
+N° 010-2014-VIVIENDA y su modifi catoria aprobada por Decreto Supremo N° 006-2015-VIVIENDA, establece que
+la Dirección General de Políticas y Regulación en Construcción y Saneamiento, tiene entre sus funciones proponer
+actualizaciones del Reglamento Nacional de Edifi caciones - RNE, en coordinación con los sectores que se vinculen, en
+el marco de los Comités Técnicos de Normalización, según la normatividad vigente;
+Que, mediante Decreto Supremo Nº 015-2004-VIVIENDA se aprueba el Índice del RNE, aplicable a las Habilitaciones
+Urbanas y a las Edifi caciones que se ejecuten a nivel nacional, estableciéndose en los artículos 1 y 3 de la citada
+norma, que el MVCS aprueba, mediante Resolución Ministerial, las normas técnicas y sus modifi caciones de acuerdo al
+mencionado índice;
+Que, mediante Decreto Supremo N° 011-2006-VIVIENDA se aprueban 66 Normas Técnicas del Reglamento Nacional
+de Edifi caciones, entre las que se encuentra la Norma Técnica EM.070 “Transporte mecánico”, y se crea la Comisión
+Permanente de Actualización del Reglamento Nacional de Edifi caciones - CPARNE, encargada de analizar y formular las
+propuestas para la actualización de las Normas Técnicas del RNE;
+Que, con el Informe Nº 005-2018-CPARNE del 7 de setiembre de 2018, el Presidente de la Comisión Permanente de
+Actualización del Reglamento Nacional de Edifi caciones, eleva la propuesta de modifi cación de la Norma Técnica EM.070
+“Transporte mecánico”, contenida en el numeral III.4 Instalaciones eléctricas y mecánicas, del Título III Edifi caciones del
+RNE, aprobado por Decreto Supremo N° 011-2006-VIVIENDA, la misma que ha sido materia de evaluación y aprobación
+por la mencionada Comisión conforme al Acta de aprobación de la Sexagésima Octava Sesión de fecha 18 de julio de
+2018, que forma parte del expediente correspondiente;
+Que, mediante Resolución Ministerial Nº 376-2018-VIVIENDA, publicada el 7 de noviembre de 2018, se dispone
+la publicación del proyecto de la Norma Técnica EM.070 “Transporte mecánico” del RNE, a efectos de recibir las
+sugerencias y comentarios de las entidades públicas, privadas y de la ciudadanía en general, dentro del plazo de diez
+(10) días hábiles y que, transcurrido dicho plazo, no se presentaron sugerencias ni comentarios sobre la propuesta
+normativa;
+Que, conforme al Memorándum Nº 198-2019-VIVIENDA/VMCS-DGPRCS del 20 de febrero de 2019, sustentado en el
+Informe Nº 112-2019-VIVIENDA/VMCS-DGPRCS-DC, la Dirección General de Políticas y Regulación en Construcción y
+Saneamiento del MVCS, sustenta la modifi cación de la Norma Técnica EM.070 “Transporte mecánico”, contenida en el
+numeral III.4 Instalaciones eléctricas y mecánicas, del Título III Edifi caciones del RNE, aprobada por Decreto Supremo
+Nº 011-2006-VIVIENDA, con el objeto de actualizarla ampliando su campo de aplicación a las etapas de diseño de la
+edifi cación, fabricación de los equipos de transporte mecánico e instalación de los equipos de transporte vertical en la
+edifi cación, incluyendo el requisito relativo al Estudio de Tráfi co Vertical como el procedimiento de cálculo sustentatorio
+del diseño arquitectónico de la edifi cación, e incorporar nuevas tecnologías para ascensores que accionan dispositivos
+de seguridad frente a sismos o incendios y sistemas de transporte vertical destinados al traslado de discapacitados y
+adulto mayor;
+Que, resulta necesario aprobar la modifi cación de la Norma Técnica, a que se refi ere el considerado que antecede,
+conforme a lo opinado por la Comisión Permanente de Actualización del Reglamento Nacional de Edifi caciones y la
+Dirección de Construcción de la Dirección General de Política y Regulación en Construcción y Saneamiento;
+De conformidad con lo dispuesto en el literal b) del artículo 23 de la Ley Nº 29158, Ley Orgánica del Poder Ejecutivo; Ley
+N° 30156, Ley de Organización y Funciones del Ministerio de Vivienda, Construcción y Saneamiento; su Reglamento de
+Organización y Funciones, aprobado por Decreto Supremo N° 010-2014-VIVIENDA, modifi cado por Decreto Supremo
+N° 006-2015-VIVIENDA; y, el Decreto Supremo Nº 015-2004-VIVIENDA que aprueba el Índice del Reglamento Nacional
+Edifi caciones;
+SE RESUELVE:
+Artículo 1.- Modifi cación de la Norma Técnica EM.070 “Transporte mecánico” del Reglamento Nacional de
+Edifi caciones
+Modifícase la Norma Técnica EM.070 “Transporte mecánico” del numeral III.4 Instalaciones eléctricas y mecánicas, del
+Título III Edifi caciones del Reglamento Nacional de Edifi caciones, aprobado por Decreto Supremo Nº 011-2006-VIVIENDA,
+que forma parte integrante de la presente Resolución Ministerial.
+Artículo 2.- Publicación y Difusión
+Encárguese a la Ofi cina General de Estadística e Informática la publicación de la presente Resolución Ministerial, de la
+Norma Técnica a que se refi ere el artículo precedente y de la Hoja de Cálculo de Ascensores para Edifi cios Residenciales
+Multifamiliares (Único Uso) en el Portal Institucional del Ministerio de Vivienda, Construcción y Saneamiento (www.
+vivienda.gob.pe), el mismo día de su publicación en el Diario Ofi cial El Peruano.
+
+4 NORMAS LEGALES Martes 12 de marzo de 2019 / El Peruano
+DISPOSICIÓN COMPLEMENTARIA TRANSITORIA
+Única.- Normativa aplicable a proyectos de inversión en ejecución
+La Norma Técnica modifi cada por la presente Resolución Ministerial, no es de aplicación a los proyectos de inversión
+pública o privada que, a la fecha de su vigencia, cuenten con expediente técnico aprobado en el marco del Sistema
+Nacional de Programación Multianual y Gestión de Inversiones - Invierte.pe, o cuenten con una solicitud de licencia
+de edifi cación en trámite ante la municipalidad respectiva; siendo de aplicación a estos las disposiciones de la Norma
+Técnica EM.070 “Transporte mecánico” del Reglamento Nacional de Edifi caciones, aprobado por Decreto Supremo N°
+011-2006-VIVIENDA.
+Regístrese, comuníquese y publíquese.
+JAVIER PIQUÉ DEL POZO
+Ministro de Vivienda, Construcción y Saneamiento
+NORMA TÉCNICA EM. 070
+TRANSPORTE MECÁNICO
+DEL REGLAMENTO NACIONAL
+DE EDIFICACIONES
+ÍNDICE
+CAPÍTULO I DISPOSICIONES GENERALES
+Artículo 1.- Objeto
+Artículo 2.- Finalidad
+Artículo 3.- Ámbito de aplicación
+Artículo 4.- Defi niciones
+CAPÍTULO II ASCENSORES
+Artículo 5.- Especifi caciones técnicas de los ascensores
+Artículo 6.- Diseño de la edifi cación
+Artículo 7.- Instalación
+Artículo 8.- Ascensores especiales para el transporte de personas con discapacidad y para establecimientos de
+salud
+CAPÍTULO III MONTAVEHÍCULOS Y MINICARGAS
+Artículo 9.- Montavehículos
+Artículo 10.- Minicargas
+Artículo 11.- Especifi caciones técnicas e instalación
+Artículo 12.- Diseño de la edifi cación
+ANEXO 1 PARTES DE UN ASCENSOR ELECTROMECÁNICO
+ANEXO 2 PARTES DE UN ASCENSOR HIDRÁULICO
+ANEXO 3 LLAVE O TRIÁNGULO DE DESTRABAMIENTO (MEDIDAS EN MILÍMETROS)
+ANEXO 4 PROCEDIMIENTO TÉCNICO PARA EL ESTUDIO DE TRÁFICO VERTICAL DE UNA EDIFICACIÓN
+RESIDENCIAL MULTIFAMILIAR
+CAPÍTULO I
+DISPOSICIONES GENERALES
+Artículo 1.- Objeto
+Establecer los lineamientos técnicos mínimos que se deben cumplir para las especifi caciones técnicas, diseño e
+instalación de los equipos de transporte mecánico en edifi caciones.
+Artículo 2.- Finalidad
+Proveer de niveles adecuados de seguridad en el transporte mecánico en las edifi caciones a fi n de que se garantice la
+integridad de las personas, así como la seguridad y efi ciencia del sistema de transporte mecánico.
+Artículo 3.- Ámbito de aplicación
+3.1 Las disposiciones de esta Norma Técnica son de aplicación obligatoria para todo equipo de transporte mecánico que
+se instale en los distintos tipos de edifi caciones incluidos en el presente Reglamento.
+3.2 Debe cumplirse, tanto en edifi caciones nuevas, ampliaciones, remodelaciones, refacciones, acondicionamientos,
+puesta en valor histórico monumental, y en general, cualquier proyecto que modifi ca o requiere un equipo de transporte
+mecánico, así como en toda edifi cación, independientemente de la antigüedad de su construcción, según lo disponga la
+Autoridad.
+3.3 Siendo la presente Norma Técnica de alcance para todo el territorio nacional, el proyectista considera el contexto
+operacional o condiciones especiales donde se construye la edifi cación para incorporar en el proyecto de transporte
+mecánico las consideraciones que garanticen la seguridad de sus ocupantes.
+3.4 En todo lo no indicado de manera expresa en la presente Norma Técnica, los estándares deben basarse, en primer
+orden, en una norma técnica peruana y Reglamentos Técnicos emitidos por las autoridades competentes. En caso de no
+existir, se debe aplicar supletoriamente en el orden siguiente: las normas IEC o ISO en su edición más reciente o normas
+de instituciones reconocidas a nivel internacional.
+
+El Peruano / Martes 12 de marzo de 2019 NORMAS LEGALES 5
+Artículo 4.- Defi niciones
+Para la aplicación de lo dispuesto en la presente Norma Técnica, se debe entender por:
+4.1 Ascensor.- Equipo de transporte vertical, diseñado para mover personas de forma segura, entre los diferentes niveles
+de un edifi cio o estructura. Está formado por partes electromecánicas que funcionan en conjunto. Ver Anexo 1 Partes de
+un ascensor electromecánico y Anexo 2 Partes de un ascensor hidráulico.
+4.2 Capacidad de transporte.- Es la cantidad de personas que son transportadas en 5 minutos por un ascensor en el
+momento de la máxima demanda. Este parámetro viene expresado como un porcentaje de la población total del edifi cio
+y mide la calidad de servicio que el sistema pueda dar.
+4.3 Control.- Dispositivo que regula el arranque, parada, aceleración, dirección y retardo del movimiento de la cabina, así
+como la administración de las llamadas exteriores de los pisos e interiores de cabina.
+4.4 Diseño de la Edifi cación.- Etapa en la cual los proyectistas de la edifi cación defi nen y verifi can la cantidad y capacidad
+de los equipos de transporte vertical así como sus características técnicas.
+4.5 Escalera mecánica.- Equipo de transporte vertical, que consiste en una escalera inclinada, cuyos escalones se
+mueven hacia arriba o hacia abajo, para el transporte de personas en dirección ascendente, descendente o en posición
+inclinada, de forma segura.
+4.6 Estudio de tráfi co vertical.- Es un procedimiento de cálculo que permite evaluar si la cantidad y dimensiones de
+ascensores proyectados son satisfactorios para proporcionar un transporte vertical adecuado al fl ujo de personas del
+edifi cio.
+4.7 Fabricación de los equipos de transporte vertical.- Etapa en la que el fabricante debe determinar las mejores
+consideraciones de diseño de los equipos.
+4.8 Foso.- Profundidad medida verticalmente desde el nivel de piso de la primera parada al fondo de losa del foso del
+ducto del ascensor; en este foso se instalan los amortiguadores de seguridad. También se le denomina Pit.
+4.9 Interruptor de seguridad.- Dispositivo automático para detener la marcha del ascensor en el sobrerecorrido o foso y
+en caso de sobrevelocidad.
+4.10 Instalación de los equipos de transporte vertical en la edifi cación.- Etapa de montaje mecánico y eléctrico de los
+equipos, en la cual el proveedor instala y calibra los equipos para un adecuado funcionamiento según el proyecto.
+4.11 Intervalo de espera.- Es el tiempo máximo entre llegadas consecutivas de distintos ascensores a la parada principal.
+4.12 Máxima demanda.- Periodo de tiempo donde ocurre la mayor cantidad de solicitudes de uso de ascensores por los
+usuarios. También se le conoce como “Pico de subida”.
+4.13 Montacargas.- Equipo de transporte vertical usado para llevar carga o personal de servicio.
+4.14 Montavehículos.- Equipo de transporte vertical usado para la elevación de vehículos y sus pasajeros en el interior.
+4.15 Minicargas (montaplatos, montapapeles, montalibros).- Equipo de transporte vertical usado exclusivamente para
+pequeñas cargas, que pueden ser libros, vajilla, papeles, medicinas o material quirúrgico, entre otros. No transporta
+personas ni animales, y sus puertas de acceso pueden o no estar a nivel de los pisos que sirve.
+4.16 Parada principal.- Nivel del ingreso principal a la edifi cación.
+4.17 Plataformas elevadoras inclinadas o plataformas salvaescaleras.- Plataformas utilizadas exclusivamente por
+personas discapacitadas, que están montadas mediante rieles laterales en el lado del pasamanos o peldaños de una
+escalera, viajando sobre esta y que cuentan con mecanismos de seguridad paracaídas. Pueden ser curvas o rectas
+dependiendo de la escalera.
+4.18 Plataformas elevadoras verticales o plataformas salva alturas.- Plataformas utilizadas para personas discapacitadas
+o cargas. Están montadas en un desnivel y deben contar con mecanismos de seguridad paracaídas.
+4.19 Puerta de desmontaje de motor.- Puerta utilizada exclusivamente para maniobra en el ingreso o salida de maquinaria
+del ascensor, o en casos de emergencia para ingreso de personal autorizado dentro del ducto. Estas puertas trampas
+pueden ubicarse en el sobrerecorrido del ducto o en el piso o losa de la sala de máquinas. Se pueden usar como puertas
+de acceso habitual para mantenimiento.
+4.20 Rampa móvil o pasillo móvil.- Instalación accionada mecánicamente, constituida por un piso móvil sin fi n (cadena
+de placas o banda por ejemplo), destinada al transporte de personas sobre el mismo nivel o entre niveles diferentes en
+posición inclinada.
+4.21 Sobre recorrido.- Distancia vertical entre el nivel de piso terminado de la parada superior y la parte inferior del techo
+del pozo o ducto del ascensor.
+4.22 Sillas elevadoras inclinadas o sillas salvaescaleras.- Son sillas utilizadas exclusivamente para uso privado
+(cuando se requiera) y destinada a personas con discapacidad temporal o permanente, las cuales están
+montadas mediante rieles laterales en el lado del pasamanos o peldaños de una escalera, viajando sobre esta
+y deben contar con mecanismos de seguridad para caídas. Pueden ser curvas o rectas dependiendo de la
+escalera.
+4.23 Sistemas de transporte vertical.- Son aquellos sistemas provistos de seguridad electromecánica, diseñados para
+el transporte seguro y efi ciente de personas y carga en edifi caciones. Es un término que engloba todos los equipos que
+cumplen con este tipo de función de transporte seguro de personas: ya sea vertical, angular u horizontal como el caso
+de rampa móvil o pasillo móvil.
+4.24 Sistema de intercomunicación de emergencia.- Medio de comunicación de dos o más vías entre el ascensor y una
+ubicación atendida por personal autorizado en la edifi cación o si no es posible, fuera de ella.
+
+6 NORMAS LEGALES Martes 12 de marzo de 2019 / El Peruano
+4.25 Vano de izaje de azotea.- Apertura de pozo o ducto ubicado encima de la parada superior y por debajo de sala de
+máquinas, que sirve para el izaje de los equipos durante el montaje.
+CAPÍTULO II
+ASCENSORES
+Artículo 5.- Especifi caciones técnicas de los ascensores
+Los ascensores que se instalen en las edifi caciones deben cumplir lo siguiente:
+5.1 Los ascensores eléctricos deben ser fabricados conforme a la Norma Europea EN-81 “Reglas de seguridad para la
+construcción e instalación de ascensores. Parte 1: Ascensores eléctricos”, u otra norma equivalente.
+5.2 Los ascensores hidráulicos deben ser fabricados conforme a la Norma Europea EN-81 “Reglas de seguridad para la
+construcción e instalación de ascensores. Parte 2: Ascensores hidráulicos”, u otra norma equivalente.
+5.3 El contratista general de la obra debe proporcionar al propietario de la edifi cación el certifi cado de calidad, la fi cha
+técnica de equipos y las pruebas de los elementos de seguridad, emitidos por el fabricante de los ascensores a ser
+instalados, así como de sus componentes, que aseguren el cumplimiento de los requisitos que se detallan en la presente
+norma.
+5.4 Adicionalmente, en las puertas de acceso, se debe cumplir lo siguiente:
+a. Las puertas de acceso al pozo, deben estar impedidas de abrirse cuando el ascensor esté funcionado, salvo cuando
+nivele con algún piso de la edifi cación, mediante el uso de un dispositivo de apertura el cual debe tener las características
+físicas indicadas en el Anexo 3.
+b. Cuando la puerta de acceso a la cabina del ascensor se encuentre abierta, el ascensor no debe moverse; salvo en
+caso de mantenimiento o de operación en modo de revisión.
+c. Disponer de dispositivos electrónicos, que en caso de que la puerta se esté cerrando y encuentre algún obstáculo,
+haga que inmediatamente se abra; sin afectar o golpear bruscamente a los objetos o personas.
+5.5 En las cabinas, se debe cumplir también lo siguiente:
+a. En el interior deben llevar interruptor o botón de alarma, el que debe ser accionado en caso de alguna emergencia,
+dando una señal de alarma acústica por una falla y consiguiente atrapamiento en la cabina del ascensor.
+b. La cabina debe tener sufi ciente ventilación mecánica.
+5.6 Adicionalmente, en los contrapesos, se debe cumplir con lo establecido en la Norma Europea EN-81 “Reglas de
+seguridad para la construcción e instalación de ascensores. Parte 1: Ascensores eléctricos”, o norma equivalente.
+5.7 En los rieles guías, se debe cumplir también lo siguiente:
+a. Las guías de la cabina y del contrapeso deben ser perfi les metálicos y rígidos. Deben estar acoplados entre sí,
+machihembrados y unidos por empalmes metálicos debidamente empernados con la sufi ciente cantidad de pernos que
+aseguren su verticalidad, garantizado por el fabricante del ascensor.
+b. No se permite el uso de soldadura de ningún tipo para la fi jación mecánica o unión de rieles guía.
+c. Las fi jaciones al ducto deben ser de acero estructural y deben estar fi rmemente ancladas para garantizar seguridad.
+d. La máxima separación entre fi jaciones debe ser determinada por el fabricante del ascensor.
+5.8 Adicionalmente, en las instalaciones electromecánicas, se debe cumplir lo siguiente:
+a. Las instalaciones eléctricas propias del equipo de transporte vertical son las comprendidas desde el tablero de
+control del equipo de transporte vertical hacia la cabina y cada parte interna de la cabina. Pueden funcionar para el
+mando y la iluminación de la cabina interior y exterior, cumpliendo las condiciones indicadas en el Código Nacional de
+Electricidad.
+b. Deben tener un tablero eléctrico normalizado bajo el Código Nacional de Electricidad e independiente por cada
+ascensor o equipo de transporte vertical, ubicado en la sala de máquinas o ambiente normalizado, bajo la regulación
+técnica vigente para este caso.
+c. Según el fabricante se puede proveer un sistema de puesta a tierra independiente para los ascensores. Los valores de
+resistencia requeridos del sistema puesto a tierra deben estar determinados por el fabricante, cumpliendo las condiciones
+indicadas en el Código Nacional de Electricidad.
+d. Las instalaciones de telecomunicaciones para los equipos de transporte vertical deben accionar la
+señalética, avisos visuales, sonoros, alarmas y de mando, al interior y exterior de la cabina del ascensor,
+avisos sonoros para personas con discapacidad visual. Asimismo, deben accionar los sensores de seguridad
+como los de apertura y cierre de las puertas, alarma de exceso de peso para transportar, mal funcionamiento,
+intercomunicador de emergencia, parlantes para la difusión de avisos comerciales y música ambiental, equipos
+de amplificación de señales de telefonía celular, en cumplimiento de las condiciones indicadas en el Código
+Nacional de Electricidad. Esta disposición también opera en el caso de cabinas que operen puertas de acceso
+en dos lados diferentes.
+e. Las instalaciones eléctricas y de telecomunicaciones propias del equipo de transporte vertical en su totalidad deben ser
+efectuadas y garantizadas por el fabricante. Está prohibido la adición o inclusión de instalaciones de telecomunicaciones
+que no fueran las permitidas y no se encuentren certifi cadas por el fabricante.
+5.9 Con respecto a la capacidad de la cabina, ésta debe tener unas dimensiones máximas según la Tabla 01 (por peso)
+y unas dimensiones mínimas según la Tabla 02 (por número de personas).
+
+El Peruano / Martes 12 de marzo de 2019 NORMAS LEGALES 7
+Tabla 01
+Área útil máxima Área útil máxima
+Carga Nominal (kg) Carga Nominal (kg)
+de la cabina (m2) de la cabina (m2)
+300 0,90 1000 2,40
+375 1,10 1050 2,50
+400 1,17 1125 2,65
+450 1,30 1200 2,80
+525 1,45 1250 2,90
+600 1,60 1275 2,95
+630 1,66 1350 3,10
+675 1,75 1425 3,25
+750 1,90 1500 3,40
+800 2,00 1600 3,56
+825 2,05 2000 4,20
+900 2,20 2500 5,00
+975 2,35
+Nota: Por encima de los 2,500 kg añadir 0,16 m2 por cada 100 kg adicionales. Para cargas intermedias se determina la
+superfi cie por interpolación lineal.
+Tabla 02
+Número de Área útil mínima de Número de Área útil mínima de
+pasajeros la cabina (m2) pasajeros la cabina (m2)
+4 0,79 13 2,15
+5 0,98 14 2,29
+6 1,17 15 2,43
+7 1,31 16 2,57
+8 1,45 17 2,71
+9 1,59 18 2,85
+10 1,73 19 2,99
+11 1,87 20 3,13
+12 2,01
+Nota: Por encima de 20 pasajeros añadir 0,115 m2 por cada pasajero adicional.
+5.10 En relación con los rótulos de la cabina y del pozo o ducto, se debe cumplir también con lo siguiente:
+a. Las placas o carteles deben estar fi jados o grabados al panel, desde el fabricante.
+b. La vida útil del rótulo debe ser igual a la vida útil del equipo. Se deben ubicar en lugares visibles y sus caracteres deber
+ser legibles con facilidad de lectura.
+c. El rótulo debe indicar la carga útil y el número de pasajeros.
+d. Las puertas de inspección de los pozos, vano de izaje de azotea y sala de máquinas tendrán carteles de “PELIGRO.
+ACCESO SOLO A PERSONAL AUTORIZADO”.
+Artículo 6.- Diseño de la edifi cación
+En el diseño de la edifi cación, se debe cumplir con las siguientes disposiciones:
+6.1 El diseño de la edifi cación debe considerar lo establecido en la Norma Europea EN-81 “Reglas de seguridad para la
+construcción e instalación de ascensores. Parte 1: Ascensores eléctricos”, o norma equivalente.
+6.2 El Proyecto Técnico acerca de los equipos de transporte vertical (ascensores, rampas mecánicas, etc.) para una
+edifi cación, debe contar con cálculos y especifi caciones técnicas a nivel estructural, resistencia al fuego así como de
+instalaciones eléctricas, mecánicas y de comunicaciones, a fi n de garantizar un funcionamiento seguro y efi ciente,
+cumpliendo con la normativa vigente.
+6.3 El ascensor no debe ser utilizado como espacio o pasillo de comunicación entre ambientes en un mismo piso o nivel
+de la edifi cación.
+
+8 NORMAS LEGALES Martes 12 de marzo de 2019 / El Peruano
+6.4 Las instalaciones eléctricas deben cumplir el Código Nacional de Electricidad.
+6.5 El Anteproyecto para una edifi cación que incluya ascensores debe contar con el Estudio de Tráfi co Vertical el cual
+sustente técnicamente el número, dimensiones y características generales de los ascensores. El Estudio de Tráfi co
+Vertical debe ser elaborado por un/a profesional en arquitectura (colegiado/a y habilitado/a) mediante un procedimiento
+matemático como fórmulas, software u otros, cumpliendo las siguientes etapas:
+1. Etapa 1. Cálculo bajo normativa internacional, regional, nacional o metodologías de asociaciones reconocidas.
+2. Etapa 2. Simulaciones por programa de cómputo sobre tráfi co vertical que aplique los datos característicos del
+equipo a instalar en la modelación del estudio de tráfi co. Prevalece la condición más exigente que cumpla la Tabla
+03.
+3. Para el caso de edifi caciones residenciales multifamiliares (único uso), se puede utilizar el procedimiento incluido en
+el Anexo 04.
+El Estudio de Tráfi co Vertical debe considerar como mínimo los siguientes datos de entrada del proyecto:
+a. Nombre del proyecto.
+b. Propietario
+c. Profesional responsable
+d. Uso de la edifi cación.
+e. Población total del proyecto (número total de personas).
+f. Capacidad de transporte en 5 minutos como % de la población total.
+g. Población a transportar en 5 minutos
+h. Intervalo de espera máximo, según Tabla 03 (según Tabla 03).
+i. Cantidad de ascensores
+j. Número de pasajeros por ascensor. Capacidad nominal según Tablas 01 y 02.
+k. Capacidad útil de pasajeros (número de personas). Es el 80% de la capacidad nominal según norma.
+l. En el caso de hospedajes, ver Nota 01 de la Tabla 03.
+m. Para el cálculo de edifi caciones residenciales multifamiliares también se considera el termino Capacidad útil de
+pasajeros.
+n. Número de plantas (incluyendo sótanos)
+o. Distancia vertical total desde nivel de piso terminado más bajo hasta el último nivel de piso terminado más alto.
+p. Distancia vertical entre plantas.
+q. Velocidad nominal del ascensor, según fabricante.
+r. Tipo de puerta del ascensor, según fabricante.
+s. Dimensiones de puerta(s), en metros. El resultado obtenido se debe comparar con lo indicado en el artículo 11 de
+la Norma Técnica A.120 Accesibilidad para personas con discapacidad y adulto mayor del Reglamento Nacional de
+Edifi caciones, prevaleciendo la condición más exigente.
+El Estudio de Tráfi co Vertical debe ser elaborado para el período de máxima demanda (ver numeral 4.6 de la presente
+norma).
+Los resultados del Estudio de Tráfi co Vertical deben cumplir con lo indicado en la Tabla 03:
+Tabla 03
+Intervalo de Capacidad de transporte en 5 minutos Referencia normativa del R.N.E. y
+Uso de la edifi cación
+espera (seg.) (como % de la población total). comentarios
+Vivienda <90 >6% A.020
+A.030
+Hospedaje <50 >10%
+Ver Nota 1
+Educación <50 >15% A.040
+Salud <35 >10% A.050
+A.060. Solo aplica para transporte de
+Industria <50 >15%
+personas
+A.070.
+Comercio <50 >10%
+Ver Nota 2
+
+El Peruano / Martes 12 de marzo de 2019 NORMAS LEGALES 9
+Intervalo de Capacidad de transporte en 5 minutos Referencia normativa del R.N.E. y
+Uso de la edifi cación
+espera (seg.) (como % de la población total). comentarios
+A.080
+Ofi cinas <35 >15%
+Edifi cación con un solo propietario
+A.080
+Ofi cinas <35 >12%
+Edifi cación con dos o más propietarios
+Servicios comunales <35 >15% A.090
+A.100
+Recreación y deportes -- --
+Ver Nota 2
+A.110
+Transporte y comunicaciones -- --
+Ver Nota 3.
+Notas de la Tabla 03:
+1. En el caso de hospedajes, se debe de considerar la carga útil como el 50% de la carga nominal del ascensor, debido
+al equipaje de los huéspedes dentro del ascensor.
+2. En el caso de tiendas por departamentos, tiendas de mejoramiento del hogar y locales comerciales agrupados, así
+como en el caso de edifi caciones para recreación y deportes, que además de ascensores incluyan escaleras mecánicas
+y/o rampas mecánicas, se puede incorporar la capacidad de transporte de dichas instalaciones en el estudio de trafi co
+vertical, no siendo exigible cumplir con el intervalo de espera y capacidad de transporte en cinco minutos, que refi ere la
+Tabla 03.
+3. Para el caso de edifi caciones de transportes y comunicaciones, como estaciones de tren o metro, las escaleras
+mecánicas o rampas móviles pueden destinarse al transporte vertical del público en general y los ascensores deben estar
+destinados principalmente para el transporte de personas discapacitadas.
+6.6 Ante emergencias, se deben cumplir los siguientes requisitos de seguridad:
+a. Los ascensores deben contar con un sistema de intercomunicación de emergencia de tres vías de acuerdo con la
+Norma Mercosur NM 207 “Elevadores eléctricos de pasajeros. Seguridad para la construcción e instalación”, o norma
+equivalente.
+La señal de alarma acústica se debe escuchar en el acceso principal o Lobby del edifi cio. En caso el edifi cio no cuente
+con Lobby o el acceso principal se encuentre a una distancia mayor a 30 metros del ascensor, se puede colocar la señal
+de alarma acústica al lado de la puerta del ascensor siguiendo lo establecido en la Norma Europea EN-81 “Reglas de
+seguridad para la construcción e instalación de ascensores. Ascensores para el transporte de pasajeros y cargas. Parte
+28: Alarmas a distancia en ascensores de pasajeros y pasajeros y cargas”, o norma equivalente.
+b. Los ascensores deben contar con dispositivos de apertura para rescatar a las personas que permanezcan dentro de
+la cabina.
+c. Frente a sismos, los requisitos de seguridad deben ser los siguientes:
+- Los ascensores que se instalen en las Edificaciones Esenciales, en las Edificaciones Importantes, así como
+en Edificaciones Comunes donde es obligatorio el uso del ascensor (según lo establecido en la Norma Técnica
+E.030 Diseño Sismorresistente del Reglamento Nacional de Edificaciones), deben incluir un sistema que detecte
+un sismo a partir de grado 6 Escala Richter, el cual los dirija inmediatamente al piso más cercano para quedar
+con las cabinas detenidas y las puertas abiertas. En este sentido, se debe cumplir con la Norma Europea
+EN-81 “Reglas de seguridad para la construcción e instalación de ascensores. Aplicaciones particulares para
+ascensores de pasajeros y de pasajeros y cargas. Parte 77: Ascensores sujetos a condiciones sísmicas” o
+norma equivalente.
+- Después del sismo (a partir de grado 6 Escala Richter), los ascensores no deben funcionar. Para restituir su
+funcionamiento se requiere una inspección realizada por personal técnico califi cado el cual debe ser certifi cado por el
+fabricante y/o importador de los equipos, cualquiera sea su marca de acuerdo a lo señalado en la Norma Europea EN-
+81. Normas de seguridad para la construcción e instalación de ascensores Aplicaciones particulares para ascensores de
+pasajeros y de pasajeros y cargas. Parte 77: Ascensores sujetos a condiciones sísmicas”.
+d. Frente a incendios, se deben cumplir los siguientes requisitos de seguridad:
+- Todos los ascensores deben contar con la Fase I “Operación de Emergencia”; su pulsador o interruptor debe estar
+ubicado en el lobby, piso principal, centro de control o ambiente de uso similar y debe ser de fácil acceso para ser
+activado en caso de una emergencia real. Dicha Fase también puede ser activada mediante la señal de interface del
+ascensor con el sistema de detección de incendio de la edifi cación.
+- Esta primera fase o Fase I debe comenzar con la activación de la señal de incendio (manual o automática), para
+luego llevar a las cabinas de los ascensores hacia el piso de evacuación designado previamente, quedando las cabinas
+detenidas y con las puertas abiertas, de acuerdo a la Norma Europea EN-81 “Reglas de seguridad para la construcción
+e instalación de ascensores. Aplicaciones particulares para los ascensores de pasajeros y de pasajeros y cargas. Parte
+73: Comportamiento de los ascensores en caso de incendios” o norma equivalente.
+- Las edifi caciones de más de 07 niveles medidos a partir del nivel de acceso desde la vía pública deben contar con la
+Fase II “Operación de emergencia desde la cabina”; que es la siguiente a la Fase I, pudiendo los bomberos acceder a las
+cabinas de los ascensores por el piso principal con la única fi nalidad de facilitar las labores de rescate y la extinción del
+fuego; de acuerdo a la Norma Europea EN-81 “Reglas de seguridad para la construcción e instalación de ascensores.
+Aplicaciones particulares para los ascensores de pasajeros y de pasajeros y cargas. Parte 72: Ascensores contra
+incendios” o norma equivalente.
+
+10 NORMAS LEGALES Martes 12 de marzo de 2019 / El Peruano
+- Después del incendio los ascensores no deben funcionar. Para restituir su funcionamiento se requiere una inspección
+realizada por personal técnico califi cado el cual debe ser certifi cado por el fabricante y/o importador de los equipos,
+cualquiera sea su marca, en la Norma Europea EN-81 “Reglas de seguridad para la construcción e instalación de
+ascensores. Aplicaciones particulares para los ascensores de pasajeros y de pasajeros y cargas. Parte 72: Ascensores
+contra incendios”.
+6.7 En el diseño del pozo o ducto, se debe cumplir lo siguiente:
+a. El diseño del pozo y del área de máquinas debe incluir criterios técnicos para evitar la propagación fuego y de humo.
+b. Los contrapesos deben instalarse dentro del pozo.
+c. El pozo debe tener aberturas para las puertas del ascensor, entre el foso y el cuarto de máquinas.
+d. Las puertas de inspección y de conservación, así como las de socorro, deben ser de imposible apertura hacia el
+interior del pozo. Dichas puertas deben tener alta resistencia, y responder a las mismas condiciones de resistencia e
+incombustibilidad que las puertas de los accesos y estar dotadas de cerradura efi caz y posición de cierre controlado
+eléctricamente.
+e. Los pozos deben estar ventilados mecánica o naturalmente, según lo indicado por el fabricante, y no deben ser nunca
+utilizados para asegurar la ventilación de locales o ambientes diferentes a su servicio.
+f. Los pozos no deben situarse encima de un lugar accesible a personas a menos que el contrapeso esté provisto de un
+paracaídas.
+g. Todo pozo debe tener cerramientos cortafuego con una resistencia al fuego no menor a dos (02) horas cuando sirven
+a edifi caciones de más de 3 pisos y no menor a una (01) una hora cuando sirven edifi caciones de hasta 3 pisos. La
+resistencia al fuego debe ser como mínimo de ¾ del tiempo del cerramiento.
+h. Un pozo puede agrupar hasta 04 cabinas contiguas sin ningún muro cortafuego que lo separe.
+i. En caso el pozo agrupe más de 04 cabinas se debe adicionar un muro cortafuego intermedio.
+j. En la parte inferior del pozo debe preverse un foso protegido de infi ltraciones de agua.
+k. En caso de ser utilizado el acceso más bajo del pozo para descender al foso, su puerta debe ser resistente al
+fuego. Asimismo, debe tener una manija sin llave que permita una salida inmediata del pozo. Desde el exterior
+solo se podrá acceder con llave. A falta de otras puertas de acceso o inspección, debe preverse una escalera de
+acceso con pasamanos, para permitir al personal encargado de la conservación un descenso, sin riesgo, al fondo
+del foso.
+l. Dentro del pozo no se deben albergar tubos, conducciones eléctricas, ni cualquier elemento extraño al servicio del
+ascensor.
+m. El pozo debe estar preparado para obtener una iluminación artifi cial, mínima de 50 lux .
+n. Para ascensores sin sala de máquinas, el hall de acceso de la última parada superior del ascensor, deberá ser de libre
+acceso y conectada a la escalera de escape del edifi cio, con el fi n del irrestricto acceso a dicho hall para las labores de
+mantenimiento y emergencias.
+6.8 En el diseño del cuarto de máquinas, se debe cumplir lo siguiente:
+a. Los cuartos de máquinas deben situarse en ambientes especiales, de preferencia encima del pozo y con acceso sólo
+a personal autorizado. En caso se utilice otra ubicación, se debe sustentar el diseño.
+b. Los cuartos de máquinas deben contar con puerta de acceso y escaleras seguras con pasamanos, con puerta trampa
+de servicio en el piso para montaje y desmontaje de maquinaria.
+c. La iluminación debe ser de 200 lux medidos a nivel del plano de trabajo y la temperatura debe ser mantenida entre 5
+°C y 40 °C .
+d. La construcción debe ser capaz de soportar los esfuerzos de los equipos. Los techos deben ser impermeables,
+resistentes a la intemperie y tener resistencia al fuego del mismo tiempo que el pozo del ascensor.
+e. Los motores o máquinas de tracción deben tener una cimentación que evite la transmisión de vibraciones.
+f. Las dimensiones deben darse por los fabricantes del equipo. La altura mínima debe ser 2 m .
+g. No se debe instalar tanques de gas o combustibles en general sobre el techo de los cuartos de máquina, ni tampoco
+encima del sobre recorrido en caso sean equipos sin cuarto de máquinas.
+6.9 En el diseño de los contrapesos, se debe cumplir lo siguiente:
+a. Con lo establecido en la Norma Europea EN-81 “Reglas de seguridad para la construcción e instalación de ascensores.
+Parte 1: Ascensores eléctricos”, o norma equivalente.
+b. Las pesas de éstos deben estar adecuadamente arriostradas o fi jadas para prevenir su desprendimiento en caso de
+sismos.
+c. Se prohíbe el uso de vaciados completos de una sola pieza como contrapeso; estos deben ser por piezas correctamente
+instaladas y aplomadas según normativa.
+Artículo 7.- Instalación
+La instalación de los ascensores debe realizarse por personal técnico califi cado el cual debe ser certifi cado por el
+fabricante y/o importador de los equipos, cualquiera sea su marca, aplicando una de las siguientes normas:
+- Norma Europea EN-81 “Reglas de seguridad para la construcción e instalación de ascensores”.
+
+El Peruano / Martes 12 de marzo de 2019 NORMAS LEGALES 11
+- Norma Mercosur NM 207 “Elevadores eléctricos de pasajeros. Seguridad para la construcción e instalación”.
+En la instalación de los ascensores, no se permite el uso de soldadura de ningún tipo para la fi jación mecánica o unión
+de rieles guía. Para otros casos, debidamente justifi cados por el profesional responsable, se siguen las Normas de la
+Sociedad Americana de Soldadura (AWS, por sus siglas en inglés). Asimismo, se pueden realizar ensayos de calidad no
+destructivos bajo la misma Norma, de ser requeridos, a fi n de garantizar la calidad de dichas uniones.
+Artículo 8.- Ascensores especiales para el transporte de personas con discapacidad y para establecimientos de
+salud
+Los ascensores especiales para el transporte de personas con discapacidad y para establecimientos de salud deben
+cumplir los siguientes requisitos de seguridad:
+8.1 Estos equipos deben ser destinados para el transporte de personas con discapacidad a fi n de salvar pequeños
+desniveles no mayores a un piso, y deben ser capaces de transportar a la persona con silla de ruedas.
+8.2 Se debe cumplir con la Norma Europea EN-81 “Reglas de seguridad para la construcción e instalación de ascensores.
+Ascensores especiales para el transporte de personas y cargas” (Parte 40 Salvaescaleras y plataformas elevadoras
+inclinadas para el uso por personas con movilidad reducida y Parte 41 Plataformas elevadoras verticales para el uso por
+personas con movilidad reducida), o normas equivalentes.
+8.3 Siguiendo también la Norma Europea EN-81 ”Reglas de seguridad para la construcción e instalación de
+ascensores. Ascensores especiales para el transporte de personas y cargas”, el proyectista o arquitecto debe
+disponer de un espacio horizontal sufi ciente para el acceso y uso de estos equipos, a fi n de detenerse, maniobrar,
+abrir y franquear puertas.
+8.4 El equipo se debe localizar con la correspondiente señalización direccional.
+8.5 En la plataforma deben fi gurar sus características, la carga máxima admisible, el tipo de silla de ruedas o
+personas con movilidad reducida que admite, así como instrucciones de uso y esquema de funcionamiento mediante
+pictogramas.
+8.6 Si no es posible instalar estos equipos en el interior del predio del edifi cio, se debe disponer de rampas como recorrido
+alternativo al mecánico.
+8.7 En edifi caciones de salud (hospitales u otros), estos equipos deben tener suministro exclusivo de energía eléctrica
+para el equipo.
+8.8 Adicionalmente, en las Plataformas Elevadoras Verticales, se debe cumplir lo siguiente:
+a. Las Plataformas Elevadoras Verticales se deben diseñar, construir, instalar y mantener según lo que se establece
+la Norma Europea UNE-EN 81-41 “Reglas de seguridad para la construcción e instalación de ascensores. Ascensores
+especiales para el transporte de personas y cargas” o, en su defecto, la norma ASME A.18-1 “Estándar de seguridad para
+plataformas elevadoras y sillas de escalera”, o norma equivalente.
+b. Estas plataformas deben evitar dejar espacios bajo las mismas para evitar el riesgo de aplastamiento; además deben
+estar provistas de sensores que detengan la máquina en caso de estos riesgos.
+c. Las dimensiones mínimas de la plataforma y la carga mínima de cálculo, deben ser determinadas por el fabricante,
+basados en el contenido de la Norma Europea EN-81 “Reglas de seguridad para la construcción e instalación de
+ascensores. Ascensores especiales para el transporte de personas y cargas”. Parte 41 Plataformas elevadoras verticales
+para el uso por personas con movilidad reducida, o norma equivalente.
+Tabla 04
+Dimensiones mínimas de Carga mínima de Tipos de sillas
+Puertas
+Plataformas libres del barrido de puertas cálculo
+Silla manual o eléctrica de tipo
+Con puertas al 125 cm x 125 cm 250 kg/m2 y siempre
+A o B y la presencia de un
+frente o bien 110 x 140 cm (anchura x profundidad) mayor de 385 kg
+acompañante
+80 cm x 125 cm 250 kg/m2 y siempre Silla manual o eléctrica de tipo A y
+(anchura x profundidad) mayor de 250 kg sin acompañante
+Con dos puertas,
+al frente y al
+Silla manual o eléctrica de tipo
+fondo. 90 cm x 140 cm 250 kg/m2 y siempre
+A o B y la presencia de un
+(anchura x profundidad) mayor de 315 kg
+acompañante
+8.9 Asimismo, en las Plataformas Elevadoras Inclinadas, se debe cumplir lo siguiente:
+a. Se deben construir, instalar y mantener según lo que establece la Norma Europea EN-81 “Reglas de seguridad para
+la construcción e instalación de ascensores”. Ascensores especiales para el transporte de personas y cargas”. Parte 40
+Salvaescaleras y plataformas elevadoras inclinadas para el uso por personas con movilidad reducida, o en su defecto, la
+norma ASME A.18-1 “Estándar de seguridad para plataformas elevadoras y sillas de escalera” y la norma ASME A17.5
+“Equipamiento eléctrico de ascensor y escalera”, o norma equivalente.
+b. Estos dispositivos deben estar previstos para su uso por una única persona.
+c. Las dimensiones mínimas de la plataforma y la carga mínima de cálculo, deben ser determinadas por el fabricante,
+basados en el contenido de la Norma Europea EN 81 “Reglas de seguridad para la construcción e instalación de
+ascensores. Ascensores especiales para el transporte de personas y cargas”. Parte 40 Salvaescaleras y plataformas
+elevadoras inclinadas para el uso por personas con movilidad reducida, o norma equivalente.
+
+12 NORMAS LEGALES Martes 12 de marzo de 2019 / El Peruano
+Tabla 05
+Dimensiones mínimas de
+Carga mínima de cálculo Tipos de sillas
+plataforma
+70 x 90 cm 250 kg/ m2 y siempre mayor o igual Silla manual o eléctrica de
+(anchura x profundidad) a 225 kg tipo A
+75 x 100 cm 250 kg/ m2 y siempre mayor o igual Silla manual o eléctrica de tipo
+(anchura x profundidad) a 250 kg A o B
+d. Se deben considerar las partes del equipo que puedan sobresalir de la plataforma durante el movimiento, especialmente
+cuando se produce un giro, a fi n de que el desplazamiento y cruces o interferencias que puedan aparecer en el recorrido,
+se produzcan de forma segura.
+e. Estos equipos se deben instalar en los tramos de escalera, en los siguientes casos:
+- Cuando en su posición de uso no impidan la utilización segura de la escalera por otras personas a pie,
+- Cuando en su posición plegada no reduzcan ni la anchura mínima exigible de la escalera ni la de cálculo de los
+elementos de evacuación (pasillos, escaleras, etc.), y,
+- Cuando se pongan los medios humanos o técnicos para asegurar que en caso de emergencia no se entorpezca la
+evacuación.
+f. Estos dispositivos no se pueden utilizar para la evacuación del edifi cio.
+g. Para que una plataforma elevadora inclinada no impida en su posición de uso la utilización segura de la escalera por
+otras personas a pie, se debe dejar un espacio libre de al menos 0,60 m cuando ésta se encuentra desplegada.
+Si esta solución es inviable, se puede aceptar que el ancho de la escalera se ocupe completamente durante el uso del
+dispositivo en los siguientes casos:
+- Cuando la circulación de personas en la escalera sea reducida. Se recuerda que estos dispositivos son apropiados para
+salvar pequeños desniveles no mayores a 1 piso o 3 m.
+- Cuando existe la posibilidad de un recorrido alternativo, que puede ser otra escalera o rampa de acceso. En este caso
+se debe señalizar debidamente el recorrido alternativo.
+- Cuando el tramo de la escalera a salvar no es muy prolongado, por ejemplo, cuando no excede de 8 peldaños o pasos,
+o menos de 1,2 m de desnivel.
+h. Finalmente, se debe garantizar que el movimiento de la plataforma elevadora inclinada en todo su recorrido sea
+siempre visible por el usuario a pie, de forma que pueda advertir el peligro y disponer de señales auditivas y/o luminosas
+durante todo su recorrido que deben activarse antes de que el movimiento inicie, fundamentalmente en lugares de gran
+afl uencia de público.
+CAPÍTULO III
+MONTAVEHÍCULOS Y MINICARGAS
+Artículo 9.- Montavehículos
+Los montavehículos deben cumplir con los siguientes requerimientos:
+9.1 Estos equipos deben ser destinados para el transporte vertical de vehículos y en su diseño, se debe considerar al
+conductor y pasajeros.
+9.2 Todo montavehículo debe cumplir con los lineamientos establecidos en la Norma Europea EN-81 “Reglas de seguridad
+para la construcción e instalación de ascensores. Parte 2: Ascensores hidráulicos”, o norma equivalente, pudiendo ser
+equipos hidráulicos o de tracción.
+9.3 La puerta debe tener un ancho mínimo de 2 m (2 000 mm) y una altura de 2,10 m (2 100 mm).
+9.4 Deben estar provistos de equipos propios de extracción de monóxido de carbono, a fi n de garantizar la seguridad de
+los pasajeros del vehículo.
+9.5 Para el caso de ductos de montavehículos que estén expuestos a la intemperie, debe proveerse un drenaje para
+aguas pluviales en la fosa, a fi n de evitar inundaciones.
+9.6 Las instalaciones eléctricas deben cumplir con lo establecido en el Código Nacional de Electricidad.
+Artículo 10.- Minicargas
+Las minicargas deben cumplir con los siguientes requerimientos:
+10.1 La capacidad de carga debe llegar hasta 300 kg.
+10.2 Las minicargas pueden ser dotadas de puertas manuales, instaladas a media altura del tipo guillotina o a nivel de
+piso del tipo manual batiente. Además, deben contar con chapas electromecánicas que impidan el movimiento de la
+cabina en caso esté abierta alguna puerta.
+10.3 Toda minicarga debe cumplir con los lineamientos establecidos en la Norma Europea EN-81 “Reglas de seguridad
+para la construcción e instalación de ascensores. Parte 3: Minicargas eléctricos e hidráulicos”, o norma equivalente,
+pudiendo tratarse de equipos hidráulicos o de tracción.
+
+El Peruano / Martes 12 de marzo de 2019 NORMAS LEGALES 13
+10.4 Las instalaciones eléctricas deben cumplir con lo establecido en el Código Nacional de Electricidad.
+CAPÍTULO IV
+ESCALERAS MECÁNICAS Y RAMPAS O PASILLOS MÓVILES
+Artículo 11.- Especifi caciones técnicas e instalación
+Las escaleras mecánicas y rampas o pasillos móviles deben seguir las especifi caciones técnicas y ser instaladas
+según lo establecido en la Norma Europea EN 115-1 “Seguridad de escaleras mecánicas y andenes móviles. Parte 1:
+Construcción e instalación”, o norma equivalente, observando las distancias de seguridad en su entorno.
+Artículo 12.- Diseño de la edifi cación
+El diseño de las escaleras mecánicas y rampas o pasillos móviles debe cumplir lo siguiente:
+12.1 En la zona de ingreso y salida de las escaleras o rampas se debe asegurar una mínima altura libre de tránsito de
+2,30 m para los usuarios.
+12.2 Solamente se pueden diseñar escaleras mecánicas o rampas móviles en disposición cruzada continua, para pisos
+que tengan una altura libre igual o mayor a 3,50 m . Para pisos de altura libre menor a 3,50 m no se debe diseñar
+escaleras mecánicas o rampas móviles en disposición cruzada continua. Ver Gráfi co 1.
+Altura libre de escaleras mecánicas cruzadas
+y rampas móviles
+Gráfi co 1
+12.3 En general, se debe cumplir con los requisitos de seguridad y medidas de protección para los usuarios, de
+acuerdo a la Norma Europea EN 115-1 “Seguridad de escaleras mecánicas y andenes móviles. Parte 1: Construcción
+e instalación”, o norma equivalente. Al inicio de los pasamanos y en el punto de intersección debe haber barreras de
+protección adecuadamente fi jadas de acuerdo a la Norma Europea UNE-EN 115. Ver ubicación de barreras de protección
+en recuadros azules (inicio/termino) y círculos rojos (intersección) en Gráfi co 2.
+12.4 En el anteproyecto, debe precisarse mediante una señal o fl echa el sentido del fl ujo de las escaleras mecánicas,
+considerando el tránsito de las personas.
+12.5 En el proyecto, las instalaciones eléctricas deben cumplir con lo establecido en el Código Nacional de Electricidad.
+12.6 En la etapa de funcionamiento debe respetarse el sentido del fl ujo de la escalera tal como se aprueba en el
+anteproyecto, salvo en caso de desperfecto. Ver ejemplo de fl ujo de escaleras (fl echas) en Gráfi co 2.
+Sentido del fl ujo de la escalera mecánica
+Gráfi co 2
+
+14 NORMAS LEGALES Martes 12 de marzo de 2019 / El Peruano
+ANEXO 1
+PARTES DE UN ASCENSOR ELECTROMECÁNICO
+Leyenda
+1. Interruptores principales 9. Indicador de piso LIP 18. Maniobra del ascensor
+de alimentación. 10. Botonera de piso LOP 19. Sistemas de tracción
+2. Cuarto de máquinas 11. Amortiguadores 20. Maniobra para confi gurar
+3. Máquina de elevación 12. Contrapeso un pequeño foso y una
+4. Cables de suspensión 13. Manga de maniobra huida superior (en caso de
+5. Información del hueco 14. Paracaídas existir) temporales
+6. Cabina 15. Cable del limitador de 21. Medio de suspensión y
+7. Operador de puerta velocidad tracción (STM)
+8. Puerta de piso 16. Guías
+17. Limitador de velocidad
+
+El Peruano / Martes 12 de marzo de 2019 NORMAS LEGALES 15
+ANEXO 2
+PARTES DE UN ASCENSOR HIDRÁULICO
+Leyenda
+1. Cilindro telescópico
+2. Maniobra del ascensor
+3. Bloque de válvulas de regulación
+4. Unidad de aceite con bomba
+5. Tubo de presión
+6. Válvula paracaídas con fuga hidráulica
+ANEXO 3
+LLAVE O TRIÁNGULO DE DESTRABAMIENTO (MEDIDAS EN MILÍMETROS)
+ANEXO 4
+PROCEDIMIENTO TÉCNICO PARA EL ESTUDIO DE TRÁFICO VERTICAL
+DE UNA EDIFICACIÓN RESIDENCIAL MULTIFAMILIAR
+El procedimiento técnico se basa en la Hoja de Cálculo “Cálculo de ascensores para edifi cios residenciales multifamiliares
+(único uso)” publicada en el Portal Institucional del Ministerio de Vivienda Construcción y Saneamiento donde el usuario
+puede introducir los siguientes datos de entrada, de acuerdo a su diseño.
+PASO 1. Ingresar la siguiente información en la hoja de cálculo:
+Datos generales:
+- Fecha
+- Nombre del Proyecto
+- Ubicación del Proyecto
+- Datos del proyectista
+
+16 NORMAS LEGALES Martes 12 de marzo de 2019 / El Peruano
+- Población total del proyecto (número total de personas). No considerar la población del primer nivel o nivel de ingreso
+principal ni los sótanos.
+- Población a transportar en cinco minutos (Número mínimo de personas)
+- Intervalo de espera máximo (segundos)
+Diseño de ascensores para el proyecto:
+- Cantidad de Ascensores
+- Número de pasajeros por ascensor (capacidad nominal)
+- Capacidad útil de pasajeros (80% de la capacidad nominal)
+- Número de plantas del proyecto (incluir todos los niveles y sótanos)
+- Distancia vertical total del proyecto (metros) Desde nivel de piso terminado más bajo (por ejemplo, último sótano) hasta
+el último nivel de piso terminado más alto (por ejemplo, azotea)
+- Velocidad nominal del ascensor (m/s) según fabricante
+- Tipo de Puerta
+- Dimensiones de Puerta (metros)
+PASO 2. Una vez ingresados los datos, automáticamente, se obtendrán los siguientes resultados sobre:
+- Intervalo de espera del proyecto (segundos)
+- Población a transportar en 5 minutos del proyecto (N° de personas)
+Verifi car los resultados del cálculo según datos ingresados con lo establecido en la Norma Técnica EM070 Transporte
+Mecánico del Reglamento Nacional de Edifi caciones.
+Simultáneamente, la hoja de cálculo indica si se cumple o no con la norma.
+PASO 3. En caso no se cumpla la norma, reformular los datos de diseño, como cantidad de ascensores, capacidad
+nominal, entre otros.
+NORMA EM.070 TRANSPORTE MECÁNICO (2018)
+CÁLCULO DE ASCENSORES PARA EDIFICIOS RESIDENCIALES MULTIFAMILIARES (ÚNICO USO)
+Fecha :
+Nombre del Proyecto :
+Calle / Número:
+Ubicación del Proyecto :
+Distrito: Provincia: Departamento:
+Datos del proyectista : Nombre: Profesión: N° colegiatura:
+Población total del proyecto (número total de personas).
+1 No considerar la población del primer nivel o nivel de 176.00
+ingreso principal ni los sótanos.
+Población a transportar en cinco minutos (Número
+2 10.56 6% % Capacidad de transporte en 5 minutos segun norma
+mínimo de personas)
+3 Intervalo de espera máximo (segundos) 90 Intervalo de espera maximo segun norma
+DISEÑO DE ASCENSORES PARA EL PROYECTO TOTAL
+4 Cantidad de Ascensores 1 1
+5 Número de pasajeros por ascensor (capacidad nominal) 8
+Capacidad útil de pasajeros (80% de la capacidad
+6 6.4
+nominal)
+Número de plantas del proyecto (incluir todos los niveles
+7 15
+y sótanos).
+Distancia vertical total del proyecto (metros). Desde nivel
+de piso terminado más bajo (por ejemplo, último sótano)
+8 43.5
+hasta el último nivel de piso terminado más alto (por
+ejemplo, azotea).
+9 Velocidad nominal del ascensor (m/s) según fabricante 1.00
+10 Tipo de Puerta Lateral
+11 Dimensiones de Puerta (metros) 1.00
+RESULTADOS
+12 Intervalo de espera del proyecto (segundos) 151.37 No cumple con la norma 151.37
+Población a transportar en 5 minutos del proyecto (N°
+13 12.68 Sí cumple con la norma 12.68
+de personas)
+Comparar los resultados del cálculo (celdas 12 y 13) con los dos requisitos a cumplir establecidos en la norma (celdas 2 y 3).
+Nota: En caso no cumplir los dos requisitos a la vez, se debe recalcular el diseño con nuevos datos, como cantidad de ascensores, capacidad
+nominal, entre otros.
+1748799-1

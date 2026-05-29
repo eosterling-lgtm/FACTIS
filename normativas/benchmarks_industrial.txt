@@ -82,3 +82,116 @@ Razón: estructura metálica portal frame prefabricada, sin acabados interiores,
   Sótanos:             No (losa a nivel)        Frecuente (estacionamientos)
   Plazo construcción:  4–7 meses               18–36 meses
   Yield arrendamiento: 6–8% neto/año           4–6% neto/año (Lima)
+
+=== PARQUE LOGÍSTICO 47 — DATOS VERIFICADOS (PPTX May 2025) ===
+
+PROYECTO ALMACÉN PROYECTADO (VES):
+  Área terreno:    18,789 m²
+  Área nave:       14,315 m²
+  Ocupación:       76.2%
+  Inversión total: US$ 4,172,660 + IGV
+  Costo/m² nave:   US$ 291.5/m² (all-in)
+  Altura clara:    13.6 m
+  Posiciones:      30,484 pos (2.13 pos/m²)
+  Puertas embarque: 22 und (1 c/650 m² nave)
+  Renta:           US$ 6.5/m²/mes (sin IGV, sin condominio)
+  Facturación anual: US$ 1,116,570
+  Payback (T.R.):  3.74 años (bruto, sin gastos operación)
+
+PROYECTOS ANTERIORES MISMA EMPRESA:
+  Almacén VI:  55,296 m² terreno / 44,238 m² nave / 80.0% / $12,386,640 / $280/m² / 15 meses
+  Almacén VII: 71,887 m² terreno / 57,578 m² nave / 80.1% / $16,697,620 / $290/m² / 13 meses
+  Almacén VIII: 60,833 m² terreno / 48,272 m² nave / 79.4% / $13,880,470 / $288/m² / 10 meses
+  Almacén IX:  32,774 m² terreno / 25,080 m² nave / 76.5% / $7,161,595  / $285/m² / 5 meses
+
+CONCLUSIONES:
+  - Costo construcción nave clase A Lima: US$ 280-292/m² (all-in)
+  - Densidad de ocupación real: 76-80% del terreno
+  - Renta clase A VES: US$ 6.5/m²/mes confirmado
+  - Puertas de embarque: 1 cada ~650 m² de nave
+  - Plazo construcción referencial: ~1 mes por cada 3,000 m² de nave
+
+=== MERCADO INDUSTRIAL LURÍN — DATOS 2024-2025 (investigación mayo 2026) ===
+
+PRECIOS DE TERRENO:
+  Dentro de parque (MacrOpolis): US$ 140–200/m²
+  Lotización fuera de parque:    US$ 120–187/m²
+  VES (referencia):              US$ 300–400/m² (sin oferta significativa)
+  Chilca (comparativo):         US$ 65–120/m²
+  Huachipa:                     US$ 130–135/m²
+
+RENTAS NAVE INDUSTRIAL:
+  Clase A (h>12m, sprinklers, andenes): US$ 5.5–8.5/m²/mes
+  Clase B (h=7.5–10.5m):               US$ 4.0–5.5/m²/mes
+  Renta promedio mercado (2025):        US$ 6.1–6.4/m²/mes
+
+MÉTRICAS DE MERCADO:
+  Vacancia Lurín (Q3 2025):   11.9% (saludable)
+  Demanda Lurín / Lima total: 54% (líder)
+  Yield / Cap rate:           8–10% (clase A)
+  Absorción neta anual Lima:  83,000–95,000 m²/año
+
+COSTO CONSTRUCCIÓN NAVE (2024-2025):
+  Almacén básico (struct. metálica simple): US$ 215–325/m²
+  Nave industrial (h=8-10m):               US$ 270–430/m²
+  Nave Clase A (h=12-14m, completa):       US$ 430–650/m²
+  Cámara frigorífica (con equipos):        US$ 675–1,215/m²
+  Proyecto integrado (terreno+obra+indirectos): US$ 600–900/m²
+  Referencia real: Simétrica 22,381 m² = US$ 909/m² all-in
+
+OPERADORES INSTALADOS EN LURÍN:
+  Logística 3PL: Ransa (6,066 m²), Megacentro Lurín (+300 unidades)
+  E-commerce: Mercado Libre (CD 3,000 m², operativo oct.2025)
+  Tech: Cirion Data Center LIM2 (12,000 m², 20MW, AI-Ready)
+  Industria: Alicorp, Molitalia, Natura, Yanbal, Ecolab, Bata, Divemotor, Metso
+  MacrOpolis: 350+ empresas, 1.1M m² ocupados, 41+ km vías internas
+
+PROYECTOS EN EJECUCIÓN 2025:
+  Simétrica Almacenes Lurín: 22,381 m² Clase A — entregado abr.2025 — US$20M
+  MacrOpolis Fase 3: 45,000 m² Fase 1 + 30,000 m² Fase 2 — en ejecución
+  Pipeline Lima 2025: +500,000 m² proyectados (88% Lima Sur + Callao)
+
+NORMATIVA LURÍN:
+  Base: Ord. 933-MML-2006 (la "NNL" del cert. 065-2020 es error tipográfico)
+  Vigente: Ord. 1814-MML (plano zonificación feb.2024, IMP)
+  Complementaria: Ord. 2389-2021-MML (Reajuste Integral Lurín)
+  SIN PDU distrital propio — integrado a PLANMET 2040 (Ord. 2499-2022)
+
+COMPARATIVO LURÍN vs CHILCA vs VES:
+  Lurín: terreno US$140-200 / renta US$5.5-8.5 / vacancia 11.9% / demanda 54%
+  Chilca: terreno US$65-120 / renta US$3.5-5.5 / vacancia 34.1% / demanda 19%
+  VES:    terreno US$300-400 / renta US$5.0-7.0 / saturado / demanda 27%
+
+PERSPECTIVAS 2025-2028:
+  - Escasez creciente de suelo en Lurín → Chilca como próximo frontier
+  - Anillo Vial Periférico (construcción desde 2026): reducirá Lurín-Callao significativamente
+  - Cold chain: mercado US$510M en 2025, proyectado US$625M en 2026
+  - E-commerce: gasto digital Perú US$37B en 2024, proyectado US$60B en 2027
+  - Cap rates: estables 8-10%, sin compresión esperada hasta post-elecciones 2026
+  - Chilca: desplaza a Lurín y Huachipa en oferta disponible (Cushman & Wakefield nov.2025)
+
+=== TRANSACCIONES REALES VES — ALDEA LOGÍSTICA (2023-2024) ===
+
+DATOS DE COMPRAVENTA VERIFICADOS:
+  Aldea 8:  32,992 m² — US$ 5,278,741 — US$ 160/m² — Ex: Fam. Wong — 2023
+  Aldea 9:  32,785 m² — US$ 5,650,000 — US$ 172/m² — Ex: Autorex    — 2023
+  Aldea 10: 35,000 m² — US$ 4,900,000 — US$ 140/m² — Ex: Celima     — 2024
+  TOTAL: ~100,777 m² comprados — promedio US$ 157/m²
+
+CONCLUSIÓN CRÍTICA:
+  Lotes GRANDES VES (~30,000 m²): US$ 140–172/m² — no US$ 300-400/m²
+  El rango US$ 300-400/m² aplica a lotes pequeños o zonas residenciales prime
+  Para modelado SOLUM con lotes industriales grandes en VES: usar US$ 140-175/m²
+
+CERTIFICADO CZ VES (N°137-2025, Mz.H Parcela 2, vigente a 01/04/2028):
+  Zonificación: CZ (Comercio Zonal) — ATN I
+  Altura: 4 PISOS FIJOS (CZ VES no usa fórmula 1.5(a+r))
+  Retiro: 1.50 ml frontal (y laterales en esquina)
+  Estacionamiento: 1/50 m² área comercial (Ord. 933-MML Anexo 2)
+  Almacenes logísticos: PERMITIDOS en CZ per Índice de Usos ATN I
+  Geotécnico: OBLIGATORIO para >3 pisos (suelo arenoso VES)
+  Sin habilitación urbana — requiere tramitar
+
+UBICACIÓN ALDEA (VES zona industrial):
+  Vecinos: BSF Almacenes del Perú, DINET S.A., CD Saga Falabella, Aldea Logística Global
+  Vías: Av. Villa del Mar, Av. César Vallejo, Av. Velasco Alvarado

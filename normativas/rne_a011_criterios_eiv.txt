@@ -1,0 +1,310 @@
+NORMA TÉCNICA A.011
+CRITERIOS Y CONDICIONES PARA LA EVALUACIÓN DEL
+IMPACTO VIAL EN EDIFICACIONES
+DEL REGLAMENTO NACIONAL DE EDIFICACIONES
+
+CAPÍTULO I
+DISPOSICIONES GENERALES
+Artículo 1.- Objeto
+La presente Norma Técnica tiene por objeto establecer los criterios, condiciones,
+características, alcances y requisitos que deben reunir los documentos y planos del
+expediente de solicitud de licencia que permitan revisar, evaluar y aprobar los
+anteproyectos y proyectos de edificación, para mitigar el impacto que puedan generar
+las edificaciones sobre la vía pública, durante su etapa de operación o funcionamiento.
+Artículo 2.- Ámbito de aplicación
+2.1 La presente Norma Técnica es de aplicación para los siguientes proyectos de
+edificación:
+- Hoteles y Apart Hoteles de 4 o 5 estrellas, que cuenten con 40 a más
+estacionamientos.
+- Edificios de educación superior con aforo mayor a 500 personas.
+- Clínicas y Hospitales, que cuenten con 40 a más estacionamientos.
+- Gran industria o Industria pesada, cuyas operaciones demanden el movimiento de
+carga pesada.
+- Industria mediana, cuyas operaciones demanden el movimiento de carga pesada.
+- Centros comerciales.
+- Mercados mayoristas.
+- Mercados minoristas.
+- Supermercados.
+- Tiendas de mejoramiento del hogar.
+- Galerías comerciales.
+- Galerías feriales.
+- Establecimiento de venta de combustibles.
+- Estaciones de servicios.
+- Edificios corporativos o de oficinas independientes con más de 5,000 m² de área útil.
+- Servicios comunales con más de 500 personas.
+- Recreación y deportes con más de 1,000 ocupantes.
+- Otros que determine el Reglamento Nacional de Edificaciones.
+2.2 Para los proyectos de uso comercial señalados anteriormente, la presente Norma
+Técnica es aplicable a partir de ciento cincuenta (150) estacionamientos.
+2.3 La presente Norma Técnica no es aplicable para proyectos con frente a vía peatonal
+o en predios cuyas dimensiones no permitan su implementación.
+2.4 Para edificaciones de uso hospedaje con usos complementarios como
+tragamonedas, centro de convenciones, salas de usos múltiples u otros que implique
+gran rotación de personas, aplica la exigencia mayor.
+2.5 Para el caso de proyectos para terminales terrestres, son aplicables los
+lineamientos y disposiciones emitidas por el sector transportes y comunicaciones.
+Artículo 3.- Glosario de términos
+Para los efectos de la presente Norma Técnica se consideran los siguientes conceptos:
+1
+
+Área de barrido de vehículo: Es la superficie libre que requiere todo vehículo cuando
+cambia de dirección. El Manual de Carreteras - Diseño Geométrico (DG) del Ministerio de
+Transportes y Comunicaciones (MTC) establece el diseño de las áreas de barrido de
+acuerdo a las clases de vehículos para calles, carreteras, entre otros.
+Esquema de giro de vehículo liviano
+Área útil: Es el área de la edificación donde se desarrollan las actividades de acuerdo al
+uso de la misma, alberga de manera permanente trabajadores en labores administrativas
+y sirve para determinar el aforo.
+Centro de distribución o Logístico: Es la infraestructura en la cual ingresan, se
+almacenan y se generan órdenes de salida de productos para su distribución al comercio
+minorista o mayorista. Generalmente se constituye por uno o más almacenes, en los
+cuales ocasionalmente se cuenta con sistemas de refrigeración o aire acondicionado,
+áreas para organizar la mercancía y compuertas, rampas u otras infraestructuras para
+carga y descarga de los vehículos.
+Impacto vial negativo: Es la disminución o alteración en forma perjudicial del tránsito de
+una calzada y/o acera como consecuencia del flujo de vehículos o personas por causa
+del funcionamiento de una edificación.
+Interferencias: Son acciones o eventos que se generan como consecuencia de la
+ejecución de actividades, ya sea durante la construcción o en la etapa de funcionamiento,
+produciendo posibles impactos viales negativos.
+Manual de Carreteras - Diseño Geométrico (DG): Es el documento normativo que
+organiza y recopila las técnicas y procedimientos para el diseño de la infraestructura vial,
+en función a su concepción y desarrollo, y acorde a determinados parámetros. Contiene
+la información necesaria para diferentes procedimientos, en la elaboración del diseño
+geométrico de los proyectos, de acuerdo a su categoría y nivel de servicio, en
+concordancia con la normativa vigente sobre la gestión de la infraestructura vial.
+2
+
+Manual de dispositivos de control de tránsito automotor para calles y carreteras:
+Es el documento técnico oficial, destinado a establecer la necesaria e imprescindible
+uniformidad en el diseño y utilización de los dispositivos de control del tránsito (señales
+verticales y horizontales o marcas en pavimento, semáforos y dispositivos auxiliares).
+Contiene los diseños gráficos de las señales reglamentarias, preventivas y de
+información; además, incorpora señales reguladoras y preventivas en zonas de trabajo e
+incluye señales turísticas.
+Punto de control: Es el espacio, en el interior del predio, donde se realiza el control para
+acceder a una edificación.
+Reglamento Nacional de Vehículos: Es el dispositivo legal que establece los requisitos
+y características técnicas que deben cumplir los vehículos para que ingresen, se
+registren, transiten, operen y se retiren del Sistema Nacional de Transporte Terrestre.
+Señalización horizontal: Son las marcas en el Pavimento o Demarcaciones. Están
+conformadas por marcas planas en el pavimento, tales como líneas horizontales y
+transversales, flechas, símbolos y letras, que se aplican o adhieren sobre el pavimento,
+sardineles, otras estructuras de la vía y zonas adyacentes.
+Señalización vertical: Son dispositivos instalados al costado o sobre el camino, y tienen
+por finalidad, reglamentar el tránsito, prevenir e informar a los usuarios mediante palabras
+o símbolos.
+Vehículo liviano: Es el vehículo de diseño correspondiente a automóviles y camionetas,
+para transporte de personas con capacidad de hasta de 7 asientos; su área máxima de
+barrido es usada para verificar el ingreso y salida de vehículos a los predios.
+Vehículo T2S1: Es el vehículo de carga equivalente al remolque simple según el
+Reglamento Nacional de Vehículos; su área de barrido se usa para verificar los accesos y
+salidas de las edificaciones industriales. Este vehículo de diseño es el considerado como
+mínimo para establecimientos que usan carga pesada.
+3
+
+CAPÍTULO II
+CONDICIONES, CONTENIDO Y CRITERIOS DEL PLAN DE MITIGACIÓN
+Artículo 4.- Plan de Mitigación
+Es el conjunto de criterios, condiciones, características, alcances y requisitos para mitigar
+el impacto vial que puedan generar los proyectos de edificación.
+El plan de mitigación se expresa en planos y memoria descriptiva firmados por
+profesional Arquitecto o Ingeniero Civil, debiendo ser resuelto dentro de los límites del
+predio. Para dichos efectos, los planos se presentan conforme se detalla en el párrafo 5.2
+del artículo 5 de la presente Norma Técnica, de manera que se muestre la salida y el
+acceso a la edificación.
+El área del entorno del predio es referencial para entender la coherencia funcional de la
+propuesta y las posibles interferencias con los otros edificios o áreas de dominio público.
+Artículo 5.- Contenido del Plan de Mitigación
+El Plan de Mitigación contiene lo siguiente:
+5.1 Memoria descriptiva, la cual debe desarrollar:
+a) La relación del proyecto con el sistema vial adyacente.
+El objetivo es verificar el cumplimiento de la afectación y/o reserva
+correspondiente al Plan Vial sobre el predio. Se debe incluir la información
+sobre el frente del proyecto respecto a proyectos de gran envergadura como
+paraderos de tren, BTR (Bus de Tránsito Rápido), entre otros, mientras éstos
+se encuentren a 150 metros del proyecto medidos desde la esquina más
+próxima del predio.
+b) La localización de estacionamientos y el desarrollo del sistema vial
+interno que incluya los flujos vehiculares y peatonales.
+El objetivo es mostrar la ubicación de los estacionamientos y el tipo de unidad
+según el Reglamento Nacional de Vehículos, sustentando la cantidad, así
+como los sentidos en el recorrido interno que permita visualizar su relación
+con los peatones y la factibilidad de uso de los accesos, tanto a nivel de la vía
+pública como de las áreas de estacionamientos en sótanos o en niveles
+superiores.
+c) El sistema de control de accesos:
+i) Para el estacionamiento de los usuarios.
+ii) Para la zona de carga y descarga de mercancías (cuando corresponda).
+Los vehículos livianos o pesados que esperan ser registrados para acceder a
+estas áreas deben hacerlo dentro del predio y no en la vía pública.
+No se permite el acceso para vehículos de carga pesada en edificaciones
+industriales y/o para la zona de carga y descarga de mercancías en
+edificaciones comerciales, cuando se ubiquen frente a una vía de dos
+carriles, uno por sentido, salvo justificación aceptada por la municipalidad
+respectiva.
+4
+
+d) El área de desembarque de pasajeros.
+El planteamiento del área de desembarque de pasajeros se desarrolla al
+interior del predio, según los criterios señalados en el párrafo 6.2 del artículo
+6 de la presente Norma Técnica.
+Si como resultado del Plan de Mitigación se requiere el traslado de módulo
+de un paradero, cambio del ciclo de semáforo u otras actividades en áreas de
+dominio público, las mismas son tramitadas ante la municipalidad que
+corresponda, fuera de los alcances de la presente Norma Técnica.
+5.2 Planos de mitigación, en escala legible no mayor a 1/250, que desarrollan:
+a) La vía pública hasta completar la sección vial, lo que incluye la vereda
+opuesta y/o el límite que conforma el área de dominio público de la(s) vía(s).
+b) Las secciones viales existentes sobre el frente del proyecto, acotadas en
+planta y corte, comparadas con la sección normativa en el caso de vías del
+Sistema Vial Primario o Metropolitano y para las vías locales, las de la
+habilitación urbana aprobada, o en su defecto, la información que
+proporcione la municipalidad respectiva.
+c) Se incluye el área de barrido de los vehículos desde el carril de la calzada
+hasta los estacionamientos y/o el patio de maniobras (acceso), debiéndose
+acotar y señalar los radios de giro en las veredas y áreas del entorno.
+d) En forma lateral la sección vial debe abarcar 15 metros a la derecha e
+izquierda del predio, a fin de mostrar el acceso y salida de los vehículos y su
+relación con el flujo peatonal. En el caso de predios en intersección debe
+incluir la totalidad de la misma hasta 15 metros hacia el interior de las vías
+que la conforman.
+Artículo 6.- Criterios para el Plan de Mitigación
+Estos criterios deben estar contemplados en la memoria descriptiva y los planos que se
+indican en el artículo 5 de la presente Norma Técnica.
+6.1 Punto de control:
+El punto de control para acceder al estacionamiento, al área de desembarque de
+pasajeros, o a la zona de carga y descarga de mercancías, se ubica a una distancia
+denominada “espacio de espera” que no se emplace en la vía pública. Esta distancia
+puede desarrollarse en forma perpendicular a la vía de ingreso o a través de un
+camino interno paralelo a la vereda. Se permite que el punto de control se ubique al
+final de la rampa de acceso, en la medida que se cumpla con las dimensiones
+requeridas.
+El espacio de espera señalado es el calculado para todos los accesos que dispone
+el proyecto; por lo tanto, si se cuenta con varios accesos, se puede repartir la
+cantidad. En caso el cálculo de como resultado un número menor a la unidad, debe
+ser redondeado según el tipo de vehículo (si es liviano, 5 metros; si es T2S1, 25
+metros; si es C2, 15 metros) o unidad vehicular, según corresponda:
+a) Para locales industriales de Gran Industria (Industria Pesada) e Industria
+Mediana.
+5
+
+6
+P a ra a cce so d e m e rca d e ría co n ve h ícu lo
+m á xim o d e d ise ñ o C 2
+C a n tid a d d e
+ve h ícu lo s p e sa d o s y
+E sp a cio d e e sp e ra
+livia n o s
+(m e tro s)
+e sta cio n a d o s
+(u n id a d e s)
+V A R IA B LE A V A R IA B LE B
+H a sta 5 0 1 5
+D e 5 1 a 2 0 0 3 0
+D e 2 0 1 a m á s 0 .3 X V A R IA B LE A
+E l e sp a cio d e e sp e ra m o stra d o p u e d e se r re
+su p e ra e l d e cim a l 0 .5
+p a rtid o e n fu n ció n d e la ca n tid a d d e a cce so s. E n to d o s lo s ca so s la fra cció n se re d o n d e a a 1 5 (m e tro s) cu a n d o
+P a ra a c c e so d e m e rc a d e ría c o n v e h íc u lo
+m á x im o d e d ise ñ o T 2 S 1
+C a n tid a d d e
+v e h íc u lo s p e sa d o s y
+E sp a c io d e e sp e ra
+liv ia n o s
+(m e tro s)
+e sta c io n a d o s
+(u n id a d e s)
+V A R IA B L E A V A R IA B L E B
+H a sta 5 0 2 5
+D e 5 1 a 2 0 0 5 0
+D e 2 0 1 a m á s 0 .5 X V A R IA B L E A
+E l e sp a c io d e e sp e ra m o stra d o p u e d e se r re
+su p e ra e l d e c im a l 0 .5
+p a rtid o e n fu n c ió n d e la c a n tid a d d e a c c e so s. E n to d o s lo s c a so s la fra c c ió n se re d o n d e a a 2 5 (m e tro s) c u a n d o
+En el caso del ingreso destinado sólo a vehículos livianos, el espacio de
+espera mínimo debe ser la mitad del requerido para uso comercial, con un
+mínimo de 5 metros.
+Únicamente para los centros de distribución o logísticos que ocupen un área
+de terreno mayor a 1 Ha. se debe adjuntar un estudio que sustente el espacio
+de espera por medio de una evaluación vial de los ingresos y salidas
+previstos; no siendo aplicable, para estos casos, las tablas previstas en el
+presente artículo.
+b) Edificaciones de uso comercio, oficinas y servicios comunales (excepto
+templos y cementerios), se requiere espacio para el 1% de la dotación de
+estacionamientos que corresponda, siendo la cantidad mínima 1 vehículo
+(equivalente a 5 metros). Para los servicios de culto (templos y cementerios)
+se exige el espacio para 1 vehículo por cada cien personas de aforo.
+c) Edificaciones de uso recreación y deportes, se requiere el espacio necesario
+para el 2% de la cantidad de estacionamientos que albergue, siendo la
+cantidad mínima 3 vehículos (equivalente a 15 metros). Esta dimensión se
+puede repartir entre los accesos.
+d) Para edificaciones de uso Hotel y Apart Hotel de más de 4 o 5 estrellas, que
+cuenten con 40 a más estacionamientos, la distancia mínima exigida debe
+ser de 1 vehículo como mínimo (5 metros), desde el frente del predio al punto
+de control, a menos que la edificación contemple otros usos como
+tragamonedas, centro de convenciones, salas de usos múltiples u otros que
+implique gran rotación de personas, en cuyo caso aplica la exigencia mayor.
+e) Para edificaciones de educación superior con un aforo de personas mayor a
+500; se debe considerar una distancia de 3 vehículos como mínimo (15
+
+metros) desde el frente del predio al punto de control de acceso. En caso la
+edificación contemple otros usos como auditorios, centro de convenciones,
+salas de usos múltiples u otros que implique gran rotación de personas,
+aplica la exigencia mayor.
+f) En edificaciones para clínicas y hospitales que cuenten de 40 a más
+estacionamientos, debe existir una distancia de 3 vehículos como mínimo (15
+metros) al punto de control de acceso.
+6.1.1 En el caso que el área de estacionamientos se desarrolle en niveles distintos al
+de acceso, se permite que el punto de control se ubique al final de la rampa
+mientras contenga la cantidad de vehículos requerida.
+6.1.2 En ningún caso el área de barrido de los vehículos de ingreso debe invadir un
+carril distinto al del acceso, por lo que parten desde el carril derecho de la calzada
+e ingresan al sendero interior (o rampa) respectivo(a) sin que genere un riesgo de
+impacto frontal contra el que circule en sentido contrario.
+6.1.3 En caso la edificación cuente con una rampa que sirva para el acceso y salida,
+debe plantearse un área de espera que no interfiera con la salida de 1 vehículo
+desde la rampa.
+6.1.4 De no existir sistema de control o se realiza una vez que se estaciona el vehículo,
+entonces no se requiere del área de espera. En todos los casos se debe
+demostrar que la vía diseñada y/o el acceso-salida, permite el desplazamiento sin
+maniobras adicionales al área de barrido del vehículo.
+6.1.5 La distancia de espera para acceder al punto de control puede ser perpendicular
+al ingreso o paralela al mismo y, al nivel o en una rampa. En el caso que se haya
+previsto el control luego de que el vehículo se encuentre estacionado, no es
+necesaria esta distancia.
+6.2 Área de desembarque de pasajeros:
+Debe ser considerado en el interior del predio en los proyectos que tengan un aforo
+mayor a 300 personas, con la longitud suficiente para albergar como mínimo 2
+vehículos simultáneos, de acuerdo con el siguiente cuadro:
+Aforo Espacio de vehículo
+De 301 a 500 2
+De 501 a 1000 3
+De 1001 a 2000 4
+De 2001 a 3000 5
+De 3001 a 4000 6
+De 4001 a 5000 7
+Cada espacio de vehículo equivale a 5 metros de distancia.
+Para edificaciones con mayores aforos se incrementa 01 espacio por cada 2000 personas.
+Para los predios cuyo frente del predio no cuente con la distancia mínima necesaria, se debe sustentar
+su implementación al interior de la edificación.
+Puede considerarse una vía interna que sirva tanto como espacio de espera previa
+al punto de control como para desembarque. El área de desembarque de pasajeros
+puede ubicarse en el sótano o nivel distinto al acceso, en cuyo caso deben
+complementar con la señalización de zona rígida en todo el perímetro a fin de no
+7
+
+afectar la eficiencia de la vía. En los proyectos de edificación con uso de hospedaje,
+recreación y deporte, de acuerdo a lo señalado en el artículo 2 de la presente Norma
+Técnica, dicha área se considera también para el embarque de pasajeros.
+El radio de giro de los vehículos en el acceso y salida deben estar conforme a los
+vehículos de diseño del Manual de Carreteras - Diseño Geométrico (DG). Asimismo,
+los accesos deben permitir que en el giro se mantenga el mismo carril, tanto en el
+acceso como en la salida, sin que haya un conflicto entre los flujos.
+6.3 Zona de carga y descarga de mercancías:
+La zona destinada para la carga y descarga de mercancías debe ser en el interior de
+los predios, así como las maniobras para lograrlo. Se toma en cuenta el Manual de
+Carreteras - Diseño Geométrico (DG) o el dispositivo que lo reemplace para que se
+grafique el área de barrido vehicular en el plano de distribución.
+8
+

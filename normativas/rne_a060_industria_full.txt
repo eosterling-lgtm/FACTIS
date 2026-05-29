@@ -1,0 +1,163 @@
+NORMA A.060
+INDUSTRIA
+CAPITULO I
+ASPECTOS GENERALES
+Artículo 1.- Se denomina edificación industrial a aquella en la que se realizan actividades de
+transformación de materia primas en productos terminados.
+Artículo 2.- Las edificaciones industriales, además de lo establecido en la Norma A.010
+“Condiciones Generales de Diseño” del presente Reglamento, deben cumplir con los siguientes
+requisitos:
+a) Contar con condiciones de seguridad para el persona! que labora en ellas
+b) Mantener las condiciones de seguridad preexistentes en el entorno
+c) Permitir que los procesos productivos se puedan efectuar de manera que se garanticen
+productos terminados satisfactorios.
+d) Proveer sistemas de protección del medio ambiente, a fin de evitar o reducir los efectos
+nocivos provenientes de las operaciones, en lo referente a emisiones de gases, vapores o
+humos; partículas en suspensión; aguas residuales; ruidos; y vibraciones.
+Articulo 3.- La presente norma comprende, de acuerdo con el nivel de actividad de los procesos,
+a las siguientes tipologías:
+- Gran industria o industria pesada
+- Industria mediana
+- Industria Liviana
+- Industria Artesanal
+- Depósitos Especiales
+Artículo 4.- Los proyectos de edificación Industrial destinados a gran industria e industria
+mediana, requieren la elaboración de los siguientes estudios complementarios:
+a) Estudio de Impacto Vial, para industrias cuyas operaciones demanden el movimiento de carga
+pesada.
+b) Estudio de Impacto Ambiental, para industrias cuyas operaciones produzcan residuos que
+tengan algún tipo de impacto en el medio ambiente
+c) Estudio de Seguridad Integral.
+CAPITULO II
+CARACTERISTICAS DE LOS COMPONENTES
+Articulo 5.- Las edificaciones industriales deberán estar distribuidas en el terreno de manera que
+permitan el paso de vehículos de servicio público para atender todas las áreas, en caso de
+siniestros.
+Articulo 6.- La dotación de estacionamientos al interior del terreno deberá ser suficiente para
+alojar los vehículos del personal y visitantes, así como los vehículos de trabajo para el
+funcionamiento de la industria.
+El proceso de carga y descarga de vehículos deberá efectuarse de manera que tanto los
+vehículos como el proceso se encuentren íntegramente dentro de los límites del terreno.
+Deberá proponerse una solución para la espera de vehículos para carga y descarga de productos,
+materiales e insumos, la misma que no debe afectar la circulación de vehículos en las vías
+públicas circundantes.
+
+Articulo 7.- Las puertas de ingreso de vehículos pesados deberán tener dimensiones que
+permitan el paso del vehículo mas grande empleado en los procesos de entrega y recojo de
+insumos o productos terminados.
+El ancho de las puertas deberá tener una dimensión suficiente para permitir además la maniobra
+de volteo del vehículo. Esta maniobra está en función del ancho de la vía desde la que se accede.
+Las puertas ubicadas sobre el límite de propiedad, deberán abrir de manera de no invadir la vía
+pública, impidiendo el tránsito de personas o vehículos.
+Artículo 8.- La iluminación de los ambientes de las edificaciones industriales deberá cumplir con
+las siguientes condiciones:
+a) Tendrán elementos que permitan la iluminación natural y/o artificial necesaria para las
+actividades que en ellos se realicen.
+b) Las oficinas administrativas ú oficinas de planta, tendrán iluminación natural directa del
+exterior, con un área mínima de ventanas de veinte por ciento (20%) del área del recinto.
+La iluminación artificial tendrá un nivel mínimo de 250 Luxes sobre el plano de trabajo.
+c) Los ambientes de producción, podrán tener iluminación natural mediante vanos ó cenital, o
+iluminación artificial cuando los procesos requieran un mejor nivel de iluminación. El nivel
+mínimo recomendable será de 300 Luxes sobre el plano de trabajo.
+d) Los ambientes de depósitos y de apoyo, tendrán iluminación natural o artificial con un nivel
+mínimo recomendable de 50 Luxes sobre el plano de trabajo.
+e) Comedores y Cocina, tendrán iluminación natural con un área de ventanas, no menor del
+veinte por ciento (20%) del área del recinto. Se complementará con iluminación artificial,
+con un nivel mínimo recomendable de 220 Luxes.
+f) Servicios Higiénicos, contarán con iluminación artificial con un nivel recomendable de 75
+Luxes.
+g) Los pasadizos de circulaciones deberán contar con iluminación natural y artificial con un
+nivel de iluminación recomendable de 100 Luxes, así como iluminación de emergencia.
+Artículo 9.- La ventilación de los ambientes de las edificaciones industriales deberá cumplir con
+las siguientes condiciones:
+a) Todos los ambientes en los que se desarrollen actividades con la presencia permanente de
+personas, contarán con vanos suficientes para permitir la renovación de aire de manera
+natural.
+b) Los ambientes de producción deberán garantizar la renovación de aire de manera natural.
+Cuando los procesos productivos demanden condiciones controladas, deberán contar con
+sistemas mecánicos de ventilación que garanticen la renovación de aire en función del
+proceso productivo, y que puedan controlar la presión, la temperatura y la humedad del
+ambiente.
+c) Los ambientes de depósito y de apoyo, podrán contar exclusivamente con ventilación
+mecánica forzada para renovación de aire.
+d) Comedores y Cocina, tendrán ventilación natural con un área mínima de ventanas, no
+menor del doce por ciento (12%) del área del recinto, para tener una dotación mínima de
+aire no menor de 0.30 m3 por persona.
+e) Servicios Higiénicos, podrán ventilarse mediante ductos, cumpliendo con los requisitos
+señalados en la Norma A.010 “Condiciones Generales de Diseño” del presente
+Reglamento.
+Artículo 10.- Las edificaciones industriales deberán contar con un plan de seguridad en el que se
+indiquen las vías de evacuación, que permitan la salida de los ocupantes hacia un área segura,
+ante una emergencia.
+
+Artículo 11.- Los sistemas de seguridad contra incendio dependen del tipo de riesgo de la
+actividad industrial que se desarrolla en la edificación, proveyendo un número de hidrantes con
+presión, caudal y almacenamiento de agua suficientes, así como extintores, concordante con la
+peligrosidad de los productos y los procesos. El Estudio de Seguridad Integral determinará los
+dispositivos necesarios para la detección y extinción del fuego.
+Artículo 12.- Los sistemas de seguridad contra incendio deberán cumplir con los requisitos
+establecidos en las Norma A-130: Requisitos de Seguridad. De acuerdo con el nivel de riesgo
+(alto, medio o bajo) de la instalación industrial, esta deberá contar con los siguientes sistemas
+automáticos de detección y extinción del fuego:
+a) Detectores de humo y temperatura
+b) Sistema de rociadores de agua ó sprinklers;
+c) Instalaciones para extinción mediante CO2;
+d) Instalaciones para extinción mediante polvo químico;
+e) Hidrantes y mangueras;
+f) Sistemas móviles de extintores; y
+g) Extintores localizados
+Artículo 13.- Los ambientes donde se desarrollen actividades o funciones con elevado peligro de
+fuego deberán estar revestidos con materiales ignífugos y asiladas mediante puertas cortafuego.
+Articulo 14.- Las edificaciones industriales donde se realicen actividades generadoras de ruido,
+deben ser aislados de manera que el nivel de ruido medido a 5.00 m. del paramento exterior no
+debe ser superior a 90 decibeles en zonas industriales y de 50 decibeles en zonas colindantes con
+zonas residenciales o comerciales.
+Articulo 15.- Las edificaciones industriales donde se realicen actividades mediante el empleo de
+equipos generadores de vibraciones superiores a los 2,000 golpes por minuto, frecuencias
+superiores a 40 ciclos por segundo, o con una amplitud de onda de mas de 100 micrones,
+deberán contar con un sistema de apoyo anti-vibraciones.
+Articulo 16.- Las edificaciones industriales donde se realicen actividades cuyos procesos originen
+emisión de gases, vapores, humos, partículas de materias y olores deberá contar con sistemas
+depuradores que reduzcan los niveles de las emisiones a los niveles permitidos en el código del
+medio ambiente y sus normas complementarias.
+Artículo 17.- Las edificaciones industriales donde se realicen actividades cuyos procesos originen
+aguas residuales contaminantes, deberán contar con sistemas de tratamiento antes de ser
+vertidas en la red pública o en cursos de agua, según lo establecido en el código del medio
+ambiente y sus normas complementarias.
+Articulo 18.- La altura mínima entre el piso terminado y el punto mas bajo de la estructura de un
+ambiente para uso de un proceso industrial será de 3.00 m.
+CAPITULO III
+DOTACIÓN DE SERVICIOS
+Artículo 19.- La dotación de servicios se resolverá de acuerdo con el número de personas que
+trabajarán en la edificación en su máxima capacidad.
+Para el cálculo del número de personas en las zonas administrativas se aplicará la relación de 10
+m2 por persona. El número de personas en las áreas de producción dependerá del proceso
+productivo.
+
+Articulo 20.- La dotación de agua a garantizar para el diseño de los sistemas de suministro y
+almacenamiento será de acuerdo con lo siguiente:
+Con servicios de aseo para los trabajadores 100 lt. por trabajador por día
+Adicionalmente se deberá considerar la demanda que generen los procesos productivos.
+Articulo 21.- Las edificaciones industriales estarán provistas de servicios higiénicos según el
+número de trabajadores, los mismos que estarán distribuidos de acuerdo al tipo y característica
+del trabajo a realizar y a una distancia no mayor a 30 m. del puesto de trabajo mas alejado.
+Número de ocupantes Hombres Mujeres
+De 0 a 15 personas 1 L, 1u, 1I 1L, 1l
+De 16 a 50 personas 2 L, 2u, 2I 2L, 2I
+De 51 a 100 personas 3 L, 3u, 3I 3L, 3I
+De 101 a 200 personas 4 L, 4u, 4I 4L, 4I
+Por cada 100 personas adicionales 1 L, 1u, 1I 1L, 1I
+L = lavatorio, u= urinario, I = Inodoro
+Articulo 22.- Las edificaciones industriales deben de estar provistas de 1 ducha por cada 10
+trabajadores por turno y una área de vestuarios a razón de 1.50 m2 por trabajador por turno de
+trabajo.
+Articulo 23.- Dependiendo de la higiene necesaria para el proceso industrial se deberán proveer
+lavatorios adicionales en las zonas de producción.
+Articulo 24.- Las áreas de servicio de comida deberán contar con servicios higiénicos adicionales
+para lo comensales. Adicionalmente deberán existir duchas para el personal de cocina.
+Artículo 25.- El número de aparatos para los servicios higiénicos para hombres y mujeres, podrán
+ser diferentes a lo establecido en el artículo 22, dependiendo de la naturaleza del proceso
+industrial.
+Artículo 26.- Las edificaciones industriales de más de 1,000 m2 de área construida, estarán
+adecuadas a los requerimientos de accesibilidad para personas con discapacidad
+

@@ -1,0 +1,829 @@
+FUNDADO EL 22 DE OCTUBRE DE 1825 POR EL LIBERTADOR SIMÓN BOLÍVAR
+“AÑO DE LA UNIDAD, LA PAZ Y EL DESARROLLO” Viernes 17 de febrero de 2023
+RESOLUCIÓN MINISTERIAL
+Nº 075-2023-VIVIENDA
+MODIFICACION DE LA
+NORMA TÉCNICA A.120
+ACCESIBILIDAD UNIVERSAL EN
+EDIFICACIONES DEL REGLAMENTO
+NACIONAL DE EDIFICACIONES
+NORMAS LEGALES
+SEPARATA ESPECIAL
+
+2 NORMAS LEGALES Viernes 17 de febrero de 2023 / El Peruano
+
+El Peruano / Viernes 17 de febrero de 2023 NORMAS LEGALES 3
+RESOLUCIÓN MINISTERIAL
+Nº 075-2023-VIVIENDA
+Lima, 15 de febrero de 2023
+VISTOS:
+La Nota Nº 021-2023-VIVIENDA/VMVU-DGPRVU, de la Dirección General de Políticas y Regulación en Vivienda
+y Urbanismo (DGPRVU); el Informe Técnico-Legal Nº 002-2023-VIVIENDA/VMVU-DGPRVU-DV-JLHP-JLFH, de la
+Dirección de Vivienda; el Memorándum Nº 186-2022-VIVIENDA/VMVU-DGADT, de la Dirección General de Accesibilidad
+y Desarrollo Tecnológico (DGADT); la Nota Nº 024-2022-VIVIENDA/VMVU-DGADT-DA, que contiene el Informe Técnico
+Legal Nº 004-2022-CVV/CCJH, de la Dirección de Accesibilidad; el Informe Nº 123-2023-VIVIENDA/OGAJ, de la Ofi cina
+General de Asesoría Jurídica (OGAJ); y,
+CONSIDERANDO:
+Que, el artículo 4 de la Ley Nº 30156, Ley de Organización y Funciones del Ministerio de Vivienda, Construcción y
+Saneamiento, establece que el citado Ministerio tiene como fi nalidad normar y promover el ordenamiento, mejoramiento,
+protección e integración de los centros poblados, urbanos y rurales, como sistema sostenible en el territorio nacional;
+facilita el acceso de la población a una vivienda digna y a los servicios de saneamiento de calidad y sostenibles, en
+especial de aquella rural o de menores recursos; promueve el desarrollo del mercado inmobiliario, la inversión en
+infraestructura y equipamiento en los centros poblados;
+Que, los artículos 5 y 6 de la mencionada Ley, establecen que el Ministerio de Vivienda, Construcción y Saneamiento
+(MVCS), tiene competencias, entre otros, en las materias de vivienda, urbanismo y desarrollo urbano; y es el órgano
+rector de las políticas nacionales y sectoriales dentro del ámbito de su competencia, que son de obligatorio cumplimiento
+por los tres niveles de gobierno en el marco del proceso de descentralización, y en todo el territorio nacional; asimismo,
+tiene entre sus competencias exclusivas, dictar normas y lineamientos técnicos para la adecuada ejecución y supervisión
+de las políticas nacionales y sectoriales;
+Que, de acuerdo con el numeral 2 del artículo 10 de la Ley Nº 30156, el MVCS en el marco de sus competencias,
+tiene como función compartida normar, aprobar, ejecutar y supervisar las políticas nacionales sobre ordenamiento y
+desarrollo urbanístico, habilitación urbana y edifi caciones, uso y ocupación del suelo urbano y urbanizables en el ámbito
+de su competencia, en concordancia con las leyes orgánicas de gobiernos regionales y de municipalidades;
+Que, el literal o) del artículo 66 del Reglamento de Organización y Funciones del Ministerio de Vivienda, Construcción
+y Saneamiento, aprobado por el Decreto Supremo Nº 010-2014-VIVIENDA, modifi cado por el Decreto Supremo Nº
+006-2015-VIVIENDA, establece que la DGPRVU tiene por función proponer actualizaciones del Reglamento Nacional
+de Edifi caciones (RNE), en coordinación con los sectores que se vinculen, en el marco de los Comités Técnicos de
+Normalización conforme a la normatividad vigente;
+Que, mediante el Decreto Supremo Nº 015-2004-VIVIENDA se aprueba el Índice y la estructura del RNE, aplicable a
+las Habilitaciones Urbanas y a las Edifi caciones que se ejecuten en el territorio nacional, estableciendo en sus artículos 1
+y 3 que corresponde al MVCS aprobar, mediante Resolución Ministerial, las normas técnicas de acuerdo al mencionado
+Índice y sus variaciones según los avances tecnológicos;
+Que, con el Decreto Supremo Nº 011-2006-VIVIENDA, se aprueban sesenta y seis (66) normas técnicas del RNE,
+entre ellas, la Norma Técnica A.120, Accesibilidad Universal en Edifi caciones, contenida en el Numeral III.1 Arquitectura
+del Título III Edifi caciones del RNE, siendo esta modifi cada por la Resolución Ministerial Nº 072-2019-VIVIENDA;
+asimismo, se constituye la Comisión Permanente de Actualización del Reglamento Nacional de Edifi caciones (CPARNE),
+encargada de analizar y formular las propuestas para la actualización del RNE;
+Que, con el Informe Nº 004-2021-CPARNE, el Presidente de la entonces CPARNE eleva la propuesta de modifi cación
+de la Norma Técnica A.120, Accesibilidad Universal en Edifi caciones del RNE, la misma que fue materia de evaluación
+y aprobación por la mencionada Comisión conforme al Acta de la Octogésima Primera Sesión llevada a cabo el 15 de
+junio y el 8 de julio de 2021;
+Que, por la Resolución Ministerial Nº 208-2021-VIVIENDA, se dispuso la publicación del proyecto de Resolución
+Ministerial que aprueba la modifi cación de la Norma Técnica A.120, Accesibilidad Universal en Edifi caciones del RNE en
+el Portal Institucional del MVCS, recibiendo sugerencias, comentarios y aportes de las personas interesadas, siendo la
+DGPRVU la encargada de su consolidación;
+Que, mediante el Decreto Supremo Nº 015-2022-VIVIENDA, se deroga el artículo 7 del Decreto Supremo Nº
+011-2006-VIVIENDA, que aprueba 66 Normas Técnicas del RNE, con el cual se constituyó la CPARNE, por lo que a
+mérito de ello se extingue dicha Comisión;
+Que, mediante el Memorándum Nº 186-2022-VIVIENDA/VMVU-DGADT, la DGADT remite a la DGPRVU la propuesta
+de modifi cación de la Norma Técnica A.120 del RNE, incorporando los aportes formulados en el proceso de consulta pública;
+Que, mediante Nota Nº 021-2023-VIVIENDA/VMVU-DGPRVU sustentada en el Informe Técnico-Legal Nº
+002-2023-VIVIENDA/VMVU-DGPRVU-DV-JLHP-JLFH, la DGPRVU propone la modifi cación de la Norma Técnica
+A.120, Accesibilidad Universal en Edifi caciones del RNE, dado que a la fecha existen nuevas prácticas nacionales e
+internacionales que vienen aplicándose en el diseño de las edifi caciones; además, por cuanto se requiere compatibilizar
+la citada Norma Técnica con la Norma Técnica Peruana NTP 873.001:2018, que regula la señalización para Accesibilidad
+Universal en Edifi caciones: señalización braille, piso táctil o podotáctil y planos hápticos; entre otros;
+Que, con el Informe Nº 123-2023-VIVIENDA/OGAJ, desde el punto de vista legal, la OGAJ emite opinión favorable a la
+presente Resolución Ministerial que modifi ca la Norma Técnica A.120, Accesibilidad Universal en Edifi caciones del RNE;
+
+4 NORMAS LEGALES Viernes 17 de febrero de 2023 / El Peruano
+Que, de acuerdo a lo expuesto en los considerandos precedentes, corresponde modifi car la Norma Técnica
+A.120, Accesibilidad Universal en Edifi caciones del RNE, conforme a lo señalado por la DGPRVU, a fi n de actualizar y
+complementar su contenido;
+De conformidad con lo dispuesto en la Ley Nº 30156, Ley de Organización y Funciones del Ministerio de Vivienda,
+Construcción y Saneamiento; su Reglamento de Organización y Funciones, aprobado por el Decreto Supremo
+Nº 010-2014-VIVIENDA y modifi cado por el Decreto Supremo Nº 006-2015-VIVIENDA; el Decreto Supremo Nº
+015-2004-VIVIENDA, que aprueba el Índice del Reglamento Nacional de Edifi caciones; el Decreto Supremo Nº
+011-2006-VIVIENDA, que aprueba sesenta y seis (66) Normas Técnicas del Reglamento Nacional de Edifi caciones,
+modifi cada por la Resolución Ministerial Nº 072-2019-VIVIENDA;
+SE RESUELVE:
+Artículo 1.- Modifi cación de la Norma Técnica A.120, Accesibilidad Universal en Edifi caciones del Reglamento
+Nacional de Edifi caciones
+Modifi car la Norma Técnica A.120, Accesibilidad Universal en Edifi caciones, contenida en el Numeral III.1
+Arquitectura del Título III Edifi caciones del Reglamento Nacional de Edifi caciones, aprobada por el Decreto Supremo Nº
+011-2006-VIVIENDA y modifi cada por la Resolución Ministerial Nº 072-2019-VIVIENDA, cuyo texto forma parte integrante
+de la presente Resolución Ministerial.
+Artículo 2.- Publicación y Difusión
+Disponer la publicación de la presente Resolución Ministerial y la Norma Técnica a que se refi ere el artículo
+precedente, en la sede digital del Ministerio de Vivienda, Construcción y Saneamiento (www.gob.pe/vivienda), el mismo
+día de la publicación de la Resolución Ministerial y la citada Norma Técnica en el diario ofi cial El Peruano.
+Regístrese, comuníquese y publíquese.
+HANIA PÉREZ DE CUÉLLAR LUBIENSKA
+Ministra de Vivienda, Construcción y Saneamiento
+NORMA TÉCNICA A.120
+ACCESIBILIDAD UNIVERSAL EN EDIFICACIONES
+DEL REGLAMENTO NACIONAL DE EDIFICACIONES
+CAPÍTULO I
+ASPECTOS GENERALES
+Artículo 1.- Objeto
+La presente Norma Técnica tiene por objeto regular las condiciones y especifi caciones técnicas mínimas de diseño para
+las edifi caciones, a fi n de contar con ambientes, mobiliario, rutas accesibles y señalización para la accesibilidad universal
+que permitan el desplazamiento seguro y atención de todas las personas, independientemente de sus características
+funcionales o capacidades, aplicando el principio del diseño universal.
+Artículo 2.- Ámbito de aplicación
+La presente Norma Técnica es de aplicación obligatoria para todas las edifi caciones donde se presten servicios de
+atención al público, sean de propiedad pública o privada; y, para las áreas de circulación común de las edifi caciones de
+uso residencial.
+Artículo 3.- Glosario de términos
+Para los efectos de la presente Norma Técnica se considera las siguientes defi niciones:
+- Accesibilidad: Derecho al acceso de toda persona al entorno físico, los medios de transporte, los servicios, la
+información y las comunicaciones. Las personas con discapacidad y personas con movilidad reducida tienen el
+derecho de acceder, en igualdad de condiciones que las demás, de la manera más autónoma y segura posible.
+- Accesibilidad en edifi caciones: Condición de acceso que presta la edifi cación para facilitar la movilidad y el
+desplazamiento autónomo de las personas en condiciones de seguridad.
+- Accesibilidad universal: Consiste en planear, proyectar, construir, rehabilitar y conservar el entorno de modo
+que tenga en cuenta las necesidades y los requerimientos de todas las personas sea cual sea su edad, condición
+o capacidad. Busca facilitar el desenvolvimiento y uso de productos, servicios, entornos y aplicaciones, siendo
+fácilmente adaptable a todas las personas desde características como la comodidad, seguridad y autonomía
+personal. La accesibilidad universal abarca los ámbitos de la edifi cación, las vías y espacios públicos, parques y
+jardines, entorno natural, transporte, señalización, comunicación, tecnología y prestación de servicios.
+- Área de refugio accesible: Espacio ubicado en área compartimentada a prueba de fuego y humos o escalera
+protegida que comunica con una ruta de evacuación, vestíbulo o ascensor. El área de refugio debe contar con las
+condiciones mínimas de accesibilidad que permita a una persona con discapacidad y movilidad reducida, esperar
+a ser evacuada por los servicios de emergencias y brigadistas.
+- Barreras arquitectónicas: Impedimentos, trabas u obstáculos físicos que limitan o impiden la libertad de
+movimiento de personas con discapacidad y movilidad reducida.
+
+El Peruano / Viernes 17 de febrero de 2023 NORMAS LEGALES 5
+- Diseño universal: Diseño de productos, entornos, programas y servicios, que puedan utilizar todas las personas,
+en la mayor medida posible, sin necesidad de adaptación ni diseño especializado.
+- Dispositivo de llamada de emergencia o pulsador de pánico: Elemento destinado a activar instantáneamente
+una alarma para reportar posibles caídas de personas o emergencias. Debe estar conectado a un sistema de
+alarma y se activa accionando un botón o tirando de una palanca o cordón.
+- Espacio de maniobra: Espacio dentro del cual se puede realizar la maniobra necesaria para acceder a una
+instalación, componente, elemento o accesorio específi co, mientras se utiliza una silla de ruedas u otro producto de
+apoyo para su desplazamiento.
+- Espacio de transferencia: Espacio mínimo libre de obstáculos que posibilita a una persona usuaria en silla de
+ruedas u otro producto de apoyo, posicionarse o trasladarse a un componente, mobiliario o equipo.
+- Formato alternativo de comunicación: Ayudas y medios que se utilizan para favorecer a las personas que
+presentan difi cultades en el ámbito de la comunicación, incluye la lengua de señas, el sistema braille, la comunicación
+táctil, los macrotipos, pictogramas, la visualización de textos, los dispositivos multimedia, el lenguaje escrito, los
+sistemas auditivos, el lenguaje sencillo, los medios de voz digitalizada y otros modos y medios aumentativos o
+alternativos de la comunicación.
+- Persona con discapacidad: Aquella persona que, tiene una o más defi ciencias físicas, sensoriales, mentales o
+intelectuales de carácter permanente que, al interactuar con diversas barreras actitudinales y del entorno, no ejerza
+o pueda verse impedida en el ejercicio de sus derechos y su inclusión plena y efectiva en la sociedad, en igualdad
+de condiciones que las demás.
+- Persona con movilidad reducida: Aquella persona que, por su diferente condición física, de manera
+permanente o temporal, por edad, estatura, enfermedad, accidente u otro tipo de condicionante, necesite
+un entorno adecuado para ejercer sus derechos de manera plena, efectiva y autovalente en igualdad de
+condiciones con los demás.
+- Plano háptico: Plano de distribución esquemático y en alto relieve, que constituye un instrumento de información y
+orientación, mediante el cual el usuario identifi ca la ruta accesible por donde debe desplazarse, en condiciones de
+seguridad y confort, hacia su punto de interés. Dicha información debe adoptar presentaciones audibles, táctiles y
+visuales, permitiendo su interpretación y comprensión por sus usuarios.
+- Producto de apoyo: Producto, dispositivo, equipo, instrumentos, tecnologías y software, fabricado especialmente
+o disponible en el mercado, para prevenir, compensar, controlar, mitigar o neutralizar defi ciencias, limitaciones en
+la actividad y restricciones en la participación.
+- Ruta accesible: Circulación que permite el desplazamiento de todas las personas, especialmente aquellas con
+discapacidad y movilidad reducida. Se encuentra libre de obstáculos o cualquier barrera arquitectónica que difi culte
+su desplazamiento.
+- Señales de acceso: Símbolos convencionales utilizados para señalizar la accesibilidad a edifi caciones y ambientes.
+- Señalización: Sistema de avisos que permite identifi car los elementos y ambientes públicos accesibles dentro de
+una edifi cación para orientar a los usuarios.
+- Señalización para accesibilidad universal: Medio de información físico, visual, táctil y audible, diseñada para
+orientar, direccionar e indicar la función para el desplazamiento seguro en el uso de los espacios.
+- Señalización podotáctil: Recurso utilizado en las superfi cies para el tránsito de personas; el cual, a través de
+cambios de texturas y color con las superfi cies adyacentes, orienta la ruta accesible y alerta los obstáculos o
+posibles peligros, a las personas con discapacidad visual.
+- Servicios de atención al público: Actividades en las que una entidad pública o privada brinda un servicio que
+pueda ser solicitado libremente por cualquier persona.
+- Zona de atención: Espacio donde se brinda servicio a toda persona que requiera información.
+- Zona de espera: Espacio destinado a que las personas permanezcan en un sitio hasta que alguien o algo llegue o
+hasta que algo suceda.
+CAPÍTULO II
+CONDICIONES GENERALES DE ACCESIBILIDAD Y FUNCIONALIDAD
+SUB-CAPÍTULO I
+INGRESOS Y CIRCULACIONES
+Artículo 4.- Ingresos
+Los ingresos deben cumplir con los siguientes aspectos:
+a) El ingreso a la edifi cación debe ser accesible desde la acera o el límite de propiedad hasta la edifi cación; en caso
+de existir diferencia de niveles, además de la escalera de acceso se debe incluir rampas o medios mecánicos
+que permitan el acceso a la edifi cación, y de contar con un sistema de drenaje en los ingresos, las rejillas no
+deben tener un espaciamiento mayor a 0.013 m y deben ser instaladas en forma perpendicular al sentido de la
+circulación.
+b) El ancho mínimo de los vanos de las puertas debe ser de 1.00 m. En caso de puertas de dos hojas se debe
+considerar que una de ellas dé continuidad a la sección mínima de la ruta accesible. De utilizarse puertas
+automáticas o puertas con dispositivos de cierre controlado debe contar con un sistema de retención y mecanismo
+
+6 NORMAS LEGALES Viernes 17 de febrero de 2023 / El Peruano
+contra corte de luz o de emergencias. Si un acceso tiene mecanismo de cierre, se debe disponer de un sistema de
+control en ambos sentidos de tránsito. Para todos los casos ningún elemento debe invadir la ruta accesible y las
+puertas deben ser de fácil apertura.
+c) De utilizarse puertas con sistema giratorio o similar, debe preverse otra puerta que permita el acceso de las
+personas en sillas de ruedas, personas con accesorios para desplazamiento, y/o con coches de niños.
+d) El espacio mínimo entre dos puertas batientes consecutivas abiertas debe ser de 1.20 m.
+e) Las características de las puertas deben diferenciarse por contraste visual de la pared adyacente, ayudando así a
+las personas a identifi car los ingresos a los ambientes o puertas de salida.
+f) Todas las puertas de material translúcido deben contar con indicadores visuales de contraste, los cuales, se deben
+colocar a una altura entre 0.90 m y 1.00 m al eje y otro entre 1.30 m y 1.40 m al eje para prevenir accidentes.
+Además, se debe instalar otro indicador visual a la altura de 0.30 m al eje para personas de talla baja y niños. Los
+indicadores visuales deben abarcar el ancho del cristal o material translúcido. En caso de implementar un indicador
+visual discontinuo, la separación entre cada indicador no debe ser mayor a 0.20 m, teniendo un ancho mínimo de
+0.05 m o un diámetro de 0.10 m según sea el caso. (Gráfi cos 1a y 1b). Las puertas de material translúcido pueden
+contar con otros tipos de indicadores visuales cuyos diseños mantengan el campo visual cubierto con las medidas
+señaladas en el presente literal. (Gráfi co 1c).
+
+El Peruano / Viernes 17 de febrero de 2023 NORMAS LEGALES 7
+g) Los tiradores o agarraderas de las puertas translúcidas deben ser de tubo continuo de diámetro o sección entre
+0.04 m y 0.05 m empotrados o adosados a la superfi cie, con una separación mínima entre 0.04 m. y 0.05 m, que
+permita jalar la puerta. La altura del tirador debe colocarse a un máximo de 1.20 m de altura, medida desde la
+superfi cie del piso acabado hasta el eje. (Gráfi co 1d).
+Artículo 5.- Circulaciones en edifi caciones
+Las circulaciones en las edifi caciones deben cumplir con lo siguiente:
+a) Los pisos deben ser fi jos, uniformes y tener una superfi cie con material que cumpla con el valor mínimo del coefi ciente
+de fricción de acuerdo a lo establecido en la ISO 10545-17 u otra norma internacional o nacional equivalente.
+Además, los pisos deben tener una superfi cie que no genere deslumbramientos. La iluminación artifi cial debe estar
+diseñada de manera que ayude a mantener un desplazamiento continuo y seguro.
+b) En las escaleras, los pasos y contrapasos de las gradas deben tener dimensiones uniformes y el radio del redondeo
+de los cantos de las gradas no debe ser mayor de 0.013 m.
+
+8 NORMAS LEGALES Viernes 17 de febrero de 2023 / El Peruano
+c) Los cambios de nivel hasta de 0.006 m, pueden ser verticales y sin tratamiento de bordes; entre niveles de 0.006
+m y 0.013 m deben ser biselados, y los desniveles superiores a 0.013 m deben ser resueltos mediante rampas.
+d) Las rejillas de ventilación de ambientes bajo el piso y que se encuentren al nivel de tránsito de las personas deben
+resolverse con materiales cuyo espaciamiento impida el paso de una esfera de 0.013 m; asimismo, en caso las
+platinas tengan una sola dirección, éstas deben ser instaladas en forma perpendicular al sentido de la circulación.
+(Gráfi co 2a).
+e) Los pisos alfombrados deben estar fi jos a su superfi cie, confi nados entre los paramentos que la delimitan o sujetan
+con platinas en sus bordes. El grosor máximo de las alfombras debe ser de 0.013 m y sus bordes expuestos deben
+fi jarse a la superfi cie del suelo a todo lo largo mediante perfi les metálicos u otro material que cubra la diferencia de
+nivel.
+f) El ancho de la circulación debe ser calculado de acuerdo al aforo del edifi cio, el cual no debe ser menor a 0.90 m.
+Cada 25.00 m de longitud debe haber espacios de maniobra de 1.50 m x 1.50 m, garantizando el giro de 360º de
+una persona en silla de ruedas u otro producto de apoyo.
+g) Las manijas de las puertas o mamparas deben ser de tipo palanca con una protuberancia fi nal o de otro tipo
+con diseño accesible, que permitan su fácil manipulación. El sistema de seguridad de la cerradura debe ser
+de tipo palanca o tipo cerrojo de diseño accesible; también puede ser de tipo botón, el cual debe accionarse
+automáticamente con la palanca durante su apertura. La cerradura de una puerta accesible debe colocarse a un
+máximo de 1.20 m de altura, medida desde la superfi cie del piso acabado hasta el eje de la cerradura. (Gráfi co 2b).
+h) Los pisos o niveles, deben cumplir con la aplicación de todos los componentes de accesibilidad descritos en la
+presente Norma Técnica para cada uno de los ambientes.
+i) En zonas de circulación se debe evitar que el giro de las hojas de las ventanas interfi era y generen barreras
+arquitectónicas. En caso que, la apertura de la puerta invada la distancia mínima requerida para la ruta accesible,
+esta debe garantizar una apertura de 180º.
+j) La ruta accesible debe cumplir con una altura mínima de 2.10 m y un ancho mínimo no menor a 0.90 m, libre de
+obstáculos, y otras condiciones mínimas señaladas en la presente Norma Técnica.
+k) No generar barreras físicas y evitar elementos adosados a los muros que sobresalgan e invadan la ruta accesible.
+De existir, no pueden sobresalir más de 0.15 m en uno de sus lados y su presencia debe ser detectable visual
+o táctilmente con facilidad. Para los elementos adosados que sobresalgan más de 0.15 m se deben realizar
+
+El Peruano / Viernes 17 de febrero de 2023 NORMAS LEGALES 9
+prolongaciones del objeto hasta el suelo; o debe colocarse debajo del objeto algún elemento que sea detectable
+con un bastón, pudiendo ser un tope o resalte de manera fi ja de altura comprendida entre 0.10 m a 0.30 m; o puede
+ser identifi cado con señalización podotáctil. Para todos los casos, el ancho mínimo de circulación no debe ser
+menor a 0.90 m. (Gráfi co 2c).
+l) El mobiliario ubicado en circulaciones debe estar colocado de manera que no interfi era en la ruta accesible.
+Artículo 6.- Características de diseño en rampas y escaleras
+Las rampas deben cumplir con lo siguiente:
+a) El ancho mínimo de una rampa debe ser de 1.00 m, incluyendo pasamanos y barandas a ambos lados. Las rampas
+de longitud mayor de 3.00 m deben contar con parapetos o barandas en los lados libres y pasamanos en los lados
+confi nados. Los pasamanos y barandas no deben invadir la ruta accesible, de ser el caso se debe aumentar el
+ancho de la rampa. En zonas techadas, las rampas y escaleras deben tener iluminación en toda la circulación,
+en el arranque, descanso y entrega; asimismo, la superfi cie de las rampas debe ser antideslizante. (Gráfi cos 3a
+y 3b). Las rampas deben ser fi jas, uniformes y tener una superfi cie con material que cumpla con el valor mínimo
+del coefi ciente de fricción de acuerdo a lo establecido en la ISO 10545-17 u otra norma internacional o nacional
+equivalente.
+b) La rampa, según la diferencia de nivel debe cumplir con la pendiente máxima, (Gráfi co 3c y 3d) de acuerdo al
+siguiente cuadro:
+DIFERENCIA DE NIVEL PENDIENTE MÁXIMA
+Hasta 0.30 m 10 %
+De 0.31 m hasta 0.72. m 8 %
+Nota: Considerar que el cuadro adjunto señala la pendiente máxima pudiendo utilizarse una pendiente menor para los casos
+permitidos.
+
+10 NORMAS LEGALES Viernes 17 de febrero de 2023 / El Peruano
+c) La longitud máxima de una rampa es de 9.00 m de largo, seguido de un descanso de 1.50 m de longitud. (Gráfi co 3d).
+d) El inicio y el fi nal de las rampas, así como de los descansos que permiten el cambio de dirección, de las edifi caciones
+de uso público, deben ser de superfi cie plana y horizontal. En las edifi caciones con un aforo mayor a 500 personas,
+los descansos deben tener un espacio de maniobra libre de obstáculos de 1.50 m x 1.50 m, garantizando el giro
+de 360º de una persona en silla de ruedas u otro producto de apoyo; y en edifi caciones con un aforo menor a 500
+personas, es permitido el espacio de maniobra de 1.20 m de diámetro.
+e) La pendiente transversal de la rampa, de existir, debe ser menor al 2%. (Gráfi co 3e).
+f) Las rampas pueden ser reemplazadas por medios mecánicos, cumpliendo con las características señaladas en el
+artículo 9 de la presente Norma Técnica.
+g) En el caso de rampas con tramos paralelos, el descanso debe abarcar ambos tramos incluyendo el espacio de
+separación que existe entre los dos tramos o muro intermedio, con una profundidad no menor a 1.50 m.
+h) Al inicio y al fi nal de las rampas y escaleras se debe colocar señalización podotáctil de tipo alerta que adviertan del cambio de
+nivel. Esta señalización podotáctil debe ubicarse en el plano horizontal y abarcar el ancho de la rampa y escalera. (Gráfi co 3f).
+
+El Peruano / Viernes 17 de febrero de 2023 NORMAS LEGALES 11
+i) Los espacios bajo las rampas y escaleras, con altura inferior a 2.10 m, deben ser delimitados con elementos de
+protección colocados en forma permanente a una altura de 0.85 m a 0.90 m de alto para impedir que una persona
+con discapacidad visual, baja visión o persona distraída ingrese a dicha área. (Gráfi co 3g). Pudiendo también
+colocar un tope o resalte de manera fi ja de altura comprendida entre 0.10 m a 0.30 m.
+j) El encuentro de la rampa o la escalera con el nivel de inicio o término de este no debe tener ningún desnivel o
+irregularidades en la superfi cie.
+Artículo 7.- Parapetos y barandas
+Los parapetos y barandas deben cumplir con lo siguiente:
+a) Las rampas, ya sean sobre parapetos, barandas o adosados a paredes, deben tener doble pasamanos horizontal.
+Uno debe estar a una altura comprendida entre 0.85 m y 0.90 m, medida verticalmente desde la rampa, hasta el eje
+del pasamanos, y el otro, a 0.25 m al eje, por debajo del mismo. (Gráfi co 4a).
+
+12 NORMAS LEGALES Viernes 17 de febrero de 2023 / El Peruano
+b) Los pasamanos deben ser uniformes, que permita una fácil y segura sujeción, y deben tener un diámetro o sección
+entre 0.04 m y 0.05 m, debiendo mantener los pasamanos adosados a la pared con una separación mínima entre
+0.04 m y 0.05 m de la misma.
+c) Los pasamanos deben ser continuos en toda la extensión de la rampa prolongándose horizontalmente 0.20 m al
+inicio y al fi nal de la misma, incluyendo los descansos intermedios, los cuales son interrumpidos en caso de accesos
+o puerta. La prolongación de los pasamanos no debe interferir la ruta accesible.
+d) Los bordes de un piso transitable, abiertos o translúcidos hacia un plano inferior con una diferencia de nivel mayor
+de 0.55 m, deben estar provistos de parapetos o barandas de seguridad con una altura no menor de 1.00 m,
+medidos hasta el eje del pasamano. Las barandas deben llevar un elemento corrido horizontal de protección a 0.15
+m sobre el nivel del piso, o un sardinel de la misma dimensión.
+Artículo 8.- Ascensores
+Los ascensores deben cumplir con los siguientes requisitos:
+a) En edifi caciones de uso residencial que cuenten con ascensor, las dimensiones mínimas al interior de la cabina del
+ascensor deben ser de 1.00 m de ancho y 1.25 m de fondo.
+b) Las dimensiones interiores mínimas de la cabina del ascensor en edifi caciones de uso público o privadas
+de uso público, debe ser de 1.20 m de ancho y 1.40 m de fondo; asimismo, de la dotación de ascensores
+requeridos, por lo menos una de las cabinas debe medir 1.50 m de ancho y 1.40 m de profundidad como
+mínimo.
+c) Los pasamanos deben tener una sección uniforme que permita una fácil y segura sujeción, con una separación
+entre 0.04 m y 0.05 m de la cara interior de la cabina y una altura entre 0.85 m y 0.90 m, medida verticalmente al
+eje del pasamanos.
+d) Las botoneras exteriores e interiores de la cabina, se deben ubicar entre 0.90 m y 1.35 m de altura. Todas las
+indicaciones de las botoneras deben tener su equivalente en sistema braille.
+e) Las puertas de la cabina y del piso deben ser automáticas y con sensor de paso; con un ancho mínimo de puerta
+de:
+- 0.80 m para ascensores de hasta 600 Kg.
+- 0.90 m para ascensores mayores de 600 Kg.
+Delante de las puertas debe existir un espacio de maniobra de 1.50 m de diámetro que permita el giro de una
+persona en silla de ruedas u otro producto de apoyo para su desplazamiento.
+f) En una de las jambas de la puerta debe colocarse el número de piso en sistema braille.
+g) Se debe instalar una señal audible que indique el piso en el que se encuentra el ascensor.
+h) Si existe escalera delante de un ascensor, la distancia hasta la escalera debe tener como mínimo 2.00 m para dar
+cabida al espacio de maniobra de una silla de ruedas y a la circulación de transeúntes simultáneamente, el espacio
+debe contar con una correcta iluminación.
+i) Las cabinas del ascensor cuyas dimensiones del espacio interior sean menor a 1.50 m x 1.50 m, debe contar en
+la superfi cie del fondo con un espejo a partir de 0.40 m de altura medidos desde el nivel de piso y no menor a 1.35
+m, o emplear otro dispositivo que permita al usuario observar los obstáculos que hay detrás al salir de la cabina.
+(Gráfi co 5a, 5b y 5c).
+
+El Peruano / Viernes 17 de febrero de 2023 NORMAS LEGALES 13
+j) Los ascensores de las edifi caciones deben contar con un dispositivo de llamada de emergencia al interior de la
+cabina.
+k) Las características de las puertas de acceso del ascensor deben contrastar con el acabado de las paredes
+contiguas.
+l) Al lado de cada puerta de acceso al ascensor debe indicar el número de planta o nivel, en relieve, el mismo que
+debe complementarse con otro formato alternativo de comunicación, y ser colocado a una altura entre 0.90 m a 1.35
+m medido desde el nivel de piso terminado. (Gráfi co 5d).
+
+14 NORMAS LEGALES Viernes 17 de febrero de 2023 / El Peruano
+Artículo 9.- Plataformas elevadoras
+a) Las plataformas elevadoras pueden salvar desniveles de hasta 1.50 m y deben contar con puertas o barreras, en
+el nivel superior e inferior, con una altura entre 0.85 m y 0.90 m. La plataforma debe medir 0.80 m de ancho y 1.20
+m de profundidad, como mínimo.
+b) Frente al ingreso y salida, deben dejar libre el espacio sufi ciente para el giro de la silla de ruedas de 1.50 m x 1.50
+m, o 1.20 m de estar colindante a la ruta accesible, y que no tenga un cerramiento entre ambas. (Gráfi co 6a).
+c) Los controles o sistema de operación deben complementarse con otro formato alternativo de comunicación y
+ubicarse al alcance del usuario en silla de ruedas, de acuerdo a las características señaladas en el artículo 10 de la
+presente Norma Técnica.
+d) La plataforma debe contar con un elemento de protección que impida el ingreso de una persona mientras esta se
+encuentre operando.
+
+El Peruano / Viernes 17 de febrero de 2023 NORMAS LEGALES 15
+SUB-CAPÍTULO II
+MOBILIARIO
+Artículo 10.- Altura de objetos
+a) Los objetos que deba alcanzar frontalmente una persona en silla de ruedas deben estar a una altura no menor de
+0.40 m ni mayor de 1.20 m.
+b) Los objetos que deba alcanzar lateralmente una persona en silla de ruedas deben estar a una altura no menor de
+0.25 m ni mayor de 1.35 m.
+c) Se puede considerar diferentes alturas, teniendo como fundamento un estudio antropométrico según las
+características del usuario.
+Artículo 11.- Mobiliario
+El mobiliario debe cumplir con los siguientes requisitos:
+a) Se debe habilitar, como mínimo, una de las ventanillas de atención al público, mostradores o cajas registradoras,
+según sea el caso, con un ancho mínimo de 0.80 m y una altura máxima de 0.80 m, considerando un espacio libre de
+obstáculos en la parte inferior, con una altura mínima de 0.75 m y una profundidad mínima de 0.40 m que permita la
+atención de personas en silla de ruedas, de talla baja, niños y niñas. De contar con módulos de boletería automáticos,
+estos deben considerar los mismos criterios de diseño, alcance de objetos y formatos alternativos de comunicación.
+b) Las zonas de espera y zonas de espectadores deben contar con un espacio reservado para silla de ruedas de 0.90
+m por 1.20 m, debidamente señalizado horizontal y verticalmente. Los asientos y espacios reservados no deben
+estar separados de los demás asientos y por lo menos uno debe encontrarse ubicado a lado de un asiento de
+espera. (Gráfi co 7a).
+c) Los asientos con apoyabrazos de las zonas de espera y zonas de espectadores deben ser fi jos a la superfi cie,
+estables y deben tener una altura entre 0.45 m y 0.50 m, con una profundidad entre 0.45 m y 0.50 m.
+d) En las zonas de espera y zonas de espectadores se deben disponer de espacios para personas en sillas de
+ruedas, a razón de uno por los primeros 50, y, adicionalmente el 1% del número total a partir de 51 asientos. Las
+fracciones se redondean al entero más cercano. En caso de contar con menos de 50 asientos, por lo menos uno
+debe cumplir con la condición señalada. Asimismo, se deben disponer de asientos con apoyabrazos para personas
+con discapacidad y movilidad reducida, para permitir la acción de sentarse y levantarse, a razón de 2% del total. Las
+fracciones se redondean al entero mayor. Cabe mencionar que la dotación señalada son condiciones mínimas que
+deben cumplir todas las edifi caciones, pudiendo aumentar en las edifi caciones que cuenten con mayor afl uencia de
+las personas con discapacidad y con movilidad reducida.
+e) En edifi caciones de atención al público debe existir zonas de espera cada 50.00 m como máximo y deben disponer
+de mobiliario con las condiciones de diseño detallados en este artículo. El mobiliario no debe invadir el ancho de la
+circulación y evacuación.
+f) Los interruptores y timbres de llamada deben estar a una altura no mayor a 1.35 m.
+g) Se debe incorporar señales visuales luminosas al sistema de alarma de la edifi cación.
+h) El 3%, o por lo menos uno de cada tipo, del número total de elementos fi jos de almacenaje de uso público, tales
+como casilleros, gabinetes, armarios, etc., debe ser accesible.
+i) De contar con casilleros deben considerar al menos la mitad de estos con mecanismos de apertura ubicados a una
+altura entre 0.40 m y 1.20 m, medidos desde el nivel de piso terminado.
+j) El sistema de información y avisos al público debe darse a través de un sistema de locución y un sistema alternativo
+que permita a las personas con discapacidad auditiva, tomar conocimiento de la información, pudiendo utilizar
+una pantalla u otro formato alternativo de comunicación. En el caso de transmitir información de turno, el formato
+alternativo de comunicación debe ir acompañado con señales luminosas a fi n de ser detectado por la persona con
+discapacidad auditiva.
+k) Las mesas o escritorios que cumplan con las condiciones de accesibilidad, deben tener una altura de 0.80 m y una
+altura mínima de 0.75 m libre de obstáculos con espacio abierto que permita la aproximación frontal de una silla de
+ruedas.
+l) En edifi caciones de atención al público que cuenten con un aforo mayor a 500 personas, se debe contar con un
+asiento de 0.80 m de ancho en las zonas de espera y zonas de espectadores. (Gráfi co 7b).
+
+16 NORMAS LEGALES Viernes 17 de febrero de 2023 / El Peruano
+Artículo 12.- Teléfonos Públicos
+Los teléfonos públicos deben cumplir con los siguientes requisitos:
+a) El 10% de los teléfonos públicos o al menos uno de cada batería de tres debe ser accesible. La altura al elemento
+manipulable más alto debe estar ubicado a 1.20 m.
+b) Los teléfonos accesibles deben permitir la conexión de audífonos personales y deben contar con controles capaces
+de proporcionar un aumento de volumen de entre 12 y 18 decibeles por encima del volumen normal.
+c) El cable que va desde el aparato telefónico hasta el auricular de mano debe tener por lo menos 0.75 m de largo.
+d) Frente a los teléfonos colgados en las paredes debe existir un espacio libre que permita la aproximación frontal de
+una persona en silla de ruedas, de 0.75 m de ancho por 1.20 m de profundidad, o de 1.20 m de ancho por 0.75 m
+de profundidad, para la aproximación paralela al teléfono.
+e) Las cabinas telefónicas deben tener como mínimo 0.90 m de ancho y 1.20 m de profundidad, libre de obstáculos, y
+su piso debe estar nivelado con el piso adyacente. El acceso debe tener, como mínimo, un ancho libre de 0.90 m y
+una altura mínima de 2.10 m.
+SUB-CAPÍTULO III
+SERVICIOS HIGIÉNICOS
+Artículo 13.- Dotación y acceso
+13.1 En edifi caciones cuyo número de ocupantes demande servicios higiénicos, por lo menos un inodoro, un lavatorio y
+un urinario de la dotación, en cada nivel o piso de la edifi cación, deben ser accesibles para las personas con discapacidad
+y movilidad reducida, pudiendo ser de uso mixto, los mismos que deben cumplir con las siguientes condiciones de diseño:
+a) Las dimensiones interiores y la distribución de los aparatos sanitarios deben contemplar un espacio de maniobra
+con un diámetro de 1.50 m que permita el giro de una silla de ruedas en 360º.
+b) La puerta de acceso debe tener un ancho mínimo de vano de 1.00 m y el marco de las puertas no debe invadir la
+ruta accesible. La puerta puede abrirse hacia el exterior, hacia el interior o ser corrediza, siempre que quede un
+espacio de maniobra con un diámetro de giro de 1.50 m.
+c) Las puertas de los módulos sanitarios y cambiadores dentro de servicios higiénicos en edifi caciones públicas o
+de ofi cinas deben tener agarraderas en la parte interior de la puerta a una altura entre 0.85 m y 0.90 m de alto,
+medido desde el nivel de piso terminado hasta el eje central de la agarradera. (Gráfi co 8a). Asimismo, el sistema de
+seguridad de la cerradura también debe ser de tipo palanca.
+
+El Peruano / Viernes 17 de febrero de 2023 NORMAS LEGALES 17
+13.2 En edifi caciones que cuenten con ambientes de atención al público cuyo aforo es mayor a 500 personas, debe
+contar por lo menos un inodoro, un lavatorio y un urinario de la dotación para personas de menor estatura debidamente
+señalizado.
+Artículo 14.- Lavatorios
+a) Los lavatorios deben instalarse adosados a la pared o empotrados en un tablero y soportar una carga vertical de
+100 kg.
+b) La distancia entre el lavatorio accesible y el lavatorio contiguo debe ser de 0.90 m entre ejes. (Gráfi cos 9a y 9b).
+c) Debe existir un espacio libre de 0.80 m x 1.20 m al frente del lavatorio para permitir la aproximación de una persona
+en silla de ruedas. (Gráfi co 9a y 9b).
+d) Se debe instalar con el borde externo superior o, de ser empotrado, con la superfi cie superior del tablero a 0.85 m
+medido desde el suelo. El espacio inferior queda libre de obstáculos, con excepción del alcantarillado y debe tener
+una altura de 0.75 m desde el piso hasta el borde inferior del mandil o fondo del tablero de ser el caso. La trampa
+del alcantarillado se debe instalar lo más cerca al fondo del lavatorio que permita su instalación y el tubo de bajada
+debe ser empotrado. No debe existir ninguna superfi cie abrasiva ni aristas fi losas debajo del lavatorio. (Gráfi co 9c).
+e) Se debe instalar grifería con comando electrónico o mecánica de botón, con mecanismo de cierre automático o
+sensor, que permite que el caño permanezca abierto, por lo menos 10 segundos. En su defecto, la grifería puede
+ser de aleta o de palanca y, no debe ser instalada a más de 0.35 m de la superfi cie del lavatorio o del tablero.
+(Gráfi co 9c).
+
+18 NORMAS LEGALES Viernes 17 de febrero de 2023 / El Peruano
+Artículo 15.- Inodoros
+a) El cubículo para inodoro debe tener dimensiones mínimas de 1.50 m x 2.00 m y debe estar debidamente señalizado
+con el símbolo internacional de accesibilidad (SIA). (Gráfi co 10a).
+b) Cuando el cubículo incluye un lavatorio, además del inodoro, se debe considerar que la distribución de los aparatos
+sanitarios debe respetar el espacio de maniobra de 1.50 m de diámetro y no incluir el radio de giro de la puerta.
+(Gráfi cos 10b y 10c).
+c) Se debe contemplar al menos un espacio de transferencia lateral y paralelo al inodoro, de 0.80 m de ancho por 1.20
+m de largo, como mínimo, que permita la aproximación lateral de un usuario en silla de ruedas.
+d) Los inodoros se deben instalar con la tapa del asiento a una altura entre 0.45 m y 0.50 m, medido desde el nivel
+de piso terminado. Las barras de apoyo tubulares, se colocan en los muros colindantes al inodoro y a una altura de
+0.25 m por encima del nivel de la tapa del asiento del inodoro, medidos hasta el eje de la barra. (Gráfi co 10d). La
+instalación de los elementos señalados debe garantizar la estabilidad y seguridad de los usuarios.
+e) Cuando el inodoro se instale junto a un muro, el eje longitudinal de este aparato sanitario debe estar a 0.40 m del
+muro. En este caso se debe proveer una barra recta de apoyo fi ja en el muro a un costado del inodoro. Al otro
+costado, que corresponde al espacio de transferencia lateral, se debe proveer de una barra de apoyo en la pared
+perpendicular al inodoro o una barra de apoyo abatible paralela al inodoro ubicada a 0.40 m del eje longitudinal del
+inodoro. Ambas barras deben ser antideslizantes, tener un diámetro entre 0.032 m y 0.051 m y de un largo mínimo
+de 0.60 m y estar ubicadas a una altura de 0.75 m, medida desde el nivel de piso terminado al eje de la barra.
+f) Cuando en ambos costados del inodoro se provea de este espacio de transferencia lateral, ambas barras deben ser
+abatibles, teniendo las mismas características, dimensiones, ubicación y altura señaladas en el literal precedente.
+(Gráfi co 10e y 10f).
+
+El Peruano / Viernes 17 de febrero de 2023 NORMAS LEGALES 19
+
+20 NORMAS LEGALES Viernes 17 de febrero de 2023 / El Peruano
+
+El Peruano / Viernes 17 de febrero de 2023 NORMAS LEGALES 21
+Artículo 16.- Urinarios
+a) Los urinarios deben ser del tipo pesebre o colgados de la pared. Deben estar provistos de un borde proyectado
+hacia el frente a no más de 0.40 m de altura sobre el piso, dejando un espacio libre de obstáculos con una altura
+de 0.25 m desde el piso hasta el borde inferior y con una profundidad mínima de 0.15 m. (Gráfi cos 11a, 11b, 11d y
+11e).
+b) Debe existir un espacio libre de 0.80 m x 1.20 m al frente del urinario para permitir la aproximación de una persona
+en silla de ruedas. (Gráfi co 11c).
+c) Se debe instalar barras de apoyo tubulares verticales de diámetro entre 0.032 m y 0.051 m, en ambos lados del
+urinario y, a 0.30 m de su eje, fi jados en el piso o pared posterior. En caso se ancle al piso, la superfi cie superior
+debe estar a una altura de 0.70 m y los que se anclan a la pared se instalan entre 0.70 m y 1.30 m. (Gráfi cos 11a,
+11b, 11c, 11d y 11e).
+d) Se pueden instalar separadores, siempre que el espacio libre entre ellos sea mayor de 0.75 m.
+e) Los mecanismos de descarga deben ser de palanca o de presión de gran superfi cie para facilitar su utilización y su
+colocación a una altura comprendida entre 0.70 m y 1.20 m.
+
+22 NORMAS LEGALES Viernes 17 de febrero de 2023 / El Peruano
+
+El Peruano / Viernes 17 de febrero de 2023 NORMAS LEGALES 23
+Artículo 17.- Duchas
+a) Las duchas tienen dimensiones mínimas de 0.90 m x 1.20 m y deben estar encajonadas entre tres paredes. En todo
+caso debe existir un espacio libre adyacente de, por lo menos, 1.50 m x 1.50 m que permita la aproximación de una
+persona en silla de ruedas. (Gráfi co 12a).
+b) Las duchas deben tener un asiento rebatible o removible entre 0.45 m y 0.50 m de profundidad por 0.50 m de
+ancho, como mínimo, con una altura entre 0.45 m y 0.50 m, en la pared opuesta a la de la grifería. (Gráfi cos 12a y
+12b).
+c) La grifería se debe ubicar a una altura de 1.20 m y las barras de apoyo entre una altura de 0.70 m a 0.75 m. Las
+barras de apoyo tubulares deben estar con la superfi cie superior instalada a una altura de 0.25 m por encima del
+nivel del asiento.
+d) Las griferías deben tener las características precisadas en el literal e) del artículo 14 de la presente Norma Técnica.
+e) Las duchas no deben llevar sardineles. Entre el piso del cubículo de la ducha y el piso adyacente puede existir un
+chafl án de altura no mayor a 0.13 m, los desniveles superiores a 0.13 m deben ser resueltos mediante rampas.
+f) Las rejillas de alcantarillado no deben tener un espaciamiento mayor a 0.013 m y deben ser instaladas en forma
+perpendicular al sentido de la circulación.
+g) En caso de contar con ducha-teléfono, la manguera debe tener por lo menos 1.50 m de largo que permita usarla
+manualmente y fi jarla en la pared a una altura de 1.20 m.
+Artículo 18.- Accesorios
+a) Los toalleros, jaboneras, papeleras y secadores de mano, comandos de ducha, deben colocarse a una altura entre
+0.40 m y 1.20 m, teniendo en cuenta las alturas de los elementos de manipulación según el artículo 10. (Gráfi co
+13a).
+
+24 NORMAS LEGALES Viernes 17 de febrero de 2023 / El Peruano
+b) Las barras de apoyo, en general, deben ser antideslizantes, tener un diámetro exterior entre 0.032 m y 0.051 m, y
+estar separadas de la pared por una distancia entre 0.04 m y 0.05 m. Deben anclarse adecuadamente y soportar
+una carga de 120 kg. Sus dispositivos de montaje deben ser fi rmes y estables, e impedir la rotación de las barras
+dentro de ellos.
+c) Los asientos y pisos de las tinas y duchas deben ser antideslizantes y soportar una carga de 120 kg.
+d) Las barras de apoyo, asientos y cualquier otro accesorio, así como la superfi cie de las paredes adyacentes deben
+estar libres de elementos abrasivos y fi losos.
+e) Se debe colocar ganchos de 0.12 m de longitud para colgar muletas, uno a 1.60 m de altura y otro en un rango entre
+0.90 m y 1.35 m, por lo menos en uno de los lados de los lavatorios y de los urinarios accesibles; así como, en los
+cubículos de inodoros y en las paredes adyacentes a las duchas. (Gráfi co 13b).
+f) Los espejos deben tener un grado de inclinación de 10º cuando se instalen a una altura mayor a 0.90 m medido
+desde el nivel de piso terminado y se ubiquen en la parte superior de los lavatorios; de ubicarlos a una altura menor,
+estos pueden ser instalados sin grado de inclinación. Para este último caso, la parte inferior del espejo se debe
+ubicar a una altura no menor de 0.40 m del nivel de piso terminado. (Gráfi co 13c).
+
+El Peruano / Viernes 17 de febrero de 2023 NORMAS LEGALES 25
+g) Los accesorios de baño, tales como jabonera, toallero, perchero, secador de manos, dispensador de papel toalla,
+repisas u otros, deben ser instalados a una altura máxima de 1.20 m y no deben obstaculizar la circulación o el giro
+de una silla de ruedas al interior del baño, ni la transferencia hacia inodoro. El portarrollo de papel higiénico debe
+estar ubicado a una distancia cómoda de alcance sentado desde el inodoro, no mayor de 0.40 m.
+h) La jabonera, el secador de manos y el dispensador de papel toalla deben ser de accionamiento automático, de
+botón o de palanca.
+i) En los servicios higiénicos de atención al público debe instalarse un cambiador fi jo o rebatible para bebés o niños y
+niñas, a una altura de 0.85 m desde el nivel de piso, considerando un espacio libre de obstáculos en la parte inferior,
+con una altura mínima de 0.75 m. El cambiador de bebé debe instalarse en un ambiente de uso mixto o uno en el
+baño de mujeres y de hombres. Este debe ser resistente al peso de un niño que necesite su uso con la ayuda de
+un familiar.
+j) En las edifi caciones de comercio de atención al público que cuenten con un aforo mayor a 500 personas del área
+de venta, se debe implementar un servicio higiénico familiar, que contenga lo siguiente:
+- Servicio higiénico para niña o niño: Conforme a la dotación de los servicios higiénicos señalada en la presente
+Norma Técnica respecto a personas de menor estatura.
+- Cambiador accesible: Con una camilla o elemento similar que facilite la acción de cambiar una prenda a
+adolescentes o adultos que requieran de asistencia; pueden instalarse en un vestidor accesible o cubículo de
+servicio higiénico accesible. (Gráfi co 13d).
+En las edifi caciones de atención al público que cuenten con un aforo menor a 500 personas, se debe incluir al
+interior del cubículo del servicio higiénico accesible, un asiento plegable para los que requieran de asistencia.
+Para ambos casos, deben contar con barras de apoyo y no debe obstaculizar el asiento o camilla de ser plegable.
+(Gráfi co 13e).
+
+26 NORMAS LEGALES Viernes 17 de febrero de 2023 / El Peruano
+Artículo 19.- Cubículos de inodoros accesibles
+a) Cuando el inodoro se incorpora como cubículo en el interior de los servicios higiénicos de hombres o mujeres,
+este espacio debe cumplir con las condiciones mínimas precisadas en el artículo 15 de la presente Norma
+Técnica.
+b) Los servicios higiénicos deben estar debidamente señalizados en el ingreso común y en el cubículo accesible y
+pueden utilizar señalización podotáctil.
+SUB-CAPÍTULO IV
+ESTACIONAMIENTOS
+Artículo 20.- Dotación de estacionamientos accesibles
+Los estacionamientos de uso público deben reservar espacios de estacionamiento exclusivo dentro del predio para
+los vehículos que transportan o son conducidos por personas con discapacidad y personas de movilidad reducida,
+considerando la dotación total, conforme al siguiente cuadro:
+DOTACIÓN TOTAL DE ESTACIONAMIENTOS ACCESIBLES
+ESTACIONAMIENTOS REQUERIDOS
+De 1 a 500 estacionamientos 4 % del total (las fracciones se redondean al
+entero mayor)
+De 501 a más estacionamientos 1 por cada 100 adicionales
+Nota: El estacionamiento accesible se contabiliza dentro del rango de dotación total de estacionamientos requeridos.
+Artículo 21.- Ubicación y circulación
+a) Los estacionamientos accesibles deben estar ubicados lo más cerca que sea posible a algún ingreso accesible a
+la edifi cación, de preferencia en el mismo nivel que este; a fi n de evacuar en forma inmediata a las personas con
+discapacidad y movilidad reducida, en situaciones de emergencia.
+b) Se debe desarrollar una ruta accesible al frente de espacios de estacionamiento y se debe prever la colocación de
+topes para las llantas, con el fi n que los vehículos al estacionarse, no invadan esa ruta.
+c) Si el estacionamiento se encuentra en un nivel subterráneo debe disponer de un ascensor que permita conectar
+el recorrido desde y hacia la salida principal de la edifi cación. La ruta de circulación hasta el ascensor debe ser
+accesible.
+d) Si la ruta de circulación peatonal invade el espacio de circulación vehicular esta debe ser demarcada en el pavimento
+para dar la debida prioridad y seguridad al peatón. Esta demarcación debe contar con las condiciones mínimas de
+la ruta accesible.
+e) El espacio de estacionamiento accesible y su circulación debe estar sobre terreno fi rme y nivelado sin variaciones
+que excedan de 0.06 m en pavimentos.
+Artículo 22.- Módulos de pago
+a) En los estacionamientos que cuenten con un sistema de pago de ticket, estos deben ser ubicados en el mismo nivel
+de los estacionamientos accesibles, para evitar que la persona deba trasladarse a otro nivel para realizar el pago.
+b) El módulo de sistema de pago debe considerar las condiciones de diseño establecidas en los artículos 10 y 11 de
+la presente Norma Técnica.
+Artículo 23.- Dimensiones y señalización
+a) Las dimensiones mínimas de los espacios de estacionamiento accesibles deben ser:
+i. Estacionamientos accesibles individuales: ancho 3.70 m. (Gráfi cos 14a y 14e).
+ii. Dos estacionamientos accesibles continuos: ancho 6.20 m, siempre que uno de ellos colinde con otro
+estacionamiento. (Gráfi cos 14b, 14c y 14d).
+iii. En todos los casos: largo 5.00 m y altura libre 2.10 m.
+b) En los lugares donde el tránsito vehicular y peatonal se encuentren al mismo nivel, se debe complementar con
+bolardos u otros elementos que delimitan las circulaciones peatonales y vehiculares, estos deben estar separados
+por una distancia mínima de 0.90 m y tener una altura mínima de 0.80 m. No pueden tener elementos salientes
+que representen riesgo para el peatón o que ocasionen barreras arquitectónicas. Los bolardos u otro elemento
+deben presentar contraste cromático con el entorno y contar con pintura o cintas refl ectivas, para garantizar su
+identifi cación por las personas con discapacidad visual.
+c) Para señalizar la ruta de circulación peatonal se debe demarcar una franja de 0.80 m como mínimo (tipo “paso
+de cebra”) que se extienda hasta el acceso para brindar seguridad a las personas con discapacidad y evitar
+desplazamientos por espacios de circulación vehicular. De existir diferencias de desnivel, estos deben ser
+salvados mediante rampas según las condiciones de diseño del Sub-Capítulo I del Capítulo II de la presente
+Norma Técnica.
+
+El Peruano / Viernes 17 de febrero de 2023 NORMAS LEGALES 27
+
+28 NORMAS LEGALES Viernes 17 de febrero de 2023 / El Peruano
+CAPÍTULO III
+CONDICIONES ESPECÍFICAS
+Artículo 24.- Probadores o vestidores
+Las edifi caciones que cuenten con probadores o vestidores deben cumplir con los siguientes requisitos adicionales:
+a) Donde existan probadores o vestidores, por lo menos uno en cada zona de probadores o vestidores, debe cumplir
+con las condiciones de accesibilidad.
+b) El vano de acceso debe tener un ancho mínimo de 1.00 m y el marco de las puertas no deben invadir la ruta
+accesible.
+c) Deben considerar las dimensiones mínimas para el espacio de maniobra de 1.50 m de diámetro y estar provista de
+una banca fi jada a la pared, con una profundidad de 0.45 m a 0.50 m, a una altura entre 0.45 m y 0.50 m del nivel
+del piso, y un ancho mínimo de 0.80 m. En caso, el asiento sea plegable, no debe obstaculizar el uso de las barras
+de apoyo. En ambos casos, se debe implementar las barras de apoyo fi jas a la pared, de acuerdo al artículo 18 de
+la presente Norma Técnica.
+
+El Peruano / Viernes 17 de febrero de 2023 NORMAS LEGALES 29
+d) Debe colocarse barras de apoyo en los muros colindantes a la banca o al asiento plegable. En el caso del asiento
+plegable, no debe obstaculizar el uso de las barras de apoyo. (Gráfi cos 15a y 15b).
+e) Se debe colocar ganchos de 0.12 m de longitud para colgar muletas, uno a 1.60 m de altura y otro en un rango entre
+0.90 m y 1.35 m. (Gráfi co 15b).
+f) La parte inferior del espejo se debe ubicar a una altura no menor de 0.40 m del piso. (Gráfi co 15b).
+g) Los probadores o vestidores deben estar debidamente señalizados en el ingreso común y en el cubículo accesible;
+y debe implementar pisos podotáctiles que identifi que el probador o vestidor accesible. (Gráfi co 15c).
+
+30 NORMAS LEGALES Viernes 17 de febrero de 2023 / El Peruano
+Artículo 25.- Espacios para comensales
+Las edifi caciones que cuenten con espacios para comensales deben cumplir con los siguientes requisitos adicionales:
+a) Los espacios para comensales deben contar con la siguiente dotación que cuente con las condiciones de
+accesibilidad:
+NÚMERO DE COMENSALES ESPACIOS REQUERIDOS CON CONDICIONES DE ACCESIBILIDAD
+Hasta 20 comensales 1 espacio
+de 21 a 50 comensales 2 espacios
+de 51 a 100 comensales 3 espacios
+Más de 100 comensales 3% del número de comensales (en caso de decimales se redondea al
+número entero más cercano)
+b) Los espacios para comensales que cuenten con las condiciones de accesibilidad deben tener mesas o tableros fi jos
+y estables, con una altura de 0.80 m, una altura mínima de 0.75 m libre de obstáculos y una profundidad mínima de
+0.40 m o con espacio abierto que permita la aproximación frontal de una silla de ruedas.
+Artículo 26.- Zona de espectadores
+Las edifi caciones que cuenten con zonas de espectadores deben cumplir con los siguientes requisitos de accesibilidad:
+a) Se debe disponer de espacios para personas en sillas de ruedas, a razón de uno por los primeros 50 asientos,
+adicionalmente el 1% del número total, a partir de 51 asientos. Las fracciones se redondean al entero más cercano.
+b) El espacio mínimo para un espectador en silla de ruedas es de 0.90 m de ancho y de 1.20 m de profundidad y debe
+estar debidamente señalizado (Gráfi co 16a). Los espacios para sillas de ruedas se deben ubicar próximos a los
+accesos y salidas de emergencia y no deben obstaculizar las circulaciones y rutas de evacuación.
+
+El Peruano / Viernes 17 de febrero de 2023 NORMAS LEGALES 31
+c) En caso que la edifi cación cuente con escenario, este debe ser accesible desde la sala de espectáculos, ya sea
+por medio de una rampa, cumpliendo la pendiente adecuada o con una plataforma mecánica que permita su uso
+de manera autónoma y segura.
+d) La numeración de las fi las y asientos debe ser legible y en formato alternativo de comunicación para personas con
+discapacidad visual o de baja visión.
+e) Considerar una ruta accesible que conecte las salas de espectadores con las áreas de servicios de la edifi cación.
+f) Se debe contar con un asiento de 0.80 m de ancho en las zonas de espectadores. (Gráfi co 16b).
+g) Los asientos y espacios reservados no deben estar separados de los demás asientos y por lo menos uno debe
+encontrarse ubicado al lado de un asiento de espera. (Gráfi co 16c).
+Artículo 27.- Habitaciones para hospedaje
+Las edifi caciones que cuenten con habitaciones para hospedaje deben cumplir con los siguientes requisitos:
+a) Debe existir una habitación que cuente con las condiciones mínimas de accesibilidad a razón de uno por los
+primeros 50, adicionalmente el 1% del número total a partir de 51 habitaciones. Las fracciones se redondean al
+entero más cercano. En caso de contar con menos de 50 habitaciones, por lo menos uno debe cumplir con la
+condición señalada.
+b) Las habitaciones que cuenten con las condiciones mínimas de accesibilidad deben ser similares a las demás
+habitaciones según su categoría, y de contar con servicios higiénicos, estos deben cumplir con las condiciones
+mínimas de accesibilidad establecidas en el Sub-Capítulo III del Capítulo II de la presente Norma Técnica.
+c) Las habitaciones que cuenten con las condiciones mínimas de accesibilidad deben contar con alarmas visuales y
+sonoras, instrumentos de notifi cación e información en sistema braille y teléfonos con luz.
+d) Estas habitaciones deben tener armarios con las condiciones mínimas de accesibilidad, de preferencia con
+puertas corredizas, con repisas y cajones dispuestos entre los 0.40 m y 1.20 m de altura u otro sistema
+permitiendo la altura máxima de alcance de objetos de acuerdo al artículo 10 de la presente Norma Técnica.
+Los accesorios deben ser a presión o palanca y su ubicación debe garantizar el alcance de una persona en
+silla de ruedas.
+e) La caja de seguridad, tomacorriente e interruptores y controles de temperatura ambiental se debe instalar a una
+altura entre 0.40 m y 1.20 m, sin muebles u obstáculos que impidan el acceso a dichos elementos.
+f) En los niveles en los que se ubiquen las habitaciones y áreas comunes que cuenten con las condiciones mínimas
+de accesibilidad, deben contar con servicios higiénicos accesibles, al menos un aparato de cada tipo.
+
+32 NORMAS LEGALES Viernes 17 de febrero de 2023 / El Peruano
+CAPÍTULO IV
+CONDICIONES DE ACCESIBILIDAD EN EDIFICACIONES PARA VIVIENDA
+Artículo 28.- Áreas de circulación común
+a) Las áreas de circulación comunes de los edifi cios multifamiliares, bifamiliares, de uso colectivo, conjuntos
+residenciales y quintas, para los que se exijan ascensor deben cumplir con condiciones de accesibilidad, mediante
+rampas o medios mecánicos; las rampas se diseñan en función a lo establecido en el artículo 6 de la presente
+Norma Técnica. Los vestíbulos de ingreso de los edifi cios multifamiliares, bifamiliares, de uso colectivo, conjuntos
+residenciales y quintas deben cumplir con condiciones de accesibilidad, mediante rampas o medios mecánicos; las
+rampas se diseñan en función a lo establecido en el artículo 6 de la presente Norma Técnica.
+b) El ancho mínimo de los vanos de las puertas principales es de 1.00 m y de 0.90 m para las interiores. Para todos
+los casos, el marco de las puertas no debe invadir la ruta accesible.
+c) Los accesos y rutas de circulación deben estar a nivel del piso y evitar superfi cies irregulares como ripio, arena o
+peldaños. Se debe considerar como mínimo 0.90 m de ancho para las rutas accesibles en el exterior, con pavimento
+antideslizante. En caso de contar con circulaciones mayores a 25.00 m de longitud, debe haber espacios de maniobra
+de 1.50 m x 1.50 m, garantizando el giro de 360º de una persona en silla de ruedas u otro producto de apoyo.
+d) Los casos en que se requiere de un producto de apoyo, se debe habilitar un sistema con formato alternativo de
+comunicación, que comunique el ingreso del edifi cio con la vivienda.
+e) En zonas de circulación se debe evitar que el giro de las hojas de las ventanas interfi era la ruta accesible, en caso
+que, la apertura de la puerta invada la distancia mínima requerida para la ruta accesible, esta debe garantizar una
+apertura de 180º. Las manijas de las puertas deben ser de tipo palanca con una protuberancia fi nal o de otra forma
+que evite que la mano se deslice hacia abajo, teniendo como máximo 1.20 m de altura medida desde el nivel de
+piso terminado hasta el eje de la cerradura.
+CAPÍTULO V
+SEGURIDAD Y SEÑALIZACIÓN PARA ACCESIBILIDAD UNIVERSAL
+Artículo 29.- Señalización para accesibilidad universal
+Las señales de acceso y avisos deben cumplir con lo siguiente:
+a) Las señaléticas y avisos deben contener información del número de piso, nombres de ambientes, los mismos que
+deben estar en escritura braille u otro formato alternativo de comunicación.
+b) La señalización braille debe estar ubicada a una altura entre 0.90 m a 1.35 m medido del nivel de piso terminado,
+y debe instalarse del lado de la manija, a una distancia a 0.10 m del marco de la puerta. Cuando no sea posible la
+colocación de esta señalización sobre la pared, la placa de braille se debe instalar al eje vertical de la puerta. Se
+puede considerar diferentes alturas para la ubicación de la placa en braille, teniendo como fundamento un estudio
+antropométrico según las características del usuario. (Gráfi cos 17a, 17b, 17c).
+
+El Peruano / Viernes 17 de febrero de 2023 NORMAS LEGALES 33
+c) La señalética de los servicios higiénicos, los cubículos de inodoro y los vestidores que cuenten con las condiciones
+de accesibilidad, debe estar adosada a las paredes o puertas adyacentes o colindantes, según corresponda. La
+señalética debe tener como medida mínima de 0.15 m x 0.15 m y se debe instalar a una altura de 1.40 m medida
+desde el nivel de piso terminado. (Gráfi co 17d).
+d) Los espacios de espera para una silla de ruedas y los asientos accesibles deben tener señalización horizontal y
+vertical con el símbolo internacional de accesibilidad (SIA).
+e) En estacionamientos, los avisos soportados por postes o colgados deben tener como mínimo 0.40 m de ancho
+y 0.60 m de alto. Del total de estacionamientos según dotación, por lo menos uno debe contar con el letrero
+de prohibición de estacionarse conforme a la Ley Nº 28084, Ley que regula el parqueo especial para vehículos
+ocupados por personas con discapacidad. Para este caso, los avisos soportados por postes o colgados deben
+tener como mínimo, 0.40 m de ancho y 0.40 m de alto con el símbolo SIA y 0.25 m con el letrero de prohibición de
+estacionarse. Para ambos casos, se deben instalar a una altura de 2.10 m, medida desde el borde inferior. (Gráfi co
+17e). La señalización vertical no debe obstruir la ruta accesible, el área destinada a los estacionamientos, ni la
+apertura de las puertas de los respectivos vehículos.
+f) La señalización horizontal de los espacios de estacionamiento vehicular accesible debe ser de 1.60 m x 1.60 m
+(Gráfi co 17f).
+
+34 NORMAS LEGALES Viernes 17 de febrero de 2023 / El Peruano
+g) Se debe considerar como mínimo un plano háptico en el ingreso de las edifi caciones de atención al público
+que cuenten con un aforo mayor a 500 personas, no incluye viviendas, a fi n de brindar información en formatos
+alternativos de comunicación de la distribución arquitectónica de un determinado espacio. Los elementos a utilizar
+en el plano háptico deben estar en alto relieve para diferenciar los ambientes o divisiones internas, así como
+considerar una leyenda, la ruta o circulación; se deben usar símbolos, texturas u otro formato alternativo de
+comunicación; y, se debe contemplar información esencial a fi n de no saturar la información visual y táctil.
+h) En caso de contemplar un plano háptico horizontal debe estar libre de obstáculos en la parte inferior, con una altura
+mínima de 0.75 m y una profundidad mínima de 0.40 m, que permita la aproximación de una persona en silla de ruedas.
+Además, debe tener una inclinación comprendida entre los 45º y 75º siendo recomendable una inclinación de 60º.
+i) En caso de contemplar un plano háptico vertical debe estar ubicado entre 0.40 m y 1.20 m de altura.
+j) La señalización podotáctil debe ser de color contrastante con el pavimento existente, pudiendo ser adosado o
+empotrado a piso que no exceda los 0.06 m de altura sobre el nivel de piso terminado. (Gráfi co 17g).
+k) La señalización podotáctil que se implementa con la presente Norma Técnica son de 2 tipos, una de tipo alerta que
+debe utilizarse para indicar un cambio de dirección, alertar sobre la presencia de un desnivel o sobre la presencia
+de un elemento que se advierta en la ruta accesible, y otra de tipo direccional que debe utilizarse para marcar la
+dirección de la ruta accesible y brinda orientación direccional a la persona con discapacidad visual durante todo
+su recorrido, desde el acceso a las diferentes dependencias del edifi cio. (Gráfi co 17h). Las dimensiones deben ser
+de acuerdo a la NTP 873.001:2018 SEÑALIZACIÓN PARA ACCESIBILIDAD UNIVERSAL EN EDIFICACIONES.
+Señalización braille, piso táctil o podotáctil y planos hápticos.
+Artículo 30.- Seguridad y área de refugio accesible
+Las edifi caciones de comercio cuyo aforo por piso es mayor de 500 personas, deben cumplir con las condiciones mínimas
+de diseño establecido en el presente artículo.
+a) El área de refugio accesible debe ubicarse en cada planta sobre el nivel del suelo que no cuente con rampa de
+acceso y en un área compartimentada a prueba de fuego y humos o escalera protegida que comunique con una
+ruta de evacuación, vestíbulo o ascensor, según las dimensiones establecidas en el presente capítulo. El área de
+refugio no debe invadir la circulación de evacuación.
+b) Las áreas de refugio deben estar debidamente señalizadas, verticalmente con el rótulo de “área de refugio
+accesible” y de dimensiones según lo establecido en la NTP 399.010-1:2016 SEÑALES DE SEGURIDAD.
+Símbolos gráfi cos y colores de seguridad. Parte 1: Reglas para el diseño de las señales de seguridad y franjas
+de seguridad; y horizontalmente con un color que contraste del pavimento; para ambos casos debe contar con el
+símbolo internacional de accesibilidad (SIA) (Gráfi co 18a).
+
+El Peruano / Viernes 17 de febrero de 2023 NORMAS LEGALES 35
+c) El espacio del área de refugio accesible debe considerar como mínimo un espacio para la permanencia de una
+persona en silla de ruedas, cuya dimensión debe ser de 0.80 m x 1.20 m; y considerar como mínimo un espacio
+para personas a pie con otro tipo de discapacidad o movilidad reducida cuya dimensión debe ser de 0.80 m x 0.60
+m, debidamente señalizado para ambos casos con el símbolo internacional de accesibilidad (SIA) (Gráfi co 18b y
+18c).
+d) El área de refugio accesible debe contar con un intercomunicador sonoro y visual con alarma de aviso de rescate.
+e) Se debe contar con una ruta accesible libre de obstáculos que permita circular a las personas con discapacidad
+y movilidad reducida hacia el área de refugio accesible; esta ruta debe estar debidamente señalizada según lo
+establecido en la NTP 399.010-1:2016 SEÑALES DE SEGURIDAD. Símbolos gráfi cos y colores de seguridad.
+Parte 1: Reglas para el diseño de las señales de seguridad y franjas de seguridad. (Gráfi co 18d).
+
+36 NORMAS LEGALES Viernes 17 de febrero de 2023 / El Peruano
+f) En los cubículos de inodoro, ducha y vestidores que cuenten con las condiciones de accesibilidad se deben
+instalar dispositivos de llamada de emergencia o pulsador de pánico, los cuales deben ser visibles, táctiles y estar
+conectados a un sistema de alarma. Los dispositivos o pulsadores pueden estar instalados en la pared o en el
+techo, para ambos casos, el elemento a accionar es a través de botón, palanca o cordón, deben instalarse en dos
+alturas, el primero ubicado a 0.40 m de altura y el segundo a 1.20 m de altura, ambas medidas desde el nivel de
+piso terminado. (Gráfi co 18e y 18f).
+g) Elaborar un plan de seguridad de la edifi cación que consigne la descripción de los dispositivos que aseguren
+condiciones de seguridad para personas con discapacidad y movilidad reducida señaladas en la presente Norma
+Técnica. Además, el plano de señalización y evacuación debe consignar la ubicación del área de refugio accesible
+y su ruta accesible, así como los dispositivos de llamada de emergencia o pulsadores de pánico.
+h) Contemplar sistemas de alerta sonora y luminosa en casos de emergencia o evacuación.
+2152217-1
