@@ -1683,6 +1683,20 @@ st.markdown("""
     .stMarkdown tbody tr:nth-child(even) td { background-color:#F9F7F4; }
     .stMarkdown p, .stMarkdown li, .stMarkdown strong { color:#1E2D3D !important; }
 
+    /* Divs con fondo claro generados dinámicamente: forzar texto oscuro */
+    .stMarkdown div[style*="background:#E8F5EE"],
+    .stMarkdown div[style*="background:#FFF8EE"],
+    .stMarkdown div[style*="background:#FFF8E6"],
+    .stMarkdown div[style*="background:#FFFFFF"],
+    .stMarkdown div[style*="background:#FDFAF6"],
+    .stMarkdown div[style*="background:#F5F3EF"],
+    .stMarkdown div[style*="background:#F7F5F1"],
+    .stMarkdown div[style*="background:#FAFAF8"],
+    .stMarkdown div[style*="background:#F0EDE8"],
+    .stMarkdown div[style*="background:#FDECEA"],
+    .stMarkdown div[style*="background:#FFF0F0"],
+    .stMarkdown div[style*="background:#FFF0EE"] { color:#1A2233 !important; }
+
     /* ── Score card ── */
     .score-card {
         border-radius: 12px; padding: 32px 36px; text-align: center;
@@ -3342,6 +3356,71 @@ REFERENCIAS_NORMATIVAS_LIMA = _load_norm("referencias_lima.txt")
 
 # ── BENCHMARKS INDUSTRIALES (costos nave, Parque Logístico 47, retornos) ─────────────────────────
 BENCHMARKS_INDUSTRIAL = _load_norm("benchmarks_industrial.txt")
+
+# ── ÍNDICE DE USOS ATN-I (6,349 actividades, P=Permitido H=Compatible) ──────────────────────────
+_INDICE_USOS_ATN_RAW = _load_norm("indice_usos_atni.txt")
+
+def _parse_indice_usos_entries(raw: str) -> list:
+    entries = []
+    for line in raw.split('\n'):
+        if line.count('|') < 2:
+            continue
+        parts = line.split('|')
+        desc = parts[1].strip()
+        if not desc or len(desc) < 4:
+            continue
+        zones: dict = {}
+        for token in parts[2].strip().split():
+            if '=' in token:
+                z, v = token.split('=', 1)
+                zones[z.strip()] = v.strip()
+        if zones:
+            entries.append({"desc": desc, "zones": zones})
+    return entries
+
+_INDICE_USOS_ENTRIES = _parse_indice_usos_entries(_INDICE_USOS_ATN_RAW)
+
+
+def _ascii_lower(s: str) -> str:
+    """Lowercase + strip accents for accent-insensitive search."""
+    import unicodedata
+    return unicodedata.normalize('NFKD', s.lower()).encode('ascii', 'ignore').decode()
+
+
+def _buscar_actividad_indice(query: str, zona_sel: str, max_results: int = 12) -> list:
+    """Keyword search across Índice de Usos ATN-I (Ord. 933-MML).
+    Accent-insensitive + prefix match (≥7 chars) to handle plural/gender endings.
+    zona_sel: 'I1'–'I4' or 'OU' or 'CZ'/'CM'/etc.
+    Returns list of dicts: {desc, zones, compat} where compat='P','H' or None."""
+    if not query or len(query.strip()) < 3:
+        return []
+    keywords = [_ascii_lower(w) for w in query.split() if len(w) >= 3]
+    if not keywords:
+        return []
+    # Normalize sidebar zone ('I2') to file format ('I-2')
+    if len(zona_sel) == 2 and zona_sel[0] == 'I' and zona_sel[1].isdigit():
+        zona_norm = f"I-{zona_sel[1]}"
+    else:
+        zona_norm = zona_sel
+
+    def _kw_match(kw: str, desc_l: str, desc_words: list) -> bool:
+        if kw in desc_l:
+            return True
+        if len(kw) >= 7:
+            pfx = kw[:7]
+            return any(w.startswith(pfx) for w in desc_words)
+        return False
+
+    scored = []
+    for entry in _INDICE_USOS_ENTRIES:
+        desc_l = _ascii_lower(entry["desc"])
+        desc_words = desc_l.split()
+        score = sum(1 for kw in keywords if _kw_match(kw, desc_l, desc_words))
+        if score > 0:
+            compat = entry["zones"].get(zona_norm) or entry["zones"].get(zona_sel)
+            scored.append((score, entry["desc"], entry["zones"], compat))
+    scored.sort(key=lambda x: (-x[0], x[1]))
+    return [{"desc": d, "zones": z, "compat": c} for _, d, z, c in scored[:max_results]]
 
 
 # ── REGLAMENTO NACIONAL DE EDIFICACIONES (RNE) ───────────────────────────────────────────────────
@@ -9058,7 +9137,10 @@ with st.sidebar:
             min_value=30.0, max_value=95.0, value=75.0, step=5.0, key="ind_pct_techada")
         _ind_nave = ind_area * ind_pct_techada / 100
         _ind_libre = ind_area * (1 - ind_pct_techada / 100)
-        st.caption(f"Nave: **{_ind_nave:,.0f} m²** · Patios/maniobras: **{_ind_libre:,.0f} m²**")
+        st.markdown(
+            f'<div style="font-size:11px;color:#A8C0D8;margin-top:-4px;margin-bottom:4px;">'
+            f'Nave: <strong>{_ind_nave:,.0f} m²</strong> · Patios/maniobras: <strong>{_ind_libre:,.0f} m²</strong>'
+            f'</div>', unsafe_allow_html=True)
 
         ind_tipo = st.selectbox("Tipo de nave",
             ["Almacén Logístico", "Nave Industrial", "Cross-docking", "Producción / Manufactura"],
@@ -9113,6 +9195,41 @@ with st.sidebar:
             value=st.session_state.get("ind_actividad_desc", ""),
             placeholder="Ej: Almacenamiento y distribución de productos farmacéuticos refrigerados…",
             height=68, key="ind_actividad_desc")
+
+        # ── Búsqueda en Índice de Usos ATN-I ──────────────────
+        _ind_busq = st.text_input(
+            "Buscar en Índice de Usos ATN-I",
+            placeholder="Ej: almacén, farmacéutico, textil, metalmecánica…",
+            key="ind_busq_atni")
+        if _ind_busq and len(_ind_busq.strip()) >= 3:
+            _zona_busq = st.session_state.get("ind_zona_ind", "I2")
+            _res_idx = _buscar_actividad_indice(_ind_busq, _zona_busq)
+            if _res_idx:
+                with st.expander(f"Índice ATN-I — {len(_res_idx)} actividades encontradas", expanded=True):
+                    for _ri in _res_idx:
+                        _c = _ri["compat"]
+                        _z_parts = []
+                        for _z, _v in sorted(_ri["zones"].items()):
+                            if _v in ("P", "H"):
+                                _z_parts.append(_z.replace("I-", "I") + ("✓" if _v == "P" else "~"))
+                        _z_str = " · ".join(_z_parts)
+                        if _c == "P":
+                            _badge = (f'<span style="background:#1A4731;color:#fff;border-radius:3px;'
+                                      f'padding:1px 6px;font-size:10px;font-weight:700;">✓ PERMITIDO en {_zona_busq}</span>')
+                        elif _c == "H":
+                            _badge = (f'<span style="background:#7A4F1A;color:#fff;border-radius:3px;'
+                                      f'padding:1px 6px;font-size:10px;font-weight:700;">~ COMPATIBLE en {_zona_busq}</span>')
+                        else:
+                            _badge = (f'<span style="background:#4A5870;color:#fff;border-radius:3px;'
+                                      f'padding:1px 6px;font-size:10px;">— NO en {_zona_busq}</span>')
+                        st.markdown(
+                            f'<div style="border-bottom:1px solid #EEF0F4;padding:5px 2px 6px;">'
+                            f'<div style="font-size:11px;font-weight:600;color:#1A2233;">{_ri["desc"].title()}</div>'
+                            f'<div style="font-size:10px;color:#6B7685;margin-top:1px;">{_z_str}</div>'
+                            f'<div style="margin-top:3px;">{_badge}</div>'
+                            f'</div>', unsafe_allow_html=True)
+            else:
+                st.caption("Sin coincidencias — prueba otro término (ej: 'almacen', 'textil').")
 
         # Compatibilidad normativa
         _zona_sel = st.session_state.get("ind_zona_ind", "I2")
@@ -9236,13 +9353,11 @@ with st.sidebar:
         ind_doc_partida = st.file_uploader("Partida Registral (SUNARP)", type="pdf", key="ind_doc_partida")
         ind_doc_params  = st.file_uploader("Certificado de Parámetros",  type="pdf", key="ind_doc_params")
         ind_doc_zon     = st.file_uploader("Cert. Zonificación y Vías",  type="pdf", key="ind_doc_zon")
-        ind_doc_planos  = st.file_uploader("Planos del Inmueble",        type="pdf", key="ind_doc_planos")
+        ind_doc_planos  = st.file_uploader("Planos del Inmueble (PDF, DWG o DXF)", type=["pdf", "dwg", "dxf"], key="ind_doc_planos")
+        if ind_doc_planos and ind_doc_planos.name.lower().endswith((".dwg", ".dxf")):
+            st.info("DWG/DXF cargado como referencia. Para incluirlo en el análisis de documentos, expórtalo como PDF desde AutoCAD: Archivo → Exportar → PDF. El polígono geométrico se procesa en el paso de Cabida Industrial.")
         _ind_has_docs = any([ind_doc_partida, ind_doc_params, ind_doc_zon, ind_doc_planos])
-        if _ind_has_docs:
-            run_ind_docs = st.button("ANALIZAR DOCUMENTOS", use_container_width=True, key="btn_ind_docs")
-        else:
-            run_ind_docs = False
-            st.caption("Adjunta al menos un documento para habilitar el análisis.")
+        run_ind_docs = False  # se dispara junto con EJECUTAR ANÁLISIS si hay docs
 
         with st.expander("Fotos del inmueble", expanded=False):
             st.caption("Las fotos se incluyen en el reporte")
@@ -9713,12 +9828,17 @@ if tipo_op == "Proyecto Logístico / Industrial" and run_industrial:
     }
     st.session_state.industrial_result = calcular_industrial(_ind_inp)
     st.session_state.ind_analizado = True
+    # Si hay documentos cargados, dispara el análisis de factibilidad en el mismo flujo
+    if _ind_has_docs:
+        run_ind_docs = True
 
 if tipo_op == "Proyecto Logístico / Industrial" and run_ind_docs:
     _ip  = ind_doc_partida.read() if ind_doc_partida else None
     _ic  = ind_doc_params.read()  if ind_doc_params  else None
     _iz  = ind_doc_zon.read()     if ind_doc_zon      else None
-    _ipl = ind_doc_planos.read()  if ind_doc_planos   else None
+    _ipl = (ind_doc_planos.read()
+            if ind_doc_planos and not ind_doc_planos.name.lower().endswith((".dwg", ".dxf"))
+            else None)
     _it  = st.session_state.get("ind_tipo", "Almacén Logístico")
     _iz2 = st.session_state.get("ind_zona_ind", "I2")
     _iu  = st.session_state.get("ind_uso", "Uso directo")
@@ -12554,11 +12674,16 @@ elif tipo_op == "Proyecto Logístico / Industrial":
 
             else:
                 _ind_geo_file = st.file_uploader(
-                    "Cargar plano perimétrico (.dxf / .pdf)",
-                    type=["dxf", "pdf"], key="ind_geo_dxf_file")
+                    "Cargar plano perimétrico (.dxf / .dwg / .pdf)",
+                    type=["dxf", "dwg", "pdf"], key="ind_geo_dxf_file")
                 if _ind_geo_file:
                     if _ind_geo_file.name.lower().endswith(".pdf"):
-                        st.info("PDF cargado como referencia. Para análisis 3D automático sube el archivo DXF/DWG exportado desde AutoCAD o adjunta las medidas en 'Tabular medidas'.")
+                        st.info("PDF cargado como referencia. Para análisis 3D automático sube el archivo DXF exportado desde AutoCAD o adjunta las medidas en 'Tabular medidas'.")
+                    elif _ind_geo_file.name.lower().endswith(".dwg"):
+                        st.warning(
+                            "**DWG es formato propietario binario** — SOLUM no puede extraer el polígono directamente. "
+                            "Exporta como DXF desde AutoCAD: **Archivo → Guardar como → AutoCAD DXF (\\*.dxf)**. "
+                            "Una vez en DXF, SOLUM extrae el perímetro automáticamente.")
                     elif _SHAPELY_OK and _EZDXF_OK:
                         import io as _io
                         _ind_poly_lote = _geo_poligono_dxf(_io.TextIOWrapper(_io.BytesIO(_ind_geo_file.read()), encoding="utf-8", errors="ignore"))
@@ -12765,9 +12890,9 @@ elif tipo_op == "Proyecto Logístico / Industrial":
                            f"de la capacidad de pago de la industria/inquilino.")
                 st.markdown(
                     f'<div style="background:{_tc};border-left:3px solid {_tb};border-radius:6px;'
-                    f'padding:10px 14px;margin-top:10px;font-size:12px;">'
+                    f'padding:10px 14px;margin-top:10px;font-size:12px;color:#1A2233;">'
                     f'{_tm}<br>'
-                    f'<span style="font-size:10px;opacity:0.65;">Referencia orientativa — el profesional aplica su criterio según la operación específica.</span>'
+                    f'<span style="font-size:10px;color:#4A5568;">Referencia orientativa — el profesional aplica su criterio según la operación específica.</span>'
                     f'</div>',
                     unsafe_allow_html=True)
 
