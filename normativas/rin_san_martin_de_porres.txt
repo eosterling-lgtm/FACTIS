@@ -1,0 +1,193 @@
+# RIN SAN MARTÍN DE PORRES — REGLAMENTO DE INTEGRACIÓN NORMATIVA
+## Parámetros Urbanísticos y Edificatorios
+### Fuente: CPU N°0757-2019 (I2, Av. Tomás Valle 601-631) · CPU N°234-2024 (CZ + RDM, Av. Tomás Valle/Jr. San Pedro) · CPU N°386-2025 (I2, Av. Tomás Valle 103-109)
+
+---
+
+## 1. MARCO LEGAL VIGENTE
+
+| Norma | Contenido | Estado |
+|---|---|---|
+| Ord. N°1015-07-MML (14/05/2007) | Reajuste Integral Zonificación SMP, Independencia, Comas, Los Olivos y parte del Rímac (ATN I y II) | **VIGENTE — NORMA BASE** |
+| Ord. N°933-2006-MML (05/08/2006) | Índice de Usos para la Ubicación de Actividades Urbanas ATN I | Vigente |
+| Ord. N°341-01-MML | Plan de Desarrollo Metropolitano — secciones viales | Vigente (referencia alineamiento) |
+| D.S. N°029-2019-VIVIENDA | Parámetros habilitaciones residenciales | Vigente |
+| RNE (D.S. N°011-2006-VIVIENDA y modificatorias) | Norma supletoria | Vigente |
+
+**Área de Estructuración Urbana: I**
+San Martín de Porres aplica normativa MML base Ord. N°1015-07-MML sin reglamento distrital premium propio.
+
+---
+
+## 2. ZONAS VERIFICADAS — SAN MARTÍN DE PORRES (ÁREA AV. TOMÁS VALLE)
+
+| Zona | Descripción | Ubicación principal |
+|---|---|---|
+| **I2** | Industria Liviana | Fundo Chavarría (Av. Tomás Valle norte, Ca. La Milla) |
+| **CZ** | Comercio Zonal | Av. Tomás Valle (Urb. San Pedro — lotes frente a Av.) |
+| **RDM** | Residencial de Densidad Media | Jr. San Pedro (Urb. San Pedro — lotes interiores) |
+
+---
+
+## 3. ZONA I2 — INDUSTRIA LIVIANA (Av. Tomás Valle / Fundo Chavarría)
+
+### Parámetros base I2
+
+| Parámetro | CPU N°0757-2019 | CPU N°386-2025 | Nota |
+|---|---|---|---|
+| Ubicación | Av. Tomás Valle 601-631 + Ca. La Milla 105-115 | Av. Tomás Valle 103-109 + Ca. La Milla | Mismo Fundo Chavarría |
+| Área terreno | 22,729.30 m² | Sin dato | — |
+| Lote mínimo | 1,000 m² | 1,000 m² | — |
+| Frente mínimo | 20 ml | 20 ml | — |
+| Densidad neta | — | 1,300 - 2,250 | — |
+| Altura I2 | Según proyecto y entorno | Según proyecto o entorno | Sin límite fijo de pisos |
+| **Altura si uso vivienda** | — | **5 PISOS MÁXIMO** | Nota (1) CPU 2025 |
+| Área libre | Según actividades y condiciones ambientales | Idem | — |
+| % Usos industriales | Hasta 20% de I1 | Hasta 20% de I1 | — |
+| **Retiro Av. Tomás Valle** | **10.00 ml frontal (ambos frentes)** | **5.00 ml (Avenida)** | Diferencia entre CPUs — verificar en CPUE |
+| **Retiro Calle/Jr.** | 10.00 ml (mín, ambos frentes) | **3.00 ml** | CPU 2025 más favorable |
+| Retiro Pasaje | — | No exigible | — |
+| Alineamiento | Av. 33.00 ml desde eje (Ord. 341-01-MML) | 60.00 ml Av. Tomás Valle / 20.00 ml Ca. La Milla | Verificar en CPUE del predio |
+| Estacionamiento | 1/6 personas empleadas | 1/6 personas empleadas | — |
+| SUNARP | Partida N°49064914 (CPU 2019) | — | — |
+
+### Nota crítica (1) — CPU 2025: USO VIVIENDA EN I2 HASTA 5 PISOS
+"Si se destina el lote a uso de vivienda exclusivamente, se podrá construir hasta una altura de 5 pisos."
+→ Un lote I2 en el corredor Tomás Valle (Fundo Chavarría) puede destinarse 100% a vivienda residencial hasta 5 pisos.
+
+### Nota crítica — Zona de usos diversificados (entre Tomás Valle / Pan. Norte / Canta Callao / Gerardo Unger-Túpac Amaru)
+"Se declara que el área comprendida entre la Av. Tomás Valle, Carretera Panamericana Norte, la Av. Canta Callao y la Av. Gerardo Unger - Túpac Amaru, es un área apta para usos diversificados y de amplia compatibilidad, por estar actualmente ocupada por instalaciones industriales, locales comerciales y urbanizaciones residenciales."
+
+→ En esta zona I2 pueden localizarse también **Centros Comerciales, Galerías Comerciales, Galerías Artesanales, Centros Feriales** y otros compatibles, aplicando parámetros urbanísticos del uso comercial. Obligatorio: retiros laterales/posteriores ≥5ml arborizados si colindan con uso industrial + EIA + EIV.
+
+### Estudios obligatorios I2 San Martín de Porres
+- Estudio de Impacto Ambiental (EIA) — si aplica
+- Estudio de Impacto Vial (EIV) — para nuevas actividades comerciales o mixtas
+- Programa de Adecuación y Manejo Ambiental (PAMA) — instalaciones industriales existentes
+
+---
+
+## 4. ZONA CZ — COMERCIO ZONAL (CPU N°234-2024)
+
+### Av. Tomás Valle / Jr. San Pedro — Urb. San Pedro, Mz. I, Lotes 7, 8 y 9
+
+| Parámetro | Valor | Nota |
+|---|---|---|
+| Zonificación | CZ (Comercio Zonal) | Ord. N°1015-07-MML |
+| ATN | I | — |
+| Coef. edificación | **4.0** | Si hay diferencia entre CZ y residencial compatible: se toma la mayor |
+| Usos residenciales compatibles | **RDM o RDA** | Aplicar parámetros del compatible |
+| Tamaño lote normativo | Existente o según proyecto | — |
+| Frente mínimo | No indicado | — |
+| **Altura máxima** | **7 pisos** (frente a Av. ≥20m o parque) | Nota (4) |
+| Altura general | 5 pisos | En lotes sin frente a Av. ≥20m |
+| Área libre — uso comercial | **No exigible** | — |
+| Área libre — pisos vivienda | Según uso residencial compatible | — |
+| **Retiro — Avenida** | **3.00 ml** | — |
+| **Retiro — Calle o Jirón** | **1.50 ml** | — |
+| Retiro — Pasaje | 0.00 ml | — |
+| Alineamiento | 38.00 ml hacia Av. Tomás Valle | — |
+| **Estacionamiento comercial** | **1 cada 50 m²** | Nota (5): especiales según EENN |
+| Altura piso a piso (residencial) | **3.00 ml máximo** | Nota (c) |
+| Altura piso a piso (comercio) | 4.00 ml máximo | Nota (d) |
+
+### Observaciones críticas CZ San Martín de Porres
+
+**Nota (1) — USO 100% RESIDENCIAL:**
+"Se permitirá utilizar hasta el 100% del área de los lotes comerciales para uso residencial."
+→ Un lote CZ puede destinarse íntegramente a Multifamiliar/Conjunto Residencial aplicando parámetros RDM o RDA.
+
+**Nota (4) — ALTURA 7 PISOS:**
+"Se permitirá hasta 7 pisos de altura en lotes ubicados frente a Parques y Avenidas con anchos mayores de 20 ml."
+
+**Nota (b) — ÁREA MÍNIMA:**
+"Se considera un área mínima de 75 m² para departamentos de 3 dormitorios. Se podrán incluir departamentos de 2 y 1 dormitorio con áreas y en porcentajes a definir."
+
+---
+
+## 5. ZONA RDM — RESIDENCIAL DE DENSIDAD MEDIA (CPU N°234-2024)
+
+### Jr. San Pedro — Urb. San Pedro, Mz. I, Lotes 13 y 14
+
+| Uso | Densidad Neta (hab/ha) | Lote mín (m²) | Frente mín (ml) | Altura (pisos) | Coef. Edif. | Área libre | Estac. |
+|---|---|---|---|---|---|---|---|
+| Unifamiliar | 330 – 560 | 90.00 | 6.00 | 3 | 2.1 | 30% | 1/vivienda |
+| Multifamiliar | 830 – 1,400 | 120.00 | 6.00 | 3 – 4 (²) | 2.8 | 30% | 1 cada 2 viv. |
+| Multifamiliar | 830 – 1,400 | 150.00 | 8.00 | 4 – 5 (²) | 3.5 | 35% | 1 cada 2 viv. |
+| Conjunto Residencial | 1,000 – 1,400 | 800.00 | 20.00 | 6 | 3.5 | 50% | 1 cada 2 viv. |
+
+(²) Frente a Parques y Av. con ancho ≥20 m.
+
+**Retiros RDM:**
+- Avenida: 3.00 ml
+- Calle o Jirón: 1.50 ml
+- Pasaje: 0.00 ml
+
+**Áreas mínimas RDM (Nota b):**
+- 3D: 75 m² mínimo
+- 2D y 1D: áreas y porcentajes a definir por proyecto
+
+**Notas adicionales RDM:**
+- Unifamiliar: en cualquier lote >90 m²
+- Piso a piso máx 3.00 m (uso residencial compatible)
+- Primer piso: puede destinarse a comercio a pequeña escala / talleres artesanales hasta 35% del área del lote (Ord. N°933-MML)
+
+---
+
+## 6. SÍNTESIS DE RETIROS — SAN MARTÍN DE PORRES (área Tomás Valle)
+
+| Zona | Avenida | Calle / Jirón | Pasaje | Observación |
+|---|---|---|---|---|
+| I2 (CPU 2019, Tomás Valle 601-631) | 10.00 ml | 10.00 ml | — | Ambos frentes mínimo |
+| I2 (CPU 2025, Tomás Valle 103-109) | 5.00 ml | 3.00 ml | No exigible | CPU más reciente — verificar |
+| CZ (CPU 2024, Tomás Valle/San Pedro) | 3.00 ml | 1.50 ml | 0.00 ml | — |
+| RDM (CPU 2024, Jr. San Pedro) | 3.00 ml | 1.50 ml | 0.00 ml | — |
+
+**DIFERENCIA CRÍTICA EN I2:** El CPU 2019 exige 10ml; el CPU 2025 exige 5ml. La diferencia puede deberse a la sección de vía específica del predio. **Siempre verificar en CPUE del predio exacto.**
+
+---
+
+## 7. DATOS DE MERCADO — SAN MARTÍN DE PORRES (referencial)
+
+| Indicador | Valor | Fuente |
+|---|---|---|
+| Precio venta residencial | ~S/. 4,500–5,500/m² | Lima Norte ATN I, segmento B/C |
+| Tipología más demandada | 2D y 3D | NSE B/C |
+| Renta industrial I2 (Tomás Valle) | $4.50–6.00/m²/mes | CONOCIMIENTO_INDUSTRIAL_SOLUM |
+| Precio terreno industrial | $300–500/m² (I2 Tomás Valle) | Mercado 2024-2025 |
+
+---
+
+## 8. CHECKLIST PRE-FACTIBILIDAD — SAN MARTÍN DE PORRES
+
+```
+□ Verificar zona exacta en Plano Ord. N°1015-07-MML
+□ Si zona I2 (Tomás Valle): EIA obligatorio · EIV si actividad comercial/mixta · PAMA si industrial existente
+□ Si I2 uso vivienda: hasta 5 pisos (CPU 2025) — verificar en CPUE del predio
+□ Si I2 uso comercial compatible: CC/Galerías permitidos con parámetros CZ · retiro 5ml lateral/posterior arborizados
+□ Si zona CZ: coef. 4.0 · 7p frente Av.≥20m / 5p general · 100% residencial permitido
+□ Si uso residencial en CZ: aplicar RDM o RDA compatible del entorno · 75m² mínimo para 3D
+□ Retiro I2: verificar 5ml (CPU 2025) o 10ml (CPU 2019) según predio específico
+□ Retiro CZ/RDM: 3ml Av. / 1.50ml calle / 0ml pasaje
+□ Estacionamiento CZ comercial: 1/50m² · I2 industrial: 1/6 personas
+□ RDM estacionamiento: 1/vivienda (unifamiliar) / 1 cada 2 viviendas (multifamiliar/conjunto)
+□ Alineamiento I2: verificar con Ord. 341-01-MML (33ml / 60ml según tramo Tomás Valle)
+□ Verificar Índice de Usos Ord. N°933-MML para compatibilidad de actividades
+```
+
+---
+
+## 9. RESUMEN EJECUTIVO — OPERATIVO PARA SOLUM
+
+**Zona I2 (Av. Tomás Valle / Fundo Chavarría):**
+→ Lote ≥1,000m²/20ml · Altura libre (industrial) o máx 5p (vivienda) · Retiro 5ml Av. / 3ml calle (CPU 2025) · Estac. 1/6p
+→ Zona de usos diversificados: admite CC, Galerías, Centros Feriales con parámetros CZ + EIA + EIV
+
+**Zona CZ (frente Av. Tomás Valle):**
+→ Coef. 4.0 · Altura 7p (Av.≥20m) / 5p · Retiro 3ml Av. / 1.5ml calle · 100% residencial · Estac. 1/50m²
+
+**Zona RDM (calles interiores):**
+→ Multifamiliar: 3-5p / lote 120-150m² / coef. 2.8-3.5 / AL 30-35% / 1 est. cada 2 viv.
+→ Conjunto Residencial: 6p / lote 800m² / coef. 3.5 / AL 50% / 1 est. cada 2 viv.
+
+**Mercado:** Lima Norte NSE B/C · ~S/. 4,500–5,500/m² · Industrial corredor Tomás Valle: nodo estratégico SMP-Callao

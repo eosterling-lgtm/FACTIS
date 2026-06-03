@@ -1,0 +1,207 @@
+# RIN SAN JUAN DE MIRAFLORES — REGLAMENTO DE INTEGRACIÓN NORMATIVA
+## Parámetros Urbanísticos y Edificatorios
+### Fuente: CPU N°221-2024-SGOPCGT-GDU-MDSJM (CZ — Av. Pedro Miotta / Jr. Huancabamba, Zona Industrial No Molesta, 1,599 m²) · CPU N°120-2020-SGOPCGT-GDU-MDSJM (CZ/I2 — Calle H, Urb. San Juan, 1,599.98 m²) · Tasación VANET N°23-2122 (CZ — Av. Los Héroes 240, 1,000 m²)
+
+---
+
+## 1. MARCO LEGAL VIGENTE
+
+| Norma | Contenido | Estado |
+|---|---|---|
+| Ord. N°2144-MML (20/12/2018) | Reajuste Integral de Zonificación de los Usos del Suelo del Distrito de SJM — **NORMA BASE** | **VIGENTE** |
+| Ord. N°620-MML | Reglamento de Zonificación General de Lima Metropolitana — complementaria ATN I | **VIGENTE** |
+| Ord. N°1015-MML (14/05/2007) | Normas Generales de Zonificación ATN I — Cuadro N°2 resumen de zonificación comercial | Vigente |
+| Ord. N°1099-MML | Complementaria de zonificación (referenciada en CPU 2020) | Vigente |
+| Ord. N°2361-MML | Proyectos MI VIVIENDA en SJM — D.S. N°006-2023-VIVIENDA | Vigente |
+| RNE (D.S. N°011-2006-VIVIENDA y modificatorias) | Norma supletoria | Vigente |
+| Ley N°29090 | Habilitaciones Urbanas y Edificaciones | Vigente |
+
+**Área de Tratamiento Normativo: I**
+**SJM es ATN I — diferenciador crítico respecto a ATN II.** Aplica Ord. N°2144-MML como norma base distrital + Ord. N°620-MML + Ord. N°1015-MML (Cuadro N°2 ATN I).
+
+---
+
+## 2. ZONAS DEL DISTRITO
+
+| Zona | Descripción | Ubicación principal |
+|---|---|---|
+| **CZ** | Comercio Zonal | Av. Pedro Miotta, Av. Los Héroes, Av. San Juan, Zona Industrial No Molesta |
+| **I2** | Industria Liviana | Urb. San Juan (Zona Industrial No Molesta) — reconversión en curso |
+| **RDM** | Residencial de Densidad Media | Interior del distrito |
+| **RDA** | Residencial de Densidad Alta | Adyacentes a avenidas principales |
+| **CV** | Comercio Vecinal | Corredores secundarios |
+
+**Zona Industrial No Molesta:** Denominación de la Habilitación Urbana (COFOPRI) que describe predios con antiguo uso industrial tolerado. La zonificación formal puede ser CZ, I2 u otro — siempre referirse al CPU del predio específico.
+
+---
+
+## 3. ZONA CZ — COMERCIO ZONAL (CPU N°221-2024 + CPU N°120-2020)
+
+### Av. Pedro Miotta / Jr. Huancabamba — Zona Industrial No Molesta (1,599 m²)
+
+| Parámetro | CZ Comercial | RDM (compatible) | RDA (compatible) |
+|---|---|---|---|
+| **Zonificación** | CZ | RDM | RDA |
+| **Área de lote mínimo** | Existente o según proyecto | Unifamiliar: 90m² / Multifamiliar: 120m² | Multifamiliar: 200m² |
+| **Frente mínimo** | Existente o según proyecto | Unifamiliar: 6.00ml / Multifamiliar: 6.00ml | 10.00ml |
+| **Altura máxima** | **15.00ml = 5 pisos** / **21.00ml = 7 pisos (¹)(²)** | Unifamiliar: 9.00ml (3p) · lote ≥90m² | **18.00ml (6p) / 21.00ml (7p) (¹)(²)** · lote ≥200m² |
+| **Área libre mínima** | **No exigible** (uso comercial) | Unifamiliar lote ≥90m²: **30%** / Multifamiliar lote ≥200m²: **40%** | Lote ≥200m²: **40%** |
+| **Retiro frontal — Avenidas** | **3.00 ml** | **3.00 ml** | **3.00 ml** |
+| **Retiro frontal — Calles/Pasajes** | **1.50 ml** | **1.50 ml** | **1.50 ml** |
+| **Retiro — Av. Pedro Miotta** | Según sustento de consolidación urbana | — | — |
+| **Estacionamiento** | **1 cada 50 m²** | Unifamiliar: 1/viv | **Multifamiliar: 1/2 viviendas** |
+
+(¹) Frente a parques y avenidas con ancho igual o mayor a 20m.
+(²) Se permitirá hasta 7 pisos de altura en los lotes ubicados frente a parques y avenidas con anchos mayores de 20m.
+
+**Nota CZ:** Se permite utilizar hasta el 100% del área de lotes comerciales para uso residencial.
+
+---
+
+## 4. ZONA I2 — INDUSTRIA LIVIANA (CPU N°120-2020)
+
+| Parámetro | Valor |
+|---|---|
+| **Área de lote mínimo** | **1,000 m²** |
+| **Frente mínimo** | **20.00 ml** |
+| **Altura** | Según Proyecto |
+| **Área libre** | Según Proyecto |
+| **Retiro frontal** | Retiro existente según consolidación urbana |
+| **Estacionamiento** | 1 espacio por cada 6 personas empleadas |
+| **% Usos industriales** | Hasta 20% de I1 (Industria Elemental) |
+
+---
+
+## 5. RESUMEN PARÁMETROS POR ZONA — SJM ATN I
+
+### Zonificación Comercial
+| Zona | Altura | Uso Residencial Compatible | Área libre | Estac. |
+|---|---|---|---|---|
+| **CZ** | **5p / 7p (Av.>20m o parque)** | RDA – RDM | No exigible (comercial) / según residencial | 1/50m² comercial / **1/2 viv** residencial |
+| **CV** | 5p | RDM | No exigible (comercial) / según residencial | 1/50m² |
+
+### Zonificación Residencial — ATN I (Ord. N°2144-MML + Ord. N°1015-MML)
+| Zona | Usos | Lote mín (m²) | Frente mín (ml) | Altura | Área libre | Estac. |
+|---|---|---|---|---|---|---|
+| **RDM** | Unifamiliar | 90 | 6 | **3 pisos** | 30% | 1/viv |
+| **RDM** | Multifamiliar | 120 | 6 | **3 pisos** | 30% (lote ≥90m²) | **1/2 viv** |
+| **RDA** | Multifamiliar | 200 | 10 | **6p / 7p (Av.>20m o parque)** | 40% (lote ≥200m²) | **1/2 viv** |
+
+---
+
+## 6. NOTAS CRÍTICAS
+
+### ATN I — impacto en parámetros
+SJM opera bajo ATN I (no ATN II). Las alturas máximas en CZ son pisos fijos (5/7), NO la fórmula 1.5(a+r) típica de ATN II. Esta es la diferencia más importante al calcular la cabida.
+
+### Estacionamiento 1/2 viviendas — el más favorable de Lima
+El ratio de 1 estacionamiento por cada 2 viviendas es el más favorable de todos los distritos integrados en SOLUM. Impacto directo: menos sótanos → menor costo → mejor TIR.
+
+### Áreas mínimas — las más bajas
+- 3D: 75m² (mismo que la mayoría)
+- **2D: 60m²** (más bajo que casi todos los distritos)
+- **1D: 40m²** (el más bajo de Lima — permite unidades compactas para inversión/alquiler)
+Esto permite maximizar el número de unidades y diseñar mix agresivo de 1D/2D.
+
+### Retiro diferenciado: 1.50ml calles · 3.00ml avenidas
+Retiro menor en calles/pasajes (1.50ml) que en avenidas (3.00ml). Diferente al estándar de muchos distritos ATN II donde el retiro es uniforme.
+
+### Zona Industrial No Molesta → reconversión CZ
+Gran parte de SJM tiene predios de origen industrial (Zona Industrial No Molesta) que han sido recalificados a CZ por la Ord. N°2144-MML. Estos predios son elegibles para desarrollo residencial/comercial con parámetros CZ estándar.
+
+### CZ altura fija vs. 1.5(a+r)
+En SJM la altura CZ es **5 pisos estándar / 7 pisos frente a Av.>20m o parques** — NO se usa la fórmula 1.5(a+r) de ATN II. Para la Av. Pedro Miotta (avenida) se puede acceder a 7 pisos si la vía tiene ancho ≥20m.
+
+### En AH con pendiente pronunciada
+Solo Uso Residencial Unifamiliar/Familiar, altura máxima 3 pisos (aplica en zonas de asentamientos humanos con topografía pronunciada — no aplica a predios urbanos consolidados).
+
+### MI VIVIENDA en SJM
+Proyectos en marco MI VIVIENDA: Ord. 2361-MML + D.S. N°006-2023-VIVIENDA. Verificar condiciones específicas en CPUE. CPU 2020: también aplica D.S. N°10-2018-VIVIENDA + D.S. N°12-2019-VIVIENDA.
+
+### Voladizos (RNE A.010 Art. 14)
+- Sin retiro: NO se permiten voladizos sobre vereda.
+- Con retiro frontal: voladizos hasta 0.50m desde 2.30m de altura. Voladizos mayores exigen aumentar el retiro.
+- No se permiten voladizos sobre retiros laterales/posteriores mínimos ni sobre retiros frontales para ensanche de vía.
+
+---
+
+## 7. SÍNTESIS DE RETIROS — SJM
+
+| Vía | Retiro | Observación |
+|---|---|---|
+| **Avenidas** | **3.00 ml** | CPU N°221-2024 |
+| **Calles / Pasajes** | **1.50 ml** | CPU N°221-2024 |
+| Av. Pedro Miotta | Según consolidación urbana | Verificar en CPUE |
+| Calle H (vía local) | Según consolidación urbana | CPU N°120-2020 |
+
+---
+
+## 8. ÁREAS MÍNIMAS — SJM (Ord. N°2144-MML)
+
+| Tipología | Área mínima | Base |
+|---|---|---|
+| **3 dormitorios** | **75 m²** | CPU N°221-2024, nota c) |
+| **2 dormitorios** | **60 m²** | CPU N°221-2024, nota c) |
+| **1 dormitorio** | **40 m²** | CPU N°221-2024, nota c) |
+
+**Estas son las áreas mínimas más bajas de Lima.** Permiten diseñar proyectos con alta densidad de unidades (mix agresivo 1D/2D) — ideal para NSE C/C+ orientado a inversión/alquiler.
+
+---
+
+## 9. DATOS DE MERCADO — SJM
+
+| Indicador | Valor |
+|---|---|
+| Precio venta residencial (estimado) | S/. 3,500–4,200/m² → **USD 1,014–1,217/m²** (TC 3.45) |
+| Precio terreno CZ (Av. Los Héroes) | **USD 2,500/m²** (tasación VANET 2023) |
+| Precio terreno CZ (rango comparables) | USD 2,167–3,274/m² (zona Cines Star / Pedro Miota / Los Héroes) |
+| Mercado objetivo | NSE C/C+ · primer inmueble · inversión/alquiler |
+| Entorno | Frente a Mall del Sur · Metro de Lima L1 · Av. Los Héroes |
+
+---
+
+## 10. CHECKLIST PRE-FACTIBILIDAD — SJM
+
+```
+□ ATN I — confirmar con CPUE (no ATN II)
+□ Verificar zona exacta: CZ / I2 / RDA / RDM / CV (Plano Ord. N°2144-MML)
+□ Si zona CZ:
+   □ Altura: 5 pisos estándar / 7 pisos si la Av. tiene ancho ≥20m o frente a parque
+   □ Retiro: 3ml avenidas · 1.50ml calles/pasajes
+   □ AL: no exigible (comercial) / 30-40% (vivienda según zona)
+   □ Estac.: 1/50m² (comercial) / 1/2 viv (multifamiliar residencial)
+   □ 100% residencial permitido
+□ Si zona I2: lote 1,000m²/20ml · altura según proyecto · estac. 1/6 pers.
+□ Si zona RDA lote ≥200m²: hasta 6p estándar / 7p Av.>20m o parques · AL 40%
+□ ESTACIONAMIENTO: 1/2 viviendas — verificar en CPUE, es el ratio del distrito
+□ Áreas mínimas: 3D=75m² · 2D=60m² · 1D=40m² — usar exactamente estos valores
+□ MI VIVIENDA: verificar Ord. 2361-MML + D.S. N°006-2023-VIVIENDA
+□ Zona Industrial No Molesta: confirmar reconversión a CZ en CPU del predio
+□ Habilitación Urbana/COFOPRI: verificar regularización registral (muchos predios son COFOPRI)
+□ Terreno CZ en Av. Los Héroes: USD 2,500/m² (tasación 2023) — referencia activa
+□ Voladizos: sin voladizo sobre vereda si no hay retiro (RNE A.010 Art. 14)
+```
+
+---
+
+## 11. RESUMEN EJECUTIVO — OPERATIVO PARA SOLUM
+
+**Zona CZ (Av. Los Héroes, Av. Pedro Miotta, Av. San Juan):**
+→ 5 pisos estándar / **7 pisos frente Av.>20m o parques** · retiro 3ml Av. / 1.50ml calles
+→ AL no exigible (comercial) / 40% (vivienda RDA) · estac. **1/2 viv** (multifamiliar)
+→ 100% residencial permitido · lote existente
+
+**Zona RDA (compatible CZ o directa):**
+→ Lote ≥200m²/10ml → **6 pisos / 7 pisos (Av.>20m)** · AL 40% · estac. **1/2 viv**
+
+**Zona I2 (Urb. San Juan y zona industrial):**
+→ Lote 1,000m²/20ml · altura según entorno · estac. 1/6 pers.
+→ Reconversión posible a CZ/residencial si CPUE lo confirma
+
+**Ventajas competitivas de SJM:**
+1. **Estac. 1/2 viv** — el más favorable de Lima → menos sótanos → menor costo → mejor TIR
+2. **1D=40m²** — permite unidades compactas de inversión que ningún otro distrito permite
+3. **Precio terreno** más económico que distritos aledaños (NSE C/C+)
+4. **Entorno** Mall del Sur + Metro L1 + Panamericana Sur → fuerte demanda de alquiler
+
+**Mercado:** Terreno CZ USD ~2,500/m² · Residencial ~USD 1,014–1,217/m² · NSE C/C+

@@ -1,0 +1,161 @@
+# RIN CALLAO — REGLAMENTO DE INTEGRACIÓN NORMATIVA
+## Parámetros Urbanísticos y Edificatorios
+### Fuente: CPU N°524-2019 (I3 Gambetta) · CPU N°046-2018 (ZRE Av. Argentina 3398) · CPU N°091-2026 (ZRE Av. Meiggs 2596) · CPU N°011-2022 (ZRE Av. Argentina 4190)
+
+---
+
+## 1. MARCO LEGAL VIGENTE
+
+| Norma | Contenido | Estado |
+|---|---|---|
+| Plan de Desarrollo Urbano Callao 2011-2022 (Ord. N°000068-2010) | Reajuste Integral Zonificación Callao — NORMA BASE | **VIGENTE** (prorrogado por Ord. N°023-2018/019) |
+| Ord. N°023-2018/019 | Prórroga del PDU Callao 2011-2022 | Vigente |
+| Ley N°27261 — Aeronáutica Civil | Restricción de alturas por proximidad aeroportuaria en TODO el Callao | **APLICACIÓN OBLIGATORIA** |
+| RNE (D.S. N°011-2006-VIVIENDA y modificatorias) | Norma supletoria | Vigente |
+| D.S. N°012-2019-VIVIENDA | Programa MI VIVIENDA — habilitado para ZRE Callao | Vigente |
+
+**Área de Estructuración Urbana: I**
+Callao es administrado por el Gobierno Regional del Callao (GORE Callao) y la Municipalidad Provincial del Callao (MPC) para zonificación. No tiene reglamento distrital comparable a San Isidro o San Borja.
+
+**RESTRICCIÓN TRANSVERSAL CRÍTICA — LEY N°27261 AERONÁUTICA CIVIL:**
+En TODO el territorio del Callao, las alturas máximas de edificación están adicionalmente reguladas por la Dirección de Aeronáutica Civil (DAC) del MTC por proximidad al Aeropuerto Internacional Jorge Chávez. Cualquier proyecto en Callao debe:
+1. Verificar si el predio está dentro de la Zona de Restricción Aeroportuaria
+2. Obtener autorización de la DAC/MTC para alturas que puedan interferir con los planos de vuelo
+3. La restricción puede ser más limitante que el parámetro urbanístico del CPU
+
+---
+
+## 2. ZONAS IDENTIFICADAS EN CALLAO (CPUs verificados)
+
+| Zona | Descripción | Ubicación principal |
+|---|---|---|
+| **ZRE** | Zona con Reglamentación Especial | Av. Argentina, Av. Enrique Meiggs, zonas mixtas |
+| **I3** | Gran Industria | Av. Néstor Gambetta, Zona Puerto |
+| **I2** | Industria Liviana | Corredores industriales |
+| **R** | Residencial | Zonas residenciales históricas |
+
+---
+
+## 3. ZONA ZRE — ZONA CON REGLAMENTACIÓN ESPECIAL
+
+### Parámetros consolidados (3 CPUs: N°046-2018, N°091-2026, N°011-2022)
+
+| Parámetro | Lote frente a CALLE | Lote frente a AVENIDA | Nota |
+|---|---|---|---|
+| **Zonificación** | ZRE | ZRE | — |
+| **Uso principal** | Vivienda + Comercio | Vivienda + Comercio | Mezcla habitual en ZRE Callao |
+| **Densidad Neta — Unifamiliar/Bifamiliar** | 1,300 hab/ha | 1,300 hab/ha | — |
+| **Densidad Neta — Multifam./C.Res.** | 2,250 hab/ha | 2,250 hab/ha | — |
+| **Coef. edificación — Unifamiliar** | 2.1 | 2.1 | — |
+| **Coef. edificación — Bifamiliar** | 2.8 | 2.8 | — |
+| **Coef. edificación — Multifamiliar/C.Res.** | **3.25** | **4.00** | Diferencial clave según tipo de vía |
+| **Coef. edificación — Comercio** | **3.25** | **4.00** | — |
+| **Área libre mínima — Vivienda** | 30% | 30% | Obligatorio |
+| **Área libre mínima — Comercio** | No exigible | No exigible | — |
+| **Altura — Unifamiliar** | 4 pisos | 4 pisos | — |
+| **Altura — Bifamiliar** | 4 pisos | 4 pisos | CPU N°091-2026 |
+| **Altura — Multifamiliar** | **5 pisos** | **1.5(a+r)** | Diferencial clave |
+| **Altura — Conjunto Residencial** | **5 pisos** | **1.5(a+r)** | — |
+| **Retiro municipal** | Varía (ver tabla) | Varía (ver tabla) | Verificar en CPU predio |
+| **Estacionamiento — Vivienda** | **1 cada 3 viviendas** | **1 cada 3 viviendas** | IMPORTANTE: muy favorable |
+| **Estacionamiento — Comercio** | 1 cada 50 m² | 1 cada 50 m² | — |
+
+### Retiros por predio (CPUs verificados)
+
+| CPU | Ubicación | Retiro | Observación |
+|---|---|---|---|
+| N°046-2018 | Av. Argentina N°3398 | 0.00 ml | Consolidación por manzanas colindantes |
+| N°011-2022 | Av. Argentina N°4190 | 0.00 ml | Consolidación por manzanas colindantes |
+| N°091-2026 | Av. Enrique Meiggs N°2596 | 5.00 ml Meiggs | HU no aprobada aún a 2026 |
+
+→ **Retiro varía significativamente por predio.** Algunos tienen 0ml por consolidación urbana; otros requieren 5ml. Siempre verificar en CPU específico.
+
+### Programa MI VIVIENDA en ZRE Callao
+CPU N°011-2022 (Av. Argentina 4190) habilita Programa MI VIVIENDA (D.S. N°012-2019-VIVIENDA) en la misma zona ZRE. Esto permite acceder a bono habitacional y financiamiento preferencial para unidades dentro de rango de precio MI VIVIENDA. Verificar precio/m² techo del programa en la fecha del proyecto.
+
+---
+
+## 4. ZONA I3 — GRAN INDUSTRIA (CPU N°524-2019 — Av. Néstor Gambetta)
+
+| Parámetro | Valor | Nota |
+|---|---|---|
+| **Zonificación** | I3 Gran Industria | Norma A.060 RNE |
+| **Lote mínimo** | 2,500 m² | — |
+| **Frente mínimo** | 30 ml | — |
+| **Altura máxima** | Según proyecto (A.060) | Sin límite fijo por pisos |
+| **Área libre** | Según actividad | Incluye patio de maniobras |
+| **Retiro frontal** | 5.00 ml (Av. Gambetta) | — |
+| **Alineamiento** | Según Habilitación Urbana | — |
+| **Estacionamiento** | 1 espacio / 6 personas por turno | Obligatorio + patio de maniobras |
+| **Estudios obligatorios** | EIV + EIA (RNE A.060) | Gran Industria siempre |
+
+### Restricciones especiales Av. Gambetta (CPU N°524-2019)
+
+**Restricción aeroportuaria — Dominio Restringido:**
+El predio en Av. Gambetta Km.11,600 está dentro de una faja de **200 ml de dominio restringido** a partir del eje de la Av. Gambetta (zona de influencia aeroportuaria). Esta restricción limita alturas y puede requerir autorización de la DAC/MTC para cualquier estructura.
+
+**Afectación vial — PROVIAS:**
+El predio tiene afectación vial por ampliación de vía. Antes de cualquier proyecto, verificar el ancho de vía aprobado por PROVIAS Nacional y la dimensión exacta de la afectación en el predio.
+
+**Alta tensión:**
+Si el predio está afecto a línea de alta tensión: respetar faja de servidumbre eléctrica (Ley de Concesiones Eléctricas Art. 111). Verificar con concesionaria eléctrica.
+
+---
+
+## 5. RESTRICCIÓN AEROPORTUARIA — LEY N°27261 (DETALLE)
+
+**Aplicación en los 4 CPUs verificados:** todos citan la restricción aeroportuaria como condicionante.
+
+### Zonas de restricción (Aeropuerto Jorge Chávez)
+- **Zona de aproximación/despegue:** máxima restricción de alturas (puede limitar a 3-5 pisos según distancia)
+- **Zona de transición lateral:** restricciones intermedias
+- **Zona horizontal interna:** permite mayor altura pero con límites
+- **Zona cónica:** restricciones decrecientes con la distancia
+
+**PROCEDIMIENTO OBLIGATORIO para proyectos en Callao:**
+1. Verificar en plano de servidumbre aeronáutica (DAC-MTC) si el predio está afecto
+2. Si está afecto: presentar proyecto a la DAC para obtención de certificado de no interferencia
+3. Sin este certificado: la municipalidad no puede otorgar licencia de edificación en predios afectos
+
+---
+
+## 6. MERCADO — CALLAO (referencial)
+
+| Indicador | Valor | Fuente |
+|---|---|---|
+| Precio venta residencial | ~USD 1,100–1,400/m² | Lima Norte/Callao residencial |
+| Renta logística Clase A | USD 5.50–7.50/m²/mes | CONOCIMIENTO_INDUSTRIAL_SOLUM |
+| Precio terreno industrial | USD 250–400/m² (Gambetta/Puerto) | Mercado 2025 |
+| Vacancia industrial | Baja en zonas consolidadas | Pipeline Callao industrial activo |
+
+---
+
+## 7. CHECKLIST PRE-FACTIBILIDAD — CALLAO
+
+```
+□ Verificar zona exacta en Plano PDU Callao 2011-2022 (Ord. N°000068-2010)
+□ RESTRICCIÓN AEROPORTUARIA: verificar en plano servidumbre DAC/MTC — puede limitar altura más que CPU
+□ Si zona I3 (Gambetta): EIV + EIA obligatorios · lote ≥2,500m² · frente ≥30ml
+□ Si zona ZRE: coef. 3.25 (calle) / 4.00 (avenida) · estac. 1/3 viviendas (muy favorable)
+□ Altura ZRE: multifamiliar 5p (calle) / 1.5(a+r) (avenida) — ADEMÁS verificar restricción DAC
+□ Retiro: varía por predio (0ml consolidación o 5ml) — siempre verificar CPU específico
+□ Si avenida: verificar si aplica altura 1.5(a+r)
+□ Programa MI VIVIENDA: verificar si el proyecto califica (D.S. N°012-2019) — bono habitacional
+□ Afectación vial Gambetta: verificar PROVIAS antes de proyecto
+□ Alta tensión: verificar servidumbre eléctrica si aplica
+□ Habilitación urbana: CPU N°091-2026 (Meiggs) indica HU no aprobada — verificar estado
+```
+
+---
+
+## 8. RESUMEN EJECUTIVO — OPERATIVO PARA SOLUM
+
+**Zona ZRE Callao (Av. Argentina / Av. Meiggs y similares):**
+→ Coef. 3.25 (calle) / 4.00 (avenida) · Altura multifam. 5p (calle) / 1.5(a+r) (Av.) · Estac. 1/3 viv · Área libre 30%
+→ MI VIVIENDA habilitado · RESTRICCIÓN AEROPORTUARIA obligatoria (DAC/MTC)
+
+**Zona I3 Gran Industria (Av. Gambetta):**
+→ Lote ≥2,500m²/30ml · Altura libre (A.060) · EIV+EIA obligatorios · Afectación vial PROVIAS · Dominio restringido 200ml
+
+**Mercado residencial:** USD 1,100–1,400/m² · Estac. 1/3 viv es ventaja financiera significativa
+**Industrial:** Renta $5.50–7.50/m²/mes · Hub logístico Puerto Callao — alta demanda 3PL y comercio exterior

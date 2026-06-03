@@ -1,0 +1,224 @@
+# RIN SAN LUIS — REGLAMENTO DE INTEGRACIÓN NORMATIVA
+## Parámetros Urbanísticos y Edificatorios
+### Fuente: CPU N°000112-2024-MDSL-GDU/SGOPC (CZ — Jr. Leónidas La Serre esq. Jr. Manuel Echeandía / Ex Fundo El Pino, 9,975.95 m²) · CPU N°064-2022-GDU/SGOPC (I2 — Jr. Río Tumbes N°290 / Las Moras, 1,200 m²)
+
+---
+
+## 1. MARCO LEGAL VIGENTE
+
+| Norma | Contenido | Estado |
+|---|---|---|
+| Ord. N°2358-2021 | Reajuste Integral de Zonificación del Distrito de San Luis — **NORMA BASE DISTRITAL** | **VIGENTE** |
+| Ord. N°1082-MML | Reajuste de Zonificación de los Usos de Suelos del Distrito de San Luis | **VIGENTE** |
+| Ord. N°1015-MML (14/05/2007) | Normas Generales de Zonificación ATN II Lima Metropolitana — complementaria | Vigente |
+| Ord. N°1076-MML | Complementa Ord. N°1015-MML en zonificación residencial y comercial | Vigente |
+| D.A. N°003-2012-MDSL (16/03/2012) | Retiros municipales San Luis — establece "sin retiro" para CZ e I2 | **VIGENTE** |
+| RNE (D.S. N°011-2006-VIVIENDA y modificatorias) | Norma supletoria | Vigente |
+| Ley N°29090 | Habilitaciones Urbanas y Edificaciones | Vigente |
+
+**Área de Tratamiento Normativo: II**
+San Luis aplica normativa MML (Ords. N°1015 + N°1076) complementada con Ord. Distrital N°2358-2021 como norma base del distrito.
+
+---
+
+## 2. ZONAS DEL DISTRITO
+
+| Zona | Descripción | Ubicación principal |
+|---|---|---|
+| **CZ** | Comercio Zonal | Jr. Leónidas La Serre, Ex Fundo El Pino y corredores comerciales |
+| **I2** | Industria Liviana | Jr. Río Tumbes, Las Moras, sectores industriales |
+| **RDM** | Residencial de Densidad Media | Interior del distrito |
+| **RDA** | Residencial de Densidad Alta | Sectores adyacentes a avenidas principales |
+| **VT** | Vivienda Taller | Usos mixtos residencial + actividades urbanas menores |
+| **CM** | Comercio Metropolitano | Ejes viales principales |
+| **CV** | Comercio Vecinal | Corredores secundarios |
+
+---
+
+## 3. ZONA CZ — COMERCIO ZONAL (CPU N°000112-2024)
+
+### Jr. Leónidas La Serre esq. Jr. Manuel Echeandía — Ex Fundo El Pino (9,975.95 m²)
+
+| Parámetro | Valor |
+|---|---|
+| **Zonificación** | CZ — Comercio Zonal |
+| **ATN** | II |
+| **Uso residencial compatible** | **RDA – RDM** (según entorno) |
+| **Altura máxima — CZ** | **1.5(a+r)** |
+| **Altura máxima — uso RDM compatible** | **8 pisos** |
+| **Área libre — uso comercial** | **No exigible** |
+| **Área libre — pisos vivienda** | Según uso residencial compatible (RDA/RDM del entorno) |
+| **Retiro frontal** | **SIN RETIRO** (D.A. N°003-2012-MDSL — aplica ambos frentes de vía) |
+| **Alineamiento de fachada** | Respetar alineamiento del derecho de vía (Habilitación Urbana) |
+| **Estacionamiento — comercial** | **1 cada 50 m²** |
+| **Estacionamiento — residencial** | **1 cada 1.5 viviendas** |
+| **Frente mínimo normativo** | Lote existente — CZ |
+| **Área mínima lote** | Lote existente — CZ |
+
+**Nota CZ:** Puede utilizarse hasta 100% del área del lote para uso residencial. Los pisos destinados a vivienda dejan área libre según uso residencial compatible.
+
+---
+
+## 4. ZONA I2 — INDUSTRIA LIVIANA (CPU N°064-2022)
+
+### Jr. Río Tumbes N°290 — Mz. A, Lote 06, Las Moras (1,200 m²)
+
+| Parámetro | Valor |
+|---|---|
+| **Zonificación** | I2 — Industria Liviana |
+| **ATN** | II |
+| **Uso residencial compatible** | No aplica directo — (*) si uso exclusivamente vivienda: puede construir hasta altura RDM |
+| **Área de lote mínimo** | **1,000.00 m²** |
+| **Frente mínimo** | **20.00 ml** |
+| **Altura de edificación** | Según Proyecto, Según Entorno |
+| **Área libre mínima** | Según actividades específicas y consideraciones ambientales |
+| **Retiro frontal** | **SIN RETIRO + voladizo de 0.50 m** (D.A. N°003-2012-MDSL) |
+| **Alineamiento de fachada** | Respetar alineamiento del derecho de vía + retiro |
+| **Estacionamiento** | **1 espacio por cada 6 personas empleadas** |
+
+(*) Nota crítica I2: Si se destina el lote a uso de vivienda exclusivamente, se podrá construir hasta la altura señalada para RDM, según tamaño de lote y ubicación.
+
+---
+
+## 5. RESUMEN DE ZONIFICACIÓN COMERCIAL ATN II — SAN LUIS
+
+| Zona | Altura | Uso Residencial Compatible | Área libre | Estacionamiento |
+|---|---|---|---|---|
+| **CM** — Comercio Metropolitano | **1.5(a+r)** | RDA | No exigible (comercial) / según residencial | 1/50 m² |
+| **CZ** — Comercio Zonal | **1.5(a+r)** | RDA – RDM | No exigible (comercial) / según residencial | 1/50 m² |
+| **CV** — Comercio Vecinal | **5 pisos** (¹) | RDM | No exigible (comercial) / según residencial | 1/50 m² |
+
+(¹) CV: Se permite hasta 7 pisos en lotes >200 m² frente a Av. con ancho >25ml. Hasta 6 pisos en lotes >200 m² frente a Av. con ancho 20-25ml, si combina con uso residencial o es exclusivamente residencial.
+
+---
+
+## 6. RESUMEN DE ZONIFICACIÓN RESIDENCIAL ATN II — SAN LUIS
+
+| Zona | Usos | Lote mín (m²) | Frente mín (ml) | Altura (pisos) | Área libre | Estac. |
+|---|---|---|---|---|---|---|
+| **RDM** | Unifamiliar / Multifamiliar | 120 | 6 | **3** | 30% | 1/1.5 viv |
+| **RDM** | Multifamiliar | 150 | 8 | **4 / 5 (¹)** | 35% | 1/1.5 viv |
+| **RDM** | Multifamiliar | 200 | 10 | **5 / 6 (¹)** | 35% | 1/1.5 viv |
+| **RDM** | Multifamiliar | 300 | 10 | **6 / 7 (¹)** | 35% | 1/1.5 viv |
+| **RDM** | Conjunto Residencial | 1,600 | 20 | **8** | 40% | 1/1.5 viv |
+| **VT** | Unifamiliar / Multifamiliar | 180 | 8 | **3 (²)** | 35% | 1/1.5 viv |
+| **RDA** | Multifamiliar | 300 | 10 | **8** | 35% | 1/1.5 viv |
+| **RDA** | Multifamiliar | 450 | 10 | **1.5(a+r) (³)** | 40% | 1/1.5 viv |
+| **RDA** | Conjunto Residencial | 2,500 | 25 | **1.5(a+r)** | 50% | 1/1.5 viv |
+
+(¹) Frente a Parque y/o Avenidas con ancho mayor de 20m.
+(²) VT: Si se destina exclusivamente a vivienda, puede construir hasta altura RDM según tamaño y ubicación.
+(³) RDA lote 450m²: Frente a Avenidas >20m → 1.5(a+r). Frente a Parques → hasta 15 pisos. Vías locales → hasta 10 pisos.
+
+---
+
+## 7. RESUMEN DE ZONIFICACIÓN INDUSTRIAL ATN II — SAN LUIS
+
+| Zona | Lote mínimo | Frente mínimo | Altura | % Usos Industriales |
+|---|---|---|---|---|
+| **I3** — Gran Industria | 2,500 m² | 30 m | Según Proyecto / Entorno | hasta 20% de I2 + hasta 10% de I1 |
+| **I2** — Industria Liviana | 1,000 m² | 20 m | Según Proyecto / Entorno | hasta 20% de I1 |
+| **I1** — Industria Elemental | 300 m² | 10 m | Según Proyecto / Entorno | Según proyecto |
+
+Estacionamiento industrial: 1 espacio por cada 6 personas empleadas.
+Área libre: según actividades específicas y consideraciones ambientales.
+
+---
+
+## 8. NOTAS CRÍTICAS
+
+### Retiro frontal: SIN RETIRO (D.A. N°003-2012-MDSL)
+Aplica en zona CZ e I2 — diferenciador clave respecto a otros distritos. Permite máxima ocupación en planta baja. Verificar en CPUE del predio para otras zonas (RDA/RDM pueden tener retiro en vías principales).
+
+### Área mínima 3D: 75 m²
+Confirmado en AMBOS CPUs (CZ e I2): "Se considera un área mínima de 75 m² para departamentos de 3 dormitorios. Se podrán incluir departamentos de 2 y 1 dormitorio con áreas en porcentaje a definir."
+
+### Piso a piso máximo
+**3.00 ml** para departamentos en edificios multifamiliares (CPU CZ N°000112-2024).
+
+### CZ = 100% residencial permitido
+La zona CZ en San Luis admite uso 100% residencial, aplicando parámetros de RDA o RDM compatible del entorno.
+
+### I2 con uso exclusivo vivienda
+Si el lote I2 se destina exclusivamente a vivienda, puede construir hasta la altura RDM según tamaño y ubicación (no aplica parámetros industriales).
+
+### Estacionamiento uniforme RDM/RDA
+1/1.5 viviendas en todos los tipos RDM y RDA — igual que Breña, más favorable que Jesús María RDA (1/1 viv).
+
+### Altura normativa aplica a lotes ≥ normativo
+Las alturas máximas de los cuadros resumen (Ord. N°1015-MML) se aplican en lotes iguales o mayores al normativo.
+
+---
+
+## 9. SÍNTESIS DE RETIROS — SAN LUIS
+
+| Zona | Retiro | Base |
+|---|---|---|
+| **CZ** | SIN RETIRO (ambos frentes) | D.A. N°003-2012-MDSL |
+| **I2** | SIN RETIRO + voladizo 0.50m | D.A. N°003-2012-MDSL |
+| **RDA / RDM** | Verificar en CPUE | Puede variar según vía y HU |
+
+---
+
+## 10. ÁREAS MÍNIMAS — SAN LUIS
+
+| Tipología | Área mínima | Base |
+|---|---|---|
+| **3 dormitorios** | **75 m²** | CPU N°000112-2024 + CPU N°064-2022 (ambos confirman) |
+| 2 dormitorios | A definir | Sin mínimo normativo fijo confirmado |
+| 1 dormitorio | A definir | Sin mínimo normativo fijo confirmado |
+
+---
+
+## 11. DATOS DE MERCADO — SAN LUIS (referencial)
+
+| Indicador | Valor |
+|---|---|
+| Precio venta estimado | S/. 4,800–5,200/m² → **USD 1,391–1,507/m²** (TC 3.45) (estimado — distrito no en top Urbania) |
+| Posición ranking Lima | Lima media — entre La Victoria y Surquillo |
+| Mercado objetivo | NSE B/B- · proximidad a San Borja y acceso Av. San Luis |
+| Nota | Dato estimado — verificar con Urbania INDEX actualizado para San Luis |
+
+---
+
+## 12. CHECKLIST PRE-FACTIBILIDAD — SAN LUIS
+
+```
+□ Verificar zona exacta: CZ / I2 / RDA / RDM / VT / CM / CV (Plano Ord. N°2358-2021)
+□ RETIRO: SIN RETIRO en CZ e I2 (D.A. N°003-2012-MDSL) — verificar en CPUE para RDA/RDM
+□ Si zona CZ: altura 1.5(a+r) · 100% residencial permitido · estac. 1/1.5 viv (RDM compatible)
+□ Si zona I2: altura según entorno · estac. 1/6 pers. (industrial) · si 100% vivienda: usa tabla RDM
+□ Si zona RDA lote 450m²: hasta 1.5(a+r) Av.>20m / hasta 15p frente parque / 10p vías locales
+□ Si zona RDM lote 300m²: hasta 7p Av.>20m o parque / Conj.Res. 1,600m²/20ml → 8p
+□ Área libre: 30% (lotes pequeños RDM) / 35-40% (medianos) / 50% (Conj.Res.)
+□ Estacionamiento: 1/1.5 viv (RDM/RDA) · 1/50m² (CZ comercial) · 1/6 pers. (industrial)
+□ Área mínima 3D: 75 m² obligatorio · 2D y 1D a definir
+□ Piso a piso máximo: 3.00 ml
+□ Lote mínimo I2: 1,000m²/20ml — frente mínimo crítico
+□ CZ: alineamiento derecho de vía (HU aprobada) — sin retiro
+□ Habilitación Urbana: obligatoria para anteproyecto y licencia
+□ Ordenanza distrital base: Ord. N°2358-2021 (Reajuste Integral San Luis) — verificar modificatorias
+```
+
+---
+
+## 13. RESUMEN EJECUTIVO — OPERATIVO PARA SOLUM
+
+**Zona CZ (Ex Fundo El Pino y corredores):**
+→ Altura 1.5(a+r) · SIN RETIRO · 100% residencial permitido · estac. 1/1.5 viv · AL según residencial compatible
+
+**Zona I2 (Las Moras y zona industrial):**
+→ Lote 1,000m²/20ml · SIN RETIRO + voladizo 0.50m · altura según entorno · estac. 1/6 pers.
+→ Si uso exclusivo vivienda: aplica tabla RDM
+
+**Zona RDA:**
+→ Lote 300m²/10ml → 8p · Lote 450m²/10ml → 1.5(a+r) Av.>20m / 15p parques / 10p locales · AL 35-40%
+
+**Zona RDM:**
+→ Lote desde 120m²/6ml → 3p hasta Conj.Res. 1,600m²/20ml → 8p · AL 30-40% · estac. 1/1.5 viv
+
+**Ventaja clave:** SIN RETIRO frontal en CZ e I2 (D.A. N°003-2012-MDSL) — maximiza planta baja.
+**Estacionamiento:** 1/1.5 viv uniforme RDM/RDA — favorable.
+**Área mínima 3D:** 75m² (confirmado en ambos CPUs).
+
+**Mercado:** USD ~1,391–1,507/m² (estimado) · NSE B/B- · distrito de transición bien ubicado entre San Borja y La Victoria.

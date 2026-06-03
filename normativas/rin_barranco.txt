@@ -1,0 +1,229 @@
+# RIN BARRANCO — REGLAMENTO DE INTEGRACIÓN NORMATIVA
+## Parámetros Urbanísticos y Edificatorios
+### Fuente: CPU N°037-2020 (Av. San Martín N°230 — Zona Monumental ATN IV) · CPU N°233-2016 (Av. El Sol Este — Fuera Zona Monumental ATN II) · Ord. N°1076-MML · Ord. N°343-MML · Ord. N°516-2019-MDB · Ord. N°303-MDB
+
+---
+
+## 1. MARCO LEGAL VIGENTE
+
+| Norma | Contenido | Estado |
+|---|---|---|
+| Ord. N°1076-MML (08/10/2007) | Reajuste Integral Zonificación Barranco, Surquillo, Chorrillos y sectores de Santiago de Surco — **NORMA BASE** | **VIGENTE** |
+| Ord. N°343-MML | Zona Monumental Barranco — parámetros específicos para edificaciones en Zona Monumental | **VIGENTE** |
+| Ord. N°373-MDB (28/09/2012) | Estacionamientos residenciales Barranco | Vigente |
+| Ord. N°516-2019-MDB (2019) | Áreas mínimas de departamentos Barranco | **VIGENTE** |
+| Ord. N°247-MDB (21/12/2005) | Zona Monumental — excepción parámetros RDA fuera del perímetro específico | Vigente |
+| Res. Directoral N°405/INC (28/03/2007) | Declaratoria Zona Monumental Nacional Barranco | Vigente |
+| RNE A.140 | Bienes Culturales Inmuebles y Zonas Monumentales | Vigente — obligatorio |
+| D.Leg. N°1225 + Ley N°28296 | Patrimonio Cultural de la Nación — MC (Ministerio de Cultura) | Vigente |
+
+**BARRANCO TIENE DOS REGÍMENES RADICALMENTE DISTINTOS:**
+
+| Régimen | ATN | Zona | Altura máx. | MC obligatorio | Estac. |
+|---|---|---|---|---|---|
+| **Zona Monumental** | IV | Histórica (mayoría del distrito) | **12 ml = 4 pisos** | **SÍ** | 1/vivienda |
+| **Fuera Zona Monumental** | II | Sector Av. El Sol Este / Panamericana Sur | **RDA hasta 1.5(a+r)** | **NO** | 1/1.5 viv. |
+
+**→ PASO 1 en cualquier análisis Barranco: verificar en qué régimen está el predio.**
+
+**Zona Monumental (ATN IV):** Todo el distrito central histórico — cuenta con Ord. N°343-MML + Ord. N°373-MDB + Ord. N°516-2019-MDB.
+**Fuera Zona Monumental (ATN II):** Sector periférico (Av. El Sol Este y otros) — aplica Ord. N°1076-MML Anexo 4, sin restricción MC.
+
+---
+
+## 2. ZONAS DEL DISTRITO
+
+| Zona | Descripción | Régimen |
+|---|---|---|
+| **RDM** | Residencial de Densidad Media | Monumental (ATN IV) o No Monumental (ATN II) — verificar CPU |
+| **RDA** | Residencial de Densidad Alta | Fuera Zona Monumental (ATN II) — Av. El Sol Este y sector periférico |
+| **CZ** | Comercio Zonal | Av. Grau, corredores comerciales |
+| **CM** | Comercio Metropolitano | Eje Paseo de la República/Vía Expresa |
+
+---
+
+## 3. ZONA MONUMENTAL (ATN IV) — PARÁMETROS RDM (CPU N°037-2020, Av. San Martín N°230)
+
+### Predio de referencia: Av. San Martín N°230 (área 896 m², frente 26 ml)
+
+| Parámetro | Valor | Base legal | Nota |
+|---|---|---|---|
+| Zonificación | RDM | Ord. N°1076-MML | — |
+| ATN | IV | — | — |
+| Zona Monumental | SÍ | Res. N°405/INC 2007 | OBLIGATORIO MC |
+| Usos compatible | Viv. Unifamiliar/Multifamiliar, Comercial C-2 | Ord. N°343-MML | — |
+| **Altura máxima** | **12.00 ml = 4 pisos** | Ord. N°1076-MML | Aprobada por Ord. N°1076-MML del 08/10/2007 |
+| Lote mínimo | Los existentes | — | Sin mínimo normativo |
+| Frente mínimo | Los existentes | — | Sin mínimo normativo |
+| **Área libre mínima** | **30%** | — | — |
+| Estacionamiento residencial | Según Ord. N°373-MDB | Ord. N°373-MDB 2012 | Ver sección 5 |
+| Alineamiento Av. San Martín | Según entorno monumental | — | Ancho vía existente: 15.38 ml |
+| Retiro municipal | No indicado en CPU | — | Verificar en CPUE |
+| Piso a piso máx (residencial) | 3.00 ml | Ord. N°1076-MML | — |
+| Altura mín. terminado a cielo raso | 2.30 ml | Art. 22 Norma A.010 RNE | — |
+
+### Restricciones de volumen en Zona Monumental (Ord. N°343-MML Art. 10)
+- **Altura máxima: 12.00 ml** — aprobada por Ord. N°1076-MML (en ningún caso superior a esto)
+- **Escalonamiento:** No se permiten volúmenes retirados de la línea municipal de fachada en edificaciones ≤4 pisos
+- La altura debe integrarse con la altura preponderante de la zona (la que viene sin considerar tanques elevados, torres de iglesias, etc.)
+- Si es una quinta: máx 3 pisos; edificaciones de "viviendas" deben retirarse del plano de fachada bajo ángulo de 45° mínimo
+
+---
+
+---
+
+## 3B. FUERA ZONA MONUMENTAL (ATN II) — PARÁMETROS RDM / RDA (CPU N°233-2016, Av. El Sol Este N°170-190)
+
+### Predio de referencia: Av. El Sol Este N°170-190 (área 1,050 m², frente 25 ml)
+**Declaración explícita del CPU:** "EL INMUEBLE SE ENCUENTRA UBICADO FUERA DEL ÁMBITO DE LA ZONA MONUMENTAL — Ord. N°1076-MML del 08/10/2007"
+→ **SIN RESTRICCIÓN MC. SIN altura máxima de 4 pisos. Aplica tabla ATN II.**
+
+### Tabla de parámetros RDM / RDA — Área de Tratamiento Normativo II (Ord. N°1076-MML Anexo 4)
+
+| Zona | Uso | Lote mín (m²) | Frente mín (ml) | Altura máx (pisos) | AL mínima | Coef. edif. | Estac. |
+|---|---|---|---|---|---|---|---|
+| **RDM** | Unifamiliar / Multifamiliar | 120 | 6.00 | **3** | 30% | 2.1 | 1/viv |
+| **RDM** | Multifamiliar | 150 | 8.00 | **4 / 5 (¹)** | 35% | — | 1/1.5 viv |
+| **RDM** | Multifamiliar | 200 | 10.00 | **5 / 6 (¹)** | 35% | — | 1/1.5 viv |
+| **RDM** | Multifamiliar | 300 | 10.00 | **6 / 7 (¹)** | 35% | — | 1/1.5 viv |
+| **RDM** | Conjunto Residencial | 1,600 | 20 | **8** | 40% | — | 1/1.5 viv |
+| **RDA** | Multifamiliar | 300 | 10 | **8** | 35% | — | 1/1.5 viv |
+| **RDA** | Multifamiliar | 450 | 10 | **1.5(a+r) (³)** | 40% | — | 1/1.5 viv |
+| **RDA** | Conjunto Residencial | 2,500 | 25 | **1.5(a+r)** | 50% | — | 1/1.5 viv |
+
+(¹) Frente a Parques y/o Avenidas con ancho mayor a 20 ml.
+(³) Frente a Avenidas >20m: 1.5(a+r). Frente a Parques: hasta **15 pisos**. En vías locales: hasta **10 pisos**.
+
+**Densidad neta (D.S. N°013-2013-Vivienda):**
+- RDM: 1,300 Hab./Ha.
+- RDA: 2,250 Hab./Ha.
+
+### Retiro — Av. El Sol Este (CPU N°233-2016)
+- **Retiro municipal: 5.00 ml**
+- Ancho de vía existente: 18.00 ml
+
+### Estacionamiento — Fuera Zona Monumental
+- **1 estacionamiento cada 1.5 viviendas** (Ord. N°373-MDB o Ord. N°1076-MML)
+- Más favorable que zona monumental (donde es 1/vivienda)
+- Para uso comercial: según Índice de Usos
+
+### Consideraciones adicionales (Ord. N°1076-MML) — No Monumental
+- Piso a piso máx: 3.00 ml (residencial) / 4.00 ml (comercial compatible)
+- Altura mín. a cielo raso: 2.30 ml (Art. 22, Norma A.010 RNE)
+- Área mínima 75m² para 3D (ver Sección 4 — puede aplicar Ord. N°516-2019-MDB)
+- Unifamiliar en lote >90 m²
+- Subdivisión solo cuando los lotes resultantes sean ≥ al mínimo normativo
+- Estacionamientos dentro del área del lote
+- Azotea residencial: reglamentada por Ord. N°303-MDB (Zona No Monumental)
+- **Acantilados Costa Verde:** Ord. N°1414-MML declara intangibles los acantilados — predios en borde de acantilado tienen restricciones adicionales
+
+---
+
+## 4. ÁREAS MÍNIMAS — BARRANCO (Ord. N°516-2019-MDB)
+
+| Tipología | Área mínima | % máximo en el proyecto |
+|---|---|---|
+| **3 dormitorios** | **90 m²** | 50% de las unidades |
+| **2 dormitorios** | **75 m²** | 35% de las unidades |
+| **1 dormitorio** | **60 m²** | 15% de las unidades |
+
+**Tolerancia:** 10% para todos los casos.
+**Distribución obligatoria:** El proyecto debe respetar los porcentajes máximos (50/35/15). No se puede hacer un proyecto 100% de 1D.
+
+**Nota:** Estas áreas son las más exigentes de Lima (junto con San Isidro/Miraflores) — determinan directamente el programa arquitectónico.
+
+---
+
+## 5. ESTACIONAMIENTO — BARRANCO (Ord. N°373-MDB)
+
+| Uso | Ratio |
+|---|---|
+| Residencial (vivienda) | 1 estacionamiento por unidad de vivienda |
+| Comercial | Según Índice de Usos (Ord. N°343-MML Anexos + Fichas ZM-11) |
+
+**Importante:** El ratio de 1/vivienda es más exigente que distritos ATN I (donde 1/2 viv o 1/3 viv son comunes). Impacto directo en sótanos y costo del proyecto.
+
+---
+
+## 6. ZONA MONUMENTAL — PROCEDIMIENTO MINISTERIO DE CULTURA
+
+**Aplicación:** Todo proyecto de edificación en Barranco Zona Monumental debe contar con:
+
+1. **Anteproyecto en consulta previa** al Ministerio de Cultura (delegado Ad Hoc)
+2. **Opinión favorable del MC** — obligatoria antes del trámite de licencia municipal
+3. **Presentación conforme al D.Leg. N°1225 + Ley N°28296** (Ley General del Patrimonio Cultural)
+4. El MC evalúa: volumetría, fachada, materiales, integración con entorno histórico
+
+**Plazo adicional:** El trámite ante el MC puede agregar 30-90 días al proceso de licencia. Debe incluirse en el cronograma del proyecto.
+
+---
+
+## 7. EXCEPCIÓN ORD. N°247-MDB — FUERA DEL PERÍMETRO ESPECÍFICO
+
+**Área excluida de Zona Monumental propiamente dicha** (Ord. N°247-MDB, 21/12/2005):
+Zona comprendida desde Av. República de Panamá, siguiendo Av. Bolognesi y Panamericana Sur, hacia el este, norte y sur, hasta límites distritales.
+
+En esta subzona: los parámetros residenciales a utilizarse serán los de **Alta Densidad** (no RDM).
+→ Fuera del perímetro monumental estricto: verificar si aplica RDA o si sigue siendo RDM.
+
+---
+
+## 8. DATOS DE MERCADO — BARRANCO (Urbania INDEX nov-2025)
+
+| Indicador | Valor |
+|---|---|
+| Precio venta promedio | S/. 9,161/m² → **USD 2,656/m²** (TC 3.45) |
+| Rentabilidad bruta alquiler | Aprox. 5.0-5.5% |
+| Posición ranking Lima | **2° lugar** (después de San Isidro por algunas métricas) |
+| Mercado objetivo | NSE A/B · premium lifestyle · inversores |
+
+---
+
+## 9. CHECKLIST PRE-FACTIBILIDAD — BARRANCO
+
+```
+PASO 1 — DETERMINAR RÉGIMEN:
+□ ¿El predio está dentro de la Zona Monumental? (Res. N°405/INC-2007 + verificar en CPU)
+   SI → Aplicar Sección 3 (ATN IV, 4 pisos máx, MC obligatorio)
+   NO → Aplicar Sección 3B (ATN II, RDM/RDA, sin MC)
+
+SI ZONA MONUMENTAL (ATN IV):
+□ MC OBLIGATORIO antes de licencia municipal (plazo adicional 30-90 días)
+□ Altura máxima INAMOVIBLE: 12.00 ml = 4 pisos (Ord. N°343-MML)
+□ Sin escalonamiento ni volúmenes retirados de fachada en edificaciones ≤4 pisos
+□ Área libre: 30% · Estac.: 1/vivienda
+□ RNE A.140 obligatorio
+□ Zona de tugurizacion: hasta 2 pisos únicamente
+
+SI FUERA ZONA MONUMENTAL (ATN II):
+□ NO requiere MC — trámite municipal estándar
+□ Determinar si zona es RDM o RDA (del CPUE)
+□ RDM: lote 120-300m² → 3-7 pisos según lote (hasta +1p frente Av.≥20m)
+□ RDA lote 450m²: hasta 1.5(a+r) — hasta 15p frente parques / 10p vías locales
+□ Retiro Av.: 5.00 ml · Estac.: 1 cada 1.5 viviendas
+□ Acantilado Costa Verde: verificar si el predio está en borde (Ord. N°1414-MML intangibilidad)
+
+AMBOS REGÍMENES:
+□ Áreas mínimas Ord. N°516-2019-MDB: 3D=90m² / 2D=75m² / 1D=60m² (distribución 50/35/15%)
+□ Piso a piso: máx 3.00 ml residencial / 4.00 ml comercial
+□ CPU válido solo si predio cuenta con Habilitación Urbana
+□ Subdivisión: solo si lotes resultantes ≥ mínimo normativo
+```
+
+---
+
+## 10. RESUMEN EJECUTIVO — OPERATIVO PARA SOLUM
+
+**Zona Monumental (ATN IV — mayoría del distrito histórico):**
+→ Altura MÁXIMA 4 pisos · AL 30% · Estac. 1/viv · MC obligatorio (30-90 días adicionales)
+→ Impacto financiero: 4p + 1 est./viv + áreas 90m² = solo viable con precio terreno muy alto
+
+**Fuera Zona Monumental (ATN II — Av. El Sol Este y sector periférico):**
+→ RDM: hasta 7 pisos (Av.≥20m) · RDA lote 450m²: 1.5(a+r) / hasta 15p frente parque
+→ Retiro 5ml Av. · Estac. 1/1.5 viv · Sin MC · Área libre 35-50%
+→ Oportunidad: misma marca-distrito Barranco con mayor potencial de cabida
+
+**Áreas mínimas (AMBAS zonas — Ord. N°516-2019-MDB):**
+3D=90m² / 2D=75m² / 1D=60m² — distribución 50%/35%/15% obligatoria · Tolerancia 10%
+
+**Mercado:** USD 2,656/m² (2° más caro de Lima) · NSE A/B · Rentabilidad bruta ~5%

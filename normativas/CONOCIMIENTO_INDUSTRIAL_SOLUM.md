@@ -167,17 +167,26 @@ Archivo completo: `/FACTIS/normativas/indice_usos_atni.txt` (6,349 actividades)
 
 ### Costos de construcción nave (Lima 2025)
 
-| Tipología | Solo obra | Proyecto integrado |
+**PRINCIPIO CRÍTICO: el costo de construcción NO varía por ubicación (VES = Lurín = Chilca).** Mismos materiales, mismos proveedores, misma mano de obra. Lo que varía por zona es solo el precio del terreno.
+
+| Tipología | Costo nave (USD/m²) | Referencia |
 |---|---|---|
-| Almacén básico (h=8m, struct. metálica) | US$ 215–325/m² | US$ 400–500/m² |
-| Nave Clase A (h=12–14m, completa) | US$ 430–650/m² | US$ 600–900/m² |
-| Cámara frigorífica (con equipos) | US$ 675–1,215/m² | US$ 900–1,400/m² |
+| Almacén básico (<10m clara) | US$ 250–300/m² | — |
+| Nave estándar (10–12m) | US$ 300–340/m² | — |
+| **Nave Clase A (12–15m) — BENCHMARK** | **US$ 350/m²** | midpoint con negociación normal |
+| Cross-docking / alta complejidad | US$ 420–550/m² | — |
+| Cámara frigorífica (con equipos) | US$ 675–1,215/m² | — |
+| Patios / maniobras (sin techar) | US$ 70–80/m² | — |
+
+**Extremos del rango:**
+- **Piso ($291/m²):** Parque Logístico 47 — promotor serial (Aldea-type), contratos marco, 8+ proyectos. No replicable para cliente una vez.
+- **Techo ($647/m²):** Simétrica Lurín — contrató Norton (constructor premium), terreno propio, ask $7.50/m²/mes (mercado negocia a $5.50–6.50). Atípico, no usar como referencia estándar.
+- **Benchmark estándar SOLUM: $350/m²** — cliente con poder de negociación razonable, sin ventajas de escala de promotor serial.
 
 **Referencia real verificada — Parque Logístico 47 (VES):**
 - Terreno: 18,789 m² | Nave: 14,315 m² | Ocupación: 76.2%
-- Inversión: US$ 4,172,660 + IGV → **US$ 291.5/m² nave** (all-in, inc. área libre)
-- Renta: US$ 6.5/m²/mes | Facturación anual: US$ 1,116,570
-- Payback bruto: **3.74 años**
+- Inversión construcción: US$ 291.5/m² nave (promotor serial — ver nota arriba)
+- Renta: US$ 6.5/m²/mes | Payback bruto (sobre construcción): 3.74 años
 - Altura clara: 13.6 m | Posiciones: 30,484 (2.13 pos/m²) | Puertas embarque: 22 (1/650 m²)
 
 **Proyectos anteriores misma empresa (benchmarks adicionales):**
@@ -200,7 +209,192 @@ Archivo completo: `/FACTIS/normativas/indice_usos_atni.txt` (6,349 actividades)
 
 ---
 
-## 7. OPERADORES Y PROYECTOS INSTALADOS EN LURÍN (2025)
+## 7. TRANSACCIÓN M&A — BSF ADQUIERE ALDEA LOGÍSTICA GLOBAL (2025)
+
+### La operación
+BSF Almacenes del Perú (Grupo Algeciras + BSF Chile) adquirió el **100% de Aldea Logística Global SAC** por **US$ 160 millones**. Indecopi aprobó en primera fase sin observaciones (no genera concentración de mercado). BSF preexistía con 655,000 m² en VES y Punta Hermosa.
+
+### Portafolio adquirido
+- **10 almacenes**, todos en Villa El Salvador
+- **272,000 m²** de capacidad total
+- **9 de 10 almacenes son Tipo A** (altura al hombro ≥12 m)
+- Más de 400 clientes operativos al momento de la venta
+
+### Métricas financieras implícitas (benchmarks M&A)
+
+| Métrica | Valor | Nota |
+|---|---|---|
+| **Precio por m² de nave** | **US$ 588/m²** | $160M / 272,000 m² |
+| **Ratio vs. costo de construcción** | **~2.0×** | vs. $291.5/m² anchor VES |
+| **Cap rate implícito** | **~10-11%** | rent blended $5.80/m²/mes, 90% ocupación |
+| **NOI anual estimado** | **~$17M/año** | 272,000 × 90% × $5.80 × 12 |
+| Payback implícito para BSF | ~9–10 años | al precio de adquisición $588/m² |
+
+### Implicancias estratégicas críticas
+
+1. **VES Class A se cotiza a $588/m² en M&A** — este es EL benchmark de valorización para portafolios logísticos Lima Sur. Cualquier nave Clase A en VES vale el doble de lo que costó construirla.
+
+2. **Barrera de entrada definitiva**: BSF eligió comprar a $588/m²/nave en lugar de construir a ~$300/m² — porque construir en VES ya no es posible a escala. La escasez de tierra convierte el precio M&A en precio de mercado real.
+
+3. **BSF consolida posición dominante**: pasa de 655,000 m² a **927,000 m²** en Lima Sur. Único operador logístico a esa escala en el mercado peruano.
+
+4. **Validación del payback Aldea**: si el costo total del portafolio fue ~$130-135M y recibieron rentas por $15M+ anuales durante ~7-8 años de operación (>$100M acumulado), la venta a $160M implica un retorno total sobre inversión de >2×. El propietario tenía razón — el negocio era excepcional.
+
+5. **Lima industrial como asset class institucional**: una transacción de $160M pagada por un grupo regional (Chile/España) confirma que el mercado logístico peruano ya tiene profundidad institucional suficiente para salidas de capital. No es solo renta — hay mercado de compradores.
+
+6. **Precio de referencia para SOLUM**: si usuario pregunta "¿cuánto vale una nave Clase A en VES?", la respuesta es **$550–600/m² nave** como referencia M&A (portafolio operativo, ≥90% ocupación). No confundir con costo de construcción.
+
+### BSF — Perfil del adquirente
+- Grupo Algeciras (español) + BSF Chile → operador regional 3PL/almacenamiento
+- 16 años en Perú antes de esta transacción
+- Capacidad post-adquisición: **927,000 m²** (mayor portafolio logístico privado Lima Sur)
+- Estrategia: diversificar de 3PL propio → oferta de almacenamiento a terceros (modelo landlord)
+
+---
+
+## 8. REFERENCIA REAL — ALMACÉN URBANO MULTI-PISO VES (EX MAESTRO / SODIMAC)
+
+### Descripción del activo
+Almacén urbano multi-piso ubicado en Av. Confraternidad (Calle 6), Villa El Salvador. Ocupante previo: Maestro (retail ferretero / acabados, Grupo Falabella). Uso actual: almacén Sodimac. Operado como tienda Maestro (big-box cash & carry), pero la estructura y la demanda del mercado lo clasifican como **activo logístico/industrial**, no comercial.
+
+**Datos verificados del inmueble:**
+| Parámetro | Valor |
+|---|---|
+| Terreno estimado (DXF) | ~8,400 m² (107 m × 79 m) |
+| Zonificación | I2 — Industria Liviana (CPU N° 173-2022-MVES) |
+| Retiro frontal | 0.00 ml |
+| Frente mínimo normativo | 20.00 ml (lote tipo 1 IEC: 10 ml / 300 m²) |
+| Estacionamiento | 1 plaza / 6 empleados |
+| Vías | Av. Confraternidad (frente) + Calle 1 (lateral) |
+| Afectación vial | Confirmada (capa "-area afecta" en planos DXF 2025) |
+
+### Programa arquitectónico (DXF ITSE 2025)
+| Nivel | NPT | Contenido |
+|---|---|---|
+| Sótano | — | Recreación empleados (fulbito, ping pong) |
+| Piso 1 | ±0.00 | Almacén principal, zona mercadería, zona desechos, 3 puertas enrollables, rampas 6%/10%, cisterna dual, manifold, caseta vigilancia |
+| Piso 2 | +4.55 m | Almacén mezzanine, oficinas, gerencia, RRHH, lactario, subestación eléctrica, CCTV/rack |
+| Piso 3 | +8.05 m | Comedor, cocina, vestidores, lockers, sala capacitación, sala descanso |
+| Techo técnico | +11.05 m | A/A centralizado (6 ductos), grupo electrógeno, tanque diario |
+
+**GBA estimado:** ~10,500 m² (piso 1 footprint ~6,700 m² + pisos superiores parciales)
+**Altura libre nave principal:** ~4.55 m (piso 1 a entrepiso) — estructura metálica con techo policarbonato
+**Estructura:** Metálica (nave principal, trusses rojos) + Concreto (sótano/nivel servicio)
+**Sprinklers:** Confirmados (tuberías rojas visibles en nivel inferior)
+**Grid columnas:** Ejes A–F × 1–7 (~crujías de 13 m)
+
+### Demanda real de mercado (Osterling Advisory — primera mano)
+Principales interesados en la comercialización del activo:
+- **Grupo Gloria** (conglomerado lácteos/alimentos) → distribución y almacenamiento
+- **Travex Perú** (operador 3PL / transporte) → almacén logístico
+- **Sodimac** (actual ocupante) → uso como almacén (no tienda retail)
+
+**Conclusión:** El activo compite por el mismo pool de inquilinos que una nave logística en Lurín o Chilca. El formato multi-piso urbano en VES ES un activo industrial — la ex-tienda Maestro fue un uso atípico en una cáscara industrial.
+
+**Por qué no se clasifica como activo comercial:** Una tienda retail convencional requiere especificación diferente — acabados, mayor estacionamiento (1/20–30 m² de venta), A/A de confort total, vidriera/fachada comercial, flujo masivo de público. Este edificio no tiene esas especificaciones.
+
+### Valorización — análisis de mercado
+
+| Escenario | Valor | $/m² terreno | $/m² GBA | Yield implícito |
+|---|---|---|---|---|
+| Precio pedido (propietario) | **US$ 8,000,000** | $952/m² | $762/m² | ~5.5% → rechazado por mercado |
+| Estimado Osterling Advisory | **US$ 6,000,000** | $714/m² | $571/m² | ~7.4% → rango bajo-aceptable |
+| Costo de reposición aprox. | ~US$ 3,500,000 | $417/m² | $333/m² | — |
+
+**Renta base para el cálculo (6,700 m² nave × $5.50/m²/mes):** US$ 36,850/mes → US$ 442,000/año
+
+**Por qué el mercado rechazó $8MM:**
+1. Yield 5.5% muy por debajo del 8–10% que exigen compradores industriales en VES
+2. Prima 2.27× sobre costo de reposición → difícil de justificar para activo multi-piso (ineficiente vs. nave piso único)
+3. Afectación vial → el comprador descuenta el riesgo de reducción de área efectiva
+4. Multi-piso reduce eficiencia operativa logística vs. nave piso único de 12–14 m clara
+5. Menor liquidez de mercado en VES vs. Lurín para transacciones de esta envergadura
+
+**Por qué $6MM es defendible:**
+1. Prima 1.70× sobre reposición → razonable para activo existente, operativo, con todos los permisos
+2. Precio/m² GBA ($571) alineado con benchmark M&A BSF/Aldea ($588/m² nave, portafolio VES)
+3. Upside: si inquilino paga $6.0–6.5/m²/mes → yield sube a 8.1–8.8% (rango de mercado)
+4. Doble cisterna + sprinklers + sótano → ventaja diferencial para Grupo Gloria (cadena de frío / HACCP)
+5. El sótano como área bonus puede rentarse por separado (estacionamiento cubierto o almacén frío)
+
+### Aprendizajes para SOLUM
+- En VES, el suelo escaso impulsa el almacén multi-piso como respuesta racional al mercado
+- Multi-piso urbano compite con naves piso único de Lurín — mismo pool de inquilinos
+- Yield de referencia para activos I2 VES multi-piso: **7.5–9%** (descuento vs. Lurín Clase A por ineficiencia de pisos)
+- Precio de entrada sostenible: donde el yield para el comprador sea ≥8% sobre renta de mercado
+- Afectación vial = descuento en valorización; comprador exige precio que compense el riesgo
+- El "uso comercial en cáscara industrial" no cambia la clasificación del activo — el mercado lo lee como industrial
+
+---
+
+## 9. OPTIMIZACIÓN DE LAYOUT LOGÍSTICO — DENSIDAD Y ALTURA (fuente: Aldea Logística)
+
+### Principio operativo fundamental
+Francis de la Croix (Gerente de Operaciones, Aldea Logística — +250,000 m² construidos, +7 años):
+> *"Siempre pensar como logístico, no como arquitecto/financiero. El logístico siempre verá el ahorro, siempre y cuando el almacén sea funcional."*
+
+El logístico evalúa una nave en **posiciones de pallet por m²**, no en m² de nave. Una nave de 13.6m bien diseñada es más rentable que una de 12m aunque cueste algo más de construir.
+
+### Geometría de rack estándar Lima (verificado por Aldea)
+Cada nivel de rack consume **1.77 m** de altura:
+
+| Componente | Medida |
+|---|---|
+| Carga (mercadería + pallet) | 1.45 m |
+| Paleta (estructura rack) | 0.15 m |
+| Viga | 0.10 m |
+| Holgura de seguridad | 0.07 m |
+| **Por nivel** | **1.77 m** |
+
+- **12.0 m al hombro** → 7 niveles de rack → densidad ~1.59 pos/m²
+- **13.6 m al hombro** → 8 niveles de rack → densidad ~2.03 pos/m²
+- Diferencia: 1.60 m adicionales de altura → **+28% de posiciones por m² de almacén**
+
+### Comparativo real — Centro Logístico Lurín (Simétrica vs. Aldea, 2015)
+
+| Métrica | Original | Propuesta Aldea | Diferencia |
+|---|---|---|---|
+| Altura al hombro | 12.0 m | **13.6 m** | +1.6 m |
+| Niveles de rack | 7 | 8 | +1 nivel |
+| Área de almacén | 22,226 m² | **28,503 m²** | **+28%** |
+| Ocupación del terreno | 58.99% | **74.57%** | +26pp por layout |
+| Renta unitaria | $6.20/m²/mes | $6.70/m²/mes | +8% |
+| Facturación anual | $1,653,614 | **$2,291,641** | **+39%** |
+| Posiciones totales | 35,340 | **57,852** | **+64%** |
+| Densidad | 1.59 pos/m² | **2.03 pos/m²** | +28% |
+| Inversión all-in (ref.) | **$550/m² nave** | — | incl. terreno Lurín |
+
+**El layout recuperó más área que la altura:** la ocupación pasó de 59% a 74.6% solo rediseñando bahías y pasillos — sin tocar el terreno. Eso equivale a +6,277 m² de almacén adicional.
+
+### Errores comunes que destruyen densidad
+1. **Bahías mal diseñadas**: las puertas enrollables (docks) en posiciones que cortan las zonas de picking/packing generan áreas irregulares que no admiten racks estándar
+2. **Módulo estructural incorrecto**: crujías que no son múltiplos exactos del ancho de rack + pasillo → m² desperdiciados en bordes
+3. **Oficinas integradas a la nave**: las oficinas dentro del volumen de almacén consumen altura de rack; deben ir en módulo independiente adosado
+4. **Sub-especificación de altura**: diseñar a 12m cuando 13.6m cuesta prácticamente lo mismo (el delta de acero por 1.6m adicionales es marginal vs. el beneficio operativo)
+
+### Tenants reales en naves Aldea Logística (referencia de mercado)
+DHL · CEVA Logistics · DINET · Saga Falabella · Ripley
+*(Todos operadores 3PL o retail de primera línea — confirman que el producto Aldea cumple estándares internacionales)*
+
+### Implicancia para SOLUM
+- La altura óptima recomendada para almacén Clase A en Lima es **13.6 m al hombro**, no 12 m
+- El evaluador financiero debe pedir al proyectista una simulación de racks antes de aprobar el diseño
+- El yield de una nave de 13.6m es superior al de una de 12m aunque la renta/m² sea parecida, porque el logístico ocupa más posiciones en el mismo m² y puede absorber un costo mayor
+- La diferencia de inversión 12m→13.6m es marginal en estructura metálica; la diferencia de ingresos es material (+39% en el caso documentado)
+
+### Principio crítico de payback — cita directa Francis de la Croix
+> *"El precio de alquiler de un local de 12 metros NO ES IGUAL al de uno a 13.6 metros, ya que el logístico tiene un 64% más de posiciones por m². El costo constructivo es definitivamente menor al mostrado (PREANSA) — siendo así el payback es mucho mejor de cara al inversionista."*
+
+**La nave de 13.6m con layout optimizado tiene simultáneamente:**
+- **+39% de facturación anual** (más área rentable + mayor renta/m² por altura)
+- **Menor costo de construcción** que el proyecto original (eficiencia de promotor serial)
+- **Resultado: payback más corto** que cualquier cálculo basado en el proyecto de 12m
+
+Este es el argumento definitivo para el inversionista: no se trata solo de "cuánto cuesta construir más alto" — se trata de que la nave más alta genera más ingresos, el promotor experimentado la construye más barata, y el retorno es superior en ambos frentes simultáneamente. No hay trade-off.
+
+---
+
+## 10. OPERADORES Y PROYECTOS INSTALADOS EN LURÍN (2025)
 
 - **Ransa**: CD 6,066 m² / 8,600 posiciones / US$ 3.5M — Av. Gaseoducto
 - **Mercado Libre**: primer CD Perú, 3,000 m², operativo oct. 2025
@@ -211,11 +405,11 @@ Archivo completo: `/FACTIS/normativas/indice_usos_atni.txt` (6,349 actividades)
 
 ---
 
-## 8. PERSPECTIVAS 2025–2028
+## 11. PERSPECTIVAS 2025–2028
 
 - **Lurín**: suelo escaso, precio sube 5–7%/año. Lotes grandes (+10,000 m²) difíciles de encontrar.
 - **Chilca**: próximo frontier industrial. Vacancia 34%, precio US$ 65–120/m². Indupark: US$ 112.9/m² H1 2025.
-- **VES**: saturado. Sin suelo industrial nuevo disponible.
+- **VES**: **disponibilidad de tierra prácticamente nula para lotes ≥20,000 m²** (confirmado 2025). Los últimos paños grandes los absorbió Aldea Logística en 2023-2024 (Aldeas 8, 9, 10 — total ~100,000 m²). Nuevos proyectos de escala logística en VES son inviables por falta de suelo. Los lotes disponibles son pequeños (<5,000 m²), fragmentados o en manos de propietarios que no venden. El precio referencial $140–172/m² de las transacciones Aldea 2023-2024 es **histórico y no replicable** — cualquier terreno que aparezca a la venta en VES cotizará con prima de escasez significativa.
 - **Anillo Vial Periférico**: US$ 2,380M, construcción desde 2026. Reducirá tiempos Lurín–Callao significativamente.
 - **Cold chain**: US$ 510M en 2025 → US$ 625M en 2026. Mayor crecimiento relativo.
 - **E-commerce**: gasto digital Perú US$ 37,000M en 2024 → proyectado US$ 60,000M en 2027.
@@ -223,7 +417,7 @@ Archivo completo: `/FACTIS/normativas/indice_usos_atni.txt` (6,349 actividades)
 
 ---
 
-## 9. ALTURAS DE NAVE POR ACTIVIDAD (benchmarks Lima)
+## 12. ALTURAS DE NAVE POR ACTIVIDAD (benchmarks Lima)
 
 | Actividad | Altura al hombro |
 |---|---|
@@ -232,26 +426,177 @@ Archivo completo: `/FACTIS/normativas/indice_usos_atni.txt` (6,349 actividades)
 | Taller / Metalmecánica | 6–8 m |
 | Cámara frigorífica | 10–12 m |
 | Con puente grúa | 14–16 m |
+| Maquinaria pesada / minería (caso excepcional) | >16 m |
 
 **"Altura al hombro"** = altura libre interior en el punto más bajo (gotera), NO la cumbrera.
 
+**NOTA — alturas excepcionales:** Naves >16 m son casos singulares para usos muy específicos (concesionarios de maquinaria minera, astilleros, fundiciones). No representan el mercado logístico ni industrial estándar de Lima. Referencia real: Ferreycorp (concesionario Caterpillar) en Av. Industrial, Cercado de Lima — 16.64 m al hombro para almacenamiento de tractores y equipos de minería de gran porte. Este dato NO debe usarse como benchmark de costo o altura para proyectos logísticos/manufactura convencionales.
+
 ---
 
-## 10. ZONAS INDUSTRIALES LIMA — HUBS PRINCIPALES
+## 13. ZONAS INDUSTRIALES LIMA — HUBS PRINCIPALES
 
 | Hub | Zonificación | Distancia a Callao | Característica |
 |---|---|---|---|
-| Villa El Salvador (VES) | I2, CZ (logístico) | ~30–40 min | Saturado, sin suelo nuevo |
+| Villa El Salvador (VES) | I2, CZ (logístico) | ~30–40 min | **Sin suelo disponible ≥20,000 m² (2025)** — mercado de tenedores, no de nuevos proyectos |
 | Lurín | I2, I3, I4 | ~45 min | Líder en demanda (54%), suelo escaso |
 | Chilca | I2, I3, I4 | ~60–75 min | Frontier, precio bajo, alta vacancia |
 | San Juan de Lurigancho | I2 | ~30 min | Eje Carretera Central, menor clase A |
 | Santa Anita | I2, I3 | ~25 min | Carretera Central, acceso logístico este |
 | Callao | I2, I3 | 0 km | Escasez total, precios más altos Lima |
 | Huachipa | I2 | ~25 min | Eje intermedio, US$ 130–135/m² |
+| **Cercado de Lima — Av. Industrial** | I2 (Área II) | ~10 min | Hub histórico consolidado. CPU emitido por MML (no municipio distrital). Retiros obligatorios. |
+
+### Retiros I2 — Cercado de Lima (Decreto Alcaldía N° 101, 1983 + Decreto N° 127)
+**DIFERENCIA CRÍTICA con VES y otros distritos:**
+- Retiro frente a **avenida**: **5.00 m** obligatorio
+- Retiro frente a **calle**: **3.00 m** obligatorio
+- VES I2: 0.00 ml — fachada hasta línea de propiedad
+- Este retiro reduce el área edificable efectiva y debe descontarse en el cálculo de cabida
+
+**CPU Cercado de Lima I2 (Ref. N° 0719-2018-MML):**
+- Emisor: MML — Gerencia de Desarrollo Urbano (no municipio distrital)
+- Área Tratamiento: II
+- Zona: 6 (Ord. 1630-MML)
+- Usos compatibles: Industria Liviana + hasta 20% I1 (Ord. 893-MML, igual que VES)
+- Coeficiente de edificación: No se indica
+- Estacionamiento: 1 plaza / 6 empleados
+
+**Referencia real verificada — Av. Industrial 508 (Ferreycorp/Ferreyros S.A.):**
+- Terreno: 7,882.55 m² (polígono irregular, doble frente: Av. Industrial + Av. Materiales)
+- Área techada: 4,235.02 m² (53.7%) — cobertura baja por uso con maquinaria pesada
+- Área libre: 3,740.01 m² (47.4%) — patios de maniobra para equipos de gran porte
+- Almacén 1: 2,034.76 m² / altura 7.39 m (estándar industrial)
+- Almacén 2: 1,830.23 m² / altura **16.64 m** (excepcional — puente grúa para maquinaria minera Caterpillar, NO representativo del mercado)
+- Estructura: metálica, techo calamina — instalación pre-2000 con reforma 2015
+- Balanza de piso (7.60 m ancho) para camiones y maquinaria pesada
+- Vía férrea histórica adyacente (ramal Lima Industrial, en desuso)
+- Uso: concesionario Caterpillar — almacén de maquinaria de minería (tractores, excavadoras, palas)
 
 ---
 
-## 11. NORMATIVA BASE APLICABLE A PROYECTOS INDUSTRIALES LIMA
+## 14. METODOLOGÍA DE TASACIÓN HIPOTECARIA INDUSTRIAL — REFERENCIA BCP (Celima SJL, 2025)
+
+**Fuente:** Informe de Tasación N° 2025-2543-A, 21/05/2025. Banco de Crédito del Peru (BCP). Inmueble: Planta industrial Celima, Av. Óscar Benavides (ex-Colonial) S/N, Urb. Industrial Infantas, San Juan de Lurigancho, Lima.
+
+### Contexto del encargo
+Tasación hipotecaria institucional. Hipoteca sindicada pari passu entre BCP, Scotiabank, BIP y Fiduciaria. Monto hipoteca: S/ 396,869,610 (equivalente a ~USD 105M al TC 3.78). Metodología obligatoria: R.M. 172-2016-VIVIENDA (Ministerio de Vivienda — Perú). Aplicable a toda tasación para fines hipotecarios bancarios.
+
+---
+
+### Metodología: Método de Costos (Valor de Reposición)
+
+1. **Valor del terreno** — Comparación de transacciones homologadas. Se aplican factores de homologación por:
+   - Ubicación (vías principales, acceso, zona industrial)
+   - Área (lotes grandes tienen valor unitario menor que lotes pequeños — descuento por volumen)
+   - Forma del lote (regular vs. irregular)
+   - Estado de saneamiento (inscripto, sin afectaciones, con hipotecas)
+
+2. **Valor de Edificación (VUE)** — Valor Unitario de Edificación aprobado por MVCS. Se aplica por tipo constructivo:
+
+| Tipo de Edificación | VUE Referencia (Celima SJL 2025) |
+|---|---|
+| Nave industrial metálica (cobertura calamina/TR4) | **$250/m²** |
+| Nave industrial concreto (columnas + vigas + losa prefab) | **$295/m²** |
+| Losa aligerada / Edificio de oficinas / Planta concreto armado | **$440/m²** |
+| Piso industrial / Losa de concreto sin techo | **$80–120/m²** |
+| Cerco perimétrico (muro concreto h≈3m) | **$120–180/m lineal** |
+
+> **Nota SOLUM:** El VUE es el costo oficial de reposición nuevo. Para tasación hipotecaria bancaria, el VUE es la base obligatoria — NO el costo real de construcción del mercado (que puede ser mayor o menor).
+
+3. **Factor de Depreciación (FD)** — Reduce el VUE según antigüedad + estado de conservación:
+
+| Antigüedad | Estado: Bueno | Estado: Regular | Estado: Malo |
+|---|---|---|---|
+| 0–5 años | 0.91–1.00 | 0.80–0.90 | 0.65–0.79 |
+| 6–10 años | 0.84–0.90 | 0.72–0.83 | 0.58–0.71 |
+| 11–20 años | 0.70–0.83 | 0.58–0.69 | 0.45–0.57 |
+| 21–30 años | 0.58–0.69 | 0.46–0.57 | 0.35–0.45 |
+| 31–50 años | 0.44–0.57 | 0.33–0.43 | 0.24–0.32 |
+| >50 años | 0.25–0.43 | 0.15–0.24 | 0.05–0.14 |
+
+**Referencia real Celima:**
+- Nave metálica principal: ~42 años, buen estado → FD ≈ 0.50–0.57
+- Edificaciones nuevas (8-9 años): FD ≈ 0.84–0.91
+
+4. **Valor de Edificación depreciado** = VUE × Área × FD
+
+5. **Valor Comercial** = Valor Terreno + Valor Edificaciones depreciadas
+
+6. **Valor de Realización** = Valor Comercial × (1 − Factor Deducciones)
+
+---
+
+### Deducciones para Valor de Realización (referencia BCP/Celima)
+
+| Concepto | % aplicado |
+|---|---|
+| Publicidad y marketing | 2.0% |
+| Tasación independiente | 0.2% |
+| Comisión agente inmobiliario | 5.0% |
+| Mantenimiento durante venta | 2.0% |
+| Factor de liquidez (60 días aprox.) | ~15.8% |
+| **Total deducciones** | **~25%** |
+
+**Regla práctica:** Valor de Realización ≈ **Valor Comercial × 0.75**
+
+---
+
+### Benchmarks de terreno SJL — Zona Industrial I2 (2025)
+
+| Métrica | Valor |
+|---|---|
+| Terreno Celima (inscrito RRPP) | 70,000 m² |
+| Terreno real (tras afectación vial) | **68,433.34 m²** |
+| Afectación vial absorbida | 1,566.66 m² (2.2% del área RRPP) |
+| Valor tasación terreno | **$560/m²** |
+| Valor total terreno | ~$38.3M |
+| Oferta de mercado comparable SJL I2 | $600–984/m² (sin homologar) |
+| Homologado (transacciones ajustadas) | $432–620/m² |
+| Conclusión | $560/m² es correcto como valor homologado SJL I2 lote grande (>60,000 m²) |
+
+> **Descuento por volumen:** Un lote de 68,433 m² en SJL I2 vale menos por m² que uno de 5,000 m². El factor de homologación por área es descendente — a mayor lote, menor valor unitario.
+
+---
+
+### Área construida inscrita vs. real (riesgo legal clave)
+
+| Concepto | RRPP | Real medido | Diferencia |
+|---|---|---|---|
+| Área construida inscrita | **7,548 m²** | **35,700.66 m²** | **+28,152 m² no declarados (4.7×)** |
+| Área terreno | 70,000 m² | 68,433.34 m² | −1,566 m² afectación vial |
+
+**Riesgo SOLUM a documentar:** Las construcciones no inscritas en RRPP son un riesgo legal significativo en procesos de venta, hipoteca o titulación. El banco tasa sobre área real (verificada), pero el título solo ampara el área registral. Solución: regularización ante Municipio + SUNARP.
+
+---
+
+### Estructura hipoteca sindicada (referencia financiamiento institucional)
+
+| Banco | Participación | Tipo |
+|---|---|---|
+| Banco de Crédito del Perú (BCP) | Líder sindicado | Agente + acreedor |
+| Scotiabank Perú | Co-acreedor | Pari passu |
+| BanBif (BIP) | Co-acreedor | Pari passu |
+| Fiduciaria (fideicomiso) | Administrador | Vehículo |
+
+**Pari passu:** todos los bancos tienen el mismo rango de prelación sobre la garantía hipotecaria. Si hay ejecución, el valor se reparte proporcionalmente.
+
+**Aplicación SOLUM:** Para activos industriales >$30M, el financiamiento bancario típicamente involucra más de una entidad financiera en estructura sindicada. El Valor de Realización es el suelo del que parte el banco para calcular el ratio LTV (Loan-to-Value).
+
+---
+
+### Síntesis de criterios para due diligence industrial (de esta tasación)
+
+1. **Verificar área real vs. RRPP antes de cualquier valorización.** Las afectaciones viales y construcciones no inscritas son frecuentes en plantas industriales antiguas.
+2. **VUE oficial ≠ costo real de mercado.** Para proyectos nuevos, usar benchmarks de mercado ($250–650/m² según tipo). Para tasaciones hipotecarias, el banco usa VUE × FD.
+3. **El Valor de Realización es el número que importa al banco**, no el Valor Comercial. Siempre descontar ~25% para estimar lo que el banco ejecutaría si hay default.
+4. **SJL I2 lotes grandes (>20,000 m²): rango $432–620/m²** homologado. Valor de oferta sin homologar puede llegar a $984/m² — es ruido, no precio de cierre.
+5. **Antigüedad de la nave impacta fuertemente.** Una nave de 42 años en buen estado tiene FD ~0.50 — vale la mitad de nueva. Reposición total puede ser más barata que rehabilitación.
+6. **Hipoteca sindicada:** para activos >$30M, el mercado financiero peruano estructura sindicatos. El promotor/vendedor debe anticipar que el comprador institucional llegará con 2-4 bancos coordinados.
+
+---
+
+## 15. NORMATIVA BASE APLICABLE A PROYECTOS INDUSTRIALES LIMA
 
 | Norma | Contenido | Relevancia |
 |---|---|---|

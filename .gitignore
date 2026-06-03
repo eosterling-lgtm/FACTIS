@@ -1,25 +1,26 @@
-# Secrets — NUNCA subir al repositorio
-.streamlit/secrets.toml
-
 # Python
 __pycache__/
-*.py[cod]
+*.pyc
 *.pyo
-.Python
+*.pyd
+*.egg-info/
+
+# Virtual environment
 venv/
 env/
 .env
+.env.*
 
-# Streamlit cache
-.streamlit/cache/
+# Secrets — NUNCA commitear
+.streamlit/secrets.toml
 
-# Outputs de prueba
-test_output_*.pdf
+# Backups
+*.bak
+*.bak_*
 
 # macOS
 .DS_Store
-*.DS_Store
+.AppleDouble
 
-# IDE
-.vscode/
-.idea/
+# PDFs generados
+*.pdf

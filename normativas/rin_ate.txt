@@ -1,0 +1,228 @@
+# RIN ATE — REGLAMENTO DE INTEGRACIÓN NORMATIVA
+## Parámetros Urbanísticos y Edificatorios
+### Fuente: CPU N°728-2021-SGHUE-GIU/MDA (I2 — Av. Separadora Industrial, Urb. Lot. Industrial del Artesano) · CPU N°326-2018-SGHUE-GDU/MDA (CZ — Av. La Molina / Ex Autopista La Molina, Fundo Inquisidor y Pulido)
+
+---
+
+## 1. MARCO LEGAL VIGENTE
+
+| Norma | Contenido | Estado |
+|---|---|---|
+| Ord. N°1099-MML (12/12/2007) | Reajuste Integral de Zonificación de Usos de Suelo — Ate — **NORMA BASE DISTRITAL** | **VIGENTE** |
+| Ord. N°1076-MML (08/10/2007) | Normas de Zonificación para el Área de Tratamiento Normativo II | **VIGENTE** |
+| Ord. N°1015-MML (14/05/2007) | Índice de Usos para Ubicación de Actividades Urbanas del ATN II | Vigente |
+| Ord. N°933-MML | Índice de Usos ATN I — supletoria | Vigente |
+| RNE (D.S. N°011-2006-VIVIENDA y modificatorias) | Norma supletoria — A.020, A.060, A.070 | Vigente |
+| Ley N°29090 | Habilitaciones Urbanas y Edificaciones | Vigente |
+
+**Área de Tratamiento Normativo: II**
+Ate aplica normativa MML (Ords. N°1099, N°1076, N°1015) como ATN II. La Ord. N°1099-MML es la norma base específica del distrito.
+
+---
+
+## 2. ZONAS DEL DISTRITO
+
+| Zona | Descripción | Ubicación principal |
+|---|---|---|
+| **I2** | Industria Liviana | Av. Separadora Industrial, Urb. Lot. Industrial del Artesano, corredores industriales |
+| **I3** | Gran Industria | Sectores industriales mayores |
+| **I1** | Industria Elemental | Sectores menores |
+| **CZ** | Comercio Zonal | Av. La Molina (Ex Autopista), Carretera Central (Av. Nicolás Ayllón), corredores comerciales |
+| **RDM** | Residencial de Densidad Media | Interior del distrito, Salamanca, Los Jardines de Ate |
+| **RDA** | Residencial de Densidad Alta | Adyacentes a avenidas principales |
+| **CM** | Comercio Metropolitano | Carretera Central, Av. Nicolás Ayllón |
+
+---
+
+## 3. ZONA I2 — INDUSTRIA LIVIANA (CPU N°728-2021)
+
+### Av. Separadora Industrial — Urb. Lotización Industrial del Artesano (Mz. B-2, Lote 3-A)
+
+| Parámetro | Valor |
+|---|---|
+| **Zonificación** | I2 — Industria Liviana |
+| **ATN** | II |
+| **% Usos Industriales** | Hasta 20% de I1 en zona I2 |
+| **Usos Compatibles** | Índice de Usos ATN II (Ord. N°1015-MML + Ord. N°933-MML) |
+| **Área de lote mínimo** | **1,000 m²** |
+| **Frente mínimo** | **20 ml** |
+| **Altura de edificación** | Según Proyecto, Según Entorno (Ord. N°1076-MML) |
+| **Área libre mínima** | Según actividades específicas y consideraciones ambientales |
+| **Retiro municipal — Av. Separadora Industrial** | **5.00 ml** |
+| **Jardín de aislamiento** | 0.00 ml |
+| **Alineamiento de fachada** | 45.00 ml (desde eje de vía) |
+| **Sección vial** | 80.00 ml (Av. Separadora Industrial) |
+| **Estacionamiento** | **1 espacio por cada 6 personas empleadas** |
+
+**Notas I2 — Ate:**
+- Dotación de estacionamientos en el interior del terreno, suficiente para personal + vehículos de trabajo — NO debe afectar circulación en vías públicas.
+- Puertas de ingreso de vehículos pesados con dimensiones para el vehículo más grande empleado.
+- Las puertas deben tener ancho suficiente para maniobra de volteo del vehículo (función del ancho de vía de acceso).
+- Puertas ubicadas sobre el límite de propiedad: deben abrir sin invadir el tránsito de personas o vehículos.
+- Industrias en Uso Conforme: deben contar con PAMA (Programa de Adecuación y Manejo Ambiental) aprobado.
+- Industrias existentes con Licencia de Funcionamiento en plano de zonificación con uso distinto: mantienen vigencia + PAMA.
+
+---
+
+## 4. ZONA CZ — COMERCIO ZONAL (CPU N°326-2018)
+
+### Av. La Molina (Ex Autopista La Molina) — Fundo Inquisidor y Pulido (Mz. 03, Lote C)
+
+| Parámetro | Valor |
+|---|---|
+| **Zonificación** | CZ — Comercio Zonal |
+| **ATN** | II |
+| **Uso residencial compatible** | **RDA y RDM** |
+| **Área de lote** | Existente o según proyecto |
+| **Frente mínimo** | Existente o según proyecto |
+| **Altura máxima** | **1.5(a+r)** |
+| **Área libre — uso comercial** | **No exigible** |
+| **Área libre — pisos vivienda** | **35%** (Vivienda Multifamiliar) |
+| **Retiro municipal — Av. La Molina** | **5.00 ml** |
+| **Jardín de aislamiento** | 0.00 ml |
+| **Alineamiento de fachada** | 24.00 ml (desde eje, Av. La Molina 38.00 ml sección) |
+| **Estacionamiento — comercial** | **1 cada 50 m²** |
+| **Estacionamiento — residencial** | **1 cada 1.5 viviendas** |
+
+**Notas CZ — Ate:**
+- (1) **100% residencial permitido**: Puede utilizarse hasta el 100% del área del lote comercial para uso residencial.
+- (2) Actividad artesanal: máximo 3 personas ocupadas.
+- (3) Establecimientos especiales (supermercados, CC, etc.): estacionamiento según Especificaciones Normativas + **EIV obligatorio** (Art. 3 RNE — proyectos de CC, complejos comerciales, mercados mayoristas/minoristas, estaciones de servicio).
+- (4) Alturas máximas: aplican a lotes iguales o mayores al normativo.
+- (5) Subdivisión: solo cuando los lotes resultantes sean ≥ al mínimo normativo.
+
+---
+
+## 5. RESUMEN ZONIFICACIÓN RESIDENCIAL ATN II — ATE (Ord. N°1099-MML + Ord. N°1076-MML)
+
+| Zona | Usos | Lote mín (m²) | Frente mín (ml) | Altura (pisos) | Área libre | Estac. |
+|---|---|---|---|---|---|---|
+| **RDM** | Unifamiliar / Multifamiliar | 120 | 6 | **3** | 30% | 1/1.5 viv |
+| **RDM** | Multifamiliar | 150 | 8 | **4 / 5 (¹)** | 35% | 1/1.5 viv |
+| **RDM** | Multifamiliar | 200 | 10 | **5 / 6 (¹)** | 35% | 1/1.5 viv |
+| **RDM** | Multifamiliar | 300 | 10 | **6 / 7 (¹)** | 35% | 1/1.5 viv |
+| **RDM** | Conjunto Residencial | 1,600 | 20 | **8** | 40% | 1/1.5 viv |
+| **RDA** | Multifamiliar | 300 | 10 | **8** | 35% | 1/1.5 viv |
+| **RDA** | Multifamiliar | 450 | 10 | **1.5(a+r) (²)** | 40% | 1/1.5 viv |
+| **RDA** | Conjunto Residencial | 2,500 | 25 | **1.5(a+r)** | 50% | 1/1.5 viv |
+
+(¹) Frente a Parques y/o Avenidas con ancho mayor de 20m.
+(²) Frente a Avenidas con ancho >20m. Frente a Parques: hasta 15 pisos. Vías locales: hasta 10 pisos.
+
+---
+
+## 6. RESUMEN ZONIFICACIÓN INDUSTRIAL ATN II — ATE
+
+| Zona | Lote mínimo | Frente mínimo | Altura | Área libre |
+|---|---|---|---|---|
+| **I3** — Gran Industria | 2,500 m² | 30 m | Según Proyecto / Entorno | Según actividades y consideraciones ambientales |
+| **I2** — Industria Liviana | 1,000 m² | 20 m | Según Proyecto / Entorno | Según actividades y consideraciones ambientales |
+| **I1** — Industria Elemental | 300 m² | 10 m | Según Proyecto / Entorno | Según proyecto |
+
+Estacionamiento industrial: 1 espacio por cada 6 personas empleadas.
+
+---
+
+## 7. RESUMEN ZONIFICACIÓN COMERCIAL ATN II — ATE
+
+| Zona | Altura | Uso Residencial Compatible | Área libre | Estacionamiento |
+|---|---|---|---|---|
+| **CM** | 1.5(a+r) | RDA | No exigible (comercial) / según residencial | 1/50 m² |
+| **CZ** | **1.5(a+r)** | **RDA – RDM** | No exigible (comercial) / **35%** (viv. multifamiliar) | 1/50 m² comercial / **1/1.5 viv** residencial |
+| **CV** | 5 pisos (¹) | RDM | No exigible (comercial) / según residencial | 1/50 m² |
+
+(¹) CV: hasta 7 pisos en lotes >200m² frente a Av. >25ml; hasta 6 pisos en lotes >200m² frente a Av. 20-25ml.
+
+---
+
+## 8. NOTAS CRÍTICAS
+
+### Área libre 35% en CZ para uso residencial
+A diferencia de otros distritos ATN II donde la nota es genérica, el CPU CZ de Ate especifica **35% para Vivienda Multifamiliar** cuando los pisos se destinan a residencia.
+
+### EIV obligatorio en CZ para grandes formatos
+Proyectos de CC, supermercados, mercados mayoristas/minoristas, estaciones de servicio en zona CZ deben contar con Estudio de Impacto Vial (Art. 3 RNE) que proponga solución de acceso y salida de vehículos sin afectar vías circundantes.
+
+### Área mínima 3D: 75 m²
+Confirmado en CPU N°326-2018 (CZ): "Se considera un área mínima de 75 m² para departamentos de 3 dormitorios." Aplica a proyectos residenciales en zona CZ y RDM/RDA.
+
+### Retiro 5.00 ml en vías principales
+Av. Separadora Industrial: retiro 5.00ml. Av. La Molina: retiro 5.00ml. Verificar en CPUE para otras vías del distrito — puede variar.
+
+### PAMA industrial
+Industrias existentes en Uso Conforme con Licencia de Funcionamiento deben contar con PAMA aprobado. Industrias con uso distinto al zonificado pueden mantener vigencia pero también deben tener PAMA.
+
+### CZ = 100% residencial
+Zona CZ de Ate permite uso 100% residencial aplicando parámetros de RDA o RDM compatible.
+
+---
+
+## 9. SÍNTESIS DE RETIROS — ATE
+
+| Vía | Retiro | Observación |
+|---|---|---|
+| **Av. Separadora Industrial** | **5.00 ml** | CPU N°728-2021 (I2) |
+| **Av. La Molina (Ex Autopista)** | **5.00 ml** | CPU N°326-2018 (CZ) |
+| Otras vías | Verificar CPUE | Puede variar |
+
+---
+
+## 10. ÁREAS MÍNIMAS — ATE
+
+| Tipología | Área mínima | Base |
+|---|---|---|
+| **3 dormitorios** | **75 m²** | CPU N°326-2018 (CZ, punto 5.3) |
+| 2 dormitorios | A definir | Sin mínimo confirmado en CPUs |
+| 1 dormitorio | A definir | Sin mínimo confirmado |
+
+---
+
+## 11. DATOS DE MERCADO — ATE (referencial)
+
+| Indicador | Valor |
+|---|---|
+| Precio venta estimado residencial | S/. 4,000–4,500/m² → **USD 1,159–1,304/m²** (TC 3.45) (estimado) |
+| Posición ranking Lima | Lima media-baja — distrito grande con variación interna (Salamanca / Los Jardines > promedio) |
+| Mercado objetivo | NSE B-/C+ · familias · primer inmueble |
+| Nota industrial | Corredor Huachipa-Carretera Central activo — renta industrial $4.5–6.0/m²/mes |
+
+---
+
+## 12. CHECKLIST PRE-FACTIBILIDAD — ATE
+
+```
+□ Verificar zona exacta: I2 / CZ / RDA / RDM / CM (Plano Ord. N°1099-MML)
+□ Si zona I2: lote mínimo 1,000m²/20ml · retiro 5ml · altura según entorno · estac. 1/6 pers.
+□ Si industria en I2: verificar si Uso Conforme + PAMA obligatorio
+□ Si zona CZ (Av. La Molina y corredores): altura 1.5(a+r) · 100% residencial permitido
+□ CZ residencial: AL 35% (multifamiliar) · estac. 1/1.5 viv · retiro 5ml
+□ CZ comercial: AL no exigible · estac. 1/50m²
+□ Si proyecto CC/supermercado en CZ: EIV obligatorio (Art. 3 RNE)
+□ Si zona RDA lote 450m²: 1.5(a+r) Av.>20m / hasta 15p frente parque / 10p vías locales
+□ Si zona RDM lote 300m²: hasta 7p (Av.>20m o parque) / Conj.Res. 1,600m² → 8p
+□ Retiro: 5.00ml Av. Separadora Industrial y Av. La Molina — verificar CPUE para otras vías
+□ Estacionamiento: 1/1.5 viv (RDA/RDM) · 1/50m² (comercial CZ) · 1/6 pers. (industrial)
+□ Área mínima 3D: 75 m² obligatorio
+□ Habilitación Urbana: obligatoria para anteproyecto y licencia
+□ Vigencia CPU: 36 meses (Ley N°29090)
+```
+
+---
+
+## 13. RESUMEN EJECUTIVO — OPERATIVO PARA SOLUM
+
+**Zona I2 (Av. Separadora Industrial y corredores industriales):**
+→ Lote 1,000m²/20ml · retiro 5ml · altura según proyecto/entorno · estac. 1/6 pers.
+→ PAMA obligatorio si industria en Uso Conforme · hasta 20% de I1 en zona I2
+
+**Zona CZ (Av. La Molina / Ex Autopista La Molina):**
+→ Altura 1.5(a+r) · retiro 5ml · 100% residencial permitido
+→ AL 35% (vivienda multifamiliar) · estac. 1/1.5 viv (residencial) / 1/50m² (comercial)
+→ EIV obligatorio para CC, supermercados, mercados (Art. 3 RNE)
+
+**Zona RDA:**
+→ Lote 300m²/10ml → 8p · Lote 450m²/10ml → 1.5(a+r) Av.>20m / 15p parques / 10p locales
+→ AL 35-50% · estac. 1/1.5 viv
+
+**Área mínima:** 3D = 75m² · piso a piso máx 3.00ml
+**Mercado:** USD ~1,159–1,304/m² (estimado) · NSE B-/C+ · industrial Carretera Central activo

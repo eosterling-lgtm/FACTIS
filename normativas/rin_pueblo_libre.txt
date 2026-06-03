@@ -1,0 +1,142 @@
+# RIN PUEBLO LIBRE — REGLAMENTO DE INTEGRACIÓN NORMATIVA
+## Parámetros Urbanísticos y Edificatorios
+### Fuente: CPU N°0721-2019-MPL-GDUA/SGOPHU (Av. Mariano Cornejo N°733 — RDA) · Ord. N°1015-MML · Ord. N°1017-MML · Ords. MPL propias
+
+---
+
+## 1. MARCO LEGAL VIGENTE
+
+| Norma | Contenido | Estado |
+|---|---|---|
+| Ord. N°1015-MML (14/05/2007) | Reajuste Integral Zonificación ATN I y II — norma base para Pueblo Libre | **VIGENTE** |
+| Ord. N°1017-MML | Parámetros urbanísticos ATN II — complementaria | **VIGENTE** |
+| Ord. N°337-MPL | Reglamento de estacionamiento Pueblo Libre — aplica a MI VIVIENDA | Vigente |
+| Ord. N°360-MPL (11/06/2011) | Conjuntos Residenciales en Pueblo Libre | Vigente |
+| Ord. N°369-MPL | Base normativa distrital Pueblo Libre | Vigente |
+| Ord. N°330-MPL + Ord. N°347-MPL | Reglamento de uso de azotea en edificaciones residenciales | Vigente |
+| D.S. N°006-2017-VIVIENDA · N°010-2018-VIVIENDA · D.S. N°022-2016-VIVIENDA | Programa MI VIVIENDA y habilitaciones | Vigente (excepto estac. que rige Ord. N°337-MPL) |
+| RNE (D.S. N°011-2006-VIVIENDA y modificatorias) | Norma supletoria | Vigente |
+
+**Área de Tratamiento Normativo: II**
+Pueblo Libre es ATN II — aplica normativa MML (Ord. N°1015-MML + Ord. N°1017-MML) complementada con ordenanzas propias de la Municipalidad de Pueblo Libre (MPL).
+
+---
+
+## 2. ZONAS DEL DISTRITO
+
+| Zona | Descripción | Ubicación principal |
+|---|---|---|
+| **RDA** | Residencial de Densidad Alta | Av. Mariano Cornejo y corredores de alta densidad |
+| **RDM** | Residencial de Densidad Media | Interior del distrito |
+| **CZ** | Comercio Zonal | Av. Brasil, Av. La Marina |
+| **CM** | Comercio Metropolitano | Eje vías expresas |
+
+---
+
+## 3. ZONA RDA — RESIDENCIAL DE DENSIDAD ALTA (CPU N°0721-2019)
+
+### Av. Mariano Cornejo N°733, Urb. La Esperanza
+
+| Parámetro | Multifamiliar (lote 300 m²) | Multifamiliar (lote 450 m²) | Conjunto Residencial (lote 2,500 m²) |
+|---|---|---|---|
+| **Área lote mínimo** | 300.00 m² | 450.00 m² | 2,500.00 m² |
+| **Frente mínimo** | 10.00 ml | 10.00 ml | 25.00 ml |
+| **Densidad neta** | 2,250 hab/Ha | 2,250 hab/Ha | 2,250 hab/Ha |
+| **Altura máxima** | **8 pisos** | **1.5(a+r) (³)** | **1.5(a+r)** |
+| **Área libre mínima** | **35%** | **40%** | **50%** |
+| **Estacionamiento** | **1/1.5 viviendas** | **1/1.5 viviendas** | **1/1.5 viviendas** |
+
+(³) Frente a Avenidas con ancho mayor de 20 ml.
+
+### Retiros (Av. Mariano Cornejo)
+| Vía | Retiro | Alineamiento |
+|---|---|---|
+| **Av. Mariano Cornejo** | **5.00 ml** | 5.00 ml (distancia límite propiedad → fachada 1° piso) |
+| Lateral | No indicado (----) | — |
+| Fondo | No indicado (----) | — |
+
+### Parámetros complementarios
+- Usos permitidos: Unifamiliar / Multifamiliar / Conjunto Residencial
+- Usos permisibles y compatibles: Multifamiliar / Conjunto Residencial + Índice de Usos para la Ubicación de Actividades Urbanas (Ord. N°933-MML)
+- Unifamiliar: permitida en cualquier lote >90 m²
+
+---
+
+## 4. NOTAS CRÍTICAS DEL CERTIFICADO
+
+### Nota (3) — ALTURA 1.5(a+r)
+"Frente a Avenidas con ancho mayor de 20 ml."
+→ El lote de 450m² con frente a una avenida >20ml puede aplicar la fórmula 1.5(a+r). El lote de 300m² tiene altura fija de 8 pisos.
+
+### Nota (4) — ESTACIONAMIENTO MI VIVIENDA
+"Incluye a los proyectos desarrollados bajo el Reglamento de Habilitación y Construcción Urbana Especial - MI VIVIENDA (Art. 3, Ord. N°337-MPL)."
+→ Los proyectos MI VIVIENDA en Pueblo Libre mantienen el ratio de estacionamiento de la Ord. N°337-MPL (1/1.5 viv), NO los ratios reducidos del reglamento MI VIVIENDA nacional.
+
+### Nota (5) — CONJUNTOS RESIDENCIALES
+"Para Conjuntos Residenciales se aplicará lo dispuesto en la Ordenanza N°360-MPL (11.06.11)."
+→ Los conj. residenciales con lote ≥2,500m² tienen reglamento específico MPL.
+
+### Nota (c) — AZOTEA
+"Se permite el uso de Azotea sobre la altura máxima (Ver Ord. N°330-MPL y N°347-MPL)."
+→ Pueblo Libre permite uso de azotea sobre la altura máxima permitida — reglamentado por ordenanzas propias MPL.
+
+### Proyectos MI VIVIENDA
+Los proyectos MI VIVIENDA deben cumplir D.S. N°006-2017-VIVIENDA, N°010-2018-VIVIENDA, D.S. N°022-2016-VIVIENDA — **EXCEPTO** el requerimiento de estacionamiento que se rige por Ord. N°337-MPL (1/1.5 viv).
+
+---
+
+## 5. ÁREAS MÍNIMAS — PUEBLO LIBRE
+
+| Tipología | Área mínima | Nota |
+|---|---|---|
+| **3 dormitorios** | **75 m²** | Confirmado en CPU (Nota a) |
+| **2 dormitorios** | A definir en proyecto | Sin mínimo normativo fijo confirmado |
+| **1 dormitorio** | A definir en proyecto | Sin mínimo normativo fijo confirmado |
+
+**Base:** "Se considera un área mínima de 75 m² para departamentos de 3 dormitorios; se podrán incluir departamentos de 2 y 1 dormitorio con áreas y en porcentajes a definir."
+
+---
+
+## 6. DATOS DE MERCADO — PUEBLO LIBRE (Urbania INDEX nov-2025)
+
+| Indicador | Valor |
+|---|---|
+| Precio venta promedio | S/. 6,279/m² → **USD 1,820/m²** (TC 3.45) |
+| Posición ranking Lima | Intermedio-alto — entre Jesús María y San Miguel |
+| Rentabilidad bruta alquiler | Aprox. 5.0–5.5% |
+| Mercado objetivo | NSE B/B+ · familias · inversores medios |
+
+---
+
+## 7. CHECKLIST PRE-FACTIBILIDAD — PUEBLO LIBRE
+
+```
+□ Verificar zona en Plano Ord. N°1015-MML + Ord. N°1017-MML (ATN II)
+□ Si zona RDA: determinar área del lote — define altura (8p para 300m² / 1.5(a+r) para 450m²)
+□ Altura 1.5(a+r): solo si frente a Av. >20m (Nota 3) — verificar ancho de vía
+□ Retiro frontal: 5.00 ml (Av. Mariano Cornejo) — verificar en CPUE para otras vías
+□ Área libre: 35% (lote 300m²) / 40% (lote 450m²) / 50% (Conj. Res. 2,500m²)
+□ Estacionamiento: 1/1.5 viviendas (Ord. N°337-MPL) — aplica también a MI VIVIENDA
+□ Para Conj. Residencial: verificar Ord. N°360-MPL (parámetros específicos)
+□ Azotea: permitida sobre altura máxima (Ord. N°330-MPL + Ord. N°347-MPL)
+□ Área mínima 3D: 75m² obligatorio · 2D y 1D: áreas a definir en proyecto
+□ Habilitación Urbana: obligatoria para anteproyecto y licencia de edificación (Nota 7)
+□ Verificar retiros laterales y de fondo en CPUE del predio (no indicados en este CPU)
+```
+
+---
+
+## 8. RESUMEN EJECUTIVO — OPERATIVO PARA SOLUM
+
+**Zona RDA Pueblo Libre (Av. Mariano Cornejo y similares):**
+→ ATN II · Lote 300m²/10ml → 8 pisos · Lote 450m²/10ml → 1.5(a+r) (frente Av.>20m)
+→ Conjunto Residencial 2,500m²/25ml → 1.5(a+r) · AL 50%
+→ Retiro 5ml · Estac. 1/1.5 viv · Área libre 35-50% según lote
+
+**Ventaja estacionamiento:** 1/1.5 viv (más favorable que Jesús María RDA donde es 1/1 viv).
+
+**Azotea:** permitida sobre la altura máxima — genera m² adicionales computables (verificar Ords. N°330-MPL y N°347-MPL para límites).
+
+**Áreas mínimas:** 3D=75m² fijo · 2D y 1D a definir por proyecto.
+
+**Mercado:** USD 1,820/m² · NSE B/B+ · Pueblo Libre ofrece marca-distrito sólida con precio inferior a Jesús María (~USD 2,196/m²) — interesante para promotores con restricción de precio terreno.

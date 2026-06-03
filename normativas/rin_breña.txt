@@ -1,0 +1,168 @@
+# RIN BREÑA — REGLAMENTO DE INTEGRACIÓN NORMATIVA
+## Parámetros Urbanísticos y Edificatorios
+### Fuente: CPU N°364-2016-SGOP-GDU/MDB (Av. Tingo María N°383 esq. Jr. Pariacoto / Jr. Manoa — CZ) · Ord. N°1017-MML · Ord. N°1347-10-MML · Ord. N°1785-13-MML
+
+---
+
+## 1. MARCO LEGAL VIGENTE
+
+| Norma | Contenido | Estado |
+|---|---|---|
+| Ord. N°1017-MML | Reajuste Integral Zonificación Breña — **NORMA BASE** | **VIGENTE** |
+| Ord. N°1347-10-MML | Modificatoria zonificación Breña | Vigente |
+| Ord. N°1785-13-MML | Modificatoria zonificación Breña | Vigente |
+| Ord. N°1017-MML Anexo 02 | Índice de Usos para la Ubicación de Actividades Urbanas | Vigente |
+| D.S. N°013-2013-VIVIENDA | Programa MI VIVIENDA — parámetros aplicables | Vigente |
+| RNE (D.S. N°011-2006-VIVIENDA y modificatorias) | Norma supletoria | Vigente |
+
+**Área de Tratamiento Normativo: II**
+Breña aplica normativa MML con Ords. propias del distrito que modifican parámetros de la norma base.
+
+---
+
+## 2. ZONAS DEL DISTRITO
+
+| Zona | Descripción | Ubicación principal |
+|---|---|---|
+| **CZ** | Comercio Zonal | Av. Tingo María, Av. Brasil, corredores comerciales |
+| **RDA** | Residencial de Densidad Alta | Sectores adyacentes a avenidas principales |
+| **RDM** | Residencial de Densidad Media | Interior del distrito |
+
+---
+
+## 3. ZONA CZ — COMERCIO ZONAL (CPU N°364-2016)
+
+### Av. Tingo María N°383 esq. Jr. Pariacoto / Jr. Manoa — Urb. Chacra Colorada
+
+| Parámetro | Valor |
+|---|---|
+| **Zonificación** | CZ — Comercio Zonal |
+| **ATN** | II |
+| **Usos genérico** | Comercio, Vivienda |
+| **Otros usos** | Índice de Usos Ord. N°1017-MML Anexo 02 |
+| **Usos compatibles residenciales** | **RDA o RDM** (según entorno) |
+| **Tamaño lote normativo** | Existente o según proyecto |
+| **Área libre — uso comercial** | **No exigible** |
+| **Área libre — pisos vivienda** | Según uso residencial compatible (RDA o RDM del entorno) |
+| **Altura máxima** | **1.5(a+r)** |
+| **Retiro — Av. Tingo María** | **5.00 ml** |
+| **Retiro — Jr. Pariacoto** | **3.00 ml** |
+| **Retiro — Jr. Manoa** | **3.00 ml** |
+| **Estacionamiento comercial** | Según A.070 Art. 30 RNE (cuadro por tipo de establecimiento) |
+| **Estacionamiento residencial** | Según uso compatible (RDA/RDM: 1/1.5 viv) |
+
+**Nota CZ:** El número mínimo de estacionamientos para edificación comercial se determina en base al cuadro de cálculo de estacionamientos indicado en la Norma A.070 Art. 30. Para uso residencial en CZ: aplicar ratio de la zona compatible (1/1.5 viv).
+
+---
+
+## 4. ZONA RDM — RESIDENCIAL DE DENSIDAD MEDIA
+
+### Tabla completa ATN II — Breña (Ord. N°1017-MML + modificatorias)
+
+| Usos | Lote mín (m²) | Frente mín (ml) | Altura (pisos) | Área libre | Estac. | Densidad |
+|---|---|---|---|---|---|---|
+| Unifamiliar / Multifamiliar | 120 | 6 | **3** | 30% | 1/1.5 viv | — |
+| Multifamiliar | 120 | 6 | **3** | 30% | 1/1.5 viv | — |
+| Multifamiliar | 150 | 8 | **4 / 5 (*)** | 35% | 1/1.5 viv | 1,300 Hab./Ha. |
+| Multifamiliar | 200 | 10 | **5 / 6 (*)** | 35% | 1/1.5 viv | 1,300 Hab./Ha. |
+| Multifamiliar | 300 | 10 | **6 / 7 (*)** | 35% | 1/1.5 viv | 1,300 Hab./Ha. |
+| Conjunto Residencial | 1,600 | 20 | **8** | 40% | 1/1.5 viv | — |
+
+(*) Frente a parque y/o Avenida con ancho mayor de 20.00 m.
+
+---
+
+## 5. ZONA RDA — RESIDENCIAL DE DENSIDAD ALTA
+
+### Tabla completa ATN II — Breña (Ord. N°1017-MML + modificatorias)
+
+| Usos | Lote mín (m²) | Frente mín (ml) | Altura (pisos) | Área libre | Estac. | Densidad |
+|---|---|---|---|---|---|---|
+| Multifamiliar | 300 | 10 | **8** | 35% | 1/1.5 viv | 2,250 Hab./Ha. |
+| Multifamiliar | 450 | 10 | **10 / 1.5(a+r) (*)** | 40% | 1/1.5 viv | 2,250 Hab./Ha. |
+| Conjunto Residencial | 2,500 | 25 | **1.5(a+r)** | 50% | 1/1.5 viv | 2,250 Hab./Ha. |
+
+(*) Con frente a Avenidas con ancho mayor de 20.00 m.
+
+---
+
+## 6. NOTAS CRÍTICAS
+
+### Estacionamiento uniforme: 1/1.5 viviendas
+Aplica en TODOS los tipos RDM y RDA — es el ratio dominante en Breña. Más favorable que Jesús María RDA (1/1 viv). Proyectos MI VIVIENDA también sujetos a este ratio (D.S. N°013-2013-VIVIENDA).
+
+### Conjuntos Residenciales y Quintas unifamiliares (RNE Art. 31)
+"En los conjuntos residenciales y quintas conformadas por viviendas unifamiliares, se permitirá el crecimiento hasta una altura máxima de 3 pisos."
+
+### CZ = 100% residencial permitido
+La zona CZ en Breña, como en otros distritos ATN II, admite uso 100% residencial aplicando parámetros de RDA o RDM compatible del entorno.
+
+### Retiros municipales — Breña (D.A. referenciada)
+El retiro municipal se mide dentro del lote a partir del límite de propiedad, como resultado del proceso de Habilitación Urbana. Verificar en CPUE del predio específico para otras vías.
+
+---
+
+## 7. SÍNTESIS DE RETIROS — BREÑA (área Av. Tingo María)
+
+| Vía | Retiro | Observación |
+|---|---|---|
+| Av. Tingo María | **5.00 ml** | CPU N°364-2016 |
+| Jr. Pariacoto | **3.00 ml** | CPU N°364-2016 |
+| Jr. Manoa | **3.00 ml** | CPU N°364-2016 |
+| Otras vías | Verificar CPUE | Puede variar según HU |
+
+---
+
+## 8. ÁREAS MÍNIMAS — BREÑA
+
+| Tipología | Área mínima | Base |
+|---|---|---|
+| **3 dormitorios** | **75 m²** | Ord. N°1017-MML (referencia ATN II general) |
+| 2 dormitorios | A definir | Sin mínimo normativo fijo confirmado en CPU |
+| 1 dormitorio | A definir | Sin mínimo normativo fijo confirmado en CPU |
+
+---
+
+## 9. DATOS DE MERCADO — BREÑA (Urbania INDEX nov-2025)
+
+| Indicador | Valor |
+|---|---|
+| Precio venta promedio | S/. 5,222/m² → **USD 1,514/m²** (TC 3.45) |
+| Posición ranking Lima | Lima media — adyacente a Cercado, acceso central |
+| Rentabilidad bruta alquiler | Aprox. 5.0–5.5% |
+| Mercado objetivo | NSE B/B+ · proximidad a centros de salud (hospitales) y comercio Av. Brasil |
+
+---
+
+## 10. CHECKLIST PRE-FACTIBILIDAD — BREÑA
+
+```
+□ Verificar zona exacta: CZ / RDA / RDM (Plano Ord. N°1017-MML + modificatorias)
+□ Si zona CZ: altura 1.5(a+r) · puede ser 100% residencial (RDA o RDM compatible)
+□ Si zona RDA lote 450m²: hasta 10p o 1.5(a+r) frente Av.>20m
+□ Si zona RDM lote 300m²: hasta 7p frente Av.>20m o parque
+□ Retiro: Av. Tingo María 5ml / Jrs. 3ml — verificar en CPUE para otras vías
+□ Estacionamiento: 1/1.5 viv en TODOS los casos — muy favorable
+□ Área libre: 30% RDM lotes pequeños / 35-40% RDA y RDM lotes medios / 50% Conj.Res.
+□ Área mínima 3D: 75m²
+□ Proyectos MI VIVIENDA: cumplir D.S. N°013-2013-VIVIENDA (ratio estac. 1/1.5 viv aplica)
+□ Quintas/Conj. unifamiliares: máximo 3 pisos (RNE Art. 31)
+□ Habilitación Urbana: obligatoria para anteproyecto y licencia
+```
+
+---
+
+## 11. RESUMEN EJECUTIVO — OPERATIVO PARA SOLUM
+
+**Zona CZ (Av. Tingo María y corredores):**
+→ Altura 1.5(a+r) · 100% residencial permitido · retiro 5ml Av. / 3ml Jr. · estac. 1/1.5 viv
+
+**Zona RDA (lotes medios):**
+→ Lote 300m²/10ml → 8p · Lote 450m²/10ml → 10p o 1.5(a+r) (Av.>20m) · AL 35-40% · estac. 1/1.5 viv
+
+**Zona RDM (lotes menores):**
+→ Lote desde 120m²/6ml → hasta 7p (frente Av.) · AL 30-35% · estac. 1/1.5 viv
+
+**Ventaja clave:** Estacionamiento 1/1.5 viv uniforme en toda la zona — igual que Breña, mejor que Jesús María RDA.
+
+**Mercado:** USD 1,514/m² · NSE B/B+ · Distrito compacto con acceso a Av. Brasil y hospitales · ideal para proyectos multifamiliares medianos (150-450m² lote)

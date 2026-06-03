@@ -1,0 +1,262 @@
+# RIN SAN MIGUEL — REGLAMENTO DE INTEGRACIÓN NORMATIVA
+## Reglamento de Zonificación · Parámetros Urbanísticos y Edificatorios
+### Fuentes: Ord. N°2146-MML (13-dic-2018) · Ord. N°1098-MML (2007) · Ord. N°1076-MML (2007) · Ords. MDSM N°107-2006, 218, 248, 240, 243 · Certificados CPUE 2018 y 2020
+
+---
+
+## 1. MARCO LEGAL VIGENTE
+
+| Norma | Contenido | Estado |
+|---|---|---|
+| Ord. N°2146-MML (13/12/2018) | Reajuste Integral de Zonificación de San Miguel — ATN II | **VIGENTE — NORMA BASE** |
+| Ord. N°2145-MML | Complementaria al reajuste integral | Vigente |
+| Ord. N°1098-MML (2007) | Normas Generales de Zonificación de Usos del Suelo Lima | Vigente (mantenida por Art. 3° Ord. 2146) |
+| Ord. N°1076-MML (18/10/2007) | Plano de Zonificación anterior (reemplazado por Ord. 2146) | Reemplazada |
+| Ord. N°1015-MML (2007) | Índice de Usos para Ubicación de Actividades Urbanas | Vigente |
+| Ord. N°240-MDSM (27/08/2012) | Régimen especial Av. Bertolotto y Av. Costanera | Vigente |
+| Ord. N°243-MDSM (20/12/2012) | Complementaria Av. Bertolotto y Av. Costanera | Vigente |
+| Ord. N°107-2006-MDSM | Edificaciones multifamiliares — regulación distrital | Vigente |
+| Ord. N°218-MDSM | Edificaciones multifamiliares — regulación distrital | Vigente |
+| Ord. N°248-MDSM | Edificaciones multifamiliares — regulación distrital | Vigente |
+| D.S. N°013-2013-VIVIENDA Art.12 | Densidad habitacional para programa MIVIVIENDA | Vigente |
+| Convenio 288-2015-VIVIENDA | Microzonificación sísmica CISMID — obligatoria para proyectos de vivienda | Vigente |
+
+**Área de Tratamiento: II (Lima Metropolitana)**
+El Plano de Zonificación aprobado por Ord. N°2146 NO define límites distritales y se publica en la web de la MML y la Municipalidad Distrital de San Miguel.
+
+---
+
+## 2. ZONAS DEL DISTRITO (Plano Ord. N°2146-MML)
+
+### Zonificación predominante por sector
+| Zona | Descripción | Ubicación principal |
+|---|---|---|
+| **RDM** | Residencial de Densidad Media | Interior del distrito — mayoría del tejido residencial |
+| **RDA** | Residencial de Densidad Alta | Zonas intermedias, ejes de avenidas principales |
+| **CM** | Comercio Metropolitano | Av. La Marina (eje principal), zonas comerciales de escala metropolitana |
+| **CZ** | Comercio Zonal | Corredores comerciales secundarios |
+| **CV** | Comercio Vecinal | Comercio local de barrio |
+| **VT** | Vivienda Taller | Zonas de transición residencial-productiva |
+| **I1 / I2** | Industrial ligero / mediano | Zona noreste (límite con Callao, entorno Av. Universitaria) |
+| **ZRP** | Zona de Recreación Pública | Parques y áreas verdes |
+| **OU** | Usos Especiales | Equipamientos institucionales |
+| **E1 / E2 / E3** | Educación Básica / Superior Tec. / Superior Univ. | PUCP (E3), colegios (E1) |
+| **H2 / H3** | Centro de Salud / Hospital General | Hospital Santa Rosa, equipamientos de salud |
+
+### Límites del distrito
+- Norte: Callao / Bellavista (Av. Elmer Faucett / Av. de los Precursores / Av. Rafael Escardó)
+- Sur: Océano Pacífico (Av. Costanera)
+- Este: Pueblo Libre / Magdalena del Mar (Av. Universitaria / Av. La Marina)
+- Oeste: Callao / Océano Pacífico
+
+---
+
+## 3. ZONA RDA — RESIDENCIAL DE DENSIDAD ALTA
+
+### Parámetros por tipo de edificación (Cert. N°340-2020 + Ord. N°1098-MML)
+
+| Tipo de edificación | Lote mín. (m²) | Frente mín. (ml) | Área libre mín. | Altura máxima | Estacionamiento mínimo |
+|---|---|---|---|---|---|
+| Multifamiliar | 300 | 10 | 35% | 8 pisos (ver notas) | 1 cada 1.5 vivienda |
+| Multifamiliar | 450 | 10 | 40% | 1.5(a+r) (ver notas) | 1 cada 1.5 vivienda |
+| Conjunto Residencial | 2,500 | 25 | 50% | 1.5(a+r) | 1 cada 1.5 vivienda |
+
+**Usos permitidos:** Unifamiliar / Multifamiliar / Conjunto Residencial
+**Unifamiliar:** permitida en cualquier lote superior a 90 m²
+
+### Notas críticas de altura — RDA
+
+**(Nota 1 — Avenidas y parques):** Frente a avenidas con ancho mayor a 20 ml o frente a parques: se permitirá hasta **15 pisos**. En vías locales: hasta **10 pisos**.
+
+**(Nota 2 — Uso exclusivo vivienda):** Si se destina el lote a uso de vivienda exclusivamente, se podrá construir hasta la altura señalada para uso Residencial de Densidad Media, según tamaño de lote y ubicación.
+
+**(Nota 3 — Av. Bertolotto y Av. Costanera — RÉGIMEN ESPECIAL):** Para predios con frente a la Av. Juan Bertolotto Negro y la Av. Costanera, podrán acogerse a lo estipulado en:
+- Ord. N°240-MDSM (27-08-2012)
+- Ord. N°243-MDSM (20-12-2012)
+
+**(Nota 4 — ZONA HISTÓRICA — ALTURA MÁXIMA 5 PISOS):** En el perímetro conformado por:
+- Av. Federico Gallese (ambos frentes)
+- Jr. Diego de Agüero / antes Yungay (ambos frentes)
+- Jr. Santa Ana, Jr. San Martín, Jr. Ayacucho
+- Jr. Amaya Puga de Lozada (ambos frentes)
+- Jr. Independencia (ambos frentes)
+→ **SOLO SE PERMITIRÁ UNA ALTURA MÁXIMA DE 5 PISOS** según Numeral A.10 del Anexo 02 de la Ord. N°1098-MML.
+
+**(Nota 5 — Ex Feria del Pacífico / Sector 10 — RÉGIMEN ESPECIAL):**
+- **Regla base:** habilitarse como Conjunto Residencial, altura máxima 12 pisos, área libre mínima 60% (Numeral A.11 del Anexo 02 de Ord. N°1098-MML)
+- **Regla especial (Ord. N°2146 Art. 2°):** Predios con frente al Boulevard Calle Manco II podrán alcanzar **16 y 18 pisos** según planos Anexos N°2 y 3 de la Ord. N°2146, CONDICIÓN: los propietarios deben hacer efectiva la servidumbre de paso a perpetuidad para uso público de la franja de **8.00 ml** del futuro Boulevard.
+  - El área adicional por compensación no puede superar la capacidad edificatoria del área cedida.
+  - Los pisos adicionales deberán tener un **retiro adicional de 3.00 ml**.
+
+### Área mínima de departamentos — RDA
+- **3 dormitorios:** área mínima 75 m²
+- **1 y 2 dormitorios:** podrán incluirse con áreas y porcentajes a definir por proyecto
+- Altura máxima piso a piso en edificios multifamiliares: **3.00 m** (Numeral A.12 del Anexo 02 de Ord. N°1098-MML)
+- De tratarse de una Quinta: altura máxima de 3 niveles (CAP. IV, Art. 31° RNE)
+
+### Usos complementarios permitidos — RDA
+- En primer piso de edificios multifamiliares con frente a avenidas: actividades comerciales y oficinas administrativas, siempre que cuenten con ambientes diseñados con acceso independiente desde la calle (Ord. N°1098-2007-MML)
+- Actividades artesanales a pequeña escala que ocupen hasta el 35% del área del lote (Ord. N°1098-2007-MML)
+- Viviendas unifamiliares existentes en RDA con frente a vías metropolitanas o avenidas con separador central: pueden destinar el 100% a actividades administrativas o comerciales compatibles (Ord. N°1098-2007-MML)
+
+### Densidad habitacional — MIVIVIENDA
+Aplicar D.S. N°013-2013-VIVIENDA Art. 12 para proyectos que se acojan al programa MIVIVIENDA.
+
+---
+
+## 4. ZONA CM — COMERCIO METROPOLITANO
+
+### Parámetros generales (Cert. N°020-2018 + Ord. N°1098-MML)
+
+| Parámetro | Valor |
+|---|---|
+| Uso residencial compatible | RDA |
+| Altura máxima (CM puro) | 1.5(a+r) donde a=ancho de vía, r=retiro municipal |
+| Lote mínimo | Existente o según proyecto |
+| Frente mínimo | No corresponde |
+| Coeficiente máx. de edificación | No corresponde |
+| Área libre mínima (uso comercial) | No exigible para uso comercial |
+| Área libre (pisos de vivienda) | La que corresponde a RDA compatible |
+
+### Usos residenciales bajo zona CM — tabla completa
+
+| Tipo | Lote mín. (m²) | Frente mín. (ml) | Área libre | Altura máxima | Estacionamiento |
+|---|---|---|---|---|---|
+| RDA Multifamiliar | 300 | 10 | 35% | 8 pisos | 1 c/1.5 viv |
+| RDA Multifamiliar | 450 | 10 | 40% | 1.5(a+r) | 1 c/1.5 viv |
+| RDA Conj. Residencial | 2,500 | 25 | 50% | 1.5(a+r) | 1 c/1.5 viv |
+
+Nota CM: Frente a avenidas >20m o parques: hasta 15 pisos. Vías locales: hasta 10 pisos.
+
+### Dotación de estacionamientos — Uso Comercial (Zona CM)
+
+| Actividad | Estacionamiento exigido |
+|---|---|
+| Comercio general | 1 cada 50 m² |
+| Supermercados | 1 cada 100 m² de área de venta |
+| Tiendas de Autoservicio | 1 cada 100 m² de área de venta |
+| Mercados | 1 cada 25 puestos |
+| Cines, Teatros, Locales de Espectáculos | 1 cada 20 butacas |
+| Locales Culturales, Clubes, Instituciones similares | 1 cada 75 m² de área techada |
+| Locales de Culto | 1 cada 30 m² de área de culto |
+
+---
+
+## 5. ESTACIONAMIENTOS — RESIDENCIAL
+
+### Ratio por zona
+| Zona | Estacionamiento mínimo |
+|---|---|
+| RDA — todos los tipos | **1 estacionamiento cada 1.5 vivienda** |
+| RDM (referencia) | **1 estacionamiento cada 1.5 vivienda** |
+
+**No hay ratio diferenciado de visitas en los certificados disponibles.** Aplicar criterio RNE A.010 o la Ord. N°1098-MML.
+
+**Av. Universitaria y Calle Mantaro:** El estacionamiento comercial fue dejado por la urbanizadora. Retiro municipal = 0.00 ml en estas vías.
+
+---
+
+## 6. RETIROS MUNICIPALES POR VÍA
+
+| Vía | Retiro municipal | Fuente |
+|---|---|---|
+| Av. Juan Bertolotto Negro | 5.00 ml (respecto al límite de propiedad) | Cert. N°340-2020 |
+| Calle Manco Segundo | 3.00 ml | Cert. N°020-2018 |
+| Av. Universitaria | 0.00 ml | Cert. N°020-2018 (nota) |
+| Calle Mantaro | 0.00 ml | Cert. N°020-2018 (nota) |
+| Av. Costanera | Según Ord. N°1508-MML (sección vial normativa especial) | Cert. N°340-2020 |
+| General (otros frentes) | Verificar en CPUE del predio específico | — |
+
+**Alineamiento de fachadas:** Siempre respetar la Sección Vial de la Habilitación Urbana de la vía correspondiente, MÁS el retiro municipal establecido.
+
+---
+
+## 7. FÓRMULA DE ALTURA — ZONA CM Y RDA CON AVENIDAS
+
+**h_max = 1.5 × (a + r)**
+- a = ancho de la vía (metros, de vereda a vereda)
+- r = retiro municipal establecido en el CPUE
+- h = altura máxima de edificación
+
+**Ejemplo:** Av. Bertolotto (ancho ~20m) con retiro 5.00m → h = 1.5 × (20 + 5) = 37.5m → ~12 pisos (altura piso a piso 3.00m)
+
+**Topes por ubicación:**
+- Frente a avenidas >20m o parques: máximo 15 pisos
+- Vías locales: máximo 10 pisos
+- Zona histórica (Jr. Yungay/Santa Ana/San Martín perimetral): máximo 5 pisos
+- Sector 10 Ex Feria del Pacífico: 12 pisos base / 16-18 pisos con servidumbre boulevard
+
+---
+
+## 8. ZONIFICACIÓN INDUSTRIAL — ZONA NORESTE
+
+La zona noreste de San Miguel (límite con Callao, entorno Av. Universitaria norte) contiene zonas **I1** (Industria Elemental y Complementaria) e **I2** (Industria Liviana).
+
+**Parámetros I2 — Industria Liviana (referencia Ord. N°933-MML):**
+- Lote mínimo: 1,000 m²
+- Frente mínimo: 20 ml
+- Altura: según proyecto (normalmente 1 o 2 pisos)
+- Usos: almacenes, talleres, industria liviana compatible
+- Estacionamiento: verificar A.060 RNE (1/6 personas o según actividad)
+
+---
+
+## 9. ALERTAS ESPECIALES Y NOTAS OPERATIVAS
+
+### Alerta sísmica — OBLIGATORIA
+**CONSIDERAR PARA PROYECTOS DE VIVIENDA LOS ESTUDIOS DE MICROZONIFICACIÓN SÍSMICA Y ANÁLISIS DE RIESGOS, REALIZADOS POR EL CISMID, EN CUMPLIMIENTO DEL CONVENIO 288-2015-VIVIENDA DEL MINISTERIO DE VIVIENDA, CONSTRUCCIÓN Y SANEAMIENTO.**
+→ San Miguel tiene suelo heterogéneo (incluye zonas costeras y antiguas áreas de relleno). Este requisito es de cumplimiento obligatorio para proyectos de vivienda.
+
+### Habilitación Urbana previa
+Para efectos de anteproyecto y/o Proyecto, se deberá contar con Habilitación Urbana Aprobada.
+
+### El CPUE no certifica dominio
+El Certificado de Parámetros Urbanísticos y Edificatorios es otorgado a la totalidad del área del lote, mas no a áreas independizadas. No certifica Título de Dominio y/o Propiedad.
+
+### Ordenanzas distritales para multifamiliares
+Para Edificaciones Multifamiliares acogerse a:
+- Ord. N°107-2006-MDSM
+- Ord. N°218-MDSM
+- Ord. N°248-MDSM
+
+---
+
+## 10. CHECKLIST DE VERIFICACIÓN — PRE-FACTIBILIDAD SAN MIGUEL
+
+```
+□ Verificar zonificación exacta del predio en Plano Ord. N°2146-MML
+□ Si zona RDA: determinar tamaño de lote → tabla altura correspondiente
+□ Si lote frente a avenida >20m: aplicar 1.5(a+r) con tope 15 pisos
+□ Si lote en zona histórica (Jr. Yungay / Santa Ana perímetro): máximo 5 pisos
+□ Si lote en Sector 10 (Ex Feria del Pacífico): verificar si frente a Calle Manco II → 16-18 pisos con servidumbre
+□ Si lote frente a Av. Bertolotto o Av. Costanera: verificar Ord. 240 y 243-MDSM
+□ Si zona CM: determinar si el proyecto es comercial puro o residencial compatible (RDA)
+□ Retiro municipal: verificar en CPUE del predio (varía por vía)
+□ Estacionamiento: 1 cada 1.5 viv para residencial; 1/50m² para comercial CM
+□ Área mínima dptos: 75m² para 3 dorm
+□ Altura piso a piso multifamiliar: máximo 3.00m
+□ Alerta sísmica CISMID: incluir en lista de estudios requeridos para proyecto
+□ Habilitación Urbana: verificar si el predio cuenta con HU aprobada
+□ Para zonas I1/I2 (noreste): verificar parámetros industriales Ord. 933-MML
+```
+
+---
+
+## 11. RESUMEN EJECUTIVO — OPERATIVO PARA SOLUM
+
+**Zona RDA estándar (lote 300-450m², vía local):**
+→ 8-10 pisos · 35-40% área libre · 1 estac/1.5 viv · área mín dpto 75m²
+
+**Zona RDA frente a avenida >20m (lote 450m+):**
+→ Hasta 15 pisos · 1.5(a+r) · 40% área libre · 1 estac/1.5 viv
+
+**Zona CM con uso residencial RDA:**
+→ 1.5(a+r) · área libre según RDA · 1 estac/1.5 viv · piso 1 comercial posible
+
+**Zona histórica (perímetro Jr. Yungay):**
+→ MÁXIMO 5 PISOS — no negociable
+
+**Sector 10 Ex Feria del Pacífico:**
+→ 12 pisos base (área libre 60%) · hasta 18 pisos con servidumbre boulevard 8ml (Ord. 2146)
+
+**Dato de mercado San Miguel (Urbania INDEX nov-2025):** ~S/.6,147/m² → ~USD 1,782/m² (TC 3.45)

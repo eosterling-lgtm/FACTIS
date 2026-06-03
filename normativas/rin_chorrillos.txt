@@ -1,0 +1,193 @@
+# RIN CHORRILLOS — REGLAMENTO DE INTEGRACIÓN NORMATIVA
+## Parámetros Urbanísticos y Edificatorios
+### Fuente: CPU N°0218-2025 (CV/RDM ATN IV — Urb. Los Cedros de Villa) · CPU N°007324-2018 (CZ/RDM ATN II — Urb. La Campiña) · CPU N°0203-2023 (RDM ATN II — Urb. La Campiña)
+
+---
+
+## 1. MARCO LEGAL VIGENTE
+
+| Norma | Contenido | Estado |
+|---|---|---|
+| Ord. N°1076-MML (08/10/2007) | Reajuste Integral Zonificación Chorrillos, Barranco, Surquillo y sectores de Surco — **NORMA BASE ATN II** | **VIGENTE** |
+| Ord. N°1044-MML | Reglamento de Zonificación Especial de Lima Metropolitana | Vigente |
+| Ord. N°1430-MML | Índice de Usos para la Ubicación de Actividades Urbanas | Vigente |
+| Ord. N°2264-MML | Todo proyecto en Chorrillos queda bajo esta norma — Art. 31 exige opinión Prohvilla (ATN IV) | **VIGENTE** |
+| Ord. N°2504-MML | Reajuste de zonificación usos del suelo Chorrillos | Vigente |
+| Ord. N°184-MML | Acondicionamiento Territorial y Desarrollo Urbano | Vigente |
+| Ord. N°1015-MML | Índice de Usos ATN I y II | Vigente |
+| D.A. N°032-88-MDCH | Retiros Municipales Chorrillos | Vigente |
+| R.D. N°1484-INC | Zona Monumental — sectores históricos Chorrillos | Vigente (aplica en zonas específicas) |
+| Ley N°27261 + D.S. N°050-2001-MTC | Aeronáutica Civil — Cono de Vuelo Aeródromo Las Palmas | **APLICACIÓN EN GRAN PARTE DEL DISTRITO** |
+| RNE (D.S. N°011-2006-VIVIENDA y modificatorias) | Norma supletoria | Vigente |
+
+**CHORRILLOS TIENE DOS SECTORES NORMATIVOS RADICALMENTE DISTINTOS:**
+
+| Sector | ATN | Régimen | Altura máx. | Restricción especial |
+|---|---|---|---|---|
+| **Sector costero / PROHVILLA** | IV | CV/RDM restrictivo | **3 pisos** | PROHVILLA obligatorio + Ord. N°2264-MML |
+| **Sector La Campiña / interior** | II | CZ/RDM estándar | **8 pisos** | Cono de vuelo Las Palmas (DGAC) |
+
+**→ PASO 1: verificar en qué sector ATN está el predio.**
+
+---
+
+## 2. RESTRICCIONES TRANSVERSALES — TODO EL DISTRITO
+
+### Restricción 1 — Cono de Vuelo Aeródromo Las Palmas (Ley N°27261)
+"El lote se encuentra ubicado dentro del cono de vuelo según Expediente de determinación de las superficies limitadoras de obstáculos del Aeródromo Las Palmas — Res. Dir. N°227-2011-MTC/12."
+→ **Obligatorio: Autorización Previa de la DGAC (Dirección General de Aeronáutica Civil)** antes de la licencia municipal. Sin esta autorización, no procede la edificación.
+→ Aplica en múltiples zonas del distrito — verificar en CPUE si el predio está afecto.
+
+### Restricción 2 — Ord. N°2264-MML (ATN IV)
+Todo proyecto en zonas ATN IV de Chorrillos queda bajo lo dispuesto en la Ord. N°2264-MML. Art. 31: **opinión de PROHVILLA obligatoria** para todo proyecto y anteproyecto.
+
+### Restricción 3 — Área Natural de Protección Municipal (ATN IV)
+Sector ATN IV con cercanía al Área Natural de Protección Municipal: compatibilidad de usos restringida. Las áreas libres y retiros de lotes se tratarán con predominio de áreas verdes y arborización.
+
+### Restricción 4 — Reajuste Ord. N°2504-MML
+Reajuste de zonificación vigente para usos del suelo de Chorrillos. Verificar si el predio fue afectado por modificación de zona.
+
+### Restricción 5 — Jardín de Aislamiento
+Urbanizaciones que en su configuración urbana han considerado "Jardín de Aislamiento": solo en los frentes que lo tengan. Verificar en Habilitación Urbana aprobada.
+
+---
+
+## 3. SECTOR ATN IV — CV/RDM (ZONA COSTERO / PROHVILLA)
+
+### CPU N°0218-2025 — Jr. Eleutheria, Urb. Los Cedros de Villa (Ago 2025, vence Ago 2028)
+
+| Parámetro | CV (Comercio Vecinal) | RDM (Residencial Densidad Media) |
+|---|---|---|
+| **Zonificación** | CV compatible con RDM | RDM |
+| **Área lote normativo** | El existente | 150 m² |
+| **Área libre mínima** | 30% (solo para vivienda) | **30%** |
+| **Altura máxima** | **3 pisos o según entorno** | **3 pisos** |
+| **Retiro frontal** | **3.00 ml** | **3.00 ml** |
+| **Alineamiento** | El existente | El existente |
+| **Estacionamiento** | 1 cada 100 m² (venta/oficina) | **1 por unidad de vivienda** |
+
+**Restricciones específicas ATN IV:**
+- PROHVILLA: opinión obligatoria (Art. 31, Ord. N°2264-MML)
+- Cono de vuelo Las Palmas: DGAC obligatorio
+- Área natural de protección: arborización en áreas libres y retiros
+- Retiro frontal: (*) D.A. N°032-88-MDCH
+
+---
+
+## 4. SECTOR ATN II — CZ/RDM (LA CAMPIÑA — INTERIOR)
+
+### CPU N°007324-2018 — Av. Guardia Civil N°150, Urb. Parc. La Campiña
+
+| Parámetro | CZ (Comercio Zonal) | RDM (Residencial) |
+|---|---|---|
+| **Zonificación** | CZ compatible con RDM (Ord. N°1076-MML) | RDM |
+| **Área lote normativo** | El existente | **1,000 m², Frente 20 ml** |
+| **Densidad neta** | Según proyecto | 2,250 Hab./Ha. |
+| **Área libre mínima** | Según proyecto | **40%** |
+| **Altura máxima** | **24.00 ml = 8 pisos** | **24.00 ml = 8 pisos** |
+| **Retiro frontal** | **3.00 ml** | **3.00 ml** |
+| **Alineamiento** | El existente | El existente |
+| **Estacionamiento** | **1 cada 50 m² comercial** | **1 cada 1.5 viviendas** |
+
+---
+
+## 5. SECTOR ATN II — RDM PURO (LA CAMPIÑA — LOTES GRANDES)
+
+### CPU N°0203-2023 — Av. Los Gorriones, Urb. Parcelación Semi Rústica La Campiña
+
+| Parámetro | Valor |
+|---|---|
+| **Zonificación** | RDM (Ord. N°1076-MML) |
+| **Área lote normativo** | **1,600 m², Frente 20 ml** |
+| **Área libre mínima** | **40%** |
+| **Altura máxima** | **8 pisos** |
+| **Retiro frontal — Av. Los Gorriones** | **5.00 ml** |
+| **Retiro frontal — Jr. Perseo** | **3.00 ml** |
+| **Retiro lateral — Colindante con Industria** | **5.00 ml mínimo SIN edificaciones (arborizado)** |
+| **Alineamiento** | El existente |
+| **Estacionamiento** | **1 cada 1.5 viviendas** |
+
+### Nota especial — colindancia con industria
+"Las nuevas edificaciones de uso Residencial que se localicen colindantes a un uso Industrial establecido deberán dejar como protección un retiro lateral mínimo de 5.00 ml sin edificaciones el cual debe ser arborizado."
+→ Fundamental en La Campiña donde coexisten usos residenciales e industriales.
+
+### Nota especial — Parcelación Semi Rústica
+Lotes en La Campiña de tipo "parcelación semi rústica" requieren actualización registral de predios conforme al D.S. N°029-2019-VIV Título III antes de tramitar Habilitación Urbana.
+
+---
+
+## 6. SÍNTESIS DE PARÁMETROS POR ZONA
+
+| Zona | ATN | Altura | Área libre | Retiro Av. | Estac. residencial | Restricción especial |
+|---|---|---|---|---|---|---|
+| CV/RDM (Los Cedros de Villa) | IV | **3 pisos** | 30% | 3.00 ml | 1/viv | PROHVILLA + DGAC obligatorio |
+| CZ/RDM (Av. Guardia Civil) | II | **8 pisos** | 40% | 3.00 ml | 1/1.5 viv | DGAC verificar |
+| RDM (Av. Los Gorriones) | II | **8 pisos** | 40% | 5.00 ml | 1/1.5 viv | DGAC + retiro 5ml si colinda industria |
+
+---
+
+## 7. ÁREAS MÍNIMAS — CHORRILLOS
+
+| Tipología | Área mínima | Base |
+|---|---|---|
+| 3 dormitorios | 75 m² | Ord. N°1076-MML (referencia general ATN II) |
+| 2 dormitorios | A definir | Sin mínimo confirmado en CPUs analizados |
+| 1 dormitorio | A definir | Sin mínimo confirmado |
+
+---
+
+## 8. DATOS DE MERCADO — CHORRILLOS (Urbania INDEX nov-2025)
+
+| Indicador | Valor |
+|---|---|
+| Precio venta promedio | S/. 5,718/m² → **USD 1,658/m²** (TC 3.45) |
+| Rentabilidad bruta alquiler | **5.7%** (3° en Lima, después de La Molina y Surquillo) |
+| Posición ranking Lima | Lima media-alta — entre San Miguel y La Molina |
+| Mercado objetivo | NSE B/B+ · reconversión industrial La Campiña · playa Costa Verde |
+
+---
+
+## 9. CHECKLIST PRE-FACTIBILIDAD — CHORRILLOS
+
+```
+PASO 1 — DETERMINAR SECTOR:
+□ ¿El predio es ATN IV (zona costero/PROHVILLA) o ATN II (La Campiña/interior)?
+
+SI SECTOR ATN IV (CV/RDM):
+□ PROHVILLA: opinión favorable OBLIGATORIA (Ord. N°2264-MML Art. 31) — plazo adicional
+□ DGAC: Autorización Previa obligatoria por cono de vuelo Aeródromo Las Palmas
+□ Altura máxima: 3 pisos — inamovible en esta zona
+□ Área libre: 30% · Estac.: 1/vivienda · Retiro: 3ml
+□ Arborización obligatoria en áreas libres y retiros (Área Natural de Protección)
+□ Verificar si el lote tiene Jardín de Aislamiento en fachada (Habilitación Urbana)
+
+SI SECTOR ATN II (La Campiña / interior):
+□ Verificar zona: CZ (Av. Guardia Civil) → lote R 1,000m²/20ml / RDM (Av. Los Gorriones) → lote 1,600m²/20ml
+□ Altura: 8 pisos en ambos casos
+□ Área libre: 40%
+□ Retiro: 3ml (CZ) / 5ml Av. y 3ml Jr. (RDM)
+□ Estacionamiento: 1/1.5 viviendas (muy favorable)
+□ Si colinda con industria: retiro lateral 5ml mínimo sin edificaciones + arborizado
+□ Si lote es parcelación semi rústica: actualizar registro antes de HU (D.S. N°029-2019-VIV)
+□ Verificar Ord. N°2504-MML: reajuste de zonificación — confirmar zona actual del predio
+
+AMBOS SECTORES:
+□ DGAC: verificar si el predio está dentro del cono de vuelo Las Palmas — certificado obligatorio
+□ Habilitación Urbana: obligatoria para anteproyecto y licencia
+□ Ord. N°2264-MML: todo proyecto queda bajo esta norma
+```
+
+---
+
+## 10. RESUMEN EJECUTIVO — OPERATIVO PARA SOLUM
+
+**Sector ATN IV — CV/RDM (Urb. Los Cedros de Villa y zonas costeras/PROHVILLA):**
+→ 3 pisos · AL 30% · Estac. 1/viv · Retiro 3ml
+→ PROHVILLA obligatorio + DGAC obligatorio — impacto significativo en plazo del proyecto
+
+**Sector ATN II — CZ y RDM (Urb. La Campiña y zona interior):**
+→ **8 pisos** · AL 40% · Estac. 1/1.5 viv · Retiro 3-5ml según vía
+→ Lote mínimo: 1,000m² (CZ) o 1,600m² (RDM) — requiere lotes grandes o acumulación
+→ Colindancia industria: retiro lateral 5ml arborizado obligatorio
+
+**Mercado:** USD 1,658/m² · Rentabilidad 5.7% (3° Lima) · NSE B/B+ · La Campiña = oportunidad de reconversión industrial a residencial en lotes grandes

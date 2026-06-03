@@ -1,0 +1,149 @@
+# RIN INDEPENDENCIA — REGLAMENTO DE INTEGRACIÓN NORMATIVA
+## Parámetros Urbanísticos y Edificatorios
+### Fuente: CPU N°000046-2023 · CPU N°000019-2023 · CPU N°000162-2022 · CPU N°143-2016 (Municipalidad Distrital de Independencia)
+
+---
+
+## 1. MARCO LEGAL VIGENTE
+
+| Norma | Contenido | Estado |
+|---|---|---|
+| Ord. N°1015-2007-MML (14/05/2007) | Reajuste Integral Zonificación ATN I y II — NORMA BASE Independencia | **VIGENTE** |
+| Ord. N°933-2006-MML (05/08/2006) | Índice de Usos para la Ubicación de Actividades Urbanas ATN I | Vigente |
+| Ord. N°2331-2021-MML | Modificatoria Plano Zonificación Distrital | Vigente |
+| Ord. N°620-MML | Normas Generales de Zonificación ATN I | Vigente |
+| D.S. N°029-2019-VIVIENDA (06/11/2019) | Parámetros habilitaciones residenciales | Vigente (referencia) |
+| RNE (D.S. N°011-2006-VIVIENDA y modificatorias) | Norma supletoria | Vigente |
+
+**Área de Estructuración Urbana: I**
+Independencia es administrado directamente por la Municipalidad Distrital de Independencia (MDI). Aplica normativa MML base (Ord. N°1015-2007-MML) sin reglamento distrital premium propio.
+
+---
+
+## 2. ZONAS DEL DISTRITO
+
+| Zona | Descripción | Ubicación principal |
+|---|---|---|
+| **CM** | Comercio Metropolitano | Urb. Industrial Panamericana Norte — predominante en zonas de reconversión |
+| **I2** | Industria Liviana | Urb. Hab. Industrial Panamericana Norte (Mz. F, Av. Pacífico) |
+| **I1** | Industria Elemental y Complementaria | Zonas industriales menores |
+| **RDA** | Residencial de Densidad Alta | Sectores residenciales |
+| **RDM** | Residencial de Densidad Media | — |
+
+---
+
+## 3. ZONA CM — COMERCIO METROPOLITANO (predominante en reconversión)
+
+### Parámetros (CPUs N°000046-2023, N°000019-2023, N°000162-2022)
+
+| Parámetro | Valor | Nota |
+|---|---|---|
+| **Zonificación** | CM — Comercio Metropolitano | Norma: Ord. N°1015-2007-MML |
+| **ATN** | I | — |
+| **Usos compatibles** | Según Índice de Usos Ord. N°933-2006-MML | — |
+| **Usos permisibles** | Multifamiliar / Conjunto Residencial / Comercial | Ord. 1015-07/MML |
+| **Área Lote Normativo** | Existente o según proyecto | No hay mínimo rígido |
+| **Frente mínimo** | Existente o según proyecto | No hay mínimo rígido |
+| **Coef. máximo edificación** | (*) Resultante del proyecto | Condicionado por % AL y pisos |
+| **Área libre — uso comercial** | **NO EXIGIBLE** | Uso comercial puro |
+| **Área libre — pisos vivienda** | Según uso residencial compatible | RDA o RDM del entorno |
+| **Altura máxima** | **1.5(a+r)** | Fórmula variable según vía |
+| **Retiro municipal — Calle/Jr./PSJ** | **1.50 ml** | CPU N°000046-2023 |
+| **Retiro municipal — Avenida** | **3.00 ml** | CPU N°000046-2023 |
+| **Retiro por consolidación** | Se respeta retiro existente | CPU N°000162-2022 y N°000019-2023 |
+| **Estacionamiento** | **1 cada 50 m²** (comercial) | Nota (3): especiales según EENN |
+| **Densidad normativa** | (*) No fijada en CPUs | — |
+
+### Observaciones críticas del certificado
+
+**Nota (1) — ALTURA MÁXIMA 7 PISOS (EXCEPCIÓN IMPORTANTE):**
+"Se permitirá hasta 7 pisos de altura en lotes ubicados frente a Parques y Avenidas con anchos mayores de 20 ml."
+→ En vías <20ml: aplica 1.5(a+r) sin excepción. En avenidas ≥20ml o frente a parque: máximo 7 pisos.
+
+**Nota (2) — USO 100% RESIDENCIAL PERMITIDO:**
+"Se permitirá utilizar hasta el 100% del área de los lotes comerciales para uso residencial."
+→ Un lote CM en Independencia puede desarrollarse íntegramente como residencial (Multifamiliar/Conjunto Residencial), aplicando parámetros del uso residencial compatible (RDA o RDM según entorno).
+
+**Nota (3) — ESTACIONAMIENTO ESPECIALES:**
+El requerimiento de estacionamientos para establecimientos especiales se rige por las Especificaciones Normativas (IV.1.8.2 del Reglamento de Zonificación vigente). Para proyectos residenciales: verificar en CPUE qué ratio aplica según uso permisible.
+
+---
+
+## 4. ZONA I2 — INDUSTRIA LIVIANA (CPU N°143-2016)
+
+| Parámetro | Valor | Nota |
+|---|---|---|
+| **Zonificación** | I2 — Industria Liviana | Ord. N°1015-2007-MML |
+| **Lote mínimo** | 1,000 m² | — |
+| **Frente mínimo** | 20 ml | — |
+| **Altura** | Según proyecto y entorno | Sin límite fijo de pisos |
+| **Área libre** | Según actividades específicas y consideraciones ambientales | Hasta 20% de I1 |
+| **% usos industriales** | Hasta 20% de I1 (compatible) | — |
+| **Retiro** | 0.00 ml (consolidación urbana) | O según HU aprobada |
+| **Alineamiento** | (a+r)/2 respecto al eje de vía | Fórmula desde eje |
+| **Coef. edificación** | Resultante del proyecto | Condicionado por % AL y pisos |
+| **Estacionamiento** | **1 espacio / 6 personas empleadas** | Por turno |
+| **Usos** | Los señalados en Índice de Usos Ord. N°933-MML | Verificar compatibilidad |
+
+### Restricción alta tensión (CPU N°143-2016)
+"Se deberá respetar el paso de servidumbre de las conexiones eléctricas de alta tensión que recorren la avenida (Ley de Concesiones Eléctricas Art. 115° y Código Nacional de Electricidad – Suministro 2001 Sección 23)."
+→ Verificar si el predio está afecto a servidumbre eléctrica antes del diseño.
+
+### Compatibilidad educación en I2
+"La compatibilidad de usos para educación se permitirá en zonificación I1 – Industria Elemental." No en I2 directamente.
+
+---
+
+## 5. RETIROS MUNICIPALES — INDEPENDENCIA (síntesis)
+
+| Tipo de vía | Retiro | Observación |
+|---|---|---|
+| Calle / Jr. / Pasaje | 1.50 ml | CPU N°000046-2023 (CM) |
+| Avenida | 3.00 ml | CPU N°000046-2023 (CM) |
+| Lotes en consolidación | Respetar retiro existente | CPUs N°000162-2022 y N°000019-2023 |
+| I2 (lotes industriales) | 0.00 ml | Por consolidación urbana |
+
+**Importante:** El retiro por "consolidación urbana" es frecuente en Independencia por la densificación histórica de la Urb. Industrial Panamericana Norte. Verificar en cada CPUE.
+
+---
+
+## 6. DATOS DE MERCADO — INDEPENDENCIA (referencial)
+
+| Indicador | Valor | Fuente |
+|---|---|---|
+| Precio venta vivienda | ~S/. 4,200–5,000/m² | Lima Norte, segmento B/C |
+| Tipología más demandada | 2D y 3D económico | Mercado objetivo NSE B/C |
+| Estrato | Lima Norte / Cono Norte | — |
+| Usos activos reconversión | CM → Residencial multifamiliar | Tendencia 2022-2026 |
+
+---
+
+## 7. CHECKLIST PRE-FACTIBILIDAD — INDEPENDENCIA
+
+```
+□ Verificar zona exacta en Plano Ord. N°1015-2007-MML + Ord. N°2331-2021-MML
+□ Si zona CM: altura 1.5(a+r) o máx 7p frente a Av. ≥20ml · puede ser 100% residencial
+□ Si uso residencial en CM: aplicar parámetros RDA o RDM compatible del entorno
+□ Si zona I2: lote ≥1,000m² · frente 20ml · estudios EIV+EIA si aplica · 1 est./6 personas
+□ Retiro: verificar si lote está en consolidación (0ml/1.50ml) o requiere retiro de Av. (3ml)
+□ Estacionamiento CM residencial: verificar en CPUE el ratio aplicable (¿1/viv, 1/1.5viv?)
+□ Alta tensión: verificar servidumbre si aplica (especialmente Av. Pacífico y corredores)
+□ Usos: verificar compatibilidad en Índice de Usos Ord. N°933-MML antes de definir programa
+□ Programa MI VIVIENDA: verificar si el proyecto califica para bono habitacional
+□ Vigencia del CPU: máximo 36 meses — verificar vigencia del certificado presentado
+```
+
+---
+
+## 8. RESUMEN EJECUTIVO — OPERATIVO PARA SOLUM
+
+**Zona CM (Comercio Metropolitano) — Urb. Industrial Panamericana Norte:**
+→ Altura 1.5(a+r) · Máx 7p frente a Av. ≥20ml · 100% residencial permitido · Retiro 1.50ml calle / 3.00ml avenida
+→ Estac. comercial 1/50m² · Para residencial: verificar ratio en CPUE (aplicar RDA/RDM compatible)
+
+**Zona I2 (Industria Liviana):**
+→ Lote ≥1,000m²/20ml · Altura según proyecto · Retiro 0ml (consolidación) · Estac. 1/6 personas
+
+**Reconversión CM → Residencial:** Es la oportunidad dominante en Independencia. Lotes industriales reconvertidos a uso 100% residencial bajo parámetros RDA/RDM. Verificar ratio de estacionamiento residencial en CPUE.
+
+**Mercado:** Lima Norte NSE B/C · S/. 4,200–5,000/m² · Alta demanda acumulada · Absorción favorable en tipologías 2D/3D económicas

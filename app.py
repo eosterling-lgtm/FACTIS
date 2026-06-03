@@ -1,8 +1,10 @@
 import streamlit as st
 import streamlit.components.v1 as _stc
 import anthropic
+import httpx
 import base64
 import hashlib
+import html as _html_esc
 import json
 import math
 import os
@@ -27,24 +29,61 @@ try:
 except ImportError:
     _EZDXF_OK = False
 
+try:
+    from pillow_heif import register_heif_opener as _register_heif
+    _register_heif()
+    _HEIF_OK = True
+except Exception:
+    _HEIF_OK = False
+
+import io as _io
+from PIL import Image as _PILImage
+
+def _to_display_bytes(raw: bytes) -> bytes:
+    """Convert any image bytes (incl. HEIC) to JPEG bytes safe for st.image()."""
+    try:
+        img = _PILImage.open(_io.BytesIO(raw))
+        out = _io.BytesIO()
+        img.convert("RGB").save(out, format="JPEG", quality=85)
+        return out.getvalue()
+    except Exception:
+        return raw
+
 # Logo embebido como base64
 _LOGO_PATH = pathlib.Path(__file__).parent / "logo.png"
 _LOGO_B64 = base64.b64encode(_LOGO_PATH.read_bytes()).decode() if _LOGO_PATH.exists() else ""
 
+# SOLUM SVG logo
+_SOLUM_SVG_PATH = pathlib.Path(__file__).parent / "solum_logo.svg"
+_SOLUM_SVG_B64 = base64.b64encode(_SOLUM_SVG_PATH.read_bytes()).decode() if _SOLUM_SVG_PATH.exists() else ""
+_SOLUM_SVG_RAW  = _SOLUM_SVG_PATH.read_text(encoding="utf-8") if _SOLUM_SVG_PATH.exists() else ""
+
+# SOLUM SVG — fondo transparente (para uso sobre header oscuro)
+_SOLUM_SVG_T_PATH = pathlib.Path(__file__).parent / "solum_logo_transparent.svg"
+_SOLUM_SVG_T_B64  = base64.b64encode(_SOLUM_SVG_T_PATH.read_bytes()).decode() if _SOLUM_SVG_T_PATH.exists() else _SOLUM_SVG_B64
+
 # Wireframe imagen estado vacío
 _WIRE_PATH = pathlib.Path(__file__).parent / "wireframe.png"
 _WIRE_B64 = base64.b64encode(_WIRE_PATH.read_bytes()).decode() if _WIRE_PATH.exists() else ""
+
+# Login background
+_LOGIN_BG_PATH = pathlib.Path(__file__).parent / "login_bg.png"
+_LOGIN_BG_B64 = base64.b64encode(_LOGIN_BG_PATH.read_bytes()).decode() if _LOGIN_BG_PATH.exists() else ""
 
 PROJECTS_DIR = pathlib.Path(__file__).parent / "projects"
 
 
 class _Proyecto:
     """Lightweight reference to a saved project — works with Supabase or local files."""
-    __slots__ = ("name", "_id", "_path")
     def __init__(self, name: str, id: str = None, path: pathlib.Path = None):
-        self.name  = name
-        self._id   = id
-        self._path = path
+        self.name   = name
+        self._id    = id
+        self._path  = path
+        self._resumen = {}
+        self._tipo    = ""
+        self._zona    = ""
+        self._fecha   = ""
+        self._nombre  = name
 
 
 def _get_supabase():
@@ -200,6 +239,326 @@ def _irr_bisect(flujos, lo=-0.9999, hi=10.0, tol=1e-7, max_iter=300):
 
 
 # ═══════════════════════════════════════════════════════
+# ANÁLISIS DE OFICINAS
+# ═══════════════════════════════════════════════════════
+
+def calcular_oficinas(r: dict) -> dict:
+    """Motor financiero Oficinas — 3 modos: Alquiler / Compra / Desarrollo."""
+    modo     = r.get("modo", "Alquiler")
+    area     = max(float(r.get("area") or 0), 0)
+    distrito = r.get("distrito", "Otro")
+    clase    = r.get("clase", "B")
+
+    _BNK_ALQ = {
+        "San Isidro":  {"A+": 28, "A": 22, "B": 16, "C": 12},
+        "Miraflores":  {"A+": 26, "A": 20, "B": 15, "C": 11},
+        "San Borja":   {"A+": 22, "A": 18, "B": 13, "C": 10},
+        "Surco":       {"A+": 22, "A": 18, "B": 13, "C": 10},
+        "La Molina":   {"A+": 20, "A": 16, "B": 12, "C":  9},
+        "Jesús María": {"A+": 18, "A": 15, "B": 11, "C":  9},
+        "Lince":       {"A+": 16, "A": 13, "B": 10, "C":  8},
+    }
+    _BNK_PRECIO = {
+        "San Isidro":  {"A+": 3500, "A": 2800, "B": 2000, "C": 1400},
+        "Miraflores":  {"A+": 3000, "A": 2400, "B": 1800, "C": 1300},
+        "San Borja":   {"A+": 2500, "A": 2000, "B": 1600, "C": 1200},
+        "Surco":       {"A+": 2500, "A": 2000, "B": 1600, "C": 1200},
+        "La Molina":   {"A+": 2200, "A": 1800, "B": 1400, "C": 1100},
+        "Jesús María": {"A+": 2000, "A": 1700, "B": 1300, "C": 1050},
+        "Lince":       {"A+": 1900, "A": 1600, "B": 1200, "C":  980},
+    }
+    _cls = clase if clase in ("A+", "A", "B", "C") else "B"
+    _bk_alq    = _BNK_ALQ.get(distrito,    {}).get(_cls, 15)
+    _bk_precio = _BNK_PRECIO.get(distrito, {}).get(_cls, 1800)
+
+    # ── MODO ALQUILER ─────────────────────────────────────────────────────
+    if modo == "Alquiler":
+        alq_base        = max(float(r.get("alq_base") or 0), 0)
+        gc_m2           = max(float(r.get("gastos_comunes") or 0), 0)
+        cocheras_n      = max(int(r.get("cocheras_n") or 0), 0)
+        cocheras_precio = max(float(r.get("cocheras_precio") or 0), 0)
+        igv             = bool(r.get("igv", False))
+        duracion        = max(float(r.get("duracion") or 1), 0.1)
+        garantia        = max(int(r.get("garantia") or 0), 0)
+        reajuste_pct    = max(float(r.get("reajuste") or 0), 0) / 100
+        gracia          = max(int(r.get("gracia") or 0), 0)
+
+        renta_m2         = alq_base / area if area > 0 else 0
+        gc_total_mes     = gc_m2 * area
+        cocheras_mes     = cocheras_n * cocheras_precio
+        igv_monto        = alq_base * 0.18 if igv else 0
+        pago_mensual_renta = alq_base + igv_monto
+        pago_mensual_total = pago_mensual_renta + gc_total_mes + cocheras_mes
+        garantia_monto   = alq_base * garantia
+
+        duracion_anos    = max(int(duracion), 1)
+        costo_total_contrato = 0.0
+        gracia_ahorro    = 0.0
+        reajuste_proyeccion = []
+        for y in range(duracion_anos):
+            renta_y = alq_base * (1 + reajuste_pct) ** y
+            igv_y   = renta_y * 0.18 if igv else 0
+            if y == 0 and gracia > 0:
+                grace_m = min(gracia, 12)
+                gracia_ahorro = renta_y * grace_m
+                costo_r_y = (renta_y + igv_y) * (12 - grace_m)
+            else:
+                costo_r_y = (renta_y + igv_y) * 12
+            costo_yr = costo_r_y + gc_total_mes * 12 + cocheras_mes * 12
+            costo_total_contrato += costo_yr
+            reajuste_proyeccion.append({
+                "año": y + 1,
+                "renta_mensual": round(renta_y),
+                "pago_mensual":  round((renta_y + igv_y) + gc_total_mes + cocheras_mes),
+                "costo_anual":   round(costo_yr),
+            })
+
+        diff_bmark = ((renta_m2 - _bk_alq) / _bk_alq * 100) if _bk_alq > 0 else 0
+        val_equiv_compra = alq_base * 12 / 0.065 if alq_base > 0 else 0
+
+        return {
+            "modo": "Alquiler",
+            "renta_m2": round(renta_m2, 1),
+            "gc_total_mes": round(gc_total_mes),
+            "cocheras_total_mes": round(cocheras_mes),
+            "igv_monto": round(igv_monto),
+            "pago_mensual_renta": round(pago_mensual_renta),
+            "pago_mensual_total": round(pago_mensual_total),
+            "garantia_monto": round(garantia_monto),
+            "gracia_ahorro": round(gracia_ahorro),
+            "costo_total_contrato": round(costo_total_contrato),
+            "benchmark_m2": _bk_alq,
+            "diff_vs_benchmark_pct": round(diff_bmark, 1),
+            "valor_equivalente_compra": round(val_equiv_compra),
+            "reajuste_proyeccion": reajuste_proyeccion,
+            "duracion_anos": duracion_anos,
+        }
+
+    # ── MODO COMPRA ──────────────────────────────────────────────────────
+    elif modo == "Compra":
+        precio_compra  = max(float(r.get("precio_compra") or 0), 0)
+        proposito      = r.get("proposito", "Uso propio")
+        alq_esperado   = max(float(r.get("alq_esperado") or 0), 0)
+        pago_ini_pct   = max(float(r.get("pago_inicial_pct") or 30), 10) / 100
+        tasa_anual     = max(float(r.get("tasa_anual") or 9), 0) / 100
+        plazo_anos     = max(int(r.get("plazo_anos") or 10), 1)
+        precio_oferta  = max(float(r.get("precio_oferta") or 0), 0) or precio_compra
+        gc_m2          = max(float(r.get("gastos_comunes") or 2.5), 0)
+
+        precio_m2     = precio_compra / area if area > 0 else 0
+        pago_inicial  = precio_compra * pago_ini_pct
+        monto_credito = precio_compra * (1 - pago_ini_pct)
+
+        cuota_mensual = 0.0
+        if monto_credito > 0 and tasa_anual > 0:
+            _r = tasa_anual / 12
+            _n = plazo_anos * 12
+            cuota_mensual = monto_credito * _r * (1 + _r)**_n / ((1 + _r)**_n - 1)
+
+        total_pagado      = pago_inicial + cuota_mensual * plazo_anos * 12
+        intereses_totales = total_pagado - precio_compra
+
+        gc_anual    = gc_m2 * area * 12
+        noi         = max(alq_esperado * 12 - gc_anual, 0) if proposito == "Para rentar" else 0
+        cap_rate    = (noi / precio_compra * 100)          if precio_compra > 0 and noi > 0 else 0
+        yield_bruto = (alq_esperado * 12 / precio_compra * 100) if precio_compra > 0 and alq_esperado > 0 else 0
+        yield_neto  = (noi / precio_compra * 100)          if precio_compra > 0 else 0
+        flujo_mensual = (alq_esperado - cuota_mensual - gc_m2 * area) if proposito == "Para rentar" else 0
+        descuento_pct = ((precio_compra - precio_oferta) / precio_compra * 100) if precio_compra > 0 else 0
+
+        diff_precio = ((precio_m2 - _bk_precio) / _bk_precio * 100) if _bk_precio > 0 else 0
+
+        APRECIACION_OFI = 0.04
+        flujo_10 = []
+        cumul = -pago_inicial
+        break_even_ano = None
+        for yr in range(1, 11):
+            ingresos_yr = alq_esperado * 12 if proposito == "Para rentar" else 0
+            cuota_yr    = cuota_mensual * 12 if yr <= plazo_anos else 0
+            flujo_yr    = ingresos_yr - cuota_yr - (gc_anual if proposito == "Para rentar" else 0)
+            cumul      += flujo_yr
+            if yr == 10:
+                val_10 = precio_compra * (1 + APRECIACION_OFI) ** 10
+                saldo_deuda = 0.0
+                if monto_credito > 0 and tasa_anual > 0 and yr <= plazo_anos:
+                    _rm = tasa_anual / 12
+                    _np = yr * 12
+                    saldo_deuda = max(monto_credito*(1+_rm)**_np - cuota_mensual*((1+_rm)**_np-1)/_rm, 0)
+                flujo_yr += val_10 - saldo_deuda
+            flujo_10.append({"año": yr, "flujo_anual": round(flujo_yr), "flujo_acumulado": round(cumul)})
+            if break_even_ano is None and cumul >= 0 and proposito == "Para rentar":
+                break_even_ano = yr
+
+        irr_anual = None
+        if proposito == "Para rentar" and alq_esperado > 0:
+            _flujos_irr = [-pago_inicial] + [f["flujo_anual"] for f in flujo_10]
+            _irr_r = _irr_bisect(_flujos_irr)
+            irr_anual = round(_irr_r * 100, 1) if _irr_r is not None else None
+
+        base_dep = precio_compra * 0.60
+        depreciacion_anual  = base_dep / 20
+        ahorro_fiscal_anual = depreciacion_anual * 0.295
+        cuota_efectiva      = max(cuota_mensual - ahorro_fiscal_anual / 12, 0)
+
+        return {
+            "modo": "Compra",
+            "precio_m2": round(precio_m2),
+            "pago_inicial": round(pago_inicial),
+            "monto_credito": round(monto_credito),
+            "cuota_mensual": round(cuota_mensual),
+            "cuota_efectiva": round(cuota_efectiva),
+            "total_pagado": round(total_pagado),
+            "intereses_totales": round(intereses_totales),
+            "noi": round(noi),
+            "cap_rate_pct": round(cap_rate, 1),
+            "yield_bruto_pct": round(yield_bruto, 1),
+            "yield_neto_pct": round(yield_neto, 1),
+            "flujo_mensual": round(flujo_mensual),
+            "descuento_pct": round(descuento_pct, 1),
+            "benchmark_precio_m2": _bk_precio,
+            "diff_precio_pct": round(diff_precio, 1),
+            "flujo_10": flujo_10,
+            "break_even_ano": break_even_ano,
+            "irr_anual": irr_anual,
+            "proposito": proposito,
+            "depreciacion_anual": round(depreciacion_anual),
+            "ahorro_fiscal_anual": round(ahorro_fiscal_anual),
+        }
+
+    # ── MODO DESARROLLO ──────────────────────────────────────────────────
+    else:
+        area_terreno    = max(float(r.get("area_terreno") or 0), 0)
+        precio_terreno  = max(float(r.get("precio_terreno") or 0), 0)
+        cus             = max(float(r.get("cus") or 8), 0)
+        cos_pct         = max(float(r.get("cos") or 60), 0) / 100
+        pisos_oficinas  = max(int(r.get("pisos_oficinas") or 8), 1)
+        eficiencia      = max(float(r.get("eficiencia") or 80), 0) / 100
+        area_und        = max(float(r.get("area_und") or 200), 50)
+        estrategia      = r.get("estrategia", "Venta")
+        precio_venta    = max(float(r.get("precio_venta") or 2500), 0)
+        precio_alquiler = max(float(r.get("precio_alquiler") or 18), 0)
+        pct_venta_sl    = max(float(r.get("pct_venta") or 60), 0) / 100
+        costo_constr    = max(float(r.get("costo_construccion") or 650), 0)
+        costos_ind_pct  = max(float(r.get("costos_ind_pct") or 20), 0) / 100
+        costo_sotano_m2 = max(float(r.get("costo_sotano") or 500), 0)
+        marketing_pct   = max(float(r.get("marketing_pct") or 3), 0) / 100
+        ratio_estac     = max(float(r.get("ratio_estac") or 50), 10)
+        dp_terreno_pct  = max(float(r.get("cr_terreno_dp") or 40), 10) / 100
+        tasa_terreno    = max(float(r.get("cr_terreno_tasa") or 8), 0) / 100
+        plazo_terreno   = max(int(r.get("cr_terreno_plazo") or 10), 1)
+        dp_obra_pct     = max(float(r.get("cr_obra_dp") or 30), 10) / 100
+        tasa_obra       = max(float(r.get("cr_obra_tasa") or 9), 0) / 100
+        plazo_obra      = max(int(r.get("cr_obra_plazo") or 8), 1)
+
+        # Cabida
+        area_planta    = area_terreno * cos_pct
+        area_bruta     = area_planta * pisos_oficinas
+        area_rentable  = area_bruta * eficiencia
+        cocheras_total = max(1, int(area_rentable / ratio_estac))
+        sotanos        = max(1, int((cocheras_total * 25) / max(area_terreno * 0.90, 1)))
+        area_sotanos   = sotanos * area_terreno * 0.90
+        unidades       = max(1, int(area_rentable / area_und))
+
+        # Costos
+        costo_terreno_total = area_terreno * precio_terreno
+        costo_construccion  = area_bruta * costo_constr
+        costo_sotanos_t     = area_sotanos * costo_sotano_m2
+        costos_directos     = costo_construccion + costo_sotanos_t
+        costos_indirectos   = costos_directos * costos_ind_pct
+        alcabala            = costo_terreno_total * 0.03
+
+        # Ingresos por estrategia
+        if estrategia == "Venta":
+            area_venta = area_rentable; area_renta = 0.0
+        elif estrategia == "Renta":
+            area_venta = 0.0; area_renta = area_rentable
+        else:
+            area_venta = area_rentable * pct_venta_sl
+            area_renta = area_rentable * (1 - pct_venta_sl)
+
+        ingresos_venta          = area_venta * precio_venta
+        renta_anual             = area_renta * precio_alquiler * 12
+        CAP_RATE_OFI            = 0.075
+        valor_renta_capitalizado = renta_anual / CAP_RATE_OFI if renta_anual > 0 else 0
+        ingresos_totales        = ingresos_venta + valor_renta_capitalizado
+        costo_marketing         = ingresos_totales * marketing_pct
+        costo_total             = costo_terreno_total + alcabala + costos_directos + costos_indirectos + costo_marketing
+
+        utilidad_bruta  = ingresos_totales - costo_total
+        margen_bruto    = (utilidad_bruta / ingresos_totales * 100) if ingresos_totales > 0 else 0
+        igv_ventas      = ingresos_venta * 0.18
+        utilidad_neta   = utilidad_bruta - igv_ventas
+        margen_neto     = (utilidad_neta / ingresos_totales * 100) if ingresos_totales > 0 else 0
+
+        # Créditos
+        cap_terreno    = costo_terreno_total * dp_terreno_pct
+        credito_terreno = costo_terreno_total * (1 - dp_terreno_pct)
+        cuota_terreno  = 0.0
+        if credito_terreno > 0 and tasa_terreno > 0:
+            _rt = tasa_terreno / 12; _nt = plazo_terreno * 12
+            cuota_terreno = credito_terreno * _rt * (1+_rt)**_nt / ((1+_rt)**_nt - 1)
+        cap_obra     = costos_directos * dp_obra_pct
+        credito_obra = costos_directos * (1 - dp_obra_pct)
+        cuota_obra   = 0.0
+        if credito_obra > 0 and tasa_obra > 0:
+            _ro = tasa_obra / 12; _no = plazo_obra * 12
+            cuota_obra = credito_obra * _ro * (1+_ro)**_no / ((1+_ro)**_no - 1)
+
+        capital_propio     = cap_terreno + cap_obra + costos_indirectos + costo_marketing
+        deuda_total        = credito_terreno + credito_obra
+        cuota_mensual      = cuota_terreno + cuota_obra
+        pct_apalancamiento = (deuda_total / costo_total * 100) if costo_total > 0 else 0
+        roi                = (utilidad_neta / capital_propio * 100) if capital_propio > 0 else 0
+
+        # TIR — inversión distribuida 24 meses + retorno al final
+        MESES_CONSTR = 24
+        _equity_m = capital_propio / MESES_CONSTR
+        _flujos_tir = [-_equity_m] * MESES_CONSTR + [utilidad_neta + capital_propio]
+        _irr_m = _irr_bisect(_flujos_tir)
+        tir_anual = round(((1 + _irr_m)**12 - 1) * 100, 1) if _irr_m is not None else None
+
+        # Escenarios
+        def _esc(dv, dc):
+            _pv = precio_venta * (1 + dv)
+            _iv = area_venta * _pv
+            _rv = renta_anual / CAP_RATE_OFI if renta_anual > 0 else 0
+            _it = _iv + _rv
+            _cd = area_bruta * costo_constr * (1 + dc) + costo_sotanos_t
+            _ct = costo_terreno_total + alcabala + _cd + _cd * costos_ind_pct + _it * marketing_pct
+            _un = (_it - _ct) - _iv * 0.18
+            _mg = ((_it - _ct) / _it * 100) if _it > 0 else 0
+            _roi = (_un / capital_propio * 100) if capital_propio > 0 else 0
+            return {"margen": round(_mg, 1), "utilidad": round(_un), "roi": round(_roi, 1)}
+
+        return {
+            "modo": "Desarrollo",
+            "area_planta": round(area_planta), "area_bruta": round(area_bruta),
+            "area_rentable": round(area_rentable), "unidades": unidades,
+            "cocheras_total": cocheras_total, "sotanos": sotanos,
+            "costo_terreno_total": round(costo_terreno_total), "alcabala": round(alcabala),
+            "costos_directos": round(costos_directos), "costos_indirectos": round(costos_indirectos),
+            "costo_marketing": round(costo_marketing), "costo_total": round(costo_total),
+            "ingresos_venta": round(ingresos_venta), "renta_anual": round(renta_anual),
+            "valor_renta_capitalizado": round(valor_renta_capitalizado),
+            "ingresos_totales": round(ingresos_totales),
+            "utilidad_bruta": round(utilidad_bruta), "margen_bruto_pct": round(margen_bruto, 1),
+            "igv_ventas": round(igv_ventas),
+            "utilidad_neta": round(utilidad_neta), "margen_neto_pct": round(margen_neto, 1),
+            "roi_pct": round(roi, 1), "tir_anual_pct": tir_anual,
+            "capital_propio": round(capital_propio), "deuda_total": round(deuda_total),
+            "cuota_mensual": round(cuota_mensual), "pct_apalancamiento": round(pct_apalancamiento, 1),
+            "cap_terreno": round(cap_terreno), "credito_terreno": round(credito_terreno),
+            "cuota_terreno": round(cuota_terreno),
+            "cap_obra": round(cap_obra), "credito_obra": round(credito_obra),
+            "cuota_obra": round(cuota_obra),
+            "estrategia": estrategia,
+            "esc_pesimista": _esc(-0.10, +0.08),
+            "esc_base":      _esc(0,      0),
+            "esc_optimista": _esc(+0.08, -0.05),
+        }
+
+
+# ═══════════════════════════════════════════════════════
 # ANÁLISIS LOGÍSTICO / INDUSTRIAL
 # ═══════════════════════════════════════════════════════
 
@@ -215,14 +574,14 @@ def calcular_industrial(inp: dict) -> dict:
     area_nave = area * pct_techada          # nave techada
     area_libre = area * (1 - pct_techada)   # patios, maniobras, circulación
 
-    # Costos de construcción — usuario puede sobreescribir
-    # Referencia: Parque Logístico 47 (Lima, ~14,300 m², Clase A, 13.6m clara) = $291/m² all-in
-    # Industrial es 3-4x más barato que residencial: estructura metálica, sin acabados
+    # Costos de construcción — usuario puede sobreescribir con su propio dato.
+    # Estándar único: $350/m² nave (Lima 2025, cliente con negociación normal).
+    # Altura afecta costo: nave 8-10m cuesta menos que 12-14m, pero el usuario ajusta.
     _DEFAULTS_NAVE = {
-        "Almacén Logístico":        280,   # 12-14m clara, estructura metálica, losa industrial
-        "Nave Industrial":          300,   # 10-14m, estructura metálica + concreto, uso mixto
-        "Cross-docking":            420,   # docks múltiples, mayor complejidad MEP
-        "Producción / Manufactura": 380,   # refuerzo de losa, instalaciones especiales
+        "Almacén Logístico":        350,
+        "Nave Industrial":          350,
+        "Cross-docking":            350,
+        "Producción / Manufactura": 350,
     }
     _default_nave = _DEFAULTS_NAVE.get(tipo_nave, 300)
     _cn = inp.get("costo_nave_m2")
@@ -335,20 +694,43 @@ def calcular_industrial(inp: dict) -> dict:
     if uso == "Inversión" and renta_neta_anual > 0 and capital_propio > 0:
         flujo_anual = [-capital_propio]
         for yr in range(1, 11):
-            cuota_yr = cuota_mensual * 12 if yr <= plazo_anos else 0
+            # Cuota anual correcta: cada crédito se detiene en su propio plazo
+            cuota_yr = 0
+            if yr <= plazo_terreno:
+                cuota_yr += cuota_terreno * 12
+            if yr <= plazo_const:
+                cuota_yr += cuota_const * 12
             flujo_yr = _renta_neta_ind(yr) - cuota_yr
             if yr == 10:
+                # Saldo residual calculado por crédito con su tasa y plazo propios
                 saldo_deuda = 0
-                if monto_credito > 0 and tasa_anual > 0 and yr <= plazo_anos:
-                    r_m = tasa_anual / 12
-                    n_p = yr * 12
-                    saldo_deuda = max(
-                        monto_credito * (1+r_m)**n_p - cuota_mensual * ((1+r_m)**n_p - 1) / r_m, 0)
+                if monto_credito_terreno > 0 and tasa_terreno > 0 and yr <= plazo_terreno:
+                    _r_t = tasa_terreno / 12
+                    _n_t = yr * 12
+                    saldo_deuda += max(
+                        monto_credito_terreno * (1+_r_t)**_n_t
+                        - cuota_terreno * ((1+_r_t)**_n_t - 1) / _r_t, 0)
+                if monto_credito_const > 0 and tasa_const > 0 and yr <= plazo_const:
+                    _r_c = tasa_const / 12
+                    _n_c = yr * 12
+                    saldo_deuda += max(
+                        monto_credito_const * (1+_r_c)**_n_c
+                        - cuota_const * ((1+_r_c)**_n_c - 1) / _r_c, 0)
                 flujo_yr += costo_total * (1 + APRECIACION_IND)**10 - saldo_deuda
             flujo_anual.append(flujo_yr)
         irr_r = _irr_bisect(flujo_anual)
         irr_anual = round(irr_r * 100, 1) if irr_r is not None else None
         van_10 = sum(f / (1 + tasa_desc)**i for i, f in enumerate(flujo_anual))
+
+    # ── Análisis de densidad de rack ──────────────────────────────────────────
+    _h_nave     = inp.get("altura_nave", 0.0) or 0.0
+    rack_niveles = max(1, int(_h_nave / 1.70)) if _h_nave >= 3.0 else 0
+    rack_pos_m2  = round(rack_niveles * 0.227, 2)           # pos/m² rack estándar (validado: 12m→1.59)
+    rack_posiciones     = round(rack_pos_m2 * area_nave)
+    rack_posiciones_opt = round(2.03 * area_nave)            # 13.6m, sistema Aldea (Francis de la Croix)
+    rack_delta_pos  = rack_posiciones_opt - rack_posiciones
+    rack_delta_pct  = round((rack_posiciones_opt / rack_posiciones - 1) * 100, 1) if rack_posiciones > 0 else 0.0
+    rack_es_optima  = _h_nave >= 13.5
 
     return {
         "area_terreno": area,
@@ -385,6 +767,7 @@ def calcular_industrial(inp: dict) -> dict:
         "dscr": dscr, "alquiler_vs_compra": alquiler_vs_compra,
         "flujo_anual": flujo_anual, "irr_anual": irr_anual, "van_10": van_10,
         "tipo_nave": tipo_nave, "zonificacion": zonificacion, "uso": uso,
+        "altura_nave": inp.get("altura_nave", 0.0),
         "actividad_categoria": inp.get("actividad_categoria", ""),
         "actividad_descripcion": inp.get("actividad_descripcion", ""),
         # Escudo fiscal
@@ -402,6 +785,15 @@ def calcular_industrial(inp: dict) -> dict:
         "yield_neto_ano3": round(yield_neto_ano3, 1),
         "yield_neto_ano5": round(yield_neto_ano5, 1),
         "payback_indexado": payback_indexado_ind,
+        # Rack density
+        "rack_niveles": rack_niveles,
+        "rack_pos_m2": rack_pos_m2,
+        "rack_posiciones": rack_posiciones,
+        "rack_posiciones_opt": rack_posiciones_opt,
+        "rack_delta_pos": rack_delta_pos,
+        "rack_delta_pct": rack_delta_pct,
+        "rack_es_optima": rack_es_optima,
+        "perfil": inp.get("perfil", "Desarrollo Integral"),
     }
 
 
@@ -607,7 +999,7 @@ def calcular_terreno_maximo(inp: dict) -> dict:
 # ═══════════════════════════════════════════════════════
 
 st.set_page_config(
-    page_title="FACTIS — Osterling Advisory",
+    page_title="SOLUM — Osterling Advisory",
     page_icon="🏛",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -658,7 +1050,7 @@ def _show_shared_view(token: str) -> None:
     fecha  = (proyecto.get("creado_en") or "")[:10]
 
     logo_html = (f'<img src="data:image/png;base64,{logo_b64}" style="height:30px;display:block;">'
-                 if logo_b64 else "FACTIS")
+                 if logo_b64 else "SOLUM")
     st.markdown(f"""
     <div style="display:flex;align-items:center;gap:16px;margin-bottom:28px;
                 padding-bottom:18px;border-bottom:2px solid #D4C9B4;">
@@ -733,8 +1125,19 @@ def _show_shared_view(token: str) -> None:
     st.markdown("---")
     st.markdown(
         '<div style="text-align:center;font-size:11px;color:#8A8070;padding:10px 0;">'
-        'Generado por <b>FACTIS</b> · Osterling Advisory · Este enlace es de solo lectura</div>',
+        'Generado por <b>SOLUM</b> · Osterling Advisory · Este enlace es de solo lectura</div>',
         unsafe_allow_html=True)
+
+# CSS global de arranque — fondo oscuro inmediato para evitar flash blanco en reconexión
+st.markdown("""
+<style>
+html, body, .stApp, [data-testid="stAppViewContainer"] {
+    background: #0E1B2A !important;
+}
+/* Ocultar warnings de skeleton durante carga */
+[data-testid="stException"] { display: none !important; }
+</style>
+""", unsafe_allow_html=True)
 
 # Verificar link compartido ANTES del login
 _qt = st.query_params.get("share", "")
@@ -756,170 +1159,145 @@ def _get_users() -> dict:
         return {}
 
 def _show_login() -> None:
-    import datetime as _dt_login, base64 as _b64l, pathlib as _pll
+    import datetime as _dt_login
+
     _yr  = _dt_login.date.today().year
-    _app = _pll.Path(__file__).parent
-
-    def _enc(name):
-        p = _app / name
-        return _b64l.b64encode(p.read_bytes()).decode() if p.exists() else ""
-
-    _bg  = _enc("bg_login.jpg")
-    _lgw = _enc("logo_white.png")
-
-    _bg_url  = f"url('data:image/jpeg;base64,{_bg}')"  if _bg  else "none"
-    _lgw_url = f"url('data:image/png;base64,{_lgw}')"  if _lgw else "none"
+    _logo_svg = (
+        f'<img src="data:image/svg+xml;base64,{_SOLUM_SVG_T_B64}" '
+        f'style="width:180px;height:180px;display:block;margin:0 auto 16px;" />'
+        if _SOLUM_SVG_T_B64 else
+        '<div style="font-size:38px;font-weight:900;color:#FFFFFF;letter-spacing:-2px;'
+        'text-align:center;margin-bottom:28px;">SOLUM</div>'
+    )
 
     st.markdown(f"""
     <style>
     html, body {{
-        background-image:{_bg_url} !important;
-        background-size:100% auto !important;
-        background-position:bottom center !important;
-        background-repeat:no-repeat !important;
-        background-color:#07111D !important;
+        background: #0E1B2A !important;
         min-height:100vh;
+    }}
+    [data-testid="stAppViewContainer"] > .main::before,
+    .stApp::before {{
+        content: "" !important;
+        position: fixed !important;
+        inset: 0 !important;
+        background-image: url("data:image/png;base64,{_LOGIN_BG_B64}") !important;
+        background-size: cover !important;
+        background-position: center !important;
+        background-repeat: no-repeat !important;
+        filter: brightness(0.55) saturate(0.85) !important;
+        z-index: 0 !important;
     }}
     .stApp, [data-testid="stAppViewContainer"], [data-testid="stMain"],
     [data-testid="stMainBlockContainer"], .main, .appview-container {{
-        background:transparent !important;
+        background: transparent !important;
     }}
     section[data-testid="stSidebar"], header[data-testid="stHeader"] {{ display:none !important; }}
     .block-container {{
-        max-width:100% !important; padding:0 !important; margin:0 !important;
-        background:transparent !important;
+        max-width: 400px !important;
+        padding: 44px 36px 40px !important;
+        margin: calc(50vh - 340px) auto 0 !important;
+        background: rgba(10,18,30,0.72) !important;
+        border: 1px solid rgba(184,144,74,0.22) !important;
+        border-radius: 16px !important;
+        backdrop-filter: blur(16px) !important;
+        -webkit-backdrop-filter: blur(16px) !important;
+        box-shadow: 0 24px 64px rgba(0,0,0,0.60) !important;
+        position: relative !important;
+        z-index: 1 !important;
     }}
-    .block-container > div {{ background:transparent !important; border:none !important; padding:0 !important; }}
-    [data-testid="stHorizontalBlock"] {{ gap:0 !important; align-items:stretch !important; }}
-    [data-testid="column"]:first-child {{
-        background:rgba(7,17,29,0.68) !important;
-        min-height:100vh !important;
+    /* Inputs */
+    .stTextInput > label,
+    .stTextInput [data-testid="stWidgetLabel"] p {{
+        color: rgba(184,200,216,0.50) !important;
+        font-size: 9px !important; font-weight: 700 !important;
+        letter-spacing: 2.5px !important; text-transform: uppercase !important;
     }}
-    [data-testid="column"]:first-child > div,
-    [data-testid="column"]:first-child [data-testid="stVerticalBlockBorderWrapper"],
-    [data-testid="column"]:first-child [data-testid="stVerticalBlock"] {{ min-height:100vh !important; padding:0 !important; }}
-    [data-testid="column"]:last-child {{
-        background:rgba(8,18,30,0.94) !important;
-        border-left:1px solid rgba(184,144,74,0.20) !important;
-        min-height:100vh !important;
-        backdrop-filter:blur(14px) !important;
-        -webkit-backdrop-filter:blur(14px) !important;
+    .stTextInput > div {{
+        background: rgba(255,255,255,0.05) !important;
+        border: 1px solid rgba(255,255,255,0.12) !important;
+        border-radius: 8px !important;
     }}
-    [data-testid="column"]:last-child > div,
-    [data-testid="column"]:last-child [data-testid="stVerticalBlockBorderWrapper"] {{ min-height:100vh !important; }}
-    [data-testid="column"]:last-child [data-testid="stVerticalBlock"] {{
-        padding:36vh 24% 6vh 24% !important;
-        box-sizing:border-box !important; width:100% !important;
+    .stTextInput > div:focus-within {{
+        border-color: rgba(184,144,74,0.55) !important;
+        box-shadow: 0 0 0 3px rgba(184,144,74,0.10) !important;
     }}
-    .solum-hero {{
-        width:90px; height:118px;
-        background-image:{_lgw_url};
-        background-size:contain; background-repeat:no-repeat; background-position:left center;
-        margin:0 0 28px 0;
+    .stTextInput input {{
+        background: transparent !important; border: none !important;
+        outline: none !important; box-shadow: none !important;
+        color: #E8EDF4 !important; font-size: 14px !important;
+        padding: 13px 14px !important;
     }}
-    .solum-sm {{
-        width:52px; height:68px;
-        background-image:{_lgw_url};
-        background-size:contain; background-repeat:no-repeat; background-position:center;
-        margin:0 auto 16px;
+    .stTextInput input:focus {{
+        outline: none !important; box-shadow: none !important;
     }}
-    [data-testid="column"]:last-child .stTextInput > label,
-    [data-testid="column"]:last-child .stTextInput [data-testid="stWidgetLabel"] p {{
-        color:rgba(184,200,216,0.48) !important; font-size:9px !important;
-        font-weight:700 !important; letter-spacing:2px !important; text-transform:uppercase !important;
+    .stTextInput input::placeholder {{ color: rgba(184,200,216,0.20) !important; }}
+    /* Botón */
+    .stButton > button,
+    .stFormSubmitButton > button,
+    [data-testid="stBaseButton-secondary"],
+    [data-testid="stBaseButton-primary"],
+    [data-testid="stFormSubmitButton"] > button {{
+        width: 100% !important;
+        background: linear-gradient(135deg,#B8904A 0%,#C9A055 100%) !important;
+        color: #FFFFFF !important; border: none !important; border-radius: 8px !important;
+        font-weight: 700 !important; font-size: 11px !important;
+        letter-spacing: 3px !important; padding: 15px !important;
+        margin-top: 12px !important; text-transform: uppercase !important;
+        box-shadow: 0 4px 24px rgba(184,144,74,0.28) !important;
+        transition: box-shadow 0.2s, transform 0.2s !important;
     }}
-    [data-testid="column"]:last-child .stTextInput > div {{
-        background:rgba(255,255,255,0.05) !important;
-        border:1px solid rgba(255,255,255,0.12) !important; border-radius:8px !important;
+    .stButton > button:hover,
+    .stFormSubmitButton > button:hover,
+    [data-testid="stBaseButton-secondary"]:hover,
+    [data-testid="stBaseButton-primary"]:hover,
+    [data-testid="stFormSubmitButton"] > button:hover {{
+        box-shadow: 0 8px 32px rgba(184,144,74,0.50) !important;
+        transform: translateY(-1px) !important;
     }}
-    [data-testid="column"]:last-child .stTextInput > div:focus-within {{
-        border-color:rgba(184,144,74,0.55) !important;
-        box-shadow:0 0 0 3px rgba(184,144,74,0.08) !important;
-    }}
-    [data-testid="column"]:last-child .stTextInput input {{
-        background:transparent !important; border:none !important;
-        color:#E8EDF4 !important; font-size:14px !important; padding:12px 14px !important;
-        width:100% !important; box-sizing:border-box !important;
-    }}
-    [data-testid="column"]:last-child .stTextInput input::placeholder {{ color:rgba(184,200,216,0.20) !important; }}
-    [data-testid="column"]:last-child .stButton > button {{
-        width:100% !important;
-        background:linear-gradient(135deg,#B8904A 0%,#C9A055 100%) !important;
-        color:#FFFFFF !important; border:none !important; border-radius:8px !important;
-        font-weight:700 !important; font-size:11px !important; letter-spacing:3px !important;
-        padding:15px !important; margin-top:10px !important; text-transform:uppercase !important;
-        box-shadow:0 4px 24px rgba(184,144,74,0.30) !important;
-    }}
-    [data-testid="column"]:last-child .stButton > button:hover {{
-        background:linear-gradient(135deg,#C9A055 0%,#D4A853 100%) !important;
-        box-shadow:0 8px 32px rgba(184,144,74,0.50) !important;
-        transform:translateY(-1px) !important;
-    }}
-    .stAlert {{ border-radius:8px !important; }}
+    .stAlert {{ border-radius: 8px !important; margin-top: 8px !important; }}
+    /* Ocultar tooltip "Press Enter to submit form" */
+    [data-testid="InputInstructions"], .stTextInput small {{ display: none !important; }}
     </style>
+
+    <!-- Logo + subtítulo dentro del card -->
+    <div style="text-align:center;margin-bottom:32px;">
+      {_logo_svg}
+      <div style="font-size:9px;color:rgba(184,144,74,0.75);letter-spacing:3.5px;
+                  text-transform:uppercase;font-weight:700;margin-top:4px;">
+        Plataforma Analítica Inmobiliaria
+      </div>
+    </div>
     """, unsafe_allow_html=True)
 
-    col_left, col_right = st.columns([60, 40], gap="small")
-
-    with col_left:
-        st.markdown(f"""
-        <div style="min-height:100vh;padding:52px 64px;display:flex;flex-direction:column;box-sizing:border-box;">
-          <div>
-            <div style="font-size:9px;font-weight:700;color:rgba(184,144,74,0.52);letter-spacing:4px;text-transform:uppercase;">SOLUM · Osterling Advisory</div>
-          </div>
-          <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:36px 0;">
-            <div class="solum-hero"></div>
-            <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;">
-              <div style="width:28px;height:1px;background:rgba(184,144,74,0.46);flex-shrink:0;"></div>
-              <div style="font-size:9px;color:rgba(184,144,74,0.76);letter-spacing:4px;text-transform:uppercase;font-weight:700;">Plataforma Analítica Inmobiliaria</div>
-            </div>
-            <div style="font-size:50px;font-weight:900;color:#FFFFFF;line-height:1.06;letter-spacing:-2px;margin-bottom:16px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
-              Análisis inmobiliario<br><span style="color:#B8904A;">para Lima.</span>
-            </div>
-            <div style="font-size:15px;color:rgba(184,200,216,0.52);line-height:1.72;margin-bottom:36px;max-width:400px;">
-              IA para análisis inmobiliario integral — del certificado de parámetros al reporte para el banco.
-            </div>
-            <div style="border-top:1px solid rgba(184,144,74,0.18);padding-top:22px;max-width:420px;">
-              <div style="font-size:10px;color:rgba(184,144,74,0.60);letter-spacing:3px;text-transform:uppercase;font-weight:600;line-height:2;">
-                Cabida &nbsp;·&nbsp; Financiero &nbsp;·&nbsp; Legal &nbsp;·&nbsp; Asistente IA
-              </div>
-            </div>
-          </div>
-          <div style="padding-top:18px;border-top:1px solid rgba(255,255,255,0.08);">
-            <div style="font-size:9px;color:rgba(184,200,216,0.18);letter-spacing:2px;text-transform:uppercase;">Osterling Advisory · Lima, Perú · {_yr}</div>
-          </div>
-        </div>
-        """, unsafe_allow_html=True)
-
-    with col_right:
-        st.markdown("""
-        <div style="margin-bottom:32px;">
-          <div style="font-size:11px;color:rgba(184,144,74,0.80);letter-spacing:3px;text-transform:uppercase;font-weight:700;margin-bottom:6px;">Acceso a la Plataforma</div>
-          <div style="font-size:13px;color:rgba(184,200,216,0.36);">Ingresa tus credenciales para continuar</div>
-        </div>
-        <div style="height:1px;background:linear-gradient(90deg,rgba(184,144,74,0.28),transparent);margin-bottom:28px;"></div>
-        """, unsafe_allow_html=True)
+    with st.form("_login_form", border=False):
         username = st.text_input("Usuario", placeholder="nombre de usuario", key="_login_user")
         password = st.text_input("Contraseña", type="password", placeholder="••••••••", key="_login_pw")
-        if st.button("Ingresar →", key="_login_btn"):
-            users = _get_users()
-            user_cfg = users.get(username.strip().lower())
-            if user_cfg and user_cfg.get("password") == _hash_pw(password):
-                st.session_state["_authenticated"] = True
-                st.session_state["_user_name"]     = user_cfg.get("name", username)
-                st.session_state["_user_role"]     = user_cfg.get("role", "advisor")
-                st.session_state["_username"]      = username.strip().lower()
-                for _k in ("_login_pw", "_login_user", "_login_btn"):
-                    st.session_state.pop(_k, None)
-                st.session_state["_auth_loading"] = True
-                st.rerun()
-            else:
-                st.error("Usuario o contraseña incorrectos.")
-        st.markdown(
-            '<div style="text-align:center;margin-top:24px;">' +
-            '<div style="font-size:10px;color:rgba(184,200,216,0.16);">🔒 Acceso restringido · Osterling Advisory</div>' +
-            '</div>',
-            unsafe_allow_html=True)
+        submitted = st.form_submit_button("INGRESAR", use_container_width=True)
+
+    if submitted:
+        users = _get_users()
+        user_cfg = users.get(username.strip().lower())
+        if user_cfg and user_cfg.get("password") == _hash_pw(password):
+            st.session_state["_authenticated"] = True
+            st.session_state["_user_name"]     = user_cfg.get("name", username)
+            st.session_state["_user_role"]     = user_cfg.get("role", "advisor")
+            st.session_state["_username"]      = username.strip().lower()
+            for _k in ("_login_pw", "_login_user"):
+                st.session_state.pop(_k, None)
+            st.session_state["_auth_loading"] = True
+            st.rerun()
+        else:
+            st.error("Usuario o contraseña incorrectos.")
+
+    st.markdown(
+        f'<div style="text-align:center;margin-top:32px;padding-top:20px;'
+        f'border-top:1px solid rgba(255,255,255,0.07);">'
+        f'<div style="font-size:9px;color:rgba(184,200,216,0.20);letter-spacing:2px;'
+        f'text-transform:uppercase;">Acceso restringido · Osterling Advisory · {_yr}</div>'
+        f'</div>',
+        unsafe_allow_html=True
+    )
 
 
 if not st.session_state.get("_authenticated"):
@@ -930,50 +1308,84 @@ if not st.session_state.get("_authenticated"):
 # Se activa en el primer render post-login, cubre la pantalla
 # mientras la app carga por debajo y se desvanece solo.
 if st.session_state.pop("_auth_loading", False):
-    st.markdown("""
+    _svg_img = (f'<img src="data:image/svg+xml;base64,{_SOLUM_SVG_T_B64}" '
+                f'style="width:180px;height:180px;display:block;margin:0 auto 16px;" />'
+                if _SOLUM_SVG_T_B64 else
+                '<div style="font-size:38px;font-weight:900;color:#FFFFFF;letter-spacing:-2px;'
+                'text-align:center;margin-bottom:28px;">SOLUM</div>')
+    _oa_bg = (
+        f'background-image:url("data:image/png;base64,{_LOGIN_BG_B64}");'
+        f'background-size:cover;background-position:center;background-repeat:no-repeat;'
+        if _LOGIN_BG_B64 else
+        'background:linear-gradient(160deg,#0E1B2A 0%,#192535 55%,#0E1B2A 100%);'
+    )
+    st.markdown(f"""
     <style>
-    #auth-overlay {
+    #auth-overlay {{
         position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-        background: linear-gradient(160deg,#0A1628 0%,#131F2E 55%,#0F1C2A 100%);
+        background: #0E1B2A;
         display: flex; flex-direction: column; align-items: center; justify-content: center;
         z-index: 999999;
-        animation: overlayFadeOut 0.45s ease 2.2s forwards;
+        animation: overlayFadeOut 0.5s ease 2.4s forwards;
         pointer-events: none;
-    }
-    @keyframes overlayFadeOut {
-        from { opacity: 1; }
-        to   { opacity: 0; visibility: hidden; }
-    }
-    .oa-dot {
-        width: 8px; height: 8px; background: #B8904A; border-radius: 50%;
-        display: inline-block; margin: 0 4px;
-        animation: oaDot 1.1s ease-in-out infinite;
-    }
-    @keyframes oaDot {
-        0%,100% { opacity:0.25; transform:scale(0.7); }
-        50%      { opacity:1;    transform:scale(1.25); }
-    }
+    }}
+    #auth-overlay::before {{
+        content: "";
+        position: absolute; inset: 0;
+        {_oa_bg}
+        filter: brightness(0.55) saturate(0.85);
+        z-index: 0;
+    }}
+    #auth-overlay > * {{ position: relative; z-index: 1; }}
+    @keyframes overlayFadeOut {{
+        from {{ opacity: 1; }}
+        to   {{ opacity: 0; visibility: hidden; }}
+    }}
+    .oa-content {{
+        display: flex; flex-direction: column; align-items: center;
+        animation: oaContentIn 0.55s ease 0.1s both;
+    }}
+    @keyframes oaContentIn {{
+        from {{ opacity: 0; transform: translateY(10px); }}
+        to   {{ opacity: 1; transform: translateY(0); }}
+    }}
+    .oa-bar-track {{
+        width: 110px; height: 2px;
+        background: rgba(184,144,74,0.18);
+        border-radius: 2px; overflow: hidden;
+        margin-top: 8px;
+    }}
+    .oa-bar-fill {{
+        height: 100%; width: 35%;
+        background: #B8904A; border-radius: 2px;
+        animation: oaBarSlide 1.5s ease-in-out infinite;
+    }}
+    @keyframes oaBarSlide {{
+        0%   {{ transform: translateX(-100%); opacity: 0.5; }}
+        50%  {{ opacity: 1; }}
+        100% {{ transform: translateX(390%); opacity: 0.5; }}
+    }}
     </style>
     <div id="auth-overlay">
-        <div style="font-size:9px;color:#B8904A;letter-spacing:5px;text-transform:uppercase;
-                    font-weight:600;margin-bottom:14px;">Osterling Advisory</div>
-        <div style="font-size:30px;font-weight:700;color:#FFFFFF;letter-spacing:-0.5px;">FACTIS</div>
-        <div style="width:40px;height:2px;background:#B8904A;margin:16px auto 22px;"></div>
-        <div style="font-size:11px;color:rgba(184,200,216,0.50);letter-spacing:1px;margin-bottom:22px;">
-            Cargando plataforma…
-        </div>
-        <div>
-            <span class="oa-dot" style="animation-delay:0s"></span>
-            <span class="oa-dot" style="animation-delay:0.35s"></span>
-            <span class="oa-dot" style="animation-delay:0.70s"></span>
+        <div class="oa-content">
+            <div style="font-size:8px;color:#B8904A;letter-spacing:6px;text-transform:uppercase;
+                        font-weight:700;margin-bottom:20px;">Osterling Advisory</div>
+            {_svg_img}
+            <div style="width:40px;height:1px;background:rgba(184,144,74,0.5);margin:20px auto 0;"></div>
+            <div style="font-size:10px;color:rgba(184,200,216,0.45);letter-spacing:3px;
+                        text-transform:uppercase;margin-top:18px;margin-bottom:14px;">
+                Cargando plataforma
+            </div>
+            <div class="oa-bar-track"><div class="oa-bar-fill"></div></div>
         </div>
     </div>
     <script>
-    // Remove overlay from DOM after animation completes
-    (function() {
+    (function() {{
         var el = document.getElementById('auth-overlay');
-        if (el) el.addEventListener('animationend', function() { el.remove(); });
-    })();
+        if (el) el.addEventListener('animationend', function(e) {{
+            if (e.animationName === 'overlayFadeOut') el.remove();
+        }});
+    }})();
     </script>
     """, unsafe_allow_html=True)
 
@@ -1000,8 +1412,11 @@ st.markdown("""
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
     }
 
-    html { background-color: #F0EDE8 !important; }
-    .stApp { background-color: #F0EDE8; }
+    html { background-color: #FAFAF8 !important; }
+    .stApp { background-color: #FAFAF8 !important; }
+    [data-testid="stAppViewContainer"] { background-color: #FAFAF8 !important; }
+    [data-testid="stMain"] { background-color: #FAFAF8 !important; }
+    [data-testid="stMainBlockContainer"] { background-color: #FAFAF8 !important; }
 
     /* ── Expanders ── */
     [data-testid="stExpander"] summary,
@@ -1013,9 +1428,24 @@ st.markdown("""
     [data-testid="stStatusWidget"] { color: #B8904A !important; }
     [data-testid="stStatusWidget"] svg { color: #B8904A !important; fill: #B8904A !important; }
     [data-testid="stStatusWidget"] label { color: #B8904A !important; }
+    /* Spinner de análisis (st.spinner) */
     .stSpinner > div { border-top-color: #B8904A !important; }
     div[data-testid="stSpinner"] > div > div {
         border-color: #B8904A transparent #B8904A transparent !important;
+    }
+    div[data-testid="stSpinner"] {
+        background-color: #0A1128 !important;
+        border-radius: 8px;
+        padding: 8px 12px;
+    }
+    div[data-testid="stSpinner"] p,
+    div[data-testid="stSpinner"] span,
+    div[data-testid="stSpinner"] > div {
+        color: #C8D8E8 !important;
+    }
+    /* El círculo giratorio SVG */
+    div[data-testid="stSpinner"] svg circle {
+        stroke: #B8904A !important;
     }
 
     /* ═══════════════════════════════════════
@@ -1371,11 +1801,11 @@ st.markdown("""
     /* ── Header principal ── */
     .main-header {
         background: linear-gradient(135deg, #0F1C2A 0%, #1A2D41 50%, #0F1C2A 100%);
-        padding: 24px 32px;
+        padding: 18px 28px;
         border-radius: 12px;
         margin-bottom: 24px;
-        box-shadow: 0 8px 32px rgba(10,20,35,0.28), 0 1px 0 rgba(184,144,74,0.2) inset;
-        border-bottom: 2px solid rgba(184,144,74,0.25);
+        box-shadow: 0 4px 24px rgba(10,20,35,0.30), 0 1px 0 rgba(184,144,74,0.18) inset;
+        border-bottom: 1px solid rgba(184,144,74,0.20);
     }
 
     /* ── Cards de métricas ── */
@@ -1447,12 +1877,12 @@ st.markdown("""
 
     /* ── Alertas ── */
     .alert-gold {
-        background: linear-gradient(135deg, #FFFBF3 0%, #FFF8EC 100%);
-        border: 1px solid #DFC07A;
-        border-left: 4px solid #B8904A; border-radius: 8px;
-        padding: 14px 18px; color: #5C3D10; font-size: 13px;
+        background: linear-gradient(135deg, #EEF8F2 0%, #E6F5EC 100%);
+        border: 1px solid #90CBA8;
+        border-left: 4px solid #1A7A4A; border-radius: 8px;
+        padding: 14px 18px; color: #0E3D22; font-size: 13px;
         margin: 10px 0; line-height: 1.65;
-        box-shadow: 0 2px 8px rgba(184,144,74,0.10);
+        box-shadow: 0 2px 8px rgba(26,122,74,0.10);
     }
     .alert-legal {
         background: #F8F6F3; border: 1px solid #D0C8BC;
@@ -1716,6 +2146,27 @@ st.markdown("""
     [class*="StatusWidget"]         { display: none !important; }
     .block-container { padding-top: 1.5rem !important; }
 
+    /* ── Eliminar flash en re-run ── */
+    /* Suprimir transición de opacidad "stale" y rerun dimming */
+    .stale, .stale * { opacity: 1 !important; transition: none !important; }
+    .element-container, .stMarkdown, .row-widget {
+        animation: none !important;
+        transition: none !important;
+    }
+    /* Streamlit rerun: bloquear el oscurecimiento/blanqueo del contenido */
+    [data-testid="stApp"],
+    [data-testid="stApp"] > *,
+    [data-testid="stAppViewContainer"],
+    [data-testid="stAppViewContainer"] > *,
+    [data-testid="stMain"],
+    [data-testid="stMainBlockContainer"],
+    [data-testid="stVerticalBlock"],
+    section[data-testid="stSidebar"],
+    .main, .main > * {
+        opacity: 1 !important;
+        transition: none !important;
+    }
+
     /* ── DataTable th/td ── */
     .stDataFrame th {
         background-color: #1E2D3D !important; color: #FFFFFF !important;
@@ -1883,8 +2334,117 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# Formato con comas eliminado — el overlay JS causaba color:transparent persistente
-# tras re-renders de Streamlit, dejando los inputs invisibles al escribir.
+# ── Formato de miles en inputs numéricos ───────────────────────────────────
+# Muestra etiqueta auxiliar debajo de cada input > 999, con separador de miles.
+# NO modifica color ni visibilidad del input (ese fue el bug anterior).
+st.markdown("""
+<script>
+(function(){
+  function fmt(n){
+    return n.toLocaleString('es-PE',{maximumFractionDigits:0});
+  }
+  function addHints(){
+    document.querySelectorAll('input[type="number"]').forEach(function(inp){
+      if(inp.dataset.solumFmt) return;
+      inp.dataset.solumFmt = '1';
+      var hint = document.createElement('div');
+      hint.className = 'solum-num-hint';
+      hint.style.cssText = 'font-size:11px;font-weight:600;color:#1A7A4A;margin-top:-10px;'
+        +'margin-bottom:4px;padding-left:2px;min-height:14px;transition:none;';
+      var par = inp.closest('[data-testid="stNumberInput"]') || inp.parentNode.parentNode;
+      par.insertAdjacentElement('afterend', hint);
+      function refresh(){
+        var v = parseFloat(inp.value);
+        hint.textContent = (v > 999) ? '= ' + fmt(v) : '';
+      }
+      inp.addEventListener('input', refresh);
+      inp.addEventListener('change', refresh);
+      refresh();
+    });
+  }
+  var _t;
+  var obs = new MutationObserver(function(){
+    clearTimeout(_t);
+    _t = setTimeout(addHints, 250);
+  });
+  obs.observe(document.body,{childList:true,subtree:true});
+  addHints();
+  // Polling para valores seteados programáticamente por Streamlit (sin disparar events)
+  setInterval(function(){
+    document.querySelectorAll('input[type="number"][data-solum-fmt]').forEach(function(inp){
+      var v = parseFloat(inp.value);
+      var par = inp.closest('[data-testid="stNumberInput"]') || inp.parentNode.parentNode;
+      var hint = par.nextElementSibling;
+      if(hint && hint.classList.contains('solum-num-hint')){
+        hint.textContent = (v > 999) ? '= ' + fmt(v) : '';
+      }
+    });
+  }, 800);
+  // Ocultar "Press Enter to apply" que Streamlit inyecta vía React
+  function hideInputInstructions(){
+    document.querySelectorAll('[data-testid="InputInstructions"]').forEach(function(el){
+      el.style.setProperty('display','none','important');
+    });
+  }
+  var _iiObs = new MutationObserver(function(){ hideInputInstructions(); });
+  _iiObs.observe(document.body,{childList:true,subtree:true});
+  hideInputInstructions();
+})();
+</script>
+""", unsafe_allow_html=True)
+
+# ── Anti-flash: intercepta cambios de opacidad inline que Streamlit aplica ──
+# durante reruns ("stale" state). El MutationObserver los revierte en <1ms.
+st.markdown("""
+<script>
+(function(){
+  var TARGETS = [
+    '[data-testid="stApp"]',
+    '[data-testid="stAppViewContainer"]',
+    '[data-testid="stMain"]',
+    '[data-testid="stMainBlockContainer"]',
+    '[data-testid="stVerticalBlock"]',
+    'section[data-testid="stSidebar"]',
+    '.main'
+  ];
+  function lockOpacity(el){
+    if(!el || !el.style) return;
+    var op = parseFloat(el.style.opacity);
+    if(!isNaN(op) && op < 0.99){
+      el.style.setProperty('opacity','1','important');
+    }
+    if(el.classList && el.classList.contains('stale')){
+      el.style.setProperty('opacity','1','important');
+      el.style.setProperty('transition','none','important');
+    }
+  }
+  function scanAll(){
+    TARGETS.forEach(function(sel){
+      document.querySelectorAll(sel).forEach(lockOpacity);
+    });
+    // También cualquier hijo directo de stApp
+    var app = document.querySelector('[data-testid="stApp"]');
+    if(app) Array.from(app.children).forEach(lockOpacity);
+  }
+  var obs = new MutationObserver(function(muts){
+    muts.forEach(function(m){
+      lockOpacity(m.target);
+      // hijos también
+      if(m.addedNodes) m.addedNodes.forEach(function(n){
+        if(n.style) lockOpacity(n);
+      });
+    });
+  });
+  obs.observe(document.documentElement,{
+    attributes:true, subtree:true,
+    attributeFilter:['style','class']
+  });
+  scanAll();
+  // Re-escanear cada 100ms durante los primeros 2 seg para atrapar el primer render
+  var _boot=0, _bint=setInterval(function(){ scanAll(); if(++_boot>20) clearInterval(_bint); },100);
+})();
+</script>
+""", unsafe_allow_html=True)
 
 # ═══════════════════════════════════════════════════════
 # AUTENTICACIÓN (legacy block — eliminado, ver _show_login() arriba)
@@ -2045,7 +2605,7 @@ if False:
                     border-radius:10px;">
             <div style="font-size:9px;color:#B8904A;letter-spacing:5px;text-transform:uppercase;
                         font-weight:600;margin-bottom:18px;">Osterling Advisory</div>
-            <div style="font-size:30px;font-weight:700;color:#FFFFFF;letter-spacing:-0.5px;">FACTIS</div>
+            <div style="font-size:30px;font-weight:700;color:#FFFFFF;letter-spacing:-0.5px;">SOLUM</div>
             <div style="width:40px;height:2px;background:#B8904A;margin:16px auto 20px;"></div>
             <div style="font-size:12px;color:#8AA8C0;letter-spacing:0.3px;margin-bottom:8px;">
                 Plataforma Analítica Inmobiliaria
@@ -2278,6 +2838,360 @@ def _geo_render_3d(poly_lote, poly_huella, n_pisos: int, n_sotanos: int = 0,
         height=420,
         legend=dict(x=0.02, y=0.97, bgcolor="rgba(10,22,40,0.8)",
                     bordercolor="rgba(184,144,74,0.3)", font=dict(size=10)),
+    )
+    return fig
+
+
+def _geo_render_3d_industrial(poly_lote, poly_nave, h_nave: float) -> go.Figure:
+    """Massing 3D industrial — tema claro, nave sólida + patio + docks + circulación."""
+    GOLD  = "#B8904A"
+    NAVY  = "#1A3A5C"
+    SAND  = "#C8A86E"
+    RED   = "#C44A4A"
+    GREEN = "#2E8B57"
+    BG    = "#F8F5F0"
+
+    traces = []
+
+    if poly_lote and not poly_lote.is_empty:
+        lxs, lys = poly_lote.exterior.xy
+        traces.append(go.Scatter3d(
+            x=list(lxs), y=list(lys), z=[0.0] * len(lxs),
+            mode="lines", line=dict(color=GOLD, width=4),
+            name="Límite del lote", showlegend=True,
+        ))
+
+    if poly_nave and not poly_nave.is_empty:
+        nxs_r, nys_r = poly_nave.exterior.xy
+        nxs = list(nxs_r[:-1])
+        nys = list(nys_r[:-1])
+        n = len(nxs)
+        vx = nxs + nxs
+        vy = nys + nys
+        vz = [0.0] * n + [float(h_nave)] * n
+        ii, jj, kk = [], [], []
+        for t in range(1, n - 1):
+            ii += [0];    jj += [t + 1]; kk += [t]
+        for t in range(1, n - 1):
+            ii += [n];    jj += [n + t]; kk += [n + t + 1]
+        for t in range(n):
+            nt = (t + 1) % n
+            ii += [t, nt]; jj += [nt, n + nt]; kk += [n + t, n + t]
+        traces.append(go.Mesh3d(
+            x=vx, y=vy, z=vz, i=ii, j=jj, k=kk,
+            color=NAVY, opacity=0.72, name="Nave industrial", showlegend=True,
+            flatshading=False,
+            lighting=dict(ambient=0.6, diffuse=0.8, specular=0.2, roughness=0.7),
+        ))
+        for lvl in [0.0, float(h_nave)]:
+            traces.append(go.Scatter3d(
+                x=list(nxs_r), y=list(nys_r), z=[lvl] * len(nxs_r),
+                mode="lines", line=dict(color=NAVY, width=2), showlegend=False,
+            ))
+        for cx, cy in zip(nxs, nys):
+            traces.append(go.Scatter3d(
+                x=[cx, cx], y=[cy, cy], z=[0.0, float(h_nave)],
+                mode="lines", line=dict(color=NAVY, width=1), showlegend=False,
+            ))
+        try:
+            minx_n, miny_n, maxx_n, maxy_n = poly_nave.bounds
+            frente_n = maxx_n - minx_n
+            n_docks = max(2, min(6, int(frente_n / 9)))
+            dock_spacing = frente_n / (n_docks + 1)
+            for d in range(n_docks):
+                dx = minx_n + dock_spacing * (d + 1)
+                traces.append(go.Scatter3d(
+                    x=[dx, dx], y=[miny_n, miny_n], z=[0.0, 1.8],
+                    mode="lines", line=dict(color=RED, width=8),
+                    name="Dock de carga" if d == 0 else "",
+                    showlegend=(d == 0),
+                ))
+            hx = minx_n - 3
+            hy = (miny_n + maxy_n) / 2
+            traces.append(go.Scatter3d(
+                x=[hx, hx, hx], y=[hy, hy, hy], z=[0.0, h_nave / 2, float(h_nave)],
+                mode="lines+text",
+                line=dict(color="#555555", width=2, dash="dot"),
+                text=["", f"{h_nave:.1f}m", ""],
+                textfont=dict(size=11, color="#333333"),
+                name="Altura nave", showlegend=False,
+            ))
+        except Exception:
+            pass
+
+    if poly_lote and poly_nave and not poly_lote.is_empty and not poly_nave.is_empty:
+        try:
+            from shapely.geometry import MultiPolygon as _MP
+            poly_patio = poly_lote.difference(poly_nave)
+            if not poly_patio.is_empty:
+                if isinstance(poly_patio, _MP):
+                    poly_patio = max(poly_patio.geoms, key=lambda g: g.area)
+                pxs_r, pys_r = poly_patio.exterior.xy
+                pxs = list(pxs_r[:-1])
+                pys = list(pys_r[:-1])
+                np_ = len(pxs)
+                if np_ >= 3:
+                    pi, pj, pk = [], [], []
+                    for t in range(1, np_ - 1):
+                        pi += [0]; pj += [t]; pk += [t + 1]
+                    traces.append(go.Mesh3d(
+                        x=pxs, y=pys, z=[0.02] * np_,
+                        i=pi, j=pj, k=pk,
+                        color=SAND, opacity=0.55,
+                        name="Patio / Maniobras", showlegend=True,
+                    ))
+        except Exception:
+            pass
+        try:
+            minx_l, miny_l, maxx_l, _ = poly_lote.bounds
+            minx_n2, miny_n2, maxx_n2, _ = poly_nave.bounds
+            mid_x = (minx_l + maxx_l) / 2
+            gap = max(miny_n2 - miny_l, 6)
+            traces.append(go.Cone(
+                x=[mid_x - 8, mid_x + 8],
+                y=[miny_l + gap * 0.30, miny_l + gap * 0.70],
+                z=[1.2, 1.2],
+                u=[0, 0], v=[1, 1], w=[0, 0],
+                sizemode="absolute", sizeref=5,
+                colorscale=[[0, GREEN], [1, GREEN]],
+                showscale=False, name="Circulación", showlegend=True, anchor="tip",
+            ))
+        except Exception:
+            pass
+
+    lim_z = max(float(h_nave) * 1.25, 8.0)
+    fig = go.Figure(data=traces)
+    fig.update_layout(
+        scene=dict(
+            xaxis=dict(title="m", showgrid=True, gridcolor="rgba(30,58,92,0.15)",
+                       backgroundcolor=BG, showbackground=True),
+            yaxis=dict(title="m", showgrid=True, gridcolor="rgba(30,58,92,0.15)",
+                       backgroundcolor=BG, showbackground=True),
+            zaxis=dict(title="altura (m)", showgrid=True, gridcolor="rgba(30,58,92,0.15)",
+                       backgroundcolor=BG, showbackground=True, range=[0, lim_z]),
+            bgcolor=BG, aspectmode="data",
+            camera=dict(eye=dict(x=1.8, y=-1.8, z=1.4)),
+        ),
+        paper_bgcolor=BG,
+        font=dict(color=NAVY, size=10),
+        margin=dict(l=0, r=0, t=10, b=0),
+        height=420,
+        legend=dict(x=0.02, y=0.97, bgcolor="rgba(248,245,240,0.92)",
+                    bordercolor=GOLD, borderwidth=1, font=dict(size=9, color=NAVY)),
+    )
+    return fig
+
+
+def _geo_render_planta_industrial(poly_lote, poly_nave, h_nave: float) -> go.Figure:
+    """Vista en planta industrial — estilo plano arquitectónico (fondo papel, hachura, racks, docks)."""
+    NEGRO    = "#1A1A2E"
+    NAVY     = "#1A3A5C"
+    PAPER    = "#F5F3EE"    # fondo papel técnico
+    PATIO_BG = "#EAE6DC"    # patio de maniobras
+    NAVE_BG  = "#D6E8F5"    # relleno nave
+    DOCK_COL = "#4A7FAA"    # docks de carga
+    RACK_COL = "rgba(26,58,92,0.18)"   # filas de racks sugeridas
+    FONT_DRF = "Courier New, monospace"  # fuente tipo drafting
+
+    area_lote  = poly_lote.area if (poly_lote and not poly_lote.is_empty) else 0.0
+    area_nave  = poly_nave.area if (poly_nave and not poly_nave.is_empty) else 0.0
+    area_patio = max(0.0, area_lote - area_nave)
+    pct_nave   = (area_nave  / area_lote * 100) if area_lote > 0 else 0.0
+    pct_patio  = (area_patio / area_lote * 100) if area_lote > 0 else 0.0
+
+    traces: list      = []
+    annotations: list = []
+    shapes: list      = []
+
+    # ── 1. Lote — borde grueso, patio con hachura punteada ────
+    if poly_lote and not poly_lote.is_empty:
+        lxs, lys = poly_lote.exterior.xy
+        traces.append(go.Scatter(
+            x=list(lxs), y=list(lys),
+            fill="toself", fillcolor=PATIO_BG,
+            line=dict(color=NEGRO, width=3),
+            mode="lines", showlegend=False,
+            fillpattern=dict(shape=".", bgcolor=PATIO_BG,
+                             fgcolor="rgba(100,85,55,0.30)", size=5, solidity=0.5),
+        ))
+
+    # ── 2. Nave — hachura diagonal azul (convención plano) ────
+    if poly_nave and not poly_nave.is_empty:
+        nxs, nys = poly_nave.exterior.xy
+        traces.append(go.Scatter(
+            x=list(nxs), y=list(nys),
+            fill="toself", fillcolor=NAVE_BG,
+            line=dict(color=NAVY, width=2),
+            mode="lines", showlegend=False,
+            fillpattern=dict(shape="/", bgcolor=NAVE_BG,
+                             fgcolor="rgba(26,58,92,0.50)", size=9, solidity=0.55),
+        ))
+
+        try:
+            minx_n, miny_n, maxx_n, maxy_n = poly_nave.bounds
+            nave_w = maxx_n - minx_n
+            nave_d = maxy_n - miny_n
+
+            # ── Racks sugeridos: franjas horizontales alternadas ──
+            rack_h   = max(2.0, nave_d / 18)   # alto visual de cada rack
+            aisle_h  = rack_h * 0.55
+            step     = rack_h + aisle_h
+            rack_margin = nave_w * 0.06
+            y_cur = miny_n + nave_d * 0.04
+            while y_cur + rack_h < maxy_n - nave_d * 0.04:
+                shapes.append(dict(
+                    type="rect",
+                    x0=minx_n + rack_margin, y0=y_cur,
+                    x1=maxx_n - rack_margin, y1=y_cur + rack_h,
+                    xref="x", yref="y",
+                    line=dict(color="rgba(26,58,92,0.55)", width=0.8),
+                    fillcolor=RACK_COL,
+                ))
+                y_cur += step
+
+            # ── Docks de carga — frente de la nave ──────────────
+            n_docks = max(2, min(6, int(nave_w / 10)))
+            dock_w  = min(3.5, nave_w / (n_docks + 1) * 0.7)
+            dock_d  = max(2.0, nave_d * 0.03)
+            spacing = nave_w / (n_docks + 1)
+            for d in range(n_docks):
+                dx0 = minx_n + spacing * (d + 1) - dock_w / 2
+                shapes.append(dict(
+                    type="rect",
+                    x0=dx0, y0=miny_n - dock_d,
+                    x1=dx0 + dock_w, y1=miny_n,
+                    xref="x", yref="y",
+                    line=dict(color=DOCK_COL, width=1.5),
+                    fillcolor="#8BB8D8",
+                ))
+
+            # ── Pasillo central (línea de circulación peatonal) ──
+            cx = (minx_n + maxx_n) / 2
+            shapes.append(dict(
+                type="line",
+                x0=cx, y0=miny_n + nave_d * 0.03,
+                x1=cx, y1=maxy_n - nave_d * 0.03,
+                xref="x", yref="y",
+                line=dict(color=NAVY, width=1, dash="dash"),
+            ))
+
+        except Exception:
+            pass
+
+        # ── Label nave ───────────────────────────────────────────
+        annotations.append(dict(
+            x=poly_nave.centroid.x,
+            y=poly_nave.centroid.y,
+            text=(f"<b>NAVE INDUSTRIAL</b><br>"
+                  f"{area_nave:,.0f} m²  ·  {pct_nave:.0f}% del lote<br>"
+                  f"Alt. hombro: {h_nave:.1f} m"),
+            showarrow=False,
+            font=dict(size=11, color=NAVY, family=FONT_DRF),
+            align="center",
+            bgcolor="rgba(255,255,255,0.86)",
+            bordercolor=NAVY,
+            borderwidth=1,
+            borderpad=5,
+        ))
+
+    # ── 3. Patio — label centrado en la franja frontal ────────
+    if poly_lote and poly_nave and not poly_lote.is_empty and not poly_nave.is_empty:
+        try:
+            _bxl = poly_lote.bounds
+            _bxn = poly_nave.bounds
+            # Centroide del patio frontal (entre borde lote y frente de nave)
+            _pat_cx = (_bxl[0] + _bxl[2]) / 2
+            _pat_cy = (_bxl[1] + _bxn[1]) / 2
+            annotations.append(dict(
+                x=_pat_cx, y=_pat_cy,
+                text=(f"<b>PATIO DE MANIOBRAS</b><br>"
+                      f"{area_patio:,.0f} m²  ·  {pct_patio:.0f}%<br>"
+                      f"<i>Radio giro tráileres</i>"),
+                showarrow=False,
+                font=dict(size=10, color="#4A3A18", family=FONT_DRF),
+                align="center",
+                bgcolor="rgba(255,255,255,0.82)",
+                bordercolor="#8A7A4A",
+                borderwidth=1,
+                borderpad=4,
+            ))
+        except Exception:
+            pass
+
+    # ── 4. Flecha Norte ───────────────────────────────────────
+    if poly_lote and not poly_lote.is_empty:
+        _bx  = poly_lote.bounds
+        _w   = _bx[2] - _bx[0]
+        _h   = _bx[3] - _bx[1]
+        _nx  = _bx[2] + _w * 0.05
+        _ny1 = _bx[3] - _h * 0.07
+        _ny2 = _bx[3]
+        annotations.append(dict(
+            x=_nx, y=_ny2,
+            ax=_nx, ay=_ny1,
+            xref="x", yref="y", axref="x", ayref="y",
+            text="N", showarrow=True,
+            arrowhead=2, arrowsize=1.8, arrowwidth=2.5,
+            arrowcolor=NEGRO,
+            font=dict(size=12, color=NEGRO, family=FONT_DRF),
+            xanchor="center",
+        ))
+        # Cuadro leyenda docks (abajo del norte)
+        annotations.append(dict(
+            x=_bx[0], y=_bx[1],
+            text="■ Dock de carga  ── Pasillo central",
+            showarrow=False,
+            font=dict(size=8, color="#555555", family=FONT_DRF),
+            xanchor="left", yanchor="top",
+            bgcolor="rgba(255,255,255,0.75)",
+            bordercolor="#AAAAAA",
+            borderwidth=1,
+            borderpad=3,
+        ))
+
+    # ── 5. Layout — rangos ceñidos al lote, sin scaleanchor ───
+    _dtick = 10.0
+    _xrange, _yrange = None, None
+    _fig_height = 420
+    if poly_lote and not poly_lote.is_empty:
+        _bx2 = poly_lote.bounds
+        _lw  = _bx2[2] - _bx2[0]   # ancho del lote
+        _lh  = _bx2[3] - _bx2[1]   # fondo del lote
+        _span = max(_lw, _lh)
+        _dtick = 25.0 if _span > 250 else (20.0 if _span > 150 else 10.0)
+        # Rangos ajustados al lote + margen mínimo para flecha N y leyenda
+        _xrange = [_bx2[0] - _lw * 0.06, _bx2[2] + _lw * 0.18]
+        _yrange = [_bx2[1] - _lh * 0.06, _bx2[3] + _lh * 0.06]
+        # Altura proporcional al aspecto del lote (capped entre 300 y 460)
+        _aspect = (_lh / _lw) if _lw > 0 else 1.0
+        _fig_height = max(300, min(460, int(370 * _aspect)))
+
+    fig = go.Figure(data=traces)
+    _ax_common = dict(
+        showgrid=True, gridcolor="rgba(150,150,130,0.30)", gridwidth=1,
+        dtick=_dtick, zeroline=False, showticklabels=True,
+        tickfont=dict(size=8, color="#888880", family=FONT_DRF),
+        ticksuffix="m", showline=True, linecolor="#AAAAAA",
+        ticks="outside", ticklen=4,
+    )
+    # scaleanchor + constrain="domain": mantiene 1:1 proporción
+    # encogiendo el dominio X en lugar de expandir el rango
+    _x_ax = dict(scaleanchor="y", scaleratio=1, constrain="domain", **_ax_common)
+    _y_ax = dict(**_ax_common)
+    if _xrange:
+        _x_ax["range"] = _xrange
+    if _yrange:
+        _y_ax["range"] = _yrange
+
+    fig.update_layout(
+        shapes=shapes,
+        xaxis=_x_ax,
+        yaxis=_y_ax,
+        paper_bgcolor=PAPER,
+        plot_bgcolor=PAPER,
+        margin=dict(l=42, r=12, t=14, b=42),
+        height=_fig_height,
+        annotations=annotations,
     )
     return fig
 
@@ -3147,6 +4061,32 @@ TIPO_CAMBIO = float((st.secrets.get("mercado") or {}).get("tipo_cambio", 3.45))
 MERCADO = get_mercado()
 
 # ═══════════════════════════════════════════════════════
+# FONDO MIVIVIENDA — Parámetros 2025
+# ═══════════════════════════════════════════════════════
+_UIT_2025   = 5_350          # S/. — UIT vigente 2025
+_TC_FMVF    = 3.75           # S/./USD referencial para topes FMVF
+_FMVF_TOPE_UIT = 93.5        # Techo Crédito MiVivienda (Ley 30892)
+_FMVF_TOPE_USD = round(_FMVF_TOPE_UIT * _UIT_2025 / _TC_FMVF)  # ≈ $133,393
+
+# BBP — Bono del Buen Pagador (tramos 2025, en S/.)
+# Fuente: FMVF — resolución de actualización vigente al momento de implementación
+_BBP_TRAMOS = [
+    # (precio_max_sol,  bono_sol,  descripcion)
+    (93_100,   25_700, "Tramo 1 — hasta S/. 93,100 (≈17.4 UIT)"),
+    (139_650,  17_400, "Tramo 2 — S/. 93,100–139,650 (hasta 26 UIT)"),
+    (206_000,  10_700, "Tramo 3 — S/. 139,650–206,000 (hasta 38.5 UIT)"),
+    (343_700,   5_500, "Tramo 4 — S/. 206,000–343,700 (hasta 64 UIT)"),
+    (500_225,   3_900, "Tramo 5 — S/. 343,700–500,225 (hasta 93.5 UIT)"),
+]
+
+def _bbp_para_precio_sol(precio_sol: float) -> tuple:
+    """Devuelve (bono_sol, descripcion) del tramo BBP para un precio en S/."""
+    for tope, bono, desc in _BBP_TRAMOS:
+        if precio_sol <= tope:
+            return bono, desc
+    return 0, "Fuera de rango FMVF (precio > 93.5 UIT)"
+
+# ═══════════════════════════════════════════════════════
 # CLAUDE API
 # ═══════════════════════════════════════════════════════
 
@@ -3154,6 +4094,42 @@ def _sanitize_api_key(raw: str) -> str:
     """Strips non-ASCII characters that macOS autocorrect can silently inject."""
     return raw.encode("ascii", errors="ignore").decode("ascii").strip()
 
+
+def _api_call(client, **kwargs) -> str:
+    """Streaming API call — acumula chunks y detecta truncamiento por max_tokens."""
+    chunks = []
+    stop_reason = None
+    try:
+        with client.messages.stream(**kwargs) as stream:
+            for chunk in stream.text_stream:
+                chunks.append(chunk)
+            try:
+                stop_reason = stream.get_final_message().stop_reason
+            except Exception:
+                pass
+    except Exception as _e:
+        _se = str(_e)
+        if "401" in _se or "authentication_error" in _se.lower() or "invalid x-api-key" in _se.lower():
+            raise
+        # Stream interrupted — NO usar respuesta parcial, reintentar completo
+        raise ValueError(f"json_parse_error: Error de streaming ({_se[:150]})")
+
+    if stop_reason == "max_tokens":
+        raise ValueError("TRUNCADO_MAX_TOKENS: La respuesta fue cortada — aumenta max_tokens o reduce el input")
+
+    text = "".join(chunks).strip()
+    if not text:
+        raise ValueError("json_parse_error: API devolvió respuesta vacía")
+    return text
+
+
+@st.cache_resource
+def _make_anthropic_client(api_key: str) -> anthropic.Anthropic:
+    return anthropic.Anthropic(
+        api_key=api_key,
+        max_retries=0,
+        timeout=httpx.Timeout(connect=30.0, read=180.0, write=120.0, pool=30.0),
+    )
 
 def get_client():
     api_key = (
@@ -3168,7 +4144,7 @@ def get_client():
     if not api_key.startswith("sk-"):
         st.error("🔑 Clave API inválida. Contacta al administrador.")
         st.stop()
-    return anthropic.Anthropic(api_key=api_key, max_retries=0, timeout=300.0)
+    return _make_anthropic_client(api_key)
 
 
 def _run_with_retry(fn, spinner_msg, max_attempts=3):
@@ -3176,6 +4152,7 @@ def _run_with_retry(fn, spinner_msg, max_attempts=3):
     import time
     _status = st.empty()
     last_err = ""
+    is_rate_limit = False
     for attempt in range(1, max_attempts + 1):
         label = spinner_msg if attempt == 1 else f"{spinner_msg} — intento {attempt}/{max_attempts}"
         with st.spinner(label):
@@ -3187,11 +4164,17 @@ def _run_with_retry(fn, spinner_msg, max_attempts=3):
                 last_err = str(e)
                 err_lower = last_err.lower()
 
-                # Auth error: clave inválida → limpiar y pedir que la re-ingresen
+                # Errores fatales no reintentables — mostrar directo
+                if "SOLUM_FATAL:" in last_err:
+                    _status.empty()
+                    st.error(last_err.replace("SOLUM_FATAL:", "⚠️"))
+                    st.stop()
+
+                # Auth error: clave inválida
                 if "401" in last_err or "authentication_error" in err_lower or "invalid x-api-key" in err_lower or "invalid api key" in err_lower:
                     _status.empty()
                     st.session_state.pop("api_key_input", None)
-                    st.error("🔑 Clave de acceso inválida. Ingresa una clave API de Anthropic válida en el panel izquierdo (⚙ Configuración) e inténtalo de nuevo.")
+                    st.error("🔑 Clave de acceso inválida. Ingresa una clave API válida en ⚙ Configuración e inténtalo de nuevo.")
                     st.stop()
 
                 is_rate_limit = "429" in last_err or "rate_limit" in err_lower or "rate limit" in err_lower
@@ -3215,32 +4198,49 @@ def _run_with_retry(fn, spinner_msg, max_attempts=3):
                     or "reset by peer" in err_lower
                     or "ssl" in err_lower
                     or "json_parse_error" in err_lower
+                    or "error de conexión" in err_lower
+                    or "broken pipe" in err_lower
+                    or "incomplete" in err_lower
                 )
+                if "TRUNCADO_MAX_TOKENS" in last_err:
+                    _status.empty()
+                    st.error("El análisis de documentos generó una respuesta demasiado larga. "
+                             "Reduce el número de documentos adjuntos o intenta con menos páginas.")
+                    st.stop()
                 if not is_retriable:
                     _status.empty()
                     st.error(f"Error inesperado: {last_err[:400]}")
                     st.stop()
 
         if attempt < max_attempts:
-            wait = 20 if is_rate_limit else 5
+            wait = 20 if is_rate_limit else 3
             for s in range(wait, 0, -1):
                 msg = (f"Optimizando consulta — reintentando en {s}s… ({attempt + 1}/{max_attempts})"
                        if is_rate_limit else
-                       f"Reintentando en {s}s… (intento {attempt + 1}/{max_attempts})")
+                       f"Reintentando conexión en {s}s… (intento {attempt + 1}/{max_attempts})")
                 _status.info(msg)
                 time.sleep(1)
             _status.empty()
 
     _status.empty()
-    if "json_parse_error" in last_err.lower():
-        st.error("El análisis no pudo completarse: Claude devolvió una respuesta incompleta. "
-                 "Intenta con documentos más pequeños (máx. ~1MB cada uno) o reduce el número de archivos adjuntos.")
-    elif "429" in last_err or "rate_limit" in last_err.lower():
-        st.error("Se superó el límite de tokens por minuto de tu cuenta Anthropic. "
-                 "Espera 1 minuto e inténtalo nuevamente, o reduce el número de documentos adjuntos.")
+    if "429" in last_err or "rate_limit" in last_err.lower():
+        st.error("Se superó el límite de tokens de tu cuenta Anthropic. "
+                 "Espera 1 minuto e inténtalo nuevamente.")
+    elif "solum_fatal" in last_err.lower():
+        st.error(last_err.replace("SOLUM_FATAL:", "⚠️"))
+    elif "json_parse_error" in last_err.lower():
+        # Mostrar el motivo real junto al mensaje genérico
+        _detail = last_err.split("json_parse_error:")[-1].strip()[:200] if "json_parse_error:" in last_err else ""
+        st.error(
+            "El análisis no pudo completarse. "
+            + (f"Detalle: {_detail} — " if _detail else "")
+            + "Intenta nuevamente o sube documentos más ligeros (máx. 8 MB por archivo)."
+        )
     else:
-        st.error(f"No se pudo conectar con el servicio de análisis después de varios intentos. "
-                 f"Verifica tu conexión a internet e inténtalo nuevamente.")
+        st.error(
+            f"No se pudo conectar con el servicio de análisis después de {max_attempts} intentos. "
+            f"Verifica tu conexión e inténtalo nuevamente. ({last_err[:200]})"
+        )
     st.stop()
 
 
@@ -3273,7 +4273,29 @@ def parse_json_safe(text: str) -> dict:
         raise ValueError(f"json_parse_error: {e} — '{raw[:120]}'")
 
 
-def pdf_block(pdf_bytes: bytes) -> dict:
+def pdf_block(pdf_bytes: bytes, max_pages: int = 4) -> dict:
+    """Envía el PDF a la API. Si tiene más de max_pages páginas, recorta al inicio."""
+    try:
+        from pdfminer.pdfpage import PDFPage
+        import io, struct
+        with io.BytesIO(pdf_bytes) as fh:
+            n_pages = sum(1 for _ in PDFPage.get_pages(fh))
+        if n_pages > max_pages:
+            # Recortar: reemplazar el PDF con solo las primeras max_pages páginas
+            # usando pypdf si está disponible, sino enviamos el original con advertencia
+            try:
+                from pypdf import PdfReader, PdfWriter
+                reader = PdfReader(io.BytesIO(pdf_bytes))
+                writer = PdfWriter()
+                for i in range(min(max_pages, len(reader.pages))):
+                    writer.add_page(reader.pages[i])
+                buf = io.BytesIO()
+                writer.write(buf)
+                pdf_bytes = buf.getvalue()
+            except ImportError:
+                pass  # pypdf no disponible — enviar completo
+    except Exception:
+        pass  # pdfminer no disponible — enviar completo
     return {
         "type": "document",
         "source": {
@@ -3295,16 +4317,79 @@ def image_block(img_bytes: bytes, media_type: str = "image/jpeg") -> dict:
     }
 
 
+def _resize_image(img_bytes: bytes, max_px: int = 1568) -> tuple[bytes, str]:
+    """Redimensiona imagen a max_px en el lado mayor. Devuelve (bytes, media_type).
+    1568px es el máximo recomendado por Anthropic para visión óptima con menor latencia."""
+    try:
+        from PIL import Image as _PIL_Image
+        import io as _io
+        img = _PIL_Image.open(_io.BytesIO(img_bytes))
+        w, h = img.size
+        orig_format = img.format or "JPEG"
+        if max(w, h) > max_px:
+            ratio = max_px / max(w, h)
+            img = img.resize((int(w * ratio), int(h * ratio)), _PIL_Image.LANCZOS)
+        # Convertir a RGB si tiene canal alpha (PNG con transparencia)
+        if img.mode in ("RGBA", "P"):
+            img = img.convert("RGB")
+            out_format, media_type = "JPEG", "image/jpeg"
+        elif orig_format == "PNG":
+            out_format, media_type = "PNG", "image/png"
+        else:
+            out_format, media_type = "JPEG", "image/jpeg"
+        buf = _io.BytesIO()
+        img.save(buf, format=out_format, quality=85, optimize=True)
+        return buf.getvalue(), media_type
+    except Exception:
+        return img_bytes, "image/jpeg"  # fallback sin modificar
+
+
+def smart_block(file_bytes: bytes) -> dict:
+    """Detecta por magic bytes si el archivo es PDF o imagen, redimensiona si es imagen
+    y retorna el bloque correcto para la API de Claude."""
+    if not file_bytes:
+        return pdf_block(file_bytes)
+    sig = file_bytes[:8]
+    if sig[:4] == b"%PDF":
+        return pdf_block(file_bytes)
+    # Es imagen — redimensionar antes de enviar
+    resized, media_type = _resize_image(file_bytes)
+    return image_block(resized, media_type)
 
 
 # ── CARGA DE NORMATIVAS DESDE ARCHIVOS EXTERNOS ─────────────────────────────────────────────────
 @st.cache_data(show_spinner=False)
 def _load_norm(filename: str) -> str:
-    """Carga un archivo de normativa desde la carpeta normativas/. Cacheado por sesión."""
+    """Carga normativa: Supabase (versión vigente) → archivo local → mensaje de error.
+    Cache de sesión para evitar queries repetidas en el mismo rerun."""
+    _cache_key = f"_norm_cache_{filename}"
+    if _cache_key in st.session_state:
+        return st.session_state[_cache_key]
+    # 1. Intentar Supabase (versión activa más reciente)
+    codigo = filename.replace(".txt", "").replace(".md", "")
+    sb = _get_supabase()
+    if sb:
+        try:
+            resp = (sb.table("normativas")
+                      .select("contenido")
+                      .eq("codigo", codigo)
+                      .eq("activo", True)
+                      .order("version", desc=True)
+                      .limit(1)
+                      .execute())
+            if resp.data:
+                text = resp.data[0]["contenido"]
+                st.session_state[_cache_key] = text
+                return text
+        except Exception:
+            pass
+    # 2. Fallback: archivo local
     base = pathlib.Path(__file__).parent / "normativas"
     path = base / filename
     if path.exists():
-        return path.read_text(encoding="utf-8")
+        text = path.read_text(encoding="utf-8")
+        st.session_state[_cache_key] = text
+        return text
     return f"[NORMATIVA NO ENCONTRADA: {filename}]"
 
 RIN_SAN_ISIDRO = _load_norm("rin_san_isidro.txt")
@@ -3331,6 +4416,12 @@ RIN_LINCE = _load_norm("rin_lince.txt")
 RIN_MAGDALENA = _load_norm("rin_magdalena.txt")
 
 
+# ── NORMATIVA ESPECÍFICA: SAN MIGUEL ─────────────────────────────────────────────────────────────
+# Fuente: Cert. N°020-2018 (CM/RDA — Calle Manco Segundo), Cert. N°340-2020 (RDA — Av. Bertolotto)
+#         Ord. N°2146-MML (13-dic-2018) — Reajuste Integral Zonificación San Miguel
+RIN_SAN_MIGUEL = _load_norm("rin_san_miguel.txt")
+
+
 # ── NORMATIVA ESPECÍFICA: JESÚS MARÍA ────────────────────────────────────────────────────────────
 # Fuente: CPU N°391-2019-MDJM (Av. Garzón 550-572, RDA, caduca 03/10/2022)
 #         CPU N°489-2018-MDJM (Av. Garzón 082, RDA+RDM, caduca 27/11/2021)
@@ -3349,7 +4440,30 @@ RIN_SURQUILLO = _load_norm("rin_surquillo.txt")
 RIN_VILLA_EL_SALVADOR = _load_norm("rin_villa_el_salvador.txt")
 
 RIN_SAN_JUAN_LURIGANCHO = _load_norm("rin_san_juan_lurigancho.txt")
+RIN_LURIGANCHO = _load_norm("rin_lurigancho.txt")
 
+RIN_LA_MOLINA = _load_norm("rin_la_molina.txt")
+
+RIN_CALLAO = _load_norm("rin_callao.txt")
+
+RIN_INDEPENDENCIA = _load_norm("rin_independencia.txt")
+
+RIN_SAN_MARTIN_PORRES = _load_norm("rin_san_martin_de_porres.txt")
+
+RIN_BARRANCO = _load_norm("rin_barranco.txt")
+
+RIN_PUEBLO_LIBRE = _load_norm("rin_pueblo_libre.txt")
+
+RIN_CHORRILLOS = _load_norm("rin_chorrillos.txt")
+
+RIN_BREÑA = _load_norm("rin_breña.txt")
+
+RIN_SAN_LUIS = _load_norm("rin_san_luis.txt")
+
+RIN_ATE = _load_norm("rin_ate.txt")
+
+RIN_SAN_JUAN_MIRAFLORES = _load_norm("rin_san_juan_miraflores.txt")
+RIN_LURIN = _load_norm("rin_lurin.txt")
 
 # ── CONOCIMIENTO NORMATIVO: LIMA METROPOLITANA Y DISTRITOS ───────────────────────────────────────
 REFERENCIAS_NORMATIVAS_LIMA = _load_norm("referencias_lima.txt")
@@ -3426,14 +4540,33 @@ def _buscar_actividad_indice(query: str, zona_sel: str, max_results: int = 12) -
 # ── REGLAMENTO NACIONAL DE EDIFICACIONES (RNE) ───────────────────────────────────────────────────
 # Norma A.010 (RM 191-2021-VIVIENDA) y Norma A.020 (RM 188-2021-VIVIENDA)
 RNE_NACIONAL = _load_norm("rne_nacional.txt")
+CONOCIMIENTO_INDUSTRIAL   = _load_norm("CONOCIMIENTO_INDUSTRIAL_SOLUM.md")
+CONOCIMIENTO_DD           = _load_norm("CONOCIMIENTO_DUE_DILIGENCE_TECNICO.md")
+CONOCIMIENTO_NEGOCIACION  = _load_norm("CONOCIMIENTO_NEGOCIACION_TACTICA.md")
+CONOCIMIENTO_CICLO        = _load_norm("CONOCIMIENTO_CICLO_MERCADO_LIMA.md")
+CONOCIMIENTO_SOCIETARIA   = _load_norm("CONOCIMIENTO_ESTRUCTURACION_SOCIETARIA.md")
+CONOCIMIENTO_RETAIL       = _load_norm("CONOCIMIENTO_RETAIL_MIXEDUSE.md")
+LEGAL_TRIBUTACION         = _load_norm("legal_tributacion_inmobiliaria.md")
+LEGAL_CONTRATOS           = _load_norm("legal_contratos_compraventa.md")
+LEGAL_ARRENDAMIENTO       = _load_norm("legal_arrendamiento_peru.md")
+LEGAL_SUNARP              = _load_norm("legal_sunarp_predios.md")
+LEGAL_GARANTIAS           = _load_norm("legal_garantias_comprador_planos.md")
 
 
 def extract_parameters(cert_bytes: bytes, norm_docs: list[bytes]) -> dict:
     client = get_client()
 
-    content = [pdf_block(cert_bytes)]
+    # Advertencia de tamaño — limit generoso; imágenes ya se redimensionan automáticamente
+    _total_mb = (len(cert_bytes) + sum(len(d) for d in norm_docs)) / 1_048_576
+    if _total_mb > 30:
+        raise ValueError(
+            f"SOLUM_FATAL: Los documentos adjuntos pesan {_total_mb:.1f} MB en total. "
+            f"Comprime cada archivo a menos de 8 MB antes de subirlo."
+        )
+
+    content = [smart_block(cert_bytes)]
     for doc in norm_docs:
-        content.append(pdf_block(doc))
+        content.append(smart_block(doc))
 
     docs_note = (
         f"\nAdemás del certificado, se adjuntan {len(norm_docs)} documento(s) normativos adicionales "
@@ -3468,6 +4601,10 @@ Devuelve ÚNICAMENTE el siguiente JSON, sin texto antes ni después, sin bloques
   "fecha_caducidad": "2026-12-31",
   "notas_altura": ["Nota 12: lote esquina aplica promedio de alturas"],
   "ordenanzas_base": ["RIN 523-2020"],
+  "afectacion_vial": false,
+  "afectacion_vial_detalle": "El predio se encuentra afecto por ampliación de Av. Portillo Grande — retiro de 8.50 m desde el límite de propiedad",
+  "afectacion_vial_ml": 8.5,
+  "area_afectada_m2": null,
   "beneficios_normativos": [
     {{
       "tipo": "mayor_altura",
@@ -3488,11 +4625,15 @@ IMPORTANTE: Reemplaza todos los valores del ejemplo con los datos reales del doc
 - estacionamientos_norma: usa el ratio correcto según la normativa del distrito identificado — consulta el RIN correspondiente de la lista anterior; incluye la base legal (Ord./RIN y artículo)
 - estac_visitas_norma: copia el texto EXACTO del certificado sobre visitas (ej: "15% máximo", "1 espacio", "10% del total"). Si el certificado no menciona visitas, usa null
 - ordenanzas_base: cita las ordenanzas vigentes del certificado, no las derogadas
-- beneficios_normativos: incluye lotes esquina, frente a parque o zona monumental, acumulación de lotes, bonificaciones de altura por vía, retiros compensados, usos mixtos, TDR, ATN, CZ, cualquier mecanismo que beneficie el proyecto según la normativa del distrito"""
+- beneficios_normativos: incluye lotes esquina, frente a parque o zona monumental, acumulación de lotes, bonificaciones de altura por vía, retiros compensados, usos mixtos, TDR, ATN, CZ, cualquier mecanismo que beneficie el proyecto según la normativa del distrito
+- afectacion_vial: true si el documento menciona afectación vial, ampliación de vía, cesión de área para vía, sección vial que requiere retroceso, fajas de afectación o similar — false si no hay mención
+- afectacion_vial_detalle: descripción exacta copiada del documento (vía afectante, metros de retiro, observaciones del certificado). null si afectacion_vial=false
+- afectacion_vial_ml: metros lineales de afectación desde el límite de propiedad. null si no se especifica o no hay afectación
+- area_afectada_m2: si el documento indica el área afectada en m², extráela. Si no, usa null (SOLUM la calculará con frente × afectacion_vial_ml)"""
 
     content.append({"type": "text", "text": prompt})
 
-    response = client.messages.create(
+    text = _api_call(client,
         model="claude-sonnet-4-6",
         max_tokens=8192,
         system=[{"type": "text",
@@ -3500,10 +4641,6 @@ IMPORTANTE: Reemplaza todos los valores del ejemplo con los datos reales del doc
                  "cache_control": {"type": "ephemeral"}}],
         messages=[{"role": "user", "content": content}]
     )
-
-    if not response.content:
-        raise ValueError("json_parse_error: API devolvió respuesta vacía")
-    text = response.content[0].text.strip()
     return parse_json_safe(text)
 
 
@@ -3598,6 +4735,21 @@ def generate_cabida(params: dict, config: dict) -> dict:
             "(2) Estacionamiento = 1 est por vivienda — el más restrictivo de todos los distritos. "
             "(3) Zona predominante RDB — no hay RDA ni CM confirmados. "
             "(4) Lotes E3 sobre Av. Javier Prado pueden reconvertirse a residencial sin cambio de zonificación."
+        )
+    elif "san miguel" in distrito.lower():
+        normativa_note += f"\n\nNORMATIVA ESPECÍFICA SAN MIGUEL (Ord. N°2146-MML dic-2018 + Ord. N°1098-MML):\n{RIN_SAN_MIGUEL}"
+        normativa_note += (
+            "\n\nCLAVES PARA SAN MIGUEL: "
+            "(1) ATN II — Ord. N°2146-MML (dic-2018) es la norma vigente. "
+            "(2) Zona RDA estándar: lote 300m²→8 pisos/35% AL; lote 450m²→1.5(a+r)/40% AL; Conj.Res 2500m²→50% AL. "
+            "(3) Frente a avenida >20m o parque: hasta 15 pisos. Vías locales: hasta 10 pisos. "
+            "(4) ZONA HISTÓRICA (perímetro Jr. Yungay/Santa Ana/San Martín/Ayacucho/Independencia): MÁXIMO 5 PISOS — inamovible. "
+            "(5) Sector 10 Ex Feria del Pacífico: base 12 pisos (AL 60%); hasta 16-18 pisos con servidumbre boulevard 8ml (Ord. N°2146 Art.2°). "
+            "(6) Av. Bertolotto y Av. Costanera: régimen especial Ord. N°240-MDSM y N°243-MDSM — verificar en CPUE. "
+            "(7) Estacionamiento: 1 cada 1.5 vivienda (uniforme para todos los tipos RDA). "
+            "(8) Área mínima dpto: 75m² para 3D. Altura piso a piso: 3.00m máximo. "
+            "(9) ALERTA SÍSMICA: Convenio 288-2015-VIVIENDA — estudios de microzonificación sísmica CISMID obligatorios para proyectos de vivienda. "
+            "(10) Zona CM (Av. La Marina): altura 1.5(a+r); uso residencial compatible RDA; estac. comercial 1/50m²."
         )
     elif "jes" in distrito.lower() and "mar" in distrito.lower():
         normativa_note += f"\n\nNORMATIVA ESPECÍFICA JESÚS MARÍA (Ord. N°1017-MML + Ord. N°1076-MML):\n{RIN_JESUS_MARIA}"
@@ -3694,11 +4846,226 @@ def generate_cabida(params: dict, config: dict) -> dict:
             "(6) Conectividad: Línea 1 Metro (eje Próceres) — activa bonus de demanda en predios cercanos. "
             "(7) Mercado objetivo: segmento B/C · precios USD 1,200-1,800/m² · tipologías 2D y 3D."
         )
+    elif "lurigancho" in distrito.lower() and "san juan" not in distrito.lower():
+        normativa_note += f"\n\nNORMATIVA ESPECÍFICA LURIGANCHO (HUACHIPA) (Ord. N°1099-MML + Ord. N°1237-MML — ATN IV):\n{RIN_LURIGANCHO}"
+        normativa_note += (
+            "\n\nCLAVES PARA LURIGANCHO (CHOSICA / HUACHIPA — ATN IV): "
+            "(1) ATN IV — distinto a los distritos metropolitanos (ATN I/II). Norma base: Ord. N°1099-MML + Ord. N°1237-MML. Autoridad: Municipalidad del Centro Poblado Santa María de Huachipa (MCPSMH). "
+            "(2) ZONA IE — Industria Especial: categoría distinta a I1/I2/I3. Restricciones ambientales más estrictas. "
+            "(3) IE — Área libre: 50% mínimo, tratado íntegramente como área verde. Solo 50% del lote es techable. "
+            "(4) IE — Altura máxima: 9.00 ml (nave un nivel estándar). MÁS restrictivo que I3 Lurín (altura libre). "
+            "(5) IE — Retiro Av. Los Laureles: 5.00 ml · alineamiento de fachada: 20.00 ml desde eje de vía · sección vial: 30.00 ml. "
+            "(6) IE — Estacionamiento: 1 espacio por cada 6 personas empleadas — resolver dentro del lote. "
+            "(7) IE — PROHIBIDO: industrias contaminantes · actividades que riesgo al acuífero subterráneo de Huachipa · industrias peligrosas. "
+            "(8) EIA OBLIGATORIO: Estudio de Impacto Ambiental aprobado por autoridad competente — ANTES de licencia. Agregar 3–6 meses al cronograma. "
+            "(9) Ord. N°1237-MML — condiciones de habilitación: dejar derecho de vía Av. Los Laureles + Quinta Avenida (reducen área útil) · franja retiro arborizado como aislamiento de seguridad dentro del lote. "
+            "(10) Cerco perimétrico: 5.40 ml · lote normativo: el existente. "
+            "(11) Mercado industrial Huachipa: terreno ~$130–135/m² · renta nave ~$4.5–6.0/m²/mes · corredor Carretera Central activo. "
+            "(12) Solo compatible con logística limpia, distribución, manufactura no contaminante — NO industria pesada, química ni residuos peligrosos."
+        )
+    elif "la molina" in distrito.lower():
+        normativa_note += f"\n\nNORMATIVA ESPECÍFICA LA MOLINA (Ord. N°1144-2008-MML + Ord. N°1661-2013-MML + D.A. N°010-2016-MDLM):\n{RIN_LA_MOLINA}"
+        normativa_note += (
+            "\n\nCLAVES PARA LA MOLINA: "
+            "(1) ATN III — reglamento propio MDLM. Norma base Ord. N°1144-2008-MML. "
+            "(2) Zona CZ estándar: 4-5 pisos · área libre no exigible (comercial) · retiro 5ml TODAS las vías. "
+            "(3) CLAVE CZ: el lote CZ puede destinarse 100% a uso residencial aplicando parámetros de zona residencial compatible del entorno. "
+            "(4) RESTRICCIÓN CZ en Av. La Molina/Av. Javier Prado: nuevo comercial solo en lotes ≥1,000m² y frente ≥20ml (Ord. N°1661 Anexo 2 B14). Por debajo de esos umbrales: SOLO residencial. "
+            "(5) BAHÍAS VEHICULARES OBLIGATORIAS: en edificaciones nuevas CZ con frente ≥15m — en retiro frontal. "
+            "(6) NO subdivisión de lotes CZ (D.A. N°010-2016-MDLM Art. 12°, lit. g). "
+            "(7) RDB (mayoría del distrito): 3-5 pisos según HU · área libre 30-40% · verificar CPUE para parámetros exactos. "
+            "(8) Estacionamiento: el de la Habilitación Urbana existente puede computar para el proyecto (Obs. 6 D.A. N°010-2016-MDLM). "
+            "(9) Mercado: USD 1,547/m² · rentabilidad bruta 6.3% (líder Lima prime) · absorción 1.4 und/mes."
+        )
+    elif "callao" in distrito.lower():
+        normativa_note += f"\n\nNORMATIVA ESPECÍFICA CALLAO (PDU Callao 2011-2022 — Ord. N°000068-2010):\n{RIN_CALLAO}"
+        normativa_note += (
+            "\n\nCLAVES PARA CALLAO: "
+            "(1) ATN I — administrado por GORE Callao + MPC. Norma base PDU Callao Ord. N°000068-2010 (prorrogado Ord. N°023-2018/019). "
+            "(2) RESTRICCIÓN AEROPORTUARIA OBLIGATORIA: Ley N°27261 — verificar plano servidumbre DAC/MTC en TODO proyecto. "
+            "La restricción DAC puede ser más limitante que el parámetro del CPU. Sin certificado DAC: no hay licencia. "
+            "(3) Zona ZRE (residencial/mixto): coef. 3.25 (calle) / 4.00 (avenida) · multifam. 5p (calle) / 1.5(a+r) (Av.) · "
+            "ESTAC. 1/3 VIVIENDAS (muy favorable). Área libre 30%. "
+            "(4) Retiro ZRE: varía (0ml consolidación en algunos predios / 5ml en otros) — siempre verificar CPU específico. "
+            "(5) Zona I3 (Gambetta): lote ≥2,500m²/30ml · altura libre A.060 · EIV+EIA obligatorios · dominio restringido 200ml + afectación PROVIAS. "
+            "(6) Programa MI VIVIENDA habilitado en ZRE (D.S. N°012-2019) — verificar elegibilidad. "
+            "(7) Alta tensión: verificar servidumbre eléctrica si aplica."
+        )
+    elif "independencia" in distrito.lower():
+        normativa_note += f"\n\nNORMATIVA ESPECÍFICA INDEPENDENCIA (Ord. N°1015-2007-MML + Ord. N°933-2006-MML):\n{RIN_INDEPENDENCIA}"
+        normativa_note += (
+            "\n\nCLAVES PARA INDEPENDENCIA: "
+            "(1) ATN I — normativa MML base Ord. N°1015-2007-MML. "
+            "(2) Zona CM (predominante reconversión industrial Panamericana Norte): altura 1.5(a+r) · retiro 1.50ml calle / 3.00ml avenida. "
+            "(3) EXCEPCIÓN ALTURA CM: hasta 7 PISOS en lotes frente a Parques o Avenidas con ancho ≥20 ml. "
+            "(4) USO RESIDENCIAL EN CM: se permite usar 100% del área del lote para uso residencial (Multifam./Conj.Resid.) — aplicar RDA/RDM compatible del entorno. "
+            "(5) Estacionamiento CM comercial: 1/50m². Para uso residencial en CM: verificar ratio en CPUE. "
+            "(6) Zona I2 (Industria Liviana): lote ≥1,000m² · frente 20ml · estac. 1/6 personas · retiro 0ml (consolidación). "
+            "(7) Alta tensión: verificar servidumbre eléctrica en corredores industriales (Av. Pacífico y otros). "
+            "(8) Mercado: Lima Norte NSE B/C · ~S/. 4,200–5,000/m² · alta demanda acumulada."
+        )
+    elif "san martin" in distrito.lower() or "smp" == distrito.lower().strip():
+        normativa_note += f"\n\nNORMATIVA ESPECÍFICA SAN MARTÍN DE PORRES (Ord. N°1015-07-MML + Ord. N°933-2006-MML):\n{RIN_SAN_MARTIN_PORRES}"
+        normativa_note += (
+            "\n\nCLAVES PARA SAN MARTÍN DE PORRES: "
+            "(1) ATN I — normativa MML base Ord. N°1015-07-MML. "
+            "(2) Zona I2 (Av. Tomás Valle / Fundo Chavarría): lote ≥1,000m²/20ml · altura libre (industrial) o máx 5p (si uso vivienda exclusivo) · retac. 5ml Av. / 3ml calle (CPU 2025). "
+            "(3) ZONA DIVERSIFICADA I2 (entre Tomás Valle/Pan.Norte/Canta Callao/Gerardo Unger): admite Centros Comerciales, Galerías, Centros Feriales aplicando parámetros CZ · EIA + EIV obligatorios. "
+            "(4) Zona CZ (Av. Tomás Valle): coef. 4.0 · 7p frente Av.≥20m / 5p general · 100% residencial permitido · retiro 3ml Av. / 1.5ml calle · estac. 1/50m². "
+            "(5) Zona RDM (calles interiores): multifamiliar 3-5p · coef. 2.8-3.5 · AL 30-35% · estac. 1/2 viviendas · conj.res. 6p/800m². "
+            "(6) Áreas mínimas: 75m² para 3D (CPU 2024 Notas) — 2D y 1D a definir. "
+            "(7) RETIRO I2 VARÍA: CPU 2019 = 10ml; CPU 2025 = 5ml — verificar siempre en CPUE del predio. "
+            "(8) Mercado: Lima Norte NSE B/C · ~S/. 4,500–5,500/m² · Industrial Tomás Valle: nodo clave SMP-Callao."
+        )
+    elif "chorrillos" in distrito.lower():
+        normativa_note += f"\n\nNORMATIVA ESPECÍFICA CHORRILLOS (Ord. N°1076-MML + Ord. N°2264-MML + Ord. N°2504-MML):\n{RIN_CHORRILLOS}"
+        normativa_note += (
+            "\n\nCLAVES PARA CHORRILLOS — DOS SECTORES: "
+            "PASO 1: verificar si el predio es ATN IV (zona costero/PROHVILLA) o ATN II (La Campiña/interior). "
+            "\n\nSECTOR ATN IV (Urb. Los Cedros de Villa y zonas costeras): "
+            "(1) PROHVILLA: opinión favorable OBLIGATORIA (Art. 31, Ord. N°2264-MML) — plazo adicional al cronograma. "
+            "(2) CONO DE VUELO Aeródromo Las Palmas: Autorización DGAC OBLIGATORIA (Ley N°27261) antes de licencia municipal. "
+            "(3) Altura máxima: 3 pisos · AL 30% · Estac. 1/viv · Retiro 3ml. "
+            "(4) Área Natural de Protección: compatibilidad usos restringida · arborización obligatoria en áreas libres y retiros. "
+            "\n\nSECTOR ATN II — La Campiña (CZ/RDM): "
+            "(5) CZ + RDM — Av. Guardia Civil: altura 8 pisos · Lote R 1,000m²/20ml · AL 40% · retiro 3ml · estac. 1/1.5 viv. "
+            "(6) RDM puro — Av. Los Gorriones: 8 pisos · lote 1,600m²/20ml · AL 40% · retiro 5ml Av./3ml Jr. · estac. 1/1.5 viv. "
+            "(7) Si colinda con industria: retiro lateral MÍNIMO 5ml sin edificaciones, arborizado. "
+            "(8) Parcelación semi rústica La Campiña: actualizar registro antes de HU (D.S. N°029-2019-VIV). "
+            "\n\nAMBOS SECTORES: "
+            "(9) DGAC / Cono de vuelo Las Palmas: verificar en TODO predio Chorrillos. "
+            "(10) Ord. N°2264-MML aplica a todo proyecto · Ord. N°2504-MML: reajuste zonificación vigente. "
+            "(11) Mercado: USD 1,658/m² · Rentabilidad 5.7% (3° Lima) · NSE B/B+."
+        )
+    elif "bre" in distrito.lower() and "ña" in distrito.lower() or "breña" in distrito.lower():
+        normativa_note += f"\n\nNORMATIVA ESPECÍFICA BREÑA (Ord. N°1017-MML + Ord. N°1347-10-MML + Ord. N°1785-13-MML):\n{RIN_BREÑA}"
+        normativa_note += (
+            "\n\nCLAVES PARA BREÑA: "
+            "(1) ATN II — Ord. N°1017-MML como base con modificatorias N°1347-10-MML y N°1785-13-MML. "
+            "(2) Zona CZ (Av. Tingo María y corredores): altura 1.5(a+r) · 100% residencial permitido · retiro 5ml Av. / 3ml Jr. "
+            "(3) Zona RDA lote 450m²/10ml: hasta 10 pisos o 1.5(a+r) frente Av.>20m. "
+            "(4) Zona RDM lote 300m²/10ml: hasta 7 pisos frente Av.>20m o parque; Conj.Res. 1,600m²/20ml → 8 pisos. "
+            "(5) ESTACIONAMIENTO UNIFORME: 1/1.5 viviendas en TODOS los tipos RDM y RDA — más favorable que Jesús María RDA. "
+            "(6) Área libre: 30% (lotes pequeños RDM) / 35-40% (medianos) / 50% (Conj.Res.). "
+            "(7) Área mínima 3D: 75m². "
+            "(8) MI VIVIENDA: cumplir D.S. N°013-2013-VIVIENDA (estac. 1/1.5 viv aplica). "
+            "(9) Mercado: USD 1,514/m² · NSE B/B+ · proximidad hospitales y Av. Brasil."
+        )
+    elif "pueblo libre" in distrito.lower() or "pueblolibre" in distrito.lower():
+        normativa_note += f"\n\nNORMATIVA ESPECÍFICA PUEBLO LIBRE (Ord. N°1015-MML + Ord. N°1017-MML + Ords. MPL propias):\n{RIN_PUEBLO_LIBRE}"
+        normativa_note += (
+            "\n\nCLAVES PARA PUEBLO LIBRE: "
+            "(1) ATN II — Ord. N°1015-MML + Ord. N°1017-MML como base; Ords. MPL propias prevalecen en estac. y conjuntos. "
+            "(2) Zona RDA: lote 300m²/10ml → 8 pisos / AL 35%; lote 450m²/10ml → 1.5(a+r) frente Av.>20m / AL 40%; Conj.Res. 2,500m²/25ml → 1.5(a+r) / AL 50%. "
+            "(3) ESTACIONAMIENTO: 1/1.5 viviendas (Ord. N°337-MPL) — más favorable que Jesús María RDA (donde es 1/1 viv). Aplica también a proyectos MI VIVIENDA. "
+            "(4) Retiro frontal: 5.00 ml (Av. Mariano Cornejo) — verificar retiros laterales y fondo en CPUE. "
+            "(5) AZOTEA PERMITIDA sobre la altura máxima (Ord. N°330-MPL + Ord. N°347-MPL) — genera m² adicionales. "
+            "(6) Conjuntos Residenciales: verificar Ord. N°360-MPL (11.06.11) para parámetros específicos. "
+            "(7) Área mínima 3D: 75m². 2D y 1D: áreas a definir en proyecto. "
+            "(8) Mercado: USD 1,820/m² · NSE B/B+ · precio inferior a Jesús María — favorable para promotores con restricción de precio terreno."
+        )
+    elif "barranco" in distrito.lower():
+        normativa_note += f"\n\nNORMATIVA ESPECÍFICA BARRANCO (Ord. N°1076-MML + Ord. N°343-MML + Ord. N°516-2019-MDB):\n{RIN_BARRANCO}"
+        normativa_note += (
+            "\n\nCLAVES PARA BARRANCO — DOS REGÍMENES: "
+            "PASO 1: verificar si el predio está en Zona Monumental (ATN IV) o Fuera Zona Monumental (ATN II). "
+            "\n\nZONA MONUMENTAL (ATN IV — mayoría del distrito histórico): "
+            "(1) MINISTERIO DE CULTURA obligatorio — opinión favorable ANTES de licencia municipal. Plazo adicional 30-90 días. "
+            "(2) ALTURA MÁXIMA INAMOVIBLE: 12.00 ml = 4 pisos (Ord. N°343-MML). Sin escalonamiento. "
+            "(3) Área libre: 30% · Estac.: 1/vivienda · RNE A.140 obligatorio. "
+            "\n\nFUERA ZONA MONUMENTAL (ATN II — Av. El Sol Este y sector periférico): "
+            "(4) SIN restricción MC — tramitación municipal estándar. "
+            "(5) RDM: hasta 7 pisos (lote 300m²/frente Av.≥20m). RDA lote 450m²: 1.5(a+r) — hasta 15 pisos frente a parques / 10 pisos vías locales. "
+            "(6) Conjunto Residencial RDA lote 2,500m²: 1.5(a+r). "
+            "(7) Retiro Av.: 5.00 ml · Estac.: 1/1.5 viviendas · Área libre: 35-50% según tipo. "
+            "\n\nAMBOS REGÍMENES: "
+            "(8) ÁREAS MÍNIMAS BARRANCO (Ord. N°516-2019-MDB): 3D=90m² · 2D=75m² · 1D=60m² — distribución 50%/35%/15%. Tolerancia 10%. "
+            "(9) Piso a piso: máx 3.00ml residencial / 4.00ml comercial. "
+            "(10) Acantilados Costa Verde: Ord. N°1414-MML — intangibles. Restricción adicional si el predio linda con el acantilado. "
+            "(11) Mercado: USD 2,656/m² (2° más caro Lima) · NSE A/B · rentabilidad bruta ~5%."
+        )
+
+    elif "san luis" in distrito.lower():
+        normativa_note += f"\n\nNORMATIVA ESPECÍFICA SAN LUIS (Ord. N°2358-2021 + Ord. N°1082-MML + Ord. N°1015-MML + Ord. N°1076-MML):\n{RIN_SAN_LUIS}"
+        normativa_note += (
+            "\n\nCLAVES PARA SAN LUIS: "
+            "(1) ATN II — Ord. N°2358-2021 como norma base distrital (Reajuste Integral San Luis) + Ords. MML. "
+            "(2) RETIRO FRONTAL: SIN RETIRO en zona CZ e I2 (D.A. N°003-2012-MDSL — aplica ambos frentes de vía). Diferenciador clave. "
+            "(3) Zona CZ: altura 1.5(a+r) · 100% residencial permitido · sin retiro · estac. 1/1.5 viv (residencial) / 1/50m² (comercial). "
+            "(4) Zona I2: lote 1,000m²/20ml · sin retiro + voladizo 0.50m · estac. 1/6 pers. · si uso exclusivo vivienda: aplica tabla RDM. "
+            "(5) Zona RDA: lote 300m²/10ml → 8p / lote 450m²/10ml → 1.5(a+r) Av.>20m / hasta 15p frente parque / 10p vías locales. "
+            "(6) Zona RDM: lote 120m²/6ml → 3p / lote 300m²/10ml → hasta 7p (Av.>20m) / Conj.Res. 1,600m²/20ml → 8p. "
+            "(7) ESTACIONAMIENTO: 1/1.5 viv (RDM/RDA) — uniforme y favorable. "
+            "(8) Área libre: 30-40% según lote y zona. "
+            "(9) Área mínima 3D: 75m² · piso a piso máx 3.00ml. "
+            "(10) CV: 5 pisos / hasta 7p en lotes >200m² frente Av.>25ml. "
+            "(11) Mercado: USD ~1,391–1,507/m² (estimado) · NSE B/B- · distrito de transición entre San Borja y La Victoria."
+        )
+
+    elif "ate" in distrito.lower() and "santa anita" not in distrito.lower():
+        normativa_note += f"\n\nNORMATIVA ESPECÍFICA ATE (Ord. N°1099-MML + Ord. N°1076-MML + Ord. N°1015-MML):\n{RIN_ATE}"
+        normativa_note += (
+            "\n\nCLAVES PARA ATE: "
+            "(1) ATN II — Ord. N°1099-MML como norma base distrital (Reajuste Integral Ate) + Ords. MML N°1076 + N°1015. "
+            "(2) Zona I2 (Av. Separadora Industrial): lote 1,000m²/20ml · retiro 5ml · altura según proyecto/entorno · estac. 1/6 pers. "
+            "(3) I2: hasta 20% de I1 permitido · PAMA obligatorio si industria en Uso Conforme. "
+            "(4) Zona CZ (Av. La Molina / Ex Autopista): altura 1.5(a+r) · retiro 5ml · 100% residencial permitido. "
+            "(5) CZ residencial: AL 35% (multifamiliar) · estac. 1/1.5 viv. CZ comercial: AL no exigible · estac. 1/50m². "
+            "(6) EIV obligatorio en CZ para CC, supermercados, mercados (Art. 3 RNE). "
+            "(7) Zona RDA lote 450m²: hasta 1.5(a+r) Av.>20m / hasta 15p frente parque / 10p vías locales. "
+            "(8) Zona RDM lote 300m²: hasta 7p (Av.>20m o parque) / Conj.Res. 1,600m²/20ml → 8p. "
+            "(9) ESTACIONAMIENTO: 1/1.5 viv (RDA/RDM) · 1/50m² (comercial) · 1/6 pers. (industrial). "
+            "(10) Área mínima 3D: 75m². "
+            "(11) Mercado residencial: USD ~1,159–1,304/m² (estimado) · NSE B-/C+ · industrial Carretera Central activo."
+        )
+
+    elif "san juan" in distrito.lower() and "miraflore" in distrito.lower():
+        normativa_note += f"\n\nNORMATIVA ESPECÍFICA SAN JUAN DE MIRAFLORES (Ord. N°2144-MML + Ord. N°620-MML + Ord. N°1015-MML ATN I):\n{RIN_SAN_JUAN_MIRAFLORES}"
+        normativa_note += (
+            "\n\nCLAVES PARA SAN JUAN DE MIRAFLORES — ATN I: "
+            "(1) ATN I — Ord. N°2144-MML como norma base distrital. NO es ATN II. "
+            "(2) Zona CZ: altura FIJA 5 pisos estándar / 7 pisos frente Av. con ancho ≥20m o frente a parques. NO usa fórmula 1.5(a+r). "
+            "(3) CZ retiro: 3.00ml avenidas · 1.50ml calles/pasajes. AL no exigible (comercial). 100% residencial permitido. "
+            "(4) CZ estac. residencial: 1/50m² comercial · MULTIFAMILIAR 1/2 viviendas — el más favorable de Lima. "
+            "(5) RDA multifamiliar lote ≥200m²/10ml: 6 pisos / 7 pisos frente Av.>20m o parques · AL 40%. "
+            "(6) RDM multifamiliar lote 120m²/6ml: 3 pisos · AL 30%. "
+            "(7) I2: lote 1,000m²/20ml · altura según proyecto · estac. 1/6 pers. · Zona Industrial No Molesta en reconversión. "
+            "(8) ESTACIONAMIENTO MULTIFAMILIAR: 1/2 viviendas en CZ, RDA y RDM — el diferenciador más importante de SJM. "
+            "(9) ÁREAS MÍNIMAS: 3D=75m² · 2D=60m² · 1D=40m² — las más bajas de Lima. Permite mix agresivo de unidades compactas. "
+            "(10) MI VIVIENDA: Ord. 2361-MML + D.S. N°006-2023-VIVIENDA. "
+            "(11) Mercado: terreno CZ Av. Los Héroes USD ~2,500/m² (tasación 2023) · residencial ~USD 1,014–1,217/m² · NSE C/C+."
+        )
+    elif "lurin" in distrito.lower() or "lurín" in distrito.lower():
+        normativa_note += f"\n\nNORMATIVA ESPECÍFICA LURÍN (Ord. N°1814-MML + Ords. N°933 + N°1015-MML — ATN I):\n{RIN_LURIN}"
+        normativa_note += (
+            "\n\nCLAVES PARA LURÍN — ATN I: "
+            "(1) ATN I — Ord. N°1814-MML como norma base distrital. Lote MÍNIMO 5,000m²/40ml en TODAS las zonas (I3, RDA y RDM). Proyectos pequeños no son viables normativamente. "
+            "(2) ZONA I3 — Gran Industria (MacrOpolis / Hab. El Faro): lote 5,000m²/40ml · AL 25% mínimo (50% de esa área = 12.5% del lote debe ser verde y arborizada) · altura según proyecto (sin límite fijo) · estac. resueltos dentro del lote sin ratio fijo · retiros según proyecto en marco de área libre arborizada. "
+            "(3) I3 — DIGESA: predios colindantes al Relleno Sanitario Portillo Grande DEBEN tener opinión favorable de DIGESA antes de tramitar licencia. Verificar en CPUE. "
+            "(4) I3 — Índice de usos: Ords. N°933 + N°1015-MML (ATN I) — amplio abanico de actividades industriales y logísticas. "
+            "(5) ZONA RDA (Lechucero Bajo): lote 5,000m²/40ml · densidad máxima 450 viv/ha (unifam/multifam) / 500 viv/ha (Conjunto Residencial) · altura SIN LÍMITE — resultante de la densidad máxima · AL 60% · estac. 1/3 viviendas (el más favorable de Lima). "
+            "(6) ZONA RDM: lote 5,000m²/40ml · densidad 160 viv/ha (Quinta/Multifam) / 280 viv/ha (Conjunto Residencial) · altura sin límite (resultante de densidad) · AL 30% (Quinta/Multifam) / 50% (Conjunto Residencial) · estac. 1/3 viv. "
+            "(7) RETIROS RESIDENCIALES — DINÁMICOS Y CRÍTICOS: frontal 3ml vías locales / 5ml avenidas · lateral = 1/6 de la altura del edificio (mínimo 3ml) · posterior = 1/3 de la altura (mínimo 3ml). Calcular siempre antes de diseñar: ej. edificio 12 pisos (≈36m) → retiro lateral mín 6m, posterior mín 12m. "
+            "(8) CÁLCULO RDA — N° max viviendas = densidad × área_lote_en_ha. Para 5,000m² (0.5ha): máx 225 viv (RDA) · Para 31,068m² (3.1ha): máx 1,395 viv (unifam/multifam) o 1,550 viv (Conjunto Residencial). "
+            "(9) Pendientes pronunciadas: solo 3 pisos sobre terreno natural · piso a piso máx 3.00ml · área mínima 3D: 75m². "
+            "(10) MERCADO INDUSTRIAL Lurín 2025: terreno I3 $140–200/m² (MacrOpolis/parque) · renta nave Clase A $5.5–8.5/m²/mes · renta promedio $6.1–6.4 · vacancia 11.9% · hub líder Lima Sur (54% demanda) · cap rate 8–10%. Operadores: Ransa, Mercado Libre, Cirion Data Center, Alicorp, Molitalia. "
+            "(11) Pipeline 2025: MacrOpolis Fase 3 (75,000m² en 2 fases). Anillo Vial Periférico en construcción → mejora conectividad Lurín-Callao."
+        )
 
     # ── Áreas mínimas obligatorias por distrito ──────────────────────────────
     _dl = distrito.lower()
     if "san isidro" in _dl:
         _area_min_nota = ""  # ya incluido en instrucción 4 con ámbito
+    elif "san juan" in _dl and "miraflore" in _dl:
+        _area_min_nota = (
+            "ÁREAS MÍNIMAS OBLIGATORIAS (San Juan de Miraflores — Ord. N°2144-MML, nota c CPU N°221-2024):\n"
+            "  3 dormitorios: 75 m² mínimo\n"
+            "  2 dormitorios: 60 m² mínimo — más bajo que la mayoría de distritos\n"
+            "  1 dormitorio:  40 m² mínimo — permite unidades compactas de inversión\n"
+            "USA EXACTAMENTE estas áreas. Son las más bajas de Lima — maximizan número de unidades.\n"
+            "CZ: 5p estándar / 7p Av.≥20m · retiro 3ml Av. / 1.50ml calles · estac. 1/2 viv (multifamiliar).\n"
+            "RDA lote ≥200m²: 6p / 7p Av.>20m · AL 40% · estac. 1/2 viv."
+        )
     elif "miraflores" in _dl:
         _area_min_nota = (
             "ÁREAS MÍNIMAS OBLIGATORIAS (Miraflores — confirmar zona en certificado):\n"
@@ -3747,6 +5114,14 @@ def generate_cabida(params: dict, config: dict) -> dict:
             "  2D y 3D: ≥75m²  1D: sin mínimo normativo fijo (usar ≥40m² según A.020 RNE).\n"
             "USA EXACTAMENTE 75m² para 2D y 3D — valor fijo de diseño."
         )
+    elif "lurigancho" in _dl and "san juan" not in _dl:
+        _area_min_nota = (
+            "ZONA IE — INDUSTRIA ESPECIAL (Lurigancho / Huachipa — Ord. N°1099-MML + Ord. N°1237-MML, ATN IV):\n"
+            "No aplica mix residencial — uso industrial exclusivo.\n"
+            "EIA OBLIGATORIO antes de licencia · solo tecnologías limpias · prohibida industria contaminante.\n"
+            "AL 50% (área verde) · altura máx 9.00 ml · retiro 5ml Av. Los Laureles · estac. 1/6 pers.\n"
+            "Autoridad: Municipalidad del Centro Poblado Santa María de Huachipa (MCPSMH)."
+        )
     elif "surco" in _dl or "santiago de surco" in _dl:
         _area_min_nota = (
             "ÁREAS MÍNIMAS OBLIGATORIAS (Surco — ATN II):\n"
@@ -3757,6 +5132,16 @@ def generate_cabida(params: dict, config: dict) -> dict:
         _area_min_nota = (
             "ÁREAS MÍNIMAS (Surquillo): sin mínimo normativo distrital confirmado.\n"
             "Usar A.020 RNE como base: 40m² multifamiliar. Optimizar según mercado."
+        )
+    elif "san miguel" in _dl:
+        _area_min_nota = (
+            "ÁREAS MÍNIMAS (San Miguel — Ord. N°1098-MML + Certs. CPUE 2018/2020):\n"
+            "3 dormitorios: 75 m² mínimo obligatorio.\n"
+            "2 dormitorios: área y porcentaje a definir por proyecto.\n"
+            "1 dormitorio: área y porcentaje a definir por proyecto.\n"
+            "Unifamiliar: permitida en cualquier lote > 90 m².\n"
+            "Altura piso a piso: máximo 3.00 m (Numeral A.12 Anexo 02 Ord. N°1098-MML).\n"
+            "ALERTA: Zona histórica (perímetro Jr. Yungay) → máximo 5 pisos sin excepción."
         )
     elif "magdalena" in _dl:
         _area_min_nota = (
@@ -3772,6 +5157,104 @@ def generate_cabida(params: dict, config: dict) -> dict:
         _area_min_nota = (
             "ÁREAS MÍNIMAS (Santa Anita): sin mínimo normativo residencial específico confirmado.\n"
             "Usar A.020 RNE: 40m² mínimo multifamiliar."
+        )
+    elif "la molina" in _dl:
+        _area_min_nota = (
+            "ÁREAS MÍNIMAS (La Molina — D.A. N°010-2016-MDLM + RDB/CZ):\n"
+            "Sin mínimo distrital explícito confirmado en CPUs analizados.\n"
+            "Usar parámetros RDB/CZ compatibles del entorno según CPUE.\n"
+            "Referencia RNE A.020: 40m² mínimo multifamiliar.\n"
+            "Mercado La Molina: tipologías 2D (90-120m²) y 3D (120-160m²) son las más demandadas."
+        )
+    elif "callao" in _dl:
+        _area_min_nota = (
+            "ÁREAS MÍNIMAS (Callao — ZRE):\n"
+            "Sin mínimo distrital explícito en CPUs verificados.\n"
+            "Usar A.020 RNE: 40m² mínimo multifamiliar.\n"
+            "Mercado Callao: tipologías 2D y 3D económicas · Programa MI VIVIENDA aplica — verificar precio techo."
+        )
+    elif "independencia" in _dl:
+        _area_min_nota = (
+            "ÁREAS MÍNIMAS (Independencia — CM reconversión):\n"
+            "Sin mínimo distrital explícito confirmado. Usar parámetros del uso residencial compatible (RDA o RDM).\n"
+            "RDA referencia: 3D=75m², 2D=55m², 1D=40m² (según Ord. N°1015-2007-MML para ATN I).\n"
+            "Mercado: NSE B/C Lima Norte · tipologías 2D (55-75m²) y 3D (75-90m²) más demandadas."
+        )
+    elif "san martin" in _dl or _dl.strip() == "smp":
+        _area_min_nota = (
+            "ÁREAS MÍNIMAS (San Martín de Porres — Ord. N°1015-07-MML):\n"
+            "3 dormitorios: 75 m² mínimo (CPU N°234-2024 Nota b).\n"
+            "2 dormitorios y 1 dormitorio: áreas y porcentajes a definir por proyecto.\n"
+            "Zona RDM: unifamiliar en lote >90 m² · multifamiliar lote mín 120-150 m².\n"
+            "Mercado SMP: NSE B/C · tipologías 2D (60-75m²) y 3D (75-90m²) más demandadas."
+        )
+    elif "pueblo libre" in _dl or "pueblolibre" in _dl:
+        _area_min_nota = (
+            "ÁREAS MÍNIMAS OBLIGATORIAS (Pueblo Libre — CPU N°0721-2019-MPL):\n"
+            "  3 dormitorios: 75 m² mínimo obligatorio\n"
+            "  2 dormitorios: área a definir en proyecto (sin mínimo normativo fijo confirmado)\n"
+            "  1 dormitorio:  área a definir en proyecto (sin mínimo normativo fijo confirmado)\n"
+            "USA EXACTAMENTE 75m² para 3D — valor fijo de diseño.\n"
+            "AZOTEA permitida sobre altura máxima (Ord. N°330-MPL + N°347-MPL) — considerar en programa."
+        )
+    elif "barranco" in _dl:
+        _area_min_nota = (
+            "ÁREAS MÍNIMAS OBLIGATORIAS (Barranco — Ord. N°516-2019-MDB — aplica AMBOS regímenes):\n"
+            "  3 dormitorios: 90 m² mínimo — máximo 50% de las unidades\n"
+            "  2 dormitorios: 75 m² mínimo — máximo 35% de las unidades\n"
+            "  1 dormitorio:  60 m² mínimo — máximo 15% de las unidades\n"
+            "Tolerancia: 10% para todos los casos.\n"
+            "USA EXACTAMENTE estas áreas y distribución — son las más altas de Lima.\n"
+            "RESTRICCIÓN: distribución 50/35/15% es obligatoria — no se puede hacer proyecto 100% de 1D o 2D.\n"
+            "ZONA MONUMENTAL: altura máx 4 pisos · estac. 1/viv · MC obligatorio.\n"
+            "FUERA ZONA MONUMENTAL: RDA hasta 1.5(a+r) · estac. 1/1.5 viv · sin MC."
+        )
+    elif "chorrillos" in _dl:
+        _area_min_nota = (
+            "ÁREAS MÍNIMAS (Chorrillos — Ord. N°1076-MML referencia ATN II):\n"
+            "  3 dormitorios: 75 m² mínimo.\n"
+            "  2 dormitorios y 1 dormitorio: áreas a definir en proyecto.\n"
+            "SECTOR ATN IV (Los Cedros de Villa): altura MÁXIMA 3 pisos · estac. 1/viv · PROHVILLA+DGAC obligatorios.\n"
+            "SECTOR ATN II (La Campiña): 8 pisos · estac. 1/1.5 viv · lote mínimo 1,000m² (CZ) o 1,600m² (RDM)."
+        )
+    elif "breña" in _dl:
+        _area_min_nota = (
+            "ÁREAS MÍNIMAS OBLIGATORIAS (Breña — Ord. N°1017-MML):\n"
+            "  3 dormitorios: 75 m² mínimo\n"
+            "  2 dormitorios y 1 dormitorio: a definir en proyecto.\n"
+            "USA EXACTAMENTE 75m² para 3D.\n"
+            "CZ (Av. Tingo María): 1.5(a+r) · sin retiro. "
+            "RDA lote 450m²: hasta 10p o 1.5(a+r) Av.>20m · RDM lote 300m²: hasta 7p · Estac. 1/1.5 viv uniforme."
+        )
+    elif "san luis" in _dl:
+        _area_min_nota = (
+            "ÁREAS MÍNIMAS (San Luis — CPU N°000112-2024 + CPU N°064-2022, Ord. N°2358-2021):\n"
+            "  3 dormitorios: 75 m² mínimo (confirmado en ambos CPUs).\n"
+            "  2 dormitorios y 1 dormitorio: áreas a definir en proyecto.\n"
+            "USA EXACTAMENTE 75m² para 3D.\n"
+            "RETIRO: SIN RETIRO frontal en CZ e I2 (D.A. N°003-2012-MDSL).\n"
+            "CZ: 1.5(a+r) · estac. 1/1.5 viv (residencial). "
+            "RDA lote 450m²: hasta 1.5(a+r) Av.>20m / 15p parques / 10p locales · RDM lote 300m²: hasta 7p."
+        )
+    elif "ate" in _dl and "santa anita" not in _dl:
+        _area_min_nota = (
+            "ÁREAS MÍNIMAS (Ate — CPU N°326-2018, Ord. N°1099-MML):\n"
+            "  3 dormitorios: 75 m² mínimo.\n"
+            "  2 dormitorios y 1 dormitorio: áreas a definir en proyecto.\n"
+            "USA EXACTAMENTE 75m² para 3D.\n"
+            "CZ (Av. La Molina): 1.5(a+r) · retiro 5ml · AL 35% viv. multifamiliar · estac. 1/1.5 viv.\n"
+            "I2 (Av. Separadora Industrial): retiro 5ml · altura según entorno · estac. 1/6 pers."
+        )
+    elif "lurin" in _dl or "lurín" in _dl:
+        _area_min_nota = (
+            "ÁREAS MÍNIMAS (Lurín — CPU N°565-2022, Ord. N°1814-MML — ATN I):\n"
+            "  3 dormitorios: 75 m² mínimo (Anexo N°03 CPU N°565-2022).\n"
+            "  2 dormitorios y 1 dormitorio: áreas a definir en proyecto.\n"
+            "USA EXACTAMENTE 75m² para 3D.\n"
+            "LOTE MÍNIMO TODAS LAS ZONAS: 5,000m²/40ml — no viable por debajo de este tamaño.\n"
+            "RDA: densidad 450 viv/ha · AL 60% · estac. 1/3 viv · altura sin límite (resultante de densidad) · retiro lateral=1/6 altura (mín 3ml) · posterior=1/3 altura (mín 3ml).\n"
+            "I3 (MacrOpolis/El Faro): AL 25% (50% arborizada) · altura según proyecto · DIGESA obligatorio si colinda Relleno Sanitario Portillo Grande.\n"
+            "Piso a piso máx: 3.00ml."
         )
     else:
         _area_min_nota = (
@@ -3790,11 +5273,12 @@ CONFIGURACIÓN BASE:
 - Sótanos para estacionamientos: determinar según normativa de estacionamientos del distrito
 
 INSTRUCCIONES:
-1. USA ÚNICAMENTE los parámetros explícitamente certificados en el documento adjunto. El valor de pisos_max ya incorpora la regla de colindancia calculada externamente — NO lo recalcules. NO apliques beneficios adicionales por cuenta propia (frente a parque, lote esquina, zonificación especial por cuadrante, etc.) aunque los identifiques en la normativa. Si detectas beneficios potenciales que podrían aplicar según la ubicación o normativa del distrito, agrégalos en "observaciones" con el texto: "BENEFICIO POTENCIAL — requiere verificación con la municipalidad antes de incorporar al proyecto: [descripción del beneficio]".
+1. USA ÚNICAMENTE los parámetros explícitamente certificados en el documento adjunto. El valor de pisos_max ya incorpora la regla de colindancia calculada externamente — NO lo recalcules. NO apliques beneficios adicionales por cuenta propia (frente a parque, lote esquina, zonificación especial por cuadrante, etc.) aunque los identifiques en la normativa. Si detectas beneficios potenciales que podrían aplicar, agrégalos en el campo "beneficios_potenciales" (NO en observaciones). Si detectas restricciones normativas que impactan el proyecto (DIGESA, EIA, zona monumental, retiro dinámico que reduce cabida, restricción ambiental, pendiente pronunciada, etc.), agrégalas en "alertas_normativas" con severidad: rojo=bloquea o condiciona gravemente, amarillo=gestionar durante el proceso, verde=informativo.
 1b. RESTRICCIÓN GEOMÉTRICA (si geo_at_max > 0): el área techada total sobre rasante NO puede superar {st.session_state.get('geo_at_max', 0):,.0f} m² (calculado geométricamente desde las medidas reales del lote y los retiros). Si el cálculo normativo arroja más área, usa el valor geométrico como techo duro.
 2. Calcula el área techada por piso: (area_terreno − área_perdida_retiro_frontal) × (1 − area_libre_min/100). IMPORTANTE: en Lima la práctica constructiva estándar es retiro lateral = 0 y retiro posterior = 0 (construcción pared con pared al límite de propiedad). Solo aplica el retiro frontal indicado en el certificado.
 3. Si zona CZ/CV/CM y área libre = 0: área techada por piso ≈ área del lote − retiros
 4. MAXIMIZA EL NÚMERO DE DEPARTAMENTOS. Para cada piso calcula cuántas unidades caben: num_unidades_piso = floor(area_techada_piso_vendible / area_promedio_del_mix). Para lotes ≤800 m² → mínimo 2 unidades/piso; para lotes >800 m² → mínimo 3 unidades/piso. VERIFICACIÓN OBLIGATORIA antes de devolver el JSON: Σ(cantidad_i × area_m2_i) debe ser ≈ area_vendible_m2 con tolerancia ±8%. Si no cuadra, ajusta las cantidades hacia arriba.
+   DIVERSIDAD OBLIGATORIA: salvo instrucción explícita del usuario, el proyecto DEBE incluir mínimo 1 unidad de cada tipología estándar (1 Dorm., 2 Dorm., 3 Dorm.). Nunca devuelvas cantidad=0 en ninguna de estas tres tipologías. Si el área disponible no permite las tres, prioriza 2D y 3D reduciendo proporcionalmente 1D.
    REGLA CRÍTICA DE ÁREAS: USA EXACTAMENTE el área mínima normativa de cada tipología como valor fijo de diseño — NO como piso mínimo. area_m2 en el JSON debe ser IGUAL al mínimo normativo, no mayor. Unidades más grandes = menos departamentos = análisis incorrecto. La única forma de maximizar unidades es usar exactamente las áreas mínimas.
    {"" if "san isidro" not in _dl else f"""SAN ISIDRO (Anexo N°03 Ord. 523-MSI) — Ámbito: {ambito or 'verificar en certificado'}:
    - Ámbito A: area_m2 EXACTO → 3D=200m²  2D=150m²  1D=100m²
@@ -3814,10 +5298,12 @@ INSTRUCCIONES:
    cocheras_por_sotano = floor(area_neta_sotano / 25).
    num_sotanos = ceil(estac_total / cocheras_por_sotano).
    IMPORTANTE: num_sotanos debe ser el número REAL necesario para alojar físicamente estac_total cocheras — no uses 1 o 2 por defecto sin verificar la capacidad.
-7. NO apliques beneficios normativos adicionales que no estén explícitamente indicados en el certificado de parámetros adjunto. Si en la normativa del distrito o en los documentos detectas beneficios potenciales (por cuadrante de ubicación, frente a parque, lote esquina, zona especial, etc.), repórtalos ÚNICAMENTE en el campo "observaciones" con el prefijo "BENEFICIO POTENCIAL — requiere verificación". El usuario y su equipo técnico/legal decidirán si los incorporan.
+7. NO apliques beneficios normativos adicionales que no estén explícitamente indicados en el certificado de parámetros adjunto. Si detectas beneficios potenciales (frente a parque, lote esquina, zona especial, cuadrante, etc.), repórtalos ÚNICAMENTE en el campo "beneficios_potenciales" — nunca en el cálculo. El usuario y su equipo técnico/legal decidirán si los incorporan.
 8. DÚPLEX: PROHIBIDO incluir dúplex salvo instrucción explícita del usuario en NOTAS DEL ANALISTA. Si el JSON de unidades devuelve algún dúplex sin que el usuario lo haya pedido, el análisis es incorrecto. El objetivo es maximizar departamentos estándar (1D/2D/3D). Si se solicitan: cada dúplex ocupa la mitad del área del último piso + zona de azotea/terraza en nivel superior (zona techada superior ≤ 50% del piso inferior, RNE A.010 Art. 9); incluirlos como tipología "Dúplex" con area_m2 = área del piso/2 + zona techada superior.
-9. Si es San Isidro: existe la posibilidad normativa de uso de azotea bajo régimen de propiedad exclusiva del último piso (30% del área utilizable después de retranques). NO lo apliques en el análisis — inclúyelo en observaciones como "BENEFICIO POTENCIAL — azotea exclusiva último piso: requiere verificación con Municipalidad de San Isidro antes de incorporar al proyecto".
+9. Si es San Isidro: existe la posibilidad normativa de uso de azotea bajo régimen de propiedad exclusiva del último piso (30% del área utilizable después de retranques). NO lo apliques en el análisis — agrégalo en "beneficios_potenciales" con texto: "Azotea exclusiva último piso (30% área utilizable tras retranques) — Ord. 523-MSI" y accion: "Verificar con Municipalidad de San Isidro antes de incorporar al proyecto".
 10. Calcula depositos_total: número de depósitos/bodegas de almacenamiento del proyecto. En Lima el mercado compra depósitos como adicional, pero no todas las unidades incluyen uno. Usa: 40-50% de total_unidades en distritos premium (San Isidro, Miraflores, Barranco); 25-35% en distritos medios (San Borja, Surco, Jesús María, Magdalena, Lince, La Molina, San Miguel); 10-20% en distritos periféricos (SJL, VES, Santa Anita, La Victoria, Cercado); 0 si el mercado objetivo es económico. Redondea al entero más cercano.
+
+IMPORTANTE — RESPUESTA CONCISA: Las strings en observaciones, alertas y metodologia deben ser CORTAS (máx 80 caracteres cada una). observaciones: máx 4 items. alertas_normativas: máx 5 items. beneficios_potenciales: máx 4 items. metodologia: 1 oración breve. No repitas información entre campos.
 
 Devuelve SOLO este JSON:
 {{
@@ -3841,13 +5327,19 @@ Devuelve SOLO este JSON:
   "area_comunes_m2": number,
   "beneficios_aplicados": [{{"beneficio": "string", "impacto": "string"}}],
   "ordenanzas_mayor_altura": ["string"],
-  "observaciones": ["string"],
-  "metodologia": "string"
+  "alertas_normativas": [
+    {{"severidad": "rojo/amarillo/verde", "texto": "≤80 chars", "accion": "≤80 chars o null"}}
+  ],
+  "beneficios_potenciales": [
+    {{"texto": "≤80 chars", "accion": "Verificar con municipalidad/arquitecto"}}
+  ],
+  "observaciones": ["≤80 chars por ítem — máx 4 ítems"],
+  "metodologia": "1 oración ≤120 chars"
 }}"""
 
-    response = client.messages.create(
+    text = _api_call(client,
         model="claude-sonnet-4-6",
-        max_tokens=8192,
+        max_tokens=16384,
         system=[
             {
                 "type": "text",
@@ -3862,10 +5354,6 @@ Devuelve SOLO este JSON:
         ],
         messages=[{"role": "user", "content": prompt}]
     )
-
-    if not response.content:
-        raise ValueError("json_parse_error: API devolvió respuesta vacía")
-    text = response.content[0].text.strip()
     cab = parse_json_safe(text)
 
     # ── POST-PROCESO: corregir inconsistencias del output de la IA ──────────
@@ -3888,13 +5376,57 @@ Devuelve SOLO este JSON:
         if cab.get("num_sotanos", 0) != _sot_correcto:
             _sot_orig = cab.get("num_sotanos", "?")
             cab["num_sotanos"] = _sot_correcto
-            _obs = cab.get("observaciones") or []
-            _obs.append(
-                f"Sótanos corregidos: {_area_t:.0f}m²×0.87/25m²/coch"
-                f"={_coch_x_sot} coch/sótano → ceil({_estac_t}/{_coch_x_sot})="
-                f"{_sot_correcto} (IA reportó {_sot_orig})"
+            _alns = cab.setdefault("alertas_normativas", [])
+            _alns.append({
+                "severidad": "amarillo",
+                "texto": f"Número de sótanos ajustado: {_sot_orig} → {_sot_correcto} (cálculo determinístico: {_coch_x_sot} cocheras/sótano en lote de {_area_t:.0f}m²)",
+                "accion": "Verificar con arquitecto la distribución de cocheras — impacta el presupuesto de excavación"
+            })
+
+    # 3. Garantizar diversidad de tipologías: mínimo 1 unidad de 1D/2D/3D
+    _tipos_std  = ["1 Dorm.", "2 Dorm.", "3 Dorm."]
+    _unidades   = cab.get("unidades") or []
+    _total_und  = int(cab.get("total_unidades") or 0)
+    if _unidades and _total_und >= len(_tipos_std):
+        _u_by_tipo = {u.get("tipo", ""): u for u in _unidades}
+        _changed   = False
+        for tipo in _tipos_std:
+            _u = _u_by_tipo.get(tipo)
+            if _u is None or _u.get("cantidad", 0) == 0:
+                # Inferir área desde el tipo de mayor metraje disponible o usar 75m²
+                _area_ref = max(
+                    (u.get("area_m2", 0) for u in _unidades
+                     if u.get("tipo") in _tipos_std and u.get("area_m2", 0) > 0),
+                    default=75
+                )
+                if _u is None:
+                    _u = {"tipo": tipo, "cantidad": 0, "area_m2": _area_ref, "area_total_m2": 0}
+                    _unidades.append(_u)
+                    _u_by_tipo[tipo] = _u
+                _area_m2 = _u.get("area_m2") or _area_ref
+                _u["cantidad"]      = 1
+                _u["area_m2"]       = _area_m2
+                _u["area_total_m2"] = _area_m2
+                _changed = True
+        if _changed:
+            # Reducir 1 unidad del tipo más numeroso para conservar el área vendible
+            _candidatos = [u for u in _unidades
+                           if u.get("tipo") in _tipos_std and u.get("cantidad", 0) > 1]
+            if _candidatos:
+                _max_u = max(_candidatos, key=lambda u: u.get("cantidad", 0))
+                _max_u["cantidad"]      -= 1
+                _max_u["area_total_m2"]  = _max_u["cantidad"] * _max_u.get("area_m2", 0)
+            # Recalcular totales
+            cab["unidades"]       = _unidades
+            cab["total_unidades"] = sum(u.get("cantidad", 0) for u in _unidades)
+            _new_sum = sum(float(u.get("area_total_m2") or 0) for u in _unidades)
+            if _new_sum > 0:
+                _ac2 = float(cab.get("area_comunes_m2") or 0)
+                cab["area_vendible_m2"]      = round(_new_sum, 1)
+                cab["area_techada_total_m2"] = round(_new_sum + _ac2, 1)
+            cab.setdefault("observaciones", []).append(
+                "Mix ajustado: mínimo 1 unidad por tipología (1D/2D/3D) para diversidad de producto."
             )
-            cab["observaciones"] = _obs
 
     return cab
 
@@ -3907,66 +5439,33 @@ def analizar_legal(partida_bytes: bytes | None, puhr_bytes: bytes | None,
     content = []
     docs_desc = []
     if partida_bytes:
-        content.append(pdf_block(partida_bytes))
+        content.append(smart_block(partida_bytes))
         docs_desc.append("Documento 1: Partida Registral (SUNARP)")
     if puhr_bytes:
-        content.append(pdf_block(puhr_bytes))
+        content.append(smart_block(puhr_bytes))
         docs_desc.append(f"Documento {len(docs_desc)+1}: PU/HR (Predio Urbano / Hoja de Resumen - SAT/Municipalidad)")
     if cert_params_bytes:
-        content.append(pdf_block(cert_params_bytes))
+        content.append(smart_block(cert_params_bytes))
         docs_desc.append(f"Documento {len(docs_desc)+1}: Certificado de Parámetros Urbanísticos")
     if planos_bytes:
-        content.append(pdf_block(planos_bytes))
+        content.append(smart_block(planos_bytes))
         docs_desc.append(f"Documento {len(docs_desc)+1}: Planos del Inmueble")
 
-    # Sistema estático (cacheado) — contiene el checklist completo y el schema JSON
-    _legal_system = """Eres un abogado especialista en derecho registral e inmobiliario peruano y urbanista con expertise en normativa de Lima.
-Respondes ÚNICAMENTE con JSON válido, sin texto antes ni después.
+    # Sistema estático (cacheado) — checklist y schema JSON CONCISO
+    _legal_system = """Eres abogado registral e inmobiliario peruano. Respondes ÚNICAMENTE con JSON válido, sin texto antes ni después.
+REGLA CRÍTICA DE CONCISIÓN: cada campo "hallazgo" máximo 12 palabras. "subsanacion" máximo 20 palabras. JSON total < 2,500 tokens.
 
-════════════════════════════════════════════════
-REVISIÓN OBLIGATORIA — CHECKLIST DE 20 PUNTOS
-════════════════════════════════════════════════
-Revisa CADA UNO sin excepción. Para cada punto indica hallazgo preciso, severidad y — si es amarillo o rojo — procedimiento accionable para subsanarlo.
+CHECKLIST 20 PUNTOS:
+Partida: 1-Titularidad 2-Cadena 3-Hipotecas 4-Embargos 5-Cautelares 6-Servidumbres 7-Restricciones 8-Anotaciones 9-Doble inmatriculación 10-Área registral 11-Régimen propiedad 12-Antigüedad partida
+Parámetros: 13-Zonificación 14-CUS 15-Área libre/COS 16-Altura 17-Retiros 18-Estacionamientos 19-Compatibilidad uso 20-Vigencia certificado
 
-── PARTIDA REGISTRAL (Puntos 1–12) ──────────────
-1. TITULARIDAD: Propietario(s) registrado(s) vs. vendedor declarado. ¿Coinciden exactamente (nombre + DNI/RUC)?
-2. CADENA DE TITULARIDAD: Transferencias sucesivas. ¿Hay saltos, inscripciones incompletas o transferencias sin sustento?
-3. HIPOTECAS: Cada hipoteca — acreedor, monto, fecha inscripción, asiento, estado (vigente/cancelada). Si cancelada, ¿figura el asiento de cancelación?
-4. EMBARGOS: Embargos civiles, tributarios (SUNAT/MEF ejecutor coactivo) o penales. Estado actual.
-5. MEDIDAS CAUTELARES: Tipo (inhibición, anotación demanda, etc.), expediente judicial, juzgado, estado.
-6. SERVIDUMBRES: Tipo (paso, vista, acueducto, luz, etc.), predio dominante/sirviente, carácter (perpetuo/temporal/oneroso).
-7. RESTRICCIONES DE DISPOSICIÓN: Cláusulas que limiten venta, arrendamiento, hipoteca u otro acto de disposición.
-8. ANOTACIONES PREVENTIVAS: Vigentes (<3 años desde inscripción) vs. caducadas. Riesgo de cada una.
-9. DOBLE INMATRICULACIÓN: Indicios de superposición con otro predio registrado o inconsistencias en linderos/ubicación.
-10. ÁREA REGISTRAL: Área en partida. ¿Concuerda con el área ingresada por el usuario? Cuantificar discrepancia.
-11. RÉGIMEN DE PROPIEDAD: Individual, copropiedad (% y DNI de cada copropietario), sociedad conyugal, persona jurídica.
-12. ANTIGÜEDAD DE LA PARTIDA: Fecha de última actualización/impresión. Días transcurridos. < 30 días ideal; > 90 días riesgo.
+Severidades: verde=favorable · amarillo=gestionar antes cierre · rojo=bloquea operación · no_verificable=sin documento
+DNI: exacto del documento o null. Nunca inventar.
 
-── CERTIFICADO DE PARÁMETROS URBANÍSTICOS (Puntos 13–20) ──
-13. ZONIFICACIÓN: Zonificación certificada vs. uso propuesto. ¿Compatible? ¿Requiere cambio de zonificación o ITT?
-14. CUS MÁXIMO: Coeficiente de Utilización del Suelo. Valor exacto. ¿El proyecto lo respeta?
-15. COS / ÁREA LIBRE MÍNIMA: Porcentaje de área libre exigido. ¿El diseño lo cumple?
-16. ALTURA MÁXIMA: Pisos máximos o metros permitidos. ¿El proyecto los respeta?
-17. RETIROS: Dimensiones exactas (frente, laterales izquierdo/derecho, posterior).
-18. ESTACIONAMIENTOS MÍNIMOS: Ratio exigido por normativa distrital.
-19. COMPATIBILIDAD DE USO: ¿El uso declarado está expresamente permitido según el certificado?
-20. VIGENCIA DEL CERTIFICADO: Fecha de emisión. Los certificados tienen vigencia de 36 meses en Lima.
-
-CRITERIOS DE SEVERIDAD:
-- "verde": hallazgo favorable, no requiere acción
-- "amarillo": observación menor; gestionar antes del cierre
-- "rojo": riesgo crítico que bloquea o condiciona gravemente la operación
-- "no_verificable": documento no adjuntado o información ilegible/ausente
-
-SUBSANACIÓN (solo amarillo/rojo): procedimiento ESPECÍFICO Y ACCIONABLE paso a paso — qué gestionar, ante qué entidad, plazo estimado, condición para cierre.
-
-IMPORTANTE — DNI: Extrae exactamente como figura. Si no figura, null. Nunca inferir ni inventar.
-IMPORTANTE — PU/HR: Extrae autoavalúo, código predio/contribuyente, clasificación municipal, condición propietario (SAT o Municipalidad).
-
-SCHEMA JSON DE RESPUESTA (devuelve EXACTAMENTE esta estructura):
+SCHEMA (devuelve EXACTAMENTE esta estructura):
 {
-  "propietarios_partida": [{"nombre": "...", "dni": "8 dígitos o RUC 11 dígitos o null", "porcentaje": "50% o null", "tipo_doc": "DNI/RUC/null"}],
-  "propietarios_puhr": [{"nombre": "...", "dni": "8 dígitos o null", "condicion": "Propietario/Poseedor/null"}],
+  "propietarios_partida": [{"nombre": "...", "dni": null, "porcentaje": null, "tipo_doc": "DNI/RUC/null"}],
+  "propietarios_puhr": [{"nombre": "...", "dni": null, "condicion": "Propietario/null"}],
   "propietarios_coinciden": true,
   "diferencias_propietarios": null,
   "direccion_partida": null,
@@ -3989,37 +5488,49 @@ SCHEMA JSON DE RESPUESTA (devuelve EXACTAMENTE esta estructura):
   "hipotecas_vigentes": [],
   "medidas_cautelares": [],
   "anotaciones_diversas": [],
-  "semaforo": "verde/amarillo/rojo",
+  "semaforo": "verde",
   "alertas": [],
-  "resumen_legal": "2-3 oraciones resumiendo el estado legal.",
+  "resumen_legal": "1-2 oraciones máximo.",
   "hallazgos": [
-    {"numero": 1, "punto": "Titularidad registral", "categoria": "partida", "hallazgo": "...", "severidad": "verde", "subsanacion": null},
-    {"numero": 2, "punto": "Cadena de titularidad", "categoria": "partida", "hallazgo": "...", "severidad": "verde/amarillo/rojo/no_verificable", "subsanacion": "procedimiento o null"}
+    {"numero": 1, "punto": "Titularidad", "categoria": "partida", "hallazgo": "máx 12 palabras", "severidad": "verde", "subsanacion": null},
+    {"numero": 2, "punto": "Cadena titularidad", "categoria": "partida", "hallazgo": "máx 12 palabras", "severidad": "verde", "subsanacion": null}
   ],
-  "completitud": {"verificados": 18, "total": 20, "no_verificables": []}
+  "completitud": {"verificados": 18, "total": 20, "no_verificables": []},
+  "observaciones_legales": ["observación concreta con norma", "observación 2"],
+  "sugerencias_mitigacion": ["acción específica — entidad — plazo", "sugerencia 2"]
 }
+REGLA: hallazgos = EXACTAMENTE 20 objetos (1-12 categoria "partida", 13-20 categoria "parametros"). Sin doc → "no_verificable".
+SEMÁFORO: verde=todo OK · amarillo=algún amarillo · rojo=cualquier rojo."""
 
-REGLA: "hallazgos" debe tener EXACTAMENTE 20 objetos en orden 1–20. Puntos 13–20 usan "categoria": "parametros". Si el certificado no fue adjuntado → severidad "no_verificable".
-SEMÁFORO: VERDE = todos verdes, sin cargas activas · AMARILLO = uno o más amarillos, ningún rojo · ROJO = cualquier punto rojo"""
+    _dd_legal_ctx = (
+        "\n\n═══════════════════════════════════════\n"
+        "CONOCIMIENTO ADICIONAL — DUE DILIGENCE\n"
+        "═══════════════════════════════════════\n"
+        + CONOCIMIENTO_DD[:3000]
+        + f"\n\nNORMATIVA SUNARP Y REGISTRO DE PREDIOS:\n{LEGAL_SUNARP[:500]}"
+        + f"\n\nNORMATIVA CONTRATOS Y COMPRAVENTA:\n{LEGAL_CONTRATOS[:350]}"
+        + f"\n\nNORMATIVA TRIBUTACIÓN INMOBILIARIA:\n{LEGAL_TRIBUTACION[:300]}"
+    )
 
     # Mensaje dinámico — solo los datos específicos del análisis
     cross_note = ("Compara y cruza la información entre todos los documentos disponibles."
                   if len(docs_desc) > 1
                   else "Extrae toda la información relevante del documento disponible.")
     sug_note = f"\n\nInstrucciones adicionales del analista:\n{sugerencias.strip()}" if sugerencias and sugerencias.strip() else ""
-    user_prompt = (f"Analiza los siguientes documentos de un inmueble en Lima, Perú:\n"
-                   f"{chr(10).join(docs_desc)}\n\n{cross_note}{sug_note}")
+    user_prompt = (
+        f"Analiza los siguientes documentos de un inmueble en Lima, Perú:\n"
+        f"{chr(10).join(docs_desc)}\n\n{cross_note}{sug_note}\n\n"
+        f"CONTEXTO ADICIONAL DE DUE DILIGENCE:{_dd_legal_ctx}"
+    )
     content.append({"type": "text", "text": user_prompt})
 
-    response = client.messages.create(
-        model="claude-sonnet-4-6",
+    text = _api_call(client,
+        model="claude-haiku-4-5-20251001",
         max_tokens=8192,
         system=[{"type": "text", "text": _legal_system, "cache_control": {"type": "ephemeral"}}],
         messages=[{"role": "user", "content": content}]
     )
-    if not response.content:
-        raise ValueError("json_parse_error: API devolvió respuesta vacía")
-    return parse_json_safe(response.content[0].text.strip())
+    return parse_json_safe(text)
 
 
 def _extraer_texto_zip(file_bytes: bytes, filename: str) -> str:
@@ -4106,14 +5617,12 @@ Si un dato no aparece usa null. Solo extrae lo que está explícito.""",
 
     content.append({"type": "text", "text": PROMPTS.get(modulo, PROMPTS["residencial"])})
 
-    response = client.messages.create(
+    text = _api_call(client,
         model="claude-sonnet-4-6",
         max_tokens=1024,
         messages=[{"role": "user", "content": content}]
     )
-    if not response.content:
-        return {"_error": "Sin respuesta de la API."}
-    return parse_json_safe(response.content[0].text.strip())
+    return parse_json_safe(text)
 
 
 def extraer_precios_cierre(partidas_bytes: list) -> list:
@@ -4146,14 +5655,12 @@ Devuelve ÚNICAMENTE este JSON, sin texto adicional:
 Si el precio no figura explícitamente usa null en precio y explícalo en observaciones.
 Si hay varias transferencias reporta solo la más reciente por fecha de inscripción."""},
         ]
-        response = client.messages.create(
-            model="claude-sonnet-4-6",
+        text = _api_call(client,
+            model="claude-haiku-4-5-20251001",
             max_tokens=2048,
             messages=[{"role": "user", "content": content}]
         )
-        if not response.content:
-            raise ValueError("json_parse_error: API devolvió respuesta vacía en comparable")
-        r = parse_json_safe(response.content[0].text.strip())
+        r = parse_json_safe(text)
         r["_idx"] = i + 1
         resultados.append(r)
     return resultados
@@ -4174,21 +5681,22 @@ def analizar_factibilidad_industrial(
     content = []
     docs_desc = []
     if partida_bytes:
-        content.append(pdf_block(partida_bytes))
+        content.append(smart_block(partida_bytes))
         docs_desc.append(f"Documento {len(docs_desc)+1}: Partida Registral (SUNARP)")
     if cert_params_bytes:
-        content.append(pdf_block(cert_params_bytes))
+        content.append(smart_block(cert_params_bytes))
         docs_desc.append(f"Documento {len(docs_desc)+1}: Certificado de Parámetros Urbanísticos")
     if cert_zon_bytes:
-        content.append(pdf_block(cert_zon_bytes))
+        content.append(smart_block(cert_zon_bytes))
         docs_desc.append(f"Documento {len(docs_desc)+1}: Certificado de Zonificación y Vías")
     if planos_bytes:
-        content.append(pdf_block(planos_bytes))
+        content.append(smart_block(planos_bytes))
         docs_desc.append(f"Documento {len(docs_desc)+1}: Planos del Inmueble")
 
     # Sistema estático (cacheado) — checklist + schema
-    _ind_system = """Eres un especialista en derecho inmobiliario, derecho registral y normativa urbanística industrial peruana.
+    _ind_system = """Eres especialista en derecho inmobiliario registral y normativa urbanística industrial peruana.
 Respondes ÚNICAMENTE con JSON válido, sin texto antes ni después.
+REGLA CRÍTICA DE CONCISIÓN: cada "hallazgo" máximo 12 palabras. "subsanacion" máximo 20 palabras. JSON total < 2,500 tokens.
 
 ════════════════════════════════════════════════
 REVISIÓN OBLIGATORIA — CHECKLIST DE 16 PUNTOS
@@ -4199,7 +5707,7 @@ Revisa CADA punto sin excepción. Para amarillo/rojo: indica procedimiento espec
 1. ZONIFICACIÓN CERTIFICADA: Zona exacta según certificado vs. zonificación declarada por usuario. ¿Coinciden?
 2. COMPATIBILIDAD DE ACTIVIDAD: ¿La actividad del proyecto está permitida, condicionada o prohibida según el índice de usos?
 3. ALTURA MÁXIMA DE NAVE: Restricción de altura en metros según certificado o normativa aplicable.
-4. RETIROS Y ALINEAMIENTO: Retiros frente, laterales y posterior. ¿Hay restricciones de alineamiento vial?
+4. RETIROS, ALINEAMIENTO Y AFECTACIÓN VIAL: Retiros frente, laterales y posterior. CRÍTICO: ¿El Certificado de Zonificación y Vías indica que el predio está AFECTO por ampliación, ensanche o prolongación de vía? Buscar frases como "faja de afectación", "retiro por ampliación de vía", "área afecta", "sección vial proyectada", "cesión para vía". Si existe afectación: indicar la vía, los metros lineales de afectación y el área estimada afectada. Una afectación vial reduce el área edificable real del terreno y puede hacer inviable el proyecto.
 5. VÍAS DE FRENTE Y ACCESO PESADO: Nombre, tipo y ancho de vía(s) de frente. ¿Permiten maniobra de tráileres (>10m)?
 6. ÁREA LIBRE Y COS INDUSTRIAL: Porcentaje de área libre o COS máximo aplicable a uso industrial.
 7. CONDICIONANTES ESPECIALES: Restricciones ambientales, sanitarias, de seguridad industrial, zonas de amortiguamiento.
@@ -4221,7 +5729,7 @@ CRITERIOS DE SEVERIDAD:
 - "rojo": riesgo crítico; bloquea o condiciona gravemente la operación
 - "no_verificable": documento no adjuntado o información ilegible
 
-SUBSANACIÓN (solo amarillo/rojo): procedimiento paso a paso — qué gestionar, ante qué entidad, plazo estimado.
+SUBSANACIÓN (solo amarillo/rojo): procedimiento paso a paso — qué gestionar, ante qué entidad, plazo estimado. Incluir en el campo "accion" de cada alerta en alertas_tecnicas y alertas_legales.
 
 SCHEMA JSON DE RESPUESTA (devuelve EXACTAMENTE esta estructura):
 {
@@ -4239,9 +5747,13 @@ SCHEMA JSON DE RESPUESTA (devuelve EXACTAMENTE esta estructura):
   "restricciones_especiales": [],
   "vias_frente": [{"nombre": "...", "tipo": "arterial/colectora/local", "ancho_ml": null}],
   "acceso_vehiculos_pesados": null,
+  "afectacion_vial": false,
+  "afectacion_vial_detalle": "descripción exacta del documento — vía, metros, tipo de afectación. null si no hay afectación",
+  "afectacion_vial_ml": null,
+  "area_afectada_m2": null,
   "area_registral_m2": null,
-  "alertas_tecnicas": [],
-  "alertas_legales": [],
+  "alertas_tecnicas": [{"severidad": "rojo/amarillo/verde", "texto": "descripción concisa", "accion": "qué hacer, ante quién, en qué plazo — null si no aplica"}],
+  "alertas_legales": [{"severidad": "rojo/amarillo/verde", "texto": "descripción concisa", "accion": "qué hacer, ante quién, en qué plazo — null si no aplica"}],
   "propietarios_partida": [],
   "direccion_partida": null,
   "partida_numero": null,
@@ -4274,15 +5786,13 @@ SEMÁFORO GLOBAL: el más restrictivo entre técnico y legal. Si un dato no exis
     )
     content.append({"type": "text", "text": user_prompt_ind})
 
-    response = client.messages.create(
-        model="claude-sonnet-4-6",
+    text = _api_call(client,
+        model="claude-haiku-4-5-20251001",
         max_tokens=8192,
         system=[{"type": "text", "text": _ind_system, "cache_control": {"type": "ephemeral"}}],
         messages=[{"role": "user", "content": content}]
     )
-    if not response.content:
-        raise ValueError("json_parse_error: API devolvió respuesta vacía")
-    return parse_json_safe(response.content[0].text.strip())
+    return parse_json_safe(text)
 
 
 # ═══════════════════════════════════════════════════════
@@ -4362,15 +5872,18 @@ def calcular_financiero(cabida: dict, fin: dict, zona: str) -> dict:
                      + c_permisos + c_gerenciamiento + c_ventas_marketing
                      + c_due_dilig + c_notarial + c_registral + c_demolicion)
     _ir_factor      = max(1 - tasa_ir, 0.50)
-    max_terreno_20  = max(0, round(ing_brutos * (1 - 0.20 / _ir_factor) - _otros_costos))
-    max_terreno_15  = max(0, round(ing_brutos * (1 - 0.15 / _ir_factor) - _otros_costos))
-    max_terreno_12  = max(0, round(ing_brutos * (1 - 0.12 / _ir_factor) - _otros_costos))
+    _alcabala_fac   = 1.03 if fin.get("include_alcabala", True) else 1.0
+    max_terreno_20  = max(0, round((ing_brutos * (1 - 0.20 / _ir_factor) - _otros_costos) / _alcabala_fac))
+    max_terreno_15  = max(0, round((ing_brutos * (1 - 0.15 / _ir_factor) - _otros_costos) / _alcabala_fac))
+    max_terreno_12  = max(0, round((ing_brutos * (1 - 0.12 / _ir_factor) - _otros_costos) / _alcabala_fac))
     ratio_terreno   = round(c_terreno_base / ing_brutos * 100, 1) if ing_brutos > 0 else 0
 
     # TIT: Tasa de Incidencia del Terreno (professional KPI)
     tit_pct         = round(c_terreno_base / ing_brutos * 100, 1) if ing_brutos > 0 else 0
 
-    vel             = m.get("velocidad_venta", 1.0)
+    _miv            = fin.get("modo_mivivienda", False)
+    vel             = m.get("velocidad_venta", 1.0) * (1.5 if _miv else 1.0)
+    vel             = min(vel, 4.0)
     n_unidades      = cabida.get("total_unidades", 0)
     n_pisos         = cabida.get("num_pisos", 7)
     _obra_auto      = 24 if n_pisos > 20 else (12 if n_pisos <= 5 else 16)
@@ -4383,10 +5896,12 @@ def calcular_financiero(cabida: dict, fin: dict, zona: str) -> dict:
     _post_obra_sales = min(6, max(0, meses_venta - meses_obra))
     meses_proyecto   = 2 + meses_obra + _post_obra_sales
 
-    if c_total > 0 and utilidad_neta > 0 and meses_proyecto > 0:
+    if c_total > 0 and meses_proyecto > 0:
         # Factor 0.65: capital no está 100% inmovilizado desde el día 0 (se desembolsa en S-curve
         # durante obra y se recupera gradualmente en ventas — período efectivo ≈ 65% del total)
-        tir_aprox = round(((1 + utilidad_neta / c_total) ** (12 / (meses_proyecto * 0.65)) - 1) * 100, 1)
+        # max(0.0, ...) previene base negativa en proyectos con pérdida total
+        _base = max(0.0, 1.0 + utilidad_neta / c_total)
+        tir_aprox = round((_base ** (12 / (meses_proyecto * 0.65)) - 1) * 100, 1)
     else:
         tir_aprox = 0.0
 
@@ -4423,6 +5938,8 @@ def calcular_financiero(cabida: dict, fin: dict, zona: str) -> dict:
             "meses_venta":          meses_venta,
             "meses_venta_calc":     _meses_venta_raw,
             "meses_proyecto":       meses_proyecto,
+            "modo_mivivienda":      _miv,
+            "precio_m2_usado":      precio_m2,
         },
         "detalle_ingresos": {
             "Departamentos":        round(ing_dptos),
@@ -4479,6 +5996,672 @@ def calcular_financiero(cabida: dict, fin: dict, zona: str) -> dict:
             "ing_brutos":        ing_brutos,
         },
     }
+
+
+# ═══════════════════════════════════════════════════════
+# ESCENARIOS DE PROGRAMA — VIS / MERCADO / CLIENTE
+# ═══════════════════════════════════════════════════════
+
+def calcular_escenarios_programa(cabida: dict, fin_base: dict, zona: str) -> list:
+    """
+    Genera 3 escenarios de programa sobre el mismo terreno/área vendible.
+    Diferencia: cómo se fracciona el área (tamaño de unidades) y a qué precio.
+    VIS: mínimas para calificar BBP.  Mercado: parámetro estándar.  Cliente: producto real.
+    """
+    m  = MERCADO.get(zona, {})
+    av = float(cabida.get("area_vendible_m2") or 0)
+    at = float(cabida.get("area_techada_total_m2") or av * 1.15)
+    _n_orig     = max(1, int(cabida.get("total_unidades") or 1))
+    _estac_r    = (cabida.get("estac_residentes", 0) / _n_orig)
+    _dep_r      = (cabida.get("depositos_total",  0) / _n_orig)
+    _precio_ref = (fin_base.get("precio_venta_m2") or m.get("precio_2br", 0)) or 0
+    _vel_base   = m.get("velocidad_venta", 1.5)
+
+    _DEFS = [
+        {
+            "id": "vis", "nombre": "VIS — FondoMiVivienda",
+            "color": "#1A3A6B", "bg": "#EEF4FB", "border": "#4A7A9B",
+            "nota": "Áreas mínimas — elegible BBP · NSE C/D · primer inmueble",
+            # pct, m2 promedio por tipología
+            "mix": [("1D", 0.40, 42), ("2D", 0.45, 62), ("3D", 0.15, 77)],
+            "precio_factor": None,   # derivado del tope FMVF
+            "vel_factor":    1.5,
+            "miv":           True,
+        },
+        {
+            "id": "mercado", "nombre": "Estándar de Mercado",
+            "color": "#1A4731", "bg": "#E8F5EE", "border": "#6BAE90",
+            "nota": "Parámetro base · mediana de mercado del distrito",
+            "mix": [("1D", 0.25, 70), ("2D", 0.55, 90), ("3D", 0.20, 125)],
+            "precio_factor": 1.0,
+            "vel_factor":    1.0,
+            "miv":           False,
+        },
+        {
+            "id": "cliente", "nombre": "Producto Cliente",
+            "color": "#7A5000", "bg": "#FFF8E6", "border": "#D4A843",
+            "nota": "Orientado al cliente real · +12% precio · áreas comerciales",
+            "mix": [("1D", 0.25, 68), ("2D", 0.50, 110), ("3D", 0.25, 155)],
+            "precio_factor": 1.12,
+            "vel_factor":    0.85,
+            "miv":           False,
+        },
+    ]
+
+    out = []
+    for d in _DEFS:
+        avg_m2 = sum(pct * m2 for _, pct, m2 in d["mix"])
+        if avg_m2 <= 0:
+            continue
+        n_und  = max(1, round(av / avg_m2))
+        n_por_tipo = {}
+        _resto = n_und
+        for i, (tip, pct, _) in enumerate(d["mix"]):
+            if i < len(d["mix"]) - 1:
+                n_por_tipo[tip] = round(n_und * pct)
+                _resto -= n_por_tipo[tip]
+            else:
+                n_por_tipo[tip] = max(0, _resto)
+
+        # Garantizar mínimo 1 unidad por tipología cuando el proyecto lo permite
+        if n_und >= len(d["mix"]):
+            for tip, _, _ in d["mix"]:
+                if n_por_tipo.get(tip, 0) == 0:
+                    _max_tip = max(n_por_tipo, key=lambda t: n_por_tipo[t])
+                    if n_por_tipo[_max_tip] > 1:
+                        n_por_tipo[_max_tip] -= 1
+                        n_por_tipo[tip] = 1
+
+        _mix_desc = " · ".join(
+            f"{n_por_tipo.get(t, 0)}×{t} ({m2}m²)" for t, _, m2 in d["mix"]
+        )
+        _nota_mix = (
+            f"Mix calculado sobre {av:,.0f} m² vendibles → {n_und} unidades "
+            f"({_mix_desc}). Área ponderada: {avg_m2:.1f} m²/und. "
+            f"Se garantiza mínimo 1 unidad por tipología para diversidad de producto."
+        )
+
+        _estac = max(0, round(n_und * _estac_r))
+        _dep   = max(0, round(n_und * _dep_r))
+
+        if d["precio_factor"] is None:
+            # VIS: precio máximo para que la unidad MÁS GRANDE del mix no supere 93.5 UIT
+            _max_m2_vis = max((m2 for _, _, m2 in d["mix"]), default=avg_m2) if d["mix"] else avg_m2
+            _denom_vis  = _max_m2_vis if _max_m2_vis > 0 else max(avg_m2, 1)
+            _p_m2 = int(_FMVF_TOPE_USD / _denom_vis)
+            _p_m2 = min(_p_m2, _precio_ref or _p_m2)   # no superar precio base si ya es VIS
+        else:
+            _p_m2 = round((_precio_ref or m.get("precio_2br", 1200)) * d["precio_factor"])
+
+        _cab_mod = {
+            **cabida,
+            "total_unidades":   n_und,
+            "estac_residentes": _estac,
+            "estac_total":      _estac,
+            "depositos_total":  _dep,
+        }
+        _fin_mod = {**fin_base, "precio_venta_m2": _p_m2, "modo_mivivienda": d["miv"]}
+
+        res = calcular_financiero(_cab_mod, _fin_mod, zona)
+        r   = res.get("resumen", {})
+
+        _bbp_sol = 0; _bbp_desc = ""
+        if d["miv"]:
+            _pu_sol = _p_m2 * avg_m2 * _TC_FMVF
+            _bbp_sol, _bbp_desc = _bbp_para_precio_sol(_pu_sol)
+
+        out.append({
+            **{k: d[k] for k in ("id","nombre","color","bg","border","nota","miv")},
+            "mix":         d["mix"],
+            "avg_m2":      round(avg_m2, 1),
+            "n_und":       n_und,
+            "n_por_tipo":  n_por_tipo,
+            "nota_mix":    _nota_mix,
+            "precio_m2":   _p_m2,
+            "vel":         round(_vel_base * d["vel_factor"], 2),
+            "ingresos":    r.get("ingresos_brutos", 0),
+            "utilidad":    r.get("utilidad_neta", 0),
+            "margen_pct":  r.get("margen_pct", 0),
+            "tir_pct":     r.get("tir_anual_pct", 0),
+            "roi_pct":     r.get("roi_pct", 0),
+            "meses_proy":  r.get("meses_proyecto", 0),
+            "be_m2":       r.get("be_precio_m2", 0),
+            "bbp_sol":     _bbp_sol,
+            "bbp_desc":    _bbp_desc,
+        })
+    return out
+
+
+# ═══════════════════════════════════════════════════════
+# ALERTAS FINANCIERAS — DETERMINÍSTICAS (Proyecto Inmobiliario)
+# ═══════════════════════════════════════════════════════
+
+def generar_alertas_financieras(r: dict, fin: dict, cabida: dict, zona: str) -> list:
+    """Genera alertas financieras estructuradas basadas en umbrales de mercado Lima."""
+    alertas = []
+    tir     = r.get("tir_anual_pct", 0) or 0
+    margen  = r.get("margen_pct", 0) or 0
+    roi     = r.get("roi_pct", 0) or 0
+    meses   = r.get("meses_proyecto", 0) or 0
+    meses_preventa = r.get("meses_preventa", 0) or 0
+    costo_financ   = r.get("costo_financiero", 0) or 0
+    utilidad_financ = r.get("utilidad_con_financ", 0) or 0
+    estructura = fin.get("estructura_financ", "estandar")
+    aporte_pct = fin.get("aporte_propio_pct", 100)
+
+    # TIR
+    if tir < 10:
+        alertas.append({
+            "severidad": "rojo",
+            "origen": "financiero",
+            "texto": f"TIR anual {tir:.1f}% — por debajo del umbral mínimo institucional (10%)",
+            "accion": "Renegociar precio de terreno o aumentar precio de venta proyectado — revisar supuestos de cabida"
+        })
+    elif tir < 15:
+        alertas.append({
+            "severidad": "amarillo",
+            "origen": "financiero",
+            "texto": f"TIR anual {tir:.1f}% — moderada, por debajo del objetivo típico de promotores (15–20%)",
+            "accion": "Evaluar si el perfil de riesgo del proyecto justifica este retorno — considerar optimización del mix de unidades"
+        })
+
+    # Margen
+    if margen < 15:
+        alertas.append({
+            "severidad": "rojo",
+            "origen": "financiero",
+            "texto": f"Margen neto {margen:.1f}% — insuficiente para cubrir imprevistos y obtener retorno razonable",
+            "accion": "Revisar precio de terreno, costos de construcción o precio de venta — mínimo viable 15%"
+        })
+    elif margen < 20:
+        alertas.append({
+            "severidad": "amarillo",
+            "origen": "financiero",
+            "texto": f"Margen neto {margen:.1f}% — ajustado; deja poco colchón ante imprevistos de obra",
+            "accion": "Verificar partida de contingencias en presupuesto — negociar precio de terreno si es posible"
+        })
+
+    # Preventa
+    if meses_preventa > 12:
+        alertas.append({
+            "severidad": "rojo",
+            "origen": "financiero",
+            "texto": f"Preventa estimada {meses_preventa} meses — riesgo de liquidez alto antes del primer desembolso bancario",
+            "accion": "Considerar reducir umbral de preventa, ajustar velocidad de absorción o revisar estrategia de precios"
+        })
+    elif meses_preventa > 8:
+        alertas.append({
+            "severidad": "amarillo",
+            "origen": "financiero",
+            "texto": f"Preventa estimada {meses_preventa} meses — plazo largo; planificar capital de trabajo para ese período",
+            "accion": "Asegurar liquidez pre-obra — considerar línea puente o socio de equity"
+        })
+
+    # Estructura con financiamiento: costo financiero alto
+    if estructura != "estandar" and costo_financ > 0:
+        pct_costo_financ = costo_financ / (r.get("costo_total_sin_financ", 1) or 1) * 100
+        if pct_costo_financ > 12:
+            alertas.append({
+                "severidad": "amarillo",
+                "origen": "financiero",
+                "texto": f"Costo financiero representa {pct_costo_financ:.1f}% del costo total — impacto significativo en margen",
+                "accion": "Evaluar negociar tasa con el banco o aumentar aporte propio para reducir carga financiera"
+            })
+
+    # Aporte propio < 30% en estructura estándar
+    if estructura == "estandar" and aporte_pct < 30:
+        alertas.append({
+            "severidad": "amarillo",
+            "origen": "financiero",
+            "texto": f"Aporte propio {aporte_pct:.0f}% — bajo; banco puede requerir garantías adicionales",
+            "accion": "Preparar garantías complementarias o evaluar estructura con track record promotor"
+        })
+
+    return alertas
+
+
+def generar_alertas_financieras_industrial(r: dict, inp: dict) -> list:
+    """Alertas financieras determinísticas para Proyecto Logístico / Industrial."""
+    alertas = []
+    yield_bruto  = r.get("yield_bruto", 0) or 0
+    yield_neto   = r.get("yield_neto", 0) or 0
+    dscr         = r.get("dscr") or 0
+    payback      = r.get("payback_anos") or 0
+    uso          = r.get("uso", "")
+    renta_m2     = r.get("renta_m2_mes", 0) or 0
+    zona_ind     = inp.get("ind_zona_ind", "")
+    costo_m2     = r.get("costo_por_m2_nave", 0) or 0
+    dp_terreno   = inp.get("dp_terreno_pct", 40)
+    dp_const     = inp.get("dp_const_pct", 30)
+    irr          = r.get("irr_anual") or 0
+
+    # Yield (solo si hay renta declarada)
+    if renta_m2 > 0:
+        if yield_bruto < 5:
+            alertas.append({
+                "severidad": "rojo",
+                "origen": "financiero",
+                "texto": f"Yield bruto {yield_bruto:.1f}% — por debajo del umbral mínimo (5%) para activo industrial en Lima",
+                "accion": "Revisar renta proyectada vs. mercado o renegociar precio de adquisición del activo"
+            })
+        elif yield_bruto < 7:
+            alertas.append({
+                "severidad": "amarillo",
+                "origen": "financiero",
+                "texto": f"Yield bruto {yield_bruto:.1f}% — por debajo del objetivo típico prime Lima (8–10%)",
+                "accion": "Evaluar si la ubicación y perfil del arrendatario justifican el diferencial de yield"
+            })
+
+    # DSCR (solo si hay financiamiento y renta)
+    if dscr and dscr > 0 and renta_m2 > 0:
+        if dscr < 1.0:
+            alertas.append({
+                "severidad": "rojo",
+                "origen": "financiero",
+                "texto": f"DSCR {dscr:.2f}x — flujo operativo insuficiente para cubrir servicio de deuda",
+                "accion": "Incrementar renta, reducir deuda o ampliar plazo del crédito — banco rechazará financiamiento bajo estas condiciones"
+            })
+        elif dscr < 1.2:
+            alertas.append({
+                "severidad": "amarillo",
+                "origen": "financiero",
+                "texto": f"DSCR {dscr:.2f}x — ajustado; banca comercial Lima exige mínimo 1.20x",
+                "accion": "Aumentar aporte propio o reducir cuota mensual para mejorar cobertura antes de presentar al banco"
+            })
+
+    # Payback
+    if payback and payback > 0:
+        if payback > 20:
+            alertas.append({
+                "severidad": "rojo",
+                "origen": "financiero",
+                "texto": f"Payback {payback:.1f} años — retorno de inversión muy largo para activo industrial",
+                "accion": "Revisar renta objetivo o costo del proyecto — payback > 20 años no es bancable ni atractivo para fondos"
+            })
+        elif payback > 15:
+            alertas.append({
+                "severidad": "amarillo",
+                "origen": "financiero",
+                "texto": f"Payback {payback:.1f} años — largo; objetivo mercado prime Lima es 10–13 años",
+                "accion": "Evaluar indexación de renta contractual para acelerar el payback"
+            })
+
+    # IRR (solo inversión)
+    if uso == "Inversión" and irr and irr > 0:
+        if irr < 8:
+            alertas.append({
+                "severidad": "rojo",
+                "origen": "financiero",
+                "texto": f"IRR {irr:.1f}% — retorno insuficiente para perfil de inversión industrial",
+                "accion": "Revisar supuestos de renta, apreciación del activo o precio de compra"
+            })
+        elif irr < 12:
+            alertas.append({
+                "severidad": "amarillo",
+                "origen": "financiero",
+                "texto": f"IRR {irr:.1f}% — moderado; fondos institucionales exigen 12–15% para industrial Lima",
+                "accion": "Evaluar si el perfil de riesgo del activo justifica el retorno — considerar indexación contractual"
+            })
+
+    # Aporte propio muy bajo
+    if dp_terreno < 20:
+        alertas.append({
+            "severidad": "amarillo",
+            "origen": "financiero",
+            "texto": f"Down payment terreno {dp_terreno:.0f}% — banco puede requerir mayor garantía hipotecaria",
+            "accion": "Incrementar aporte propio o preparar garantías adicionales para viabilizar el crédito hipotecario"
+        })
+
+    return alertas
+
+
+def generar_alertas_oficinas(r: dict) -> list:
+    """Alertas determinísticas para Proyecto de Oficinas — Alquiler, Compra y Desarrollo."""
+    alertas = []
+    modo   = r.get("modo", "")
+    clase  = (r.get("clase") or r.get("clase_objetivo") or "B").upper()
+    dist   = (r.get("distrito") or "").lower()
+    area   = r.get("area", 0) or 0
+
+    # ── ALQUILER ──────────────────────────────────────────────────────────
+    if modo == "Alquiler":
+        alq_base  = r.get("alq_base", 0) or 0
+        duracion  = r.get("duracion", 3) or 3   # en años
+        garantia  = r.get("garantia", 0) or 0   # meses
+        reajuste  = r.get("reajuste", 0) or 0   # %
+        igv       = r.get("igv", False)          # bool
+
+        if area > 0 and alq_base > 0:
+            pm2 = alq_base / area
+            # Benchmark alquiler por clase y distrito (USD/m²/mes)
+            if "san isidro" in dist:
+                bm = 26.0 if "A" in clase else (18.0 if "B" in clase else 12.0)
+            elif "miraflores" in dist:
+                bm = 22.0 if "A" in clase else (17.0 if "B" in clase else 11.0)
+            elif "san borja" in dist or "surco" in dist:
+                bm = 19.0 if "A" in clase else (15.0 if "B" in clase else 10.0)
+            else:
+                bm = 17.0 if "A" in clase else (13.0 if "B" in clase else 9.0)
+
+            diff_pct = (pm2 - bm) / bm * 100 if bm > 0 else 0
+            distrito_label = r.get("distrito", "Lima")
+            if diff_pct > 15:
+                alertas.append({
+                    "severidad": "rojo", "origen": "financiero",
+                    "texto": f"Renta ${pm2:.1f}/m²/mes (+{diff_pct:.0f}% sobre benchmark Clase {clase} en {distrito_label}) — precio fuera de mercado",
+                    "accion": f"Negociar reducción hacia benchmark de mercado (${bm:.0f}/m²/mes) o exigir mejoras significativas en TI (Tenant Improvements)"
+                })
+            elif diff_pct > 5:
+                alertas.append({
+                    "severidad": "amarillo", "origen": "financiero",
+                    "texto": f"Renta ${pm2:.1f}/m²/mes ({diff_pct:+.0f}% vs. benchmark Clase {clase} en {distrito_label})",
+                    "accion": "Evaluar si piso, estado y amenidades del espacio justifican el diferencial"
+                })
+            else:
+                alertas.append({
+                    "severidad": "verde", "origen": "financiero",
+                    "texto": f"Renta ${pm2:.1f}/m²/mes — alineada con benchmark Clase {clase} en {distrito_label} (ref. ${bm:.0f}/m²/mes)",
+                    "accion": None
+                })
+
+        if duracion < 1:
+            alertas.append({
+                "severidad": "amarillo", "origen": "normativo",
+                "texto": "Contrato menor a 1 año — plazo muy corto, genera incertidumbre de renovación",
+                "accion": "Negociar extensión mínima a 12–24 meses o incluir opción de renovación automática con aviso previo de 90 días"
+            })
+
+        if garantia < 1:
+            alertas.append({
+                "severidad": "amarillo", "origen": "legal",
+                "texto": f"Garantía {garantia} meses — inferior al estándar de mercado para oficinas (2–3 meses)",
+                "accion": "Exigir garantía de al menos 2 meses para cubrir incumplimientos o daños al local"
+            })
+
+        if reajuste == 0 and duracion >= 1:
+            alertas.append({
+                "severidad": "amarillo", "origen": "financiero",
+                "texto": "Sin cláusula de reajuste — contrato pierde poder adquisitivo ante inflación durante el plazo",
+                "accion": "Incorporar ajuste anual por IPC o pactar reajuste fijo del 3–5% anual desde el segundo año"
+            })
+
+        if igv:
+            alertas.append({
+                "severidad": "amarillo", "origen": "legal",
+                "texto": "IGV marcado como incluido — en arrendamiento de oficinas prime el IGV (18%) se agrega al alquiler base",
+                "accion": "Verificar tratamiento tributario con contador — si el arrendador es PJ, el IGV es adicional al alquiler pactado"
+            })
+
+    # ── COMPRA ────────────────────────────────────────────────────────────
+    elif modo == "Compra":
+        precio_compra = r.get("precio_compra", 0) or 0
+        alq_esperado  = r.get("alq_esperado", 0) or 0
+        pago_ini_pct  = r.get("pago_inicial_pct", 20) or 20
+        dd_plazo      = r.get("dd_plazo", 0) or 0
+        precio_oferta = r.get("precio_oferta", 0) or 0
+
+        if precio_compra > 0 and area > 0:
+            pm2 = precio_compra / area
+            # Benchmark precio compra (USD/m²)
+            if "san isidro" in dist:
+                bm = 3200 if "A" in clase else (2100 if "B" in clase else 1400)
+            elif "miraflores" in dist:
+                bm = 2700 if "A" in clase else (1900 if "B" in clase else 1300)
+            elif "san borja" in dist or "surco" in dist:
+                bm = 2300 if "A" in clase else (1700 if "B" in clase else 1200)
+            else:
+                bm = 1900 if "A" in clase else (1500 if "B" in clase else 1100)
+            diff_pct = (pm2 - bm) / bm * 100 if bm > 0 else 0
+            distrito_label = r.get("distrito", "Lima")
+            if diff_pct > 20:
+                alertas.append({
+                    "severidad": "rojo", "origen": "financiero",
+                    "texto": f"Precio ${pm2:,.0f}/m² (+{diff_pct:.0f}% sobre benchmark Clase {clase} en {distrito_label})",
+                    "accion": "Respaldar con tasación independiente — diferencial significativo puede indicar sobreprecio o falta de comparables"
+                })
+            elif diff_pct > 10:
+                alertas.append({
+                    "severidad": "amarillo", "origen": "financiero",
+                    "texto": f"Precio ${pm2:,.0f}/m² ({diff_pct:+.0f}% vs. benchmark Clase {clase} en {distrito_label})",
+                    "accion": "Obtener tasación bancaria antes de comprometerse — el diferencial puede reducir el monto del crédito hipotecario"
+                })
+            else:
+                alertas.append({
+                    "severidad": "verde", "origen": "financiero",
+                    "texto": f"Precio ${pm2:,.0f}/m² — alineado con mercado Clase {clase} en {distrito_label} (ref. ${bm:,}/m²)",
+                    "accion": None
+                })
+
+        if precio_compra > 0 and alq_esperado > 0:
+            yield_bruto = alq_esperado * 12 / precio_compra * 100
+            if yield_bruto < 4:
+                alertas.append({
+                    "severidad": "rojo", "origen": "financiero",
+                    "texto": f"Yield bruto {yield_bruto:.1f}% — por debajo del mínimo aceptable para oficinas Lima (6–8%)",
+                    "accion": "Revisar precio de compra o proyección de renta — yield insuficiente no justifica la inversión a las condiciones actuales"
+                })
+            elif yield_bruto < 6:
+                alertas.append({
+                    "severidad": "amarillo", "origen": "financiero",
+                    "texto": f"Yield bruto {yield_bruto:.1f}% — por debajo del objetivo prime Lima (6–8%)",
+                    "accion": "Evaluar si la apreciación del activo compensa el bajo yield corriente — verificar vacancia y condiciones del edificio"
+                })
+            else:
+                alertas.append({
+                    "severidad": "verde", "origen": "financiero",
+                    "texto": f"Yield bruto {yield_bruto:.1f}% — dentro del rango prime Lima (6–8%)",
+                    "accion": None
+                })
+
+        if pago_ini_pct < 20:
+            alertas.append({
+                "severidad": "rojo", "origen": "financiero",
+                "texto": f"Cuota inicial {pago_ini_pct:.0f}% — por debajo del mínimo bancario típico (20%) para compra de oficina",
+                "accion": "Incrementar aporte propio o explorar garantía hipotecaria adicional para viabilizar el financiamiento"
+            })
+
+        if 0 < dd_plazo < 15:
+            alertas.append({
+                "severidad": "amarillo", "origen": "legal",
+                "texto": f"Due diligence {dd_plazo} días — plazo ajustado para revisar partida, PU/HR, cargas y obligaciones técnicas",
+                "accion": "Negociar extensión a mínimo 15–20 días hábiles para revisión legal y técnica completa"
+            })
+
+        if precio_oferta > 0 and precio_compra > 0 and precio_oferta < precio_compra:
+            desc = (precio_compra - precio_oferta) / precio_compra * 100
+            alertas.append({
+                "severidad": "verde", "origen": "financiero",
+                "texto": f"Oferta ${precio_oferta:,.0f} vs. precio pedido ${precio_compra:,.0f} — descuento negociado de {desc:.1f}%",
+                "accion": None
+            })
+
+    # ── DESARROLLO DE PROYECTO ────────────────────────────────────────────
+    elif modo == "Desarrollo de Proyecto":
+        area_ter    = r.get("area_terreno", 0) or 0
+        precio_ter  = r.get("precio_terreno", 0) or 0
+        cus         = r.get("cus", 0) or 0
+        eficiencia  = r.get("eficiencia", 80) or 80
+        costo_con   = r.get("costo_construccion", 0) or 0
+        precio_vta  = r.get("precio_venta", 0) or 0
+        precio_alq  = r.get("precio_alquiler", 0) or 0
+        pct_vta     = r.get("pct_venta", 0) or 0
+        ratio_e     = r.get("ratio_estac", 50) or 50   # m²/cochera
+        costos_ind  = r.get("costos_ind_pct", 15) or 15
+
+        if area_ter > 0 and cus > 0 and costo_con > 0:
+            area_constr   = area_ter * cus
+            area_rentable = area_constr * (eficiencia / 100)
+            costo_terreno = precio_ter * area_ter
+            costo_obras   = costo_con * area_constr * (1 + costos_ind / 100)
+            costo_total   = costo_terreno + costo_obras
+
+            ingresos_vta      = area_rentable * (pct_vta / 100) * precio_vta if precio_vta > 0 else 0
+            ingresos_alq_anual = area_rentable * (1 - pct_vta / 100) * precio_alq * 12 if precio_alq > 0 else 0
+            ingresos_tot = ingresos_vta + ingresos_alq_anual
+
+            if ingresos_tot > 0 and costo_total > 0:
+                margen = (ingresos_tot - costo_total) / ingresos_tot * 100
+                if margen < 15:
+                    alertas.append({
+                        "severidad": "rojo", "origen": "financiero",
+                        "texto": f"Margen bruto estimado {margen:.1f}% — insuficiente para desarrollo de oficinas (mínimo 20–25%)",
+                        "accion": "Revisar precio del terreno, costo de construcción o incrementar precio objetivo para mejorar la estructura financiera"
+                    })
+                elif margen < 25:
+                    alertas.append({
+                        "severidad": "amarillo", "origen": "financiero",
+                        "texto": f"Margen bruto estimado {margen:.1f}% — ajustado (objetivo: ≥25% para proyecto de oficinas)",
+                        "accion": "Optimizar mix venta/renta o mejorar eficiencia de planta para incrementar el margen"
+                    })
+                else:
+                    alertas.append({
+                        "severidad": "verde", "origen": "financiero",
+                        "texto": f"Margen bruto estimado {margen:.1f}% — dentro del objetivo para desarrollo de oficinas",
+                        "accion": None
+                    })
+
+        if eficiencia < 70:
+            alertas.append({
+                "severidad": "amarillo", "origen": "normativo",
+                "texto": f"Eficiencia de planta {eficiencia:.0f}% — por debajo del estándar para oficinas Clase A/B (70–80%)",
+                "accion": "Revisar distribución arquitectónica — eficiencias bajas impactan directamente el GLA arrendable"
+            })
+
+        # RNE A.080: 1 cochera/40m² área rentable de oficinas
+        if ratio_e > 40:
+            alertas.append({
+                "severidad": "amarillo", "origen": "normativo",
+                "texto": f"Ratio estacionamiento {ratio_e:.0f} m²/cochera — inferior al estándar RNE A.080 (1 cochera/40m² área de oficinas)",
+                "accion": "Verificar con arquitecto el número de cocheras requerido — déficit reduce comercialidad y puede bloquear la licencia"
+            })
+
+    return alertas
+
+
+def generar_alertas_financieras_residencial(r: dict) -> list:
+    """Alertas financieras determinísticas para Inmueble Residencial."""
+    alertas = []
+    precio        = r.get("precio", 0) or 0
+    precio_m2     = r.get("precio_m2", 0) or 0
+    precio_m2_mkt = r.get("precio_m2_mercado", 0) or 0
+    yield_bruto   = r.get("yield_bruto", 0) or 0
+    yield_mkt     = r.get("yield_mercado_pct", 0) or 0
+    alquiler_mes  = r.get("alquiler_mes", 0) or 0
+    alq_mkt_m2    = r.get("alquiler_mercado_m2", 0) or 0
+    m2            = r.get("m2", 0) or 0
+    cuota         = r.get("cuota_mensual", 0) or 0
+    pct_pie       = r.get("pct_pie", 0) or 0
+    flujo         = r.get("flujo_mensual")
+    payback       = r.get("payback_anos")
+    uso           = r.get("uso", "Vivienda propia")
+    zona          = r.get("zona", "Lima")
+
+    # ── Precio vs. mercado ────────────────────────────────
+    if precio_m2 > 0 and precio_m2_mkt > 0:
+        diff_pct = (precio_m2 - precio_m2_mkt) / precio_m2_mkt * 100
+        if diff_pct > 20:
+            alertas.append({
+                "severidad": "rojo", "origen": "financiero",
+                "texto": f"Precio/m² ${precio_m2:,} (+{diff_pct:.0f}% sobre mediana {zona} ${precio_m2_mkt:,}/m²) — prima significativa vs. mercado",
+                "accion": "Solicitar tasación independiente — precio por encima de mediana reduce plusvalía esperada y puede generar sobreendeudamiento"
+            })
+        elif diff_pct > 10:
+            alertas.append({
+                "severidad": "amarillo", "origen": "financiero",
+                "texto": f"Precio/m² ${precio_m2:,} ({diff_pct:+.0f}% vs. mediana {zona} ${precio_m2_mkt:,}/m²)",
+                "accion": "Verificar atributos diferenciales del inmueble (piso, vista, estado, amenidades) que justifiquen la prima"
+            })
+        elif diff_pct < -10:
+            alertas.append({
+                "severidad": "verde", "origen": "financiero",
+                "texto": f"Precio/m² ${precio_m2:,} ({diff_pct:.0f}% bajo mediana {zona}) — descuento respecto al mercado",
+                "accion": None
+            })
+
+    # ── Cuota inicial ─────────────────────────────────────
+    if cuota > 0:
+        if pct_pie < 10:
+            alertas.append({
+                "severidad": "rojo", "origen": "financiero",
+                "texto": f"Cuota inicial {pct_pie:.0f}% del precio — muy por debajo del mínimo bancario (10–20%)",
+                "accion": "Incrementar el pie o evaluar programas MIVIVIENDA/Techo Propio con condiciones especiales de cuota inicial"
+            })
+        elif pct_pie < 20:
+            alertas.append({
+                "severidad": "amarillo", "origen": "financiero",
+                "texto": f"Cuota inicial {pct_pie:.0f}% — por debajo del estándar bancario (20%) para crédito hipotecario convencional",
+                "accion": "Evaluar si el banco acepta menor pie o explorar crédito hipotecario + crédito complementario"
+            })
+
+    # ── Yield (inversión) ─────────────────────────────────
+    if uso in ("Inversión para alquilar", "Evaluación para venta") and alquiler_mes > 0:
+        if yield_bruto < 4:
+            alertas.append({
+                "severidad": "rojo", "origen": "financiero",
+                "texto": f"Yield bruto {yield_bruto:.1f}% — por debajo del mínimo aceptable para inversión residencial Lima (4%)",
+                "accion": "Revisar precio de compra o renta esperada — retorno insuficiente no justifica la inversión"
+            })
+        elif yield_mkt > 0 and yield_bruto < yield_mkt - 0.5:
+            alertas.append({
+                "severidad": "amarillo", "origen": "financiero",
+                "texto": f"Yield bruto {yield_bruto:.1f}% — por debajo del promedio de {zona} ({yield_mkt:.1f}%)",
+                "accion": "Evaluar si la plusvalía esperada y la ubicación compensan el diferencial de yield"
+            })
+        else:
+            alertas.append({
+                "severidad": "verde", "origen": "financiero",
+                "texto": f"Yield bruto {yield_bruto:.1f}% — {('por encima' if yield_bruto > yield_mkt else 'alineado con')} el promedio de {zona} ({yield_mkt:.1f}%)",
+                "accion": None
+            })
+
+        # Renta vs. mercado
+        if m2 > 0 and alq_mkt_m2 > 0:
+            alq_mkt_total = alq_mkt_m2 * m2
+            diff_alq = (alquiler_mes - alq_mkt_total) / alq_mkt_total * 100 if alq_mkt_total > 0 else 0
+            if diff_alq > 15:
+                alertas.append({
+                    "severidad": "amarillo", "origen": "financiero",
+                    "texto": f"Renta ${alquiler_mes:,.0f}/mes ({diff_alq:+.0f}% sobre mercado {zona}) — puede generar vacancia",
+                    "accion": "Evaluar si el inmueble tiene atributos suficientes para sostener la renta pedida vs. comparables del edificio"
+                })
+            elif diff_alq < -15:
+                alertas.append({
+                    "severidad": "verde", "origen": "financiero",
+                    "texto": f"Renta ${alquiler_mes:,.0f}/mes ({diff_alq:.0f}% bajo mercado) — potencial de ajuste al alza en próxima renovación",
+                    "accion": None
+                })
+
+        # Flujo mensual (inversión con crédito)
+        if flujo is not None:
+            if flujo < 0:
+                alertas.append({
+                    "severidad": "amarillo", "origen": "financiero",
+                    "texto": f"Flujo mensual negativo: −${abs(flujo):,.0f}/mes (cuota > renta neta)",
+                    "accion": "Incrementar cuota inicial para reducir la cuota mensual, o ajustar precio de compra — el diferencial es aporte mensual adicional del inversor"
+                })
+            else:
+                alertas.append({
+                    "severidad": "verde", "origen": "financiero",
+                    "texto": f"Flujo mensual positivo: +${flujo:,.0f}/mes (renta neta cubre la cuota)",
+                    "accion": None
+                })
+
+        # Payback
+        if payback and payback > 0:
+            if payback > 20:
+                alertas.append({
+                    "severidad": "rojo", "origen": "financiero",
+                    "texto": f"Payback {payback:.1f} años — retorno de inversión muy largo para residencial Lima",
+                    "accion": "Revisar precio o renta objetivo — payback > 20 años reduce atractivo vs. otras alternativas de inversión"
+                })
+            elif payback > 15:
+                alertas.append({
+                    "severidad": "amarillo", "origen": "financiero",
+                    "texto": f"Payback {payback:.1f} años — largo; promedio Lima es 15–18 años según análisis de mercado",
+                    "accion": "Evaluar indexación de renta en contrato plurianual para acelerar el payback"
+                })
+
+    return alertas
 
 
 # ═══════════════════════════════════════════════════════
@@ -4542,7 +6725,7 @@ def generar_excel_factis(result: dict, cabida: dict, params: dict,
     ws1.row_dimensions[1].height = 36
 
     # Título
-    t = ws1.cell(row=1, column=1, value=f"FACTIS — Reporte Financiero · {zona}")
+    t = ws1.cell(row=1, column=1, value=f"SOLUM — Reporte Financiero · {zona}")
     t.font = Font(bold=True, size=14, color=GOLD)
     t.fill = PatternFill("solid", fgColor=DARK)
     t.alignment = Alignment(horizontal="left", vertical="center")
@@ -4802,15 +6985,26 @@ def generar_pdf_factis(result: dict, cabida: dict, params: dict,
         canvas_obj.setStrokeColor(GOLD)
         canvas_obj.setLineWidth(1.0)
         canvas_obj.line(6 * mm, H - HEADER_H, W, H - HEADER_H)
-        # Mini-wordmark FACTIS
+        # Mini logo SOLUM — barras encima del texto (tipología correcta)
+        _hbx   = M + 2 * mm          # x izquierda del bloque logo
+        _hb_cx = _hbx + 10           # centro x para alinear barras y texto
+        _hb_bar_h = [3, 5, 7, 9, 8, 5, 3]   # alturas px, ascendente
+        _hb_bw  = 1.6                 # ancho de cada barra
+        _hb_gap = 1.2                 # gap entre barras
+        _hb_total_w = len(_hb_bar_h) * _hb_bw + (len(_hb_bar_h) - 1) * _hb_gap
+        _hb_x0  = _hb_cx - _hb_total_w / 2
+        _hb_bar_y = H - HEADER_H * 0.42   # base de las barras
+        canvas_obj.setFillColor(GOLD)
+        for _i, _bh in enumerate(_hb_bar_h):
+            canvas_obj.rect(_hb_x0 + _i * (_hb_bw + _hb_gap), _hb_bar_y, _hb_bw, _bh, fill=1, stroke=0)
+        # "SOLUM" centrado debajo de las barras
         canvas_obj.setFillColor(NAV)
-        canvas_obj.setFont("Helvetica-Bold", 11)
-        canvas_obj.drawString(M + 2 * mm, H - HEADER_H * 0.55, "FACTIS")
-        # Sub-etiqueta
+        canvas_obj.setFont("Helvetica-Bold", 7)
+        canvas_obj.drawCentredString(_hb_cx, _hb_bar_y - 7, "SOLUM")
+        # Sub-etiqueta a la derecha
         canvas_obj.setFillColor(GREY)
         canvas_obj.setFont("Helvetica", 7)
-        canvas_obj.drawString(M + 2 * mm + 46, H - HEADER_H * 0.55,
-                              "·  Osterling Advisory")
+        canvas_obj.drawString(_hb_cx + 13, _hb_bar_y - 2, "·  Osterling Advisory")
         # Pie de página — línea separadora
         canvas_obj.setStrokeColor(colors.HexColor("#E8E0D4"))
         canvas_obj.setLineWidth(0.3)
@@ -4819,86 +7013,127 @@ def generar_pdf_factis(result: dict, cabida: dict, params: dict,
         canvas_obj.setFont("Helvetica", 7)
         canvas_obj.setFillColor(GREY)
         canvas_obj.drawString(M, 11.5 * mm,
-            f"FACTIS — Análisis de Cabida y Factibilidad Financiera  ·  {today}")
+            f"SOLUM — Análisis de Cabida y Factibilidad Financiera  ·  {today}")
         canvas_obj.drawRightString(W - M, 11.5 * mm,
             f"Preparado por Osterling Advisory  ·  Pág. {doc.page}")
         # Pie de página — disclaimer IA (debajo de la línea)
         canvas_obj.setFont("Helvetica", 5.5)
         canvas_obj.setFillColor(colors.HexColor("#A89880"))
-        _disclaimer = (
-            "NOTA: Esta IA de Análisis Inmobiliario debe utilizarse como herramienta complementaria al criterio profesional, "
-            "permitiendo obtener resultados preliminares de manera rápida. El profesional podrá definir tipologías, "
-            "distribución por plantas y modificaciones pertinentes. La IA irá alineándose con la visión del profesional."
-        )
-        canvas_obj.drawCentredString(W / 2, 7.5 * mm, _disclaimer)
+        canvas_obj.drawCentredString(W / 2, 9.0 * mm,
+            "NOTA: Esta IA de Análisis Inmobiliario debe utilizarse como herramienta complementaria al criterio profesional.")
+        canvas_obj.drawCentredString(W / 2, 6.0 * mm,
+            "Los valores indicados son preliminares. El profesional definirá tipologías, distribución y modificaciones pertinentes.")
         canvas_obj.restoreState()
 
     def _cover_page(canvas_obj, doc):
-        # Fondo navy completo
+        import os as _os
+
+        # ── Fondo navy completo ───────────────────────────────────
         canvas_obj.setFillColor(NAV)
         canvas_obj.rect(0, 0, W, H, fill=1, stroke=0)
-        # Banda gold lateral
+
+        # Franja dorada izquierda
         canvas_obj.setFillColor(GOLD)
         canvas_obj.rect(0, 0, 6 * mm, H, fill=1, stroke=0)
-        # Wordmark FACTIS
-        canvas_obj.setFillColor(WHITE)
-        canvas_obj.setFont("Helvetica-Bold", 52)
-        canvas_obj.drawString(M + 6 * mm, H - 55 * mm, "FACTIS")
-        # Línea dorada
+
+        # ── LOGO SOLUM — barras centradas + texto abajo ───────────
+        # Barras ascendentes (misma proporción que logo oficial)
+        _bar_heights = [6, 9, 13, 17, 21, 26, 22, 14]   # mm, ascendente → descendente
+        _bar_w_mm  = 3.2
+        _bar_gap_mm = 2.4
+        _n_bars = len(_bar_heights)
+        _bars_total_w = (_n_bars * _bar_w_mm + (_n_bars - 1) * _bar_gap_mm) * mm
+        _lcx = (W + 6 * mm) / 2          # centro horizontal (descontando franja dorada)
+        _bars_y  = H * 0.71              # base de las barras
+        _bar_x0  = _lcx - _bars_total_w / 2
+
+        canvas_obj.setFillColor(colors.white)
+        for _i, _bh in enumerate(_bar_heights):
+            _bx = _bar_x0 + _i * (_bar_w_mm + _bar_gap_mm) * mm
+            canvas_obj.rect(_bx, _bars_y, _bar_w_mm * mm, _bh * mm, fill=1, stroke=0)
+
+        # "SOLUM" centrado debajo de las barras
+        canvas_obj.setFont("Helvetica-Bold", 26)
+        canvas_obj.setFillColor(colors.white)
+        canvas_obj.drawCentredString(_lcx, _bars_y - 11 * mm, "SOLUM")
+
+        # Subtítulo en azul-gris suave
+        canvas_obj.setFont("Helvetica", 8)
+        canvas_obj.setFillColor(colors.HexColor("#7A9BBD"))
+        canvas_obj.drawCentredString(_lcx, _bars_y - 19 * mm, "Plataforma Analítica Inmobiliaria")
+
+        # ── Separador dorado horizontal ───────────────────────────
+        _sep_y = _bars_y - 27 * mm
         canvas_obj.setStrokeColor(GOLD)
-        canvas_obj.setLineWidth(1.2)
-        canvas_obj.line(M + 6 * mm, H - 63 * mm, W - M, H - 63 * mm)
-        # Subtítulo
-        canvas_obj.setFont("Helvetica", 13)
-        canvas_obj.setFillColor(colors.HexColor("#B8C8D8"))
-        canvas_obj.drawString(M + 6 * mm, H - 72 * mm,
-                              "Análisis de Cabida y Factibilidad Financiera")
-        # Datos del proyecto
+        canvas_obj.setLineWidth(0.8)
+        canvas_obj.line(M + 10 * mm, _sep_y, W - M, _sep_y)
+
+        # ── Datos del proyecto ────────────────────────────────────
+        _py = _sep_y - 14 * mm
         canvas_obj.setFillColor(GOLD)
-        canvas_obj.setFont("Helvetica-Bold", 10)
-        canvas_obj.drawString(M + 6 * mm, H * 0.52, "PROYECTO")
+        canvas_obj.setFont("Helvetica-Bold", 7)
+        canvas_obj.drawString(M + 10 * mm, _py, "PROYECTO")
+
+        canvas_obj.setFillColor(colors.white)
+        canvas_obj.setFont("Helvetica-Bold", 15)
+        canvas_obj.drawString(M + 10 * mm, _py - 16, _nombre_proy)
+
+        canvas_obj.setFillColor(colors.HexColor("#7A9BBD"))
         canvas_obj.setFont("Helvetica", 9)
-        canvas_obj.setFillColor(WHITE)
-        canvas_obj.drawString(M + 6 * mm, H * 0.52 - 14, f"Proyecto:   {_nombre_proy}")
-        canvas_obj.drawString(M + 6 * mm, H * 0.52 - 27, f"Distrito:    {distrito}")
-        canvas_obj.drawString(M + 6 * mm, H * 0.52 - 40, f"Dirección:  {direccion}")
-        canvas_obj.drawString(M + 6 * mm, H * 0.52 - 53, f"Fecha:       {today}")
-        # KPIs grandes en portada
+        canvas_obj.drawString(M + 10 * mm, _py - 29, f"{distrito}  ·  {direccion}")
+        canvas_obj.drawString(M + 10 * mm, _py - 41, f"Fecha: {today}")
+
+        # ── KPI boxes ────────────────────────────────────────────
+        _ky = H * 0.31
         _kpis = [
             ("MARGEN NETO", f"{_mg:.1f}%"),
             ("TIR ANUAL",   f"{_tir:.1f}%"),
-            ("ROI",         f"{r.get('roi_pct',0):.1f}%"),
+            ("ROI",         f"{r.get('roi_pct', 0):.1f}%"),
         ]
-        _kx = M + 6 * mm
+        _kbox_w = 52 * mm
+        _kbox_h = 26 * mm
+        _kx = M + 10 * mm
         for _lbl, _val in _kpis:
-            canvas_obj.setFillColor(colors.HexColor("#2A3D4D"))
-            canvas_obj.rect(_kx, H * 0.25, 52 * mm, 28 * mm, fill=1, stroke=0)
+            # Fondo semi-oscuro sobre navy
+            canvas_obj.setFillColor(colors.HexColor("#0A1828"))
+            canvas_obj.setStrokeColor(GOLD)
+            canvas_obj.setLineWidth(0.5)
+            canvas_obj.rect(_kx, _ky, _kbox_w, _kbox_h, fill=1, stroke=1)
             canvas_obj.setFillColor(GOLD)
-            canvas_obj.setFont("Helvetica-Bold", 7)
-            canvas_obj.drawString(_kx + 4 * mm, H * 0.25 + 22 * mm, _lbl)
-            canvas_obj.setFillColor(WHITE)
-            canvas_obj.setFont("Helvetica-Bold", 22)
-            canvas_obj.drawString(_kx + 4 * mm, H * 0.25 + 9 * mm, _val)
-            _kx += 56 * mm
-        # Perfil de inversión
-        canvas_obj.setFillColor(colors.HexColor("#2A3D4D"))
-        canvas_obj.rect(M + 6 * mm, H * 0.15, 160 * mm, 18 * mm, fill=1, stroke=0)
+            canvas_obj.setFont("Helvetica-Bold", 6.5)
+            canvas_obj.drawString(_kx + 4 * mm, _ky + _kbox_h - 9, _lbl)
+            canvas_obj.setFillColor(colors.white)
+            canvas_obj.setFont("Helvetica-Bold", 20)
+            canvas_obj.drawString(_kx + 4 * mm, _ky + 6, _val)
+            _kx += _kbox_w + 4 * mm
+
+        # ── Perfil de inversión ───────────────────────────────────
+        _ip_y = H * 0.15
+        _ip_w = W - M - (M + 10 * mm)
+        canvas_obj.setFillColor(colors.HexColor("#0A1828"))
+        canvas_obj.setStrokeColor(GOLD)
+        canvas_obj.setLineWidth(0.5)
+        canvas_obj.rect(M + 10 * mm, _ip_y, _ip_w, 18 * mm, fill=1, stroke=1)
         canvas_obj.setFillColor(GOLD)
         canvas_obj.setFont("Helvetica-Bold", 7)
-        canvas_obj.drawString(M + 10 * mm, H * 0.15 + 12 * mm, "PERFIL DE INVERSIÓN")
-        canvas_obj.setFillColor(WHITE)
-        canvas_obj.setFont("Helvetica-Bold", 14)
-        canvas_obj.drawString(M + 10 * mm, H * 0.15 + 4 * mm, _perfil_txt)
-        canvas_obj.setFillColor(colors.HexColor("#8A9BAD"))
+        canvas_obj.drawString(M + 14 * mm, _ip_y + 13 * mm, "PERFIL DE INVERSIÓN")
+        canvas_obj.setFillColor(_perfil_col)
+        canvas_obj.setFont("Helvetica-Bold", 13)
+        canvas_obj.drawString(M + 14 * mm, _ip_y + 5 * mm, _perfil_txt)
+        canvas_obj.setFillColor(colors.HexColor("#7A9BBD"))
         canvas_obj.setFont("Helvetica", 8)
-        canvas_obj.drawString(M + 70 * mm, H * 0.15 + 4 * mm,
-                              f"TIT terreno: {_tit:.1f}% · Utilidad neta: {_fmt(r.get('utilidad_neta',0))}")
-        # Footer portada
-        canvas_obj.setFillColor(GREY)
+        canvas_obj.drawString(M + 70 * mm, _ip_y + 5 * mm,
+                              f"TIT terreno: {_tit:.1f}%  ·  Utilidad neta: {_fmt(r.get('utilidad_neta', 0))}")
+
+        # ── Footer ────────────────────────────────────────────────
+        canvas_obj.setStrokeColor(colors.HexColor("#1E3048"))
+        canvas_obj.setLineWidth(0.3)
+        canvas_obj.line(M + 6 * mm, 15 * mm, W - M, 15 * mm)
+        canvas_obj.setFillColor(colors.HexColor("#4A6A8A"))
         canvas_obj.setFont("Helvetica", 7)
-        canvas_obj.drawString(M + 6 * mm, 12 * mm,
+        canvas_obj.drawString(M + 6 * mm, 10 * mm,
                               "Preparado por Osterling Advisory  ·  factis.pe")
-        canvas_obj.drawRightString(W - M, 12 * mm, "Confidencial")
+        canvas_obj.drawRightString(W - M, 10 * mm, "Confidencial")
 
     def _fmt(v):
         v = v or 0
@@ -4998,7 +7233,7 @@ def generar_pdf_factis(result: dict, cabida: dict, params: dict,
                 data.append([Paragraph(lbl, _style(f"sh{row_idx}", fontSize=7.5,
                               textColor=GOLD, fontName="Helvetica-Bold")), ""])
                 styles_ts += [
-                    ("BACKGROUND",  (0, row_idx), (-1, row_idx), NAV),
+                    ("BACKGROUND",  (0, row_idx), (-1, row_idx), colors.HexColor("#2E4060")),
                     ("TEXTCOLOR",   (0, row_idx), (-1, row_idx), GOLD),
                     ("TOPPADDING",  (0, row_idx), (-1, row_idx), 5),
                     ("BOTTOMPADDING",(0, row_idx),(-1, row_idx), 5),
@@ -5194,6 +7429,19 @@ def generar_pdf_factis(result: dict, cabida: dict, params: dict,
     ]))
     story.append(Spacer(1, 8))
 
+    # Nota de absorción y plazos
+    _vel_abs = fin_inputs.get("velocidad_venta", 1.0) or 1.0
+    _m_venta = r.get("meses_venta", 0) or 0
+    _m_obra  = r.get("meses_obra", 0) or 0
+    _bench_abs = 1.5
+    _abs_nota = (
+        f"Velocidad de absorción estimada: <b>{_vel_abs:.1f} und/mes</b> "
+        f"(benchmark Miraflores / Lima prime: ~{_bench_abs} und/mes — estimación conservadora). "
+        f"Plazo de ventas proyectado: <b>{_m_venta} meses</b> · Plazo de obra: <b>{_m_obra} meses</b>."
+    )
+    story.append(Paragraph(_abs_nota, _style("abs_n", fontSize=7.5, textColor=GREY, leading=11)))
+    story.append(Spacer(1, 8))
+
     # Perfil inversión + clasificación terreno (2 columnas)
     _perf_bg = {GRN: GRN_L, AMB: AMB_L, RED: RED_L, NAV: colors.HexColor("#EEF2F7")}
     _p_bg = _perf_bg.get(_perfil_col, LGREY)
@@ -5212,7 +7460,7 @@ def generar_pdf_factis(result: dict, cabida: dict, params: dict,
                             fontName="Helvetica", textColor=GREY,
                             alignment=TA_CENTER, leading=9))
         _inner = Table([[_p_lbl], [_p_val], [_p_sub]],
-                       colWidths=[_iw], rowHeights=[14, 24, 14])
+                       colWidths=[_iw], rowHeights=[11, 20, 11])
         _inner.setStyle(TableStyle([
             ("ALIGN",        (0, 0), (-1, -1), "CENTER"),
             ("VALIGN",       (0, 0), (-1, -1), "MIDDLE"),
@@ -5236,7 +7484,7 @@ def generar_pdf_factis(result: dict, cabida: dict, params: dict,
         val_color=_zona_c,
     )
     t2 = Table([[perf_cell, zona_cell]],
-               colWidths=[_cell_w2] * 2, rowHeights=[44 * mm])
+               colWidths=[_cell_w2] * 2, rowHeights=[28 * mm])
     t2.setStyle(TableStyle([
         ("BACKGROUND", (0, 0), (0, 0), _p_bg),
         ("BACKGROUND", (1, 0), (1, 0), LGREY),
@@ -5388,7 +7636,7 @@ def generar_pdf_factis(result: dict, cabida: dict, params: dict,
         u_tbl = Table(u_data, colWidths=[_uw*0.22, _uw*0.08, _uw*0.09, _uw*0.11,
                                           _uw*0.16, _uw*0.18, _uw*0.10])
         u_tbl.setStyle(TableStyle([
-            ("BACKGROUND",     (0, 0), (-1, 0),  NAV),
+            ("BACKGROUND",     (0, 0), (-1, 0),  colors.HexColor("#2E4060")),
             ("BACKGROUND",     (0, -1),(-1, -1), colors.HexColor("#E8EDF3")),
             ("LINEABOVE",      (0, -1),(-1, -1), 0.8, NAV),
             ("GRID",           (0, 0), (-1, -1), 0.3, BORD),
@@ -5579,7 +7827,7 @@ def generar_pdf_factis(result: dict, cabida: dict, params: dict,
         ("LEFTPADDING", (0, 0), (-1, -1), 8),
         ("RIGHTPADDING",(0, 0), (-1, -1), 8),
     ] + res_styles_ts))
-    story.append(res_tbl)
+    story.append(KeepTogether([res_tbl]))
 
     # ── Página: Due Diligence Legal ──────────────────────────────
     if legal:
@@ -5914,6 +8162,7 @@ def calcular_sensibilidad(cabida: dict, fin_base: dict, zona: str) -> pd.DataFra
     return pd.DataFrame(filas, columns=cols, index=idx)
 
 
+@st.cache_data(show_spinner=False)
 def calcular_sensibilidad_terreno(cabida: dict, fin_base: dict, zona: str):
     """Matriz margen% + TIR% cruzando precio de venta (cols) × precio de terreno (filas).
     Returns (df_mg, df_tir, precios_list, terrenos_list, precio_base, terreno_base).
@@ -5949,6 +8198,23 @@ def calcular_sensibilidad_terreno(cabida: dict, fin_base: dict, zona: str):
     df_mg  = pd.DataFrame(mg_grid,  columns=cols, index=idx)
     df_tir = pd.DataFrame(tir_grid, columns=cols, index=idx)
     return df_mg, df_tir, precios, terrenos, precio_base, terreno_base
+
+
+def calcular_precio_min_venta(cabida: dict, fin_base: dict, zona: str, margen_target_pct: float) -> int:
+    """Precio de venta mínimo por m² para alcanzar el margen objetivo (búsqueda binaria).
+    Retorna 0 si no hay datos suficientes."""
+    av = cabida.get("area_vendible_m2", 0)
+    if av <= 0 or fin_base.get("costo_terreno", 0) <= 0:
+        return 0
+    p_low, p_high = 300.0, 25_000.0
+    for _ in range(28):
+        p_mid = (p_low + p_high) / 2.0
+        r = calcular_financiero(cabida, {**fin_base, "precio_venta_m2": p_mid}, zona)["resumen"]
+        if r["margen_pct"] < margen_target_pct:
+            p_low = p_mid
+        else:
+            p_high = p_mid
+    return round(p_mid / 50) * 50
 
 
 def _s_curve_weights(n: int) -> list:
@@ -6159,7 +8425,11 @@ def generar_flujo(cabida: dict, result_financiero: dict, fin: dict, zona: str):
 
     inicio_obra  = meses_preventa   # construcción arranca después de preventa
     fin_obra     = inicio_obra + meses_obra
-    total_meses  = fin_obra + 6
+    # Extiende ventana para capturar todas las cuotas del último comprador:
+    # la última venta ocurre ~ceil(n_unidades/vel) meses después del inicio,
+    # y genera 20 cuotas mensuales adicionales → ventana mínima = last_sale + 22.
+    _last_sale_month = _math.ceil(n_unidades / vel)
+    total_meses  = max(fin_obra + 6, _last_sale_month + 22)
     n_months     = total_meses + 1
 
     # ── S-curve construcción ──────────────────────────
@@ -6243,9 +8513,13 @@ def generar_flujo(cabida: dict, result_financiero: dict, fin: dict, zona: str):
             fl[min(fin_obra, total_meses)] -= saldo_banco
 
         # Costos de ventas + gerenciamiento restantes (excl. marketing preventa ya aplicado)
-        c_vtas = (raw["c_ventas_marketing"] + raw["c_gerenciamiento"]) * (1.0 - pct_mktg_pv)
-        for i in range(min(meses_venta, n_months)):
-            fl[i] -= c_vtas / meses_venta
+        # Spreadeados desde inicio_obra hasta fin de ventas, no desde mes 0
+        c_vtas      = (raw["c_ventas_marketing"] + raw["c_gerenciamiento"]) * (1.0 - pct_mktg_pv)
+        _vv_start   = min(inicio_obra, n_months)
+        _vv_end     = min(_vv_start + meses_venta, n_months)
+        _vv_range   = max(1, _vv_end - _vv_start)
+        for i in range(_vv_start, _vv_end):
+            fl[i] -= c_vtas / _vv_range
 
         # Ingresos: PIE 10% | 20 cuotas 30% | saldo 60% al fin de obra
         precio_u      = raw["ing_brutos"] / n_unidades
@@ -6325,7 +8599,7 @@ def generar_resumen_ejecutivo_ia(tipo: str, datos: dict) -> dict:
         _irr_str = (f"{datos['irr_anual']:.1f}%" if datos.get('irr_anual') is not None else 'N/A')
         ctx = (
             f"Activo: {datos.get('tipo_nave')} · Zonificación {datos.get('zonificacion')} · Uso: {datos.get('uso')}\n"
-            f"Área nave: {datos.get('area_nave',0):,.0f} m² · Área libre: {datos.get('area_libre',0):,.0f} m²\n"
+            f"Área nave: {datos.get('area_nave',0):,.0f} m² · Área libre: {datos.get('area_libre',0):,.0f} m² · Altura libre: {datos.get('altura_nave',0):.1f} m al hombro\n"
             f"Costo total: ${datos.get('costo_total',0):,.0f} · Costo/m² nave: ${datos.get('costo_por_m2_nave',0):,.0f}\n"
             f"Yield bruto: {datos.get('yield_bruto',0):.1f}% · Yield neto: {datos.get('yield_neto',0):.1f}%\n"
             f"DSCR: {_dscr_str}\n"
@@ -6338,9 +8612,11 @@ def generar_resumen_ejecutivo_ia(tipo: str, datos: dict) -> dict:
         ref = ("Referencia Lima 2025-2026: yield neto target 6–8%, TIR equity mínima 12%, "
                "DSCR ≥ 1.20x, renta logística $5.5–7.0/m²/mes. "
                "Costo construcción nave industrial (estructura metálica, SIN acabados residenciales): "
-               "Logística Clase A 12-14m clara $270–300/m², estándar $220–260/m², básica $180–220/m², "
-               "cross-docking $380–500/m², manufactura $350–450/m². "
-               "Patios/maniobras: $60–90/m². "
+               "Estándar único Lima 2025: $350/m² nave (NO varía por ubicación). "
+               "Nave baja manufactura (8-10m) → ajustar a $300–330; nave alta o compleja → $400+. "
+               "Patios/maniobras (sin techar): $70–80/m². "
+               "Ref. baja: Parque Logístico 47 $291/m² (promotor serial, contratos marco). "
+               "Ref. alta: Simétrica $647/m² (constructor premium Norton, atípico). "
                "Proyecto de referencia real: Parque Logístico Lima 14,315 m² nave, 13.6m clara, "
                "inversión $291/m² all-in, renta $6.5/m²/mes, payback 3.74 años, yield bruto 26.8%. "
                "IMPORTANTE: costos industriales son 3-4x más bajos que construcción residencial "
@@ -6364,13 +8640,54 @@ def generar_resumen_ejecutivo_ia(tipo: str, datos: dict) -> dict:
 
     _bench_ctx = f"\n\nBENCHMARKS INDUSTRIALES DE REFERENCIA:\n{BENCHMARKS_INDUSTRIAL}" if tipo_label.startswith("industrial") else ""
 
-    prompt = f"""Eres Enrique Osterling, director de Osterling Advisory, con 20 años de experiencia en activos comerciales e industriales en Lima. Eres directo, preciso y orientado a la decisión.
+    if tipo_label.startswith("industrial"):
+        _legal_ctx = (
+            f"\n\nNORMATIVA LEGAL — ARRENDAMIENTO INDUSTRIAL:\n{LEGAL_ARRENDAMIENTO[:400]}"
+            f"\n\nNORMATIVA LEGAL — SUNARP Y CARGAS:\n{LEGAL_SUNARP[:350]}"
+            f"\n\nNORMATIVA LEGAL — TRIBUTACIÓN:\n{LEGAL_TRIBUTACION[:300]}"
+        )
+    else:
+        _legal_ctx = (
+            f"\n\nNORMATIVA LEGAL — TRIBUTACIÓN INMOBILIARIA:\n{LEGAL_TRIBUTACION[:400]}"
+            f"\n\nNORMATIVA LEGAL — CONTRATOS COMPRAVENTA:\n{LEGAL_CONTRATOS[:350]}"
+            f"\n\nNORMATIVA LEGAL — SUNARP Y CARGAS:\n{LEGAL_SUNARP[:300]}"
+        )
 
-Analiza este activo {tipo_label}:
+    if tipo_label.startswith("industrial"):
+        _ciclo_ctx = f"\n\nPOSICIONAMIENTO DE MERCADO — LIMA 2026:\n{CONOCIMIENTO_CICLO[:3000]}"
+        _orient_ind = """
+CRITERIOS DE ORIENTACIÓN (Sección 18 — SOLUM):
+Yield >10%: supera cap rate Clase A Lima (8–10%). Validar hipótesis precio/renta.
+Yield 8–10%: en línea con mercado industrial Clase A. Precio razonable para la renta.
+Yield 6–8%: por debajo del mercado. Precio elevado respecto a renta. Mayor equity requerido.
+Yield <6%: solo justificable por revalorización de suelo o mejora del inmueble.
+DSCR >1.35x: flujo cubre holgadamente la deuda. Perfil bancable sin restricciones.
+DSCR 1.25–1.35x: umbral mínimo bancario. Financiable sin margen para caída de rentas.
+DSCR 1.10–1.25x: por debajo del mínimo bancario (1.25x). Reducir crédito o mejorar renta.
+DSCR <1.10x: renta no cubre deuda. Solo viable con equity significativo o sin financiamiento.
+TIR equity >18%: supera benchmark industrial Lima (12–15%). Retorno sólido.
+TIR equity 12–18%: dentro del rango objetivo. Viable para inversión institucional.
+TIR equity <12%: por debajo del costo de capital. Revisar estructura o precio del inmueble.
+"""
+        _orient_res = ""
+    else:
+        _ciclo_ctx = ""
+        _orient_ind = ""
+        _orient_res = """
+CRITERIOS DE ORIENTACIÓN (Sección 18 — SOLUM):
+Yield bruto >6%: supera el promedio Lima (5.94%). Buena rentabilidad para inversión.
+Yield bruto 4–6%: dentro del rango residencial Lima. Normal para vivienda propia con plusvalía.
+Yield bruto <4%: bajo para inversión pura. Evaluar si la apreciación compensa.
+Payback <18 años: recuperación rápida. Alta viabilidad como inversión.
+Payback 18–25 años: típico Lima. Aceptable si la apreciación es sostenida.
+Payback >25 años: largo. La ganancia de capital debe ser el argumento principal.
+Cuota/ingreso >30%: el comprador estaría sobre-endeudado. Revisar financiamiento.
+Precio vs. mercado: si precio > mercado >8%: hay margen de negociación hacia abajo.
+"""
 
-{ctx}
+    _sys_resumen = f"""Eres Enrique Osterling, director de Osterling Advisory, con 20 años de experiencia en activos comerciales e industriales en Lima. Eres directo, preciso y orientado a la decisión.
 
-{ref}{_bench_ctx}
+{ref}{_bench_ctx}{_ciclo_ctx}{_orient_ind}{_orient_res}{_legal_ctx}
 Tasa libre de riesgo Perú: ~7.5% (bonos soberanos PEN).
 
 Devuelve ÚNICAMENTE este JSON sin texto adicional:
@@ -6378,19 +8695,21 @@ Devuelve ÚNICAMENTE este JSON sin texto adicional:
   "recomendacion": "comprar/evaluar_con_condiciones/no_recomendado",
   "titulo": "Frase de 6-9 palabras resumiendo la oportunidad de inversión",
   "resumen": "2-3 oraciones describiendo el activo, su posicionamiento y contexto de mercado.",
+  "orientacion_indicadores": "1-2 frases interpretando los indicadores clave según los criterios de orientación — NO una recomendación, sino contexto de mercado para que el cliente decida.",
   "argumentos_favor": ["argumento concreto 1", "argumento concreto 2", "argumento concreto 3"],
   "riesgos": ["riesgo concreto 1", "riesgo concreto 2"],
+  "observaciones_legales": ["observación legal concreta 1 con norma aplicable", "observación legal concreta 2"],
+  "sugerencias_mitigacion": ["acción concreta para mitigar el riesgo legal 1", "acción concreta 2"],
   "conclusion": "1-2 oraciones de recomendación final. Directo y accionable."
 }}"""
 
-    response = client.messages.create(
-        model="claude-sonnet-4-6",
+    text = _api_call(client,
+        model="claude-haiku-4-5-20251001",
         max_tokens=1024,
-        messages=[{"role": "user", "content": prompt}]
+        system=[{"type": "text", "text": _sys_resumen, "cache_control": {"type": "ephemeral"}}],
+        messages=[{"role": "user", "content": f"Analiza este activo {tipo_label}:\n\n{ctx}"}]
     )
-    if not response.content:
-        raise ValueError("json_parse_error: API devolvió respuesta vacía")
-    return parse_json_safe(response.content[0].text.strip())
+    return parse_json_safe(text)
 
 
 def generar_memorandum_advisory_ind(datos: dict) -> dict:
@@ -6401,21 +8720,16 @@ def generar_memorandum_advisory_ind(datos: dict) -> dict:
     _irr_str     = (f"{datos['irr_anual']:.1f}%" if datos.get('irr_anual') is not None else 'N/A')
 
     _renta_m2 = datos.get('renta_m2_mes', 0)
-    _costo_m2 = datos.get('costo_m2_mes', 0)
     _renta_ctx = ""
-    if _renta_m2 > 0 and _costo_m2 > 0:
-        _dif = _renta_m2 - _costo_m2
+    if _renta_m2 > 0:
         _renta_ctx = (
-            f"\nComparativa compra vs. arrendamiento:"
-            f"\n  Costo efectivo compra: ${_costo_m2:.2f}/m²/mes"
-            f"\n  Renta de mercado equivalente: ${_renta_m2:.2f}/m²/mes"
-            f"\n  Diferencial: ${_dif:+.2f}/m²/mes ({'favor compra' if _dif > 0 else 'favor arrendamiento'})"
+            f"\nRenta de mercado referencial: ${_renta_m2:.2f}/m²/mes"
         )
 
     ctx = (
         f"PARÁMETROS DEL PROYECTO:\n"
         f"Tipo: {datos.get('tipo_nave')} · Zonificación: {datos.get('zonificacion')} · Propósito: {datos.get('uso')}\n"
-        f"Área nave techada: {datos.get('area_nave',0):,.0f} m²  ·  Área libre/maniobra: {datos.get('area_libre',0):,.0f} m²\n"
+        f"Área nave techada: {datos.get('area_nave',0):,.0f} m²  ·  Área libre/maniobra: {datos.get('area_libre',0):,.0f} m²  ·  Altura libre: {datos.get('altura_nave',0):.1f} m al hombro\n"
         f"Actividad declarada: {datos.get('actividad_desc', 'No especificada')}\n\n"
         f"ESTRUCTURA DE COSTOS:\n"
         f"Costo terreno: ${datos.get('costo_terreno',0):,.0f}  (${datos.get('costo_terreno_m2',0):,.0f}/m² de terreno)\n"
@@ -6446,17 +8760,25 @@ def generar_memorandum_advisory_ind(datos: dict) -> dict:
         "- Tasa libre de riesgo Perú: ~7.5% (bonos soberanos PEN)"
     )
 
-    prompt = f"""Eres consultor senior de Osterling Advisory, especializado en activos logísticos e industriales en Lima, Perú.
+    _neg_ctx = f"\n\nESTRATEGIAS DE NEGOCIACIÓN Y ESTRUCTURACIÓN:\n{CONOCIMIENTO_NEGOCIACION[:800]}"
+    _soc_ctx = f"\n\nESTRUCTURACIÓN SOCIETARIA:\n{CONOCIMIENTO_SOCIETARIA[:600]}"
+    _ciclo_ctx_memo = f"\n\nCICLO DE MERCADO LIMA 2026:\n{CONOCIMIENTO_CICLO[:800]}"
+    _dd_ctx = f"\n\nDUE DILIGENCE Y RED FLAGS:\n{CONOCIMIENTO_DD[:600]}"
+    _legal_memo_ctx = (
+        f"\n\nNORMATIVA LEGAL — ARRENDAMIENTO INDUSTRIAL (CC + D.Leg. 1177):\n{LEGAL_ARRENDAMIENTO[:400]}"
+        f"\n\nNORMATIVA LEGAL — SUNARP, HIPOTECAS Y CARGAS:\n{LEGAL_SUNARP[:350]}"
+        f"\n\nNORMATIVA LEGAL — TRIBUTACIÓN (Alcabala, IR, IGV):\n{LEGAL_TRIBUTACION[:300]}"
+        f"\n\nNORMATIVA LEGAL — CONTRATOS COMPRAVENTA:\n{LEGAL_CONTRATOS[:250]}"
+    )
+
+    _sys_memo = f"""Eres consultor senior de Osterling Advisory, especializado en activos logísticos e industriales en Lima, Perú.
 
 Tu trabajo es elaborar un Memorandum de Advisory Board: un documento de análisis objetivo que consolida toda la información del proyecto para que el cliente tome su propia decisión según sus criterios, estrategia y necesidades específicas.
 
 PRINCIPIO FUNDAMENTAL: No emitas recomendación de compra, venta ni decisión. Presenta la data analítica, crítica, verificable y exacta. Los inversionistas tienen objetivos distintos — generación de flujo, acumulación de patrimonio, uso operativo propio, escudo fiscal — y solo ellos pueden evaluar si este proyecto se alinea con su estrategia.
 
-Datos del proyecto:
-{ctx}
-
 Referencias de mercado:
-{ref}
+{ref}{_ciclo_ctx_memo}{_neg_ctx}{_soc_ctx}{_dd_ctx}{_legal_memo_ctx}
 
 Devuelve ÚNICAMENTE este JSON sin texto adicional ni markdown:
 {{
@@ -6465,19 +8787,23 @@ Devuelve ÚNICAMENTE este JSON sin texto adicional ni markdown:
   "indicadores_clave": "2-3 oraciones con los números más relevantes: inversión total, costo/m², yield, payback, TIR. Solo datos, sin calificativos positivos ni negativos.",
   "posicionamiento_mercado": "2-3 oraciones sobre cómo se posiciona este proyecto frente al mercado: comparativa de costos vs. renta, benchmarks. Factual y neutro.",
   "estructura_financiera": "2 oraciones describiendo el esquema de financiamiento: capital propio, estructura de créditos, cuota mensual, DSCR.",
+  "ciclo_mercado": "1-2 frases sobre el momento del ciclo inmobiliario Lima y qué implica para este tipo de activo.",
+  "estructuracion_sugerida": "1-2 frases sobre la estructura societaria óptima (SAC/SPV/fideicomiso) para este tipo de operación, basándose en el perfil del proyecto.",
+  "consideraciones_negociacion": "1-2 frases sobre tácticas de negociación o estructuración del precio relevantes para este activo.",
+  "observaciones_legales": ["Observación legal concreta 1 con norma aplicable (CC, SUNARP, tributación)", "Observación legal concreta 2", "Observación legal concreta 3"],
+  "sugerencias_mitigacion": ["Acción específica para mitigar el riesgo legal 1 — entidad, plazo, instrumento", "Acción específica 2", "Acción específica 3"],
   "factores_relevantes": ["Dato concreto 1 con cifra verificable", "Dato concreto 2 con cifra verificable", "Dato concreto 3 con cifra verificable", "Dato concreto 4 con cifra verificable"],
   "consideraciones": ["Aspecto a evaluar 1 (dato verificable, sin juicio)", "Aspecto a evaluar 2 (dato verificable, sin juicio)"],
   "sintesis": "2-3 oraciones de síntesis objetiva: qué es el proyecto, qué retorno ofrece bajo los supuestos ingresados, y qué implica financieramente. Sin sesgos. El cliente evaluará su alineación con su estrategia de inversión."
 }}"""
 
-    response = client.messages.create(
-        model="claude-sonnet-4-6",
+    text = _api_call(client,
+        model="claude-haiku-4-5-20251001",
         max_tokens=1400,
-        messages=[{"role": "user", "content": prompt}]
+        system=[{"type": "text", "text": _sys_memo, "cache_control": {"type": "ephemeral"}}],
+        messages=[{"role": "user", "content": f"Datos del proyecto:\n{ctx}"}]
     )
-    if not response.content:
-        raise ValueError("json_parse_error: API devolvió respuesta vacía")
-    return parse_json_safe(response.content[0].text.strip())
+    return parse_json_safe(text)
 
 
 def generar_informe_industrial_html(r: dict, factibilidad: dict | None, fecha: str) -> str:
@@ -6508,10 +8834,10 @@ def generar_informe_industrial_html(r: dict, factibilidad: dict | None, fecha: s
         f'<td style="padding:8px 12px;color:#7A7268;font-size:11px;text-align:right;">{pct}</td></tr>'
         for lbl, val, pct in [
             ("Terreno", r.get('costo_terreno', 0), f"{r.get('costo_terreno',0)/_ct*100:.1f}%"),
-            ("Alcabala (3%)", r.get('alcabala', 0), f"{r.get('alcabala',0)/_ct*100:.1f}%"),
             (f"Nave techada ({r.get('area_nave',0):,.0f} m² × ${r.get('costo_nave_m2',0):,.0f}/m²)", r.get('costo_nave_total', 0), f"{r.get('costo_nave_total',0)/_ct*100:.1f}%"),
             (f"Piso área libre ({r.get('area_libre',0):,.0f} m² × ${r.get('costo_piso_libre_m2',0):,.0f}/m²)", r.get('costo_pisos_libres', 0), f"{r.get('costo_pisos_libres',0)/_ct*100:.1f}%"),
             (f"Costos Indirectos ({r.get('pct_indirectos', 5):.0f}%)", r.get('soft_costs', 0), f"{r.get('soft_costs',0)/_ct*100:.1f}%"),
+            ("Alcabala (3%)", r.get('alcabala', 0), f"{r.get('alcabala',0)/_ct*100:.1f}%"),
             ("<strong>TOTAL</strong>", r.get('costo_total', 0), "100%"),
         ]
     )
@@ -6540,7 +8866,7 @@ def generar_informe_industrial_html(r: dict, factibilidad: dict | None, fecha: s
         )
 
     return f"""<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
-<title>Informe Industrial — Osterling Advisory</title>
+<title>Informe Industrial — SOLUM</title>
 <style>body{{font-family:'Segoe UI',Arial,sans-serif;background:#EDEAE4;margin:0;padding:32px;color:{NAV};}}
 .page{{background:#FFFFFF;max-width:860px;margin:0 auto;padding:48px 56px;border-radius:6px;}}
 table{{width:100%;border-collapse:collapse;}}thead th{{background:{NAV};color:#FFFFFF;padding:9px 12px;font-size:10px;letter-spacing:1px;text-transform:uppercase;}}
@@ -6549,7 +8875,7 @@ tbody tr:nth-child(even) td{{background:#F9F7F4;}}
 <div style="border-bottom:2px solid {GLD};padding-bottom:20px;margin-bottom:28px;display:flex;justify-content:space-between;align-items:flex-end;">
   <div>
     <div style="font-size:9px;color:{GLD};letter-spacing:4px;text-transform:uppercase;font-weight:600;">Osterling Advisory</div>
-    <div style="font-size:22px;font-weight:700;color:{NAV};margin-top:6px;">Análisis Logístico / Industrial</div>
+    <div style="font-size:22px;font-weight:700;color:{NAV};margin-top:6px;">SOLUM — Análisis Industrial</div>
     <div style="font-size:12px;color:#7A7268;margin-top:4px;">{r.get('tipo_nave','—')} · {r.get('zonificacion','—')} · {r.get('uso','—')}</div>
   </div>
   <div style="text-align:right;font-size:11px;color:#9A9080;">{fecha}<br>Lima, Perú</div>
@@ -6592,12 +8918,19 @@ f'<div style="font-size:9px;color:#9A9080;letter-spacing:2px;text-transform:uppe
 
 {fac_html}
 
-<div style="margin-top:48px;border-top:1px solid {BRD};padding-top:20px;">
-<p style="font-size:11px;font-weight:700;color:{NAV};margin:0;">Enrique Osterling</p>
-<p style="font-size:10px;color:#555;margin:3px 0;">Gerente General — Osterling Advisory · Inmobiliaria Corporativa</p>
-<p style="font-size:10px;color:#555;margin:3px 0;">+51 950 891 995 · eosterling@grupoosterling.com · Lima, Perú</p>
-<p style="font-size:9px;color:#AAA;margin-top:12px;">Análisis referencial basado en los parámetros ingresados. No constituye asesoría legal ni financiera formal.</p>
-</div></div></body></html>"""
+<div style="margin-top:48px;border-top:1px solid {BRD};padding-top:20px;display:flex;justify-content:space-between;align-items:flex-start;">
+<div>
+<p style="font-size:10px;color:#9A9080;letter-spacing:2px;text-transform:uppercase;font-weight:600;margin:0 0 4px;">Preparado por</p>
+<p style="font-size:11px;font-weight:700;color:{NAV};margin:0;">Osterling Advisory</p>
+<p style="font-size:10px;color:#555;margin:3px 0;">Lima, Perú · eosterling@grupoosterling.com</p>
+</div>
+<div style="text-align:right;">
+<p style="font-size:10px;color:{GLD};font-weight:700;letter-spacing:2px;margin:0;">SOLUM</p>
+<p style="font-size:9px;color:#AAA;margin:3px 0;">Pre-Factibilidad Inmobiliaria</p>
+</div>
+</div>
+<p style="font-size:9px;color:#AAA;margin-top:12px;border-top:1px solid {BRD};padding-top:8px;">Análisis referencial basado en los parámetros ingresados. No constituye asesoría legal ni financiera formal.</p>
+</div></body></html>"""
 
 
 def generar_informe_industrial_pdf(r: dict, factibilidad, fecha: str, altura_nave: float = 0) -> bytes:
@@ -6641,14 +8974,29 @@ def generar_informe_industrial_pdf(r: dict, factibilidad, fecha: str, altura_nav
     story = []
 
     # ── Helpers ──────────────────────────────────────────────────────────────────
-    def _section_title(txt):
-        return KeepTogether([
+    def _section_items(txt):
+        """Returns the section-title flowables as a list (for use inside KeepTogether)."""
+        return [
             HRFlowable(width=W, thickness=0.75, color=GOLD, spaceAfter=3),
             Paragraph((txt or "").upper(), S_sec),
-        ])
+        ]
+
+    def _section_title(txt):
+        return KeepTogether(_section_items(txt))
+
+    def _kt(*args):
+        """Flatten args (lists are unpacked) and wrap in KeepTogether."""
+        flat = []
+        for a in args:
+            if isinstance(a, list):
+                flat.extend(a)
+            else:
+                flat.append(a)
+        return KeepTogether(flat)
 
     def _data_table(header_row, data_rows, col_widths, bold_last=False):
-        """3-column data table with NAV header and alternating CREAM/WHITE rows."""
+        """3-column data table with NAV header and alternating CREAM/WHITE rows.
+        splitByRow=0 keeps every row on the same page as the header."""
         hdr = [Paragraph(h, _s(f"dh{i}", fontSize=7, leading=9, textColor=WHITE,
                                 fontName="Helvetica-Bold", alignment=(TA_RIGHT if i > 0 else TA_LEFT)))
                for i, h in enumerate(header_row)]
@@ -6672,7 +9020,7 @@ def generar_informe_industrial_pdf(r: dict, factibilidad, fecha: str, altura_nav
             last = len(data_rows)
             ts.add("FONTNAME",   (0, last), (-1, last), "Helvetica-Bold")
             ts.add("BACKGROUND", (0, last), (-1, last), colors.HexColor("#E8E4DC"))
-        return Table(tbl_data, colWidths=col_widths, style=ts)
+        return Table(tbl_data, colWidths=col_widths, style=ts, splitByRow=0)
 
     # ── 1. Header ─────────────────────────────────────────────────────────────────
     tipo_nave   = r.get("tipo_nave", "—")
@@ -6682,10 +9030,10 @@ def generar_informe_industrial_pdf(r: dict, factibilidad, fecha: str, altura_nav
     hdr_left = [
         [Paragraph("OSTERLING ADVISORY", _s("hl1", fontSize=7, leading=9, textColor=GOLD,
                                              fontName="Helvetica-Bold", charSpace=3))],
-        [Paragraph("FACTIS", _s("hl2", fontSize=20, leading=22, textColor=NAV,
-                                 fontName="Helvetica-Bold"))],
-        [Paragraph("IA DE ANÁLISIS INMOBILIARIO", _s("hl3", fontSize=6, leading=8,
-                                                              textColor=GRAY, charSpace=1.5))],
+        [Paragraph("SOLUM", _s("hl2", fontSize=20, leading=22, textColor=NAV,
+                                fontName="Helvetica-Bold"))],
+        [Paragraph("ANÁLISIS DE INMUEBLES INDUSTRIALES Y LOGÍSTICOS", _s("hl3", fontSize=6, leading=8,
+                                                                          textColor=GRAY, charSpace=1.5))],
     ]
     badge_tbl = Table(
         [[Paragraph("ANÁLISIS INDUSTRIAL", _s("badge", fontSize=7, leading=9,
@@ -6761,8 +9109,6 @@ def generar_informe_industrial_pdf(r: dict, factibilidad, fecha: str, altura_nav
         story.append(Spacer(1, 4*mm))
 
     # ── 3. Indicadores Clave ──────────────────────────────────────────────────────
-    story.append(_section_title("Indicadores Clave"))
-    story.append(Spacer(1, 2*mm))
 
     _at  = r.get("area_terreno", 0) or 0
     _ct  = r.get("costo_terreno", 0) or 0
@@ -6845,13 +9191,10 @@ def generar_informe_industrial_pdf(r: dict, factibilidad, fecha: str, altura_nav
             ("VALIGN",     (0,0), (-1,-1), "TOP"),
         ])
     )
-    story.append(kpi_row)
-    story.append(Spacer(1, 5*mm))
+    story.append(_kt(_section_items("Indicadores Clave"), Spacer(1, 4*mm), kpi_row))
+    story.append(Spacer(1, 10*mm))
 
     # ── 4. Estructura de Costos ───────────────────────────────────────────────────
-    story.append(_section_title("Estructura de Costos"))
-    story.append(Spacer(1, 2*mm))
-
     _alc   = r.get("alcabala", 0) or 0
     _an    = r.get("area_nave", 0) or 0
     _al    = r.get("area_libre", 0) or 0
@@ -6869,25 +9212,11 @@ def generar_informe_industrial_pdf(r: dict, factibilidad, fecha: str, altura_nav
 
     altura_str = f"  ·  {altura_nave:.0f}m al hombro" if altura_nave and altura_nave > 0 else ""
 
-    story.append(Paragraph("A  ·  TERRENO",
-                            _s("subA", fontSize=8, leading=10, textColor=GOLD,
-                               fontName="Helvetica-Bold")))
-    story.append(Spacer(1, 1*mm))
     terreno_rows = [
         ["Terreno", f"${_ct:,.0f}", _pct(_ct)],
         ["Alcabala (3%)", f"${_alc:,.0f}", _pct(_alc)],
         ["TOTAL TERRENO", f"${_cta:,.0f}", _pct(_cta)],
     ]
-    story.append(_data_table(["Concepto", "Monto USD", "% Total"],
-                              terreno_rows,
-                              [W*0.55, W*0.25, W*0.20],
-                              bold_last=True))
-    story.append(Spacer(1, 3*mm))
-
-    story.append(Paragraph("B  ·  CONSTRUCCIÓN E IMPLEMENTACIÓN",
-                            _s("subB", fontSize=8, leading=10, textColor=BLUE,
-                               fontName="Helvetica-Bold")))
-    story.append(Spacer(1, 1*mm))
     const_rows = [
         [f"Nave techada  {_an:,.0f} m²  ×  ${_cnm2:,.0f}/m²{altura_str}",
          f"${_cnt:,.0f}", _pct(_cnt)],
@@ -6897,13 +9226,6 @@ def generar_informe_industrial_pdf(r: dict, factibilidad, fecha: str, altura_nav
          f"${_sc:,.0f}", _pct(_sc)],
         ["TOTAL CONSTRUCCIÓN", f"${_ccs:,.0f}", _pct(_ccs)],
     ]
-    story.append(_data_table(["Concepto", "Monto USD", "% Total"],
-                              const_rows,
-                              [W*0.55, W*0.25, W*0.20],
-                              bold_last=True))
-    story.append(Spacer(1, 2*mm))
-
-    # Summary total row
     total_tbl = Table(
         [[Paragraph("COSTO TOTAL PROYECTO (A + B)",
                     _s("totlbl", fontSize=8, leading=10, textColor=WHITE,
@@ -6915,6 +9237,7 @@ def generar_informe_industrial_pdf(r: dict, factibilidad, fecha: str, altura_nav
                     _s("totpct", fontSize=8, leading=10, textColor=WHITE,
                        alignment=TA_RIGHT))]],
         colWidths=[W*0.55, W*0.25, W*0.20],
+        splitByRow=0,
         style=TableStyle([
             ("BACKGROUND",    (0,0), (-1,-1), NAV),
             ("TOPPADDING",    (0,0), (-1,-1), 7),
@@ -6925,12 +9248,22 @@ def generar_informe_industrial_pdf(r: dict, factibilidad, fecha: str, altura_nav
             ("VALIGN",        (0,0), (-1,-1), "MIDDLE"),
         ])
     )
-    story.append(total_tbl)
-    story.append(Spacer(1, 5*mm))
+    story.append(_kt(
+        _section_items("Estructura de Costos"),
+        Spacer(1, 4*mm),
+        Paragraph("A  ·  TERRENO", _s("subA", fontSize=8, leading=10, textColor=GOLD, fontName="Helvetica-Bold")),
+        Spacer(1, 2*mm),
+        _data_table(["Concepto", "Monto USD", "% Total"], terreno_rows, [W*0.55, W*0.25, W*0.20], bold_last=True),
+        Spacer(1, 5*mm),
+        Paragraph("B  ·  CONSTRUCCIÓN E IMPLEMENTACIÓN", _s("subB", fontSize=8, leading=10, textColor=BLUE, fontName="Helvetica-Bold")),
+        Spacer(1, 2*mm),
+        _data_table(["Concepto", "Monto USD", "% Total"], const_rows, [W*0.55, W*0.25, W*0.20], bold_last=True),
+        Spacer(1, 4*mm),
+        total_tbl,
+    ))
+    story.append(Spacer(1, 10*mm))
 
     # ── 5. Financiamiento ────────────────────────────────────────────────────────
-    story.append(_section_title("Estructura de Financiamiento"))
-    story.append(Spacer(1, 2*mm))
 
     _cpt  = r.get("capital_propio_terreno", 0) or 0
     _mct  = r.get("monto_credito_terreno", 0) or 0
@@ -7008,12 +9341,10 @@ def generar_informe_industrial_pdf(r: dict, factibilidad, fecha: str, altura_nav
             ("VALIGN",       (0,0), (-1,-1), "TOP"),
         ])
     )
-    story.append(fin_pair)
-    story.append(Spacer(1, 5*mm))
+    story.append(_kt(_section_items("Estructura de Financiamiento"), Spacer(1, 4*mm), fin_pair))
+    story.append(Spacer(1, 10*mm))
 
     # ── 6. Gran Total ─────────────────────────────────────────────────────────────
-    story.append(_section_title("Gran Total"))
-    story.append(Spacer(1, 2*mm))
 
     _cp   = r.get("capital_propio", 0) or 0
     _mc   = r.get("monto_credito", 0) or 0
@@ -7036,6 +9367,7 @@ def generar_informe_industrial_pdf(r: dict, factibilidad, fecha: str, altura_nav
         _gt_row("CUOTA MENSUAL TOTAL",  f"${_qm:,.0f}/mes", "Terreno + Obra", NAV),
     ]
     gt_tbl = Table(gt_data, colWidths=[W*0.42, W*0.28, W*0.30],
+                   splitByRow=0,
                    style=TableStyle([
                        ("BACKGROUND",    (0,0), (-1,-1), NAV),
                        ("LINEBELOW",     (0,0), (-1,-2), 0.5, colors.HexColor("#3A4D5F")),
@@ -7046,18 +9378,58 @@ def generar_informe_industrial_pdf(r: dict, factibilidad, fecha: str, altura_nav
                        ("ALIGN",         (1,0), (-1,-1), "RIGHT"),
                        ("VALIGN",        (0,0), (-1,-1), "MIDDLE"),
                    ]))
-    story.append(gt_tbl)
-    story.append(Spacer(1, 2*mm))
-    story.append(Paragraph(
+    _gran_total_note = Paragraph(
         "El financiamiento puede estructurarse de forma independiente: solo terreno, solo construcción, "
         "o ambos según la estrategia del inversionista.",
-        S_note))
-    story.append(Spacer(1, 5*mm))
+        S_note)
+    story.append(_kt(
+        _section_items("Gran Total"),
+        Spacer(1, 4*mm), gt_tbl,
+        Spacer(1, 4*mm), _gran_total_note,
+    ))
+    story.append(Spacer(1, 10*mm))
+
+    # ── 6b. Densidad de Rack ──────────────────────────────────────────────────────
+    _rak_niv_pdf  = r.get("rack_niveles", 0) or 0
+    _rak_tipo_pdf = r.get("tipo_nave", "")
+    if _rak_niv_pdf > 0 and _rak_tipo_pdf in ("Almacén Logístico", "Cross-docking", "Nave Industrial"):
+        _h_p    = r.get("altura_nave", 0) or 0
+        _pm2_p  = r.get("rack_pos_m2", 0) or 0
+        _tot_p  = r.get("rack_posiciones", 0) or 0
+        _opt_p  = r.get("rack_posiciones_opt", 0) or 0
+        _dlt_p  = r.get("rack_delta_pos", 0) or 0
+        _pct_p  = r.get("rack_delta_pct", 0) or 0
+        _ok_p   = r.get("rack_es_optima", False)
+        rack_rows = [
+            ["Altura al hombro (ingresada)",           f"{_h_p:.1f} m",      ""],
+            ["Niveles de rack posibles",               str(_rak_niv_pdf),     ""],
+            ["Posiciones totales — rack estándar",     f"{_tot_p:,}",         f"{_pm2_p:.2f} pos/m²"],
+            ["Posiciones Clase A (13.6 m — Aldea)",    f"{_opt_p:,}",         "2.03 pos/m²"],
+            ["Potencial adicional" if not _ok_p else "Diferencia vs. Clase A",
+             f"+{_dlt_p:,}" if _dlt_p > 0 else str(_dlt_p),
+             f"+{_pct_p:.0f}%" if _dlt_p > 0 else "—"],
+        ]
+        _rack_note = (
+            (f"A {_h_p:.1f} m de altura la nave soporta {_rak_niv_pdf} niveles de rack ({_pm2_p:.2f} pos/m²). "
+             f"Elevando a 13.6 m (estándar Clase A, validado por Aldea Logística) se obtienen {_opt_p:,} posiciones — "
+             f"un {_pct_p:.0f}% más de capacidad con una inversión marginal estimada de $15–25/m² nave en estructura. "
+             f"Los operadores logísticos Prime (DHL, CEVA, Ransa) valoran esta especificación y pagan renta premium.")
+            if not _ok_p else
+            (f"Altura {_h_p:.1f} m — especificación Clase A logística. "
+             f"{_tot_p:,} posiciones ({_pm2_p:.2f} pos/m²). "
+             f"Activo posicionado para operadores Prime: DHL, CEVA, Ransa, Saga, Ripley y 3PL Clase A.")
+        )
+        story.append(_kt(
+            _section_items("Densidad de Almacenaje — Análisis de Rack"),
+            Spacer(1, 4*mm),
+            _data_table(["Parámetro", "Valor", "Densidad"], rack_rows, [W*0.55, W*0.25, W*0.20]),
+            Spacer(1, 4*mm),
+            Paragraph(_rack_note, S_note),
+        ))
+        story.append(Spacer(1, 10*mm))
 
     # ── 7. Factibilidad ───────────────────────────────────────────────────────────
     if factibilidad:
-        story.append(_section_title("Factibilidad Técnica y Legal"))
-        story.append(Spacer(1, 2*mm))
         sg = (factibilidad.get("semaforo_global") or "amarillo").lower()
         sem_bg_map  = {"verde": "#E8F5EE", "amarillo": "#FFF8EE", "rojo": "#FFF0F0"}
         sem_col_map = {"verde": "#1A4731", "amarillo": "#7A5500", "rojo": "#8B1A1A"}
@@ -7085,6 +9457,7 @@ def generar_informe_industrial_pdf(r: dict, factibilidad, fecha: str, altura_nav
         fac_tbl = Table(
             [[fac_inner]],
             colWidths=[W],
+            splitByRow=0,
             style=TableStyle([
                 ("BACKGROUND",   (0,0), (-1,-1), fac_bg),
                 ("LINEBEFORE",   (0,0), (0,-1),  3, fac_brd),
@@ -7094,16 +9467,16 @@ def generar_informe_industrial_pdf(r: dict, factibilidad, fecha: str, altura_nav
                 ("RIGHTPADDING", (0,0), (-1,-1), 8),
             ])
         )
-        story.append(fac_tbl)
-        story.append(Spacer(1, 5*mm))
+        story.append(_kt(_section_items("Factibilidad Técnica y Legal"), Spacer(1, 4*mm), fac_tbl))
+        story.append(Spacer(1, 10*mm))
 
     # ── 8. Footer ─────────────────────────────────────────────────────────────────
     story.append(Spacer(1, 6))
     story.append(HRFlowable(width=W, thickness=0.5, color=BORD, spaceAfter=4))
     footer_tbl = Table(
-        [[Paragraph("© Osterling Advisory  ·  Acceso restringido  ·  Confidencial",
+        [[Paragraph("Preparado por Osterling Advisory  ·  Uso confidencial  ·  Confidencial",
                     _s("ftl", fontSize=7, leading=9, textColor=GRAY)),
-          Paragraph("FACTIS — Plataforma Analítica Inmobiliaria",
+          Paragraph("SOLUM — Plataforma de Pre-Factibilidad Inmobiliaria",
                     _s("ftr", fontSize=7, leading=9, textColor=GRAY, alignment=TA_RIGHT))]],
         colWidths=[W*0.55, W*0.45],
         style=TableStyle([("TOPPADDING",(0,0),(-1,-1),0),("BOTTOMPADDING",(0,0),(-1,-1),0),
@@ -7159,7 +9532,7 @@ def generar_propuesta_html(
     ubicacion  = p.get("ubicacion") or p.get("direccion") or "—"
     distrito   = p.get("distrito") or ""
     zona_res   = p.get("zona_residencial") or p.get("zonificacion") or "—"
-    partida    = lg.get("partida_numero") or "—"
+    partida    = lg.get("partida_numero") or "Pendiente de verificación SUNARP"
     _props_raw = lg.get("propietarios_partida") or []
     propietario_reg = (", ".join(
         (x.get("nombre", str(x)) if isinstance(x, dict) else str(x))
@@ -7328,10 +9701,40 @@ def generar_propuesta_html(
           </td>
         </tr>"""
 
+    _cond_src = (condiciones or "").strip()
+    if not _cond_src and tipo == "Compra":
+        _cond_src = (
+            "Libre de cargas, hipotecas y gravámenes registrales\n"
+            "Libre de ocupación y entregado sin mejoras post-oferta\n"
+            "Servicios (agua, luz, predial y arbitrios) al día a la fecha de cierre\n"
+            "Sujeto a due diligence legal (SUNARP) y técnico de 30 días calendario"
+        )
     condiciones_html = "".join(
         f'<li style="margin-bottom:5px;font-size:11px;color:#444;">{c.strip()}</li>'
-        for c in (condiciones or "").split("\n") if c.strip()
+        for c in _cond_src.split("\n") if c.strip()
     ) or '<li style="font-size:11px;color:#888;">—</li>'
+
+    # Sustento del precio ofertado
+    _sustento_precio_html = ""
+    if tipo == "Compra" and r:
+        _max_t20 = r.get("max_terreno_20pct", 0) or 0
+        if _max_t20 > 0 and area > 0:
+            _pm2_terr = round(_max_t20 / area, 0)
+            if precio_usd <= _max_t20 * 1.05:
+                _sustento_precio_html = (
+                    f'<p style="font-size:10px;color:#666;margin:8px 0 0;line-height:1.5;">'
+                    f'El precio ofertado (USD {precio_usd:,.0f}) se calibra al umbral de viabilidad SOLUM: '
+                    f'precio máximo de terreno compatible con margen neto ≥ 20% = '
+                    f'<strong>USD {_max_t20:,.0f}</strong> (USD {_pm2_terr:,.0f}/m²).'
+                    f'</p>'
+                )
+            else:
+                _sustento_precio_html = (
+                    f'<p style="font-size:10px;color:#666;margin:8px 0 0;line-height:1.5;">'
+                    f'Referencia SOLUM: umbral de viabilidad al 20% de margen = USD {_max_t20:,.0f} '
+                    f'(USD {_pm2_terr:,.0f}/m²). La oferta supera este umbral; se proyecta negociación o ajuste del programa.'
+                    f'</p>'
+                )
 
     return f"""<!DOCTYPE html>
 <html lang="es">
@@ -7356,7 +9759,7 @@ def generar_propuesta_html(
     <div>
       <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:{GOLD};
                   font-weight:700;margin-bottom:6px;">Osterling Advisory</div>
-      <div style="font-size:26px;font-weight:800;color:{NAV};letter-spacing:-0.5px;">FACTIS</div>
+      <div style="font-size:26px;font-weight:800;color:{NAV};letter-spacing:-0.5px;">SOLUM</div>
       <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#888;margin-top:2px;">
         IA de Análisis Inmobiliario
       </div>
@@ -7432,7 +9835,8 @@ def generar_propuesta_html(
         </tr>
       </tbody>
     </table>
-    <div style="font-size:10px;font-weight:700;color:{NAV};margin-bottom:8px;text-transform:uppercase;
+    {_sustento_precio_html}
+    <div style="font-size:10px;font-weight:700;color:{NAV};margin-bottom:8px;margin-top:14px;text-transform:uppercase;
                 letter-spacing:1px;">Condiciones de la operación</div>
     <ul style="padding-left:18px;margin:0;">{condiciones_html}</ul>
   </div>
@@ -7454,7 +9858,7 @@ def generar_propuesta_html(
         <div style="font-size:10px;color:{GOLD};margin-top:2px;">Osterling Advisory</div>
       </div>
       <div style="text-align:right;font-size:9px;color:#AAA;">
-        Generado con FACTIS · Osterling Advisory<br>
+        Generado con SOLUM · Osterling Advisory<br>
         eosterling@grupoosterling.com · Lima, Perú
       </div>
     </div>
@@ -7513,7 +9917,7 @@ def generar_propuesta_pdf(
     ubicacion   = p.get("ubicacion") or p.get("direccion") or "—"
     distrito    = p.get("distrito") or ""
     zona_res    = p.get("zona_residencial") or p.get("zonificacion") or "—"
-    partida     = lg.get("partida_numero") or "—"
+    partida     = lg.get("partida_numero") or "Pendiente de verificación SUNARP"
     _props_raw2 = lg.get("propietarios_partida") or []
     propietario_reg = (", ".join(
         (x.get("nombre", str(x)) if isinstance(x, dict) else str(x))
@@ -7553,7 +9957,7 @@ def generar_propuesta_pdf(
     hdr_left = [
         [Paragraph("OSTERLING ADVISORY", _s("kl", fontSize=7, leading=9, textColor=GOLD,
                                              fontName="Helvetica-Bold", charSpace=3))],
-        [Paragraph("FACTIS", _s("fct", fontSize=20, leading=22, textColor=NAV,
+        [Paragraph("SOLUM", _s("fct", fontSize=20, leading=22, textColor=NAV,
                                  fontName="Helvetica-Bold"))],
         [Paragraph("IA DE ANÁLISIS INMOBILIARIO", _s("sub2", fontSize=6, leading=8,
                                                               textColor=GRAY, charSpace=1.5))],
@@ -7654,10 +10058,40 @@ def generar_propuesta_pdf(
     econ_rows.append(("Plazo de respuesta",
                        f"{plazo_respuesta} días calendario desde la recepción de la presente"))
     story.append(_kv_table(econ_rows))
+
+    # Sustento del precio ofertado basado en umbral de viabilidad SOLUM
+    if tipo == "Compra" and r:
+        _max_t20 = r.get("max_terreno_20pct", 0) or 0
+        if _max_t20 > 0 and area > 0:
+            _pm2_terr = round(_max_t20 / area, 0)
+            if precio_usd <= _max_t20 * 1.05:
+                _sustento = (
+                    f"El precio ofertado (USD {precio_usd:,.0f}) se calibra al umbral de viabilidad estimado por SOLUM: "
+                    f"precio máximo de terreno compatible con margen neto ≥ 20% = "
+                    f"<b>USD {_max_t20:,.0f}</b> (USD {_pm2_terr:,.0f}/m²). "
+                    f"La oferta se encuadra dentro del rango de viabilidad del proyecto."
+                )
+            else:
+                _sustento = (
+                    f"Referencia de viabilidad SOLUM: el umbral al 20% de margen neto es USD {_max_t20:,.0f} "
+                    f"(USD {_pm2_terr:,.0f}/m²). La oferta supera este umbral; "
+                    f"se proyecta negociación o ajuste del programa para mantener la rentabilidad objetivo."
+                )
+            story.append(Spacer(1, 3*mm))
+            story.append(Paragraph(_sustento, S_small))
+
     story.append(Spacer(1, 4*mm))
     story.append(Paragraph("Condiciones de la operación", S_label))
     story.append(Spacer(1, 2*mm))
-    for c in (condiciones or "").split("\n"):
+    _cond_text = (condiciones or "").strip()
+    if not _cond_text and tipo == "Compra":
+        _cond_text = (
+            "Libre de cargas, hipotecas y gravámenes registrales\n"
+            "Libre de ocupación y entregado sin mejoras post-oferta\n"
+            "Servicios (agua, luz, predial y arbitrios) al día a la fecha de cierre\n"
+            "Sujeto a due diligence legal (SUNARP) y técnico de 30 días calendario"
+        )
+    for c in _cond_text.split("\n"):
         if c.strip():
             story.append(Paragraph(f"• {c.strip()}", S_cond))
     story.append(Spacer(1, 6*mm))
@@ -7807,7 +10241,7 @@ def generar_propuesta_pdf(
         S_intro))
     story.append(Spacer(1, 6*mm))
     story.append(Paragraph(
-        "<i>NOTA: Esta propuesta ha sido elaborada con el apoyo de la IA de Análisis Inmobiliario FACTIS como "
+        "<i>NOTA: Esta propuesta ha sido elaborada con el apoyo de la IA de Análisis Inmobiliario SOLUM como "
         "herramienta complementaria al criterio profesional. Los valores indicados son preliminares y están "
         "sujetos a verificación técnica y legal. La propuesta definitiva deberá ser suscrita por las partes.</i>",
         _s("disc_prop", fontSize=6.5, leading=10, textColor=colors.HexColor("#AAAAAA"),
@@ -7816,7 +10250,7 @@ def generar_propuesta_pdf(
     sign_tbl = Table(
         [[Paragraph(representante, _s("sig", fontSize=10, leading=13, textColor=NAV,
                                        fontName="Helvetica-Bold")),
-          Paragraph("Generado con FACTIS · Osterling Advisory<br/>eosterling@grupoosterling.com · Lima, Perú",
+          Paragraph("Generado con SOLUM · Osterling Advisory<br/>eosterling@grupoosterling.com · Lima, Perú",
                     _s("ft", fontSize=7, leading=10, textColor=colors.HexColor("#AAAAAA"),
                        alignment=TA_RIGHT))],
          [Paragraph(cargo, _s("cgo", fontSize=8, leading=10, textColor=GRAY)), Paragraph("", S_small)],
@@ -7925,7 +10359,7 @@ tbody tr:nth-child(even) td{{background:#F9F7F4;}}
             border-radius:12px;padding:36px 40px;margin-bottom:32px;color:#FFFFFF;">
     <div style="font-size:8px;letter-spacing:4px;text-transform:uppercase;
                 color:rgba(255,255,255,0.5);margin-bottom:12px;">
-        FACTIS · Informe de Análisis Residencial · {fecha}
+        SOLUM · Informe de Análisis Residencial · {fecha}
     </div>
     <div style="font-size:32px;font-weight:800;line-height:1.2;margin-bottom:8px;">
         {distrito if distrito else r.get("zona", "—")} &nbsp;·&nbsp; {_rpt_dorm}
@@ -8122,7 +10556,7 @@ def generar_informe_html(params, cabida, financ, legal, zona, financ_inputs, fec
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>FACTIS — Informe — {ubicacion}</title>
+<title>SOLUM — Informe — {ubicacion}</title>
 <style>
   * {{ box-sizing:border-box; margin:0; padding:0; }}
   body {{
@@ -8183,7 +10617,7 @@ def generar_informe_html(params, cabida, financ, legal, zona, financ_inputs, fec
 <div class="print-header">
   <div style="display:flex;justify-content:space-between;align-items:center;">
     <div>
-      <span style="font-size:16px;font-weight:800;color:{NAV};letter-spacing:-0.5px;">FACTIS</span>
+      <span style="font-size:16px;font-weight:800;color:{NAV};letter-spacing:-0.5px;">SOLUM</span>
       <span style="font-size:8px;color:{GOLD};letter-spacing:3px;text-transform:uppercase;
                    margin-left:10px;font-weight:600;">IA de Análisis Inmobiliario</span>
     </div>
@@ -8196,7 +10630,7 @@ def generar_informe_html(params, cabida, financ, legal, zona, financ_inputs, fec
 <div class="screen-header" style="margin-bottom:6px;">
   <div style="display:flex;justify-content:space-between;align-items:center;">
     <div>
-      <span style="font-size:22px;font-weight:800;color:{NAV};letter-spacing:-1px;">FACTIS</span>
+      <span style="font-size:22px;font-weight:800;color:{NAV};letter-spacing:-1px;">SOLUM</span>
       <span style="font-size:9px;color:{GOLD};letter-spacing:3px;text-transform:uppercase;
                    margin-left:12px;font-weight:600;">IA de Análisis Inmobiliario</span>
     </div>
@@ -8324,7 +10758,7 @@ def generar_informe_html(params, cabida, financ, legal, zona, financ_inputs, fec
   </div>
   <p style="font-size:8px;color:#AAA;text-align:right;">
     Resultados referenciales — validar con asesores especializados.<br>
-    Generado con FACTIS &copy; 2026 · Osterling Advisory
+    Generado con SOLUM &copy; 2026 · Osterling Advisory
   </p>
 </div>
 
@@ -8338,7 +10772,7 @@ def generar_informe_html(params, cabida, financ, legal, zona, financ_inputs, fec
 
 _module_subtitles = {
     "Proyecto Inmobiliario":          "IA de Análisis Inmobiliario",
-    "Proyecto Logístico / Industrial": "Análisis de Activos Logísticos e Industriales",
+    "Proyecto Logístico / Industrial": "Análisis de Inmuebles para el Desarrollo de Actividades Logísticas e Industriales",
     "Inmueble Residencial":            "Evaluación de Inmuebles Residenciales",
 }
 _active_module = st.session_state.get("tipo_operacion", "Proyecto Inmobiliario")
@@ -8350,21 +10784,29 @@ _module_tags = {
 }
 _tag = _module_tags.get(_active_module, "")
 
+_hdr_logo = (
+    f'<img src="data:image/svg+xml;base64,{_SOLUM_SVG_T_B64}" '
+    f'style="height:72px;width:72px;display:block;flex-shrink:0;opacity:0.90;" />'
+    if _SOLUM_SVG_T_B64 else
+    '<span style="font-size:20px;font-weight:800;color:#FFFFFF;letter-spacing:-1px;">SOLUM</span>'
+)
 st.markdown(
     '<div class="main-header">'
     '<div style="display:flex;align-items:center;justify-content:space-between;">'
+    '<div style="display:flex;align-items:center;gap:16px;">'
+    + _hdr_logo +
     '<div>'
-    '<div style="font-size:9px;color:#B8904A;letter-spacing:4px;text-transform:uppercase;font-weight:600;margin-bottom:10px;">Osterling Advisory</div>'
-    '<div style="display:flex;align-items:center;gap:18px;">'
-    '<span style="font-size:22px;font-weight:700;color:#FFFFFF;letter-spacing:-0.5px;">FACTIS</span>'
-    '<span style="width:1px;height:18px;background:#B8904A;opacity:0.4;display:inline-block;flex-shrink:0;"></span>'
-    f'<span style="font-size:10px;color:#8AA8C0;letter-spacing:2.5px;text-transform:uppercase;font-weight:500;">{_subtitle}</span>'
+    '<div style="font-size:8px;color:rgba(184,144,74,0.65);letter-spacing:5px;'
+    'text-transform:uppercase;font-weight:700;margin-bottom:5px;">Osterling Advisory</div>'
+    f'<div style="font-size:12px;color:rgba(200,216,232,0.85);letter-spacing:2px;'
+    f'text-transform:uppercase;font-weight:500;line-height:1.3;">{_subtitle}</div>'
     '</div>'
-    f'<div style="margin-top:10px;font-size:9px;color:#B8904A;letter-spacing:1.5px;opacity:0.8;">{_tag}</div>'
     '</div>'
     '<div style="text-align:right;">'
-    '<div style="font-size:8px;color:#B8904A;letter-spacing:2px;text-transform:uppercase;font-weight:600;opacity:0.7;">Lima, Perú</div>'
-    f'<div style="font-size:9px;color:rgba(184,144,74,0.5);margin-top:6px;letter-spacing:1px;">{_active_module}</div>'
+    '<div style="font-size:9px;color:rgba(184,144,74,0.50);letter-spacing:3px;'
+    'text-transform:uppercase;font-weight:600;">Lima, Perú</div>'
+    f'<div style="font-size:10px;color:rgba(184,200,216,0.35);margin-top:4px;'
+    f'letter-spacing:1px;text-transform:uppercase;">{_active_module}</div>'
     '</div>'
     '</div></div>',
     unsafe_allow_html=True
@@ -8382,32 +10824,13 @@ with st.sidebar:
     # ── Sidebar brand header ──────────────────────────
     _user_display = st.session_state.get("_user_name", "")
     _user_role    = st.session_state.get("_user_role", "advisor")
-    if _LOGO_B64:
-        st.markdown(f"""
-        <div style="padding:16px 16px 10px;text-align:center;
-                    border-bottom:1px solid rgba(255,255,255,0.09);margin-bottom:6px;">
-            <div style="background:#FFFFFF;border-radius:8px;padding:10px 16px;
-                        display:inline-block;max-width:90%;">
-                <img src="data:image/png;base64,{_LOGO_B64}"
-                     style="height:36px;max-width:100%;object-fit:contain;display:block;">
-            </div>
-            <div style="font-size:7px;color:rgba(184,144,74,0.75);letter-spacing:3px;
-                        text-transform:uppercase;font-weight:600;margin-top:9px;">
-                Plataforma Analítica Inmobiliaria
-            </div>
-        </div>""", unsafe_allow_html=True)
-    else:
-        st.markdown("""
-        <div style="padding:24px 20px 14px;border-bottom:1px solid rgba(255,255,255,0.09);
-                    margin-bottom:6px;text-align:center;">
-            <div style="font-size:22px;font-weight:800;color:#FFFFFF;letter-spacing:-0.5px;">
-                FACTIS
-            </div>
-            <div style="font-size:7px;color:rgba(184,144,74,0.80);letter-spacing:4px;
-                        text-transform:uppercase;font-weight:600;margin-top:6px;">
-                Osterling Advisory
-            </div>
-        </div>""", unsafe_allow_html=True)
+    st.markdown(
+        '<div style="padding:18px 16px 12px;border-bottom:1px solid rgba(255,255,255,0.09);'
+        'margin-bottom:6px;text-align:center;">'
+        '<div style="font-size:11px;color:rgba(184,144,74,0.65);letter-spacing:5px;'
+        'text-transform:uppercase;font-weight:700;">Osterling Advisory</div>'
+        '</div>',
+        unsafe_allow_html=True)
 
     # ── Usuario activo + logout ───────────────────────
     _role_label = "Admin" if _user_role == "admin" else "Asesor"
@@ -8428,7 +10851,7 @@ with st.sidebar:
     st.markdown("### MÓDULO DE ANÁLISIS")
     tipo_op = st.radio(
         "tipo_op_radio",
-        ["Proyecto Inmobiliario", "Proyecto Logístico / Industrial", "Inmueble Residencial", "Portfolio"],
+        ["Proyecto Inmobiliario", "Proyecto Logístico / Industrial", "Proyecto de Oficinas", "Inmueble Residencial", "Portfolio"],
         key="tipo_operacion",
         label_visibility="collapsed",
     )
@@ -8452,6 +10875,12 @@ with st.sidebar:
             "Valuación de inmueble existente",
             "Precio · Renta · Yield · Comparables",
             "Úsalo cuando tienes un departamento, casa o unidad residencial ya construida y quieres analizar su valor o rentabilidad.",
+        ),
+        "Proyecto de Oficinas": (
+            "🏢",
+            "Alquiler · Compra · Desarrollo de Proyecto",
+            "Yield · TIR · Financiero · Comparativa",
+            "Úsalo para analizar el alquiler o compra de una oficina existente, o para proyectar el desarrollo de un edificio de oficinas.",
         ),
         "Portfolio": (
             "📁",
@@ -8496,14 +10925,15 @@ with st.sidebar:
     if tipo_op == "Proyecto Inmobiliario":
         # ── Indicador de progreso guiado ─────────────────
         _step1_done = bool(st.session_state.get("nombre_proyecto", "").strip())
-        _step2_done = int(st.session_state.get("cab_precio_compra", 0) or 0) > 0
-        _step3_done = st.session_state.get("cabida") is not None
-        _step4_done = _step3_done
+        _step2_done = any([st.session_state.get("cert"), st.session_state.get("partida"),
+                           st.session_state.get("puhr"), st.session_state.get("plano")])
+        _step3_done = int(st.session_state.get("cab_precio_compra", 0) or 0) > 0
+        _step4_done = st.session_state.get("cabida") is not None
         _steps_prog = [
-            ("Terreno & Proyecto", "Nombre, ubicación, área", _step1_done),
-            ("Datos Financieros",  "Precio compra y venta/m²", _step2_done),
-            ("Análisis IA",        "Cabida, RIN, Factibilidad", _step3_done),
-            ("Reporte PDF",        "Descarga informe ejecutivo", _step4_done),
+            ("Ingreso de Información del Inmueble", "Nombre, ubicación, área",          _step1_done),
+            ("Documentos del Inmueble",             "Certificado, partida, planos",      _step2_done),
+            ("Costos Financieros",                  "Precio compra y venta/m²",          _step3_done),
+            ("Resumen Ejecutivo",                   "Cabida, finanzas, informe",         _step4_done),
         ]
         _current_step = next((i for i, (_, _, d) in enumerate(_steps_prog) if not d), 4)
         _prog_html = "".join([_sp(i,l,s,d,i==_current_step,i==3) for i,(l,s,d) in enumerate(_steps_prog)])
@@ -8511,37 +10941,11 @@ with st.sidebar:
             f'<div style="background:rgba(255,255,255,0.04);border-radius:10px;padding:12px 14px 10px;'
             f'border:1px solid rgba(255,255,255,0.08);margin-bottom:10px;">'
             f'<div style="font-size:9px;font-weight:700;color:rgba(184,200,216,0.45);'
-            f'letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;">FLUJO DE TRABAJO</div>'
+            f'letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;">FLUJO DE ANÁLISIS IA</div>'
             f'{_prog_html}</div>',
             unsafe_allow_html=True)
-        st.markdown("### DOCUMENTOS")
-        pdf_cert    = st.file_uploader("Certificado de Parámetros ✱",       type=["pdf"], key="cert")
-        pdf_plano   = st.file_uploader("Planos (perimetral / topográfico)",  type=["pdf"], key="plano",
-                                       accept_multiple_files=True)
-        pdf_partida = st.file_uploader("Partida Registral",                  type=["pdf"], key="partida")
-        pdf_puhr    = st.file_uploader("PU / HR",                            type=["pdf"], key="puhr")
-        pdf_norms   = st.file_uploader("Ordenanzas y normativa",             type=["pdf"], key="norms",
-                                       accept_multiple_files=True)
-
         st.markdown("---")
-        st.markdown("### PROYECTO")
-        # ── Estado vacío guiado ────────────────────────────
-        _no_nombre = not bool(st.session_state.get("nombre_proyecto", "").strip())
-        _no_area   = float(st.session_state.get("cab_override_area", 0) or 0) == 0
-        _no_precio = int(st.session_state.get("cab_precio_compra", 0) or 0) == 0
-        if _no_nombre and _no_area and _no_precio:
-            st.markdown(
-                '<div style="background:rgba(184,144,74,0.08);border-radius:8px;padding:11px 13px;'
-                'border:1px solid rgba(184,144,74,0.22);margin-bottom:10px;">'
-                '<div style="font-size:10px;font-weight:700;color:#D4A853;letter-spacing:0.5px;margin-bottom:7px;">¿POR DÓNDE EMPEZAR?</div>'
-                '<div style="font-size:11px;color:rgba(184,200,216,0.82);line-height:1.75;">'
-                '① Ingresa el <b style="color:#C8D8E8;">nombre</b> del proyecto<br>'
-                '② Selecciona el <b style="color:#C8D8E8;">distrito</b><br>'
-                '③ Sube el <b style="color:#C8D8E8;">certificado de parámetros</b><br>'
-                '④ Completa el <b style="color:#C8D8E8;">precio de compra</b><br>'
-                '⑤ Presiona <b style="color:#D4A853;">Analizar →</b>'
-                '</div></div>',
-                unsafe_allow_html=True)
+        st.markdown("### INGRESO DE INFORMACIÓN DEL INMUEBLE")
         nombre_proyecto = st.text_input(
             "Nombre del proyecto",
             placeholder="Ej: Torres Las Camelias — Miraflores",
@@ -8551,10 +10955,40 @@ with st.sidebar:
         _cab_zona_default = _cab_zona_keys.index(_cab_zona_saved) if _cab_zona_saved in _cab_zona_keys else min(20, len(_cab_zona_keys) - 1)
         zona = st.selectbox("Ubicación", _cab_zona_keys, index=_cab_zona_default, key="cab_zona_sel_widget")
 
+        with st.expander("📄 Documentos del Inmueble", expanded=False):
+            _doc_types = ["pdf", "jpg", "jpeg", "png", "webp"]
+            _plan_types = ["pdf", "dwg", "dxf", "jpg", "jpeg", "png", "webp"]
+            pdf_cert    = st.file_uploader("Certificado de Parámetros ✱",       type=_doc_types, key="cert")
+            pdf_plano   = st.file_uploader("Planos (perimetral / topográfico)",  type=_plan_types, key="plano",
+                                           accept_multiple_files=True)
+            pdf_partida = st.file_uploader("Partida Registral",                  type=_doc_types, key="partida")
+            pdf_puhr    = st.file_uploader("PU / HR",                            type=_doc_types, key="puhr")
+            pdf_norms   = st.file_uploader("Ordenanzas y normativa",             type=_doc_types, key="norms",
+                                           accept_multiple_files=True)
+
+        # Cachear bytes en session_state apenas se suben (con huella para no re-leer)
+        if pdf_cert is not None:
+            _cs = f"{pdf_cert.name}:{pdf_cert.size}"
+            if st.session_state.get("_fp_cert") != _cs:
+                st.session_state.cert_bytes = pdf_cert.read()
+                st.session_state["_fp_cert"] = _cs
+        if pdf_partida is not None:
+            _ps = f"{pdf_partida.name}:{pdf_partida.size}"
+            if st.session_state.get("_fp_partida") != _ps:
+                st.session_state.partida_bytes = pdf_partida.read()
+                st.session_state["_fp_partida"] = _ps
+                st.session_state.legal = None  # nuevo doc → borrar resultado anterior
+        if pdf_puhr is not None:
+            _us = f"{pdf_puhr.name}:{pdf_puhr.size}"
+            if st.session_state.get("_fp_puhr") != _us:
+                st.session_state.puhr_bytes = pdf_puhr.read()
+                st.session_state["_fp_puhr"] = _us
+                st.session_state.legal = None
+
         st.markdown("---")
-        st.markdown("### INFORMACIÓN COMPLEMENTARIA DEL INMUEBLE")
-        with st.expander("📄 Completar desde documento"):
-            st.caption("Sube el certificado de parámetros, plano o cualquier documento del predio. La IA extrae automáticamente el área, frente, fondo, distrito y precios.")
+        st.markdown("### DESCRIPCIÓN DEL INMUEBLE")
+        with st.expander("📊 Presentación o Resumen Ejecutivo del Inmueble"):
+            st.caption("Sube un brochure, presentación o resumen ejecutivo — la IA extrae área, frente, fondo, distrito y precios para completar los campos automáticamente.")
             _cab_doc_up = st.file_uploader(
                 "PDF, PPTX o DOCX",
                 type=["pdf", "pptx", "ppt", "docx"],
@@ -8601,8 +11035,18 @@ with st.sidebar:
                                                   key="cab_fondo_inp")
 
             _area_calc = round(override_frente * override_fondo, 1) if override_frente > 0 and override_fondo > 0 else 0.0
+
+            # Auto-poblar área cuando frente o fondo cambian
+            if _area_calc > 0 and (
+                override_frente != st.session_state.get("_cab_prev_frente", 0.0) or
+                override_fondo  != st.session_state.get("_cab_prev_fondo",  0.0)
+            ):
+                st.session_state["cab_area_inp"] = _area_calc
+            st.session_state["_cab_prev_frente"] = override_frente
+            st.session_state["_cab_prev_fondo"]  = override_fondo
+
             if _area_calc > 0:
-                st.markdown(f"Área calculada: **{_area_calc:,.1f} m²** (frente × fondo)")
+                st.markdown(f'<div style="font-size:12px;color:#B8904A;font-weight:600;">Área calculada: {_area_calc:,.1f} m² <span style="font-weight:400;color:#8A9AB0;">(frente × fondo)</span></div>', unsafe_allow_html=True)
 
             override_area = st.number_input("Área del terreno (m²)", min_value=0.0, max_value=50000.0,
                                             value=float(st.session_state.get("cab_override_area", _area_calc)), step=10.0, key="cab_area_inp")
@@ -8625,7 +11069,7 @@ with st.sidebar:
                            f"con el colindante más alto ({_col_max} pisos). Claude calculará la altura permitida.")
 
         st.markdown("---")
-        st.markdown("### DATOS FINANCIEROS")
+        st.markdown("### COSTOS PROYECTADOS")
         _financ_inputs_ss = st.session_state.get("financ_inputs") or {}
 
         # Inicializar keys de widgets solo si no existen (evita conflicto value/key en Streamlit)
@@ -8643,6 +11087,41 @@ with st.sidebar:
         precio_compra   = st.number_input("Precio de compra del inmueble (USD)",
                                           min_value=1, max_value=50_000_000,
                                           step=10_000, format="%d", key="cab_precio_compra_inp")
+        # ── Modo MiVivienda ────────────────────────────────────────────
+        _miv_sel = st.radio(
+            "Tipo de proyecto",
+            ["Libre", "FondoMiVivienda (VIS)"],
+            horizontal=True,
+            key="cab_modo_mivivienda",
+            index=0,
+        )
+        _modo_miv = (_miv_sel == "FondoMiVivienda (VIS)")
+        if _modo_miv:
+            _cab_now = st.session_state.get("cabida") or {}
+            _av_now  = float(_cab_now.get("area_vendible_m2") or 0)
+            _nu_now  = int(_cab_now.get("total_unidades") or 0)
+            _avg_unit_m2 = round(_av_now / _nu_now, 1) if _nu_now > 0 else 70.0
+            _tope_pvm_usd = int(_FMVF_TOPE_USD / _avg_unit_m2) if _avg_unit_m2 > 0 else 0
+            st.markdown(
+                f'<div style="background:rgba(184,144,74,0.10);border:1px solid rgba(184,144,74,0.35);'
+                f'border-left:3px solid #B8904A;border-radius:6px;padding:10px 12px;margin:4px 0 8px;">'
+                f'<div style="font-size:9px;color:#B8904A;font-weight:700;letter-spacing:2px;'
+                f'text-transform:uppercase;margin-bottom:6px;">FondoMiVivienda — Topes 2025</div>'
+                f'<div style="font-size:12px;color:rgba(255,255,255,0.90);font-weight:700;margin-bottom:2px;">'
+                f'Tope unidad: <span style="color:#B8904A;">USD {_FMVF_TOPE_USD:,}</span></div>'
+                f'<div style="font-size:10px;color:rgba(200,216,232,0.55);margin-bottom:6px;">'
+                f'93.5 UIT · S/. 500,225</div>'
+                + (f'<div style="font-size:11px;color:rgba(200,216,232,0.80);">'
+                   f'Unidad prom. {_avg_unit_m2:.0f} m² → tope '
+                   f'<b style="color:rgba(255,255,255,0.90);">${_tope_pvm_usd:,}/m²</b></div>'
+                   if _nu_now > 0 else
+                   f'<div style="font-size:10px;color:rgba(200,216,232,0.45);">Genera cabida para ver tope/m²</div>')
+                + f'<div style="font-size:9px;color:rgba(200,216,232,0.45);margin-top:6px;line-height:1.5;">'
+                f'Absorción +50% · BBP hasta S/. 25,700 · NSE C/D</div>'
+                f'</div>',
+                unsafe_allow_html=True,
+            )
+
         precio_venta_m2 = st.number_input("Precio de venta / m² (USD)",
                                           min_value=0, max_value=15_000,
                                           step=100, key="cab_pventa_inp")
@@ -8650,6 +11129,59 @@ with st.sidebar:
         _ref_p2 = MERCADO.get(zona, {}).get("precio_2br", 0)
         _ref_p3 = MERCADO.get(zona, {}).get("precio_3br", 0)
         _m_zona = MERCADO.get(zona, {})
+        # ── Referencia de mercado y sugerencia de precio ──────────
+        if _ref_p2 > 0:
+            if precio_venta_m2 == 0:
+                _tip_line = (f'1D ${_ref_p1:,} · 2D ${_ref_p2:,} · 3D ${_ref_p3:,}/m²'
+                             if _ref_p1 > 0 and _ref_p3 > 0 else f'${_ref_p2:,}/m²')
+                st.markdown(
+                    f'<div style="font-size:10px;color:#7A5000;padding:5px 8px;margin:3px 0 8px;'
+                    f'background:#FFF8E6;border-left:3px solid #D4A843;border-radius:0 4px 4px 0;">'
+                    f'Usando mediana {zona} &nbsp;·&nbsp; {_tip_line}</div>',
+                    unsafe_allow_html=True
+                )
+            else:
+                _diff_ref = (precio_venta_m2 - _ref_p2) / _ref_p2 * 100 if _ref_p2 > 0 else 0
+                # Clasificación por tier de posicionamiento — sin alarmar por precio premium
+                if _diff_ref < -10:
+                    _tier_lbl  = "Por debajo de la mediana del distrito"
+                    _tier_bg   = "#F0F0F0"; _tier_tc = "#5A5A5A"; _tier_bc = "#AAAAAA"
+                    _tier_note = "Verificar si el precio es competitivo para el nivel de acabados proyectado"
+                elif _diff_ref < 0:
+                    _tier_lbl  = f"Cerca de la mediana del distrito ({_diff_ref:+.0f}%)"
+                    _tier_bg   = "#F0FBF5"; _tier_tc = "#1A4731"; _tier_bc = "#6BAE90"
+                    _tier_note = None
+                elif _diff_ref <= 15:
+                    _tier_lbl  = f"Alineado con el mercado ({_diff_ref:+.0f}% sobre mediana)"
+                    _tier_bg   = "#F0FBF5"; _tier_tc = "#1A4731"; _tier_bc = "#6BAE90"
+                    _tier_note = "Consistente con proyecto de acabados estándar a medio en la zona"
+                elif _diff_ref <= 35:
+                    _tier_lbl  = f"Posicionamiento premium ({_diff_ref:+.0f}% sobre mediana)"
+                    _tier_bg   = "#FFFAF0"; _tier_tc = "#7A5000"; _tier_bc = "#D4A843"
+                    _tier_note = "Normal para proyectos con acabados importados, amenidades exclusivas o ubicación diferenciada"
+                elif _diff_ref <= 60:
+                    _tier_lbl  = f"Segmento luxury ({_diff_ref:+.0f}% sobre mediana)"
+                    _tier_bg   = "#F8F4ED"; _tier_tc = "#5A3A10"; _tier_bc = "#B8904A"
+                    _tier_note = "Verificar absorción esperada y comparables de proyectos luxury activos en la zona"
+                else:
+                    _tier_lbl  = f"Prima muy alta ({_diff_ref:+.0f}% sobre mediana)"
+                    _tier_bg   = "#FFF0F0"; _tier_tc = "#7A1A1A"; _tier_bc = "#E07A5F"
+                    _tier_note = "Contrastar con proyectos comparables — prima de esta magnitud puede afectar la velocidad de absorción"
+
+                st.markdown(
+                    f'<div style="background:{_tier_bg};border:1px solid {_tier_bc};border-left:3px solid {_tier_bc};'
+                    f'border-radius:6px;padding:8px 12px;margin:4px 0 8px;">'
+                    f'<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">'
+                    f'<div style="font-size:11px;font-weight:700;color:{_tier_tc};">{_tier_lbl}</div>'
+                    f'</div>'
+                    + (f'<div style="font-size:10px;color:{_tier_tc};opacity:0.85;margin-top:3px;">{_tier_note}</div>'
+                       if _tier_note else '')
+                    + f'<div style="font-size:9px;color:#8A9AAA;margin-top:5px;">'
+                    f'Referencia de mercado {zona}: 1D ${_ref_p1:,}/m² · 2D ${_ref_p2:,}/m² · 3D ${_ref_p3:,}/m² '
+                    f'— mediana del distrito (todos los niveles de acabados)</div>'
+                    f'</div>',
+                    unsafe_allow_html=True
+                )
         _def_estac = int((_financ_inputs_ss.get("precio_estac") or 0) or _m_zona.get("precio_estac", 0))
         _def_dep   = int((_financ_inputs_ss.get("precio_deposito") or 0) or _m_zona.get("precio_deposito", 0))
         _col_pe, _col_pd = st.columns(2)
@@ -8748,26 +11280,6 @@ with st.sidebar:
                 costo_demolicion = 0
 
 
-        st.markdown("---")
-        st.markdown("### DOCUMENTOS DE REFERENCIA")
-        st.caption("Sube partidas, fichas técnicas, capturas o información de inmuebles alternativos que quieras considerar.")
-        _ref_files = st.file_uploader(
-            "PDF, imágenes o documentos",
-            type=["pdf", "jpg", "jpeg", "png", "webp", "xlsx", "xls"],
-            accept_multiple_files=True,
-            key="ref_docs_inm",
-            label_visibility="collapsed",
-        )
-        if _ref_files:
-            st.session_state["ref_docs_inm_bytes"] = [
-                {"name": f.name, "size": len(f.read())} for f in _ref_files
-            ]
-            st.markdown(
-                f'<div style="font-size:10px;color:rgba(107,206,160,0.85);'
-                f'background:rgba(107,206,160,0.08);border-radius:6px;'
-                f'padding:6px 10px;border-left:2px solid rgba(107,206,160,0.4);">'
-                f'✓ {len(_ref_files)} documento(s) adjunto(s)</div>',
-                unsafe_allow_html=True)
 
         st.markdown("---")
         st.markdown("### INSTRUCCIONES AL ANÁLISIS")
@@ -8782,6 +11294,17 @@ with st.sidebar:
 
         st.markdown("---")
         run = st.button("GENERAR ANÁLISIS", use_container_width=True, type="primary")
+
+        st.markdown(
+            '<div style="margin:18px 0 10px;border-top:1px solid rgba(255,255,255,0.10);">'
+            '<div style="font-size:8px;color:rgba(184,144,74,0.60);letter-spacing:2.5px;'
+            'text-transform:uppercase;font-weight:700;text-align:center;margin-top:10px;">'
+            'INFORMACIÓN ADICIONAL</div>'
+            '<div style="font-size:9px;color:rgba(200,216,232,0.35);text-align:center;margin-top:3px;">'
+            'No esencial para realizar análisis</div>'
+            '</div>',
+            unsafe_allow_html=True
+        )
 
         # ── RETROALIMENTACIÓN ─────────────────────────────
         if st.session_state.get("params") or st.session_state.get("cabida"):
@@ -8817,7 +11340,7 @@ with st.sidebar:
                     '<div style="background:rgba(107,206,160,0.10);border-left:3px solid '
                     'rgba(107,206,160,0.50);border-radius:6px;padding:8px 12px;'
                     'font-size:11px;color:rgba(107,206,160,0.90);font-weight:600;margin-top:6px;">'
-                    f'✓ Recibido: {_fb_file.name}</div>', unsafe_allow_html=True)
+                    f'✓ Recibido: {_html_esc.escape(_fb_file.name)}</div>', unsafe_allow_html=True)
 
         # ── GUARDAR / CARGAR PROYECTO ─────────────────────
         st.markdown("---")
@@ -8841,16 +11364,26 @@ with st.sidebar:
                                     label_visibility="collapsed", key="guardar_nombre_proy")
         if st.button("GUARDAR PROYECTO", use_container_width=True, key="btn_guardar_inm"):
             if st.session_state.get("params"):
+                _fin = st.session_state.get("financ") or {}
+                _inm_resumen = {
+                    "margen_pct":     _fin.get("margen_pct") or _fin.get("margen_neto_pct") or 0,
+                    "tir_anual_pct":  _fin.get("tir_anual_pct") or _fin.get("tir_anual") or 0,
+                    "utilidad_neta":  _fin.get("utilidad_neta") or 0,
+                    "ingresos_brutos": _fin.get("ingresos_brutos") or _fin.get("ventas_brutas") or 0,
+                    "costo_total":    _fin.get("costo_total") or 0,
+                    "n_unidades":     _fin.get("n_unidades") or 0,
+                }
                 fp = guardar_proyecto(nombre_proy or "sin_nombre", {
                     "params":        st.session_state.params,
                     "cabida":        st.session_state.cabida,
                     "financ_inputs": st.session_state.financ_inputs,
                     "financ":        st.session_state.financ,
                     "zona":          st.session_state.zona,
-                })
+                    "resumen":       _inm_resumen,
+                }, tipo="inmobiliario", zona=str(st.session_state.get("zona") or ""))
                 st.session_state["_last_inm_proy"] = fp
                 st.session_state.pop("_share_url_inm", None)
-                st.markdown('<div style="background:rgba(107,206,160,0.12);border-left:3px solid rgba(107,206,160,0.50);border-radius:6px;padding:8px 12px;color:rgba(107,206,160,0.90);font-size:12px;font-weight:600;margin-top:8px;">✓ ' + f"Guardado: {fp.name}" + '</div>', unsafe_allow_html=True)
+                st.markdown('<div style="background:rgba(107,206,160,0.12);border-left:3px solid rgba(107,206,160,0.50);border-radius:6px;padding:8px 12px;color:rgba(107,206,160,0.90);font-size:12px;font-weight:600;margin-top:8px;">✓ ' + f"Guardado: {_html_esc.escape(fp.name)}" + '</div>', unsafe_allow_html=True)
             else:
                 st.markdown('<div class="alert-info">ℹ️ ' + "Genera el análisis primero." + '</div>', unsafe_allow_html=True)
         _lp_inm = st.session_state.get("_last_inm_proy")
@@ -8871,16 +11404,17 @@ with st.sidebar:
         st.caption("Las fotos se incluyen en el reporte PDF")
         _cab_fotos = st.file_uploader(
             "Sube fotos del inmueble / terreno",
-            type=["jpg", "jpeg", "png", "webp"],
+            type=["jpg", "jpeg", "png", "webp", "heic"],
             accept_multiple_files=True,
             key="cab_fotos_upload",
         )
         if _cab_fotos:
-            st.session_state["cab_fotos_bytes"] = [f.read() for f in _cab_fotos]
+            _cab_fotos_bytes = [f.read() for f in _cab_fotos]
+            st.session_state["cab_fotos_bytes"] = _cab_fotos_bytes
             st.session_state["cab_fotos_nombres"] = [f.name for f in _cab_fotos]
-            cols_f = st.columns(min(len(_cab_fotos), 3))
-            for _fi, _fup in enumerate(_cab_fotos[:3]):
-                cols_f[_fi].image(_fup, use_container_width=True)
+            cols_f = st.columns(min(len(_cab_fotos_bytes), 3))
+            for _fi, _fb in enumerate(_cab_fotos_bytes[:3]):
+                cols_f[_fi].image(_to_display_bytes(_fb), use_container_width=True)
 
         st.markdown("---")
         st.markdown("### ANÁLISIS LEGAL")
@@ -8911,20 +11445,7 @@ with st.sidebar:
                 f'● {" · ".join(_sb_docs_list)}</div>',
                 unsafe_allow_html=True)
 
-            if st.button("ANALIZAR DOCUMENTOS LEGALES", use_container_width=True,
-                         key="btn_legal_sidebar", type="secondary"):
-                if pdf_partida is not None:
-                    st.session_state.partida_bytes = pdf_partida.read()
-                if pdf_puhr is not None:
-                    st.session_state.puhr_bytes = pdf_puhr.read()
-                _p_bytes = st.session_state.get("partida_bytes")
-                _u_bytes = st.session_state.get("puhr_bytes")
-                _c_bytes = pdf_cert.read() if pdf_cert is not None else None
-                if _p_bytes or _u_bytes:
-                    st.session_state.legal = _run_with_retry(
-                        lambda _p=_p_bytes, _u=_u_bytes, _c=_c_bytes: analizar_legal(_p, _u, _c),
-                        "Analizando documentos registrales y parámetros urbanísticos…",
-                    )
+            st.caption("El análisis legal se ejecuta automáticamente al generar el análisis.")
 
         if st.session_state.get("legal"):
             _sb_lg  = st.session_state.legal
@@ -8943,8 +11464,14 @@ with st.sidebar:
             st.caption("Ver detalles completos en la pestaña Legal →")
 
         st.markdown("---")
-        st.markdown("### PROPUESTA")
-        st.caption("Genera una propuesta formal de compra o arrendamiento")
+        st.markdown("### ELABORACIÓN DE PROPUESTA")
+        st.markdown(
+            '<div style="font-size:10px;color:rgba(184,144,74,0.75);background:rgba(184,144,74,0.07);'
+            'border-left:2px solid rgba(184,144,74,0.40);border-radius:4px;padding:7px 10px;margin-bottom:8px;">'
+            'Realiza primero el análisis para contar con el sustento técnico y financiero que respalde la propuesta.'
+            '</div>',
+            unsafe_allow_html=True
+        )
         prop_tipo        = st.selectbox("Tipo de propuesta", ["Compra", "Arrendamiento"],
                                         key="prop_tipo")
         prop_propietario = st.text_input("Propietario(s)", placeholder="Nombre del vendedor/arrendador",
@@ -8961,7 +11488,7 @@ with st.sidebar:
             _v15_ss = _r_ss.get("max_terreno_15pct", 0)
 
         # ── Estructura de compra / pago ─────────────────
-        with st.expander("Estructura de Compra / Pago", expanded=True):
+        with st.expander("Estructura de Compra", expanded=False):
             _tiene_opcion = st.checkbox("Incluir opción de compra", value=True, key="prop_opcion")
             if _tiene_opcion:
                 _dias_opcion = st.number_input("Plazo opción (días)", 1, 360, 90, 15, key="prop_dias_opcion")
@@ -8998,53 +11525,120 @@ with st.sidebar:
 
         # ── Indicador de progreso guiado Industrial ───────
         _ind1_done = int(st.session_state.get("ind_costo_terreno", 0) or 0) > 0
-        _ind2_done = float(st.session_state.get("ind_area_nave_m2", 0) or 0) > 0
-        _ind3_done = st.session_state.get("ind_analizado") is True
-        _ind4_done = _ind3_done
+        _ind2_done = any([st.session_state.get("ind_doc_partida"), st.session_state.get("ind_doc_params"),
+                          st.session_state.get("ind_doc_zon"),     st.session_state.get("ind_doc_planos"),
+                          st.session_state.get("partida_bytes")])
+        _ind3_done = int(st.session_state.get("ind_costo_nave", 0) or 0) > 0 or st.session_state.get("ind_analizado") is True
+        _ind4_done = st.session_state.get("ind_analizado") is True
         _steps_ind = [
-            ("Terreno",        "Ubicación, área, costo",       _ind1_done),
-            ("Proyecto",       "Nave, actividad, % techada",   _ind2_done),
-            ("Análisis",       "Uso, renta, yield, DSCR",      _ind3_done),
-            ("Financiamiento", "Terreno + obra",               _ind3_done),
-            ("Reporte",        "Resumen ejecutivo PDF",        _ind4_done),
+            ("Ingreso de Información del Inmueble", "Ubicación, área, costo",          _ind1_done),
+            ("Documentos del Inmueble",             "Certificado, partida, planos",    _ind2_done),
+            ("Costos Financieros",                  "Nave, financiamiento, renta",     _ind3_done),
+            ("Resumen Ejecutivo",                   "Yield, DSCR, informe PDF",        _ind4_done),
         ]
-        _cur_ind = next((i for i, (_, _, d) in enumerate(_steps_ind) if not d), 5)
-        _ind_html = "".join([_sp(i,l,s,d,i==_cur_ind,i==4) for i,(l,s,d) in enumerate(_steps_ind)])
+        _cur_ind = next((i for i, (_, _, d) in enumerate(_steps_ind) if not d), 4)
+        _ind_html = "".join([_sp(i,l,s,d,i==_cur_ind,i==3) for i,(l,s,d) in enumerate(_steps_ind)])
         st.markdown(
             f'<div style="background:rgba(255,255,255,0.04);border-radius:10px;padding:12px 14px 10px;'
             f'border:1px solid rgba(255,255,255,0.08);margin-bottom:10px;">'
             f'<div style="font-size:9px;font-weight:700;color:rgba(184,200,216,0.45);'
-            f'letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;">FLUJO DE TRABAJO</div>'
+            f'letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;">FLUJO DE ANÁLISIS IA</div>'
             f'{_ind_html}</div>',
             unsafe_allow_html=True)
 
-        # ── Estado vacío guiado Industrial ────────────────
-        _ind_empty = (not _ind1_done and not _ind2_done)
-        if _ind_empty:
-            st.markdown(
-                '<div style="background:rgba(184,144,74,0.08);border-radius:8px;padding:11px 13px;'
-                'border:1px solid rgba(184,144,74,0.22);margin-bottom:10px;">'
-                '<div style="font-size:10px;font-weight:700;color:#D4A853;letter-spacing:0.5px;margin-bottom:7px;">¿CUÁNDO USAR ESTE MÓDULO?</div>'
-                '<div style="font-size:11px;color:rgba(184,200,216,0.82);line-height:1.75;">'
-                '✓ <b style="color:#C8D8E8;">Nave logística</b> o almacén a construir<br>'
-                '✓ <b style="color:#C8D8E8;">Planta industrial</b> o manufactura<br>'
-                '✓ <b style="color:#C8D8E8;">Cross-docking</b> o centro de distribución<br>'
-                '✗ No para departamentos — usa <b style="color:#D4A853;">Proyecto Inmobiliario</b>'
-                '</div>'
-                '<div style="margin-top:9px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.08);'
-                'font-size:10px;font-weight:700;color:#D4A853;letter-spacing:0.5px;margin-bottom:5px;">¿POR DÓNDE EMPEZAR?</div>'
-                '<div style="font-size:11px;color:rgba(184,200,216,0.82);line-height:1.75;">'
-                '① Selecciona la <b style="color:#C8D8E8;">zona industrial</b> de Lima<br>'
-                '② Ingresa el <b style="color:#C8D8E8;">área de la nave</b> proyectada<br>'
-                '③ Completa el <b style="color:#C8D8E8;">costo del terreno</b><br>'
-                '④ Presiona <b style="color:#D4A853;">Ejecutar análisis →</b>'
-                '</div></div>',
-                unsafe_allow_html=True)
+        st.markdown("### PERFIL DE ANÁLISIS")
+        ind_perfil = st.radio(
+            "Perfil de análisis",
+            ["Desarrollo Integral", "Inmueble Implementado", "Compra de Terreno"],
+            key="ind_perfil",
+            help="Desarrollo Integral: construcción nueva de nave · Inmueble Implementado: nave ya construida lista para operar · Compra de Terreno: adquisición de suelo industrial")
+        _ind_es_impl = ind_perfil in ("Inmueble Implementado", "Compra de Terreno")
+        if ind_perfil == "Inmueble Implementado":
+            st.caption("Precio de adquisición = terreno + nave existente. Costos de construcción en $0.")
+        elif ind_perfil == "Compra de Terreno":
+            st.caption("Análisis de adquisición de suelo industrial. Sin costos de construcción.")
+        else:
+            st.caption("⚠ Industrial ≠ Residencial: estructura metálica sin acabados → **3-4x más barato por m²**")
 
-        # ── 1 · TERRENO ─────────────────────────────────────
-        _step_header("1", "Terreno")
-        with st.expander("📄 Importar datos desde documento"):
-            st.caption("Sube una ficha técnica, brochure o plano del terreno — la IA extrae área, ubicación y tipo de nave para pre-llenar los campos automáticamente.")
+        st.markdown("### INGRESO DE INFORMACIÓN DEL INMUEBLE")
+
+        _TIPO_ZONA_MIN = {
+            "Almacén Logístico":        "I1",
+            "Nave Industrial":          "I1",
+            "Cross-docking":            "I1",
+            "Producción / Manufactura": "I2",
+        }
+        _ZONA_ORDEN = {"I1": 1, "I2": 2, "I3": 3, "I4": 4, "CZ": 1, "OU": 0}
+
+        _ind_docs_open = any(
+            st.session_state.get(k) is not None
+            for k in ["ind_doc_partida", "ind_doc_puhr", "ind_doc_params",
+                      "ind_doc_zon", "ind_doc_planos"]
+        )
+        with st.expander("📄 Documentos del Inmueble", expanded=_ind_docs_open):
+            st.caption("Sube los documentos del inmueble para análisis de factibilidad")
+            _ind_secrets_key = (st.secrets.get("anthropic", {}) or {}).get("api_key", "")
+            if not _ind_secrets_key and not st.session_state.get("api_key_input"):
+                _ind_api_k = st.text_input("⚙ Clave de acceso API", type="password",
+                                           placeholder="••••••••••••••••", key="ind_api_key_inp",
+                                           value=st.session_state.get("api_key_input", ""))
+                if _ind_api_k:
+                    st.session_state["api_key_input"] = _sanitize_api_key(_ind_api_k)
+            _doc_types_ind = ["pdf", "jpg", "jpeg", "png", "webp"]
+            ind_doc_partida = st.file_uploader("Partida Registral (SUNARP)", type=_doc_types_ind, key="ind_doc_partida")
+            ind_doc_puhr    = st.file_uploader("PU / HR (Predio Urbano — SAT/Municipalidad)", type=_doc_types_ind, key="ind_doc_puhr")
+            ind_doc_params  = st.file_uploader("Certificado de Parámetros",  type=_doc_types_ind, key="ind_doc_params")
+            ind_doc_zon     = st.file_uploader("Cert. Zonificación y Vías",  type=_doc_types_ind, key="ind_doc_zon")
+            ind_doc_planos  = st.file_uploader("Planos del Inmueble (PDF, DWG, DXF o imagen)", type=["pdf", "dwg", "dxf", "jpg", "jpeg", "png", "webp"], key="ind_doc_planos")
+            if ind_doc_planos and ind_doc_planos.name.lower().endswith(".dxf"):
+                st.caption("DXF cargado — para extracción automática del polígono usa la sección de Cabida → 'Cargar plano perimétrico'.")
+            elif ind_doc_planos and ind_doc_planos.name.lower().endswith(".dwg"):
+                st.markdown('<div style="font-size:12px;color:#2E6B55;background:#EBF4F0;border-left:3px solid #2E6B55;border-radius:4px;padding:8px 12px;margin-top:4px;">DWG es formato propietario — exporta como DXF desde AutoCAD (Archivo → Guardar como → AutoCAD DXF) para que SOLUM pueda extraer el polígono.</div>', unsafe_allow_html=True)
+            _ind_has_docs = any([ind_doc_partida, ind_doc_puhr, ind_doc_params, ind_doc_zon, ind_doc_planos])
+            run_ind_docs = False
+            # Cachear bytes en session_state apenas se suben (huella para no re-leer)
+            if ind_doc_partida is not None:
+                _ips = f"{ind_doc_partida.name}:{ind_doc_partida.size}"
+                if st.session_state.get("_fp_ind_p") != _ips:
+                    st.session_state.partida_bytes = ind_doc_partida.read()
+                    st.session_state["_fp_ind_p"] = _ips
+                    st.session_state.industrial_factibilidad = None
+            if ind_doc_params is not None:
+                _ics = f"{ind_doc_params.name}:{ind_doc_params.size}"
+                if st.session_state.get("_fp_ind_c") != _ics:
+                    st.session_state["ind_params_bytes"] = ind_doc_params.read()
+                    st.session_state["_fp_ind_c"] = _ics
+                    st.session_state.industrial_factibilidad = None
+            if ind_doc_zon is not None:
+                _izs = f"{ind_doc_zon.name}:{ind_doc_zon.size}"
+                if st.session_state.get("_fp_ind_z") != _izs:
+                    st.session_state["ind_zon_bytes"] = ind_doc_zon.read()
+                    st.session_state["_fp_ind_z"] = _izs
+                    st.session_state.industrial_factibilidad = None
+            if ind_doc_planos is not None and not ind_doc_planos.name.lower().endswith((".dwg", ".dxf")):
+                _ipls = f"{ind_doc_planos.name}:{ind_doc_planos.size}"
+                if st.session_state.get("_fp_ind_pl") != _ipls:
+                    st.session_state["ind_planos_bytes"] = ind_doc_planos.read()
+                    st.session_state["_fp_ind_pl"] = _ipls
+
+            _ind_fotos_open = bool(st.session_state.get("ind_fotos_bytes"))
+            with st.expander("📷 Fotos del inmueble", expanded=_ind_fotos_open):
+                st.caption("Las fotos se incluyen en el reporte")
+                _ind_fotos = st.file_uploader(
+                    "Sube fotos del terreno / nave",
+                    type=["jpg", "jpeg", "png", "webp", "heic"],
+                    accept_multiple_files=True,
+                    key="ind_fotos_upload",
+                )
+                if _ind_fotos:
+                    _ind_fotos_bytes = [f.read() for f in _ind_fotos]
+                    st.session_state["ind_fotos_bytes"] = _ind_fotos_bytes
+                    st.session_state["ind_fotos_nombres"] = [f.name for f in _ind_fotos]
+                    cols_if = st.columns(min(len(_ind_fotos_bytes), 3))
+                    for _ifi, _fb in enumerate(_ind_fotos_bytes[:3]):
+                        cols_if[_ifi].image(_to_display_bytes(_fb), use_container_width=True)
+        with st.expander("📊 Presentación o Resumen Ejecutivo del Inmueble"):
+            st.caption("Sube un brochure, presentación o resumen ejecutivo — la IA extrae área, ubicación y tipo de nave para completar los campos automáticamente.")
             _ind_doc_up = st.file_uploader(
                 "PDF, PPTX o DOCX",
                 type=["pdf", "pptx", "ppt", "docx"],
@@ -9090,221 +11684,298 @@ with st.sidebar:
             key="ind_ubicacion")
         ind_zona_lima = st.selectbox("Zona industrial Lima",
             [
-                "Lurín / Pachacámac",
-                "Villa El Salvador",
-                "Chilca",
-                "Callao / Bellavista",
-                "Ventanilla",
-                "Huachipa / Ate",
-                "Ate Vitarte",
-                "Santa Anita",
-                "San Juan de Lurigancho (SJL)",
-                "Lurigancho / Chosica",
-                "Puente Piedra",
-                "Carabayllo",
-                "Los Olivos / Independencia",
-                "La Victoria / Cercado de Lima",
-                "Chorrillos",
-                "Otro",
+                "Ancón", "Ate Vitarte", "Callao / Bellavista", "Carabayllo",
+                "Cercado de Lima", "Chilca", "Chorrillos", "Comas", "El Agustino",
+                "Huachipa / Ate", "La Victoria", "Los Olivos / Independencia",
+                "Lurigancho / Chosica", "Lurín", "Pachacámac", "Puente Piedra",
+                "San Juan de Lurigancho (SJL)", "San Juan de Miraflores",
+                "San Martín de Porres (SMP)", "Santa Anita", "Ventanilla",
+                "Villa El Salvador", "Villa María del Triunfo", "Otro",
             ],
             key="ind_zona_lima")
 
-        ind_col1, ind_col2 = st.columns(2)
-        ind_frente = ind_col1.number_input("Frente (ml)", 0.0, 1000.0, 0.0, 0.5, key="ind_frente")
-        ind_fondo  = ind_col2.number_input("Fondo (ml)",  0.0, 1000.0, 0.0, 0.5, key="ind_fondo")
-        _ind_area_calc = round(ind_frente * ind_fondo, 1) if ind_frente > 0 and ind_fondo > 0 else 0.0
-        if _ind_area_calc > 0:
-            st.markdown(f'<div style="font-size:11px;color:#B8904A;font-weight:600;margin-top:-4px;">= {_ind_area_calc:,.0f} m²</div>', unsafe_allow_html=True)
-            if st.session_state.get("ind_area_auto", True):
-                st.session_state["ind_area_val"] = _ind_area_calc
-        _ind_area_default = st.session_state.get("ind_area_val", 5000.0)
-        ind_area = st.number_input("Área total del terreno (m²)", 1.0, 500_000.0,
-                                   max(1.0, _ind_area_default), 50.0, key="ind_area")
+        st.markdown('<div style="color:#B8904A;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin:14px 0 6px;">CARACTERÍSTICAS</div>', unsafe_allow_html=True)
+
+        with st.expander("Medidas del inmueble", expanded=False):
+            st.caption("Frente y fondo calculan el área automáticamente — ajusta si el lote es irregular.")
+            ind_col1, ind_col2 = st.columns(2)
+            ind_frente = ind_col1.number_input("Frente (ml)", 0.0, 1000.0, 0.0, 0.5, key="ind_frente")
+            ind_fondo  = ind_col2.number_input("Fondo (ml)",  0.0, 1000.0, 0.0, 0.5, key="ind_fondo")
+            _ind_area_calc = round(ind_frente * ind_fondo, 1) if ind_frente > 0 and ind_fondo > 0 else 0.0
+            if _ind_area_calc > 0:
+                st.markdown(f'<div style="font-size:11px;color:#B8904A;font-weight:600;margin-top:-4px;">= {_ind_area_calc:,.0f} m²</div>', unsafe_allow_html=True)
+                if st.session_state.get("ind_area_auto", True):
+                    st.session_state["ind_area_val"] = _ind_area_calc
+        _ind_area_calc = round(
+            float(st.session_state.get("ind_frente", 0.0)) * float(st.session_state.get("ind_fondo", 0.0)), 1
+        )
+        _ind_area_default = st.session_state.get("ind_area_val", 0.0)
+        ind_area = st.number_input("Área total del terreno (m²)", 0.0, 500_000.0,
+                                   _ind_area_default, 50.0, key="ind_area")
         if abs(ind_area - _ind_area_calc) > 1 and _ind_area_calc > 0:
             st.session_state["ind_area_auto"] = False
         elif _ind_area_calc == 0:
             st.session_state["ind_area_auto"] = True
 
-        ind_costo_terreno = st.number_input("Costo del terreno (USD)", 1, 100_000_000,
-                                            max(1, int(st.session_state.get("ind_costo_terreno") or 1_000_000)),
-                                            50_000, key="ind_costo_terreno")
-        st.markdown(f'<div style="font-size:11px;color:#B8904A;font-weight:600;margin-top:-6px;">= ${ind_costo_terreno:,.0f} USD</div>', unsafe_allow_html=True)
+        ind_zona_ind = st.selectbox("Zonificación",
+            ["I1", "I2", "I3", "I4", "CZ", "OU"], index=1, key="ind_zona_ind")
 
-        # ── 2 · PROYECTO ────────────────────────────────────
-        _step_header("2", "Proyecto")
+        ind_actividad_desc = st.text_input(
+            "Actividad a desarrollar",
+            value=st.session_state.get("ind_actividad_desc", ""),
+            placeholder="Ej: Almacenamiento y distribución de productos farmacéuticos…",
+            key="ind_actividad_desc")
+
+        _show_compat_badge = (
+            st.session_state.get("_ind_tipo_touched", False)
+            or bool(st.session_state.get("ind_actividad_desc", "").strip())
+        )
+        if _show_compat_badge:
+            _zona_sel  = st.session_state.get("ind_zona_ind", "I2")
+            _zona_min  = _TIPO_ZONA_MIN.get(st.session_state.get("ind_tipo", "Almacén Logístico"), "I1")
+            _ord_sel   = _ZONA_ORDEN.get(_zona_sel, 0)
+            _ord_min   = _ZONA_ORDEN.get(_zona_min, 1)
+            _act_desc  = st.session_state.get("ind_actividad_desc", "").lower()
+            _PELIGROSAS = ["explosiv", "municione", "armament", "pólvora", "polvor",
+                           "pirotecrni", "pirotecni", "detonant", "peligros", "radioactiv",
+                           "nuclear", "químico peligroso", "quimico peligroso", "residuo peligros",
+                           "inflamable", "tóxico", "toxico", "clorhidrico", "sulfúrico",
+                           "fertilizante nitrogenado"]
+            _REQUIERE_I3 = ["cementera", "cemento", "siderúrgic", "siderurgic", "fundición",
+                            "fundicion", "laminadora", "refinería", "refineria", "petroquímica",
+                            "petroquimica", "minera", "chancadora", "trituradora"]
+            _act_peligrosa = any(k in _act_desc for k in _PELIGROSAS)
+            _act_i3        = any(k in _act_desc for k in _REQUIERE_I3)
+            if _act_peligrosa:
+                _norm_icon, _norm_label, _norm_color, _norm_bg = "⛔", "INCOMPATIBLE", "#C44A4A", "rgba(196,74,74,0.12)"
+                _norm_sub = "Actividad peligrosa — requiere autorización especial (DISCAMEC / OEFA) y zonificación I3-I4 mínimo."
+            elif _act_i3 and _ord_sel < 3:
+                _norm_icon, _norm_label, _norm_color, _norm_bg = "⛔", "INCOMPATIBLE", "#C44A4A", "rgba(196,74,74,0.12)"
+                _norm_sub = f"Actividad gran industria — requiere I3 o I4 mínimo. Zona {_zona_sel} no es suficiente."
+            elif _zona_sel == "OU":
+                _norm_icon, _norm_label, _norm_color, _norm_bg = "⛔", "INCOMPATIBLE", "#C44A4A", "rgba(196,74,74,0.12)"
+                _norm_sub = "Zonificación OU no admite uso industrial — verificar certificado."
+            elif _zona_sel == "CZ" and _zona_min == "I2":
+                _norm_icon, _norm_label, _norm_color, _norm_bg = "⚠", "CONDICIONADO", "#B8862E", "rgba(184,134,46,0.12)"
+                _norm_sub = "CZ admite almacenes logísticos (Índice Usos ATN-I) · No admite manufactura — requiere I2 mínimo"
+            elif _ord_sel >= _ord_min:
+                _norm_icon, _norm_label, _norm_color, _norm_bg = "✓", "COMPATIBLE", "#1A7A4A", "rgba(26,122,74,0.12)"
+                _norm_sub = f"Zona {_zona_sel} · mínimo requerido {_zona_min} · Ord. 933-MML ATN-I"
+            elif _ord_sel == _ord_min - 1:
+                _norm_icon, _norm_label, _norm_color, _norm_bg = "⚠", "CONDICIONADO", "#B8862E", "rgba(184,134,46,0.12)"
+                _norm_sub = f"Zona {_zona_sel} — requiere mínimo {_zona_min}. Verificar PDU distrital."
+            else:
+                _norm_icon, _norm_label, _norm_color, _norm_bg = "⛔", "INCOMPATIBLE", "#C44A4A", "rgba(196,74,74,0.12)"
+                _norm_sub = f"Requiere {_zona_min} mínimo — zona {_zona_sel} no es suficiente."
+            st.markdown(
+                f'<div style="background:{_norm_bg};border-radius:6px;padding:8px 12px;margin:6px 0 10px;'
+                f'display:flex;align-items:flex-start;gap:10px;">'
+                f'<span style="font-size:15px;line-height:1.2;">{_norm_icon}</span>'
+                f'<div>'
+                f'<div style="font-size:10px;font-weight:700;letter-spacing:1px;color:{_norm_color};">{_norm_label}</div>'
+                f'<div style="font-size:10px;color:#A8B8C8;margin-top:1px;">{_norm_sub}</div>'
+                f'</div></div>', unsafe_allow_html=True)
+        ind_act_categoria = st.session_state.get("ind_tipo", "Almacén Logístico")
+
+        st.markdown('<div style="color:#B8904A;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin:14px 0 6px;">PROYECTO</div>', unsafe_allow_html=True)
+
+        def _mark_tipo_touched():
+            st.session_state["_ind_tipo_touched"] = True
+        ind_tipo = st.selectbox("Tipo de nave",
+            ["Almacén Logístico", "Nave Industrial", "Cross-docking", "Producción / Manufactura"],
+            key="ind_tipo", on_change=_mark_tipo_touched)
+
         ind_pct_techada = st.number_input(
             "% Área techada (nave)",
             min_value=30.0, max_value=95.0, value=75.0, step=5.0, key="ind_pct_techada")
         _ind_nave = ind_area * ind_pct_techada / 100
         _ind_libre = ind_area * (1 - ind_pct_techada / 100)
-        st.markdown(
-            f'<div style="font-size:11px;color:#A8C0D8;margin-top:-4px;margin-bottom:4px;">'
-            f'Nave: <strong>{_ind_nave:,.0f} m²</strong> · Patios/maniobras: <strong>{_ind_libre:,.0f} m²</strong>'
+        _nc1, _nc2 = st.columns(2)
+        _nc1.markdown(
+            f'<div style="background:rgba(168,192,216,0.08);border-radius:6px;padding:7px 10px;text-align:center;">'
+            f'<div style="font-size:9px;font-weight:700;letter-spacing:1px;color:rgba(184,200,216,0.5);text-transform:uppercase;">Nave</div>'
+            f'<div style="font-size:16px;font-weight:700;color:#C8D8E8;">{_ind_nave:,.0f} m²</div>'
             f'</div>', unsafe_allow_html=True)
+        _nc2.markdown(
+            f'<div style="background:rgba(168,192,216,0.08);border-radius:6px;padding:7px 10px;text-align:center;">'
+            f'<div style="font-size:9px;font-weight:700;letter-spacing:1px;color:rgba(184,200,216,0.5);text-transform:uppercase;">Patio / Maniobras</div>'
+            f'<div style="font-size:16px;font-weight:700;color:#C8D8E8;">{_ind_libre:,.0f} m²</div>'
+            f'</div>', unsafe_allow_html=True)
+        st.markdown("<div style='margin-bottom:6px;'></div>", unsafe_allow_html=True)
 
-        ind_tipo = st.selectbox("Tipo de nave",
-            ["Almacén Logístico", "Nave Industrial", "Cross-docking", "Producción / Manufactura"],
-            key="ind_tipo")
-
-        # ── Actividad — campo único: descripción + búsqueda automática en Índice ATN-I ──
-        _TIPO_ZONA_MIN = {
-            "Almacén Logístico":        "I1",
-            "Nave Industrial":          "I1",
-            "Cross-docking":            "I1",
-            "Producción / Manufactura": "I2",
+        _ALTURA_DEFAULTS = {
+            "Almacén Logístico":        12.0,
+            "Nave Industrial":          10.0,
+            "Cross-docking":            12.0,
+            "Producción / Manufactura":  8.0,
         }
-        _ZONA_ORDEN = {"I1": 1, "I2": 2, "I3": 3, "I4": 4, "OU": 0}
+        _alt_default = _ALTURA_DEFAULTS.get(st.session_state.get("ind_tipo", "Almacén Logístico"), 10.0)
+        ind_altura_nave = st.number_input(
+            "Altura de Nave (al hombro) m",
+            min_value=3.0, max_value=25.0,
+            value=float(st.session_state.get("ind_altura_nave", _alt_default)),
+            step=0.5, key="ind_altura_nave",
+        )
 
-        ind_actividad_desc = st.text_area(
-            "Actividad a desarrollar",
-            value=st.session_state.get("ind_actividad_desc", ""),
-            placeholder="Ej: Almacenamiento y distribución de productos farmacéuticos refrigerados…",
-            height=68, key="ind_actividad_desc")
+        st.markdown("### COSTOS PROYECTADOS")
 
-        # Semáforo de compatibilidad (derivado de tipo de nave)
-        _zona_sel = st.session_state.get("ind_zona_ind", "I2")
-        _zona_min = _TIPO_ZONA_MIN.get(st.session_state.get("ind_tipo", "Almacén Logístico"), "I1")
-        _ord_sel  = _ZONA_ORDEN.get(_zona_sel, 0)
-        _ord_min  = _ZONA_ORDEN.get(_zona_min, 1)
-        if _zona_sel == "OU":
-            _norm_icon, _norm_label, _norm_color, _norm_bg = "⛔", "INCOMPATIBLE", "#C44A4A", "rgba(196,74,74,0.12)"
-            _norm_sub = "Zonificación OU no admite uso industrial — verificar certificado."
-        elif _ord_sel >= _ord_min:
-            _norm_icon, _norm_label, _norm_color, _norm_bg = "✓", "COMPATIBLE", "#1A7A4A", "rgba(26,122,74,0.12)"
-            _norm_sub = f"Zona {_zona_sel} · mínimo requerido {_zona_min} · Ord. 933-MML ATN-I"
-        elif _ord_sel == _ord_min - 1:
-            _norm_icon, _norm_label, _norm_color, _norm_bg = "⚠", "CONDICIONADO", "#B8862E", "rgba(184,134,46,0.12)"
-            _norm_sub = f"Zona {_zona_sel} — requiere mínimo {_zona_min}. Verificar PDU distrital."
-        else:
-            _norm_icon, _norm_label, _norm_color, _norm_bg = "⛔", "INCOMPATIBLE", "#C44A4A", "rgba(196,74,74,0.12)"
-            _norm_sub = f"Requiere {_zona_min} mínimo — zona {_zona_sel} no es suficiente."
-        st.markdown(
-            f'<div style="background:{_norm_bg};border-radius:6px;padding:8px 12px;margin:6px 0 10px;'
-            f'display:flex;align-items:flex-start;gap:10px;">'
-            f'<span style="font-size:15px;line-height:1.2;">{_norm_icon}</span>'
-            f'<div>'
-            f'<div style="font-size:10px;font-weight:700;letter-spacing:1px;color:{_norm_color};">{_norm_label}</div>'
-            f'<div style="font-size:10px;color:#A8B8C8;margin-top:1px;">{_norm_sub}</div>'
-            f'</div></div>', unsafe_allow_html=True)
-        ind_act_categoria = st.session_state.get("ind_tipo", "Almacén Logístico")
+        ind_costo_terreno = st.number_input("Costo del Inmueble (USD)", 0, 100_000_000,
+                                            int(st.session_state.get("ind_costo_terreno") or 0),
+                                            50_000, key="ind_costo_terreno")
+        st.markdown(f'<div style="font-size:11px;color:#B8904A;font-weight:600;margin-top:-6px;">= ${ind_costo_terreno:,.0f} USD</div>', unsafe_allow_html=True)
 
         _COSTO_DEFAULTS = {
-            "Almacén Logístico":        (280, "Estructura metálica portal frame, 12–14m clara, losa industrial. "
-                                              "Ref. real: Parque Logístico 47 Lima (14,300 m², 13.6m, Clase A) = $270–300/m²"),
-            "Nave Industrial":          (300, "Estructura metálica + elementos de concreto, uso mixto. "
-                                              "Ref. Lima: $280–350/m² según especificación técnica"),
-            "Cross-docking":            (420, "Mayor complejidad: múltiples docks, corredores internos, MEP intensivo. "
-                                              "Ref. Lima: $380–500/m²"),
-            "Producción / Manufactura": (380, "Losa reforzada (cargas pesadas), instalaciones especiales eléctricas/agua. "
-                                              "Ref. Lima: $350–450/m²"),
+            "Almacén Logístico":        (350, "Estándar nave industrial Lima 2025: $350/m². "
+                                              "Nave baja (8–10m) → ajustar a la baja; nave alta o compleja → a la sube."),
+            "Nave Industrial":          (350, "Estándar nave industrial Lima 2025: $350/m²."),
+            "Cross-docking":            (350, "Estándar nave industrial Lima 2025: $350/m². "
+                                              "Docks múltiples y MEP complejo → ajustar a $420–500/m²."),
+            "Producción / Manufactura": (350, "Estándar nave industrial Lima 2025: $350/m². "
+                                              "Nave baja (8–10m) → puede ajustarse a $300–330/m²."),
         }
         _def_nave, _help_nave = _COSTO_DEFAULTS.get(
-            st.session_state.get("ind_tipo", "Almacén Logístico"),
-            (280, ""))
-        st.caption("⚠ Industrial ≠ Residencial: estructura metálica sin acabados → **3-4x más barato por m²**")
-
-        with st.expander("Costos de construcción"):
-            ind_zona_ind = st.selectbox("Zonificación (referencia)",
-                ["I1", "I2", "I3", "I4", "OU"], index=1, key="ind_zona_ind")
+            st.session_state.get("ind_tipo", "Almacén Logístico"), (280, ""))
+        if not _ind_es_impl:
             ind_costo_nave = st.number_input(
-                "Costo nave (USD/m²)",
-                min_value=1, max_value=2000, value=max(1, _def_nave), step=25, key="ind_costo_nave")
+                "Costo nave (USD/m²)", min_value=0, max_value=2000,
+                value=int(st.session_state.get("ind_costo_nave", max(1, _def_nave))),
+                step=25, key="ind_costo_nave")
             ind_costo_piso = st.number_input(
                 "Costo patios / maniobras (USD/m²)",
                 min_value=0, max_value=500, value=80, step=10, key="ind_costo_piso")
             ind_pct_indirectos = st.number_input(
                 "Costos indirectos (%)",
                 min_value=0.0, max_value=30.0, value=5.0, step=0.5, key="ind_pct_indirectos")
+        else:
+            ind_costo_nave = 0
+            ind_costo_piso = 0
+            ind_pct_indirectos = 0.0
 
-        # ── 3 · ANÁLISIS DE USO ──────────────────────────────
-        _step_header("3", "Análisis de Uso")
-        ind_uso = st.radio("Propósito del activo",
-            ["Uso directo", "Inversión"], key="ind_uso")
-        ind_renta = st.number_input(
-            "Renta de mercado (USD/m²/mes)",
-            0.0, 50.0, 6.5, 0.25, key="ind_renta")
-        ind_tipo_contrato = st.radio(
-            "Tipo de contrato", ["Anual", "Plurianual (3+ años)"],
-            horizontal=True, key="ind_tipo_contrato")
-        ind_ajuste_pct   = 0.0
-        ind_inicio_ajuste = 2
-        if ind_tipo_contrato == "Plurianual (3+ años)":
-            _ica1, _ica2 = st.columns(2)
-            ind_ajuste_pct    = _ica1.number_input(
-                "Ajuste anual (%)", 0.0, 10.0, 3.0, 0.5, key="ind_ajuste_pct")
-            ind_inicio_ajuste = _ica2.selectbox(
-                "Año de inicio del ajuste", [2, 3], key="ind_inicio_ajuste")
+        ind_demolicion_activa = st.checkbox(
+            "Incluir costo de demolición", value=False, key="ind_demolicion_activa")
+        if ind_demolicion_activa:
+            ind_costo_demolicion = st.number_input(
+                "Costo de demolición (USD)", 0, 5_000_000,
+                int(st.session_state.get("ind_costo_demolicion", 0)), 10_000,
+                key="ind_costo_demolicion")
+        else:
+            ind_costo_demolicion = 0
 
-        # ── 4 · FINANCIAMIENTO ───────────────────────────────
-        _step_header("4", "Financiamiento")
-        ind_alcabala = st.checkbox("Incluir Alcabala (3%)", value=True, key="ind_alcabala")
-        with st.expander("Crédito terreno", expanded=False):
-            ind_dp_terreno = st.number_input(
-                "Downpayment (%)", 0.0, 100.0,
+        st.markdown("### INFORMACIÓN FINANCIERA")
+
+        st.markdown('<div style="color:#B8904A;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin:10px 0 6px;">ADQUISICIÓN DEL INMUEBLE</div>', unsafe_allow_html=True)
+        ind_fin_terreno = st.radio(
+            "Terreno", ["Recursos propios", "Crédito"],
+            horizontal=True, key="ind_fin_terreno", label_visibility="collapsed")
+        ind_dp_terreno    = 100.0
+        ind_tasa_terreno  = 0.0
+        ind_plazo_terreno = 1
+        if ind_fin_terreno == "Crédito":
+            _ft1, _ft2, _ft3 = st.columns(3)
+            ind_dp_terreno    = _ft1.number_input(
+                "Pago inicial (%)", 0.0, 100.0,
                 float(st.session_state.get("ind_dp_terreno", 40.0)), 5.0,
                 key="ind_dp_terreno")
-            ind_tasa_terreno = st.number_input(
+            ind_tasa_terreno  = _ft2.number_input(
                 "Tasa (% anual)", 0.0, 30.0,
                 float(st.session_state.get("ind_tasa_terreno", 8.0)), 0.25,
                 key="ind_tasa_terreno")
-            ind_plazo_terreno = st.number_input(
+            ind_plazo_terreno = _ft3.number_input(
                 "Plazo (años)", 1, 30,
                 int(st.session_state.get("ind_plazo_terreno", 10)), 1,
                 key="ind_plazo_terreno")
-        with st.expander("Crédito obra", expanded=False):
-            ind_dp_const = st.number_input(
-                "Downpayment (%)", 0.0, 100.0,
-                float(st.session_state.get("ind_dp_const", 30.0)), 5.0,
-                key="ind_dp_const")
-            ind_tasa_const = st.number_input(
-                "Tasa (% anual)", 0.0, 30.0,
-                float(st.session_state.get("ind_tasa_const", 9.0)), 0.25,
-                key="ind_tasa_const")
-            ind_plazo_const = st.number_input(
-                "Plazo (años)", 1, 20,
-                int(st.session_state.get("ind_plazo_const", 8)), 1,
-                key="ind_plazo_const")
 
-        # ── 5 · DOCUMENTOS & FOTOS ──────────────────────────
-        _step_header("5", "Documentos & Fotos")
-        st.caption("Sube los documentos del proyecto para análisis de factibilidad")
-        _ind_secrets_key = (st.secrets.get("anthropic", {}) or {}).get("api_key", "")
-        if not _ind_secrets_key and not st.session_state.get("api_key_input"):
-            with st.expander("⚙ Configuración API", expanded=True):
-                _ind_api_k = st.text_input("Clave de acceso", type="password",
-                                           placeholder="••••••••••••••••", key="ind_api_key_inp",
-                                           value=st.session_state.get("api_key_input", ""))
-                if _ind_api_k:
-                    st.session_state["api_key_input"] = _sanitize_api_key(_ind_api_k)
-        if _ind_secrets_key or st.session_state.get("api_key_input"):
-            st.markdown(
-                '<div style="font-size:10px;color:#1A4731;background:#E8F5EE;'
-                'border-radius:4px;padding:5px 10px;margin-bottom:6px;'
-                'border-left:2px solid #1A4731;">● Sistema activo</div>',
-                unsafe_allow_html=True)
-        ind_doc_partida = st.file_uploader("Partida Registral (SUNARP)", type="pdf", key="ind_doc_partida")
-        ind_doc_params  = st.file_uploader("Certificado de Parámetros",  type="pdf", key="ind_doc_params")
-        ind_doc_zon     = st.file_uploader("Cert. Zonificación y Vías",  type="pdf", key="ind_doc_zon")
-        ind_doc_planos  = st.file_uploader("Planos del Inmueble (PDF, DWG o DXF)", type=["pdf", "dwg", "dxf"], key="ind_doc_planos")
-        if ind_doc_planos and ind_doc_planos.name.lower().endswith((".dwg", ".dxf")):
-            st.info("DWG/DXF cargado como referencia. Para incluirlo en el análisis de documentos, expórtalo como PDF desde AutoCAD: Archivo → Exportar → PDF. El polígono geométrico se procesa en el paso de Cabida Industrial.")
-        _ind_has_docs = any([ind_doc_partida, ind_doc_params, ind_doc_zon, ind_doc_planos])
-        run_ind_docs = False  # se dispara junto con EJECUTAR ANÁLISIS si hay docs
+        ind_dp_const    = 100.0
+        ind_tasa_const  = 0.0
+        ind_plazo_const = 1
+        if ind_perfil == "Desarrollo Integral":
+            st.markdown('<div style="color:#B8904A;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin:14px 0 6px;">EJECUCIÓN DE OBRAS DE IMPLEMENTACIÓN</div>', unsafe_allow_html=True)
+            ind_fin_const = st.radio(
+                "Construcción", ["Recursos propios", "Crédito"],
+                horizontal=True, key="ind_fin_const", label_visibility="collapsed")
+            if ind_fin_const == "Crédito":
+                _fc1, _fc2, _fc3 = st.columns(3)
+                ind_dp_const    = _fc1.number_input(
+                    "Pago inicial (%)", 0.0, 100.0,
+                    float(st.session_state.get("ind_dp_const", 30.0)), 5.0,
+                    key="ind_dp_const")
+                ind_tasa_const  = _fc2.number_input(
+                    "Tasa (% anual)", 0.0, 30.0,
+                    float(st.session_state.get("ind_tasa_const", 9.0)), 0.25,
+                    key="ind_tasa_const")
+                ind_plazo_const = _fc3.number_input(
+                    "Plazo (años)", 1, 20,
+                    int(st.session_state.get("ind_plazo_const", 8)), 1,
+                    key="ind_plazo_const")
 
-        with st.expander("Fotos del inmueble", expanded=False):
-            st.caption("Las fotos se incluyen en el reporte")
-            _ind_fotos = st.file_uploader(
-                "Sube fotos del terreno / nave",
-                type=["jpg", "jpeg", "png", "webp"],
-                accept_multiple_files=True,
-                key="ind_fotos_upload",
+        ind_alcabala = st.checkbox("Incluir Alcabala (3%)", value=True, key="ind_alcabala")
+
+        st.markdown("### MOTIVO DE COMPRA")
+
+        if "ind_uso" not in st.session_state:
+            st.session_state["ind_uso"] = "Uso directo"
+        ind_uso = st.radio("ind_uso_radio",
+            ["Uso directo", "Inversión"],
+            key="ind_uso", label_visibility="collapsed")
+        ind_renta       = 0.0
+        ind_tipo_contrato = "Anual"
+        ind_ajuste_pct   = 0.0
+        ind_inicio_ajuste = 2
+        if ind_uso == "Inversión":
+            ind_renta = st.number_input(
+                "Renta de mercado (USD/m²/mes)",
+                0.0, 50.0, 6.5, 0.25, key="ind_renta")
+            ind_periodo_anos = st.number_input(
+                "Período de ocupación del inquilino (años)",
+                min_value=1, max_value=30,
+                value=int(st.session_state.get("ind_periodo_anos", 5)), step=1,
+                key="ind_periodo_anos")
+            ind_tipo_contrato = "Anual" if ind_periodo_anos <= 1 else "Plurianual (3+ años)"
+            if ind_periodo_anos > 1:
+                _ica1, _ica2 = st.columns(2)
+                ind_ajuste_pct    = _ica1.number_input(
+                    "Ajuste anual (%)", 0.0, 10.0, 3.0, 0.5, key="ind_ajuste_pct")
+                ind_inicio_ajuste = _ica2.selectbox(
+                    "Año de inicio del ajuste", [2, 3], key="ind_inicio_ajuste")
+
+        _tab_compra_ind, _tab_alquiler_ind = st.tabs(["Compra", "Alquiler"])
+
+        with _tab_compra_ind:
+            st.caption("Análisis orientado a la adquisición del inmueble industrial.")
+            ind_op_tipo = "Compra"
+
+        with _tab_alquiler_ind:
+            st.caption("Análisis orientado al arrendamiento del inmueble industrial.")
+            ind_op_tipo = "Alquiler"
+            _nav_m2 = float(st.session_state.get("ind_area_nave_m2", 0) or 0) or (
+                float(st.session_state.get("ind_area", 0) or 0) *
+                float(st.session_state.get("ind_pct_techada", 75) or 75) / 100
             )
-            if _ind_fotos:
-                st.session_state["ind_fotos_bytes"] = [f.read() for f in _ind_fotos]
-                st.session_state["ind_fotos_nombres"] = [f.name for f in _ind_fotos]
-                cols_if = st.columns(min(len(_ind_fotos), 3))
-                for _ifi, _ifup in enumerate(_ind_fotos[:3]):
-                    cols_if[_ifi].image(_ifup, use_container_width=True)
+            ind_renta_alq = st.number_input(
+                "Renta mensual (USD/m²/mes)", 0.0, 50.0,
+                float(st.session_state.get("ind_renta_alq", 6.5)), 0.25, key="ind_renta_alq")
+            ind_plazo_alq = st.number_input(
+                "Plazo de contrato (años)", 1, 20,
+                int(st.session_state.get("ind_plazo_alq", 3)), 1, key="ind_plazo_alq")
+            ind_ajuste_alq = st.number_input(
+                "Ajuste anual (%)", 0.0, 10.0,
+                float(st.session_state.get("ind_ajuste_alq", 3.0)), 0.5, key="ind_ajuste_alq")
+            if _nav_m2 > 0 and ind_renta_alq > 0:
+                _costo_mens = _nav_m2 * ind_renta_alq
+                _costo_anual = _costo_mens * 12
+                _costo_total_alq = sum([
+                    _costo_anual * (1 + ind_ajuste_alq / 100) ** y
+                    for y in range(ind_plazo_alq)
+                ])
+                st.markdown(
+                    f'<div style="background:rgba(184,144,74,0.10);border-radius:6px;padding:8px 12px;margin-top:6px;">'
+                    f'<div style="font-size:9px;font-weight:700;letter-spacing:1px;color:rgba(184,200,216,0.55);text-transform:uppercase;margin-bottom:5px;">Costo estimado de arrendamiento</div>'
+                    f'<div style="font-size:11px;color:#C8D8E8;line-height:1.75;">'
+                    f'Mensual: <b>${_costo_mens:,.0f}</b><br>'
+                    f'Anual (año 1): <b>${_costo_anual:,.0f}</b><br>'
+                    f'Total {ind_plazo_alq} años: <b>${_costo_total_alq:,.0f}</b>'
+                    f'</div></div>',
+                    unsafe_allow_html=True)
 
         st.markdown("---")
         st.caption("Instrucciones al análisis — tipo de nave, restricciones, preferencias del cliente.")
@@ -9318,7 +11989,70 @@ with st.sidebar:
 
         # ── EJECUTAR ─────────────────────────────────────────
         st.markdown("---")
-        run_industrial = st.button("EJECUTAR ANÁLISIS", use_container_width=True, type="primary")
+        run_industrial = st.button("GENERAR ANÁLISIS", use_container_width=True, type="primary")
+
+        st.markdown("---")
+        st.markdown("### ELABORACIÓN DE PROPUESTA")
+        st.markdown(
+            '<div style="font-size:10px;color:rgba(184,144,74,0.75);background:rgba(184,144,74,0.07);'
+            'border-left:2px solid rgba(184,144,74,0.40);border-radius:4px;padding:7px 10px;margin-bottom:8px;">'
+            'Realiza primero el análisis para contar con el sustento técnico y financiero que respalde la propuesta.'
+            '</div>',
+            unsafe_allow_html=True
+        )
+        with st.expander("Estructura de Compra", expanded=False):
+            ind_prop_comprador = st.text_input(
+                "Comprador / Empresa", placeholder="Ej: Inversiones Logísticas SAC",
+                key="ind_prop_comprador")
+            ind_prop_vendedor = st.text_input(
+                "Vendedor / Propietario", placeholder="Ej: Fam. García",
+                key="ind_prop_vendedor")
+            ind_prop_precio = st.number_input(
+                "Precio ofertado (USD)", 0, 100_000_000,
+                int(st.session_state.get("ind_costo_terreno") or 0), 50_000,
+                key="ind_prop_precio")
+            st.markdown(f'<div style="font-size:11px;color:#B8904A;font-weight:600;margin-top:-6px;">= ${ind_prop_precio:,.0f} USD</div>', unsafe_allow_html=True)
+            _tiene_opcion_ind = st.checkbox("Incluir opción de compra", value=False, key="ind_prop_opcion")
+            if _tiene_opcion_ind:
+                _iop1, _iop2 = st.columns(2)
+                ind_prop_dias_op = _iop1.number_input(
+                    "Plazo opción (días)", 1, 360, 60, 15, key="ind_prop_dias_op")
+                ind_prop_pct_op  = _iop2.number_input(
+                    "Monto opción (% precio)", 0.0, 20.0, 2.0, 0.5,
+                    format="%.1f", key="ind_prop_pct_op")
+            else:
+                ind_prop_dias_op, ind_prop_pct_op = 0, 0.0
+            st.caption("Estructura de pagos")
+            ind_prop_pct_minuta = st.number_input(
+                "Pago a firma de minuta (%)", 0.0, 100.0, 30.0, 5.0,
+                format="%.1f", key="ind_prop_pct_minuta")
+            ind_prop_cond_minuta = st.text_input(
+                "Condición para la minuta",
+                value="Aprobación del due diligence legal (30 días)",
+                key="ind_prop_cond_minuta")
+            _ind_prop_saldo = round(100.0 - ind_prop_pct_minuta - ind_prop_pct_op, 1)
+            st.info(f"Saldo a escritura pública: **{_ind_prop_saldo:.1f}%**")
+            ind_prop_cond_escritura = st.text_input(
+                "Condición para escritura pública",
+                value="Entrega libre de cargas, servidumbres y ocupantes",
+                key="ind_prop_cond_escritura")
+            ind_prop_plazo = st.number_input(
+                "Plazo de respuesta (días)", 1, 90, 15, 1, key="ind_prop_plazo")
+            ind_prop_condiciones = st.text_area(
+                "Condiciones adicionales",
+                placeholder="Ej:\nDue diligence técnico 30 días\nSaneamiento registral previo\nServicios industriales al día",
+                height=80, key="ind_prop_condiciones")
+
+        st.markdown(
+            '<div style="margin:18px 0 10px;border-top:1px solid rgba(255,255,255,0.10);">'
+            '<div style="font-size:8px;color:rgba(184,144,74,0.60);letter-spacing:2.5px;'
+            'text-transform:uppercase;font-weight:700;text-align:center;margin-top:10px;">'
+            'INFORMACIÓN ADICIONAL</div>'
+            '<div style="font-size:9px;color:rgba(200,216,232,0.35);text-align:center;margin-top:3px;">'
+            'No esencial para realizar análisis</div>'
+            '</div>',
+            unsafe_allow_html=True
+        )
 
         # ── PROYECTOS GUARDADOS ──────────────────────────────
         with st.expander("💾 Proyectos guardados"):
@@ -9338,13 +12072,27 @@ with st.sidebar:
                                               label_visibility="collapsed", key="ind_nombre_proy")
             if st.button("GUARDAR PROYECTO", use_container_width=True, key="btn_ind_guardar"):
                 if st.session_state.get("industrial_result"):
+                    _ir = st.session_state.industrial_result
+                    _ind_resumen = {
+                        "yield_bruto":   _ir.get("yield_bruto") or 0,
+                        "yield_neto":    _ir.get("yield_neto") or 0,
+                        "dscr":          _ir.get("dscr") or 0,
+                        "irr_anual":     _ir.get("irr_anual") or 0,
+                        "payback_anos":  _ir.get("payback_anos") or 0,
+                        "costo_total":   _ir.get("costo_total") or 0,
+                        "area_nave":     _ir.get("area_nave") or 0,
+                        "tipo_nave":     _ir.get("tipo_nave") or "",
+                        "capital_propio": _ir.get("capital_propio") or 0,
+                    }
                     fp = guardar_proyecto(_ind_nombre_proy or "industrial_sin_nombre",
-                                          {"industrial_result": st.session_state.industrial_result})
+                                          {"industrial_result": _ir, "resumen": _ind_resumen},
+                                          tipo="industrial",
+                                          zona=st.session_state.get("ind_zona_ind") or "")
                     st.session_state["_last_ind_proy"] = fp
                     st.session_state.pop("_share_url_ind", None)
                     st.markdown(f'<div style="background:rgba(107,206,160,0.12);border-left:3px solid rgba(107,206,160,0.50);'
                                 f'border-radius:6px;padding:8px 12px;color:rgba(107,206,160,0.90);font-size:12px;font-weight:600;margin-top:6px;">'
-                                f'✓ {fp.name}</div>', unsafe_allow_html=True)
+                                f'✓ {_html_esc.escape(fp.name)}</div>', unsafe_allow_html=True)
                 else:
                     st.markdown('<div class="alert-info">ℹ️ ' + "Ejecuta el análisis primero." + '</div>', unsafe_allow_html=True)
             _lp_ind = st.session_state.get("_last_ind_proy")
@@ -9400,11 +12148,52 @@ with st.sidebar:
     elif tipo_op == "Inmueble Residencial":
         run = False
         run_industrial = False
+        run_res_docs = False
 
-        # ── 1 · UBICACIÓN ──────────────────────────────────
-        _step_header("1", "Ubicación")
-        with st.expander("📄 Importar datos desde documento"):
-            st.caption("Sube una ficha técnica, tasación o brochure del inmueble — la IA extrae automáticamente área, antigüedad, precio y ubicación para pre-llenar los campos.")
+        # ── MODO DE ANÁLISIS ──────────────────────────────
+        st.markdown("### ¿QUÉ DESEAS ANALIZAR?")
+        res_modo = st.radio(
+            "modo_res",
+            ["Compra", "Alquiler"],
+            horizontal=True,
+            key="res_modo_radio",
+            label_visibility="collapsed",
+        )
+
+        # ── INFORMACIÓN DEL INMUEBLE ──────────────────────
+        st.markdown("### INFORMACIÓN DEL INMUEBLE")
+
+        st.markdown(
+            '<div style="color:#B8904A;font-size:11px;font-weight:700;letter-spacing:2px;'
+            'text-transform:uppercase;margin:14px 0 6px;">DOCUMENTOS</div>',
+            unsafe_allow_html=True,
+        )
+        with st.expander("Partida Registral, PU/HR, Parámetros y Planos"):
+            st.caption("Sube los documentos del inmueble para el análisis legal y normativo.")
+            _res_secrets_key = (st.secrets.get("anthropic", {}) or {}).get("api_key", "")
+            if not _res_secrets_key and not st.session_state.get("api_key_input"):
+                _res_api_k = st.text_input("Clave de acceso", type="password",
+                                           placeholder="••••••••••••••••", key="res_api_key_inp",
+                                           value=st.session_state.get("api_key_input", ""))
+                if _res_api_k:
+                    st.session_state["api_key_input"] = _sanitize_api_key(_res_api_k)
+            _doc_types_res = ["pdf", "jpg", "jpeg", "png", "webp"]
+            res_doc_partida = st.file_uploader("Partida Registral (SUNARP)", type=_doc_types_res, key="res_doc_partida")
+            res_doc_puhr    = st.file_uploader("PU / HR",                    type=_doc_types_res, key="res_doc_puhr")
+            res_doc_params  = st.file_uploader("Certificado de Parámetros",  type=_doc_types_res, key="res_doc_params")
+            res_doc_planos  = st.file_uploader("Planos del Inmueble (PDF, DXF o imagen)", type=["pdf", "dxf", "dwg", "jpg", "jpeg", "png", "webp"], key="res_doc_planos")
+            if res_doc_planos and res_doc_planos.name.lower().endswith(".dxf"):
+                st.caption("DXF cargado como referencia — para extracción automática del polígono usa la sección de Cabida.")
+            elif res_doc_planos and res_doc_planos.name.lower().endswith(".dwg"):
+                st.markdown('<div style="font-size:12px;color:#2E6B55;background:#EBF4F0;border-left:3px solid #2E6B55;border-radius:4px;padding:8px 12px;margin-top:4px;">DWG es formato propietario — exporta como DXF desde AutoCAD (Archivo → Guardar como → AutoCAD DXF) para que SOLUM pueda extraer el polígono automáticamente.</div>', unsafe_allow_html=True)
+            _res_has_docs = any([res_doc_partida, res_doc_puhr, res_doc_params, res_doc_planos])
+            if not _res_has_docs:
+                st.caption("Adjunta al menos un documento para habilitar el análisis legal.")
+            else:
+                st.caption("El análisis legal se ejecuta automáticamente al generar el análisis.")
+
+        with st.expander("📊 Presentación o Brochure del Inmueble"):
+            st.caption("Sube un brochure, presentación o resumen ejecutivo — la IA extrae área, antigüedad, precio y ubicación automáticamente.")
             _res_doc_up = st.file_uploader(
                 "PDF, PPTX o DOCX",
                 type=["pdf", "pptx", "ppt", "docx"],
@@ -9444,12 +12233,15 @@ with st.sidebar:
         _res_zona_keys = list(MERCADO.keys())
         _res_zona_saved = st.session_state.get("res_zona_sel", "")
         _res_zona_idx = _res_zona_keys.index(_res_zona_saved) if _res_zona_saved in _res_zona_keys else min(20, len(_res_zona_keys) - 1)
-        res_zona = st.selectbox("Ubicación", _res_zona_keys,
-                                 index=_res_zona_idx, key="res_zona_sel")
+        res_zona = st.selectbox("Distrito", _res_zona_keys,
+                                index=_res_zona_idx, key="res_zona_sel")
         _m_res = MERCADO.get(res_zona, {})
 
-        # ── 2 · INMUEBLE ───────────────────────────────────
-        _step_header("2", "Inmueble")
+        st.markdown(
+            '<div style="color:#B8904A;font-size:11px;font-weight:700;letter-spacing:2px;'
+            'text-transform:uppercase;margin:14px 0 6px;">CARACTERÍSTICAS</div>',
+            unsafe_allow_html=True,
+        )
         res_col1, res_col2 = st.columns(2)
         res_m2 = res_col1.number_input("Área (m²)", 1, 2000, max(1, int(st.session_state.get("res_m2_k", 80))), 5, key="res_m2_k")
         res_antiguedad = res_col2.number_input("Antigüedad (años)", 0, 100, int(st.session_state.get("res_antig_k", 5)), 1, key="res_antig_k")
@@ -9461,82 +12253,171 @@ with st.sidebar:
             _dorm_default_idx = 1
         res_dormitorios = st.selectbox("Tipología", _dorm_opts, index=_dorm_default_idx, key="res_dorm_k")
 
-        # ── 3 · PRECIO ─────────────────────────────────────
-        _step_header("3", "Precio")
-        _precio_ref = (_m_res.get("precio_1br", 0) if "1" in res_dormitorios else
-                       _m_res.get("precio_2br", 0) if "2" in res_dormitorios else
-                       _m_res.get("precio_3br", 0)) * res_m2
-        _ref_m2_display = (_m_res.get("precio_2br", 0) if "2" in res_dormitorios else
-                           (_m_res.get("precio_1br", 0) if "1" in res_dormitorios else _m_res.get("precio_3br", 0)))
-        st.markdown(f'<div style="font-size:11px;color:#B8904A;font-weight:600;margin-top:-4px;">Mercado: ${_ref_m2_display:,}/m² · Ref. total ${_precio_ref:,.0f}</div>', unsafe_allow_html=True)
+        _res_fotos = st.file_uploader(
+            "📷 Fotos del inmueble",
+            type=["jpg", "jpeg", "png", "webp", "heic"],
+            accept_multiple_files=True,
+            key="res_fotos_upload",
+        )
+        if _res_fotos:
+            _res_fotos_bytes = [f.read() for f in _res_fotos]
+            st.session_state["res_fotos_bytes"] = _res_fotos_bytes
+            st.session_state["res_fotos_nombres"] = [f.name for f in _res_fotos]
+            cols_rf = st.columns(min(len(_res_fotos_bytes), 3))
+            for _rfi, _fb in enumerate(_res_fotos_bytes[:3]):
+                cols_rf[_rfi].image(_to_display_bytes(_fb), use_container_width=True)
 
-        res_precio = st.number_input("Precio de compra (USD)", 1, 10_000_000,
-                                      max(1, int(st.session_state.get("res_precio_k", max(int(_precio_ref / 10000) * 10000, 50000)))), 5_000, format="%d", key="res_precio_k")
+        # ── PRECIO ────────────────────────────────────────
+        st.markdown("### PRECIO PROPUESTO")
 
-        _ppm2 = res_precio / res_m2 if res_m2 > 0 else 0
-        _ref_m2 = (_m_res.get("precio_2br", 0) if "2" in res_dormitorios else
-                   (_m_res.get("precio_1br", 0) if "1" in res_dormitorios else _m_res.get("precio_3br", 0)))
-        _diff_pct = ((_ppm2 - _ref_m2) / _ref_m2 * 100) if _ref_m2 > 0 else 0
-        if abs(_diff_pct) <= 8:
-            _pos_color, _pos_text = "#1A4731", f"En línea con mercado ({_diff_pct:+.1f}%)"
-        elif _diff_pct > 8:
-            _pos_color, _pos_text = "#7A1A1A", f"Sobre el mercado ({_diff_pct:+.1f}%) — negociar"
+        _ref_m2 = (_m_res.get("precio_1br", 0) if "1" in res_dormitorios else
+                   _m_res.get("precio_2br", 0) if "2" in res_dormitorios else
+                   _m_res.get("precio_3br", 0))
+        _precio_ref_total = _ref_m2 * res_m2
+
+        if res_modo == "Compra":
+            res_precio = st.number_input(
+                "Precio de compra (USD)", 1, 10_000_000,
+                max(1, int(st.session_state.get("res_precio_k", max(int(_precio_ref_total / 10000) * 10000, 50000)))),
+                5_000, format="%d", key="res_precio_k",
+            )
         else:
-            _pos_color, _pos_text = "#1A4731", f"Por debajo del mercado ({_diff_pct:+.1f}%) — oportunidad"
-        st.markdown(f'<div style="background:rgba(255,255,255,0.06);border-left:3px solid {_pos_color};border-radius:6px;'
-                    f'padding:6px 12px;font-size:11px;color:{_pos_color};font-weight:600;margin-bottom:4px;">'
-                    f'${_ppm2:,.0f}/m² — {_pos_text}</div>', unsafe_allow_html=True)
+            _alq_ref = round(_m_res.get("alquiler_m2_mes", 0) * res_m2 / 50) * 50
+            res_alquiler = st.number_input(
+                "Renta mensual (USD)", 0, 20_000,
+                int(st.session_state.get("res_alq_k", int(_alq_ref))), 50,
+                key="res_alq_inp",
+            )
+            res_precio = st.number_input(
+                "Valor referencial de venta (USD)",
+                1, 10_000_000,
+                max(1, int(st.session_state.get("res_precio_k", max(int(_precio_ref_total / 10000) * 10000, 50000)))),
+                5_000, format="%d", key="res_precio_k",
+                help="Se usa para calcular la rentabilidad. Ajusta al precio de mercado o al precio pedido por el propietario.",
+            )
 
-        # ── 4 · FINANCIAMIENTO ──────────────────────────────
-        _step_header("4", "Financiamiento")
-        res_pct_pie = st.number_input("Pago inicial / Down Payment (%)", 0.0, 100.0, 20.0, 1.0,
-                                       key="res_pct_pie_inp")
-        res_tasa = st.number_input("Tasa de interés anual (%)", 0.0, 30.0, 8.5, 0.25,
-                                    key="res_tasa_inp")
-        res_plazo = st.number_input("Plazo del crédito (años)", 1, 30, 20, 1,
-                                    key="res_plazo_inp")
+        # ── ELABORACIÓN DE PROPUESTA (solo Compra) ────────
+        if res_modo == "Compra":
+            st.markdown("### ELABORACIÓN DE PROPUESTA")
+            st.markdown(
+                '<div style="font-size:10px;color:rgba(184,144,74,0.75);background:rgba(184,144,74,0.07);'
+                'border-left:2px solid rgba(184,144,74,0.40);border-radius:4px;padding:7px 10px;margin-bottom:8px;">'
+                'Realiza primero el análisis para contar con el sustento técnico y financiero que respalde la propuesta.'
+                '</div>',
+                unsafe_allow_html=True
+            )
+            with st.expander("Estructura de la Oferta", expanded=False):
+                st.caption("Datos para preparar la carta de intención o propuesta al vendedor.")
+                _res_pv1, _res_pv2 = st.columns(2)
+                _res_pv1.text_input("Vendedor", placeholder="Nombre o empresa", key="res_prop_vendedor")
+                _res_pv2.text_input("Comprador", placeholder="Nombre o empresa", key="res_prop_comprador")
+                st.number_input(
+                    "Precio ofertado (USD)", 1, 10_000_000,
+                    max(1, int(res_precio * 0.95)), 5_000, format="%d",
+                    key="res_prop_precio_ofertado",
+                )
+                _res_po1, _res_po2 = st.columns(2)
+                _res_po1.number_input("Opción de compra (%)", 0.0, 20.0, 5.0, 0.5, key="res_prop_opcion_pct")
+                _res_po2.number_input("Minuta / contrato (%)", 0.0, 50.0, 20.0, 5.0, key="res_prop_minuta_pct")
+                st.text_area(
+                    "Condiciones especiales",
+                    placeholder="Ej: sujeto a due diligence, inspección técnica, financiamiento bancario…",
+                    height=70, key="res_prop_condiciones",
+                )
 
-        # ── 5 · PROPÓSITO ───────────────────────────────────
-        _step_header("5", "Propósito")
-        res_uso = st.radio("¿Para qué?",
-            ["Vivienda propia", "Inversión para alquilar", "Evaluación para venta"],
-            key="res_uso_radio")
+        # ── INFORMACIÓN FINANCIERA ─────────────────────────
+        st.markdown("### INFORMACIÓN FINANCIERA")
 
-        if res_uso in ["Inversión para alquilar", "Evaluación para venta"]:
-            _alq_sugerido = round(_m_res.get("alquiler_m2_mes", 0) * res_m2 / 50) * 50
+        if res_modo == "Compra":
+            res_alcabala = st.checkbox("Incluir Alcabala (3%)", value=True, key="res_alcabala")
+            st.markdown(
+                '<div style="color:#B8904A;font-size:11px;font-weight:700;letter-spacing:2px;'
+                'text-transform:uppercase;margin:14px 0 6px;">FINANCIAMIENTO</div>',
+                unsafe_allow_html=True,
+            )
+            res_fin_tipo = st.radio(
+                "res_fin_tipo_radio",
+                ["Recursos propios", "Crédito hipotecario"],
+                horizontal=True, key="res_fin_tipo_radio",
+                label_visibility="collapsed",
+            )
+            if res_fin_tipo == "Crédito hipotecario":
+                res_pct_pie = st.number_input("Cuota inicial (%)", 0.0, 100.0, 20.0, 1.0, key="res_pct_pie_inp")
+                _fhc1, _fhc2 = st.columns(2)
+                res_tasa  = _fhc1.number_input("Tasa anual (%)", 0.0, 30.0, 8.5, 0.25, key="res_tasa_inp")
+                res_plazo = int(_fhc2.number_input("Plazo (años)", 1, 30, 20, 1, key="res_plazo_inp"))
+            else:
+                res_pct_pie = 100.0
+                res_tasa    = 0.0
+                res_plazo   = 0
+            st.markdown(
+                '<div style="color:#B8904A;font-size:11px;font-weight:700;letter-spacing:2px;'
+                'text-transform:uppercase;margin:14px 0 6px;">PROPÓSITO DE COMPRA</div>',
+                unsafe_allow_html=True,
+            )
+            res_uso = st.radio(
+                "res_uso_radio",
+                ["Vivienda propia", "Inversión para alquilar"],
+                key="res_uso_radio",
+                label_visibility="collapsed",
+            )
             if res_uso == "Inversión para alquilar":
-                st.markdown(f'<div style="font-size:11px;color:#B8904A;font-weight:600;margin-top:-4px;">Mercado: ${_alq_sugerido:,}/mes · ${_m_res.get("alquiler_m2_mes", 0):.1f}/m²/mes</div>', unsafe_allow_html=True)
-                res_alquiler = st.number_input("Renta mensual (USD)", 0, 20_000,
-                                                int(st.session_state.get("res_alq_k", int(_alq_sugerido))), 50, key="res_alq_inp")
+                _alq_inv_ref = round(_m_res.get("alquiler_m2_mes", 0) * res_m2 / 50) * 50
+                st.markdown(
+                    f'<div style="font-size:11px;color:#B8904A;font-weight:600;margin-top:-4px;">'
+                    f'Mercado: ${_alq_inv_ref:,}/mes · ${_m_res.get("alquiler_m2_mes", 0):.1f}/m²/mes</div>',
+                    unsafe_allow_html=True,
+                )
+                res_alquiler = st.number_input(
+                    "Renta mensual esperada (USD)", 0, 20_000,
+                    int(st.session_state.get("res_alq_k", int(_alq_inv_ref))), 50,
+                    key="res_alq_inp",
+                )
                 res_tipo_contrato = st.radio(
                     "Tipo de contrato", ["Anual", "Plurianual (3+ años)"],
-                    horizontal=True, key="res_tipo_contrato")
+                    horizontal=True, key="res_tipo_contrato",
+                )
                 res_ajuste_pct    = 0.0
                 res_inicio_ajuste = 2
                 if res_tipo_contrato == "Plurianual (3+ años)":
                     _rca1, _rca2 = st.columns(2)
-                    res_ajuste_pct    = _rca1.number_input(
-                        "Ajuste anual (%)", 0.0, 10.0, 3.0, 0.5, key="res_ajuste_pct")
-                    res_inicio_ajuste = _rca2.selectbox(
-                        "Año de inicio del ajuste", [2, 3], key="res_inicio_ajuste")
+                    res_ajuste_pct    = _rca1.number_input("Ajuste anual (%)", 0.0, 10.0, 3.0, 0.5, key="res_ajuste_pct")
+                    res_inicio_ajuste = _rca2.selectbox("Año de inicio del ajuste", [2, 3], key="res_inicio_ajuste")
+                res_gastos = st.number_input(
+                    "Gastos mensuales estimados (USD)", 0, 5_000,
+                    max(int(res_precio * 0.004 / 12), 50), 10, key="res_gastos_inp",
+                )
             else:
                 res_alquiler      = 0
+                res_gastos        = 0
                 res_tipo_contrato = "Anual"
                 res_ajuste_pct    = 0.0
                 res_inicio_ajuste = 2
-            res_gastos = st.number_input("Gastos mensuales (USD)", 0, 5_000,
-                                          max(int(res_precio * 0.004 / 12), 50), 10,
-                                          key="res_gastos_inp")
         else:
-            res_alquiler      = 0
-            res_gastos        = 0
-            res_tipo_contrato = "Anual"
+            res_alcabala      = False
+            res_pct_pie       = 0.0
+            res_tasa          = 0.0
+            res_plazo         = 0
+            res_fin_tipo      = "Recursos propios"
+            res_uso           = "Inversión para alquilar"
+            res_tipo_contrato = st.radio(
+                "Tipo de contrato", ["Anual", "Plurianual (3+ años)"],
+                horizontal=True, key="res_tipo_contrato",
+            )
             res_ajuste_pct    = 0.0
             res_inicio_ajuste = 2
+            if res_tipo_contrato == "Plurianual (3+ años)":
+                _rca1, _rca2 = st.columns(2)
+                res_ajuste_pct    = _rca1.number_input("Ajuste anual (%)", 0.0, 10.0, 3.0, 0.5, key="res_ajuste_pct")
+                res_inicio_ajuste = _rca2.selectbox("Año de inicio del ajuste", [2, 3], key="res_inicio_ajuste")
+            res_gastos = st.number_input(
+                "Gastos mensuales del inmueble (USD)", 0, 5_000,
+                max(int(res_precio * 0.004 / 12), 50), 10, key="res_gastos_inp",
+            )
 
-        # ── 6 · COMPARATIVA ─────────────────────────────────
-        _step_header("6", "Comparativa de Inmuebles")
-        st.caption("Agrega hasta 3 inmuebles alternativos para comparar")
+        # ── COMPARATIVA DE INMUEBLES ───────────────────────
+        st.markdown("### COMPARATIVA DE INMUEBLES")
+        st.caption("Agrega hasta 3 inmuebles alternativos para comparar — precio, área y rentabilidad.")
         if "res_inmuebles_comp" not in st.session_state:
             st.session_state.res_inmuebles_comp = []
 
@@ -9544,23 +12425,23 @@ with st.sidebar:
             _rc_nombre = st.text_input("Nombre / referencia", placeholder="Ej: Depto Av. Larco 320", key="rc_nombre_inp")
             _rc_col1, _rc_col2 = st.columns(2)
             _rc_precio = _rc_col1.number_input("Precio USD", 0, 10_000_000, 200_000, 5_000, format="%d", key="rc_precio_inp")
-            _rc_m2 = _rc_col2.number_input("m²", 10, 2000, 80, 5, key="rc_m2")
+            _rc_m2     = _rc_col2.number_input("m²", 10, 2000, 80, 5, key="rc_m2")
             _rc_col3, _rc_col4 = st.columns(2)
-            _rc_alq = _rc_col3.number_input("Alquiler/mes USD", 0, 20_000, 800, 50, key="rc_alq")
+            _rc_alq  = _rc_col3.number_input("Alquiler/mes USD", 0, 20_000, 800, 50, key="rc_alq")
             _rc_dorm = _rc_col4.selectbox("Dorm.", ["1D", "2D", "3D"], key="rc_dorm")
             _rc_zona = st.selectbox("Distrito", list(MERCADO.keys()), key="rc_zona_sel")
-            _rc_img = st.file_uploader("Foto del inmueble (opcional)", type=["jpg", "jpeg", "png", "webp"], key="rc_img_upload")
+            _rc_img  = st.file_uploader("Foto del inmueble (opcional)", type=["jpg", "jpeg", "png", "webp", "heic"], key="rc_img_upload")
             if st.button("AGREGAR", use_container_width=True, key="btn_rc_agregar", type="primary"):
                 if _rc_nombre.strip():
                     _rc_img_bytes = _rc_img.read() if _rc_img else None
                     st.session_state.res_inmuebles_comp.append({
-                        "nombre": _rc_nombre.strip(),
-                        "precio": _rc_precio, "m2": _rc_m2,
-                        "alquiler": _rc_alq, "dormitorios": _rc_dorm,
-                        "zona": _rc_zona,
+                        "nombre":    _rc_nombre.strip(),
+                        "precio":    _rc_precio, "m2": _rc_m2,
+                        "alquiler":  _rc_alq, "dormitorios": _rc_dorm,
+                        "zona":      _rc_zona,
                         "precio_m2": round(_rc_precio / _rc_m2) if _rc_m2 > 0 else 0,
                         "yield_bruto": round(_rc_alq * 12 / _rc_precio * 100, 1) if _rc_precio > 0 and _rc_alq > 0 else 0,
-                        "imagen_bytes": _rc_img_bytes,
+                        "imagen_bytes":  _rc_img_bytes,
                         "imagen_nombre": _rc_img.name if _rc_img else None,
                     })
                     st.rerun()
@@ -9576,64 +12457,32 @@ with st.sidebar:
                 st.session_state.res_inmuebles_comp = []
                 st.rerun()
 
-        # ── 7 · DOCUMENTOS ──────────────────────────────────
-        _step_header("7", "Documentos")
-        st.caption("Sube los documentos del inmueble para análisis registral y técnico")
-        _res_secrets_key = (st.secrets.get("anthropic", {}) or {}).get("api_key", "")
-        if not _res_secrets_key and not st.session_state.get("api_key_input"):
-            with st.expander("⚙ Configuración API", expanded=True):
-                _res_api_k = st.text_input("Clave de acceso", type="password",
-                                           placeholder="••••••••••••••••", key="res_api_key_inp",
-                                           value=st.session_state.get("api_key_input", ""))
-                if _res_api_k:
-                    st.session_state["api_key_input"] = _sanitize_api_key(_res_api_k)
-        if _res_secrets_key or st.session_state.get("api_key_input"):
-            st.markdown(
-                '<div style="font-size:10px;color:#1A4731;background:#E8F5EE;'
-                'border-radius:4px;padding:5px 10px;margin-bottom:6px;'
-                'border-left:2px solid #1A4731;">● Sistema activo</div>',
-                unsafe_allow_html=True)
-        res_doc_partida = st.file_uploader("Partida Registral (SUNARP)", type="pdf", key="res_doc_partida")
-        res_doc_puhr    = st.file_uploader("PU / HR",                    type="pdf", key="res_doc_puhr")
-        res_doc_params  = st.file_uploader("Certificado de Parámetros",  type="pdf", key="res_doc_params")
-        res_doc_planos  = st.file_uploader("Planos del Inmueble",        type="pdf", key="res_doc_planos")
-        _res_has_docs = any([res_doc_partida, res_doc_puhr, res_doc_params, res_doc_planos])
-        if _res_has_docs:
-            run_res_docs = st.button("ANALIZAR DOCUMENTOS", use_container_width=True, key="btn_res_docs")
-        else:
-            run_res_docs = False
-            st.caption("Adjunta al menos un documento para habilitar el análisis.")
-
-        # ── 8 · FOTOS ───────────────────────────────────────
-        _step_header("8", "Fotos del Inmueble")
-        st.caption("Las fotos se incluyen en el informe")
-        _res_fotos = st.file_uploader(
-            "Sube fotos del inmueble",
-            type=["jpg", "jpeg", "png", "webp"],
-            accept_multiple_files=True,
-            key="res_fotos_upload",
-        )
-        if _res_fotos:
-            st.session_state["res_fotos_bytes"] = [f.read() for f in _res_fotos]
-            st.session_state["res_fotos_nombres"] = [f.name for f in _res_fotos]
-            cols_rf = st.columns(min(len(_res_fotos), 3))
-            for _rfi, _rfup in enumerate(_res_fotos[:3]):
-                cols_rf[_rfi].image(_rfup, use_container_width=True)
-
+        # ── INSTRUCCIONES ─────────────────────────────────
         st.markdown("---")
         st.markdown("### INSTRUCCIONES AL ANÁLISIS")
-        st.caption("Lo que escribas aquí guía a la IA — uso del inmueble, condiciones especiales, perfil del comprador.")
+        st.caption("Cuéntale a SOLUM qué es lo más importante — perfil del cliente, prioridades, condiciones especiales.")
         res_sugerencias = st.text_area(
             label="instrucciones_res",
-            placeholder="Ej: cliente busca inversión para alquiler, priorizar zonas con alta plusvalía, presupuesto máximo $250K...",
+            placeholder="Ej: cliente busca inversión para alquiler, presupuesto máximo $250K, priorizar cercanía a colegios...",
             height=90,
             label_visibility="collapsed",
-            key="res_sugerencias_inp"
+            key="res_sugerencias_inp",
         )
 
         # ── EJECUTAR ─────────────────────────────────────────
         st.markdown("---")
-        run_residencial = st.button("EJECUTAR ANÁLISIS", use_container_width=True, type="primary")
+        run_residencial = st.button("GENERAR ANÁLISIS", use_container_width=True, type="primary")
+
+        st.markdown(
+            '<div style="margin:18px 0 10px;border-top:1px solid rgba(255,255,255,0.10);">'
+            '<div style="font-size:8px;color:rgba(184,144,74,0.60);letter-spacing:2.5px;'
+            'text-transform:uppercase;font-weight:700;text-align:center;margin-top:10px;">'
+            'INFORMACIÓN ADICIONAL</div>'
+            '<div style="font-size:9px;color:rgba(200,216,232,0.35);text-align:center;margin-top:3px;">'
+            'No esencial para realizar análisis</div>'
+            '</div>',
+            unsafe_allow_html=True
+        )
 
         # ── PROYECTOS GUARDADOS ──────────────────────────────
         with st.expander("💾 Proyectos guardados"):
@@ -9653,13 +12502,27 @@ with st.sidebar:
                                               label_visibility="collapsed", key="res_nombre_proy")
             if st.button("GUARDAR PROYECTO", use_container_width=True, key="btn_res_guardar"):
                 if st.session_state.get("residencial_result"):
+                    _rr = st.session_state.residencial_result
+                    _res_resumen = {
+                        "precio_venta_m2": _rr.get("precio_venta_m2") or _rr.get("precio_m2") or 0,
+                        "yield_alquiler":  _rr.get("yield_bruto") or _rr.get("rentabilidad_bruta") or 0,
+                        "costo_total":     _rr.get("valor_total") or _rr.get("precio_total") or 0,
+                        "margen_pct":      _rr.get("margen_pct") or 0,
+                        "tir_anual_pct":   _rr.get("tir_anual_pct") or 0,
+                        "utilidad_neta":   _rr.get("utilidad_neta") or 0,
+                        "ingresos_brutos": _rr.get("ingresos_brutos") or _rr.get("valor_total") or 0,
+                    }
                     fp = guardar_proyecto(_res_nombre_proy or "residencial_sin_nombre",
-                                          {"residencial_result": st.session_state.residencial_result})
+                                          {"residencial_result": _rr, "resumen": _res_resumen},
+                                          tipo="residencial",
+                                          zona=st.session_state.get("res_distrito") or "")
                     st.session_state["_last_res_proy"] = fp
                     st.session_state.pop("_share_url_res", None)
-                    st.markdown(f'<div style="background:rgba(107,206,160,0.12);border-left:3px solid rgba(107,206,160,0.50);'
-                                f'border-radius:6px;padding:8px 12px;color:rgba(107,206,160,0.90);font-size:12px;font-weight:600;margin-top:6px;">'
-                                f'✓ {fp.name}</div>', unsafe_allow_html=True)
+                    st.markdown(
+                        f'<div style="background:rgba(107,206,160,0.12);border-left:3px solid rgba(107,206,160,0.50);'
+                        f'border-radius:6px;padding:8px 12px;color:rgba(107,206,160,0.90);font-size:12px;font-weight:600;margin-top:6px;">'
+                        f'✓ {_html_esc.escape(fp.name)}</div>', unsafe_allow_html=True,
+                    )
                 else:
                     st.markdown('<div class="alert-info">ℹ️ ' + "Ejecuta el análisis primero." + '</div>', unsafe_allow_html=True)
             _lp_res = st.session_state.get("_last_res_proy")
@@ -9711,6 +12574,530 @@ with st.sidebar:
                     'font-size:11px;color:rgba(107,206,160,0.90);font-weight:600;margin-top:6px;">'
                     f'✓ Recibido: {_fb_file_res.name}</div>', unsafe_allow_html=True)
 
+    # ── MÓDULO 4: INMUEBLE DE OFICINAS ────────────────────
+    elif tipo_op == "Proyecto de Oficinas":
+        run = False
+        run_industrial = False
+        run_residencial = False
+        run_oficinas = False
+
+        # ── MODO DE ANÁLISIS ──────────────────────────────
+        st.markdown("### ¿QUÉ DESEAS ANALIZAR?")
+        ofi_modo = st.radio(
+            "ofi_modo_radio",
+            ["Alquiler", "Compra", "Desarrollo de Proyecto"],
+            key="ofi_modo",
+            label_visibility="collapsed",
+        )
+
+        # ── INFORMACIÓN DEL INMUEBLE ──────────────────────
+        st.markdown("### INFORMACIÓN DEL INMUEBLE")
+        ofi_distrito = st.selectbox(
+            "Distrito",
+            ["San Isidro", "Miraflores", "San Borja", "Surco", "La Molina",
+             "Jesús María", "Magdalena", "Lince", "Pueblo Libre", "Surquillo",
+             "Barranco", "Chorrillos", "Otro"],
+            key="ofi_distrito",
+        )
+        ofi_edificio = st.text_input(
+            "Edificio / Nombre del proyecto", key="ofi_edificio",
+            placeholder="Ej. Torre Interbank, Centro Empresarial..."
+        )
+
+        if ofi_modo in ("Alquiler", "Compra"):
+            ofi_clase = st.selectbox("Clase del edificio", ["A+", "A", "B", "C"], key="ofi_clase")
+        else:
+            ofi_clase = "A"
+
+        _ofi_c1, _ofi_c2 = st.columns(2)
+        with _ofi_c1:
+            ofi_piso = st.number_input("Piso", min_value=1, max_value=60, value=5, step=1, key="ofi_piso")
+        with _ofi_c2:
+            ofi_area = st.number_input("Área (m²)", min_value=50.0, value=300.0, step=10.0, key="ofi_area")
+        ofi_anio = st.number_input(
+            "Año del edificio", min_value=1980, max_value=2030, value=2015, step=1, key="ofi_anio"
+        )
+
+        st.markdown(
+            '<div style="margin:18px 0 10px;border-top:1px solid rgba(255,255,255,0.10);">'
+            '<div style="font-size:8px;color:rgba(184,144,74,0.60);letter-spacing:2.5px;'
+            'text-transform:uppercase;font-weight:700;text-align:center;margin-top:10px;">'
+            'INFORMACIÓN ADICIONAL</div>'
+            '<div style="font-size:9px;color:rgba(200,216,232,0.35);text-align:center;margin-top:3px;">'
+            'No esencial para realizar análisis</div>'
+            '</div>',
+            unsafe_allow_html=True
+        )
+        with st.expander("📎 DOCUMENTOS"):
+            _ofi_doc_file = st.file_uploader(
+                "Contrato / Brochure / Plano",
+                type=["pdf", "png", "jpg", "jpeg"],
+                key="ofi_doc_file",
+            )
+            ofi_doc_bytes = _ofi_doc_file.read() if _ofi_doc_file else None
+
+        # ── BLOQUE SEGÚN MODO ─────────────────────────────
+
+        if ofi_modo == "Alquiler":
+            # PRECIO DE ARRENDAMIENTO
+            st.markdown("### PRECIO DE ARRENDAMIENTO")
+            ofi_alq_base = st.number_input(
+                "Alquiler base (USD/mes)", min_value=0.0, value=4500.0, step=100.0, key="ofi_alq_base"
+            )
+            _ofi_usdm2 = (ofi_alq_base / ofi_area) if ofi_area > 0 else 0.0
+            _ofi_bench = {
+                "San Isidro": (18, 26), "Miraflores": (15, 22),
+                "San Borja": (12, 18), "Surco": (10, 16),
+            }.get(ofi_distrito, (10, 20))
+            _ofi_color = (
+                "#6BCEA0" if _ofi_bench[0] <= _ofi_usdm2 <= _ofi_bench[1]
+                else ("#F4A261" if _ofi_usdm2 > _ofi_bench[1] else "#E07A5F")
+            )
+            st.markdown(
+                f'<div style="background:rgba(255,255,255,0.05);border-radius:7px;padding:7px 11px;'
+                f'font-size:12px;color:{_ofi_color};font-weight:700;margin:-4px 0 6px 0;">'
+                f'USD {_ofi_usdm2:.1f}/m²/mes · Mercado {ofi_distrito}: '
+                f'${_ofi_bench[0]}–${_ofi_bench[1]}/m²/mes</div>',
+                unsafe_allow_html=True,
+            )
+            _ofi_gc1, _ofi_gc2 = st.columns(2)
+            with _ofi_gc1:
+                ofi_gastos_comunes = st.number_input(
+                    "Gastos comunes (USD/m²/mes)", min_value=0.0, value=2.5, step=0.5, key="ofi_gastos_comunes"
+                )
+            with _ofi_gc2:
+                ofi_cocheras_n = st.number_input(
+                    "Cocheras (N°)", min_value=0, value=2, step=1, key="ofi_cocheras_n"
+                )
+            ofi_cocheras_precio = st.number_input(
+                "Precio por cochera (USD/mes)", min_value=0.0, value=180.0, step=10.0, key="ofi_cocheras_precio"
+            )
+            ofi_igv = st.checkbox("Incluye IGV (18%)", value=False, key="ofi_igv")
+
+            # CONDICIONES DEL CONTRATO
+            st.markdown("### CONDICIONES DEL CONTRATO")
+            _ofi_ca, _ofi_cb = st.columns(2)
+            with _ofi_ca:
+                ofi_duracion = st.number_input(
+                    "Duración (años)", min_value=1, max_value=10, value=3, step=1, key="ofi_duracion"
+                )
+                ofi_garantia = st.number_input(
+                    "Garantía (meses)", min_value=0, max_value=12, value=3, step=1, key="ofi_garantia"
+                )
+            with _ofi_cb:
+                ofi_reajuste = st.number_input(
+                    "Reajuste anual (%)", min_value=0.0, max_value=10.0, value=3.0, step=0.5, key="ofi_reajuste"
+                )
+                ofi_gracia = st.number_input(
+                    "Período de gracia (meses)", min_value=0, max_value=6, value=1, step=1, key="ofi_gracia"
+                )
+
+            # ELABORACIÓN DE PROPUESTA
+            with st.expander("📋 ELABORACIÓN DE PROPUESTA"):
+                st.markdown(
+                    '<div style="font-size:10px;color:rgba(184,144,74,0.75);background:rgba(184,144,74,0.07);'
+                    'border-left:2px solid rgba(184,144,74,0.40);border-radius:4px;padding:7px 10px;margin-bottom:8px;">'
+                    'Realiza primero el análisis para contar con el sustento técnico y financiero que respalde la propuesta.'
+                    '</div>',
+                    unsafe_allow_html=True
+                )
+                ofi_prop_renta = st.number_input(
+                    "Renta propuesta (USD/mes)", min_value=0.0, value=round(ofi_alq_base * 0.90, -2),
+                    step=100.0, key="ofi_prop_renta"
+                )
+                ofi_prop_mejoras_ti = st.text_area(
+                    "Mejoras / Tenant improvements solicitadas", key="ofi_prop_mejoras_ti",
+                    placeholder="Ej. Acondicionar 2 salas de reunión, cableado, pintura...", height=70
+                )
+                ofi_prop_clausulas = st.text_area(
+                    "Cláusulas especiales", key="ofi_prop_clausulas",
+                    placeholder="Ej. Opción de expansión, subarrendamiento, terminación anticipada...", height=70
+                )
+
+            # COMPARATIVA
+            st.markdown("### COMPARATIVA")
+            _ofi_comp_list = st.session_state.ofi_comparativa
+            for _oi, _ocomp in enumerate(_ofi_comp_list[:3]):
+                with st.expander(f"Comparable {_oi+1}: {_ocomp.get('edificio','—')}", expanded=False):
+                    _ofi_comp_list[_oi]["edificio"] = st.text_input(
+                        "Edificio", value=_ocomp.get("edificio",""), key=f"ofi_comp_{_oi}_edif"
+                    )
+                    _ofa, _ofb = st.columns(2)
+                    with _ofa:
+                        _ofi_comp_list[_oi]["area"] = st.number_input(
+                            "Área m²", value=float(_ocomp.get("area",0)),
+                            key=f"ofi_comp_{_oi}_area", min_value=0.0, step=10.0
+                        )
+                        _ofi_comp_list[_oi]["precio"] = st.number_input(
+                            "USD/m²/mes", value=float(_ocomp.get("precio",0)),
+                            key=f"ofi_comp_{_oi}_precio", min_value=0.0, step=0.5
+                        )
+                    with _ofb:
+                        _ofi_comp_list[_oi]["clase"] = st.selectbox(
+                            "Clase", ["A+","A","B","C"],
+                            index=(["A+","A","B","C"].index(_ocomp.get("clase","A"))
+                                   if _ocomp.get("clase","A") in ["A+","A","B","C"] else 1),
+                            key=f"ofi_comp_{_oi}_clase"
+                        )
+                        _ofi_comp_list[_oi]["fuente"] = st.text_input(
+                            "Fuente", value=_ocomp.get("fuente",""), key=f"ofi_comp_{_oi}_fuente"
+                        )
+                    if st.button("🗑 Eliminar", key=f"ofi_del_comp_{_oi}"):
+                        _ofi_comp_list.pop(_oi); st.rerun()
+            if len(_ofi_comp_list) < 3:
+                if st.button("＋ Agregar comparable", key="ofi_add_comp"):
+                    st.session_state.ofi_comparativa.append(
+                        {"edificio":"","area":0,"precio":0,"clase":"A","fuente":""}
+                    ); st.rerun()
+
+            # defaults para variables no usadas en este modo
+            ofi_precio_compra = 0.0; ofi_proposito = "Uso propio"; ofi_alq_esperado = 0.0
+            ofi_pago_inicial_pct = 20.0; ofi_tasa_anual = 9.0; ofi_plazo_anos = 10
+            ofi_precio_oferta = 0.0; ofi_estructura_pago = ""; ofi_dd_plazo = 30
+            ofi_area_terreno = 0.0; ofi_precio_terreno = 0.0; ofi_zonificacion = ""
+            ofi_pisos_max = 10; ofi_cus = 6.0; ofi_cos = 60.0; ofi_retiro = 3.0
+            ofi_ratio_estac = 50.0; ofi_pisos_oficinas = 8; ofi_eficiencia = 80.0
+            ofi_clase_objetivo = "A"; ofi_area_und = 200.0; ofi_estrategia = "Venta"
+            ofi_precio_venta = 2500.0; ofi_precio_alquiler = 18.0; ofi_pct_venta = 100.0
+            ofi_nivel_acabados = "Premium"; ofi_costo_construccion = 650.0
+            ofi_costo_sotano = 500.0; ofi_costos_ind_pct = 20.0; ofi_marketing_pct = 3.0
+            ofi_cr_terreno_dp = 40.0; ofi_cr_terreno_tasa = 8.0; ofi_cr_terreno_plazo = 10
+            ofi_cr_obra_dp = 30.0; ofi_cr_obra_tasa = 9.0; ofi_cr_obra_plazo = 8
+            ofi_preventa_pct = 30.0; ofi_cert_bytes = None
+
+        elif ofi_modo == "Compra":
+            # PRECIO
+            st.markdown("### PRECIO")
+            ofi_precio_compra = st.number_input(
+                "Precio de compra (USD)", min_value=0.0, value=450000.0, step=5000.0, key="ofi_precio_compra"
+            )
+            _ofi_usdm2_c = (ofi_precio_compra / ofi_area) if ofi_area > 0 else 0.0
+            _ofi_bench_c = {
+                "San Isidro": (2200, 3200), "Miraflores": (1800, 2800),
+                "San Borja": (1500, 2200), "Surco": (1200, 1800),
+            }.get(ofi_distrito, (1200, 2200))
+            _ofi_color_c = (
+                "#6BCEA0" if _ofi_bench_c[0] <= _ofi_usdm2_c <= _ofi_bench_c[1]
+                else ("#F4A261" if _ofi_usdm2_c > _ofi_bench_c[1] else "#E07A5F")
+            )
+            st.markdown(
+                f'<div style="background:rgba(255,255,255,0.05);border-radius:7px;padding:7px 11px;'
+                f'font-size:12px;color:{_ofi_color_c};font-weight:700;margin:-4px 0 6px 0;">'
+                f'USD {_ofi_usdm2_c:,.0f}/m² · Mercado {ofi_distrito}: '
+                f'${_ofi_bench_c[0]:,}–${_ofi_bench_c[1]:,}/m²</div>',
+                unsafe_allow_html=True,
+            )
+
+            # PROPÓSITO DE COMPRA
+            st.markdown("### PROPÓSITO DE COMPRA")
+            ofi_proposito = st.radio(
+                "ofi_proposito_radio",
+                ["Uso propio", "Para rentar"],
+                key="ofi_proposito",
+                label_visibility="collapsed",
+            )
+            if ofi_proposito == "Para rentar":
+                ofi_alq_esperado = st.number_input(
+                    "Alquiler esperado (USD/mes)", min_value=0.0, value=4500.0, step=100.0, key="ofi_alq_esperado"
+                )
+                _ofi_yield = (ofi_alq_esperado * 12 / ofi_precio_compra * 100) if ofi_precio_compra > 0 else 0.0
+                _ofi_yc = "#6BCEA0" if _ofi_yield >= 6.0 else ("#F4A261" if _ofi_yield >= 4.5 else "#E07A5F")
+                st.markdown(
+                    f'<div style="background:rgba(255,255,255,0.05);border-radius:7px;padding:7px 11px;'
+                    f'font-size:12px;color:{_ofi_yc};font-weight:700;margin:-4px 0 6px 0;">'
+                    f'Yield bruto: {_ofi_yield:.1f}% · Benchmark Lima oficinas: 5–8%</div>',
+                    unsafe_allow_html=True,
+                )
+            else:
+                ofi_alq_esperado = 0.0
+
+            # FINANCIAMIENTO
+            st.markdown("### FINANCIAMIENTO")
+            _ofi_fa, _ofi_fb = st.columns(2)
+            with _ofi_fa:
+                ofi_pago_inicial_pct = st.number_input(
+                    "Pago inicial (%)", min_value=10.0, max_value=100.0, value=30.0, step=5.0, key="ofi_pago_inicial_pct"
+                )
+                ofi_tasa_anual = st.number_input(
+                    "Tasa anual (%)", min_value=1.0, max_value=20.0, value=9.0, step=0.25, key="ofi_tasa_anual"
+                )
+            with _ofi_fb:
+                ofi_plazo_anos = st.number_input(
+                    "Plazo (años)", min_value=1, max_value=20, value=10, step=1, key="ofi_plazo_anos"
+                )
+
+            # ELABORACIÓN DE PROPUESTA
+            with st.expander("📋 ELABORACIÓN DE PROPUESTA"):
+                st.markdown(
+                    '<div style="font-size:10px;color:rgba(184,144,74,0.75);background:rgba(184,144,74,0.07);'
+                    'border-left:2px solid rgba(184,144,74,0.40);border-radius:4px;padding:7px 10px;margin-bottom:8px;">'
+                    'Realiza primero el análisis para contar con el sustento técnico y financiero que respalde la propuesta.'
+                    '</div>',
+                    unsafe_allow_html=True
+                )
+                ofi_precio_oferta = st.number_input(
+                    "Precio de oferta (USD)", min_value=0.0, value=round(ofi_precio_compra * 0.92, -3),
+                    step=5000.0, key="ofi_precio_oferta"
+                )
+                ofi_estructura_pago = st.text_area(
+                    "Estructura de pago propuesta", key="ofi_estructura_pago",
+                    placeholder="Ej. 30% a la firma, 70% a la escritura en 60 días...", height=70
+                )
+                ofi_dd_plazo = st.number_input(
+                    "Plazo due diligence (días)", min_value=15, max_value=90, value=30, step=5, key="ofi_dd_plazo"
+                )
+
+            # COMPARATIVA
+            st.markdown("### COMPARATIVA")
+            _ofi_comp_list = st.session_state.ofi_comparativa
+            for _oi, _ocomp in enumerate(_ofi_comp_list[:3]):
+                with st.expander(f"Comparable {_oi+1}: {_ocomp.get('edificio','—')}", expanded=False):
+                    _ofi_comp_list[_oi]["edificio"] = st.text_input(
+                        "Edificio", value=_ocomp.get("edificio",""), key=f"ofi_comp_{_oi}_edif"
+                    )
+                    _ofa, _ofb = st.columns(2)
+                    with _ofa:
+                        _ofi_comp_list[_oi]["area"] = st.number_input(
+                            "Área m²", value=float(_ocomp.get("area",0)),
+                            key=f"ofi_comp_{_oi}_area", min_value=0.0, step=10.0
+                        )
+                        _ofi_comp_list[_oi]["precio"] = st.number_input(
+                            "USD/m²", value=float(_ocomp.get("precio",0)),
+                            key=f"ofi_comp_{_oi}_precio", min_value=0.0, step=50.0
+                        )
+                    with _ofb:
+                        _ofi_comp_list[_oi]["clase"] = st.selectbox(
+                            "Clase", ["A+","A","B","C"],
+                            index=(["A+","A","B","C"].index(_ocomp.get("clase","A"))
+                                   if _ocomp.get("clase","A") in ["A+","A","B","C"] else 1),
+                            key=f"ofi_comp_{_oi}_clase"
+                        )
+                        _ofi_comp_list[_oi]["fuente"] = st.text_input(
+                            "Fuente", value=_ocomp.get("fuente",""), key=f"ofi_comp_{_oi}_fuente"
+                        )
+                    if st.button("🗑 Eliminar", key=f"ofi_del_comp_{_oi}"):
+                        _ofi_comp_list.pop(_oi); st.rerun()
+            if len(_ofi_comp_list) < 3:
+                if st.button("＋ Agregar comparable", key="ofi_add_comp"):
+                    st.session_state.ofi_comparativa.append(
+                        {"edificio":"","area":0,"precio":0,"clase":"A","fuente":""}
+                    ); st.rerun()
+
+            # defaults para variables no usadas en este modo
+            ofi_alq_base = 0.0; ofi_gastos_comunes = 0.0; ofi_cocheras_n = 0
+            ofi_cocheras_precio = 0.0; ofi_igv = False; ofi_duracion = 3
+            ofi_reajuste = 3.0; ofi_garantia = 3; ofi_gracia = 0
+            ofi_prop_renta = 0.0; ofi_prop_mejoras_ti = ""; ofi_prop_clausulas = ""
+            ofi_area_terreno = 0.0; ofi_precio_terreno = 0.0; ofi_zonificacion = ""
+            ofi_pisos_max = 10; ofi_cus = 6.0; ofi_cos = 60.0; ofi_retiro = 3.0
+            ofi_ratio_estac = 50.0; ofi_pisos_oficinas = 8; ofi_eficiencia = 80.0
+            ofi_clase_objetivo = "A"; ofi_area_und = 200.0; ofi_estrategia = "Venta"
+            ofi_precio_venta = 2500.0; ofi_precio_alquiler = 18.0; ofi_pct_venta = 100.0
+            ofi_nivel_acabados = "Premium"; ofi_costo_construccion = 650.0
+            ofi_costo_sotano = 500.0; ofi_costos_ind_pct = 20.0; ofi_marketing_pct = 3.0
+            ofi_cr_terreno_dp = 40.0; ofi_cr_terreno_tasa = 8.0; ofi_cr_terreno_plazo = 10
+            ofi_cr_obra_dp = 30.0; ofi_cr_obra_tasa = 9.0; ofi_cr_obra_plazo = 8
+            ofi_preventa_pct = 30.0; ofi_cert_bytes = None
+
+        else:  # Desarrollo de Proyecto
+            # PARÁMETROS DEL TERRENO
+            st.markdown("### PARÁMETROS DEL TERRENO")
+            _ofi_ta, _ofi_tb = st.columns(2)
+            with _ofi_ta:
+                ofi_area_terreno = st.number_input(
+                    "Área terreno (m²)", min_value=200.0, value=2000.0, step=50.0, key="ofi_area_terreno"
+                )
+            with _ofi_tb:
+                ofi_precio_terreno = st.number_input(
+                    "Precio terreno (USD/m²)", min_value=0.0, value=1200.0, step=50.0, key="ofi_precio_terreno"
+                )
+            _ofi_tc, _ofi_td = st.columns(2)
+            with _ofi_tc:
+                ofi_zonificacion = st.selectbox(
+                    "Zonificación", ["CZ", "CE", "CM", "RDA", "RDM", "Otra"], key="ofi_zonificacion"
+                )
+                ofi_cus = st.number_input(
+                    "CUS", min_value=1.0, max_value=20.0, value=8.0, step=0.5, key="ofi_cus"
+                )
+                ofi_retiro = st.number_input(
+                    "Retiro frontal (m)", min_value=0.0, max_value=10.0, value=3.0, step=0.5, key="ofi_retiro"
+                )
+            with _ofi_td:
+                ofi_pisos_max = st.number_input(
+                    "N° pisos máx.", min_value=2, max_value=40, value=12, step=1, key="ofi_pisos_max"
+                )
+                ofi_cos = st.number_input(
+                    "COS (%)", min_value=20.0, max_value=100.0, value=60.0, step=5.0, key="ofi_cos"
+                )
+                ofi_ratio_estac = st.number_input(
+                    "Ratio estac. (m²/cochera)", min_value=20.0, max_value=100.0, value=50.0, step=5.0, key="ofi_ratio_estac"
+                )
+            with st.expander("📎 Certificado de parámetros"):
+                _ofi_cert_file = st.file_uploader(
+                    "Subir certificado urbanístico (PDF/imagen)",
+                    type=["pdf","png","jpg","jpeg"], key="ofi_cert_file"
+                )
+                ofi_cert_bytes = _ofi_cert_file.read() if _ofi_cert_file else None
+
+            # CABIDA
+            st.markdown("### CABIDA")
+            _ofi_ea, _ofi_eb = st.columns(2)
+            with _ofi_ea:
+                ofi_pisos_oficinas = st.number_input(
+                    "N° pisos de oficinas", min_value=2, max_value=ofi_pisos_max,
+                    value=min(8, ofi_pisos_max), step=1, key="ofi_pisos_oficinas"
+                )
+            with _ofi_eb:
+                ofi_eficiencia = st.number_input(
+                    "Eficiencia (%)", min_value=50.0, max_value=95.0, value=80.0, step=1.0, key="ofi_eficiencia"
+                )
+            _ofi_area_bruta = ofi_area_terreno * (ofi_cos / 100.0) * ofi_pisos_oficinas
+            _ofi_area_vendible = _ofi_area_bruta * (ofi_eficiencia / 100.0)
+            _ofi_cocheras_tot = max(1, int(ofi_area_vendible / ofi_ratio_estac))
+            _ofi_sotanos = max(1, int(_ofi_cocheras_tot * 25 / max(1, ofi_area_terreno * 0.90)))
+            st.markdown(
+                f'<div style="background:rgba(255,255,255,0.05);border-radius:7px;padding:8px 12px;'
+                f'font-size:12px;color:#C8D8E8;margin:4px 0 6px 0;line-height:1.7;">'
+                f'Área bruta: <b>{_ofi_area_bruta:,.0f} m²</b> &nbsp;·&nbsp; '
+                f'Área vendible: <b>{_ofi_area_vendible:,.0f} m²</b><br>'
+                f'Cocheras: <b>{_ofi_cocheras_tot}</b> &nbsp;·&nbsp; '
+                f'Sótanos estimados: <b>{_ofi_sotanos}</b></div>',
+                unsafe_allow_html=True,
+            )
+
+            # TIPOLOGÍA Y ESTRATEGIA
+            st.markdown("### TIPOLOGÍA Y ESTRATEGIA")
+            _ofi_ka, _ofi_kb = st.columns(2)
+            with _ofi_ka:
+                ofi_clase_objetivo = st.selectbox(
+                    "Clase objetivo", ["A+", "A", "B"], key="ofi_clase_objetivo"
+                )
+            with _ofi_kb:
+                ofi_area_und = st.number_input(
+                    "Área por unidad (m²)", min_value=50.0, value=200.0, step=25.0, key="ofi_area_und"
+                )
+            ofi_estrategia = st.radio(
+                "ofi_estrategia_radio",
+                ["Venta", "Renta", "Mixta"],
+                key="ofi_estrategia",
+                label_visibility="collapsed",
+                horizontal=True,
+            )
+            _ofi_pa, _ofi_pb = st.columns(2)
+            with _ofi_pa:
+                if ofi_estrategia in ("Venta", "Mixta"):
+                    ofi_precio_venta = st.number_input(
+                        "Precio venta (USD/m²)", min_value=500.0, value=2500.0, step=50.0, key="ofi_precio_venta"
+                    )
+                else:
+                    ofi_precio_venta = 0.0
+            with _ofi_pb:
+                if ofi_estrategia in ("Renta", "Mixta"):
+                    ofi_precio_alquiler = st.number_input(
+                        "Precio alquiler (USD/m²/mes)", min_value=5.0, value=18.0, step=0.5, key="ofi_precio_alquiler"
+                    )
+                else:
+                    ofi_precio_alquiler = 0.0
+            if ofi_estrategia == "Mixta":
+                ofi_pct_venta = float(st.slider(
+                    "% a venta", min_value=10, max_value=90, value=60, step=5, key="ofi_pct_venta"
+                ))
+            else:
+                ofi_pct_venta = 100.0 if ofi_estrategia == "Venta" else 0.0
+
+            # COSTOS DE DESARROLLO
+            st.markdown("### COSTOS DE DESARROLLO")
+            ofi_nivel_acabados = st.selectbox(
+                "Nivel de acabados", ["Estándar", "Premium", "Lujo"], index=1, key="ofi_nivel_acabados"
+            )
+            _ofi_costo_default = {"Estándar": 500.0, "Premium": 650.0, "Lujo": 850.0}.get(ofi_nivel_acabados, 650.0)
+            _ofi_da, _ofi_db = st.columns(2)
+            with _ofi_da:
+                ofi_costo_construccion = st.number_input(
+                    "Construcción (USD/m²)", min_value=200.0, value=_ofi_costo_default, step=25.0, key="ofi_costo_construccion"
+                )
+                ofi_costos_ind_pct = st.number_input(
+                    "Costos indirectos (%)", min_value=5.0, max_value=40.0, value=20.0, step=1.0, key="ofi_costos_ind_pct"
+                )
+            with _ofi_db:
+                ofi_costo_sotano = st.number_input(
+                    "Cochera sótano (USD/und)", min_value=100.0, value=500.0, step=25.0, key="ofi_costo_sotano"
+                )
+                ofi_marketing_pct = st.number_input(
+                    "Marketing (%)", min_value=0.0, max_value=10.0, value=3.0, step=0.5, key="ofi_marketing_pct"
+                )
+
+            # FINANCIAMIENTO DEL PROMOTOR
+            st.markdown("### FINANCIAMIENTO DEL PROMOTOR")
+            st.markdown(
+                '<div style="font-size:11px;color:rgba(200,216,232,0.55);font-weight:600;'
+                'letter-spacing:0.5px;margin-bottom:4px;">CRÉDITO TERRENO</div>',
+                unsafe_allow_html=True,
+            )
+            _ofi_cta, _ofi_ctb, _ofi_ctc = st.columns(3)
+            with _ofi_cta:
+                ofi_cr_terreno_dp = st.number_input(
+                    "Pago inicial (%)", min_value=10.0, max_value=100.0, value=40.0, step=5.0, key="ofi_cr_terreno_dp"
+                )
+            with _ofi_ctb:
+                ofi_cr_terreno_tasa = st.number_input(
+                    "Tasa (%)", min_value=1.0, max_value=20.0, value=8.0, step=0.25, key="ofi_cr_terreno_tasa"
+                )
+            with _ofi_ctc:
+                ofi_cr_terreno_plazo = st.number_input(
+                    "Plazo (años)", min_value=1, max_value=15, value=10, step=1, key="ofi_cr_terreno_plazo"
+                )
+            st.markdown(
+                '<div style="font-size:11px;color:rgba(200,216,232,0.55);font-weight:600;'
+                'letter-spacing:0.5px;margin:6px 0 4px 0;">CRÉDITO OBRA</div>',
+                unsafe_allow_html=True,
+            )
+            _ofi_coa, _ofi_cob, _ofi_coc = st.columns(3)
+            with _ofi_coa:
+                ofi_cr_obra_dp = st.number_input(
+                    "Pago inicial (%)", min_value=10.0, max_value=100.0, value=30.0, step=5.0, key="ofi_cr_obra_dp"
+                )
+            with _ofi_cob:
+                ofi_cr_obra_tasa = st.number_input(
+                    "Tasa (%)", min_value=1.0, max_value=20.0, value=9.0, step=0.25, key="ofi_cr_obra_tasa"
+                )
+            with _ofi_coc:
+                ofi_cr_obra_plazo = st.number_input(
+                    "Plazo (años)", min_value=1, max_value=15, value=8, step=1, key="ofi_cr_obra_plazo"
+                )
+            ofi_preventa_pct = float(st.slider(
+                "Preventa requerida (%)", min_value=10, max_value=70, value=30, step=5, key="ofi_preventa_pct"
+            ))
+
+            # defaults para variables no usadas en este modo
+            ofi_alq_base = 0.0; ofi_gastos_comunes = 0.0; ofi_cocheras_n = 0
+            ofi_cocheras_precio = 0.0; ofi_igv = False; ofi_duracion = 3
+            ofi_reajuste = 3.0; ofi_garantia = 3; ofi_gracia = 0
+            ofi_prop_renta = 0.0; ofi_prop_mejoras_ti = ""; ofi_prop_clausulas = ""
+            ofi_precio_compra = 0.0; ofi_proposito = "Uso propio"; ofi_alq_esperado = 0.0
+            ofi_pago_inicial_pct = 30.0; ofi_tasa_anual = 9.0; ofi_plazo_anos = 10
+            ofi_precio_oferta = 0.0; ofi_estructura_pago = ""; ofi_dd_plazo = 30
+            ofi_clase = "A"; ofi_doc_bytes = None
+
+        # ── INSTRUCCIONES AL ANÁLISIS ─────────────────────
+        st.markdown("### INSTRUCCIONES AL ANÁLISIS")
+        ofi_instrucciones = st.text_area(
+            "Notas para el análisis (opcional)",
+            key="ofi_instrucciones",
+            placeholder=(
+                "Ej. Priorizar análisis de yield, verificar normativa A.080, "
+                "comparar con Clase B del mismo distrito..."
+            ),
+            height=90,
+        )
+
+        run_oficinas = st.button(
+            "⚡ GENERAR ANÁLISIS DE OFICINAS",
+            key="btn_run_oficinas",
+            use_container_width=True,
+            type="primary",
+        )
+
 # ── SESSION STATE ────────────────────────────────────
 
 for k in ("params", "cabida", "financ", "zona", "legal",
@@ -9725,6 +13112,8 @@ if "ind_comparativa" not in st.session_state:
     st.session_state.ind_comparativa = []
 if "res_comparativa" not in st.session_state:
     st.session_state.res_comparativa = []
+if "ofi_comparativa" not in st.session_state:
+    st.session_state.ofi_comparativa = []
 if "comps_sunarp" not in st.session_state:
     st.session_state.comps_sunarp = []
 
@@ -9733,36 +13122,64 @@ tipo_op = st.session_state.get("tipo_operacion", "Proyecto Inmobiliario")
 # ── EJECUCIÓN ────────────────────────────────────────
 
 if tipo_op == "Proyecto Logístico / Industrial" and run_industrial:
-    _ind_inp = {
-        "area_terreno":        ind_area,
-        "costo_terreno":       ind_costo_terreno,
-        "tipo_nave":           ind_tipo,
-        "zonificacion":        ind_zona_ind,
-        "pct_techada":         ind_pct_techada,
-        "costo_nave_m2":       ind_costo_nave,
-        "costo_piso_libre_m2": ind_costo_piso,
-        "pct_indirectos":      ind_pct_indirectos,
-        "include_alcabala":    ind_alcabala,
-        "renta_m2_mes":        ind_renta,
-        "uso":                 ind_uso,
-        "tipo_contrato":       ind_tipo_contrato,
-        "ajuste_anual_pct":    ind_ajuste_pct,
-        "inicio_ajuste_ano":   ind_inicio_ajuste,
-        "actividad_categoria": st.session_state.get("ind_act_categoria", ""),
-        "actividad_descripcion": st.session_state.get("ind_actividad_desc", ""),
-        # Dual credit
-        "dp_terreno_pct":   st.session_state.get("ind_dp_terreno", 40.0),
-        "tasa_terreno":     st.session_state.get("ind_tasa_terreno", 8.0),
-        "plazo_terreno":    int(st.session_state.get("ind_plazo_terreno", 10)),
-        "dp_const_pct":     st.session_state.get("ind_dp_const", 30.0),
-        "tasa_const":       st.session_state.get("ind_tasa_const", 9.0),
-        "plazo_const":      int(st.session_state.get("ind_plazo_const", 8)),
-    }
-    st.session_state.industrial_result = calcular_industrial(_ind_inp)
-    st.session_state.ind_analizado = True
-    # Si hay documentos cargados, dispara el análisis de factibilidad en el mismo flujo
-    if _ind_has_docs:
-        run_ind_docs = True
+    if not ind_area or ind_area <= 0:
+        st.markdown(
+            '<div style="background:rgba(26,122,74,0.13);border:1px solid rgba(26,122,74,0.35);'
+            'border-radius:8px;padding:10px 14px;margin:6px 0;display:flex;align-items:center;gap:10px;">'
+            '<span style="font-size:16px;">📐</span>'
+            '<span style="font-size:13px;font-weight:600;color:#1A7A4A;">'
+            'Ingresa el área del terreno para generar el análisis.'
+            '</span></div>',
+            unsafe_allow_html=True
+        )
+    else:
+        _ind_inp = {
+            "area_terreno":        ind_area,
+            "costo_terreno":       ind_costo_terreno,
+            "tipo_nave":           ind_tipo,
+            "zonificacion":        ind_zona_ind,
+            "pct_techada":         ind_pct_techada,
+            "costo_nave_m2":       ind_costo_nave,
+            "costo_piso_libre_m2": ind_costo_piso,
+            "pct_indirectos":      ind_pct_indirectos,
+            "include_alcabala":    ind_alcabala,
+            "renta_m2_mes":        ind_renta,
+            "uso":                 ind_uso,
+            "tipo_contrato":       ind_tipo_contrato,
+            "ajuste_anual_pct":    ind_ajuste_pct,
+            "inicio_ajuste_ano":   ind_inicio_ajuste,
+            "actividad_categoria": st.session_state.get("ind_act_categoria", ""),
+            "actividad_descripcion": st.session_state.get("ind_actividad_desc", ""),
+            "altura_nave":          float(st.session_state.get("ind_altura_nave", 10.0)),
+            "dp_terreno_pct":   ind_dp_terreno,
+            "tasa_terreno":     ind_tasa_terreno,
+            "plazo_terreno":    int(ind_plazo_terreno),
+            "dp_const_pct":     ind_dp_const,
+            "tasa_const":       ind_tasa_const,
+            "plazo_const":      int(ind_plazo_const),
+            "perfil":           st.session_state.get("ind_perfil", "Desarrollo Integral"),
+        }
+        try:
+            st.session_state.industrial_result = calcular_industrial(_ind_inp)
+            st.session_state.ind_analizado = True
+            # Si hay documentos cargados, analizar automáticamente (usar bytes cacheados)
+            _ip  = st.session_state.get("partida_bytes")
+            _ic  = st.session_state.get("ind_params_bytes")
+            _iz  = st.session_state.get("ind_zon_bytes")
+            _ipl = st.session_state.get("ind_planos_bytes")
+            if _ip or _ic or _iz:
+                _it   = st.session_state.get("ind_tipo", "Almacén Logístico")
+                _iz2  = st.session_state.get("ind_zona_ind", "I2")
+                _iu   = st.session_state.get("ind_uso", "Uso directo")
+                _isug = st.session_state.get("ind_sugerencias_inp", "")
+                st.session_state.industrial_factibilidad = _run_with_retry(
+                    lambda _ip=_ip, _ic=_ic, _iz=_iz, _it=_it, _iz2=_iz2, _iu=_iu, _ipl=_ipl, _isug=_isug:
+                        analizar_factibilidad_industrial(_ip, _ic, _iz, _it, _iz2, _iu, _ipl, _isug),
+                    "Analizando factibilidad técnica y documentos registrales…",
+                )
+            st.rerun()
+        except Exception as _e:
+            st.error(f"Error al calcular: {_e}")
 
 if tipo_op == "Proyecto Logístico / Industrial" and run_ind_docs:
     _ip  = ind_doc_partida.read() if ind_doc_partida else None
@@ -9785,7 +13202,9 @@ if tipo_op == "Inmueble Residencial" and run_res_docs:
     _rp = res_doc_partida.read() if res_doc_partida else None
     _ru = res_doc_puhr.read()    if res_doc_puhr    else None
     _rc = res_doc_params.read() if res_doc_params else None
-    _rl = res_doc_planos.read() if res_doc_planos  else None
+    _rl = (res_doc_planos.read()
+           if res_doc_planos and not res_doc_planos.name.lower().endswith((".dwg", ".dxf"))
+           else None)
     _rsug = st.session_state.get("res_sugerencias_inp", "")
     st.session_state.residencial_legal = _run_with_retry(
         lambda _p=_rp, _u=_ru, _c=_rc, _l=_rl, _rsug=_rsug: analizar_legal(_p, _u, _c, _l, _rsug),
@@ -9823,6 +13242,17 @@ elif tipo_op == "Inmueble Residencial" and run_residencial:
     st.session_state["_res_zona_val"]      = res_zona
     st.session_state["_res_m2_val"]        = res_m2
     st.session_state["_res_antiguedad_val"] = res_antiguedad
+    # Auto-trigger legal si hay documentos disponibles
+    if any([res_doc_partida, res_doc_puhr, res_doc_params, res_doc_planos]):
+        _rp = res_doc_partida.read() if res_doc_partida else None
+        _ru = res_doc_puhr.read()    if res_doc_puhr    else None
+        _rc = res_doc_params.read()  if res_doc_params  else None
+        _rl = res_doc_planos.read()  if res_doc_planos  else None
+        _rsug = st.session_state.get("res_sugerencias_inp", "")
+        st.session_state.residencial_legal = _run_with_retry(
+            lambda _p=_rp, _u=_ru, _c=_rc, _l=_rl, _sg=_rsug: analizar_legal(_p, _u, _c, _l, _sg),
+            "Analizando documentos legales…",
+        )
 
 elif run:
     if not pdf_cert:
@@ -9833,25 +13263,25 @@ elif run:
     # con las medidas reales del lote en esta misma sesión
     st.session_state["geo_at_max"] = 0
 
-    # Recopilar todos los documentos adicionales
+    # Recopilar documentos normativos adicionales para extract_parameters
+    # NOTA: la partida registral NO se incluye aquí — es documento legal, no normativo.
+    # La partida se procesa exclusivamente en analizar_legal vía st.session_state.partida_bytes.
     extra_docs = []
     if pdf_plano:
         for f in (pdf_plano if isinstance(pdf_plano, list) else [pdf_plano]):
             extra_docs.append(f.read())
-    if pdf_partida:
-        _partida_bytes = pdf_partida.read()
-        extra_docs.append(_partida_bytes)
-        st.session_state.partida_bytes = _partida_bytes
     if pdf_puhr:
-        _puhr_bytes = pdf_puhr.read()
-        extra_docs.append(_puhr_bytes)
-        st.session_state.puhr_bytes = _puhr_bytes
+        _puhr_bytes = st.session_state.get("puhr_bytes") or b""
+        if _puhr_bytes:
+            extra_docs.append(_puhr_bytes)
     if pdf_norms:
         for f in pdf_norms:
             extra_docs.append(f.read())
 
-    _cert_bytes = pdf_cert.read()
-    st.session_state.cert_bytes = _cert_bytes
+    _cert_bytes = st.session_state.get("cert_bytes") or b""
+    if not _cert_bytes:
+        _cert_bytes = pdf_cert.read()
+        st.session_state.cert_bytes = _cert_bytes
     st.session_state.params = _run_with_retry(
         lambda _cb=_cert_bytes, _ed=list(extra_docs): extract_parameters(_cb, _ed),
         "Extrayendo información del documento…",
@@ -9926,8 +13356,57 @@ elif run:
         "meses_preventa_override": meses_preventa_override,
         "meses_obra_override": meses_obra_override,
         "pct_mktg_preventa":  pct_mktg_preventa,
+        "modo_mivivienda":    _modo_miv,
     }
     st.session_state.zona = zona
+    # Auto-trigger legal si hay partida o PU/HR disponibles
+    _al_p = st.session_state.get("partida_bytes")
+    _al_u = st.session_state.get("puhr_bytes")
+    _al_c = st.session_state.get("cert_bytes")
+    if _al_p or _al_u:
+        st.session_state.legal = _run_with_retry(
+            lambda _p=_al_p, _u=_al_u, _c=_al_c: analizar_legal(_p, _u, _c),
+            "Analizando documentos registrales…",
+        )
+
+# ── AUTO-TRIGGERS LEGALES (corren en cualquier rerender si faltan resultados) ──
+
+if tipo_op == "Proyecto Inmobiliario" and st.session_state.get("cabida") and not st.session_state.get("legal"):
+    _tap = st.session_state.get("partida_bytes")
+    _tau = st.session_state.get("puhr_bytes")
+    _tac = st.session_state.get("cert_bytes")
+    if _tap or _tau:
+        st.session_state.legal = _run_with_retry(
+            lambda _p=_tap, _u=_tau, _c=_tac: analizar_legal(_p, _u, _c),
+            "Analizando documentos registrales…",
+        )
+
+if tipo_op == "Proyecto Logístico / Industrial" and st.session_state.get("industrial_result") and not st.session_state.get("industrial_factibilidad"):
+    _tip = st.session_state.get("partida_bytes")
+    _tic = st.session_state.get("ind_params_bytes")
+    _tiz = st.session_state.get("ind_zon_bytes")
+    _tit  = st.session_state.get("ind_tipo", "Almacén Logístico")
+    _tiz2 = st.session_state.get("ind_zona_ind", "I2")
+    _tiu  = st.session_state.get("ind_uso", "Uso directo")
+    _tipl = st.session_state.get("ind_planos_bytes")
+    _tisg = st.session_state.get("ind_sugerencias_inp", "")
+    if _tip or _tic or _tiz:
+        st.session_state.industrial_factibilidad = _run_with_retry(
+            lambda _p=_tip, _c=_tic, _z=_tiz, _t=_tit, _z2=_tiz2, _u=_tiu, _pl=_tipl, _sg=_tisg:
+                analizar_factibilidad_industrial(_p, _c, _z, _t, _z2, _u, _pl, _sg),
+            "Analizando factibilidad técnica y documentos registrales…",
+        )
+
+if tipo_op == "Inmueble Residencial" and st.session_state.get("residencial_result") and not st.session_state.get("residencial_legal"):
+    _trp = st.session_state.get("partida_bytes")
+    _tru = st.session_state.get("puhr_bytes")
+    _trc = st.session_state.get("cert_bytes")
+    _trsg = st.session_state.get("res_sugerencias_inp", "")
+    if _trp or _tru:
+        st.session_state.residencial_legal = _run_with_retry(
+            lambda _p=_trp, _u=_tru, _c=_trc, _sg=_trsg: analizar_legal(_p, _u, _c, None, _sg),
+            "Analizando documentos legales…",
+        )
 
 # ── TABS ─────────────────────────────────────────────
 
@@ -9936,6 +13415,44 @@ if tipo_op == "Proyecto Inmobiliario":
         p        = st.session_state.params
         c        = st.session_state.cabida
         zona_sel = st.session_state.zona or zona
+
+        # Aplicar fix de diversidad de tipologías al cabida en sesión (retroactivo)
+        if c:
+            _fix_tipos_std = ["1 Dorm.", "2 Dorm.", "3 Dorm."]
+            _fix_unds = c.get("unidades") or []
+            _fix_tot  = int(c.get("total_unidades") or 0)
+            if _fix_unds and _fix_tot >= len(_fix_tipos_std):
+                _fix_by_tipo = {u.get("tipo", ""): u for u in _fix_unds}
+                _fix_changed = False
+                for _ft in _fix_tipos_std:
+                    _fu = _fix_by_tipo.get(_ft)
+                    if _fu is None or _fu.get("cantidad", 0) == 0:
+                        _fa_ref = max(
+                            (u.get("area_m2", 0) for u in _fix_unds
+                             if u.get("tipo") in _fix_tipos_std and u.get("area_m2", 0) > 0),
+                            default=75
+                        )
+                        if _fu is None:
+                            _fu = {"tipo": _ft, "cantidad": 0, "area_m2": _fa_ref, "area_total_m2": 0}
+                            _fix_unds.append(_fu)
+                            _fix_by_tipo[_ft] = _fu
+                        _fa = _fu.get("area_m2") or _fa_ref
+                        _fu["cantidad"] = 1; _fu["area_m2"] = _fa; _fu["area_total_m2"] = _fa
+                        _fix_changed = True
+                if _fix_changed:
+                    _fix_cands = [u for u in _fix_unds
+                                  if u.get("tipo") in _fix_tipos_std and u.get("cantidad", 0) > 1]
+                    if _fix_cands:
+                        _fix_max = max(_fix_cands, key=lambda u: u.get("cantidad", 0))
+                        _fix_max["cantidad"] -= 1
+                        _fix_max["area_total_m2"] = _fix_max["cantidad"] * _fix_max.get("area_m2", 0)
+                    c["unidades"] = _fix_unds
+                    c["total_unidades"] = sum(u.get("cantidad", 0) for u in _fix_unds)
+                    _fix_sum = sum(float(u.get("area_total_m2") or 0) for u in _fix_unds)
+                    if _fix_sum > 0:
+                        c["area_vendible_m2"] = round(_fix_sum, 1)
+                        c["area_techada_total_m2"] = round(_fix_sum + float(c.get("area_comunes_m2") or 0), 1)
+                    st.session_state.cabida = c
 
         # Persistir tab activa en localStorage para sobrevivir reruns de Streamlit
         st.components.v1.html("""<script>
@@ -10046,7 +13563,7 @@ if tipo_op == "Proyecto Inmobiliario":
                         padding:24px 28px;">
                 <div style="font-size:9px;color:rgba(255,255,255,0.60);letter-spacing:3px;
                             text-transform:uppercase;margin-bottom:6px;">
-                    Análisis de Proyecto Inmobiliario · FACTIS
+                    Análisis de Proyecto Inmobiliario · SOLUM
                 </div>
                 <div style="font-size:28px;font-weight:800;color:#FFFFFF;line-height:1.15;
                             text-shadow:0 2px 8px rgba(0,0,0,0.5);">
@@ -10075,6 +13592,27 @@ if tipo_op == "Proyecto Inmobiliario":
         </div>""", unsafe_allow_html=True)
 
         tabs = st.tabs(["Parámetros", "Cabida", "Financiero", "Flujo de Caja", "Legal", "Resumen", "Propuesta", "Renta / Holding"], key="proj_tabs")
+        st.components.v1.html("""<script>
+        (function(){
+            var KEY='solum_proj_tab';
+            function init(){
+                var tabs=Array.from(window.parent.document.querySelectorAll('[role="tab"]'));
+                if(!tabs.length){setTimeout(init,150);return;}
+                var name=window.parent.sessionStorage.getItem(KEY);
+                if(name){
+                    var t=tabs.find(function(x){return x.textContent.trim()===name;});
+                    if(t&&t.getAttribute('aria-selected')!=='true') t.click();
+                }
+                tabs.forEach(function(tab){
+                    if(tab._sp)return;tab._sp=1;
+                    tab.addEventListener('click',function(){
+                        window.parent.sessionStorage.setItem(KEY,this.textContent.trim());
+                    });
+                });
+            }
+            setTimeout(init,350);
+        })();
+        </script>""", height=0)
 
         # ── TAB 1: PARÁMETROS ────────────────────────────
         with tabs[0]:
@@ -10182,8 +13720,10 @@ if tipo_op == "Proyecto Inmobiliario":
                         st.markdown('<div class="alert-info">ℹ️ ' + "Librería shapely no disponible. Ejecuta: pip install shapely" + '</div>', unsafe_allow_html=True)
 
             else:
-                _geo_file = st.file_uploader("Cargar plano perimétrico (.dxf)", type=["dxf"], key="geo_dxf_file")
-                if _geo_file:
+                _geo_file = st.file_uploader("Cargar plano perimétrico (.dxf / .dwg)", type=["dxf", "dwg"], key="geo_dxf_file")
+                if _geo_file and _geo_file.name.lower().endswith(".dwg"):
+                    st.markdown('<div style="font-size:12px;color:#2E6B55;background:#EBF4F0;border-left:3px solid #2E6B55;border-radius:4px;padding:8px 12px;margin-top:4px;">DWG es formato propietario — exporta como DXF desde AutoCAD (Archivo → Guardar como → AutoCAD DXF) y vuelve a cargar.</div>', unsafe_allow_html=True)
+                if _geo_file and _geo_file.name.lower().endswith(".dxf"):
                     if _SHAPELY_OK and _EZDXF_OK:
                         import io
                         _poly_lote = _geo_poligono_dxf(io.TextIOWrapper(io.BytesIO(_geo_file.read()), encoding="utf-8", errors="ignore"))
@@ -10345,7 +13885,9 @@ if tipo_op == "Proyecto Inmobiliario":
 
                 st.markdown('<div class="section-title">Mix de Tipologías</div>', unsafe_allow_html=True)
                 unidades = c.get("unidades", [])
+                _col_mix, _col_nota = st.columns([3, 2])
                 if unidades:
+                  with _col_mix:
                     # ── Tabla HTML tipologías + cocheras + depósitos ──────
                     _estac_r = c.get("estac_residentes", 0)
                     _estac_v = c.get("estac_visitas", 0)
@@ -10412,23 +13954,151 @@ if tipo_op == "Proyecto Inmobiliario":
                     </table>
                     """, unsafe_allow_html=True)
 
-                    st.markdown('<div style="height:16px;"></div>', unsafe_allow_html=True)
+                  # ── Columna derecha: nota optimización + gráfico ───────
+                  with _col_nota:
+                    _av_nota = float(c.get("area_vendible_m2") or 0)
+                    _u_dict  = {
+                        (u.get("tipo","") if isinstance(u,dict) else u[0]): u
+                        for u in unidades
+                    }
+                    _a1d = float((_u_dict.get("1 Dorm.") or {}).get("area_m2", 0) or 70)
+                    _a2d = float((_u_dict.get("2 Dorm.") or {}).get("area_m2", 0) or 90)
+                    _a3d = float((_u_dict.get("3 Dorm.") or {}).get("area_m2", 0) or 110)
+                    _n_actual_nota = _tot_u if unidades else c.get("total_unidades", 0)
+                    _mix_actual = " · ".join(
+                        f'{(u.get("cantidad",0) if isinstance(u,dict) else u[1])}×{(u.get("tipo","") if isinstance(u,dict) else u[0])}'
+                        for u in unidades
+                        if (u.get("cantidad",0) if isinstance(u,dict) else u[1]) > 0
+                        and (u.get("tipo","") if isinstance(u,dict) else u[0]) in ["1 Dorm.","2 Dorm.","3 Dorm."]
+                    )
 
-                    df_u = pd.DataFrame([{
+                    # ── Restricciones normativas de mix por distrito ──────
+                    _dl_opt = (st.session_state.params.get("distrito") or zona_sel or "").lower()
+                    if "san isidro" in _dl_opt:
+                        _max1, _max2, _min3 = 0.20, 0.50, 0.50
+                        _cnstr_txt = "Ord. 523-MSI: 1D máx 20% · 3D mín 50%"
+                    elif "barranco" in _dl_opt:
+                        _max1, _max2, _min3 = 0.15, 0.35, 0.50
+                        _cnstr_txt = "Ord. 516-2019-MDB: 3D 50% · 2D 35% · 1D 15%"
+                    elif "miraflores" in _dl_opt:
+                        _amb_opt = (st.session_state.params.get("ambito_urbano") or "").upper()
+                        _max1 = 0.35 if _amb_opt in ("A","B") else 0.50
+                        _max2, _min3 = 1.0, 0.0
+                        _cnstr_txt = f"Miraflores {'CM' if _max1==0.35 else 'RDMA'}: 1D máx {int(_max1*100)}%"
+                    elif "san borja" in _dl_opt:
+                        _max1, _max2, _min3 = 0.30, 1.0, 0.0
+                        _cnstr_txt = "San Borja: sin restricción de mix normativo"
+                    else:
+                        _max1, _max2, _min3 = 1.0, 1.0, 0.0
+                        _cnstr_txt = "Sin restricción normativa de porcentajes"
+
+                    # ── Optimizador de mix respetando restricciones ───────
+                    import math as _math
+                    def _opt_mix(av, a1, a2, a3, mx1, mx2, mn3):
+                        """Maximiza unidades respetando límites normativos de mix."""
+                        best_n1, best_n2, best_n3 = 1, 1, 1
+                        best_total = 3
+                        _n_max = int(av / min(a1, a2, a3)) + 1 if min(a1,a2,a3) > 0 else 50
+                        for N in range(3, _n_max + 1):
+                            # máximo 1D y 2D según restricciones, mínimo 3D
+                            n3 = max(1, _math.ceil(mn3 * N))
+                            n1 = max(1, min(int(mx1 * N), N - n3 - 1))
+                            n2 = N - n1 - n3
+                            if n2 < 1:
+                                n2 = 1
+                                n1 = max(1, N - n2 - n3)
+                            if n1 + n2 + n3 != N:
+                                continue
+                            total = N
+                            if n1/total > mx1 + 0.01: continue
+                            if n2/total > mx2 + 0.01: continue
+                            if n3/total < mn3 - 0.01: continue
+                            if n1*a1 + n2*a2 + n3*a3 > av: break
+                            best_n1, best_n2, best_n3, best_total = n1, n2, n3, total
+                        return best_n1, best_n2, best_n3, best_total
+
+                    _on1, _on2, _on3, _ot = _opt_mix(_av_nota, _a1d, _a2d, _a3d, _max1, _max2, _min3)
+                    _op1 = round(_on1/_ot*100) if _ot > 0 else 0
+                    _op2 = round(_on2/_ot*100) if _ot > 0 else 0
+                    _op3 = round(_on3/_ot*100) if _ot > 0 else 0
+                    _oa1 = round(_on1 * _a1d, 0)
+                    _oa2 = round(_on2 * _a2d, 0)
+                    _oa3 = round(_on3 * _a3d, 0)
+
+                    # ── Tabla optimizada (misma estructura que tabla principal) ─
+                    _opt_rows = (
+                        f'<tr><td style="padding:3px 6px;font-size:10px;">1 Dorm.</td>'
+                        f'<td style="padding:3px 6px;font-size:11px;font-weight:700;color:#B8904A;text-align:center;">{_on1}</td>'
+                        f'<td style="padding:3px 6px;font-size:10px;text-align:center;">{_op1}%</td>'
+                        f'<td style="padding:3px 6px;font-size:10px;text-align:right;">{_a1d:.0f} m²</td>'
+                        f'<td style="padding:3px 6px;font-size:10px;text-align:right;">{_oa1:,.0f} m²</td></tr>'
+                        f'<tr><td style="padding:3px 6px;font-size:10px;">2 Dorm.</td>'
+                        f'<td style="padding:3px 6px;font-size:11px;font-weight:700;color:#B8904A;text-align:center;">{_on2}</td>'
+                        f'<td style="padding:3px 6px;font-size:10px;text-align:center;">{_op2}%</td>'
+                        f'<td style="padding:3px 6px;font-size:10px;text-align:right;">{_a2d:.0f} m²</td>'
+                        f'<td style="padding:3px 6px;font-size:10px;text-align:right;">{_oa2:,.0f} m²</td></tr>'
+                        f'<tr><td style="padding:3px 6px;font-size:10px;">3 Dorm.</td>'
+                        f'<td style="padding:3px 6px;font-size:11px;font-weight:700;color:#B8904A;text-align:center;">{_on3}</td>'
+                        f'<td style="padding:3px 6px;font-size:10px;text-align:center;">{_op3}%</td>'
+                        f'<td style="padding:3px 6px;font-size:10px;text-align:right;">{_a3d:.0f} m²</td>'
+                        f'<td style="padding:3px 6px;font-size:10px;text-align:right;">{_oa3:,.0f} m²</td></tr>'
+                        f'<tr style="border-top:1px solid #D8D4CC;">'
+                        f'<td style="padding:3px 6px;font-size:10px;font-weight:700;">Total</td>'
+                        f'<td style="padding:3px 6px;font-size:11px;font-weight:700;color:#1E2D3D;text-align:center;">{_ot}</td>'
+                        f'<td colspan="2"></td>'
+                        f'<td style="padding:3px 6px;font-size:10px;text-align:right;font-weight:600;">{_oa1+_oa2+_oa3:,.0f} m²</td></tr>'
+                    )
+                    _delta_u = _ot - _n_actual_nota
+                    _delta_txt = (f'+{_delta_u} unid. vs. mix diversificado' if _delta_u > 0
+                                  else 'igual al mix diversificado' if _delta_u == 0
+                                  else f'{_delta_u} unid. vs. mix diversificado')
+
+                    st.markdown(
+                        f'<div style="font-size:10px;color:#5A6A7A;padding:10px 12px;margin:0 0 10px;'
+                        f'background:#F5F2ED;border-left:3px solid #B8904A;border-radius:0 6px 6px 0;">'
+                        f'<div style="font-size:9px;color:#B8904A;font-weight:700;letter-spacing:1.5px;'
+                        f'text-transform:uppercase;margin-bottom:6px;">Análisis de Mix</div>'
+                        f'<div style="margin-bottom:6px;">'
+                        f'<span style="color:#1E2D3D;font-weight:700;">Mix con diversidad</span><br>'
+                        f'<span style="color:#5A6A7A;">{_mix_actual} = <b>{_n_actual_nota} unidades</b></span></div>'
+                        f'<div style="border-top:1px solid #D8D4CC;padding-top:6px;margin-bottom:6px;">'
+                        f'<span style="color:#1E2D3D;font-weight:700;">Si priorizas volumen</span> '
+                        f'<span style="font-size:9px;color:#8A9AAA;">({_delta_txt})</span></div>'
+                        f'<table style="width:100%;border-collapse:collapse;">'
+                        f'<tr style="border-bottom:1px solid #D8D4CC;">'
+                        f'<th style="padding:2px 6px;font-size:9px;color:#8A9AAA;font-weight:600;text-align:left;">TIPOLOGÍA</th>'
+                        f'<th style="padding:2px 6px;font-size:9px;color:#8A9AAA;font-weight:600;text-align:center;">UNID.</th>'
+                        f'<th style="padding:2px 6px;font-size:9px;color:#8A9AAA;font-weight:600;text-align:center;">MIX</th>'
+                        f'<th style="padding:2px 6px;font-size:9px;color:#8A9AAA;font-weight:600;text-align:right;">M²/UNID.</th>'
+                        f'<th style="padding:2px 6px;font-size:9px;color:#8A9AAA;font-weight:600;text-align:right;">TOTAL</th>'
+                        f'</tr>{_opt_rows}</table>'
+                        f'<div style="font-size:9px;color:#8A9AAA;margin-top:6px;font-style:italic;">'
+                        f'{_cnstr_txt}. La diversidad amplía el mercado y mejora absorción.</div>'
+                        f'</div>',
+                        unsafe_allow_html=True
+                    )
+
+                # ── Pie chart del mix actual — fila propia centrada ───
+                if unidades:
+                    _pie_df = pd.DataFrame([{
                         "Tipología": u.get("tipologia", u.get("tipo", "—")) if isinstance(u, dict) else (u[0] if isinstance(u, (list,tuple)) else "—"),
                         "Cantidad":  u.get("cantidad", 0) if isinstance(u, dict) else (u[1] if isinstance(u, (list,tuple)) else 0),
-                    } for u in unidades])
-                    fig = px.pie(df_u, values="Cantidad", names="Tipología",
-                                 color_discrete_sequence=["#1E2D3D", "#B8904A", "#8A9BAD", "#6B7F8E"], hole=0.5)
-                    fig.update_traces(textfont_size=12, textfont_family="Inter, sans-serif",
-                                      marker=dict(line=dict(color="#EDEAE4", width=3)))
-                    fig.update_layout(
-                        height=280, margin=dict(t=10, b=10, l=10, r=10),
-                        paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
-                        font=dict(family="Inter, sans-serif", color="#1E2D3D"),
-                        legend=dict(font=dict(size=12), bgcolor="rgba(0,0,0,0)"),
-                    )
-                    st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
+                    } for u in unidades
+                      if (u.get("cantidad", 0) if isinstance(u, dict) else (u[1] if isinstance(u, (list,tuple)) else 0)) > 0])
+                    _, _pie_col, _ = st.columns([1, 2, 1])
+                    with _pie_col:
+                        _pie_fig = px.pie(_pie_df, values="Cantidad", names="Tipología",
+                                         color_discrete_sequence=["#1E2D3D", "#B8904A", "#8A9BAD", "#6B7F8E"], hole=0.5)
+                        _pie_fig.update_traces(textfont_size=12, textfont_family="Inter, sans-serif",
+                                               marker=dict(line=dict(color="#EDEAE4", width=3)))
+                        _pie_fig.update_layout(
+                            height=220, margin=dict(t=10, b=10, l=0, r=0),
+                            paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
+                            font=dict(family="Inter, sans-serif", color="#1E2D3D"),
+                            legend=dict(font=dict(size=11), bgcolor="rgba(0,0,0,0)", orientation="h",
+                                        yanchor="bottom", y=-0.25, xanchor="center", x=0.5),
+                        )
+                        st.plotly_chart(_pie_fig, use_container_width=True, config={"displayModeBar": False})
 
                 col1, col2, col3 = st.columns(3)
                 col1.metric("Estac. residentes", c.get("estac_residentes", 0))
@@ -10525,23 +14195,54 @@ if tipo_op == "Proyecto Inmobiliario":
                     </p>
                     """, unsafe_allow_html=True)
 
-                _ord_alt = c.get("ordenanzas_mayor_altura", [])
-                _obs_all = c.get("observaciones", [])
-                _obs_benefit = [o for o in _obs_all if "BENEFICIO POTENCIAL" in o]
-                _obs_regular = [o for o in _obs_all if "BENEFICIO POTENCIAL" not in o]
+                _ord_alt      = c.get("ordenanzas_mayor_altura", [])
+                _alertas_norm = c.get("alertas_normativas", [])
+                _beneficios   = c.get("beneficios_potenciales", [])
+                _obs_tecnicas = [o for o in (c.get("observaciones") or []) if o]
 
+                # ── Ordenanzas para mayor altura
                 if _ord_alt:
                     with st.expander(f"⚖️ Ordenanzas para Mayor Altura ({len(_ord_alt)})"):
                         for o in _ord_alt:
                             st.markdown(f'<div class="alert-gold">⚖️ {o}</div>', unsafe_allow_html=True)
 
-                if _obs_benefit:
-                    for o in _obs_benefit:
-                        st.markdown(f'<div class="alert-gold">✨ {o}</div>', unsafe_allow_html=True)
+                # ── Alertas normativas estructuradas
+                _col_sev = {"rojo": ("#C0392B","#FFF0F0","#F5C6CB"), "amarillo": ("#7A4F1A","#FFF8EE","#F5DEB3"), "verde": ("#1A4731","#E8F5EE","#C3E6CB")}
+                _alertas_rojas    = [a for a in _alertas_norm if a.get("severidad") == "rojo"]
+                _alertas_amarillas = [a for a in _alertas_norm if a.get("severidad") == "amarillo"]
+                _alertas_verdes   = [a for a in _alertas_norm if a.get("severidad") == "verde"]
 
-                if _obs_regular:
-                    with st.expander(f"Observaciones normativas ({len(_obs_regular)})"):
-                        for obs in _obs_regular:
+                if _alertas_norm:
+                    st.markdown('<div class="section-title">Alertas Normativas</div>', unsafe_allow_html=True)
+                    for _al in (_alertas_rojas + _alertas_amarillas + _alertas_verdes):
+                        _sev = _al.get("severidad", "amarillo")
+                        _ctxt, _cbg, _cbrd = _col_sev.get(_sev, _col_sev["amarillo"])
+                        _ico = {"rojo": "🔴", "amarillo": "🟡", "verde": "🟢"}.get(_sev, "🟡")
+                        _accion_html = (f'<div style="font-size:10px;color:{_ctxt};opacity:0.75;margin-top:5px;padding-top:5px;border-top:1px solid {_cbrd};">→ {_al["accion"]}</div>'
+                                        if _al.get("accion") else "")
+                        st.markdown(
+                            f'<div style="background:{_cbg};border:1px solid {_cbrd};border-left:4px solid {_ctxt};'
+                            f'border-radius:6px;padding:10px 14px;margin-bottom:6px;">'
+                            f'<span style="font-size:12px;color:{_ctxt};font-weight:600;">{_ico} {_al.get("texto","")}</span>'
+                            f'{_accion_html}</div>',
+                            unsafe_allow_html=True
+                        )
+
+                # ── Beneficios potenciales
+                if _beneficios:
+                    st.markdown('<div class="section-title">Beneficios Potenciales</div>', unsafe_allow_html=True)
+                    for _bp in _beneficios:
+                        st.markdown(
+                            f'<div class="alert-gold" style="margin-bottom:6px;">'
+                            f'✨ <b>{_bp.get("texto","")}</b>'
+                            f'<br><span style="font-size:10px;opacity:0.75;">→ {_bp.get("accion","")}</span></div>',
+                            unsafe_allow_html=True
+                        )
+
+                # ── Observaciones técnicas internas (colapsadas)
+                if _obs_tecnicas:
+                    with st.expander(f"Notas técnicas de cálculo ({len(_obs_tecnicas)})"):
+                        for obs in _obs_tecnicas:
                             st.markdown(f"• {obs}")
 
                 if c.get("metodologia"):
@@ -10563,28 +14264,44 @@ if tipo_op == "Proyecto Inmobiliario":
                 with col_s2:
                     st.metric("Velocidad de mercado", f"{m_data.get('velocidad_venta', 1.0):.2f} und/mes")
 
+                # Leer directamente de los widgets del sidebar (valores actuales, no versión guardada)
                 fin_run = {
-                    "costo_terreno":      fi.get("costo_terreno", 0),
-                    "costo_construccion": fi.get("costo_construccion", 700),
-                    "costo_sotano_m2":    fi.get("costo_sotano_m2", 450),
-                    "fee_constructora":   fi.get("fee_constructora", 10.0),
-                    "tasa_ir":            fi.get("tasa_ir", 29.5),
-                    "include_alcabala":   fi.get("include_alcabala", True),
-                    "include_dd":         fi.get("include_dd", True),
-                    "costo_demolicion":   fi.get("costo_demolicion", 0),
-                    "precio_venta_m2":    fi.get("precio_venta_m2", m_data.get("precio_2br", 0)),
-                    "precio_estac":       m_data.get("precio_estac", 0),
-                    "precio_deposito":    m_data.get("precio_deposito", 0),
-                    "tasa_financ":        tasa,
-                    "estructura_financ":  fi.get("estructura_financ", "estandar"),
-                    "aporte_propio_pct":  fi.get("aporte_propio_pct", 100.0),
-                    "pct_preventa_banco": fi.get("pct_preventa_banco", 30.0),
-                    "meses_preventa_override": fi.get("meses_preventa_override"),
-                    "meses_obra_override": fi.get("meses_obra_override"),
-                    "pct_mktg_preventa":  fi.get("pct_mktg_preventa", 2.0),
-                    "nombre_proyecto":    st.session_state.get("nombre_proyecto", ""),
+                    "costo_terreno":        precio_compra,
+                    "costo_construccion":   costo_const_m2,
+                    "costo_sotano_m2":      costo_sotano_m2,
+                    "costo_arq_m2":         costo_arq_m2,
+                    "costo_esp_m2":         costo_esp_m2,
+                    "costo_factibilidades": costo_factibilidades,
+                    "fee_constructora":     fee_constructora,
+                    "tasa_ir":              tasa_ir,
+                    "include_alcabala":     include_alcabala,
+                    "include_dd":           include_dd,
+                    "costo_demolicion":     costo_demolicion,
+                    "precio_venta_m2":      precio_venta_m2,
+                    "precio_estac":         precio_estac_inp if precio_estac_inp > 0 else m_data.get("precio_estac", 0),
+                    "precio_deposito":      precio_deposito_inp if precio_deposito_inp > 0 else m_data.get("precio_deposito", 0),
+                    "tasa_financ":          tasa,
+                    "estructura_financ":    estructura_financ,
+                    "aporte_propio_pct":    aporte_propio_pct,
+                    "pct_preventa_banco":   pct_preventa_banco,
+                    "meses_preventa_override": meses_preventa_override,
+                    "meses_obra_override":  meses_obra_override,
+                    "pct_mktg_preventa":    pct_mktg_preventa,
+                    "nombre_proyecto":      st.session_state.get("nombre_proyecto", ""),
+                    "modo_mivivienda":      _modo_miv,
                 }
                 result = calcular_financiero(c, fin_run, zona_sel)
+                # Reemplazar TIR aproximada con IRR real del DCF mes a mes
+                try:
+                    _, _, _tir_dcf, _, _, _esc_dcf = generar_flujo(c, result, fin_run, zona_sel)
+                    if _tir_dcf is not None:
+                        result["resumen"]["tir_anual_pct"] = _tir_dcf
+                        _tir_be  = _esc_dcf["sin_banco"].get("mes_be")
+                        _tir_exp = _esc_dcf["sin_banco"].get("max_exp", 0)
+                        result["resumen"]["mes_breakeven"] = _tir_be
+                        result["resumen"]["max_exposicion"] = _tir_exp
+                except Exception:
+                    pass
                 st.session_state.financ = result
                 r = result.get("resumen", {})
 
@@ -10610,9 +14327,9 @@ if tipo_op == "Proyecto Inmobiliario":
                     <div style="width:1px;background:#6BAE90;opacity:0.4;align-self:stretch;"></div>
                     <div>
                       <div style="font-size:10px;color:#4A5568;font-weight:600;text-transform:uppercase;
-                                  letter-spacing:1px;margin-bottom:2px;">TIR Anual Estimada</div>
+                                  letter-spacing:1px;margin-bottom:2px;">TIR Equity (IRR real)</div>
                       <div style="font-size:32px;font-weight:800;color:{_tir_c};letter-spacing:-1px;">{_tir:.1f}%</div>
-                      <div style="font-size:10px;color:#7A9A80;">Ref. óptimo: ≥ 15%</div>
+                      <div style="font-size:10px;color:#7A9A80;">Ref. óptimo: ≥ 15% · DCF mes a mes</div>
                     </div>
                     <div style="width:1px;background:#6BAE90;opacity:0.4;align-self:stretch;"></div>
                     <div>
@@ -10638,8 +14355,96 @@ if tipo_op == "Proyecto Inmobiliario":
                 col2.metric("Utilidad bruta",    fmt_usd(r.get("utilidad_bruta", 0)),  delta=f"{r.get('margen_bruto_pct', 0)}% bruto")
                 col3.metric(f"IR ({r.get('ir_pct', 29.5)}%)", fmt_usd(r.get("costo_ir", 0)))
                 col4.metric("Utilidad neta",     fmt_usd(r.get("utilidad_neta", 0)),  delta=f"{r.get('margen_pct', 0)}% neto")
-                col5.metric("ROI / TIR",         f"{r.get('roi_pct', 0)}% / {r.get('tir_anual_pct', 0)}%")
+                _be_mes = r.get("mes_breakeven")
+                _max_exp = r.get("max_exposicion", 0)
+                col5.metric("Breakeven / Exp. máx.",
+                            f"Mes {_be_mes}" if _be_mes else "—",
+                            delta=fmt_usd(abs(_max_exp)) if _max_exp else None,
+                            delta_color="inverse")
                 col6.metric("Break-even m²",     f"${r.get('be_precio_m2', 0):,}")
+
+                # ── Panel FondoMiVivienda ─────────────────────────────
+                if r.get("modo_mivivienda"):
+                    _pvm_usado   = r.get("precio_m2_usado", fin_run.get("precio_venta_m2", 0)) or 0
+                    _av_miv      = c.get("area_vendible_m2", 0)
+                    _nu_miv      = c.get("total_unidades", 0)
+                    _avg_u       = (_av_miv / _nu_miv) if _nu_miv > 0 else 70.0
+                    _precio_unit_usd  = _pvm_usado * _avg_u
+                    _precio_unit_sol  = _precio_unit_usd * _TC_FMVF
+                    _tope_sol         = _FMVF_TOPE_UIT * _UIT_2025
+                    _bajo_tope        = _precio_unit_sol <= _tope_sol
+                    _bono_sol, _bono_desc = _bbp_para_precio_sol(_precio_unit_sol)
+                    _bono_usd         = round(_bono_sol / _TC_FMVF)
+                    _pie_pct          = 10.0
+                    _pie_bruto        = _precio_unit_usd * _pie_pct / 100
+                    _pie_neto         = max(0, _pie_bruto - _bono_usd)
+                    _credito          = _precio_unit_usd - _pie_bruto
+                    _r_mes            = 9.0 / 100 / 12
+                    _n_meses          = 360
+                    _cuota_usd        = (_credito * _r_mes * (1 + _r_mes)**_n_meses /
+                                         ((1 + _r_mes)**_n_meses - 1)) if _credito > 0 else 0
+                    _cuota_sol        = round(_cuota_usd * _TC_FMVF)
+                    _tope_color       = "#1A4731" if _bajo_tope else "#7A1A1A"
+                    _tope_bg          = "#E8F5EE" if _bajo_tope else "#FFF0F0"
+                    _tope_border      = "#6BAE90" if _bajo_tope else "#E07A5F"
+                    _tope_label       = "✓ Dentro del tope FMVF" if _bajo_tope else "✗ Supera el tope FMVF"
+                    st.markdown(
+                        f'<div style="background:#EEF4FB;border:1px solid #4A7A9B;border-left:4px solid #1A3A6B;'
+                        f'border-radius:8px;padding:16px 24px;margin:16px 0;">'
+                        f'<div style="font-size:9px;color:#1A3A6B;letter-spacing:3px;text-transform:uppercase;'
+                        f'font-weight:700;margin-bottom:12px;">Panel FondoMiVivienda — Análisis VIS</div>'
+                        f'<div style="display:flex;gap:24px;flex-wrap:wrap;align-items:flex-start;">'
+
+                        f'<div style="min-width:140px;">'
+                        f'<div style="font-size:10px;color:#4A5568;font-weight:600;text-transform:uppercase;'
+                        f'letter-spacing:1px;margin-bottom:2px;">Precio / unidad prom.</div>'
+                        f'<div style="font-size:22px;font-weight:800;color:#1A2D4A;">USD {_precio_unit_usd:,.0f}</div>'
+                        f'<div style="font-size:10px;color:#7A8AAA;">S/. {_precio_unit_sol:,.0f} · {_avg_u:.0f} m²</div>'
+                        f'</div>'
+
+                        f'<div style="min-width:140px;">'
+                        f'<div style="font-size:10px;color:#4A5568;font-weight:600;text-transform:uppercase;'
+                        f'letter-spacing:1px;margin-bottom:2px;">Verificación tope FMVF</div>'
+                        f'<div style="background:{_tope_bg};border:1px solid {_tope_border};border-radius:5px;'
+                        f'padding:5px 10px;margin-top:4px;">'
+                        f'<div style="font-size:12px;font-weight:700;color:{_tope_color};">{_tope_label}</div>'
+                        f'<div style="font-size:9px;color:#5A6A7A;">Tope: S/. {_tope_sol:,.0f} (93.5 UIT)</div>'
+                        f'</div></div>'
+
+                        f'<div style="min-width:160px;">'
+                        f'<div style="font-size:10px;color:#4A5568;font-weight:600;text-transform:uppercase;'
+                        f'letter-spacing:1px;margin-bottom:2px;">BBP aplicable</div>'
+                        f'<div style="font-size:22px;font-weight:800;color:#1A3A6B;">S/. {_bono_sol:,}</div>'
+                        f'<div style="font-size:10px;color:#7A8AAA;">USD {_bono_usd:,} · {_bono_desc}</div>'
+                        f'</div>'
+
+                        f'<div style="min-width:140px;">'
+                        f'<div style="font-size:10px;color:#4A5568;font-weight:600;text-transform:uppercase;'
+                        f'letter-spacing:1px;margin-bottom:2px;">Cuota inicial neta</div>'
+                        f'<div style="font-size:22px;font-weight:800;color:#1A2D4A;">USD {_pie_neto:,.0f}</div>'
+                        f'<div style="font-size:10px;color:#7A8AAA;">Pie 10% USD {_pie_bruto:,.0f} − BBP USD {_bono_usd:,}</div>'
+                        f'</div>'
+
+                        f'<div style="min-width:140px;">'
+                        f'<div style="font-size:10px;color:#4A5568;font-weight:600;text-transform:uppercase;'
+                        f'letter-spacing:1px;margin-bottom:2px;">Cuota mensual est.</div>'
+                        f'<div style="font-size:22px;font-weight:800;color:#1A2D4A;">S/. {_cuota_sol:,}</div>'
+                        f'<div style="font-size:10px;color:#7A8AAA;">30 años · 9% · créd. USD {_credito:,.0f}</div>'
+                        f'</div>'
+
+                        f'</div>'
+                        f'<div style="margin-top:12px;border-top:1px solid #C8D8E8;padding-top:8px;'
+                        f'display:flex;gap:16px;flex-wrap:wrap;">'
+                        f'<div style="font-size:10px;color:#4A5A7A;font-weight:600;">Requisitos promotor:</div>'
+                        f'<div style="font-size:10px;color:#5A6A8A;">☑ Inscripción proyecto FMVF</div>'
+                        f'<div style="font-size:10px;color:#5A6A8A;">☑ Especificaciones técnicas mínimas VIS</div>'
+                        f'<div style="font-size:10px;color:#5A6A8A;">☑ Conformidad de Obra previa a desembolso FMVF</div>'
+                        f'<div style="font-size:10px;color:#5A6A8A;">☑ Habilitación urbana vigente</div>'
+                        + (f'<div style="font-size:10px;color:#D4860A;font-weight:700;">⚠ Verificar precio — supera tope FMVF</div>'
+                           if not _bajo_tope else '')
+                        + f'</div></div>',
+                        unsafe_allow_html=True,
+                    )
 
                 # ── Viabilidad del proyecto ──────────────────────────
                 _tit = r.get("tit_pct", 0) or 0
@@ -10683,9 +14488,9 @@ if tipo_op == "Proyecto Inmobiliario":
 
                 # ── Detalle ingresos / costos + tipologías ─
                 col1, col2 = st.columns(2)
-                _pvm = fin_run.get("precio_venta_m2", m_data.get("precio_2br", 0))
-                _pe  = m_data.get("precio_estac", 0)
-                _pd  = m_data.get("precio_deposito", 0)
+                _pvm = fin_run.get("precio_venta_m2") or m_data.get("precio_2br", 0)
+                _pe  = fin_run.get("precio_estac") or m_data.get("precio_estac", 0)
+                _pd  = fin_run.get("precio_deposito") or m_data.get("precio_deposito", 0)
                 with col1:
                     st.markdown('<div class="section-title">Ingresos</div>', unsafe_allow_html=True)
                     for k, v in result["detalle_ingresos"].items():
@@ -10847,7 +14652,179 @@ if tipo_op == "Proyecto Inmobiliario":
                     unsafe_allow_html=True
                 )
 
+                # ── Precio Mínimo de Venta por m² ────────────────────────
+                st.markdown('<div class="section-title">Precio Mínimo de Venta por m²</div>', unsafe_allow_html=True)
+                _pv_actual  = fin_run.get("precio_venta_m2", 0) or 0
+                _pv_mkt     = MERCADO.get(zona_sel, {}).get("precio_2br", 0)
+                _pv_be      = r.get("be_precio_m2", 0)        # punto de equilibrio 0% margen (ya calculado)
+                _pv_15      = calcular_precio_min_venta(c, fin_run, zona_sel, 15)
+                _pv_20      = calcular_precio_min_venta(c, fin_run, zona_sel, 20)
+
+                def _pv_zone(pv_actual, pv_min):
+                    if pv_min <= 0: return ("—", "#1E2D3D", "#F5F2ED", "#9A9080")
+                    if pv_actual >= pv_min: return ("PRECIO CUBRE MARGEN", "#1A4731", "#E8F5EE", "#6BAE90")
+                    return ("PRECIO INSUFICIENTE", "#7A1A1A", "#FDECEA", "#E07A5F")
+
+                _pz0_lbl, _pz0_tc, _pz0_bg, _pz0_ac = _pv_zone(_pv_actual, _pv_be)
+                _pz15_lbl, _pz15_tc, _pz15_bg, _pz15_ac = _pv_zone(_pv_actual, _pv_15)
+                _pz20_lbl, _pz20_tc, _pz20_bg, _pz20_ac = _pv_zone(_pv_actual, _pv_20)
+
+                st.markdown(
+                    f'<div style="background:#FDFAF6;border:1px solid #D8D4CC;border-radius:8px;padding:20px 24px;margin-bottom:16px;">'
+                    f'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px;">'
+                    # Break-even 0%
+                    f'<div style="background:#FFFFFF;border:1px solid #D8D4CC;border-left:4px solid #9A9590;border-radius:6px;padding:14px 16px;">'
+                    f'<div style="font-size:9px;color:#1E2D3D;letter-spacing:2px;font-weight:700;text-transform:uppercase;margin-bottom:6px;">Punto de Equilibrio</div>'
+                    f'<div style="font-size:9px;color:#7A7268;margin-bottom:8px;">Cubre costos · Margen 0%</div>'
+                    f'<div style="font-size:20px;font-weight:800;color:#1E2D3D;">${_pv_be:,}/m²</div>'
+                    f'<div style="font-size:10px;color:#9A9590;margin-top:4px;">Precio mínimo absoluto</div>'
+                    f'</div>'
+                    # Mínimo 15%
+                    f'<div style="background:#FFFFFF;border:1px solid #D8D4CC;border-left:4px solid #B8904A;border-radius:6px;padding:14px 16px;">'
+                    f'<div style="font-size:9px;color:#1E2D3D;letter-spacing:2px;font-weight:700;text-transform:uppercase;margin-bottom:6px;">Mínimo Viable</div>'
+                    f'<div style="font-size:9px;color:#7A7268;margin-bottom:8px;">Margen neto ≥ 15%</div>'
+                    f'<div style="font-size:20px;font-weight:800;color:#1E2D3D;">'
+                    f'{"$" + f"{_pv_15:,}" if _pv_15 else "—"}/m²</div>'
+                    f'<div style="font-size:10px;color:#9A9590;margin-top:4px;">Precio negociable mínimo</div>'
+                    f'</div>'
+                    # Mínimo 20%
+                    f'<div style="background:#FFFFFF;border:1px solid #D8D4CC;border-left:4px solid #1E2D3D;border-radius:6px;padding:14px 16px;">'
+                    f'<div style="font-size:9px;color:#1E2D3D;letter-spacing:2px;font-weight:700;text-transform:uppercase;margin-bottom:6px;">Objetivo Óptimo</div>'
+                    f'<div style="font-size:9px;color:#7A7268;margin-bottom:8px;">Margen neto ≥ 20%</div>'
+                    f'<div style="font-size:20px;font-weight:800;color:#1E2D3D;">'
+                    f'{"$" + f"{_pv_20:,}" if _pv_20 else "—"}/m²</div>'
+                    f'<div style="font-size:10px;color:#9A9590;margin-top:4px;">Precio objetivo del proyecto</div>'
+                    f'</div>'
+                    f'</div>'
+                    # Barra inferior — precio actual vs. mínimos + referencia de mercado
+                    f'<div style="background:#F5F3EF;border:1px solid #D8D4CC;border-radius:6px;padding:10px 16px;'
+                    f'display:flex;align-items:center;gap:16px;flex-wrap:wrap;">'
+                    f'<div style="font-size:11px;color:#1E2D3D;font-weight:700;">'
+                    f'Precio ingresado: ${_pv_actual:,}/m²</div>'
+                    f'<div style="width:1px;background:#D8D4CC;height:18px;flex-shrink:0;"></div>'
+                    + (f'<div style="font-size:10px;color:#7A7268;">Mediana de mercado {zona_sel}: <b>${_pv_mkt:,}/m²</b></div>'
+                       f'<div style="width:1px;background:#D8D4CC;height:18px;flex-shrink:0;"></div>'
+                       if _pv_mkt > 0 else '')
+                    + (f'<div style="font-size:10px;font-weight:700;color:{"#1A4731" if _pv_actual >= _pv_15 else "#7A1A1A"};">'
+                       f'{"✓ Precio sobre mínimo viable (15%)" if _pv_actual >= _pv_15 else "⚠ Precio bajo mínimo viable (15%)"}'
+                       f'</div>' if _pv_actual > 0 and _pv_15 > 0 else '')
+                    + f'</div>'
+                    f'</div>',
+                    unsafe_allow_html=True
+                )
+
+                # ── Análisis 3 Escenarios — Formato Bancario ─────────────
+                st.markdown("---")
+                st.markdown(
+                    '<div style="display:flex;align-items:center;gap:12px;margin-bottom:6px;">'
+                    '<div class="section-title" style="margin:0;">Análisis de Escenarios — Formato Bancario</div>'
+                    '<span style="font-size:9px;background:#1E2D3D;color:#B8904A;padding:3px 10px;'
+                    'border-radius:10px;font-weight:700;letter-spacing:1px;">PESIMISTA · BASE · OPTIMISTA</span>'
+                    '</div>',
+                    unsafe_allow_html=True
+                )
+                st.caption("Stress test estándar para expediente de crédito promotor — variaciones sobre parámetros del análisis base")
+
+                # Computar los 3 escenarios fijos
+                _bk_scens = [
+                    ("PESIMISTA",  0.90, 1.05, "#7A1A1A", "#FFF0F0", "#E07A5F",
+                     "Precio venta −10% · Costo construcción +5%"),
+                    ("BASE",       1.00, 1.00, "#1E2D3D", "#EEF2F6", "#4A7A9B",
+                     "Parámetros del análisis"),
+                    ("OPTIMISTA",  1.05, 1.00, "#1A4731", "#F0FBF5", "#3DAA6B",
+                     "Precio venta +5% · Costo construcción sin cambio"),
+                ]
+                _bk_results = []
+                for _bsn, _bpp, _bpc, _btc, _bbg, _bac, _bsup in _bk_scens:
+                    _bfin = {
+                        **fin_run,
+                        "precio_venta_m2":    max(500, int(fin_run["precio_venta_m2"] * _bpp)),
+                        "costo_construccion": max(200, int(fin_run["costo_construccion"] * _bpc)),
+                    }
+                    _brr = calcular_financiero(c, _bfin, zona_sel)["resumen"]
+                    _bk_results.append((_bsn, _btc, _bbg, _bac, _bsup, _bfin, _brr))
+
+                # Renderizar tabla bancaria
+                _BRD_BK = "#D8D4CC"
+                _bk_html = (
+                    '<div style="overflow-x:auto;margin-bottom:4px;">'
+                    '<table style="border-collapse:collapse;width:100%;">'
+                    '<thead><tr>'
+                    f'<th style="background:#0A1628;color:#B8904A;padding:10px 16px;font-size:11px;'
+                    f'font-weight:700;text-align:left;border:1px solid {_BRD_BK};min-width:180px;">Métrica</th>'
+                )
+                for _bsn, _btc, _bbg, _bac, _bsup, _bfin, _brr in _bk_results:
+                    _hdr_bg = {"PESIMISTA": "#5A1010", "BASE": "#1E2D3D", "OPTIMISTA": "#1A4731"}.get(_bsn, "#1E2D3D")
+                    _bk_html += (
+                        f'<th style="background:{_hdr_bg};color:#FFFFFF;padding:10px 16px;'
+                        f'font-size:11px;font-weight:700;text-align:center;border:1px solid {_BRD_BK};min-width:140px;">'
+                        f'{_bsn}'
+                        f'<div style="font-size:9px;font-weight:400;opacity:0.75;margin-top:3px;line-height:1.3;">'
+                        f'{_bsup}</div>'
+                        f'</th>'
+                    )
+                _bk_html += '</tr></thead><tbody>'
+
+                def _bk_kpi_color(field, val):
+                    if field == "margen_pct":
+                        if val >= 20: return "#E8F5EE", "#1A5C32"
+                        if val >= 12: return "#FFF8E6", "#7A5500"
+                        return "#FDECEA", "#7A1A1A"
+                    if field == "tir_anual_pct":
+                        if val >= 15: return "#E8F5EE", "#1A5C32"
+                        if val >= 10: return "#FFF8E6", "#7A5500"
+                        return "#FDECEA", "#7A1A1A"
+                    if field == "roi_pct":
+                        if val >= 20: return "#E8F5EE", "#1A5C32"
+                        if val >= 12: return "#FFF8E6", "#7A5500"
+                        return "#FDECEA", "#7A1A1A"
+                    return "#FFFFFF", "#1E2D3D"
+
+                _lbl_s = f'style="background:#F0EDE8;color:#1E2D3D;padding:8px 16px;font-size:11px;font-weight:700;border:1px solid {_BRD_BK};white-space:nowrap;"'
+                _sep_s = f'colspan="{len(_bk_results)+1}" style="background:#E8E4DC;height:1px;padding:0;border:1px solid {_BRD_BK};"'
+
+                _bk_metricas = [
+                    # (etiqueta, key_en_fin, key_en_resumen, formato, es_kpi)
+                    ("Precio de venta",     "precio_venta_m2",    None,               lambda f,r: f"${f['precio_venta_m2']:,}/m²", False, None),
+                    ("Costo construcción",  "costo_construccion", None,               lambda f,r: f"${f['costo_construccion']:,}/m²", False, None),
+                    (None, None, None, None, False, None),
+                    ("Ingresos brutos",     None, "ingresos_brutos",  lambda f,r: f"${r['ingresos_brutos']:,.0f}", False, None),
+                    ("Costo total",         None, "costo_total_con_financ", lambda f,r: f"${r['costo_total_con_financ']:,.0f}", False, None),
+                    ("Utilidad neta",       None, "utilidad_neta",    lambda f,r: f"${r['utilidad_neta']:,.0f}", False, None),
+                    (None, None, None, None, False, None),
+                    ("Margen neto %",       None, "margen_pct",       lambda f,r: f"{r['margen_pct']:.1f}%", True, "margen_pct"),
+                    ("TIR anual %",         None, "tir_anual_pct",    lambda f,r: f"{r['tir_anual_pct']:.1f}%", True, "tir_anual_pct"),
+                    ("ROI %",               None, "roi_pct",          lambda f,r: f"{r['roi_pct']:.1f}%", True, "roi_pct"),
+                    (None, None, None, None, False, None),
+                    ("Break-even $/m²",     None, "be_precio_m2",     lambda f,r: f"${r['be_precio_m2']:,}", False, None),
+                ]
+                for _brow in _bk_metricas:
+                    _bl, _bfk, _brk, _bfmt, _bkpi, _bfield = _brow
+                    if _bl is None:
+                        _bk_html += f'<tr><td {_sep_s}></td></tr>'
+                        continue
+                    _bk_html += f'<tr><td {_lbl_s}>{_bl}</td>'
+                    for _bsn, _btc, _bbg, _bac, _bsup, _bfin, _brr in _bk_results:
+                        _bval_str = _bfmt(_bfin, _brr)
+                        if _bkpi and _bfield:
+                            _raw_v = float(_brr.get(_bfield, 0))
+                            _cbg, _cfg = _bk_kpi_color(_bfield, _raw_v)
+                            _fw = "800"
+                        else:
+                            _cbg, _cfg = "#FFFFFF", "#1E2D3D"
+                            _fw = "600"
+                        _bk_html += (
+                            f'<td style="background:{_cbg};color:{_cfg};padding:8px 16px;'
+                            f'font-size:12px;font-weight:{_fw};text-align:center;border:1px solid {_BRD_BK};">'
+                            f'{_bval_str}</td>'
+                        )
+                    _bk_html += '</tr>'
+                _bk_html += '</tbody></table></div>'
+                st.markdown(_bk_html, unsafe_allow_html=True)
+                st.caption("Margen/TIR/ROI — Verde ≥ umbral óptimo · Amarillo = aceptable · Rojo = revisar · Escenarios sobre parámetros ingresados, sin variar terreno")
+
                 # ── Matriz de sensibilidad ────────────────
+                st.markdown("---")
                 st.markdown('<div class="section-title">Matriz de Sensibilidad — Margen %</div>', unsafe_allow_html=True)
                 st.caption("Impacto en margen neto ante variaciones de precio de venta (filas) y costo de construcción (columnas)")
                 df_sens = calcular_sensibilidad(c, fin_run, zona_sel)
@@ -10903,9 +14880,9 @@ if tipo_op == "Proyecto Inmobiliario":
                     _st_row0 = min(range(len(_st_terrenos)), key=lambda i: abs(_st_terrenos[i] - _st_t0))
 
                     def _cell_color_mg(v):
-                        if v >= 18:  return "#1B5E20", "#A5D6A7"   # verde oscuro / texto claro
-                        if v >= 12:  return "#F57F17", "#FFF9C4"   # naranja / amarillo claro
-                        return "#B71C1C", "#FFCDD2"                 # rojo oscuro / rosa claro
+                        if v >= 18:  return "rgba(39,174,96,0.18)",   "#7BCFA0"   # verde translúcido
+                        if v >= 12:  return "rgba(184,144,74,0.22)",  "#C8A060"   # bronce translúcido
+                        return       "rgba(192,57,43,0.20)",          "#E07878"   # rojo translúcido
 
                     _NAV = "#0A1628"
                     _BRD = "#2A3D52"
@@ -10963,6 +14940,115 @@ if tipo_op == "Proyecto Inmobiliario":
                     )
                 else:
                     st.info("Ingresa precio de venta y costo de terreno para ver la matriz.")
+
+                # ── Escenarios de Programa ────────────────
+                st.markdown("---")
+                with st.expander("Escenarios de Programa — VIS / Mercado / Producto Cliente", expanded=False):
+                    st.caption(
+                        "El mismo terreno, la misma área vendible — 3 formas distintas de fraccionar el área "
+                        "según el cliente objetivo. Sin llamadas adicionales a la IA."
+                    )
+                    if c and fin_run:
+                        _esc_prog = calcular_escenarios_programa(c, fin_run, zona_sel)
+                        if _esc_prog:
+                            # Identificar el ganador en cada KPI
+                            _best_tir  = max(_esc_prog, key=lambda x: x["tir_pct"])["id"]
+                            _best_util = max(_esc_prog, key=lambda x: x["utilidad"])["id"]
+                            _best_vel  = max(_esc_prog, key=lambda x: x["vel"])["id"]
+
+                            _cols_esc = st.columns(3)
+                            for _ci, _esc in enumerate(_esc_prog):
+                                with _cols_esc[_ci]:
+                                    _is_best_tir  = _esc["id"] == _best_tir
+                                    _is_best_util = _esc["id"] == _best_util
+                                    _mg_c  = "#1A4731" if _esc["margen_pct"] >= 20 else ("#7A5000" if _esc["margen_pct"] >= 12 else "#7A1A1A")
+                                    _tir_c = "#1A4731" if _esc["tir_pct"]   >= 15 else ("#7A5000" if _esc["tir_pct"]   >= 10 else "#7A1A1A")
+                                    # Header card
+                                    st.markdown(
+                                        f'<div style="background:{_esc["color"]};border-radius:8px 8px 0 0;'
+                                        f'padding:10px 14px;">'
+                                        f'<div style="font-size:9px;color:rgba(255,255,255,0.60);letter-spacing:2px;'
+                                        f'text-transform:uppercase;font-weight:700;">Escenario {_ci+1}</div>'
+                                        f'<div style="font-size:13px;font-weight:800;color:#FFF;margin-top:2px;">'
+                                        f'{_esc["nombre"]}</div>'
+                                        f'<div style="font-size:10px;color:rgba(255,255,255,0.65);margin-top:3px;">'
+                                        f'{_esc["nota"]}</div>'
+                                        f'</div>',
+                                        unsafe_allow_html=True,
+                                    )
+                                    # KPIs
+                                    st.markdown(
+                                        f'<div style="background:{_esc["bg"]};border:1px solid {_esc["border"]};'
+                                        f'border-top:none;border-radius:0 0 8px 8px;padding:14px;">'
+
+                                        f'<div style="display:flex;justify-content:space-between;margin-bottom:8px;">'
+                                        f'<div><div style="font-size:9px;color:#5A6A7A;font-weight:600;text-transform:uppercase;letter-spacing:1px;">Margen Neto</div>'
+                                        f'<div style="font-size:24px;font-weight:800;color:{_mg_c};">{_esc["margen_pct"]:.1f}%</div></div>'
+                                        f'<div style="text-align:right;"><div style="font-size:9px;color:#5A6A7A;font-weight:600;text-transform:uppercase;letter-spacing:1px;">TIR Anual'
+                                        + (' 🏆' if _is_best_tir else '') +
+                                        f'</div><div style="font-size:24px;font-weight:800;color:{_tir_c};">{_esc["tir_pct"]:.1f}%</div></div>'
+                                        f'</div>'
+
+                                        f'<div style="border-top:1px solid {_esc["border"]};opacity:0.3;margin:8px 0;"></div>'
+
+                                        f'<div style="font-size:11px;color:#1E2D3D;margin-bottom:4px;">'
+                                        f'<b>Utilidad neta:</b> {fmt_usd(_esc["utilidad"])}'
+                                        + (' 🏆' if _is_best_util else '') +
+                                        f'</div>'
+                                        f'<div style="font-size:11px;color:#1E2D3D;margin-bottom:4px;">'
+                                        f'<b>Ingresos:</b> {fmt_usd(_esc["ingresos"])}</div>'
+                                        f'<div style="font-size:11px;color:#1E2D3D;margin-bottom:4px;">'
+                                        f'<b>Precio/m²:</b> ${_esc["precio_m2"]:,}</div>'
+
+                                        f'<div style="border-top:1px solid {_esc["border"]};opacity:0.3;margin:8px 0;"></div>'
+
+                                        f'<div style="font-size:10px;color:#4A5A6A;margin-bottom:3px;">'
+                                        f'<b>Unidades:</b> {_esc["n_und"]} · prom {_esc["avg_m2"]} m²</div>'
+                                        + "".join(
+                                            f'<div style="font-size:10px;color:#5A6A7A;">'
+                                            f'{tip}: {_esc["n_por_tipo"].get(tip,0)} unds ({m2}m²)</div>'
+                                            for tip, _, m2 in _esc["mix"]
+                                        ) +
+                                        f'<div style="font-size:9px;color:#7A8A9A;margin-top:5px;font-style:italic;'
+                                        f'background:rgba(0,0,0,0.04);border-radius:4px;padding:4px 6px;">'
+                                        f'ⓘ {_esc.get("nota_mix","")}</div>'
+                                        f'<div style="font-size:10px;color:#4A5A6A;margin-top:6px;">'
+                                        f'<b>Velocidad:</b> {_esc["vel"]:.1f} und/mes · {_esc["meses_proy"]} meses</div>'
+
+                                        + (
+                                            f'<div style="margin-top:8px;background:#1A3A6B;border-radius:5px;padding:6px 10px;">'
+                                            f'<div style="font-size:9px;color:rgba(255,255,255,0.7);text-transform:uppercase;letter-spacing:1px;">BBP Aplicable</div>'
+                                            f'<div style="font-size:13px;font-weight:700;color:#FFF;">S/. {_esc["bbp_sol"]:,}</div>'
+                                            f'<div style="font-size:9px;color:rgba(255,255,255,0.6);">{_esc["bbp_desc"]}</div>'
+                                            f'</div>'
+                                            if _esc["miv"] and _esc["bbp_sol"] > 0 else ""
+                                        )
+
+                                        + f'</div>',
+                                        unsafe_allow_html=True,
+                                    )
+
+                            # Tabla resumen comparativa
+                            st.markdown(
+                                '<div style="margin-top:16px;font-size:9px;color:#B8904A;letter-spacing:2px;'
+                                'font-weight:700;text-transform:uppercase;">Resumen Comparativo</div>',
+                                unsafe_allow_html=True,
+                            )
+                            import pandas as _pd_esc
+                            _df_esc = _pd_esc.DataFrame([{
+                                "Escenario":    e["nombre"],
+                                "Unidades":     e["n_und"],
+                                "Prom m²":      e["avg_m2"],
+                                "Precio/m²":    f"${e['precio_m2']:,}",
+                                "Ingresos":     fmt_usd(e["ingresos"]),
+                                "Utilidad":     fmt_usd(e["utilidad"]),
+                                "Margen %":     f"{e['margen_pct']:.1f}%",
+                                "TIR %":        f"{e['tir_pct']:.1f}%",
+                                "Meses proy.":  e["meses_proy"],
+                            } for e in _esc_prog])
+                            st.dataframe(_df_esc, use_container_width=True, hide_index=True)
+                    else:
+                        st.info("Genera el análisis primero para ver los escenarios de programa.")
 
                 # ── Comparador de Escenarios ──────────────
                 st.markdown("---")
@@ -11164,7 +15250,7 @@ if tipo_op == "Proyecto Inmobiliario":
                 # Preventa: recalcular con la misma fórmula que generar_flujo
                 import math as _math_g
                 _n_unid_g   = max(c.get("total_unidades", 1) or 1, 1)
-                _vel_g      = float((MERCADO.get(zona_sel, {}) or {}).get("velocidad_absorcion", 1.5) or 1.5)
+                _vel_g      = float((MERCADO.get(zona_sel, {}) or {}).get("velocidad_venta", 1.5) or 1.5)
                 _pct_pv_g   = fi.get("pct_preventa_banco", 30.0) / 100
                 _unid_req_g = max(1, _math_g.ceil(_n_unid_g * _pct_pv_g))
                 _pv_auto_g  = max(1, _math_g.ceil(_unid_req_g / _vel_g))
@@ -11351,53 +15437,38 @@ if tipo_op == "Proyecto Inmobiliario":
                 )
                 st.markdown(_cmp_html, unsafe_allow_html=True)
 
-                # ── Gráfico: Curva S construcción ──────────
-                st.markdown('<div class="section-title">Curva S — Desembolso Construcción</div>',
-                            unsafe_allow_html=True)
-                obra_m = cb["obra_mensual"]
-                obra_cumsum = []
-                _s = 0
-                total_obra = sum(obra_m) or 1
-                for v in obra_m:
-                    _s += v
-                    obra_cumsum.append(_s / total_obra * 100)
-                obra_x = list(range(3, 3 + len(obra_m)))
-
-                fig_s = go.Figure()
-                fig_s.add_trace(go.Bar(
-                    x=obra_x, y=[v / 1000 for v in obra_m],
-                    name="Desembolso mensual ($K)",
-                    marker_color="rgba(184,144,74,0.65)",
-                    hovertemplate="Mes %{x}<br>Desembolso: $%{y:,.0f}K<extra></extra>",
-                    yaxis="y",
-                ))
-                fig_s.add_trace(go.Scatter(
-                    x=obra_x, y=obra_cumsum,
-                    name="Avance acumulado (%)",
-                    mode="lines+markers",
-                    line=dict(color="#1E2D3D", width=2.5),
-                    marker=dict(size=4),
-                    hovertemplate="Mes %{x}<br>Avance: %{y:.1f}%<extra></extra>",
-                    yaxis="y2",
-                ))
-                fig_s.update_layout(
-                    height=300,
-                    barmode="overlay",
-                    yaxis=dict(title="Desembolso ($K)", tickformat="$,.0f",
-                               showgrid=True, gridcolor="#E8E3DA",
-                               tickfont=dict(color="#4A5568", size=10)),
-                    yaxis2=dict(title="% Avance acumulado", overlaying="y", side="right",
-                                range=[0, 105], ticksuffix="%",
-                                tickfont=dict(color="#4A5568", size=10),
-                                showgrid=False),
-                    xaxis=dict(title="Mes de proyecto", tickfont=dict(color="#4A5568", size=10), showgrid=False),
-                    legend=dict(orientation="h", yanchor="bottom", y=1.02, x=0,
-                                font=dict(size=10, color="#4A5568")),
-                    margin=dict(t=30, b=40, l=70, r=70),
-                    paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
-                    font=dict(color="#4A5568", size=11, family="Inter, sans-serif"),
-                )
-                st.plotly_chart(fig_s, use_container_width=True, config={"displayModeBar": False})
+                # ── Tabla: Desembolso Construcción ──────────
+                with st.expander("Desembolso Construcción — Cronograma mensual", expanded=False):
+                    st.caption("Distribución de desembolsos de obra por mes (Curva S logística)")
+                    obra_m      = cb["obra_mensual"]
+                    _total_obra = sum(obra_m) or 1
+                    _s_acum     = 0
+                    _NAV_OB     = "#1E2D3D"
+                    _BRD_OB     = "#D8D4CC"
+                    _obra_html  = (
+                        '<div style="overflow-x:auto;">'
+                        '<table style="border-collapse:collapse;width:100%;">'
+                        '<thead><tr>'
+                        f'<th style="background:{_NAV_OB};color:#fff;padding:7px 12px;font-size:11px;font-weight:600;text-align:center;border:1px solid {_BRD_OB};">Mes</th>'
+                        f'<th style="background:{_NAV_OB};color:#fff;padding:7px 12px;font-size:11px;font-weight:600;text-align:right;border:1px solid {_BRD_OB};">Desembolso ($K)</th>'
+                        f'<th style="background:{_NAV_OB};color:#B8904A;padding:7px 12px;font-size:11px;font-weight:600;text-align:right;border:1px solid {_BRD_OB};">Acumulado ($K)</th>'
+                        f'<th style="background:{_NAV_OB};color:#fff;padding:7px 12px;font-size:11px;font-weight:600;text-align:right;border:1px solid {_BRD_OB};">% Avance</th>'
+                        '</tr></thead><tbody>'
+                    )
+                    for _oi, _ov in enumerate(obra_m):
+                        _s_acum += _ov
+                        _bg_ob   = "#F5F3EF" if _oi % 2 == 0 else "#FFFFFF"
+                        _pct_ob  = _s_acum / _total_obra * 100
+                        _obra_html += (
+                            f'<tr style="background:{_bg_ob};">'
+                            f'<td style="padding:6px 12px;font-size:11px;text-align:center;border:1px solid {_BRD_OB};color:{_NAV_OB};font-weight:600;">{3 + _oi}</td>'
+                            f'<td style="padding:6px 12px;font-size:11px;text-align:right;border:1px solid {_BRD_OB};color:#4A5568;">${_ov / 1000:,.1f}K</td>'
+                            f'<td style="padding:6px 12px;font-size:11px;text-align:right;border:1px solid {_BRD_OB};color:#B8904A;font-weight:700;">${_s_acum / 1000:,.1f}K</td>'
+                            f'<td style="padding:6px 12px;font-size:11px;text-align:right;border:1px solid {_BRD_OB};color:#1A4731;font-weight:700;">{_pct_ob:.1f}%</td>'
+                            '</tr>'
+                        )
+                    _obra_html += '</tbody></table></div>'
+                    st.markdown(_obra_html, unsafe_allow_html=True)
 
                 # ── Gráfico: Flujo acumulado comparativo ───
                 st.markdown('<div class="section-title">Flujo de Caja Acumulado — Comparativa</div>',
@@ -11407,19 +15478,44 @@ if tipo_op == "Proyecto Inmobiliario":
                 acum_con = cb["acum"]
 
                 fig_fl = go.Figure()
+
+                # Zona roja — período en negativo (debajo de cero)
+                _fl_all_vals = list(acum_sin) + list(acum_con)
+                _fl_y_min = min(_fl_all_vals) * 1.15 if min(_fl_all_vals) < 0 else 0
+                if _fl_y_min < 0:
+                    fig_fl.add_hrect(y0=_fl_y_min, y1=0,
+                                     fillcolor="rgba(192,57,43,0.07)", line_width=0, layer="below")
+
                 fig_fl.add_trace(go.Scatter(
                     x=meses, y=acum_sin,
-                    mode="lines", name="Sin banco",
+                    mode="lines", name="Sin banco (100% equity)",
                     line=dict(color="#1E2D3D", width=2.5),
                     hovertemplate="Mes %{x}<br>Sin banco: $%{y:,.0f}<extra></extra>",
                 ))
                 fig_fl.add_trace(go.Scatter(
                     x=meses, y=acum_con,
-                    mode="lines", name="Con banco",
+                    mode="lines", name="Con banco (línea crédito)",
                     line=dict(color="#B8904A", width=2, dash="dash"),
                     hovertemplate="Mes %{x}<br>Con banco: $%{y:,.0f}<extra></extra>",
                 ))
-                fig_fl.add_hline(y=0, line_color="#AAAAAA", line_width=1.2)
+                fig_fl.add_hline(y=0, line_color="#888888", line_width=1.0)
+
+                # Anotación en punto de máxima exposición (sin banco)
+                if acum_sin:
+                    _fl_min_val = min(acum_sin)
+                    if _fl_min_val < 0:
+                        _fl_min_idx = list(acum_sin).index(_fl_min_val)
+                        _fl_min_mes = meses[_fl_min_idx] if _fl_min_idx < len(meses) else _fl_min_idx
+                        fig_fl.add_annotation(
+                            x=_fl_min_mes, y=_fl_min_val,
+                            text=f"Máx. exposición<br><b>${abs(_fl_min_val):,.0f}</b>",
+                            showarrow=True, arrowhead=2, arrowcolor="#7A1A1A",
+                            arrowwidth=1.5, ax=40, ay=-36,
+                            font=dict(size=9, color="#7A1A1A"),
+                            bgcolor="rgba(255,242,242,0.90)",
+                            bordercolor="#E07878", borderwidth=1, borderpad=4,
+                        )
+
                 if sb["mes_be"]:
                     fig_fl.add_vline(x=sb["mes_be"], line_dash="dot", line_color="#1E2D3D",
                                      line_width=1.2,
@@ -11433,16 +15529,16 @@ if tipo_op == "Proyecto Inmobiliario":
                                      annotation_font=dict(size=10, color="#B8904A"),
                                      annotation_position="top right")
                 fig_fl.update_layout(
-                    height=360,
+                    height=380,
                     yaxis=dict(tickformat="$,.0f", zeroline=False,
                                showgrid=True, gridcolor="#E8E3DA",
                                title=dict(text="USD acumulado", font=dict(color="#4A5568", size=11)),
                                tickfont=dict(color="#4A5568", size=10)),
-                    xaxis=dict(title=dict(text="Mes", font=dict(color="#4A5568", size=11)),
+                    xaxis=dict(title=dict(text="Mes de proyecto", font=dict(color="#4A5568", size=11)),
                                showgrid=False, tickfont=dict(color="#4A5568", size=10)),
                     legend=dict(orientation="h", yanchor="bottom", y=1.02, x=0,
                                 font=dict(size=11, color="#4A5568")),
-                    margin=dict(t=30, b=40, l=80, r=20),
+                    margin=dict(t=30, b=40, l=90, r=20),
                     paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
                     font=dict(color="#4A5568", size=11, family="Inter, sans-serif"),
                 )
@@ -11523,14 +15619,7 @@ if tipo_op == "Proyecto Inmobiliario":
                 if tiene_puhr:    docs_disponibles.append("PU/HR")
                 st.caption(f"Documentos disponibles: {' · '.join(docs_disponibles)}")
 
-                if st.button("ANALIZAR DOCUMENTOS LEGALES", use_container_width=True, type="primary"):
-                    _p_bytes = st.session_state.get("partida_bytes")
-                    _u_bytes = st.session_state.get("puhr_bytes")
-                    _c_bytes = st.session_state.get("cert_bytes")
-                    st.session_state.legal = _run_with_retry(
-                        lambda _p=_p_bytes, _u=_u_bytes, _c=_c_bytes: analizar_legal(_p, _u, _c),
-                        "Analizando documentos registrales y parámetros urbanísticos…",
-                    )
+                st.caption("El análisis legal se ejecuta automáticamente al generar el análisis.")
 
                 lg = st.session_state.legal
                 if lg:
@@ -11840,8 +15929,83 @@ if tipo_op == "Proyecto Inmobiliario":
                         for an in anotac:
                             st.markdown(f'<div class="alert-legal">• {an}</div>', unsafe_allow_html=True)
 
+                    # ── Análisis Legal Normativo ──────────────
+                    _obs_l_proy = lg.get("observaciones_legales") or []
+                    _sug_m_proy = lg.get("sugerencias_mitigacion") or []
+                    if _obs_l_proy or _sug_m_proy:
+                        st.markdown('<div class="section-title">⚖ Análisis Legal — Normativa Aplicable</div>', unsafe_allow_html=True)
+                        _ol_p1, _ol_p2 = st.columns(2)
+                        with _ol_p1:
+                            if _obs_l_proy:
+                                _items_obs_p = "".join(
+                                    f'<div style="padding:8px 0;border-bottom:1px solid #F5C6CB;font-size:12px;color:#5A1A1A;line-height:1.5;">⚠ {o}</div>'
+                                    for o in _obs_l_proy
+                                )
+                                st.markdown(
+                                    f'<div style="background:#FFF0F0;border:1px solid #F5C6CB;border-left:4px solid #C0392B;border-radius:6px;padding:16px 20px;">'
+                                    f'<div style="font-size:9px;color:#7A1A1A;letter-spacing:2px;text-transform:uppercase;font-weight:700;margin-bottom:10px;">Observaciones Legales</div>'
+                                    f'{_items_obs_p}</div>',
+                                    unsafe_allow_html=True
+                                )
+                        with _ol_p2:
+                            if _sug_m_proy:
+                                _items_sug_p = "".join(
+                                    f'<div style="padding:8px 0;border-bottom:1px solid #C3E6CB;font-size:12px;color:#1A4731;line-height:1.5;">→ {s}</div>'
+                                    for s in _sug_m_proy
+                                )
+                                st.markdown(
+                                    f'<div style="background:#E8F5EE;border:1px solid #C3E6CB;border-left:4px solid #27AE60;border-radius:6px;padding:16px 20px;">'
+                                    f'<div style="font-size:9px;color:#1A4731;letter-spacing:2px;text-transform:uppercase;font-weight:700;margin-bottom:10px;">Mitigación / Subsanación</div>'
+                                    f'{_items_sug_p}</div>',
+                                    unsafe_allow_html=True
+                                )
+
         # ── TAB 6: RESUMEN ───────────────────────────────
         with tabs[5]:
+            # ── MATRIZ DE RIESGOS UNIFICADA ──────────────
+            _lg_res = st.session_state.get("legal_result") or {}
+            _fin_res = (st.session_state.financ or {}).get("resumen", {}) if st.session_state.financ else {}
+            _fin_inp = st.session_state.financ_inputs or {}
+
+            _matriz_alertas = []
+            # 1. Alertas normativas de cabida
+            for _a in (c.get("alertas_normativas", []) if c else []):
+                _matriz_alertas.append({**_a, "modulo": "Normativo"})
+            # 2. Alertas legales de partida
+            for _ol in (_lg_res.get("observaciones_legales") or []):
+                _matriz_alertas.append({"severidad": "amarillo", "origen": "legal", "modulo": "Legal", "texto": _ol, "accion": (_lg_res.get("sugerencias_mitigacion") or ["Verificar con abogado antes del cierre"])[0]})
+            for _hl in (_lg_res.get("hallazgos") or []):
+                if _hl.get("severidad") == "rojo":
+                    _matriz_alertas.append({"severidad": "rojo", "origen": "legal", "modulo": "Legal", "texto": f"{_hl.get('punto','')}: {_hl.get('hallazgo','')}", "accion": _hl.get("subsanacion") or "Revisar con abogado"})
+            # 3. Alertas financieras determinísticas
+            if _fin_res and c:
+                for _af in generar_alertas_financieras(_fin_res, _fin_inp, c, zona_sel):
+                    _matriz_alertas.append({**_af, "modulo": "Financiero"})
+
+            # Ordenar: rojo → amarillo → verde
+            _sev_order = {"rojo": 0, "amarillo": 1, "verde": 2}
+            _matriz_alertas.sort(key=lambda x: _sev_order.get(x.get("severidad", "verde"), 2))
+
+            if _matriz_alertas:
+                st.markdown('<div class="section-title">Matriz de Riesgos</div>', unsafe_allow_html=True)
+                _col_sev_r = {"rojo": ("#C0392B","#FFF0F0","#F5C6CB"), "amarillo": ("#7A4F1A","#FFF8EE","#F5DEB3"), "verde": ("#1A4731","#E8F5EE","#C3E6CB")}
+                _ico_sev   = {"rojo": "🔴", "amarillo": "🟡", "verde": "🟢"}
+                for _ma in _matriz_alertas:
+                    _sev = _ma.get("severidad", "amarillo")
+                    _ctxt, _cbg, _cbrd = _col_sev_r.get(_sev, _col_sev_r["amarillo"])
+                    _ico = _ico_sev.get(_sev, "🟡")
+                    _mod_badge = f'<span style="font-size:9px;background:{_ctxt};color:#FFF;padding:2px 7px;border-radius:3px;letter-spacing:1px;font-weight:700;margin-right:8px;">{_ma.get("modulo","").upper()}</span>'
+                    _accion_r  = (f'<div style="font-size:10px;color:{_ctxt};opacity:0.8;margin-top:5px;padding-top:4px;border-top:1px solid {_cbrd};">→ {_ma["accion"]}</div>'
+                                  if _ma.get("accion") else "")
+                    st.markdown(
+                        f'<div style="background:{_cbg};border:1px solid {_cbrd};border-left:4px solid {_ctxt};'
+                        f'border-radius:6px;padding:10px 14px;margin-bottom:6px;">'
+                        f'{_mod_badge}<span style="font-size:12px;color:{_ctxt};font-weight:600;">{_ico} {_ma.get("texto","")}</span>'
+                        f'{_accion_r}</div>',
+                        unsafe_allow_html=True
+                    )
+                st.markdown("---")
+
             # Score de viabilidad
             if c and st.session_state.financ:
                 r = (st.session_state.financ or {}).get("resumen", {})
@@ -12044,12 +16208,12 @@ if tipo_op == "Proyecto Inmobiliario":
                         + f'• <b>${_v20p:,}</b> → margen neto ≥ 20% &nbsp;<span style="color:#1A4731;font-weight:700;">●</span> óptimo<br>'
                         + f'• <b>${_v15p:,}</b> → margen neto ≥ 15% &nbsp;<span style="color:#7A5500;font-weight:700;">●</span> aceptable<br>'
                         + f'• <b>${_v12p:,}</b> → margen neto ≥ 12% &nbsp;<span style="color:#7A1A1A;font-weight:700;">●</span> mínimo<br><br>'
-                        + 'Ingresa el precio ofertado en el panel izquierdo → sección <strong>PROPUESTA</strong>.'
+                        + 'Ingresa el precio ofertado en el panel izquierdo → sección <strong>ELABORACIÓN DE PROPUESTA</strong>.'
                         '</div>',
                         unsafe_allow_html=True
                     )
                 else:
-                    st.markdown('<div class="alert-legal">Ingresa el precio ofertado en el panel izquierdo (sección <strong>PROPUESTA</strong>) para generar el documento.</div>',
+                    st.markdown('<div class="alert-legal">Ingresa el precio ofertado en el panel izquierdo (sección <strong>ELABORACIÓN DE PROPUESTA</strong>) para generar el documento.</div>',
                                 unsafe_allow_html=True)
             else:
                 from datetime import date as _date2
@@ -12315,118 +16479,82 @@ if tipo_op == "Proyecto Inmobiliario":
 
     else:
         st.markdown(
-            '<div style="border-radius:8px;min-height:460px;'
+            '<div style="border-radius:8px;min-height:420px;'
             'background:linear-gradient(160deg,#1A2737 0%,#1E2D3D 60%,#1A2737 100%);'
             'display:flex;align-items:center;justify-content:center;'
             'box-shadow:0 8px 32px rgba(30,45,61,0.18);padding:64px 48px;">'
-
-            '<div style="display:grid;grid-template-columns:1fr 1px 1fr;gap:0;max-width:820px;width:100%;">'
-
-            # Left: descriptor
-            '<div style="padding-right:48px;display:flex;flex-direction:column;justify-content:center;gap:16px;">'
-            '<div style="font-size:9px;color:#B8904A;letter-spacing:4px;text-transform:uppercase;'
-            'font-weight:700;font-family:Inter,sans-serif;">Potenciado por IA</div>'
-            '<div style="font-size:22px;font-weight:700;color:#FFFFFF;letter-spacing:-0.5px;line-height:1.25;'
-            'font-family:Inter,sans-serif;">IA de Análisis Inmobiliario</div>'
-            '<div style="font-size:13px;color:#8AA8C0;line-height:1.7;font-family:Inter,sans-serif;">'
-            'Integra en una sesión de trabajo; cabida arquitectónica, análisis financiero '
-            'y due diligence legal. Optimizando tu tiempo en el análisis de Proyectos:'
+            '<div style="max-width:620px;width:100%;text-align:center;">'
+            '<div style="font-size:9px;color:#FFFFFF;letter-spacing:3px;text-transform:uppercase;font-weight:600;margin-bottom:18px;">'
+            'CABIDA &nbsp;·&nbsp; NORMATIVA &nbsp;·&nbsp; FINANCIERO &nbsp;·&nbsp; LEGAL'
             '</div>'
-            '<div style="border-left:2px solid #B8904A;padding-left:14px;margin-top:4px;">'
-            '<span style="font-size:13px;color:#FFFFFF;font-family:Inter,sans-serif;font-weight:500;">'
-            'Multifamiliares, Logísticos e Industriales.'
-            '</span>'
+            '<div style="font-size:28px;font-weight:700;color:#FFFFFF;letter-spacing:-0.5px;margin-bottom:8px;">'
+            'Análisis de Proyecto Inmobiliario'
             '</div>'
-            '<div style="font-size:11px;color:#B8904A;letter-spacing:1.5px;text-transform:uppercase;'
-            'font-weight:600;font-family:Inter,sans-serif;">Acelerador de decisiones · Optimización de análisis</div>'
+            '<div style="width:48px;height:2px;background:#B8904A;margin:16px auto;"></div>'
+            '<div style="font-size:13px;color:#B0C0D0;line-height:1.7;margin-bottom:32px;">'
+            'Herramienta IA para la evaluación integral de proyectos residenciales. '
+            'Genera en minutos cabida arquitectónica, modelo financiero y due diligence legal '
+            'para presentar ante banca, fondos de inversión y directorios.'
             '</div>'
-
-            # Separator
-            '<div style="background:rgba(184,144,74,0.3);"></div>'
-
-            # Right: steps
-            '<div style="padding-left:48px;display:flex;flex-direction:column;justify-content:center;gap:24px;">'
-            '<div style="font-size:9px;color:#B8904A;letter-spacing:3px;text-transform:uppercase;'
-            'font-weight:700;font-family:Inter,sans-serif;">Cómo comenzar</div>'
-
-            '<div style="display:flex;align-items:flex-start;gap:16px;">'
-            '<div style="min-width:24px;height:24px;border-radius:50%;background:rgba(184,144,74,0.2);'
-            'border:1px solid #B8904A;display:flex;align-items:center;justify-content:center;'
-            'font-size:11px;color:#B8904A;font-weight:700;">1</div>'
-            '<div style="font-size:13px;color:#E8EDF2;line-height:1.65;font-family:Inter,sans-serif;">'
-            'Adjunta el Certificado de Parámetros y documentos en el panel izquierdo'
-            '</div></div>'
-
-            '<div style="display:flex;align-items:flex-start;gap:16px;">'
-            '<div style="min-width:24px;height:24px;border-radius:50%;background:rgba(184,144,74,0.2);'
-            'border:1px solid #B8904A;display:flex;align-items:center;justify-content:center;'
-            'font-size:11px;color:#B8904A;font-weight:700;">2</div>'
-            '<div style="font-size:13px;color:#E8EDF2;line-height:1.65;font-family:Inter,sans-serif;">'
-            'Configura la zona de mercado y los parámetros financieros del proyecto'
-            '</div></div>'
-
-            '<div style="display:flex;align-items:flex-start;gap:16px;">'
-            '<div style="min-width:24px;height:24px;border-radius:50%;background:rgba(184,144,74,0.2);'
-            'border:1px solid #B8904A;display:flex;align-items:center;justify-content:center;'
-            'font-size:11px;color:#B8904A;font-weight:700;">3</div>'
-            '<div style="font-size:13px;color:#E8EDF2;line-height:1.65;font-family:Inter,sans-serif;">'
-            'Presiona GENERAR ANÁLISIS — cabida, financiero, legal y flujo de caja en segundos'
-            '</div></div>'
-
-            '</div>'  # end right
-            '</div>'  # end grid
-            '</div>',  # end hero
+            '<div style="display:flex;gap:20px;justify-content:center;flex-wrap:wrap;">'
+            '<div style="background:rgba(184,144,74,0.08);border:1px solid rgba(184,144,74,0.28);'
+            'border-radius:8px;padding:16px 22px;min-width:140px;">'
+            '<div style="font-size:15px;font-weight:700;color:#B8904A;letter-spacing:1px;text-transform:uppercase;">Cabida</div>'
+            '<div style="font-size:10px;color:#8AA8C0;margin-top:5px;line-height:1.5;">Programa óptimo<br>según normativa vigente</div>'
+            '</div>'
+            '<div style="background:rgba(184,144,74,0.08);border:1px solid rgba(184,144,74,0.28);'
+            'border-radius:8px;padding:16px 22px;min-width:140px;">'
+            '<div style="font-size:15px;font-weight:700;color:#B8904A;letter-spacing:1px;text-transform:uppercase;">Finanzas</div>'
+            '<div style="font-size:10px;color:#8AA8C0;margin-top:5px;line-height:1.5;">TIR, margen, flujo<br>y estructura bancaria</div>'
+            '</div>'
+            '<div style="background:rgba(184,144,74,0.08);border:1px solid rgba(184,144,74,0.28);'
+            'border-radius:8px;padding:16px 22px;min-width:140px;">'
+            '<div style="font-size:15px;font-weight:700;color:#B8904A;letter-spacing:1px;text-transform:uppercase;">Legal</div>'
+            '<div style="font-size:10px;color:#8AA8C0;margin-top:5px;line-height:1.5;">Partida SUNARP,<br>cargas y alertas</div>'
+            '</div>'
+            '</div>'
+            '</div></div>',
             unsafe_allow_html=True
         )
 
-        # ── Capabilities bar ─────────────────────────────
-        # icon: small gold monogram circle
-        def _cap_icon(letter):
-            return (
-                '<div style="width:36px;height:36px;border-radius:50%;'
-                'border:1.5px solid #B8904A;display:flex;align-items:center;'
-                'justify-content:center;margin:0 auto 12px auto;">'
-                f'<span style="font-size:13px;font-weight:700;color:#B8904A;'
-                f'font-family:Inter,sans-serif;">{letter}</span>'
-                '</div>'
-            )
-        def _cap(letter, title, desc):
+        def _rcap(mono, title, desc):
             return (
                 '<div style="display:flex;flex-direction:column;align-items:center;'
-                'text-align:center;padding:28px 20px;">'
-                + _cap_icon(letter)
-                + f'<div style="font-size:12px;font-weight:700;color:#1E2D3D;letter-spacing:0.3px;'
+                'text-align:center;padding:26px 20px;">'
+                '<div style="width:36px;height:36px;border-radius:50%;border:1.5px solid #B8904A;'
+                'display:flex;align-items:center;justify-content:center;margin:0 auto 12px auto;">'
+                f'<span style="font-size:12px;font-weight:700;color:#B8904A;'
+                f'font-family:Inter,sans-serif;">{mono}</span>'
+                '</div>'
+                f'<div style="font-size:12px;font-weight:700;color:#1E2D3D;letter-spacing:0.3px;'
                 f'font-family:Inter,sans-serif;margin-bottom:6px;">{title}</div>'
                 f'<div style="font-size:11px;color:#7A8A99;line-height:1.55;font-family:Inter,sans-serif;">{desc}</div>'
                 '</div>'
             )
-        cap_sep = '<div style="width:1px;background:#E0DAD0;margin:16px 0;align-self:stretch;"></div>'
+        _rcap_sep = '<div style="width:1px;background:#E0DAD0;margin:16px 0;align-self:stretch;"></div>'
         st.markdown(
             '<div style="background:#FAFAF8;border:1px solid #E8E3DA;border-radius:8px;'
             'margin-top:16px;display:grid;grid-template-columns:1fr 1px 1fr 1px 1fr 1px 1fr;'
             'align-items:stretch;">'
-            + _cap("CA", "Cabida Arquitectónica", "Área techada, unidades, pisos y programa óptimo según normativa")
-            + cap_sep
-            + _cap("AF", "Análisis Financiero", "TIR, utilidad, margen y estructura de costos del proyecto")
-            + cap_sep
-            + _cap("FC", "Flujo de Caja", "Curva S mensual, breakeven y exposición máxima de capital")
-            + cap_sep
-            + _cap("DL", "Due Diligence Legal", "Partida registral, PU/HR, cargas, hipotecas y alertas registrales")
+            + _rcap("CA", "Cabida Arquitectónica", "Área techada, unidades, pisos y programa óptimo según normativa")
+            + _rcap_sep
+            + _rcap("AF", "Análisis Financiero", "TIR, utilidad, margen y estructura de costos del proyecto")
+            + _rcap_sep
+            + _rcap("FC", "Flujo de Caja", "Curva S mensual, breakeven y exposición máxima de capital")
+            + _rcap_sep
+            + _rcap("DL", "Due Diligence Legal", "Partida SUNARP, PU/HR, cargas, hipotecas y alertas registrales")
             + '</div>',
             unsafe_allow_html=True
         )
 
-        # ── Footer disclaimer ────────────────────────────
         st.markdown(
             '<div style="margin-top:32px;padding:20px 32px;border-top:1px solid #E0DAD0;'
             'text-align:center;">'
             '<p style="font-size:11px;color:#8A8A8A;line-height:1.7;font-family:Inter,sans-serif;'
             'max-width:680px;margin:0 auto;">'
-            'Osterling Advisory está comprometido con brindar información rigurosa y actualizada para la '
-            'toma de decisiones inmobiliarias. Los resultados generados por FACTIS tienen carácter '
-            'referencial y se basan en los parámetros ingresados por el usuario. Se recomienda validar '
-            'los resultados con asesores legales, financieros y técnicos antes de tomar decisiones de inversión. '
-            'Para consultas o soporte, escríbenos a '
+            'Los resultados generados por SOLUM tienen carácter referencial y se basan en los parámetros '
+            'ingresados por el usuario. Se recomienda validar con asesores técnicos, legales y financieros '
+            'antes de tomar decisiones de inversión. Consultas: '
             '<a href="mailto:eosterling@grupoosterling.com" style="color:#B8904A;text-decoration:none;">'
             'eosterling@grupoosterling.com</a>.'
             '</p>'
@@ -12437,6 +16565,72 @@ if tipo_op == "Proyecto Inmobiliario":
             unsafe_allow_html=True
         )
 
+elif tipo_op == "Proyecto de Oficinas" and run_oficinas:
+    st.session_state["oficinas_result"] = {
+        "modo": ofi_modo,
+        "distrito": ofi_distrito,
+        "edificio": ofi_edificio,
+        "clase": ofi_clase,
+        "piso": ofi_piso,
+        "area": ofi_area,
+        "anio": ofi_anio,
+        # Alquiler
+        "alq_base": ofi_alq_base,
+        "gastos_comunes": ofi_gastos_comunes,
+        "cocheras_n": ofi_cocheras_n,
+        "cocheras_precio": ofi_cocheras_precio,
+        "igv": ofi_igv,
+        "duracion": ofi_duracion,
+        "reajuste": ofi_reajuste,
+        "garantia": ofi_garantia,
+        "gracia": ofi_gracia,
+        "prop_renta": ofi_prop_renta,
+        "prop_mejoras_ti": ofi_prop_mejoras_ti,
+        "prop_clausulas": ofi_prop_clausulas,
+        # Compra
+        "precio_compra": ofi_precio_compra,
+        "proposito": ofi_proposito,
+        "alq_esperado": ofi_alq_esperado,
+        "pago_inicial_pct": ofi_pago_inicial_pct,
+        "tasa_anual": ofi_tasa_anual,
+        "plazo_anos": ofi_plazo_anos,
+        "precio_oferta": ofi_precio_oferta,
+        "estructura_pago": ofi_estructura_pago,
+        "dd_plazo": ofi_dd_plazo,
+        # Desarrollo
+        "area_terreno": ofi_area_terreno,
+        "precio_terreno": ofi_precio_terreno,
+        "zonificacion": ofi_zonificacion,
+        "pisos_max": ofi_pisos_max,
+        "cus": ofi_cus,
+        "cos": ofi_cos,
+        "retiro": ofi_retiro,
+        "ratio_estac": ofi_ratio_estac,
+        "pisos_oficinas": ofi_pisos_oficinas,
+        "eficiencia": ofi_eficiencia,
+        "clase_objetivo": ofi_clase_objetivo,
+        "area_und": ofi_area_und,
+        "estrategia": ofi_estrategia,
+        "precio_venta": ofi_precio_venta,
+        "precio_alquiler": ofi_precio_alquiler,
+        "pct_venta": ofi_pct_venta,
+        "nivel_acabados": ofi_nivel_acabados,
+        "costo_construccion": ofi_costo_construccion,
+        "costo_sotano": ofi_costo_sotano,
+        "costos_ind_pct": ofi_costos_ind_pct,
+        "marketing_pct": ofi_marketing_pct,
+        "cr_terreno_dp": ofi_cr_terreno_dp,
+        "cr_terreno_tasa": ofi_cr_terreno_tasa,
+        "cr_terreno_plazo": ofi_cr_terreno_plazo,
+        "cr_obra_dp": ofi_cr_obra_dp,
+        "cr_obra_tasa": ofi_cr_obra_tasa,
+        "cr_obra_plazo": ofi_cr_obra_plazo,
+        "preventa_pct": ofi_preventa_pct,
+        "instrucciones": ofi_instrucciones,
+        "comparativa": list(st.session_state.ofi_comparativa),
+    }
+    st.rerun()
+
 # ═══════════════════════════════════════════════════════
 # MÓDULO 2: PROYECTO LOGÍSTICO / INDUSTRIAL
 # ═══════════════════════════════════════════════════════
@@ -12444,7 +16638,7 @@ if tipo_op == "Proyecto Inmobiliario":
 elif tipo_op == "Proyecto Logístico / Industrial":
     r = st.session_state.get("industrial_result")
 
-    if r:
+    if r and r.get("area_terreno", 0) > 0:
         # ── Controles de comparativa ─────────────────────
         _ic1, _ic2, _ic3 = st.columns([2, 1, 1])
         with _ic1:
@@ -12493,6 +16687,9 @@ elif tipo_op == "Proyecto Logístico / Industrial":
             if _ind_payback else ""
             )
         )
+        _kpi_items = (("" if _ind_yield_bruto == 0 else
+            f'<div><div style="font-size:9px;color:rgba(255,255,255,0.55);text-transform:uppercase;letter-spacing:1px;">Yield Bruto</div>'
+            f'<div style="font-size:20px;font-weight:700;color:#FFFFFF;">{_ind_yield_bruto:.1f}%</div></div>') + _ind_kpi4)
 
         st.markdown(f"""
         <div style="position:relative;border-radius:16px;overflow:hidden;margin-bottom:20px;
@@ -12504,7 +16701,12 @@ elif tipo_op == "Proyecto Logístico / Industrial":
                         padding:24px 28px;">
                 <div style="font-size:9px;color:rgba(255,255,255,0.60);letter-spacing:3px;
                             text-transform:uppercase;margin-bottom:6px;">
-                    Análisis Logístico / Industrial · FACTIS
+                    Análisis Logístico / Industrial · SOLUM
+                    <span style="margin-left:12px;background:rgba(184,144,74,0.85);color:#fff;
+                                 font-size:8px;letter-spacing:1px;padding:2px 8px;border-radius:3px;
+                                 font-weight:700;text-transform:uppercase;">
+                        {r.get("perfil","Desarrollo Integral")}
+                    </span>
                 </div>
                 <div style="font-size:28px;font-weight:800;color:#FFFFFF;line-height:1.15;
                             text-shadow:0 2px 8px rgba(0,0,0,0.5);">
@@ -12520,31 +16722,50 @@ elif tipo_op == "Proyecto Logístico / Industrial":
                         <div style="font-size:20px;font-weight:700;color:#FFFFFF;">{r.get("area_nave",0):,.0f} m²</div>
                     </div>
                     <div>
-                        <div style="font-size:9px;color:rgba(255,255,255,0.55);text-transform:uppercase;letter-spacing:1px;">Costo Total</div>
-                        <div style="font-size:20px;font-weight:700;color:#FFFFFF;">${r.get("costo_total",0):,.0f}</div>
+                        <div style="font-size:9px;color:rgba(255,255,255,0.55);text-transform:uppercase;letter-spacing:1px;">Costo Terreno</div>
+                        <div style="font-size:20px;font-weight:700;color:#FFFFFF;">${r.get("costo_terreno",0):,.0f}</div>
                     </div>
-                    {"" if _ind_yield_bruto == 0 else f'<div><div style="font-size:9px;color:rgba(255,255,255,0.55);text-transform:uppercase;letter-spacing:1px;">Yield Bruto</div><div style="font-size:20px;font-weight:700;color:#FFFFFF;">{_ind_yield_bruto:.1f}%</div></div>'}
-                    {_ind_kpi4}
-                </div>
-            </div>
-        </div>""", unsafe_allow_html=True)
+                    <div>
+                        <div style="font-size:9px;color:rgba(255,255,255,0.55);text-transform:uppercase;letter-spacing:1px;">Costo Construcción</div>
+                        <div style="font-size:20px;font-weight:700;color:#FFFFFF;">${r.get("costo_construccion",0):,.0f}</div>
+                    </div>
+                    <div>
+                        <div style="font-size:9px;color:rgba(255,255,255,0.55);text-transform:uppercase;letter-spacing:1px;">Zonificación</div>
+                        <div style="font-size:20px;font-weight:700;color:#FFFFFF;">{r.get("zonificacion","—")}</div>
+                    </div>
+                    {_kpi_items}</div></div></div>""", unsafe_allow_html=True)
 
-        if st.session_state.get("_goto_tab_name_ind"):
-            _ind_tab_name = st.session_state.pop("_goto_tab_name_ind")
-            st.components.v1.html(f"""<script>
-            setTimeout(function(){{
-                var tabs = Array.from(window.parent.document.querySelectorAll('[role="tab"]'));
-                var target = tabs.find(function(t){{
-                    return t.textContent.trim() === {repr(_ind_tab_name)};
+        _ind_goto = st.session_state.pop("_goto_tab_name_ind", None)
+        _ind_perfil_activo = r.get("perfil", "Desarrollo Integral")
+        ind_tabs = st.tabs(["Parámetros", "Financiero", "Flujo de Caja", "Legal", "Factibilidad", "Resumen Ejecutivo", "Comparativa"])
+        st.components.v1.html(f"""<script>
+        (function(){{
+            var KEY='solum_ind_tab';
+            var gotoName={repr(_ind_goto or '')};
+            function init(){{
+                var tabs=Array.from(window.parent.document.querySelectorAll('[role="tab"]'));
+                if(!tabs.length){{setTimeout(init,150);return;}}
+                var name=gotoName||window.parent.sessionStorage.getItem(KEY);
+                if(name){{
+                    var t=tabs.find(function(x){{return x.textContent.trim()===name;}});
+                    if(t&&t.getAttribute('aria-selected')!=='true'){{
+                        t.click();
+                        window.parent.sessionStorage.setItem(KEY,name);
+                    }}
+                }}
+                tabs.forEach(function(tab){{
+                    if(tab._si)return;tab._si=1;
+                    tab.addEventListener('click',function(){{
+                        window.parent.sessionStorage.setItem(KEY,this.textContent.trim());
+                    }});
                 }});
-                if(target){{ target.click(); }}
-            }}, 350);
-            </script>""", height=0)
-
-        ind_tabs = st.tabs(["Resumen Ejecutivo", "Parámetros", "Financiero", "Flujo de Caja", "Comparativa", "Factibilidad", "Análisis IA"])
+            }}
+            setTimeout(init,350);
+        }})();
+        </script>""", height=0)
 
         # TAB 0: RESUMEN EJECUTIVO
-        with ind_tabs[0]:
+        with ind_tabs[5]:
             _NAV = "#1E2D3D"; _GOLD = "#B8904A"; _BRD = "#2E3F52"
 
             # ── Semáforo global ───────────────────────────────────
@@ -12567,6 +16788,72 @@ elif tipo_op == "Proyecto Logístico / Industrial":
                     f'{fac_re.get("resumen_tecnico","")}</div></div></div>',
                     unsafe_allow_html=True)
 
+            # ── Afectación vial ───────────────────────────────────
+            if fac_re.get("afectacion_vial"):
+                _av_ml   = fac_re.get("afectacion_vial_ml")
+                _av_m2   = fac_re.get("area_afectada_m2")
+                _av_det  = fac_re.get("afectacion_vial_detalle") or ""
+                _av_m2_calc = (_av_m2 or
+                               ((_av_ml or 0) * float(r.get("frente_ml") or
+                                st.session_state.get("ind_frente") or 0)))
+                _av_area_str = (f"  ·  Área afectada estimada: **{_av_m2_calc:,.0f} m²**"
+                                if _av_m2_calc > 0 else "")
+                _av_ml_str   = f"  ·  Retiro: **{_av_ml} ml**" if _av_ml else ""
+                st.markdown(
+                    f'<div style="background:rgba(139,26,26,0.12);border-left:4px solid #8B1A1A;'
+                    f'border-radius:8px;padding:14px 20px;margin-bottom:14px;">'
+                    f'<div style="font-size:10px;font-weight:700;letter-spacing:1.5px;color:#8B1A1A;'
+                    f'margin-bottom:6px;">⛔ AFECTACIÓN VIAL DETECTADA</div>'
+                    f'<div style="font-size:11px;color:#8B1A1A;line-height:1.6;">{_av_det}</div>'
+                    f'<div style="font-size:10px;color:#8B1A1A;opacity:0.75;margin-top:4px;">'
+                    f'El área edificable real es menor al área registral del terreno.'
+                    f'{_av_ml_str}{_av_area_str}</div></div>',
+                    unsafe_allow_html=True)
+
+            # ── Matriz de Riesgos unificada ───────────────────────
+            _ind_inp_re = st.session_state.get("industrial_result") or {}
+            _mat_ind = []
+            # Alertas técnicas y legales de factibilidad
+            for _al in (fac_re.get("alertas_tecnicas") or []):
+                if isinstance(_al, dict):
+                    _mat_ind.append({**_al, "modulo": "Técnico"})
+                elif str(_al).strip():
+                    _mat_ind.append({"severidad": "amarillo", "texto": str(_al), "accion": None, "modulo": "Técnico"})
+            for _al in (fac_re.get("alertas_legales") or []):
+                if isinstance(_al, dict):
+                    _mat_ind.append({**_al, "modulo": "Legal"})
+                elif str(_al).strip():
+                    _mat_ind.append({"severidad": "amarillo", "texto": str(_al), "accion": None, "modulo": "Legal"})
+            # Hallazgos rojos de factibilidad
+            for _hl in (fac_re.get("hallazgos") or []):
+                if _hl.get("severidad") == "rojo":
+                    _cat = "Técnico" if _hl.get("categoria") == "tecnico" else "Legal"
+                    _mat_ind.append({"severidad": "rojo", "modulo": _cat, "texto": f"{_hl.get('punto','')}: {_hl.get('hallazgo','')}", "accion": _hl.get("subsanacion")})
+            # Alertas financieras determinísticas
+            _ind_inp_fin = st.session_state.get("ind_fin_inputs") or {}
+            for _af in generar_alertas_financieras_industrial(r, _ind_inp_fin):
+                _mat_ind.append({**_af, "modulo": "Financiero"})
+            # Afectación vial como alerta roja
+            if fac_re.get("afectacion_vial"):
+                _mat_ind.insert(0, {"severidad": "rojo", "modulo": "Vial", "texto": f"Afectación vial: {fac_re.get('afectacion_vial_detalle','ver detalle')}", "accion": "Cuantificar área cedida antes de comprometer precio — impacta la cabida industrial real"})
+
+            if _mat_ind:
+                _mat_ind.sort(key=lambda x: {"rojo": 0, "amarillo": 1, "verde": 2}.get(x.get("severidad","amarillo"), 1))
+                st.markdown('<div class="section-title">Matriz de Riesgos</div>', unsafe_allow_html=True)
+                _cs_ind = {"rojo": ("#C0392B","#FFF0F0","#F5C6CB"), "amarillo": ("#7A4F1A","#FFF8EE","#F5DEB3"), "verde": ("#1A4731","#E8F5EE","#C3E6CB")}
+                _ico_ind = {"rojo": "🔴", "amarillo": "🟡", "verde": "🟢"}
+                for _mi in _mat_ind:
+                    _sev = _mi.get("severidad","amarillo")
+                    _ct, _cb, _cbr = _cs_ind.get(_sev, _cs_ind["amarillo"])
+                    _bdg = f'<span style="font-size:9px;background:{_ct};color:#FFF;padding:2px 7px;border-radius:3px;letter-spacing:1px;font-weight:700;margin-right:8px;">{_mi.get("modulo","").upper()}</span>'
+                    _ac  = (f'<div style="font-size:10px;color:{_ct};opacity:0.8;margin-top:5px;padding-top:4px;border-top:1px solid {_cbr};">→ {_mi["accion"]}</div>' if _mi.get("accion") else "")
+                    st.markdown(
+                        f'<div style="background:{_cb};border:1px solid {_cbr};border-left:4px solid {_ct};border-radius:6px;padding:10px 14px;margin-bottom:6px;">'
+                        f'{_bdg}<span style="font-size:12px;color:{_ct};font-weight:600;">{_ico_ind.get(_sev,"🟡")} {_mi.get("texto","")}</span>{_ac}</div>',
+                        unsafe_allow_html=True
+                    )
+                st.markdown("---")
+
             # ── Parámetros clave ──────────────────────────────────
             st.markdown('<div class="section-title">Parámetros del Activo</div>', unsafe_allow_html=True)
             _re_cols = st.columns(4)
@@ -12578,12 +16865,78 @@ elif tipo_op == "Proyecto Logístico / Industrial":
             _re_cols2[0].metric("Costo total",     f"${r.get('costo_total',0):,.0f}")
             _re_cols2[1].metric("Costo/m² nave",   f"${r.get('costo_por_m2_nave',0):,.0f}/m²")
             _re_cols2[2].metric("Yield bruto",     f"{r.get('yield_bruto',0):.1f}%")
-            _re_cols2[3].metric("Payback",         f"{r.get('payback_anos',0):.1f} años" if r.get('payback_anos',0) > 0 else "—")
+            _re_cols2[3].metric("Payback",         f"{r.get('payback_anos') or 0:.1f} años" if (r.get('payback_anos') or 0) > 0 else "—")
             if r.get("actividad_descripcion"):
                 st.markdown(
                     f'<div style="font-size:11px;color:#8A9BAD;margin-top:4px;">'
                     f'Actividad declarada: <em>{r["actividad_descripcion"]}</em></div>',
                     unsafe_allow_html=True)
+
+            # ── Densidad de Almacenaje ────────────────────────────
+            _rak_tipo = r.get("tipo_nave", "")
+            _rak_niv  = r.get("rack_niveles", 0) or 0
+            if _rak_niv > 0 and _rak_tipo in ("Almacén Logístico", "Cross-docking", "Nave Industrial"):
+                _rak_pm2  = r.get("rack_pos_m2", 0) or 0
+                _rak_tot  = r.get("rack_posiciones", 0) or 0
+                _rak_opt  = r.get("rack_posiciones_opt", 0) or 0
+                _rak_dlt  = r.get("rack_delta_pos", 0) or 0
+                _rak_pct  = r.get("rack_delta_pct", 0) or 0
+                _rak_ok   = r.get("rack_es_optima", False)
+                _h_nave_r = r.get("altura_nave", 0) or 0
+
+                st.markdown('<div class="section-title" style="margin-top:18px;">Densidad de Almacenaje — Análisis de Rack</div>', unsafe_allow_html=True)
+                _rk1, _rk2, _rk3, _rk4 = st.columns(4)
+                _rk1.metric("Altura nave", f"{_h_nave_r:.1f} m")
+                _rk2.metric("Niveles de rack", str(_rak_niv))
+                _rk3.metric("Posiciones totales", f"{_rak_tot:,}")
+                _rk4.metric("Densidad", f"{_rak_pm2:.2f} pos/m²")
+
+                if not _rak_ok:
+                    st.markdown(f"""
+                    <div style="background:rgba(184,144,74,0.07);border-left:3px solid #B8904A;
+                                border-radius:0 8px 8px 0;padding:14px 18px;margin-top:10px;">
+                        <div style="font-size:10px;font-weight:700;letter-spacing:1.5px;color:#B8904A;margin-bottom:10px;">
+                            OPORTUNIDAD — ALTURA CLASE A (13.6 m)
+                        </div>
+                        <div style="display:flex;gap:28px;flex-wrap:wrap;margin-bottom:10px;align-items:center;">
+                            <div>
+                                <div style="font-size:9px;color:#3A5570;text-transform:uppercase;letter-spacing:1px;font-weight:600;">Actual · {_h_nave_r:.1f} m</div>
+                                <div style="font-size:20px;font-weight:700;color:#1A2D3D;">{_rak_tot:,} pos.</div>
+                                <div style="font-size:10px;color:#3A5570;font-weight:500;">{_rak_pm2:.2f} pos/m²</div>
+                            </div>
+                            <div style="font-size:22px;color:#2A3A4A;font-weight:700;">→</div>
+                            <div>
+                                <div style="font-size:9px;color:#3A5570;text-transform:uppercase;letter-spacing:1px;font-weight:600;">Clase A · 13.6 m</div>
+                                <div style="font-size:20px;font-weight:700;color:#B8904A;">{_rak_opt:,} pos.</div>
+                                <div style="font-size:10px;color:#3A5570;font-weight:500;">2.03 pos/m² · Aldea validado</div>
+                            </div>
+                            <div>
+                                <div style="font-size:9px;color:#3A5570;text-transform:uppercase;letter-spacing:1px;font-weight:600;">Ganancia</div>
+                                <div style="font-size:20px;font-weight:700;color:#1A6A3A;">+{_rak_dlt:,} pos.</div>
+                                <div style="font-size:10px;color:#1A6A3A;font-weight:600;">+{_rak_pct:.0f}% capacidad</div>
+                            </div>
+                        </div>
+                        <div style="font-size:12px;color:#2A4060;line-height:1.65;border-top:1px solid rgba(184,144,74,0.2);padding-top:8px;">
+                            Un operador logístico (DHL, CEVA, Ransa, Saga) valora la altura porque almacena
+                            más paletas por m² de piso — pagará renta premium sobre naves de menor altura.
+                            A 13.6 m, el mismo terreno genera <strong style="color:#B8904A;">+{_rak_pct:.0f}% de posiciones</strong>
+                            con una inversión marginal estimada de $15–25/m² nave adicional en estructura.
+                        </div>
+                    </div>""", unsafe_allow_html=True)
+                else:
+                    st.markdown(f"""
+                    <div style="background:rgba(16,112,64,0.08);border-left:3px solid #1A7A4A;
+                                border-radius:0 8px 8px 0;padding:12px 18px;margin-top:10px;">
+                        <div style="font-size:10px;font-weight:700;letter-spacing:1.5px;color:#1A7A4A;margin-bottom:4px;">
+                            ✓ ALTURA CLASE A — ESPECIFICACIÓN ÓPTIMA
+                        </div>
+                        <div style="font-size:11px;color:#6AAA8A;line-height:1.65;">
+                            {_h_nave_r:.1f} m ≥ 13.0 m — especificación Clase A logística.
+                            Con {_rak_tot:,} posiciones ({_rak_pm2:.2f} pos/m²) este activo compite
+                            directamente con los parques Prime de Lurín y VES.
+                            Inquilinos objetivo: DHL, CEVA, Ransa, Saga, Ripley y operadores 3PL Clase A.
+                        </div>
+                    </div>""", unsafe_allow_html=True)
 
             # ── Sustento normativo ────────────────────────────────
             st.markdown('<div class="section-title" style="margin-top:18px;">Sustento Normativo y Técnico</div>', unsafe_allow_html=True)
@@ -12591,15 +16944,15 @@ elif tipo_op == "Proyecto Logístico / Industrial":
             def _norm_row(icon, titulo, estado, base_legal, detalle=""):
                 _col_ic = "#1A7A4A" if icon == "✓" else ("#C44A4A" if icon == "⛔" else "#B8862E")
                 st.markdown(
-                    f'<div style="border-left:3px solid {_col_ic};padding:10px 14px;margin-bottom:10px;'
-                    f'background:rgba(255,255,255,0.03);border-radius:0 6px 6px 0;">'
+                    f'<div style="border-left:3px solid {_col_ic};padding:12px 16px;margin-bottom:10px;'
+                    f'background:rgba(30,45,61,0.04);border-radius:0 6px 6px 0;">'
                     f'<div style="display:flex;align-items:baseline;gap:8px;">'
-                    f'<span style="font-size:14px;color:{_col_ic};">{icon}</span>'
-                    f'<span style="font-size:12px;font-weight:700;color:#C8D8E8;">{titulo}</span>'
-                    f'<span style="font-size:11px;color:#8A9BAD;margin-left:auto;">{estado}</span></div>'
-                    + (f'<div style="font-size:10px;color:#6B8098;margin-top:4px;">'
-                       f'Base legal: <strong style="color:#8A9BAD;">{base_legal}</strong></div>' if base_legal else "")
-                    + (f'<div style="font-size:11px;color:#A8B8C8;margin-top:3px;">{detalle}</div>' if detalle else "")
+                    f'<span style="font-size:15px;color:{_col_ic};">{icon}</span>'
+                    f'<span style="font-size:13px;font-weight:700;color:#1E2D3D;">{titulo}</span>'
+                    f'<span style="font-size:12px;font-weight:600;color:#2A4A60;margin-left:auto;">{estado}</span></div>'
+                    + (f'<div style="font-size:11px;color:#3A5070;margin-top:5px;">'
+                       f'Base legal: <strong style="color:#1A2D3D;">{base_legal}</strong></div>' if base_legal else "")
+                    + (f'<div style="font-size:12px;color:#2A4060;margin-top:4px;line-height:1.5;">{detalle}</div>' if detalle else "")
                     + '</div>', unsafe_allow_html=True)
 
             # 1. Zonificación vs. tipo de nave
@@ -12635,7 +16988,7 @@ elif tipo_op == "Proyecto Logístico / Industrial":
                 f"Nave de {_area_nave_r:,.0f} m² {'supera el umbral — EIV obligatorio ante municipio y MTC antes de licencia.' if _eiv_req else 'está bajo el umbral de 1,500 m² — sin exigencia de EIV.'}")
 
             # 4. DSCR bancario
-            _dscr_r = r.get("dscr", 0)
+            _dscr_r = r.get("dscr") or 0
             _dscr_ok = _dscr_r == 0 or _dscr_r >= 1.20
             _norm_row(
                 "✓" if _dscr_ok else "⛔",
@@ -12645,14 +16998,22 @@ elif tipo_op == "Proyecto Logístico / Industrial":
                 f"{'Supera el mínimo bancario de 1.20x.' if _dscr_ok and _dscr_r > 0 else ('Sin crédito declarado.' if _dscr_r == 0 else 'Por debajo del mínimo — banco observará la operación.')}")
 
             # 5. Yield vs. mercado
-            _yld_r = r.get("yield_bruto", 0)
-            _yld_ok = _yld_r >= 8.0
-            _norm_row(
-                "✓" if _yld_ok else ("⚠" if _yld_r >= 5 else "⛔"),
-                f"Yield bruto: {_yld_r:.1f}%",
-                "SOBRE MERCADO" if _yld_r >= 10 else ("EN MERCADO" if _yld_ok else "BAJO MERCADO"),
-                "Benchmarks Lima 2025 · Cushman & Wakefield / Colliers — Lurín Clase A: 8–10% bruto",
-                f"Ref. Parque Logístico 47 (Lima VES, 14,315 m², Clase A): yield bruto 26.8% · Lurín mercado: 8–10%.")
+            _yld_r = r.get("yield_bruto") or 0
+            if _yld_r == 0:
+                _norm_row(
+                    "—",
+                    "Yield bruto: sin renta declarada",
+                    "N/A",
+                    "Benchmarks Lima 2025 · Cushman & Wakefield / Colliers — Lurín Clase A: 8–10% bruto",
+                    "Selecciona 'Inversión' e ingresa la renta mensual estimada para calcular el yield sobre el costo total.")
+            else:
+                _yld_ok = _yld_r >= 8.0
+                _norm_row(
+                    "✓" if _yld_ok else ("⚠" if _yld_r >= 5 else "⛔"),
+                    f"Yield bruto: {_yld_r:.1f}%",
+                    "SOBRE MERCADO" if _yld_r >= 10 else ("EN MERCADO" if _yld_ok else "BAJO MERCADO"),
+                    "Benchmarks Lima 2025 · Cushman & Wakefield / Colliers — Lurín Clase A: 8–10% bruto",
+                    f"Ref. Parque Logístico 47 (Lima VES, 14,315 m², Clase A): yield bruto 26.8% · Lurín mercado: 8–10%.")
 
             # 6. Acceso pesado (si hay factibilidad)
             _acceso = fac_re.get("restricciones_acceso", "")
@@ -12666,23 +17027,120 @@ elif tipo_op == "Proyecto Logístico / Industrial":
             if _est_reg:
                 _norm_row("✓", "Estado registral (SUNARP)", "VERIFICADO", "SUNARP — partida registral", _est_reg)
 
-            # ── Conclusión ejecutiva (del Análisis IA si ya fue generado) ──
+            # ── Memorandum de Advisory Board ──────────────────────────
+            st.markdown("---")
+            st.markdown('<div class="section-title">Memorandum de Advisory Board</div>', unsafe_allow_html=True)
             _memo_re = st.session_state.get("ind_resumen") or {}
-            if _memo_re.get("perfil_activo") or _memo_re.get("conclusion"):
-                st.markdown('<div class="section-title" style="margin-top:18px;">Conclusión del Análisis</div>', unsafe_allow_html=True)
-                _concl = _memo_re.get("conclusion") or _memo_re.get("perfil_activo", "")
+            if not _memo_re:
                 st.markdown(
-                    f'<div style="background:rgba(184,144,74,0.07);border-left:3px solid #B8904A;'
-                    f'border-radius:0 8px 8px 0;padding:14px 18px;font-size:12px;color:#C8D8E8;line-height:1.7;">'
-                    f'{_concl}</div>', unsafe_allow_html=True)
-            else:
-                st.markdown(
-                    '<div style="font-size:11px;color:#6B8098;margin-top:16px;font-style:italic;">'
-                    'Genera el Análisis IA (última pestaña) para obtener la conclusión narrativa del advisory board.</div>',
+                    '<div style="background:#EEF3F8;border:1px solid #B0C4D8;border-left:4px solid #1E2D3D;'
+                    'border-radius:8px;padding:18px 22px;margin-bottom:16px;">'
+                    '<div style="font-size:13px;color:#2A3A4A;line-height:1.8;">'
+                    'Consolida toda la data analítica — indicadores, costos, financiamiento y contexto de mercado — '
+                    'en un documento narrativo ejecutivo para toma de decisiones.</div></div>',
                     unsafe_allow_html=True)
+            if st.button("GENERAR MEMORANDUM", use_container_width=True, type="primary", key="btn_ind_rsm_re"):
+                _r_copy_re = dict(r)
+                st.session_state.ind_resumen = _run_with_retry(
+                    lambda _rc=_r_copy_re: generar_memorandum_advisory_ind(_rc),
+                    "Generando memorandum de Advisory Board…"
+                )
+                st.rerun()
+            if _memo_re:
+                st.markdown(f"""
+                <div style="border-bottom:2px solid #B8904A;padding-bottom:16px;margin-bottom:24px;">
+                    <div style="font-size:9px;color:#B8904A;letter-spacing:4px;text-transform:uppercase;
+                                font-weight:600;margin-bottom:6px;">SOLUM · Memorandum de Advisory Board</div>
+                    <div style="font-size:20px;font-weight:700;color:#1E2D3D;">
+                        {_memo_re.get('titulo','Análisis Industrial')}</div>
+                </div>""", unsafe_allow_html=True)
+                st.markdown(
+                    '<div style="font-size:9px;color:#9A9080;letter-spacing:3px;text-transform:uppercase;'
+                    'font-weight:600;margin-bottom:8px;">Perfil del Activo</div>',
+                    unsafe_allow_html=True)
+                st.markdown(
+                    f'<div style="font-size:13px;color:#1E2D3D;line-height:1.8;margin-bottom:20px;">'
+                    f'{_memo_re.get("perfil_activo","")}</div>',
+                    unsafe_allow_html=True)
+                _re_mc1, _re_mc2 = st.columns(2)
+                with _re_mc1:
+                    st.markdown('<div style="font-size:9px;color:#9A9080;letter-spacing:3px;text-transform:uppercase;font-weight:600;margin-bottom:8px;">Indicadores Clave</div>', unsafe_allow_html=True)
+                    st.markdown(f'<div style="background:#F7F5F1;border-left:3px solid #B8904A;border-radius:4px;padding:14px 16px;font-size:13px;color:#1E2D3D;line-height:1.8;">{_memo_re.get("indicadores_clave","")}</div>', unsafe_allow_html=True)
+                with _re_mc2:
+                    st.markdown('<div style="font-size:9px;color:#9A9080;letter-spacing:3px;text-transform:uppercase;font-weight:600;margin-bottom:8px;">Posicionamiento de Mercado</div>', unsafe_allow_html=True)
+                    st.markdown(f'<div style="background:#F7F5F1;border-left:3px solid #1E2D3D;border-radius:4px;padding:14px 16px;font-size:13px;color:#1E2D3D;line-height:1.8;">{_memo_re.get("posicionamiento_mercado","")}</div>', unsafe_allow_html=True)
+                st.markdown('<div style="height:14px;"></div>', unsafe_allow_html=True)
+                st.markdown('<div style="font-size:9px;color:#9A9080;letter-spacing:3px;text-transform:uppercase;font-weight:600;margin-bottom:8px;">Estructura Financiera</div>', unsafe_allow_html=True)
+                st.markdown(f'<div style="font-size:13px;color:#1E2D3D;line-height:1.8;margin-bottom:20px;">{_memo_re.get("estructura_financiera","")}</div>', unsafe_allow_html=True)
+                _re_mf1, _re_mf2 = st.columns(2)
+                with _re_mf1:
+                    st.markdown('<div style="font-size:9px;color:#9A9080;letter-spacing:3px;text-transform:uppercase;font-weight:600;margin-bottom:8px;">Factores Relevantes</div>', unsafe_allow_html=True)
+                    for _fi in (_memo_re.get("factores_relevantes") or []):
+                        st.markdown(f'<div style="font-size:12px;color:#1E2D3D;padding:8px 12px;border-bottom:1px solid #E8E4DC;line-height:1.6;">→ {_fi}</div>', unsafe_allow_html=True)
+                with _re_mf2:
+                    st.markdown('<div style="font-size:9px;color:#9A9080;letter-spacing:3px;text-transform:uppercase;font-weight:600;margin-bottom:8px;">Consideraciones</div>', unsafe_allow_html=True)
+                    for _ci in (_memo_re.get("consideraciones") or []):
+                        st.markdown(f'<div style="font-size:12px;color:#1E2D3D;padding:8px 12px;border-bottom:1px solid #E8E4DC;line-height:1.6;">· {_ci}</div>', unsafe_allow_html=True)
+                st.markdown('<div style="height:14px;"></div>', unsafe_allow_html=True)
+                st.markdown(
+                    f'<div style="background:#1E2D3D;border-radius:6px;padding:20px 24px;margin-top:4px;">'
+                    f'<div style="font-size:9px;color:#B8904A;letter-spacing:2px;text-transform:uppercase;'
+                    f'font-weight:600;margin-bottom:10px;">Síntesis del Análisis</div>'
+                    f'<div style="font-size:13px;color:#FFFFFF;line-height:1.8;">{_memo_re.get("sintesis","")}</div>'
+                    f'</div>',
+                    unsafe_allow_html=True)
+                _obs_l_ind = _memo_re.get("observaciones_legales") or []
+                _sug_m_ind = _memo_re.get("sugerencias_mitigacion") or []
+                if _obs_l_ind or _sug_m_ind:
+                    st.markdown('<div style="height:14px;"></div>', unsafe_allow_html=True)
+                    st.markdown(
+                        '<div style="font-size:9px;color:#9A9080;letter-spacing:3px;text-transform:uppercase;'
+                        'font-weight:600;margin-bottom:10px;">⚖ Análisis Legal</div>',
+                        unsafe_allow_html=True)
+                    _ol_ind1, _ol_ind2 = st.columns(2)
+                    with _ol_ind1:
+                        st.markdown(
+                            '<div style="font-size:10px;color:#E07A5F;font-weight:600;letter-spacing:1px;'
+                            'text-transform:uppercase;margin-bottom:6px;">Observaciones</div>',
+                            unsafe_allow_html=True)
+                        for _o in _obs_l_ind:
+                            st.markdown(
+                                f'<div style="font-size:12px;color:#1E2D3D;padding:8px 12px;'
+                                f'border-left:3px solid #E07A5F;background:#FFF5F3;'
+                                f'border-radius:0 4px 4px 0;margin-bottom:5px;line-height:1.55;">'
+                                f'⚠ {_o}</div>', unsafe_allow_html=True)
+                    with _ol_ind2:
+                        st.markdown(
+                            '<div style="font-size:10px;color:#1A7A4A;font-weight:600;letter-spacing:1px;'
+                            'text-transform:uppercase;margin-bottom:6px;">Mitigación</div>',
+                            unsafe_allow_html=True)
+                        for _s in _sug_m_ind:
+                            st.markdown(
+                                f'<div style="font-size:12px;color:#1E2D3D;padding:8px 12px;'
+                                f'border-left:3px solid #6BCEA0;background:#F0FBF5;'
+                                f'border-radius:0 4px 4px 0;margin-bottom:5px;line-height:1.55;">'
+                                f'→ {_s}</div>', unsafe_allow_html=True)
+                if st.button("REGENERAR MEMORANDUM", key="btn_ind_rsm_regen_re"):
+                    st.session_state.ind_resumen = None
+                    st.rerun()
+            # ── Descarga PDF ──────────────────────────────────────────
+            st.markdown("---")
+            st.markdown('<div class="section-title">Descargar Informe SOLUM</div>', unsafe_allow_html=True)
+            _ind_pdf_re = generar_informe_industrial_pdf(
+                r, st.session_state.get("industrial_factibilidad"),
+                datetime.datetime.now().strftime("%d/%m/%Y"),
+                altura_nave=float(st.session_state.get("ind_altura_nave") or st.session_state.get("ind_geo_h_nave_val") or 0))
+            st.download_button(
+                "DESCARGAR INFORME SOLUM (PDF)",
+                data=_ind_pdf_re,
+                file_name=f"SOLUM_industrial_{datetime.datetime.now().strftime('%Y%m%d')}.pdf",
+                mime="application/pdf",
+                use_container_width=True,
+                key="btn_dl_ind_pdf_re",
+            )
 
         # TAB 1: PARÁMETROS / GEOMETRÍA + RESUMEN
-        with ind_tabs[1]:
+        with ind_tabs[0]:
             # ── GEOMETRÍA DEL LOTE INDUSTRIAL ────────────────────
             st.markdown('<div class="section-title">Geometría del Lote</div>', unsafe_allow_html=True)
 
@@ -12696,10 +17154,10 @@ elif tipo_op == "Proyecto Logístico / Industrial":
 
             if _ind_geo_modo == "Tabular medidas":
                 _igc1, _igc2, _igc3, _igc4 = st.columns(4)
-                _ig_frente = _igc1.number_input("Frente (ml)",         min_value=1.0, value=float(st.session_state.get("ind_geo_frente", 30.0)), step=1.0, key="ind_geo_frente")
-                _ig_fondo  = _igc2.number_input("Fondo (ml)",          min_value=1.0, value=float(st.session_state.get("ind_geo_fondo",  50.0)), step=1.0, key="ind_geo_fondo")
-                _ig_izq    = _igc3.number_input("Lado izquierdo (ml)", min_value=1.0, value=float(st.session_state.get("ind_geo_izq",   50.0)), step=1.0, key="ind_geo_izq")
-                _ig_der    = _igc4.number_input("Lado derecho (ml)",   min_value=1.0, value=float(st.session_state.get("ind_geo_der",   50.0)), step=1.0, key="ind_geo_der")
+                _ig_frente = _igc1.number_input("Frente (ml)",         min_value=0.0, value=float(st.session_state.get("ind_geo_frente", 0.0)), step=1.0, key="ind_geo_frente")
+                _ig_fondo  = _igc2.number_input("Fondo (ml)",          min_value=0.0, value=float(st.session_state.get("ind_geo_fondo",  0.0)), step=1.0, key="ind_geo_fondo")
+                _ig_izq    = _igc3.number_input("Lado izquierdo (ml)", min_value=0.0, value=float(st.session_state.get("ind_geo_izq",   0.0)), step=1.0, key="ind_geo_izq")
+                _ig_der    = _igc4.number_input("Lado derecho (ml)",   min_value=0.0, value=float(st.session_state.get("ind_geo_der",   0.0)), step=1.0, key="ind_geo_der")
 
                 if st.button("Calcular geometría", key="ind_geo_calc_btn", type="primary"):
                     if _SHAPELY_OK:
@@ -12790,16 +17248,20 @@ elif tipo_op == "Proyecto Logístico / Industrial":
                     f'Altura recomendada al hombro: <strong>{_h_min:.0f}–{_h_max:.0f}m</strong> · {_h_nota}</div>',
                     unsafe_allow_html=True)
 
-                st.markdown('<div class="section-title">Massing 3D</div>', unsafe_allow_html=True)
+                st.markdown('<div class="section-title">Vista en Planta</div>', unsafe_allow_html=True)
                 _irg_h, _irg_sp = st.columns([1, 3])
                 _ig_h_nave = _irg_h.number_input(
                     "Altura al hombro (m)", min_value=3.0, max_value=25.0,
-                    value=float(st.session_state.get("ind_geo_h_nave_val", _h_default)),
+                    value=float(st.session_state.get("ind_geo_h_nave") or st.session_state.get("ind_altura_nave") or _h_default),
                     step=0.5, key="ind_geo_h_nave")
                 st.session_state["ind_geo_h_nave_val"] = _ig_h_nave
 
-                # Retiros fijos en 0 — la huella declarada ES la ocupación de la nave
-                _ig_ret_f, _ig_ret_l, _ig_ret_p = 0.0, 0.0, 0.0
+                # Retiro frontal = patio de maniobras (frente de la nave respecto al lote)
+                _pct_techada_r = r.get("pct_techada", 80.0) / 100.0  # ej: 0.80
+                _lote_bounds   = _ind_poly_lote.bounds if _ind_poly_lote else (0, 0, 0, 0)
+                _fondo_total   = _lote_bounds[3] - _lote_bounds[1]
+                _ig_ret_f      = _fondo_total * (1.0 - _pct_techada_r)  # patio al frente
+                _ig_ret_l, _ig_ret_p = 0.0, 0.0
                 _ind_poly_huella = _geo_aplicar_retiros(_ind_poly_lote, _ig_ret_f, _ig_ret_l, _ig_ret_p)
                 _ig_frente_val   = st.session_state.get("ind_geo_frente_val", 0.0)
 
@@ -12828,10 +17290,8 @@ elif tipo_op == "Proyecto Logístico / Industrial":
                 _col_3d, _col_tbl = st.columns([3, 2])
 
                 with _col_3d:
-                    # 3D industrial: nave de 1 planta con altura real al hombro
-                    _fig_3d_ind = _geo_render_3d(_ind_poly_lote, _ind_poly_huella, 1, 0, _ig_h_nave)
-                    st.plotly_chart(_fig_3d_ind, use_container_width=True)
-                    st.caption(f"Dorado: límite del lote · Azul: huella de nave · Altura: {_ig_h_nave:.1f}m al hombro")
+                    _fig_planta_ind = _geo_render_planta_industrial(_ind_poly_lote, _ind_poly_huella, _ig_h_nave)
+                    st.plotly_chart(_fig_planta_ind, use_container_width=True)
 
                 with _col_tbl:
                     _area_lote_geo  = _img.get("area_lote_m2", 0)
@@ -12852,13 +17312,25 @@ elif tipo_op == "Proyecto Logístico / Industrial":
                                 f'Los cálculos financieros usan el área de Parámetros.</div>',
                                 unsafe_allow_html=True)
 
+                    _pct_libre_r   = 100.0 - r.get("pct_techada", 80.0)
+                    _area_patio    = _area_lote_geo * (1.0 - _pct_techada_r)
+                    _h_sidebar     = float(st.session_state.get("ind_altura_nave") or _ig_h_nave)
+                    _vol_nave      = _area_nave_geo * _h_sidebar
+                    # Capacidad de almacenamiento (estimación pre-factibilidad)
+                    _h_util        = max(3.0, _h_sidebar - 1.2)   # altura libre bajo vigas
+                    _niv_rack      = max(1, int(_h_util / 3.2))    # niveles de rack (~3.2m/nivel)
+                    _pos_planta    = int(_area_nave_geo * 0.42 / 1.2)   # 42% util, 1.2m²/pos
+                    _pos_total     = _pos_planta * _niv_rack
+                    _densidad      = round(_pos_total / _area_nave_geo, 1) if _area_nave_geo > 0 else 0
                     _tbl_rows = [
-                        ("Área del lote (geo)",      f"{_area_lote_geo:,.0f} m²",  "Calculada del polígono"),
-                        ("Área declarada (Paráms.)", f"{_area_declarada:,.0f} m²", "Usada en finanzas"),
-                        ("Área de nave (huella)",    f"{_area_nave_geo:,.0f} m²",  f"{_img.get('cos_real_pct',0):.1f}% del lote"),
-                        ("Área de operaciones",      f"{_area_libre_geo:,.0f} m²", "Patios + maniobras"),
-                        ("Altura de nave",           f"{_ig_h_nave:.1f} m",         "Al hombro (gotera)"),
-                        ("Volumen operativo",        f"{_vol_nave:,.0f} m³",        "Nave × altura"),
+                        ("Área del terreno",           f"{_area_lote_geo:,.0f} m²",  "Calculada del polígono"),
+                        ("Área de almacén (nave)",     f"{_area_nave_geo:,.0f} m²",  f"{r.get('pct_techada',80):.0f}% del lote"),
+                        ("Patio de maniobras",         f"{_area_patio:,.0f} m²",     f"{_pct_libre_r:.0f}% · radio tráileres"),
+                        ("Altura al hombro",           f"{_h_sidebar:.1f} m",         "Altura libre al hombro (gotera)"),
+                        ("Niveles de rack",            f"{_niv_rack} niveles",        f"~{_h_util:.1f}m útil / 3.2m por nivel"),
+                        ("Posiciones de pallets",      f"{_pos_total:,} pos.",        f"{_pos_planta:,} planta × {_niv_rack} niveles"),
+                        ("Densidad de almacenamiento", f"{_densidad} pos/m²",         "Estimación pre-factibilidad"),
+                        ("Volumen operativo",          f"{_vol_nave:,.0f} m³",        "Nave × altura al hombro"),
                     ]
                     _tbl_html = (
                         '<table style="width:100%;border-collapse:collapse;font-size:11px;">'
@@ -12890,14 +17362,22 @@ elif tipo_op == "Proyecto Logístico / Industrial":
             ci3.metric("Costo Total Proyecto", f"${r.get('costo_total', 0):,.0f}")
             ci4.metric("Costo por m² (nave)", f"${r.get('costo_por_m2_nave', 0):,.0f}/m²")
 
+            _es_implementado = r.get("costo_nave_m2", 350) < 5
             st.markdown('<div class="section-title">Estructura de Costos</div>', unsafe_allow_html=True)
+            if _es_implementado:
+                st.markdown(
+                    '<div class="alert-gold">🏭 <strong>Inmueble implementado</strong> — el precio de adquisición incluye terreno y naves ya construidas. '
+                    'Costos de construcción en $0 (no aplica). Costo/m² nave refleja el valor total de la inversión.</div>',
+                    unsafe_allow_html=True)
             ci5, ci6 = st.columns(2)
             with ci5:
-                ci5.metric("Terreno", f"${r.get('costo_terreno', 0):,.0f}")
+                ci5.metric("Precio adquisición" if _es_implementado else "Terreno", f"${r.get('costo_terreno', 0):,.0f}",
+                           "terreno + naves implementadas" if _es_implementado else None)
+                if not _es_implementado:
+                    ci5.metric("Nave techada", f"${r.get('costo_nave_total', 0):,.0f}", f"${r.get('costo_nave_m2', 0):,.0f}/m² × {r.get('area_nave', 0):,.0f} m²")
+                    ci5.metric("Piso área libre", f"${r.get('costo_pisos_libres', 0):,.0f}", f"${r.get('costo_piso_libre_m2', 0):,.0f}/m² × {r.get('area_libre', 0):,.0f} m²")
+                    ci5.metric(f"Costos Indirectos ({r.get('pct_indirectos', 5):.0f}%)", f"${r['soft_costs']:,.0f}")
                 ci5.metric("Alcabala (3%)", f"${r.get('alcabala', 0):,.0f}")
-                ci5.metric("Nave techada", f"${r.get('costo_nave_total', 0):,.0f}", f"${r.get('costo_nave_m2', 0):,.0f}/m² × {r.get('area_nave', 0):,.0f} m²")
-                ci5.metric("Piso área libre", f"${r.get('costo_pisos_libres', 0):,.0f}", f"${r.get('costo_piso_libre_m2', 0):,.0f}/m² × {r.get('area_libre', 0):,.0f} m²")
-                ci5.metric(f"Costos Indirectos ({r.get('pct_indirectos', 5):.0f}%)", f"${r['soft_costs']:,.0f}")
             with ci6:
                 costo_items = [
                     ("Terreno", r.get('costo_terreno', 0)),
@@ -12922,22 +17402,35 @@ elif tipo_op == "Proyecto Logístico / Industrial":
                 )
                 st.plotly_chart(fig_costs, use_container_width=True)
 
-            st.markdown(
-                '<div class="alert-gold">'
-                f'<strong>Costos de construcción:</strong> Nave: ${r.get("costo_nave_m2", 0):,.0f}/m² ({r.get("tipo_nave", "")}) · '
-                f'Piso área libre: ${r.get("costo_piso_libre_m2", 0):,.0f}/m². '
-                f'Costos indirectos ({r.get("pct_indirectos", 5):.0f}%): permisos, licencias municipales, supervisión y gestión de obra.'
-                '</div>',
-                unsafe_allow_html=True
-            )
+            if not _es_implementado:
+                st.markdown(
+                    '<div class="alert-gold">'
+                    f'<strong>Costos de construcción:</strong> Nave: ${r.get("costo_nave_m2", 0):,.0f}/m² ({r.get("tipo_nave", "")}) · '
+                    f'Piso área libre: ${r.get("costo_piso_libre_m2", 0):,.0f}/m². '
+                    f'Costos indirectos ({r.get("pct_indirectos", 5):.0f}%): permisos, licencias municipales, supervisión y gestión de obra.'
+                    '</div>',
+                    unsafe_allow_html=True
+                )
 
-            # ── Validador precio de terreno (referencia orientativa) ──
+            # ── Validador precio de adquisición ──
             _pt_m2 = r.get('costo_terreno', 0) / r.get('area_terreno', 1) if r.get('area_terreno', 0) > 0 else 0
             _zona_ind_sel = st.session_state.get("ind_zona_lima", "")
             _es_ves_lurin = any(z in _zona_ind_sel for z in ["Villa El Salvador", "Lurín"])
             if _pt_m2 > 0:
                 _uso_ind = r.get("uso", "Inversión")
-                if _es_ves_lurin:
+                if _es_implementado:
+                    # Para inmueble implementado: comparar costo/m² nave vs mercado
+                    _cpm2_nave = r.get("costo_por_m2_nave", 0)
+                    _mkt_low, _mkt_high = (700, 1100) if _es_ves_lurin else (600, 1200)
+                    if _cpm2_nave <= _mkt_high:
+                        _tc, _tb = "#E8F5EE", "#1A4731"
+                        _tm = (f"✓ Inmueble implementado a <b>${_cpm2_nave:,.0f}/m² nave</b> — "
+                               f"dentro del rango de mercado para nave existente en Lima ({_mkt_low:,}–{_mkt_high:,}/m² nave).")
+                    else:
+                        _tc, _tb = "#FDECEA", "#7A1A1A"
+                        _tm = (f"⚠ Inmueble implementado a <b>${_cpm2_nave:,.0f}/m² nave</b> — "
+                               f"sobre referencia de mercado (${_mkt_low:,}–{_mkt_high:,}/m² nave Lima). Verificar yield requerido.")
+                elif _es_ves_lurin:
                     _max_t = 180 if _uso_ind == "Inversión" else 300
                     _ref_txt = ("build-to-rent · ref. Aldea Logística VES 2023-2024: $140–$172/m²"
                                 if _uso_ind == "Inversión" else "uso propio · umbral orientativo")
@@ -12967,7 +17460,7 @@ elif tipo_op == "Proyecto Logístico / Industrial":
                     unsafe_allow_html=True)
 
         # TAB 2: FINANCIERO
-        with ind_tabs[2]:
+        with ind_tabs[1]:
             # ── Compra vs. Arrendamiento ──────────────────────
             st.markdown('<div class="section-title">Compra vs. Arrendamiento</div>', unsafe_allow_html=True)
             st.caption("Referencia orientativa — el profesional aplica su criterio según la industria, perfil del inquilino y estructura del deal.")
@@ -12982,14 +17475,6 @@ elif tipo_op == "Proyecto Logístico / Industrial":
                 _metodo_lbl   = "Amortización lineal 10 años (sin financiamiento)"
             _renta_be10 = r.get('costo_total', 0) / (10 * 12 * _an) if _an > 0 else 0
 
-            _PRIME_LO, _PRIME_HI = 5.50, 7.50
-            if _costo_m2_mes <= _PRIME_LO:
-                _bvr_bg = "#1A4731"
-            elif _costo_m2_mes <= _PRIME_HI:
-                _bvr_bg = "#7A5500"
-            else:
-                _bvr_bg = "#8B1A1A"
-
             bvr1, bvr2 = st.columns(2)
             with bvr1:
                 st.metric("Costo efectivo compra", f"${_costo_m2_mes:.2f}/m²/mes", _metodo_lbl)
@@ -13000,10 +17485,6 @@ elif tipo_op == "Proyecto Logístico / Industrial":
                     unsafe_allow_html=True)
             bvr2.metric("Break-even renta 10 años", f"${_renta_be10:.2f}/m²/mes",
                         "Renta mínima para recuperar la inversión en 10 años")
-
-            st.markdown(
-                f'<div style="background:{_bvr_bg};height:6px;border-radius:3px;margin-bottom:16px;"></div>',
-                unsafe_allow_html=True)
 
             # ── Proyección indexada (solo contratos plurianuales) ──
             if r.get("tipo_contrato") == "Plurianual (3+ años)" and r.get("ajuste_anual_pct", 0) > 0:
@@ -13041,40 +17522,47 @@ elif tipo_op == "Proyecto Logístico / Industrial":
                 'text-transform:uppercase;margin:10px 0 6px;">A · Adquisición del Terreno</div>',
                 unsafe_allow_html=True)
             _fA1, _fA2, _fA3, _fA4 = st.columns(4)
-            _fA1.metric("Costo Terreno + Alcabala", f"${r.get('costo_terreno_alcabala', 0):,.0f}")
-            _fA2.metric("Downpayment",
+            _fA1.metric("Costo Terreno", f"${r.get('costo_terreno', 0):,.0f}")
+            _fA2.metric("Alcabala (3%)", f"${r.get('alcabala', 0):,.0f}")
+            _fA3.metric(" ", " ")
+            _fA4.metric("Total Adquisición", f"${r.get('costo_terreno_alcabala', 0):,.0f}")
+            _fB1f, _fB2f, _fB3f, _fB4f = st.columns(4)
+            _fB1f.metric("Downpayment",
                         f"${r.get('capital_propio_terreno', 0):,.0f}",
                         f"{r.get('dp_terreno_pct', 0):.0f}% al contado")
-            _fA3.metric("Crédito Terreno",
+            _fB2f.metric("Crédito Terreno",
                         f"${r.get('monto_credito_terreno', 0):,.0f}",
                         f"{100 - r.get('dp_terreno_pct', 0):.0f}% financiado")
-            _fA4.metric("Cuota Terreno / mes",
+            _fB3f.metric("Cuota Terreno / mes",
                         f"${r.get('cuota_terreno', 0):,.0f}" if (r.get('cuota_terreno') or 0) > 0 else "—",
                         f"{r.get('tasa_terreno', 0):.1f}% · {r.get('plazo_terreno', 0)} años")
+            _fB4f.metric(" ", " ")
 
-            # ── Bloque B: Obra ──
-            st.markdown(
-                '<div style="font-size:10px;font-weight:700;color:#4A90C4;letter-spacing:1.5px;'
-                'text-transform:uppercase;margin:14px 0 6px;">B · Construcción e Implementación</div>',
-                unsafe_allow_html=True)
-            _fB1, _fB2, _fB3, _fB4 = st.columns(4)
-            _fB1.metric("Costo Total Construcción", f"${r.get('costo_construccion_soft', 0):,.0f}",
-                        f"${r.get('costo_por_m2_nave', 0):,.0f}/m² nave")
-            _fB2.metric("Downpayment Obra",
-                        f"${r.get('capital_propio_const', 0):,.0f}",
-                        f"{r.get('dp_const_pct', 0):.0f}% al contado")
-            _fB3.metric("Crédito Construcción",
-                        f"${r.get('monto_credito_const', 0):,.0f}",
-                        f"{100 - r.get('dp_const_pct', 0):.0f}% financiado")
-            _fB4.metric("Cuota Obra / mes",
-                        f"${r.get('cuota_const', 0):,.0f}" if (r.get('cuota_const') or 0) > 0 else "—",
-                        f"{r.get('tasa_const', 0):.1f}% · {r.get('plazo_const', 0)} años")
+            # ── Bloque B: Obra (solo Desarrollo Integral) ──
+            if _ind_perfil_activo == "Desarrollo Integral":
+                st.markdown(
+                    '<div style="font-size:10px;font-weight:700;color:#4A90C4;letter-spacing:1.5px;'
+                    'text-transform:uppercase;margin:14px 0 6px;">B · Construcción e Implementación</div>',
+                    unsafe_allow_html=True)
+                _fB1, _fB2, _fB3, _fB4 = st.columns(4)
+                _fB1.metric("Costo Total Construcción", f"${r.get('costo_construccion_soft', 0):,.0f}",
+                            f"${r.get('costo_por_m2_nave', 0):,.0f}/m² nave")
+                _fB2.metric("Downpayment Obra",
+                            f"${r.get('capital_propio_const', 0):,.0f}",
+                            f"{r.get('dp_const_pct', 0):.0f}% al contado")
+                _fB3.metric("Crédito Construcción",
+                            f"${r.get('monto_credito_const', 0):,.0f}",
+                            f"{100 - r.get('dp_const_pct', 0):.0f}% financiado")
+                _fB4.metric("Cuota Obra / mes",
+                            f"${r.get('cuota_const', 0):,.0f}" if (r.get('cuota_const') or 0) > 0 else "—",
+                            f"{r.get('tasa_const', 0):.1f}% · {r.get('plazo_const', 0)} años")
 
             # ── Bloque C: Totales ──
+            _bloque_c_label = "C · Resumen Total del Financiamiento" if _ind_perfil_activo == "Desarrollo Integral" else "B · Estructura de Financiamiento"
             st.markdown(
-                '<div style="font-size:10px;font-weight:700;color:#1E2D3D;letter-spacing:1.5px;'
-                'text-transform:uppercase;margin:14px 0 6px;border-top:1px solid #D8D4CC;padding-top:10px;">'
-                'C · Resumen Total del Financiamiento</div>',
+                f'<div style="font-size:10px;font-weight:700;color:#1E2D3D;letter-spacing:1.5px;'
+                f'text-transform:uppercase;margin:14px 0 6px;border-top:1px solid #D8D4CC;padding-top:10px;">'
+                f'{_bloque_c_label}</div>',
                 unsafe_allow_html=True)
             cf1, cf2, cf3 = st.columns(3)
             cf1.metric("Capital Propio Total", f"${r.get('capital_propio', 0):,.0f}",
@@ -13144,30 +17632,86 @@ elif tipo_op == "Proyecto Logístico / Industrial":
                         )
 
         # TAB 3: FLUJO DE CAJA
-        with ind_tabs[3]:
+        with ind_tabs[2]:
+            # ── Cronograma Gantt ───────────────────────────────────────
+            st.markdown('<div class="section-title">Cronograma del Proyecto</div>', unsafe_allow_html=True)
+            _meses_dd_p  = 4
+            _meses_const_p = int(st.session_state.get("ind_tplazo_const") or 6)
+            _const_start_p = 1  # construcción arranca mes 1, en paralelo con DD
+            _inicio_renta_p = _const_start_p + _meses_const_p  # 1+6=7
+            _phases_ind = [
+                ("Due Diligence / Permisos", 0, _meses_dd_p, "Gestión"),
+                (f"Construcción Nave ({_meses_const_p} meses)", _const_start_p, _inicio_renta_p, "Obra"),
+                ("Inicio Operaciones / Renta", _inicio_renta_p, _inicio_renta_p + 12, "Operación"),
+            ]
+            _cmap_ind  = {"Gestión": "#4A90C4", "Obra": "#B8904A", "Operación": "#1A5C32"}
+            _NAV_GI = "#0A1628"; _PLT_GI = "#0E1E2E"
+            _seen_leg_i = set()
+            _fig_g_ind = go.Figure()
+            for _pf, _ps, _pe, _pet in reversed(_phases_ind):
+                _show_l = _pet not in _seen_leg_i
+                _seen_leg_i.add(_pet)
+                _fig_g_ind.add_trace(go.Bar(
+                    x=[_pe - _ps], y=[_pf], base=[_ps], orientation="h",
+                    marker_color=_cmap_ind[_pet], name=_pet,
+                    text=[f"{_pe-_ps} mes{'es' if _pe-_ps != 1 else ''}"],
+                    textposition="inside", insidetextanchor="middle",
+                    textfont=dict(color="white", size=11, family="Inter"),
+                    hovertemplate=f"<b>{_pf}</b><br>Inicio: mes {_ps}<br>Fin: mes {_pe}<br>Duración: {_pe-_ps} meses<extra></extra>",
+                    showlegend=_show_l,
+                ))
+            _fig_g_ind.add_vline(x=0, line_color="#B8904A", line_width=1.5, line_dash="dot")
+            _fig_g_ind.update_layout(
+                barmode="overlay", paper_bgcolor=_NAV_GI, plot_bgcolor=_PLT_GI,
+                font=dict(color="white", size=10, family="Inter"),
+                margin=dict(l=0, r=20, t=10, b=30), height=190,
+                xaxis=dict(title="Mes del proyecto", tickmode="linear", tick0=0, dtick=2,
+                           gridcolor="#1E2D3D", tickfont=dict(size=10),
+                           range=[-0.5, _inicio_renta_p + 13]),
+                yaxis=dict(showgrid=False, tickfont=dict(size=11)),
+                legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0,
+                            font=dict(size=10), bgcolor="rgba(0,0,0,0)"),
+                showlegend=True,
+            )
+            st.plotly_chart(_fig_g_ind, use_container_width=True)
+            _gcol1, _gcol2, _gcol3 = st.columns(3)
+            _gcol1.metric("Due Diligence / Permisos", f"{_meses_dd_p} meses")
+            _gcol2.metric("Construcción Nave", f"{_meses_const_p} meses")
+            _gcol3.metric("Inicio de Renta", f"Mes {_inicio_renta_p}")
+            st.markdown("---")
+
             if r.get('uso') == "Inversión" and r.get('flujo_anual'):
+                fa = r['flujo_anual']
+                _ct_fc  = r.get('costo_total', 0) or 0
+                _cp_fc  = r.get('capital_propio', 0) or 0
+                _mc_fc  = r.get('monto_credito', 0) or 0
+                _rna_fc = r.get('renta_neta_anual', 0) or 0
+                _rba_fc = (r.get('renta_total_mes', 0) or 0) * 12
+                _cuota_m_fc = r.get('cuota_mensual', 0) or 0
+                _cuota_a_fc = _cuota_m_fc * 12
+                _plazo_fc = r.get('plazo_anos', 0) or 0
+                _gasto_fin_fc = max(_cuota_a_fc * _plazo_fc - _mc_fc, 0)
+                APRIC_FC = r.get('APRECIACION_IND', 0.03)
+
+                # ── Score viabilidad ─────────────────────────────────
                 st.markdown('<div class="section-title">Score de Viabilidad</div>', unsafe_allow_html=True)
-
-                # Score compuesto
-                _score_pts = 0
-                _score_max = 4
-                if r.get('yield_neto', 0) >= 7:    _score_pts += 1
-                if r.get('dscr') and r['dscr'] >= 1.2: _score_pts += 1
+                _score_pts = 0; _score_max = 4
+                if r.get('yield_neto', 0) >= 7:          _score_pts += 1
+                if r.get('dscr') and r['dscr'] >= 1.2:   _score_pts += 1
                 if r.get('payback_anos') and r['payback_anos'] <= 12: _score_pts += 1
-                if r.get('irr_anual') and r['irr_anual'] >= 12: _score_pts += 1
+                if r.get('irr_anual') and r['irr_anual'] >= 12:       _score_pts += 1
                 _score_pct = _score_pts / _score_max
-                _score_color = "#1A4731" if _score_pct >= 0.75 else ("#7A4F1A" if _score_pct >= 0.5 else "#7A1A1A")
-                _score_bg = "#E8F5EE" if _score_pct >= 0.75 else ("#FFF8EE" if _score_pct >= 0.5 else "#FFF0F0")
-                _score_etiq = "INVERSIÓN VIABLE" if _score_pct >= 0.75 else ("INVERSIÓN CON RESERVAS" if _score_pct >= 0.5 else "REVISAR ESTRUCTURA")
-
+                _sc  = "#1A4731" if _score_pct >= 0.75 else ("#7A4F1A" if _score_pct >= 0.5 else "#7A1A1A")
+                _sbg = "#E8F5EE" if _score_pct >= 0.75 else ("#FFF8EE" if _score_pct >= 0.5 else "#FFF0F0")
+                _se  = "INVERSIÓN VIABLE" if _score_pct >= 0.75 else ("INVERSIÓN CON RESERVAS" if _score_pct >= 0.5 else "REVISAR ESTRUCTURA")
                 st.markdown(f"""
-                <div style="background:{_score_bg};border:1px solid {_score_color};border-left:4px solid {_score_color};
+                <div style="background:{_sbg};border:1px solid {_sc};border-left:4px solid {_sc};
                             border-radius:8px;padding:18px 24px;margin-bottom:20px;display:flex;align-items:center;gap:24px;">
-                    <div style="font-size:48px;font-weight:800;color:{_score_color};min-width:64px;text-align:center;">{_score_pts}/{_score_max}</div>
+                    <div style="font-size:48px;font-weight:800;color:{_sc};min-width:64px;text-align:center;">{_score_pts}/{_score_max}</div>
                     <div>
-                        <div style="font-size:9px;letter-spacing:3px;color:{_score_color};text-transform:uppercase;font-weight:700;opacity:0.7;">Score de Viabilidad Industrial</div>
-                        <div style="font-size:18px;font-weight:700;color:{_score_color};margin-top:4px;">{_score_etiq}</div>
-                        <div style="font-size:12px;color:{_score_color};opacity:0.8;margin-top:6px;line-height:1.5;">
+                        <div style="font-size:9px;letter-spacing:3px;color:{_sc};text-transform:uppercase;font-weight:700;opacity:0.7;">Score de Viabilidad Industrial</div>
+                        <div style="font-size:18px;font-weight:700;color:{_sc};margin-top:4px;">{_se}</div>
+                        <div style="font-size:12px;color:{_sc};opacity:0.8;margin-top:6px;line-height:1.5;">
                             {"✓" if r.get('yield_neto',0)>=7 else "✗"} Yield neto ≥ 7% &nbsp;·&nbsp;
                             {"✓" if r.get('dscr') and r['dscr']>=1.2 else "✗"} DSCR ≥ 1.20x &nbsp;·&nbsp;
                             {"✓" if r.get('payback_anos') and r['payback_anos']<=12 else "✗"} Payback ≤ 12 años &nbsp;·&nbsp;
@@ -13176,6 +17720,7 @@ elif tipo_op == "Proyecto Logístico / Industrial":
                     </div>
                 </div>""", unsafe_allow_html=True)
 
+                # ── Indicadores de retorno ─────────────────────────────
                 st.markdown('<div class="section-title">Indicadores de Retorno</div>', unsafe_allow_html=True)
                 cf1, cf2, cf3, cf4 = st.columns(4)
                 cf1.metric("TIR Equity 10 años", f"{r.get('irr_anual', 0):.1f}%" if r.get('irr_anual') is not None else "—")
@@ -13183,107 +17728,166 @@ elif tipo_op == "Proyecto Logístico / Industrial":
                 cf3.metric("Yield Neto", f"{r.get('yield_neto', 0):.1f}%")
                 cf4.metric("Payback", f"{r.get('payback_anos', 0):.1f} a." if r.get('payback_anos') else "—")
 
-                st.markdown('<div class="section-title">Flujo de Caja Proyectado (10 años)</div>', unsafe_allow_html=True)
-                fa = r['flujo_anual']
-                anos_fc = list(range(len(fa)))
-                colores_fc = ["#7A1A1A" if v < 0 else "#1A4731" for v in fa]
-                fig_fc = go.Figure(go.Bar(
-                    x=[f"Año {i}" if i > 0 else "Inv. Inicial" for i in anos_fc],
-                    y=fa,
-                    marker_color=colores_fc,
-                    text=[f"${v:,.0f}" for v in fa],
-                    textposition="outside",
+                # ── Comparativa 100% Equity vs Con Financiamiento ─────
+                st.markdown('<div class="section-title">Comparativa — 100% Equity vs Con Financiamiento</div>', unsafe_allow_html=True)
+
+                def _irr_fc_bisect(flows, lo=-0.5, hi=5.0, tol=1e-6, maxiter=200):
+                    def _npv(rate): return sum(f / (1+rate)**i for i, f in enumerate(flows))
+                    if _npv(lo) * _npv(hi) > 0: return None
+                    for _ in range(maxiter):
+                        mid = (lo + hi) / 2
+                        if abs(hi - lo) < tol: return mid
+                        if _npv(lo) * _npv(mid) <= 0: hi = mid
+                        else: lo = mid
+                    return (lo + hi) / 2
+
+                _flujo_eq = [-_ct_fc] + [_rna_fc] * 9 + [_rna_fc + _ct_fc * (1 + APRIC_FC) ** 10]
+                _irr_eq_r  = _irr_fc_bisect(_flujo_eq)
+                _irr_eq_s  = f"{_irr_eq_r*100:.1f}%" if _irr_eq_r is not None else "—"
+                _irr_fin_s = f"{r.get('irr_anual',0):.1f}%" if r.get('irr_anual') is not None else "—"
+                _pb_eq_s   = f"{_ct_fc/_rna_fc:.1f} a." if _rna_fc > 0 else "—"
+                _fl_lib_a  = _rna_fc - _cuota_a_fc
+                _pb_fin_s  = f"{_cp_fc/_fl_lib_a:.1f} a." if _fl_lib_a > 0 and _cp_fc > 0 else "—"
+                _dscr_s    = f"{r.get('dscr',0):.2f}x" if r.get('dscr') else "—"
+                _td = 'padding:8px 14px;font-size:12px;border:1px solid #D8D4CC;'
+                _cmp_tbl = (
+                    '<table style="border-collapse:collapse;width:100%;margin-bottom:16px;"><thead><tr>'
+                    + f'<th style="background:#1E2D3D;color:#fff;padding:9px 14px;font-size:11px;font-weight:600;text-align:left;border:1px solid #2A3D51;">Métrica</th>'
+                    + f'<th style="background:#1E2D3D;color:#B8904A;padding:9px 14px;font-size:11px;font-weight:600;text-align:right;border:1px solid #2A3D51;">100% Equity</th>'
+                    + f'<th style="background:#1E2D3D;color:#4A90C4;padding:9px 14px;font-size:11px;font-weight:600;text-align:right;border:1px solid #2A3D51;">Con Financiamiento</th>'
+                    + '</tr></thead><tbody>'
+                    + f'<tr style="background:#F9F7F4;"><td style="{_td}">Capital requerido</td><td style="{_td}text-align:right;font-weight:700;">${_ct_fc:,.0f}</td><td style="{_td}text-align:right;font-weight:700;">${_cp_fc:,.0f}</td></tr>'
+                    + f'<tr><td style="{_td}">Cuota mensual</td><td style="{_td}text-align:right;">—</td><td style="{_td}text-align:right;">${_cuota_m_fc:,.0f}</td></tr>'
+                    + f'<tr style="background:#F9F7F4;"><td style="{_td}">Gasto financiero estimado</td><td style="{_td}text-align:right;">—</td><td style="{_td}text-align:right;">${_gasto_fin_fc:,.0f}</td></tr>'
+                    + f'<tr><td style="{_td}">DSCR</td><td style="{_td}text-align:right;">—</td><td style="{_td}text-align:right;">{_dscr_s}</td></tr>'
+                    + f'<tr style="background:#F9F7F4;"><td style="{_td}">Payback estimado</td><td style="{_td}text-align:right;">{_pb_eq_s}</td><td style="{_td}text-align:right;">{_pb_fin_s}</td></tr>'
+                    + f'<tr><td style="{_td}font-weight:700;">TIR Equity 10 años</td><td style="{_td}text-align:right;font-weight:700;color:#1A5C32;">{_irr_eq_s}</td><td style="{_td}text-align:right;font-weight:700;color:#1A5C32;">{_irr_fin_s}</td></tr>'
+                    + '</tbody></table>'
+                )
+                st.markdown(_cmp_tbl, unsafe_allow_html=True)
+
+                # ── Gráfico flujo acumulado ────────────────────────────
+                st.markdown('<div class="section-title">Flujo de Caja Acumulado (10 años)</div>', unsafe_allow_html=True)
+                _acum_vals = []
+                _s_fc = 0
+                for fv in fa:
+                    _s_fc += fv
+                    _acum_vals.append(_s_fc)
+                _be_yr = next((i for i, v in enumerate(_acum_vals) if v >= 0), None)
+                fig_acum = go.Figure()
+                fig_acum.add_trace(go.Scatter(
+                    x=list(range(len(fa))), y=_acum_vals,
+                    mode="lines+markers", name="Flujo Acumulado",
+                    line=dict(color="#B8904A", width=2.5), marker=dict(size=6),
+                    hovertemplate="Año %{x}<br>Acumulado: $%{y:,.0f}<extra></extra>",
                 ))
-                fig_fc.update_layout(
-                    height=300, margin=dict(t=30, b=20, l=10, r=10),
+                fig_acum.add_hline(y=0, line_color="#AAAAAA", line_width=1.2)
+                if _be_yr is not None:
+                    fig_acum.add_vline(x=_be_yr, line_dash="dot", line_color="#1A5C32", line_width=1.5,
+                                       annotation_text=f" Breakeven — Año {_be_yr}",
+                                       annotation_font=dict(size=10, color="#1A5C32"),
+                                       annotation_position="top right")
+                fig_acum.update_layout(
+                    height=320,
+                    yaxis=dict(tickformat="$,.0f", zeroline=False, showgrid=True, gridcolor="#E8E3DA",
+                               title=dict(text="USD acumulado", font=dict(color="#4A5568", size=11)),
+                               tickfont=dict(color="#4A5568", size=10)),
+                    xaxis=dict(title=dict(text="Año", font=dict(color="#4A5568", size=11)),
+                               showgrid=False, tickfont=dict(color="#4A5568", size=10),
+                               tickmode="linear", tick0=0, dtick=1),
+                    margin=dict(t=30, b=40, l=80, r=20),
                     paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
-                    yaxis=dict(tickfont=dict(color="#4A5568", size=10), showgrid=True, gridcolor="#E8E4DC", tickformat="$,.0f"),
-                    xaxis=dict(tickfont=dict(color="#4A5568", size=10)),
-                    font=dict(family="Inter", color="#4A5568"),
+                    font=dict(color="#4A5568", size=11, family="Inter, sans-serif"),
                     showlegend=False,
                 )
-                st.plotly_chart(fig_fc, use_container_width=True)
+                st.plotly_chart(fig_acum, use_container_width=True, config={"displayModeBar": False})
 
-                # Tabla flujo
+                # ── Tabla anual mejorada ───────────────────────────────
+                st.markdown('<div class="section-title">Detalle Anual</div>', unsafe_allow_html=True)
                 _fc_th = "".join(
                     f'<th style="background:#1E2D3D;color:#FFFFFF;padding:9px 12px;font-size:10px;'
                     f'letter-spacing:1px;text-transform:uppercase;font-weight:700;border:1px solid #2A3D51;text-align:right;">{h}</th>'
-                    for h in ["Período", "Renta Neta", "Cuota Deuda", "Flujo Libre", "Flujo Acumulado"]
+                    for h in ["Período", "Renta Bruta", "Gastos Op.", "Renta Neta", "Cuota Deuda", "Flujo Libre", "Flujo Acum."]
                 )
-                _fc_rows = ""
-                _acum = 0
-                cuota_anual = (r.get('cuota_mensual') or 0) * 12
+                _fc_rows = ""; _acum3 = 0
                 for i, fv in enumerate(fa):
                     bg = "#FFFFFF" if i % 2 == 0 else "#F9F7F4"
-                    yr_lbl = "Inversión Inicial" if i == 0 else f"Año {i}"
+                    yr_lbl = "Inv. Inicial" if i == 0 else f"Año {i}"
+                    _yr_note = " + Exit" if i == len(fa) - 1 else ""
                     if i == 0:
-                        _acum += fv
-                        _fc_rows += (f'<tr><td style="background:{bg};color:#1E2D3D;padding:8px 12px;font-size:12px;border:1px solid #E0DAD0;">{yr_lbl}</td>'
-                                     f'<td style="background:{bg};color:#1E2D3D;padding:8px 12px;font-size:12px;border:1px solid #E0DAD0;text-align:right;">—</td>'
-                                     f'<td style="background:{bg};color:#1E2D3D;padding:8px 12px;font-size:12px;border:1px solid #E0DAD0;text-align:right;">—</td>'
-                                     f'<td style="background:{bg};color:#7A1A1A;padding:8px 12px;font-size:12px;border:1px solid #E0DAD0;text-align:right;font-weight:700;">${fv:,.0f}</td>'
-                                     f'<td style="background:{bg};color:#7A1A1A;padding:8px 12px;font-size:12px;border:1px solid #E0DAD0;text-align:right;">${_acum:,.0f}</td></tr>')
+                        _acum3 += fv
+                        _fc_rows += (
+                            f'<tr><td style="background:{bg};color:#1E2D3D;padding:7px 12px;font-size:11px;border:1px solid #E0DAD0;">{yr_lbl}</td>'
+                            f'<td style="background:{bg};color:#1E2D3D;padding:7px 12px;font-size:11px;border:1px solid #E0DAD0;text-align:right;">—</td>'
+                            f'<td style="background:{bg};color:#1E2D3D;padding:7px 12px;font-size:11px;border:1px solid #E0DAD0;text-align:right;">—</td>'
+                            f'<td style="background:{bg};color:#1E2D3D;padding:7px 12px;font-size:11px;border:1px solid #E0DAD0;text-align:right;">—</td>'
+                            f'<td style="background:{bg};color:#1E2D3D;padding:7px 12px;font-size:11px;border:1px solid #E0DAD0;text-align:right;">—</td>'
+                            f'<td style="background:{bg};color:#7A1A1A;padding:7px 12px;font-size:11px;border:1px solid #E0DAD0;text-align:right;font-weight:700;">${fv:,.0f}</td>'
+                            f'<td style="background:{bg};color:#7A1A1A;padding:7px 12px;font-size:11px;border:1px solid #E0DAD0;text-align:right;">${_acum3:,.0f}</td></tr>'
+                        )
                     else:
-                        yr_actual = i
-                        _cuota_yr = cuota_anual if yr_actual <= r.get('plazo_anos', 0) else 0
-                        _renta = r.get('renta_neta_anual', 0) or 0
-                        _flujo_libre = _renta - _cuota_yr
-                        _flujo_display = _flujo_libre if i < len(fa) - 1 else fv
-                        _acum += _flujo_display
-                        _col_libre = "#1A4731" if _flujo_display >= 0 else "#7A1A1A"
-                        _col_acum  = "#1A4731" if _acum >= 0 else "#7A1A1A"
-                        _yr_note = " + Venta" if i == len(fa) - 1 else ""
-                        _fc_rows += (f'<tr><td style="background:{bg};color:#1E2D3D;padding:8px 12px;font-size:12px;border:1px solid #E0DAD0;">{yr_lbl}{_yr_note}</td>'
-                                     f'<td style="background:{bg};color:#1E2D3D;padding:8px 12px;font-size:12px;border:1px solid #E0DAD0;text-align:right;">${_renta:,.0f}</td>'
-                                     f'<td style="background:{bg};color:#1E2D3D;padding:8px 12px;font-size:12px;border:1px solid #E0DAD0;text-align:right;">${_cuota_yr:,.0f}</td>'
-                                     f'<td style="background:{bg};color:{_col_libre};padding:8px 12px;font-size:12px;border:1px solid #E0DAD0;text-align:right;font-weight:600;">${_flujo_display:,.0f}</td>'
-                                     f'<td style="background:{bg};color:{_col_acum};padding:8px 12px;font-size:12px;border:1px solid #E0DAD0;text-align:right;">${_acum:,.0f}</td></tr>')
-
+                        _cuota_yr = _cuota_a_fc if i <= _plazo_fc else 0
+                        _opex_yr  = _rba_fc * 0.08
+                        _rna_yr   = _rba_fc - _opex_yr
+                        _fl_yr    = _rna_yr - _cuota_yr
+                        _fl_disp  = _fl_yr if i < len(fa) - 1 else fv
+                        _acum3   += _fl_disp
+                        _cl = "#1A4731" if _fl_disp >= 0 else "#7A1A1A"
+                        _ca = "#1A4731" if _acum3 >= 0 else "#7A1A1A"
+                        _fc_rows += (
+                            f'<tr><td style="background:{bg};color:#1E2D3D;padding:7px 12px;font-size:11px;border:1px solid #E0DAD0;">{yr_lbl}{_yr_note}</td>'
+                            f'<td style="background:{bg};color:#1E2D3D;padding:7px 12px;font-size:11px;border:1px solid #E0DAD0;text-align:right;">${_rba_fc:,.0f}</td>'
+                            f'<td style="background:{bg};color:#7A7268;padding:7px 12px;font-size:11px;border:1px solid #E0DAD0;text-align:right;">(${_opex_yr:,.0f})</td>'
+                            f'<td style="background:{bg};color:#1E2D3D;padding:7px 12px;font-size:11px;border:1px solid #E0DAD0;text-align:right;">${_rna_yr:,.0f}</td>'
+                            f'<td style="background:{bg};color:#1E2D3D;padding:7px 12px;font-size:11px;border:1px solid #E0DAD0;text-align:right;">${_cuota_yr:,.0f}</td>'
+                            f'<td style="background:{bg};color:{_cl};padding:7px 12px;font-size:11px;border:1px solid #E0DAD0;text-align:right;font-weight:600;">${_fl_disp:,.0f}</td>'
+                            f'<td style="background:{bg};color:{_ca};padding:7px 12px;font-size:11px;border:1px solid #E0DAD0;text-align:right;">${_acum3:,.0f}</td></tr>'
+                        )
                 st.markdown(
                     f'<div style="overflow-x:auto;margin-bottom:20px;">'
                     f'<table style="width:100%;border-collapse:collapse;">'
                     f'<thead><tr>{_fc_th}</tr></thead><tbody>{_fc_rows}</tbody></table></div>',
                     unsafe_allow_html=True
                 )
-
-                st.markdown('<div class="section-title">Descargar Informe</div>', unsafe_allow_html=True)
-                _ind_pdf_bytes = generar_informe_industrial_pdf(
-                    r, st.session_state.get("industrial_factibilidad"),
-                    datetime.datetime.now().strftime("%d/%m/%Y"),
-                    altura_nave=float(st.session_state.get("ind_geo_h_nave_val") or 0))
-                st.download_button(
-                    "DESCARGAR INFORME PDF",
-                    data=_ind_pdf_bytes,
-                    file_name=f"informe_industrial_{datetime.datetime.now().strftime('%Y%m%d')}.pdf",
-                    mime="application/pdf",
-                    use_container_width=True,
-                )
-                st.caption("El archivo .html se abre en cualquier navegador y puede imprimirse como PDF.")
-
             else:
                 st.markdown(
                     '<div class="alert-legal">El flujo de caja e IRR están disponibles en modo <strong>Inversión</strong> '
                     'con renta de mercado ingresada. Cambia el propósito del activo en el panel izquierdo.</div>',
                     unsafe_allow_html=True
                 )
-                # Siempre mostrar botón de descarga aunque no haya IRR
-                st.markdown('<div class="section-title">Descargar Informe</div>', unsafe_allow_html=True)
-                _ind_pdf_bytes = generar_informe_industrial_pdf(
-                    r, st.session_state.get("industrial_factibilidad"),
-                    datetime.datetime.now().strftime("%d/%m/%Y"),
-                    altura_nave=float(st.session_state.get("ind_geo_h_nave_val") or 0))
-                st.download_button(
-                    "DESCARGAR INFORME PDF",
-                    data=_ind_pdf_bytes,
-                    file_name=f"informe_industrial_{datetime.datetime.now().strftime('%Y%m%d')}.pdf",
-                    mime="application/pdf",
-                    use_container_width=True,
-                )
+
+            # ── Descarga siempre disponible ───────────────────────────
+            st.markdown('<div class="section-title">Descargar Informe</div>', unsafe_allow_html=True)
+            _ind_pdf_bytes = generar_informe_industrial_pdf(
+                r, st.session_state.get("industrial_factibilidad"),
+                datetime.datetime.now().strftime("%d/%m/%Y"),
+                altura_nave=float(st.session_state.get("ind_altura_nave") or st.session_state.get("ind_geo_h_nave_val") or 0))
+            st.download_button(
+                "DESCARGAR INFORME SOLUM (PDF)",
+                data=_ind_pdf_bytes,
+                file_name=f"SOLUM_industrial_{datetime.datetime.now().strftime('%Y%m%d')}.pdf",
+                mime="application/pdf",
+                use_container_width=True,
+                key="btn_dl_ind_pdf_fc",
+            )
 
         # TAB 4: COMPARATIVA
-        with ind_tabs[4]:
-            # Multi-project comparison
-            cmp_list = st.session_state.ind_comparativa
+        with ind_tabs[6]:
+            if _ind_perfil_activo == "Compra de Terreno":
+                st.markdown(
+                    '<div style="background:#EEF3F8;border:1px solid #B0C4D8;border-left:4px solid #1E2D3D;'
+                    'border-radius:8px;padding:28px 28px;margin-top:8px;">'
+                    '<div style="font-size:13px;font-weight:700;color:#1E2D3D;margin-bottom:10px;">No disponible para este perfil</div>'
+                    '<div style="font-size:13px;color:#2A3A4A;line-height:1.8;">'
+                    'La comparativa de escenarios está disponible para los perfiles '
+                    '<strong>Desarrollo Integral</strong> e <strong>Inmueble Implementado</strong>.<br><br>'
+                    'Cambia el perfil en el panel izquierdo para acceder a esta función.'
+                    '</div></div>',
+                    unsafe_allow_html=True)
+                cmp_list = []
+            else:
+                # Multi-project comparison
+                cmp_list = st.session_state.ind_comparativa
             if cmp_list:
                 st.markdown('<div class="section-title">Comparativa de Escenarios</div>', unsafe_allow_html=True)
                 _cmp_metrics = ["costo_total", "costo_por_m2_nave", "yield_neto", "dscr", "payback_anos", "irr_anual", "capital_propio", "cuota_mensual"]
@@ -13384,9 +17988,8 @@ elif tipo_op == "Proyecto Logístico / Industrial":
                 cv2.metric("Cuota efectiva (post-impuestos)", f"${cuota_ef:,.0f}/mes",
                            f"−${ahorro_fis_mens:,.0f}/mes escudo fiscal")
                 cv3.metric("Renta de mercado equiv.", f"${r.get('renta_total_mes', 0):,.0f}/mes")
-                dif = (r.get('renta_total_mes') or 0) - cuota_ef
-                cv4.metric("Ahorro vs. arrendar", f"${dif:,.0f}/mes" if dif >= 0 else f"−${abs(dif):,.0f}/mes",
-                           "comprar es más barato" if dif >= 0 else "arrendar es más barato aún")
+                cv4.metric("Escudo fiscal mensual", f"${ahorro_fis_mens:,.0f}/mes",
+                           "Deducción intereses + depreciación")
 
                 # ── Panel escudo fiscal ───────────────────────────────────────────
                 st.markdown(f"""
@@ -13467,136 +18070,86 @@ elif tipo_op == "Proyecto Logístico / Industrial":
             else:
                 st.markdown('<div class="alert-legal">Ingresa la renta de mercado equivalente en el panel izquierdo para activar la comparativa Comprar vs. Arrendar.</div>', unsafe_allow_html=True)
 
-        # TAB 6: MEMORANDUM ADVISORY BOARD
-        with ind_tabs[6]:
-            memo = st.session_state.get("ind_resumen")
-            if not memo:
+        # TAB 3: LEGAL
+        with ind_tabs[3]:
+            st.markdown('<div class="section-title">Due Diligence Legal</div>', unsafe_allow_html=True)
+            _fac_leg = st.session_state.get("industrial_factibilidad")
+            if not _fac_leg:
                 st.markdown(
-                    '<div style="background:#F7F5F1;border:1px solid #D8D4CC;border-radius:8px;'
-                    'padding:36px 32px;text-align:center;margin-top:8px;">'
-                    '<div style="font-size:9px;color:#9A9080;letter-spacing:3px;text-transform:uppercase;'
-                    'font-weight:600;margin-bottom:12px;">Advisory Board</div>'
-                    '<div style="font-size:16px;font-weight:600;color:#1E2D3D;margin-bottom:8px;">'
-                    'Memorandum de Análisis</div>'
-                    '<div style="width:36px;height:2px;background:#B8904A;margin:12px auto;"></div>'
-                    '<div style="font-size:13px;color:#7A7268;line-height:1.7;max-width:520px;margin:0 auto 24px;">'
-                    'Genera el memorandum de Advisory Board: consolidación de la data analítica del proyecto — '
-                    'indicadores, estructura de costos, financiamiento y contexto de mercado — '
-                    'para que el cliente evalúe la oportunidad según sus propios criterios y estrategia.'
-                    '</div>',
-                    unsafe_allow_html=True
-                )
-                st.markdown("</div>", unsafe_allow_html=True)
-            if st.button("GENERAR MEMORANDUM", use_container_width=True, type="primary", key="btn_ind_rsm"):
-                _r_copy = dict(r)
-                st.session_state.ind_resumen = _run_with_retry(
-                    lambda _rc=_r_copy: generar_memorandum_advisory_ind(_rc),
-                    "Generando memorandum de Advisory Board…"
-                )
-                st.rerun()
-            if memo:
+                    '<div style="background:#EEF3F8;border:1px solid #B0C4D8;border-left:4px solid #1E2D3D;'
+                    'border-radius:8px;padding:28px 28px;margin-top:8px;">'
+                    '<div style="font-size:13px;font-weight:700;color:#1E2D3D;margin-bottom:10px;">Análisis legal no ejecutado</div>'
+                    '<div style="font-size:13px;color:#2A3A4A;line-height:1.8;">'
+                    'Adjunta la <strong>Partida Registral</strong> en el panel izquierdo y presiona '
+                    '<strong>ANALIZAR DOCUMENTOS</strong> para obtener:<br><br>'
+                    '✓ Identificación registral: propietarios, cargas e hipotecas<br>'
+                    '✓ Verificación de área registral vs. área real<br>'
+                    '✓ Alertas legales: medidas cautelares y restricciones'
+                    '</div></div>',
+                    unsafe_allow_html=True)
+            else:
+                _sem_l2 = _fac_leg.get("semaforo_legal", "amarillo").lower()
+                _SEM2 = {"verde": ("#1A4731", "#E8F5EE"), "amarillo": ("#7A4F1A", "#FFF8EE"), "rojo": ("#7A1A1A", "#FFF0F0")}
+                _ETIQ2 = {"verde": "SIN ALERTAS LEGALES", "amarillo": "OBSERVACIONES LEGALES", "rojo": "ALERTAS LEGALES CRÍTICAS"}
+                _lc2, _lbg2 = _SEM2.get(_sem_l2, ("#1E2D3D", "#F5F2ED"))
                 st.markdown(f"""
-                <div style="border-bottom:2px solid #B8904A;padding-bottom:16px;margin-bottom:24px;">
-                    <div style="font-size:9px;color:#B8904A;letter-spacing:4px;text-transform:uppercase;
-                                font-weight:600;margin-bottom:6px;">Osterling Advisory · Memorandum de Advisory Board</div>
-                    <div style="font-size:20px;font-weight:700;color:#1E2D3D;">
-                        {memo.get('titulo','Análisis Industrial')}</div>
+                <div style="background:{_lbg2};border:1px solid {_lc2};border-left:4px solid {_lc2};
+                            border-radius:8px;padding:20px 24px;margin-bottom:20px;">
+                    <div style="font-size:9px;letter-spacing:3px;color:{_lc2};text-transform:uppercase;
+                                font-weight:700;margin-bottom:6px;">Evaluación Legal</div>
+                    <div style="font-size:20px;font-weight:700;color:{_lc2};margin-bottom:8px;">{_ETIQ2.get(_sem_l2,'—')}</div>
+                    <div style="font-size:13px;color:{_lc2};line-height:1.6;">{_fac_leg.get('resumen_legal','—')}</div>
                 </div>""", unsafe_allow_html=True)
-
-                st.markdown(
-                    '<div style="font-size:9px;color:#9A9080;letter-spacing:3px;text-transform:uppercase;'
-                    'font-weight:600;margin-bottom:8px;">Perfil del Activo</div>',
-                    unsafe_allow_html=True
-                )
-                st.markdown(
-                    f'<div style="font-size:13px;color:#1E2D3D;line-height:1.8;margin-bottom:20px;">'
-                    f'{memo.get("perfil_activo","")}</div>',
-                    unsafe_allow_html=True
-                )
-
-                _mc1, _mc2 = st.columns(2)
-                with _mc1:
-                    st.markdown(
-                        '<div style="font-size:9px;color:#9A9080;letter-spacing:3px;text-transform:uppercase;'
-                        'font-weight:600;margin-bottom:8px;">Indicadores Clave</div>',
-                        unsafe_allow_html=True
-                    )
-                    st.markdown(
-                        f'<div style="background:#F7F5F1;border-left:3px solid #B8904A;border-radius:4px;'
-                        f'padding:14px 16px;font-size:13px;color:#1E2D3D;line-height:1.8;">'
-                        f'{memo.get("indicadores_clave","")}</div>',
-                        unsafe_allow_html=True
-                    )
-                with _mc2:
-                    st.markdown(
-                        '<div style="font-size:9px;color:#9A9080;letter-spacing:3px;text-transform:uppercase;'
-                        'font-weight:600;margin-bottom:8px;">Posicionamiento de Mercado</div>',
-                        unsafe_allow_html=True
-                    )
-                    st.markdown(
-                        f'<div style="background:#F7F5F1;border-left:3px solid #1E2D3D;border-radius:4px;'
-                        f'padding:14px 16px;font-size:13px;color:#1E2D3D;line-height:1.8;">'
-                        f'{memo.get("posicionamiento_mercado","")}</div>',
-                        unsafe_allow_html=True
-                    )
-
-                st.markdown('<div style="height:18px;"></div>', unsafe_allow_html=True)
-
-                st.markdown(
-                    '<div style="font-size:9px;color:#9A9080;letter-spacing:3px;text-transform:uppercase;'
-                    'font-weight:600;margin-bottom:8px;margin-top:4px;">Estructura Financiera</div>',
-                    unsafe_allow_html=True
-                )
-                st.markdown(
-                    f'<div style="font-size:13px;color:#1E2D3D;line-height:1.8;margin-bottom:20px;">'
-                    f'{memo.get("estructura_financiera","")}</div>',
-                    unsafe_allow_html=True
-                )
-
-                _mf1, _mf2 = st.columns(2)
-                with _mf1:
-                    st.markdown(
-                        '<div style="font-size:9px;color:#9A9080;letter-spacing:3px;text-transform:uppercase;'
-                        'font-weight:600;margin-bottom:8px;">Factores Relevantes</div>',
-                        unsafe_allow_html=True
-                    )
-                    for _fitem in (memo.get("factores_relevantes") or []):
+                _prop_l2 = _fac_leg.get("propietarios_partida", []) or []
+                _area_r2 = _fac_leg.get("area_registral_m2")
+                _partida_n2 = _fac_leg.get("partida_numero")
+                _dir_r2 = _fac_leg.get("direccion_partida")
+                if _partida_n2 or _area_r2 or _prop_l2:
+                    st.markdown('<div class="section-title">Identificación Registral</div>', unsafe_allow_html=True)
+                    _fl1, _fl2, _fl3 = st.columns(3)
+                    _fl1.metric("N° Partida", _partida_n2 or "—")
+                    _fl2.metric("Área registral", f"{_area_r2:,.2f} m²" if _area_r2 else "—")
+                    _fl3.metric("Propietario(s)", str(len(_prop_l2)) if _prop_l2 else "—")
+                    if _prop_l2:
+                        st.markdown('<div class="alert-legal"><strong>Titular(es):</strong> ' +
+                                    ' · '.join(str(p.get("nombre", p) if isinstance(p, dict) else p) for p in _prop_l2) +
+                                    '</div>', unsafe_allow_html=True)
+                    if _dir_r2:
+                        st.markdown(f'<div class="alert-legal"><strong>Dirección registral:</strong> {_dir_r2}</div>',
+                                    unsafe_allow_html=True)
+                _all_h2 = _fac_leg.get("hallazgos") or []
+                _leg_h2 = [h for h in _all_h2 if h.get("categoria") == "legal"]
+                if _leg_h2:
+                    _ISEV2 = {
+                        "verde":          ("🟢", "#1A4731", "#E8F5EE", "#C3E6CB"),
+                        "amarillo":       ("🟡", "#7A4F1A", "#FFF8EE", "#FFE0A0"),
+                        "rojo":           ("🔴", "#7A1A1A", "#FFF0F0", "#F5C6CB"),
+                        "no_verificable": ("⚪", "#6A6A6A", "#F5F5F5", "#D8D4CC"),
+                    }
+                    st.markdown('<div class="section-title">Análisis Legal — Partida Registral SUNARP</div>', unsafe_allow_html=True)
+                    for _h2 in _leg_h2:
+                        _sev2 = (_h2.get("severidad") or "no_verificable").lower()
+                        _ic2, _tc2, _bg2, _bd2 = _ISEV2.get(_sev2, _ISEV2["no_verificable"])
+                        _sl2 = {"verde": "OK", "amarillo": "VERIFICAR", "rojo": "CRÍTICO", "no_verificable": "NO VERIFICABLE"}.get(_sev2, _sev2.upper())
+                        _sh2 = (f'<div style="margin-top:10px;padding-top:10px;border-top:1px solid {_bd2};">'
+                                f'<div style="font-size:9px;color:{_tc2};letter-spacing:1.5px;text-transform:uppercase;font-weight:700;margin-bottom:4px;">Subsanación</div>'
+                                f'<div style="font-size:12px;color:#2A3A4A;line-height:1.6;">{_h2["subsanacion"]}</div></div>'
+                                if _h2.get("subsanacion") else "")
                         st.markdown(
-                            f'<div style="font-size:12px;color:#1E2D3D;padding:8px 12px;'
-                            f'border-bottom:1px solid #E8E4DC;line-height:1.6;">→ {_fitem}</div>',
-                            unsafe_allow_html=True
-                        )
-                with _mf2:
-                    st.markdown(
-                        '<div style="font-size:9px;color:#9A9080;letter-spacing:3px;text-transform:uppercase;'
-                        'font-weight:600;margin-bottom:8px;">Consideraciones</div>',
-                        unsafe_allow_html=True
-                    )
-                    for _citem in (memo.get("consideraciones") or []):
-                        st.markdown(
-                            f'<div style="font-size:12px;color:#1E2D3D;padding:8px 12px;'
-                            f'border-bottom:1px solid #E8E4DC;line-height:1.6;">· {_citem}</div>',
-                            unsafe_allow_html=True
-                        )
-
-                st.markdown('<div style="height:18px;"></div>', unsafe_allow_html=True)
-
-                st.markdown(
-                    f'<div style="background:#1E2D3D;border-radius:6px;padding:20px 24px;margin-top:4px;">'
-                    f'<div style="font-size:9px;color:#B8904A;letter-spacing:2px;text-transform:uppercase;'
-                    f'font-weight:600;margin-bottom:10px;">Síntesis del Análisis</div>'
-                    f'<div style="font-size:13px;color:#FFFFFF;line-height:1.8;">'
-                    f'{memo.get("sintesis","")}</div>'
-                    f'</div>',
-                    unsafe_allow_html=True
-                )
-
-                if st.button("REGENERAR", key="btn_ind_rsm_regen"):
-                    st.session_state.ind_resumen = None
-                    st.rerun()
+                            f'<div style="background:{_bg2};border:1px solid {_bd2};border-left:4px solid {_tc2};'
+                            f'border-radius:6px;padding:14px 18px;margin-bottom:10px;">'
+                            f'<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">'
+                            f'<div style="font-size:9px;color:{_tc2};letter-spacing:1.5px;text-transform:uppercase;font-weight:700;">'
+                            f'{_ic2} {_h2.get("numero","")}. {_h2.get("punto","—")}</div>'
+                            f'<div style="font-size:8px;font-weight:700;color:{_tc2};background:rgba(0,0,0,0.07);'
+                            f'padding:2px 8px;border-radius:3px;">{_sl2}</div></div>'
+                            f'<div style="font-size:12px;color:#1E2D3D;line-height:1.6;">{_h2.get("hallazgo","—")}</div>'
+                            f'{_sh2}</div>', unsafe_allow_html=True)
+                elif not (_partida_n2 or _area_r2 or _prop_l2):
+                    st.info("No se encontraron datos legales en los documentos analizados.")
 
         # TAB 5: FACTIBILIDAD
-        with ind_tabs[5]:
+        with ind_tabs[4]:
             fac = st.session_state.get("industrial_factibilidad")
             if not fac:
                 st.markdown(
@@ -13798,17 +18351,37 @@ elif tipo_op == "Proyecto Logístico / Industrial":
                             for nv in _icnv:
                                 st.markdown(f'<div style="font-size:12px;color:#9A9080;padding:3px 0;">⚪ {nv}</div>', unsafe_allow_html=True)
                 else:
-                    # Fallback: legacy alertas
+                    # Alertas estructuradas (nuevo formato con severidad + accion)
                     alertas_t = fac.get("alertas_tecnicas", []) or []
                     alertas_l = fac.get("alertas_legales", []) or []
-                    if alertas_t or alertas_l:
+                    _todas_fac = []
+                    for _al in alertas_t:
+                        if isinstance(_al, dict):
+                            _todas_fac.append({**_al, "modulo": "Técnico"})
+                        else:
+                            _todas_fac.append({"severidad": "amarillo", "texto": str(_al), "accion": None, "modulo": "Técnico"})
+                    for _al in alertas_l:
+                        if isinstance(_al, dict):
+                            _todas_fac.append({**_al, "modulo": "Legal"})
+                        else:
+                            _al_sev = "rojo" if sem_l == "rojo" else "amarillo"
+                            _todas_fac.append({"severidad": _al_sev, "texto": str(_al), "accion": None, "modulo": "Legal"})
+                    if _todas_fac:
+                        _todas_fac.sort(key=lambda x: {"rojo": 0, "amarillo": 1, "verde": 2}.get(x.get("severidad", "amarillo"), 1))
                         st.markdown('<div class="section-title">Alertas</div>', unsafe_allow_html=True)
-                        for al in alertas_t:
-                            st.markdown(f'<div class="alert-gold">⚠ [TÉCNICO] {al}</div>', unsafe_allow_html=True)
-                        for al in alertas_l:
-                            _al_style = "alert-gold" if sem_l == "amarillo" else "alert-legal"
-                            _icon_al = "🔴" if sem_l == "rojo" else "🟡"
-                            st.markdown(f'<div class="{_al_style}">{_icon_al} [LEGAL] {al}</div>', unsafe_allow_html=True)
+                        _cs_fac = {"rojo": ("#C0392B","#FFF0F0","#F5C6CB"), "amarillo": ("#7A4F1A","#FFF8EE","#F5DEB3"), "verde": ("#1A4731","#E8F5EE","#C3E6CB")}
+                        _ico_fac = {"rojo": "🔴", "amarillo": "🟡", "verde": "🟢"}
+                        for _af in _todas_fac:
+                            _sev = _af.get("severidad", "amarillo")
+                            _ct, _cb, _cbr = _cs_fac.get(_sev, _cs_fac["amarillo"])
+                            _badge = f'<span style="font-size:9px;background:{_ct};color:#FFF;padding:2px 7px;border-radius:3px;letter-spacing:1px;font-weight:700;margin-right:8px;">{_af.get("modulo","").upper()}</span>'
+                            _ac_html = (f'<div style="font-size:10px;color:{_ct};opacity:0.8;margin-top:5px;padding-top:4px;border-top:1px solid {_cbr};">→ {_af["accion"]}</div>' if _af.get("accion") else "")
+                            st.markdown(
+                                f'<div style="background:{_cb};border:1px solid {_cbr};border-left:4px solid {_ct};border-radius:6px;padding:10px 14px;margin-bottom:6px;">'
+                                f'{_badge}<span style="font-size:12px;color:{_ct};font-weight:600;">{_ico_fac.get(_sev,"🟡")} {_af.get("texto","")}</span>'
+                                f'{_ac_html}</div>',
+                                unsafe_allow_html=True
+                            )
 
         st.markdown("""
 <div style="border-top:1px solid #E8E0D4;margin-top:32px;padding-top:14px;">
@@ -13828,34 +18401,87 @@ elif tipo_op == "Proyecto Logístico / Industrial":
             'background:linear-gradient(160deg,#1A2737 0%,#1E2D3D 60%,#1A2737 100%);'
             'display:flex;align-items:center;justify-content:center;'
             'box-shadow:0 8px 32px rgba(30,45,61,0.18);padding:64px 48px;">'
-            '<div style="max-width:600px;width:100%;text-align:center;">'
-            '<div style="font-size:9px;color:#B8904A;letter-spacing:4px;text-transform:uppercase;font-weight:600;margin-bottom:16px;">Osterling Advisory</div>'
-            '<div style="font-size:28px;font-weight:700;color:#FFFFFF;letter-spacing:-0.5px;margin-bottom:8px;">Proyecto Logístico / Industrial</div>'
+            '<div style="max-width:620px;width:100%;text-align:center;">'
+            '<div style="font-size:9px;color:#FFFFFF;letter-spacing:3px;text-transform:uppercase;font-weight:600;margin-bottom:18px;">'
+            'FINANCIERO &nbsp;·&nbsp; NORMATIVA &nbsp;·&nbsp; INDICADORES &nbsp;·&nbsp; LEGAL'
+            '</div>'
+            '<div style="font-size:28px;font-weight:700;color:#FFFFFF;letter-spacing:-0.5px;margin-bottom:8px;">'
+            'Análisis de Activo Logístico e Industrial'
+            '</div>'
             '<div style="width:48px;height:2px;background:#B8904A;margin:16px auto;"></div>'
             '<div style="font-size:13px;color:#B0C0D0;line-height:1.7;margin-bottom:32px;">'
-            'Evalúa la viabilidad de compra de un activo industrial o logístico. '
-            'Ingresa los datos del terreno, tipo de nave y condiciones de financiamiento '
-            'para obtener: costo total del proyecto, cuota mensual, yield, payback '
-            'y comparativa compra vs. arrendamiento.'
+            'Herramienta IA para la evaluación integral de proyectos logísticos e industriales. '
+            'Genera en minutos el sustento técnico, normativo y financiero para presentar '
+            'ante banca, fondos de inversión y directorios.'
             '</div>'
-            '<div style="display:flex;gap:24px;justify-content:center;flex-wrap:wrap;">'
-            '<div style="background:rgba(184,144,74,0.1);border:1px solid rgba(184,144,74,0.3);'
-            'border-radius:6px;padding:14px 20px;min-width:120px;">'
-            '<div style="font-size:20px;font-weight:700;color:#B8904A;">I1–I4</div>'
-            '<div style="font-size:10px;color:#8AA8C0;letter-spacing:1.5px;text-transform:uppercase;margin-top:4px;">Zonificaciones</div>'
+            '<div style="display:flex;gap:20px;justify-content:center;flex-wrap:wrap;">'
+            '<div style="background:rgba(184,144,74,0.08);border:1px solid rgba(184,144,74,0.28);'
+            'border-radius:8px;padding:16px 22px;min-width:140px;">'
+            '<div style="font-size:15px;font-weight:700;color:#B8904A;letter-spacing:1px;text-transform:uppercase;">Evalúa</div>'
+            '<div style="font-size:10px;color:#8AA8C0;margin-top:5px;line-height:1.5;">Viabilidad técnica,<br>normativa y de mercado</div>'
             '</div>'
-            '<div style="background:rgba(184,144,74,0.1);border:1px solid rgba(184,144,74,0.3);'
-            'border-radius:6px;padding:14px 20px;min-width:120px;">'
-            '<div style="font-size:20px;font-weight:700;color:#B8904A;">4</div>'
-            '<div style="font-size:10px;color:#8AA8C0;letter-spacing:1.5px;text-transform:uppercase;margin-top:4px;">Tipos de Nave</div>'
+            '<div style="background:rgba(184,144,74,0.08);border:1px solid rgba(184,144,74,0.28);'
+            'border-radius:8px;padding:16px 22px;min-width:140px;">'
+            '<div style="font-size:15px;font-weight:700;color:#B8904A;letter-spacing:1px;text-transform:uppercase;">Estructura</div>'
+            '<div style="font-size:10px;color:#8AA8C0;margin-top:5px;line-height:1.5;">Financiamiento,<br>yield y DSCR bancario</div>'
             '</div>'
-            '<div style="background:rgba(184,144,74,0.1);border:1px solid rgba(184,144,74,0.3);'
-            'border-radius:6px;padding:14px 20px;min-width:120px;">'
-            '<div style="font-size:20px;font-weight:700;color:#B8904A;">Yield</div>'
-            '<div style="font-size:10px;color:#8AA8C0;letter-spacing:1.5px;text-transform:uppercase;margin-top:4px;">+ DSCR + Payback</div>'
+            '<div style="background:rgba(184,144,74,0.08);border:1px solid rgba(184,144,74,0.28);'
+            'border-radius:8px;padding:16px 22px;min-width:140px;">'
+            '<div style="font-size:15px;font-weight:700;color:#B8904A;letter-spacing:1px;text-transform:uppercase;">Decide</div>'
+            '<div style="font-size:10px;color:#8AA8C0;margin-top:5px;line-height:1.5;">Datos de mercado<br>actualizados</div>'
             '</div>'
             '</div>'
             '</div></div>',
+            unsafe_allow_html=True
+        )
+
+        # ── Capability bar industrial ─────────────────────────
+        def _icap(mono, title, desc):
+            return (
+                '<div style="display:flex;flex-direction:column;align-items:center;'
+                'text-align:center;padding:26px 20px;">'
+                '<div style="width:36px;height:36px;border-radius:50%;border:1.5px solid #B8904A;'
+                'display:flex;align-items:center;justify-content:center;margin:0 auto 12px auto;">'
+                f'<span style="font-size:12px;font-weight:700;color:#B8904A;'
+                f'font-family:Inter,sans-serif;">{mono}</span>'
+                '</div>'
+                f'<div style="font-size:12px;font-weight:700;color:#1E2D3D;letter-spacing:0.3px;'
+                f'font-family:Inter,sans-serif;margin-bottom:6px;">{title}</div>'
+                f'<div style="font-size:11px;color:#7A8A99;line-height:1.55;font-family:Inter,sans-serif;">{desc}</div>'
+                '</div>'
+            )
+        _icap_sep = '<div style="width:1px;background:#E0DAD0;margin:16px 0;align-self:stretch;"></div>'
+        st.markdown(
+            '<div style="background:#FAFAF8;border:1px solid #E8E3DA;border-radius:8px;'
+            'margin-top:16px;display:grid;grid-template-columns:1fr 1px 1fr 1px 1fr 1px 1fr;'
+            'align-items:stretch;">'
+            + _icap("YD", "Yield / DSCR", "Rentabilidad bruta, neta y cobertura bancaria del proyecto")
+            + _icap_sep
+            + _icap("CM", "Costos y Massing", "Estructura de costos, volumen de nave y geometría del lote")
+            + _icap_sep
+            + _icap("FC", "Flujo de Caja", "Proyección 10 años, payback, TIR y exposición de capital")
+            + _icap_sep
+            + _icap("DL", "Due Diligence Legal", "Partida SUNARP, PU/HR, zonificación, cargas y alertas registrales")
+            + '</div>',
+            unsafe_allow_html=True
+        )
+
+        # ── Footer disclaimer industrial ──────────────────────
+        st.markdown(
+            '<div style="margin-top:32px;padding:20px 32px;border-top:1px solid #E0DAD0;'
+            'text-align:center;">'
+            '<p style="font-size:11px;color:#8A8A8A;line-height:1.7;font-family:Inter,sans-serif;'
+            'max-width:680px;margin:0 auto;">'
+            'Los resultados generados por SOLUM tienen carácter referencial y se basan en los parámetros '
+            'ingresados por el usuario. Se recomienda validar con asesores técnicos, legales y financieros '
+            'antes de tomar decisiones de inversión. Consultas: '
+            '<a href="mailto:eosterling@grupoosterling.com" style="color:#B8904A;text-decoration:none;">'
+            'eosterling@grupoosterling.com</a>.'
+            '</p>'
+            '<p style="font-size:10px;color:#AAAAAA;margin-top:12px;font-family:Inter,sans-serif;">'
+            '© 2026 Osterling Advisory — Lima, Perú. Todos los derechos reservados.'
+            '</p>'
+            '</div>',
             unsafe_allow_html=True
         )
 
@@ -13917,7 +18543,7 @@ elif tipo_op == "Inmueble Residencial":
                         padding:24px 28px;">
                 <div style="font-size:9px;color:rgba(255,255,255,0.60);letter-spacing:3px;
                             text-transform:uppercase;margin-bottom:6px;">
-                    Análisis de Inmueble Residencial · FACTIS
+                    Análisis de Inmueble Residencial · SOLUM
                 </div>
                 <div style="font-size:28px;font-weight:800;color:#FFFFFF;line-height:1.15;
                             text-shadow:0 2px 8px rgba(0,0,0,0.5);">
@@ -13946,6 +18572,27 @@ elif tipo_op == "Inmueble Residencial":
 
         res_tab_labels = ["Parámetros", "Financiero", "Inversión"] if r.get('uso') in ["Inversión para alquilar", "Evaluación para venta"] else ["Parámetros", "Financiero", "Escenarios"]
         res_tabs = st.tabs(res_tab_labels + ["Comparativa", "Amortización", "Legal", "Resumen", "Documentos"])
+        st.components.v1.html("""<script>
+        (function(){
+            var KEY='solum_res_tab';
+            function init(){
+                var tabs=Array.from(window.parent.document.querySelectorAll('[role="tab"]'));
+                if(!tabs.length){setTimeout(init,150);return;}
+                var name=window.parent.sessionStorage.getItem(KEY);
+                if(name){
+                    var t=tabs.find(function(x){return x.textContent.trim()===name;});
+                    if(t&&t.getAttribute('aria-selected')!=='true') t.click();
+                }
+                tabs.forEach(function(tab){
+                    if(tab._sr)return;tab._sr=1;
+                    tab.addEventListener('click',function(){
+                        window.parent.sessionStorage.setItem(KEY,this.textContent.trim());
+                    });
+                });
+            }
+            setTimeout(init,350);
+        })();
+        </script>""", height=0)
 
         # TAB 0: MERCADO
         with res_tabs[0]:
@@ -13982,7 +18629,7 @@ elif tipo_op == "Inmueble Residencial":
                 <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;">
                     <div>
                         <div style="font-size:9px;color:rgba(255,255,255,0.55);letter-spacing:3px;
-                                    text-transform:uppercase;margin-bottom:6px;">Perfil de Distrito · Urbania 2025</div>
+                                    text-transform:uppercase;margin-bottom:6px;">Perfil de Distrito · Noviembre 2025</div>
                         <div style="font-size:28px;font-weight:800;color:#FFFFFF;line-height:1.1;">{_zona_key}</div>
                         <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;">
                             <span style="background:{_tier_bg};color:{_tier_col};font-size:9px;font-weight:700;
@@ -14059,7 +18706,7 @@ elif tipo_op == "Inmueble Residencial":
                     paper_bgcolor="rgba(0,0,0,0)", font=dict(family="Inter"),
                 )
                 st.plotly_chart(fig_gauge, use_container_width=True, config={"displayModeBar": False})
-                st.caption("Aguja naranja = precio pagado · Línea negra = mediana de zona (Urbania nov-2025) · Verde = oportunidad · Rojo = sobre mercado")
+                st.caption("Aguja naranja = precio pagado · Línea negra = mediana de zona · Verde = oportunidad · Rojo = sobre mercado")
 
             # ── Posición de precio (KPIs) ────────────────────────
             _ppm2_r = r.get("precio_m2", 0)
@@ -14076,7 +18723,7 @@ elif tipo_op == "Inmueble Residencial":
 
             pm1, pm2, pm3 = st.columns(3)
             pm1.metric("Precio pagado / m²", f"${_ppm2_r:,.0f}/m²")
-            pm2.metric("Mediana zona (Urbania)", f"${_ref_r:,}/m²",
+            pm2.metric("Mediana zona", f"${_ref_r:,}/m²",
                        delta=f"{_diff_r:+.1f}% vs. mercado")
             pm3.metric("Precio justo estimado", f"${int(r.get('m2',0) * _ref_r):,}")
 
@@ -14152,7 +18799,7 @@ elif tipo_op == "Inmueble Residencial":
                        f"+${r.get('ganancia_capital_5', 0):,.0f} ({_tasa_apr:.1f}%/año)")
             pv3.metric("Valor estimado 10 años", f"${r.get('valor_10', 0):,.0f}",
                        f"+${r.get('ganancia_capital_10', 0):,.0f}")
-            st.caption(f"Tasa de apreciación usada: {_tasa_apr:.1f}% anual (variación anual de la zona). Fuente: Urbania nov-25.")
+            st.caption(f"Tasa de apreciación usada: {_tasa_apr:.1f}% anual (variación anual de la zona). Fuente: análisis de mercado Lima.")
 
         # TAB 1: CRÉDITO HIPOTECARIO
         with res_tabs[1]:
@@ -14785,6 +19432,81 @@ elif tipo_op == "Inmueble Residencial":
 
         # TAB 6: RESUMEN IA (residencial)
         with res_tabs[6]:
+            # ── Matriz de Riesgos ─────────────────────────────────────────
+            _res_alertas_fin = generar_alertas_financieras_residencial(r)
+            _res_legal       = st.session_state.get("residencial_legal") or {}
+            _res_hallazgos   = _res_legal.get("hallazgos") or []
+            _res_obs_legales = _res_legal.get("observaciones_legales") or []
+
+            # Convertir hallazgos legales rojos/amarillos a alertas
+            _res_alertas_leg = []
+            for _h in _res_hallazgos:
+                _hsev = _h.get("severidad", "")
+                if _hsev in ("rojo", "amarillo"):
+                    _res_alertas_leg.append({
+                        "severidad": _hsev,
+                        "origen": "legal",
+                        "texto": f'{_h.get("punto","")}: {_h.get("hallazgo","")}',
+                        "accion": _h.get("subsanacion")
+                    })
+
+            _res_todas = sorted(
+                _res_alertas_fin + _res_alertas_leg,
+                key=lambda x: {"rojo": 0, "amarillo": 1, "verde": 2}.get(x.get("severidad", "verde"), 2)
+            )
+
+            _SCONF_RES = {
+                "rojo":    ("#7A1A1A", "#FFF0F0", "#E07A5F", "CRÍTICO"),
+                "amarillo":("#7A4F1A", "#FFF8EE", "#D4A843", "ATENCIÓN"),
+                "verde":   ("#1A4731", "#F0FBF5", "#3DAA6B", "FAVORABLE"),
+            }
+            _ORIGEN_BADGE_RES = {
+                "financiero": ("#1E2D3D", "#D0DCE8"),
+                "legal":      ("#1A3A2A", "#D8F0E4"),
+            }
+
+            if _res_todas:
+                _n_rojo_res = sum(1 for a in _res_todas if a.get("severidad") == "rojo")
+                _n_am_res   = sum(1 for a in _res_todas if a.get("severidad") == "amarillo")
+                _n_vd_res   = sum(1 for a in _res_todas if a.get("severidad") == "verde")
+                _smf_bg  = "#FFF0F0" if _n_rojo_res else ("#FFF8EE" if _n_am_res else "#F0FBF5")
+                _smf_bc  = "#E07A5F" if _n_rojo_res else ("#D4A843" if _n_am_res else "#3DAA6B")
+                _smf_tc  = "#7A1A1A" if _n_rojo_res else ("#7A4F1A" if _n_am_res else "#1A4731")
+                st.markdown(
+                    f'<div style="background:{_smf_bg};border:1px solid {_smf_bc};border-radius:8px;'
+                    f'padding:12px 18px;margin-bottom:14px;display:flex;gap:16px;align-items:center;">'
+                    f'<div style="font-size:9px;font-weight:700;color:{_smf_tc};letter-spacing:2px;text-transform:uppercase;">MATRIZ DE RIESGOS</div>'
+                    f'<span style="background:#E07A5F;color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;">{_n_rojo_res} crítico{"s" if _n_rojo_res != 1 else ""}</span>'
+                    f'<span style="background:#D4A843;color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;">{_n_am_res} atención</span>'
+                    f'<span style="background:#3DAA6B;color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;">{_n_vd_res} favorable{"s" if _n_vd_res != 1 else ""}</span>'
+                    f'</div>',
+                    unsafe_allow_html=True
+                )
+                for _al in _res_todas:
+                    _sev_res  = _al.get("severidad", "amarillo")
+                    _tc_res, _bg_res, _bc_res, _lbl_res = _SCONF_RES.get(_sev_res, _SCONF_RES["amarillo"])
+                    _origen_res = _al.get("origen", "financiero")
+                    _otc_res, _obg_res = _ORIGEN_BADGE_RES.get(_origen_res, ("#1E2D3D", "#D0DCE8"))
+                    _txt_res  = _al.get("texto", "")
+                    _acc_res  = _al.get("accion")
+                    st.markdown(
+                        f'<div style="background:{_bg_res};border:1px solid {_bc_res};border-left:4px solid {_bc_res};'
+                        f'border-radius:6px;padding:10px 14px;margin-bottom:7px;">'
+                        f'<div style="display:flex;align-items:flex-start;gap:8px;">'
+                        f'<span style="background:{_bc_res};color:#FFFFFF;font-size:8px;font-weight:700;'
+                        f'padding:2px 7px;border-radius:10px;white-space:nowrap;margin-top:1px;">{_lbl_res}</span>'
+                        f'<span style="background:{_obg_res};color:{_otc_res};font-size:8px;font-weight:600;'
+                        f'padding:2px 7px;border-radius:10px;white-space:nowrap;margin-top:1px;text-transform:uppercase;">'
+                        f'{_origen_res}</span>'
+                        f'<div style="flex:1;">'
+                        f'<div style="font-size:12px;color:{_tc_res};font-weight:600;line-height:1.5;">{_txt_res}</div>'
+                        + (f'<div style="font-size:11px;color:{_tc_res};opacity:0.8;margin-top:4px;line-height:1.4;">'
+                           f'→ {_acc_res}</div>' if _acc_res else '')
+                        + '</div></div></div>',
+                        unsafe_allow_html=True
+                    )
+                st.markdown('<div style="height:12px;"></div>', unsafe_allow_html=True)
+
             rsm_r = st.session_state.get("res_resumen")
             if not rsm_r:
                 st.markdown(
@@ -14836,6 +19558,38 @@ elif tipo_op == "Inmueble Residencial":
                     f'<div style="font-size:9px;color:#B8904A;letter-spacing:2px;text-transform:uppercase;font-weight:600;margin-bottom:6px;">Conclusión</div>'
                     f'<div style="font-size:13px;color:#FFFFFF;line-height:1.7;">{rsm_r.get("conclusion","")}</div>'
                     f'</div>', unsafe_allow_html=True)
+
+                _obs_l_res = rsm_r.get("observaciones_legales") or []
+                _sug_m_res = rsm_r.get("sugerencias_mitigacion") or []
+                if _obs_l_res or _sug_m_res:
+                    st.markdown('<div style="height:12px;"></div>', unsafe_allow_html=True)
+                    st.markdown(
+                        '<div style="font-size:9px;color:#9A9080;letter-spacing:3px;text-transform:uppercase;'
+                        'font-weight:600;margin-bottom:10px;">⚖ Análisis Legal</div>',
+                        unsafe_allow_html=True)
+                    _ol_res1, _ol_res2 = st.columns(2)
+                    with _ol_res1:
+                        st.markdown(
+                            '<div style="font-size:10px;color:#E07A5F;font-weight:600;letter-spacing:1px;'
+                            'text-transform:uppercase;margin-bottom:6px;">Observaciones</div>',
+                            unsafe_allow_html=True)
+                        for _o in _obs_l_res:
+                            st.markdown(
+                                f'<div style="font-size:12px;color:#1E2D3D;padding:8px 12px;'
+                                f'border-left:3px solid #E07A5F;background:#FFF5F3;'
+                                f'border-radius:0 4px 4px 0;margin-bottom:5px;line-height:1.55;">'
+                                f'⚠ {_o}</div>', unsafe_allow_html=True)
+                    with _ol_res2:
+                        st.markdown(
+                            '<div style="font-size:10px;color:#1A7A4A;font-weight:600;letter-spacing:1px;'
+                            'text-transform:uppercase;margin-bottom:6px;">Mitigación</div>',
+                            unsafe_allow_html=True)
+                        for _s in _sug_m_res:
+                            st.markdown(
+                                f'<div style="font-size:12px;color:#1E2D3D;padding:8px 12px;'
+                                f'border-left:3px solid #6BCEA0;background:#F0FBF5;'
+                                f'border-radius:0 4px 4px 0;margin-bottom:5px;line-height:1.55;">'
+                                f'→ {_s}</div>', unsafe_allow_html=True)
 
                 if st.button("REGENERAR", key="btn_res_rsm_regen"):
                     st.session_state.res_resumen = None
@@ -14911,7 +19665,7 @@ elif tipo_op == "Inmueble Residencial":
 <div class="page">
 
 <div class="header">
-  <div class="header-sub">Osterling Advisory · FACTIS</div>
+  <div class="header-sub">Osterling Advisory · SOLUM</div>
   <div class="header-title">{_doc_tipo}</div>
   <div class="header-meta">
     {'Preparado por: ' + _doc_agente + ' · ' if _doc_agente else ''}Zona: {_zona_doc} · Fecha: {_fecha_doc}
@@ -14930,7 +19684,7 @@ elif tipo_op == "Inmueble Residencial":
 <div class="section-title">II. Posición de Mercado</div>
 <div class="market-box">
   <table>
-    <tr><th>Indicador</th><th>Este Inmueble</th><th>Mercado Zona (Urbania nov-25)</th><th>Diferencial</th></tr>
+    <tr><th>Indicador</th><th>Este Inmueble</th><th>Mercado Zona</th><th>Diferencial</th></tr>
     <tr>
       <td>Precio / m²</td>
       <td><strong>${_ppm2_doc:,.0f}/m²</strong></td>
@@ -14941,7 +19695,7 @@ elif tipo_op == "Inmueble Residencial":
     {"" if not _yield_doc else f'<tr><td>Yield bruto anual</td><td><strong>{_yield_doc:.1f}%</strong></td><td>{_yield_mkt_doc:.1f}%</td><td class="' + ("verde" if _yield_doc >= _yield_mkt_doc else "rojo") + f'">{(_yield_doc-_yield_mkt_doc):+.1f}pp</td></tr>'}
     <tr>
       <td>Tendencia anual zona</td>
-      <td colspan="2">{_var_doc:+.1f}% en 12 meses (Urbania Lima Index)</td>
+      <td colspan="2">{_var_doc:+.1f}% en 12 meses (índice de mercado Lima)</td>
       <td class="{'verde' if _var_doc >= 0 else 'rojo'}">{'↑ En alza' if _var_doc >= 2 else ('→ Estable' if abs(_var_doc) < 2 else '↓ En baja')}</td>
     </tr>
   </table>
@@ -14966,8 +19720,8 @@ elif tipo_op == "Inmueble Residencial":
 {('<div class="section-title">VI. Observaciones</div><div class="alert">' + _doc_obs + '</div>') if _doc_obs else ""}
 
 <div class="footer">
-  Documento generado por FACTIS · Osterling Advisory<br>
-  Los valores de mercado corresponden al Índice Urbania Lima — Noviembre 2025 · Tipo de cambio SUNAT: 3.42 S./USD<br>
+  Documento generado por SOLUM · Osterling Advisory<br>
+  Los valores de mercado corresponden a referencias de precios Lima — Noviembre 2025 · Tipo de cambio SUNAT: 3.42 S./USD<br>
   {_fecha_doc}<br><br>
   <span style="font-size:9px;color:#B8AA9A;">
   NOTA: Esta IA de Análisis Inmobiliario debe utilizarse como herramienta complementaria al criterio profesional,
@@ -15019,144 +19773,908 @@ elif tipo_op == "Inmueble Residencial":
             'background:linear-gradient(160deg,#1A2737 0%,#1E2D3D 60%,#1A2737 100%);'
             'display:flex;align-items:center;justify-content:center;'
             'box-shadow:0 8px 32px rgba(30,45,61,0.18);padding:64px 48px;">'
-            '<div style="max-width:600px;width:100%;text-align:center;">'
-            '<div style="font-size:9px;color:#B8904A;letter-spacing:4px;text-transform:uppercase;font-weight:600;margin-bottom:16px;">Osterling Advisory</div>'
-            '<div style="font-size:28px;font-weight:700;color:#FFFFFF;letter-spacing:-0.5px;margin-bottom:8px;">Análisis Residencial</div>'
+            '<div style="max-width:620px;width:100%;text-align:center;">'
+            '<div style="font-size:9px;color:#FFFFFF;letter-spacing:3px;text-transform:uppercase;font-weight:600;margin-bottom:18px;">'
+            'CRÉDITO &nbsp;·&nbsp; YIELD &nbsp;·&nbsp; APRECIACIÓN &nbsp;·&nbsp; LEGAL'
+            '</div>'
+            '<div style="font-size:28px;font-weight:700;color:#FFFFFF;letter-spacing:-0.5px;margin-bottom:8px;">'
+            'Análisis de Inmueble Residencial'
+            '</div>'
             '<div style="width:48px;height:2px;background:#B8904A;margin:16px auto;"></div>'
             '<div style="font-size:13px;color:#B0C0D0;line-height:1.7;margin-bottom:32px;">'
-            'Evalúa la compra de un inmueble residencial ya sea para uso propio o como inversión. '
-            'Obtén la cuota mensual exacta, el ingreso mínimo recomendado para calificar al crédito, '
-            'rentabilidad por alquiler, payback y proyección de apreciación de capital.'
+            'Herramienta IA para la evaluación de inmuebles residenciales como inversión o uso propio. '
+            'Obtén cuota hipotecaria, yield, payback y proyección de apreciación '
+            'para tomar decisiones de compra con sustento financiero.'
             '</div>'
-            '<div style="display:flex;gap:24px;justify-content:center;flex-wrap:wrap;">'
-            '<div style="background:rgba(184,144,74,0.1);border:1px solid rgba(184,144,74,0.3);'
-            'border-radius:6px;padding:14px 20px;min-width:120px;">'
-            '<div style="font-size:18px;font-weight:700;color:#B8904A;">Cuota</div>'
-            '<div style="font-size:10px;color:#8AA8C0;letter-spacing:1.5px;text-transform:uppercase;margin-top:4px;">Hipotecaria Exacta</div>'
+            '<div style="display:flex;gap:20px;justify-content:center;flex-wrap:wrap;">'
+            '<div style="background:rgba(184,144,74,0.08);border:1px solid rgba(184,144,74,0.28);'
+            'border-radius:8px;padding:16px 22px;min-width:140px;">'
+            '<div style="font-size:15px;font-weight:700;color:#B8904A;letter-spacing:1px;text-transform:uppercase;">Crédito</div>'
+            '<div style="font-size:10px;color:#8AA8C0;margin-top:5px;line-height:1.5;">Cuota, ingreso mínimo<br>y estructura bancaria</div>'
             '</div>'
-            '<div style="background:rgba(184,144,74,0.1);border:1px solid rgba(184,144,74,0.3);'
-            'border-radius:6px;padding:14px 20px;min-width:120px;">'
-            '<div style="font-size:18px;font-weight:700;color:#B8904A;">Yield</div>'
-            '<div style="font-size:10px;color:#8AA8C0;letter-spacing:1.5px;text-transform:uppercase;margin-top:4px;">Bruto y Neto</div>'
+            '<div style="background:rgba(184,144,74,0.08);border:1px solid rgba(184,144,74,0.28);'
+            'border-radius:8px;padding:16px 22px;min-width:140px;">'
+            '<div style="font-size:15px;font-weight:700;color:#B8904A;letter-spacing:1px;text-transform:uppercase;">Rentabilidad</div>'
+            '<div style="font-size:10px;color:#8AA8C0;margin-top:5px;line-height:1.5;">Yield bruto, neto<br>y payback</div>'
             '</div>'
-            '<div style="background:rgba(184,144,74,0.1);border:1px solid rgba(184,144,74,0.3);'
-            'border-radius:6px;padding:14px 20px;min-width:120px;">'
-            '<div style="font-size:18px;font-weight:700;color:#B8904A;">+4%</div>'
-            '<div style="font-size:10px;color:#8AA8C0;letter-spacing:1.5px;text-transform:uppercase;margin-top:4px;">Apreciación Lima</div>'
+            '<div style="background:rgba(184,144,74,0.08);border:1px solid rgba(184,144,74,0.28);'
+            'border-radius:8px;padding:16px 22px;min-width:140px;">'
+            '<div style="font-size:15px;font-weight:700;color:#B8904A;letter-spacing:1px;text-transform:uppercase;">Apreciación</div>'
+            '<div style="font-size:10px;color:#8AA8C0;margin-top:5px;line-height:1.5;">Proyección de valor<br>a 5 y 10 años</div>'
             '</div>'
             '</div>'
             '</div></div>',
             unsafe_allow_html=True
         )
 
+        def _rescap(mono, title, desc):
+            return (
+                '<div style="display:flex;flex-direction:column;align-items:center;'
+                'text-align:center;padding:26px 20px;">'
+                '<div style="width:36px;height:36px;border-radius:50%;border:1.5px solid #B8904A;'
+                'display:flex;align-items:center;justify-content:center;margin:0 auto 12px auto;">'
+                f'<span style="font-size:12px;font-weight:700;color:#B8904A;'
+                f'font-family:Inter,sans-serif;">{mono}</span>'
+                '</div>'
+                f'<div style="font-size:12px;font-weight:700;color:#1E2D3D;letter-spacing:0.3px;'
+                f'font-family:Inter,sans-serif;margin-bottom:6px;">{title}</div>'
+                f'<div style="font-size:11px;color:#7A8A99;line-height:1.55;font-family:Inter,sans-serif;">{desc}</div>'
+                '</div>'
+            )
+        _rescap_sep = '<div style="width:1px;background:#E0DAD0;margin:16px 0;align-self:stretch;"></div>'
+        st.markdown(
+            '<div style="background:#FAFAF8;border:1px solid #E8E3DA;border-radius:8px;'
+            'margin-top:16px;display:grid;grid-template-columns:1fr 1px 1fr 1px 1fr 1px 1fr;'
+            'align-items:stretch;">'
+            + _rescap("CH", "Cuota Hipotecaria", "Simulación exacta de crédito MiVivienda o hipotecario libre")
+            + _rescap_sep
+            + _rescap("YD", "Yield y Payback", "Rentabilidad bruta, neta y tiempo de recupero de la inversión")
+            + _rescap_sep
+            + _rescap("AP", "Apreciación de Capital", "Proyección de valor del inmueble a 5 y 10 años")
+            + _rescap_sep
+            + _rescap("DL", "Due Diligence Legal", "Partida SUNARP, PU/HR, cargas, hipotecas y alertas registrales")
+            + '</div>',
+            unsafe_allow_html=True
+        )
+
+        st.markdown(
+            '<div style="margin-top:32px;padding:20px 32px;border-top:1px solid #E0DAD0;'
+            'text-align:center;">'
+            '<p style="font-size:11px;color:#8A8A8A;line-height:1.7;font-family:Inter,sans-serif;'
+            'max-width:680px;margin:0 auto;">'
+            'Los resultados generados por SOLUM tienen carácter referencial y se basan en los parámetros '
+            'ingresados por el usuario. Se recomienda validar con asesores técnicos, legales y financieros '
+            'antes de tomar decisiones de inversión. Consultas: '
+            '<a href="mailto:eosterling@grupoosterling.com" style="color:#B8904A;text-decoration:none;">'
+            'eosterling@grupoosterling.com</a>.'
+            '</p>'
+            '<p style="font-size:10px;color:#AAAAAA;margin-top:12px;font-family:Inter,sans-serif;">'
+            '© 2026 Osterling Advisory — Lima, Perú. Todos los derechos reservados.'
+            '</p>'
+            '</div>',
+            unsafe_allow_html=True
+        )
+
+# ═══════════════════════════════════════════════════════
+# MÓDULO 4: INMUEBLE DE OFICINAS
+# ═══════════════════════════════════════════════════════
+
+elif tipo_op == "Proyecto de Oficinas":
+    _ofi_r = st.session_state.get("oficinas_result")
+
+    if not _ofi_r:
+        # ── Hero banner ───────────────────────────────────────
+        st.markdown(
+            '<div style="border-radius:8px;min-height:420px;'
+            'background:linear-gradient(160deg,#1A2737 0%,#1E2D3D 60%,#1A2737 100%);'
+            'display:flex;align-items:center;justify-content:center;'
+            'box-shadow:0 8px 32px rgba(30,45,61,0.18);padding:64px 48px;">'
+            '<div style="max-width:620px;width:100%;text-align:center;">'
+            '<div style="font-size:9px;color:#FFFFFF;letter-spacing:3px;text-transform:uppercase;font-weight:600;margin-bottom:18px;">'
+            'ALQUILER &nbsp;·&nbsp; COMPRA &nbsp;·&nbsp; DESARROLLO &nbsp;·&nbsp; MERCADO'
+            '</div>'
+            '<div style="font-size:28px;font-weight:700;color:#FFFFFF;letter-spacing:-0.5px;margin-bottom:8px;">'
+            'Proyecto de Oficinas'
+            '</div>'
+            '<div style="width:48px;height:2px;background:#B8904A;margin:16px auto;"></div>'
+            '<div style="font-size:13px;color:#B0C0D0;line-height:1.7;margin-bottom:32px;">'
+            'Herramienta IA para la evaluación de oficinas comerciales en Lima. '
+            'Analiza rentabilidad de alquiler, estructura financiera de compra y '
+            'prefactibilidad de proyectos de desarrollo corporativo.'
+            '</div>'
+            '<div style="display:flex;gap:20px;justify-content:center;flex-wrap:wrap;">'
+            '<div style="background:rgba(184,144,74,0.08);border:1px solid rgba(184,144,74,0.28);'
+            'border-radius:8px;padding:16px 22px;min-width:140px;">'
+            '<div style="font-size:15px;font-weight:700;color:#B8904A;letter-spacing:1px;text-transform:uppercase;">Rentabilidad</div>'
+            '<div style="font-size:10px;color:#8AA8C0;margin-top:5px;line-height:1.5;">Yield, cap rate<br>y NOI por m²</div>'
+            '</div>'
+            '<div style="background:rgba(184,144,74,0.08);border:1px solid rgba(184,144,74,0.28);'
+            'border-radius:8px;padding:16px 22px;min-width:140px;">'
+            '<div style="font-size:15px;font-weight:700;color:#B8904A;letter-spacing:1px;text-transform:uppercase;">Estructura</div>'
+            '<div style="font-size:10px;color:#8AA8C0;margin-top:5px;line-height:1.5;">Financiamiento,<br>cuotas y payback</div>'
+            '</div>'
+            '<div style="background:rgba(184,144,74,0.08);border:1px solid rgba(184,144,74,0.28);'
+            'border-radius:8px;padding:16px 22px;min-width:140px;">'
+            '<div style="font-size:15px;font-weight:700;color:#B8904A;letter-spacing:1px;text-transform:uppercase;">Mercado</div>'
+            '<div style="font-size:10px;color:#8AA8C0;margin-top:5px;line-height:1.5;">Benchmarks Clase A/B<br>San Isidro · Miraflores</div>'
+            '</div>'
+            '</div>'
+            '</div></div>',
+            unsafe_allow_html=True
+        )
+
+        # ── Capability bar ────────────────────────────────────
+        def _ocap(mono, title, desc):
+            return (
+                '<div style="display:flex;flex-direction:column;align-items:center;'
+                'text-align:center;padding:26px 20px;">'
+                '<div style="width:36px;height:36px;border-radius:50%;border:1.5px solid #B8904A;'
+                'display:flex;align-items:center;justify-content:center;margin:0 auto 12px auto;">'
+                f'<span style="font-size:12px;font-weight:700;color:#B8904A;'
+                f'font-family:Inter,sans-serif;">{mono}</span>'
+                '</div>'
+                f'<div style="font-size:12px;font-weight:700;color:#1E2D3D;letter-spacing:0.3px;'
+                f'font-family:Inter,sans-serif;margin-bottom:6px;">{title}</div>'
+                f'<div style="font-size:11px;color:#7A8A99;line-height:1.55;font-family:Inter,sans-serif;">{desc}</div>'
+                '</div>'
+            )
+        _ocap_sep = '<div style="width:1px;background:#E0DAD0;margin:16px 0;align-self:stretch;"></div>'
+        st.markdown(
+            '<div style="background:#FAFAF8;border:1px solid #E8E3DA;border-radius:8px;'
+            'margin-top:16px;display:grid;grid-template-columns:1fr 1px 1fr 1px 1fr 1px 1fr;'
+            'align-items:stretch;">'
+            + _ocap("RB", "Yield / Cap Rate", "Rentabilidad bruta, neta y retorno sobre inversión")
+            + _ocap_sep
+            + _ocap("CF", "Flujo de Caja", "Proyección de ingresos, gastos comunes y NOI anual")
+            + _ocap_sep
+            + _ocap("MK", "Benchmarks Mercado", "Rentas y precios Clase A/B en San Isidro, Miraflores y San Borja")
+            + _ocap_sep
+            + _ocap("DL", "Due Diligence Legal", "Verificación SUNARP, parámetros A.080 y alertas registrales")
+            + '</div>',
+            unsafe_allow_html=True
+        )
+
+        # ── Footer disclaimer ─────────────────────────────────
+        st.markdown(
+            '<div style="margin-top:32px;padding:20px 32px;border-top:1px solid #E0DAD0;'
+            'text-align:center;">'
+            '<p style="font-size:11px;color:#8A8A8A;line-height:1.7;font-family:Inter,sans-serif;'
+            'max-width:680px;margin:0 auto;">'
+            'Los resultados generados por SOLUM tienen carácter referencial y se basan en los parámetros '
+            'ingresados por el usuario. Se recomienda validar con asesores técnicos, legales y financieros '
+            'antes de tomar decisiones de inversión. Consultas: '
+            '<a href="mailto:eosterling@grupoosterling.com" style="color:#B8904A;text-decoration:none;">'
+            'eosterling@grupoosterling.com</a>.'
+            '</p>'
+            '<p style="font-size:10px;color:#AAAAAA;margin-top:12px;font-family:Inter,sans-serif;">'
+            '© 2026 Osterling Advisory — Lima, Perú. Todos los derechos reservados.'
+            '</p>'
+            '</div>',
+            unsafe_allow_html=True
+        )
+
+    else:
+        _ofi_modo_r = _ofi_r.get("modo", "")
+        _ofi_dist_r = _ofi_r.get("distrito", "")
+        _ofi_edif_r = _ofi_r.get("edificio", "") or _ofi_dist_r
+        st.markdown(
+            f'<div style="background:rgba(255,255,255,0.04);border-radius:9px;'
+            f'padding:12px 16px;margin-bottom:16px;">'
+            f'<span style="font-size:11px;color:#B8904A;font-weight:700;letter-spacing:1px;">'
+            f'{_ofi_modo_r.upper()}</span>'
+            f'<span style="font-size:12px;color:#8899AA;margin-left:10px;">'
+            f'{_ofi_edif_r} · {_ofi_dist_r} · Piso {_ofi_r.get("piso","")} · '
+            f'{_ofi_r.get("area",0):,.0f} m² · Clase {_ofi_r.get("clase","")}</span>'
+            f'</div>',
+            unsafe_allow_html=True,
+        )
+        # ── Matriz de Riesgos Proyecto de Oficinas ───────────────────────
+        _ofi_alertas = generar_alertas_oficinas(_ofi_r)
+
+        _SCONF_OFI = {
+            "rojo":    ("#7A1A1A", "#FFF0F0", "#E07A5F", "CRÍTICO"),
+            "amarillo":("#7A4F1A", "#FFF8EE", "#D4A843", "ATENCIÓN"),
+            "verde":   ("#1A4731", "#F0FBF5", "#3DAA6B", "FAVORABLE"),
+        }
+        _ORIGEN_BADGE_OFI = {
+            "financiero": ("#1E2D3D", "#D0DCE8"),
+            "normativo":  ("#3A1A5A", "#E8D8F8"),
+            "legal":      ("#1A3A2A", "#D8F0E4"),
+        }
+
+        _rojos_ofi   = [a for a in _ofi_alertas if a.get("severidad") == "rojo"]
+        _amarillos_ofi = [a for a in _ofi_alertas if a.get("severidad") == "amarillo"]
+        _verdes_ofi  = [a for a in _ofi_alertas if a.get("severidad") == "verde"]
+        _ordenadas_ofi = _rojos_ofi + _amarillos_ofi + _verdes_ofi
+
+        if _ordenadas_ofi:
+            st.markdown(
+                '<div style="font-size:9px;color:#9A9080;letter-spacing:3px;text-transform:uppercase;'
+                'font-weight:600;margin:16px 0 10px;">MATRIZ DE RIESGOS Y ALERTAS</div>',
+                unsafe_allow_html=True
+            )
+            for _al in _ordenadas_ofi:
+                _sev_ofi = _al.get("severidad", "amarillo")
+                _tc_ofi, _bg_ofi, _bc_ofi, _lbl_ofi = _SCONF_OFI.get(_sev_ofi, _SCONF_OFI["amarillo"])
+                _origen_ofi  = _al.get("origen", "financiero")
+                _otc_ofi, _obg_ofi = _ORIGEN_BADGE_OFI.get(_origen_ofi, ("#1E2D3D", "#D0DCE8"))
+                _txt_ofi  = _al.get("texto", "")
+                _acc_ofi  = _al.get("accion")
+                st.markdown(
+                    f'<div style="background:{_bg_ofi};border:1px solid {_bc_ofi};border-left:4px solid {_bc_ofi};'
+                    f'border-radius:6px;padding:10px 14px;margin-bottom:7px;">'
+                    f'<div style="display:flex;align-items:flex-start;gap:8px;">'
+                    f'<span style="background:{_bc_ofi};color:#FFFFFF;font-size:8px;font-weight:700;'
+                    f'padding:2px 7px;border-radius:10px;white-space:nowrap;margin-top:1px;">{_lbl_ofi}</span>'
+                    f'<span style="background:{_obg_ofi};color:{_otc_ofi};font-size:8px;font-weight:600;'
+                    f'padding:2px 7px;border-radius:10px;white-space:nowrap;margin-top:1px;text-transform:uppercase;">'
+                    f'{_origen_ofi}</span>'
+                    f'<div style="flex:1;">'
+                    f'<div style="font-size:12px;color:{_tc_ofi};font-weight:600;line-height:1.5;">{_txt_ofi}</div>'
+                    + (f'<div style="font-size:11px;color:{_tc_ofi};opacity:0.8;margin-top:4px;line-height:1.4;">'
+                       f'→ {_acc_ofi}</div>' if _acc_ofi else '')
+                    + '</div></div></div>',
+                    unsafe_allow_html=True
+                )
+
+        # ── Análisis Financiero ──────────────────────────────────────────────
+        try:
+            _ofi_fin = calcular_oficinas(_ofi_r)
+        except Exception:
+            _ofi_fin = {}
+
+        if _ofi_fin:
+            st.markdown(
+                '<div style="font-size:9px;color:#9A9080;letter-spacing:3px;text-transform:uppercase;'
+                'font-weight:600;margin:20px 0 12px;">ANÁLISIS FINANCIERO</div>',
+                unsafe_allow_html=True)
+
+            _ofi_modo_fin = _ofi_fin.get("modo", "")
+            _ofi_dis_lbl  = _ofi_r.get("distrito", "")
+            _ofi_cls_lbl  = _ofi_r.get("clase", "B")
+
+            # ── ALQUILER ──────────────────────────────────────────────────
+            if _ofi_modo_fin == "Alquiler":
+                _oa_t1, _oa_t2 = st.tabs(["Estructura de Costos", "Proyección de Reajuste"])
+
+                with _oa_t1:
+                    _oa1, _oa2, _oa3, _oa4 = st.columns(4)
+                    _oa1.metric("Renta base / mes",     f"${_ofi_fin['pago_mensual_renta']:,.0f}")
+                    _oa2.metric("Gastos comunes / mes", f"${_ofi_fin['gc_total_mes']:,.0f}")
+                    _oa3.metric("Cocheras / mes",        f"${_ofi_fin['cocheras_total_mes']:,.0f}")
+                    _oa4.metric("Pago total mensual",    f"${_ofi_fin['pago_mensual_total']:,.0f}")
+                    st.markdown("---")
+                    _ob1, _ob2, _ob3 = st.columns(3)
+                    _ob1.metric("Costo total del contrato",      f"${_ofi_fin['costo_total_contrato']:,.0f}")
+                    _ob2.metric("Garantía requerida",            f"${_ofi_fin['garantia_monto']:,.0f}")
+                    _ob3.metric("Equivalente de compra (6.5%)",  f"${_ofi_fin['valor_equivalente_compra']:,.0f}")
+                    _diff_a = _ofi_fin.get("diff_vs_benchmark_pct", 0)
+                    _bk_a   = _ofi_fin.get("benchmark_m2", 0)
+                    _rm2_a  = _ofi_fin.get("renta_m2", 0)
+                    _icon_a = "🟢" if abs(_diff_a) <= 5 else ("🟡" if _diff_a <= 15 else "🔴")
+                    st.info(f"{_icon_a} Renta/m²: **${_rm2_a:.1f}/m²/mes** · Benchmark {_ofi_cls_lbl} {_ofi_dis_lbl}: **${_bk_a}/m²/mes** · Diferencial: **{_diff_a:+.1f}%**")
+                    if _ofi_fin.get("igv_monto", 0) > 0:
+                        st.warning(f"IGV incluido en renta: +${_ofi_fin['igv_monto']:,.0f}/mes (18%). Verificar tratamiento tributario con el área contable.")
+                    if _ofi_fin.get("gracia_ahorro", 0) > 0:
+                        st.success(f"Período de gracia: ahorro estimado de ${_ofi_fin['gracia_ahorro']:,.0f} en renta.")
+
+                with _oa_t2:
+                    _proj_a = _ofi_fin.get("reajuste_proyeccion", [])
+                    if _proj_a:
+                        _df_proj = pd.DataFrame(_proj_a)
+                        _df_proj.columns = ["Año", "Renta base/mes ($)", "Pago total/mes ($)", "Costo anual ($)"]
+                        st.dataframe(_df_proj, hide_index=True, use_container_width=True)
+
+            # ── COMPRA ────────────────────────────────────────────────────
+            elif _ofi_modo_fin == "Compra":
+                _oc_t1, _oc_t2, _oc_t3 = st.tabs(["Financiamiento", "Rentabilidad", "Proyección 10 años"])
+
+                with _oc_t1:
+                    _ca1, _ca2, _ca3, _ca4 = st.columns(4)
+                    _ca1.metric("Precio / m²",    f"${_ofi_fin['precio_m2']:,.0f}")
+                    _ca2.metric("Pago inicial",    f"${_ofi_fin['pago_inicial']:,.0f}")
+                    _ca3.metric("Monto crédito",   f"${_ofi_fin['monto_credito']:,.0f}")
+                    _ca4.metric("Cuota mensual",   f"${_ofi_fin['cuota_mensual']:,.0f}")
+                    st.markdown("---")
+                    _cb1, _cb2, _cb3 = st.columns(3)
+                    _cb1.metric("Total pagado (capital + int.)",    f"${_ofi_fin['total_pagado']:,.0f}")
+                    _cb2.metric("Intereses totales",                f"${_ofi_fin['intereses_totales']:,.0f}")
+                    _cb3.metric("Cuota efectiva (c/ escudo fiscal)",f"${_ofi_fin['cuota_efectiva']:,.0f}")
+                    _diff_c = _ofi_fin.get("diff_precio_pct", 0)
+                    _bk_c   = _ofi_fin.get("benchmark_precio_m2", 0)
+                    _pm2_c  = _ofi_fin.get("precio_m2", 0)
+                    _icon_c = "🟢" if abs(_diff_c) <= 10 else ("🟡" if _diff_c <= 20 else "🔴")
+                    st.info(f"{_icon_c} Precio/m²: **${_pm2_c:,.0f}** · Benchmark {_ofi_cls_lbl} {_ofi_dis_lbl}: **${_bk_c:,}/m²** · Diferencial: **{_diff_c:+.1f}%**")
+                    if _ofi_fin.get("descuento_pct", 0) > 0:
+                        st.success(f"Descuento negociado: {_ofi_fin['descuento_pct']:.1f}% sobre precio de lista.")
+
+                with _oc_t2:
+                    if _ofi_fin.get("proposito") == "Para rentar":
+                        _ra1, _ra2, _ra3, _ra4 = st.columns(4)
+                        _cap_c = _ofi_fin.get("cap_rate_pct", 0)
+                        _ra1.metric("NOI anual",    f"${_ofi_fin['noi']:,.0f}")
+                        _ra2.metric("Cap rate",     f"{_cap_c:.1f}%",
+                                    delta="Sobre benchmark" if _cap_c >= 6.5 else "Bajo benchmark Lima prime (6.5–8%)")
+                        _ra3.metric("Yield bruto",  f"{_ofi_fin['yield_bruto_pct']:.1f}%")
+                        _ra4.metric("Yield neto",   f"{_ofi_fin['yield_neto_pct']:.1f}%")
+                        st.markdown("---")
+                        _rb1, _rb2, _rb3 = st.columns(3)
+                        _fl_c = _ofi_fin.get("flujo_mensual", 0)
+                        _rb1.metric("Flujo mensual neto", f"${_fl_c:,.0f}",
+                                    delta="Positivo" if _fl_c > 0 else "Negativo — cubre con apreciación")
+                        _be_c = _ofi_fin.get("break_even_ano")
+                        _rb2.metric("Break-even",   f"Año {_be_c}" if _be_c else "No alcanzado en 10a")
+                        _irr_c = _ofi_fin.get("irr_anual")
+                        _rb3.metric("TIR 10 años",  f"{_irr_c:.1f}%" if _irr_c else "—")
+                    else:
+                        _rc1, _rc2 = st.columns(2)
+                        _rc1.metric("Ahorro fiscal anual (depreciación)", f"${_ofi_fin['ahorro_fiscal_anual']:,.0f}")
+                        _rc2.metric("Depreciación anual deducible",       f"${_ofi_fin['depreciacion_anual']:,.0f}")
+                        st.info("Uso propio — el beneficio financiero es el escudo fiscal (depreciación) y la apreciación del activo (~4%/año en oficinas Lima prime).")
+
+                with _oc_t3:
+                    _f10 = _ofi_fin.get("flujo_10", [])
+                    if _f10:
+                        _df10 = pd.DataFrame(_f10)
+                        _df10.columns = ["Año", "Flujo anual ($)", "Flujo acumulado ($)"]
+                        st.dataframe(_df10, hide_index=True, use_container_width=True)
+
+            # ── DESARROLLO ────────────────────────────────────────────────
+            else:
+                _od_t1, _od_t2, _od_t3, _od_t4 = st.tabs(["Cabida", "Rentabilidad", "Financiamiento", "Escenarios"])
+
+                with _od_t1:
+                    _da1, _da2, _da3, _da4 = st.columns(4)
+                    _da1.metric("Área rentable",       f"{_ofi_fin['area_rentable']:,.0f} m²")
+                    _da2.metric("Área bruta construida", f"{_ofi_fin['area_bruta']:,.0f} m²")
+                    _da3.metric("Unidades",             str(_ofi_fin['unidades']))
+                    _da4.metric("Cocheras / Sótanos",   f"{_ofi_fin['cocheras_total']} / {_ofi_fin['sotanos']}")
+                    st.markdown("---")
+                    _db1, _db2, _db3, _db4 = st.columns(4)
+                    _db1.metric("Terreno + alcabala",     f"${_ofi_fin['costo_terreno_total']+_ofi_fin['alcabala']:,.0f}")
+                    _db2.metric("Construcción + sótanos", f"${_ofi_fin['costos_directos']:,.0f}")
+                    _db3.metric("Indirectos + marketing", f"${_ofi_fin['costos_indirectos']+_ofi_fin['costo_marketing']:,.0f}")
+                    _db4.metric("Costo total del proyecto", f"${_ofi_fin['costo_total']:,.0f}")
+
+                with _od_t2:
+                    _ea1, _ea2, _ea3, _ea4 = st.columns(4)
+                    _mg_d = _ofi_fin.get("margen_bruto_pct", 0)
+                    _ea1.metric("Margen bruto",         f"{_mg_d:.1f}%",
+                                delta="Viable" if _mg_d >= 20 else ("Ajustado" if _mg_d >= 15 else "Bajo mínimo"))
+                    _ea2.metric("Margen neto",          f"{_ofi_fin['margen_neto_pct']:.1f}%")
+                    _ea3.metric("ROI capital propio",   f"{_ofi_fin['roi_pct']:.1f}%")
+                    _tir_d = _ofi_fin.get("tir_anual_pct")
+                    _ea4.metric("TIR anual",            f"{_tir_d:.1f}%" if _tir_d else "—")
+                    st.markdown("---")
+                    _eb1, _eb2, _eb3 = st.columns(3)
+                    _eb1.metric("Ingresos totales",   f"${_ofi_fin['ingresos_totales']:,.0f}")
+                    _eb2.metric("Utilidad neta",      f"${_ofi_fin['utilidad_neta']:,.0f}")
+                    _rv_d = _ofi_fin.get("valor_renta_capitalizado", 0)
+                    if _rv_d > 0:
+                        _eb3.metric("Renta capitalizada (7.5%)", f"${_rv_d:,.0f}")
+                        st.caption(f"Renta anual proyectada: ${_ofi_fin['renta_anual']:,.0f} · capitalizada al 7.5% cap rate Lima oficinas.")
+
+                with _od_t3:
+                    _fa1, _fa2, _fa3 = st.columns(3)
+                    _fa1.metric("Capital propio total", f"${_ofi_fin['capital_propio']:,.0f}")
+                    _fa2.metric("Deuda total",          f"${_ofi_fin['deuda_total']:,.0f}")
+                    _fa3.metric("Apalancamiento",       f"{_ofi_fin['pct_apalancamiento']:.1f}%")
+                    st.markdown("---")
+                    _fb1, _fb2 = st.columns(2)
+                    with _fb1:
+                        st.markdown("**Crédito Terreno**")
+                        st.metric("Capital propio terreno", f"${_ofi_fin['cap_terreno']:,.0f}")
+                        st.metric("Monto crédito terreno",  f"${_ofi_fin['credito_terreno']:,.0f}")
+                        st.metric("Cuota mensual terreno",  f"${_ofi_fin['cuota_terreno']:,.0f}")
+                    with _fb2:
+                        st.markdown("**Crédito Obra**")
+                        st.metric("Capital propio obra", f"${_ofi_fin['cap_obra']:,.0f}")
+                        st.metric("Monto crédito obra",  f"${_ofi_fin['credito_obra']:,.0f}")
+                        st.metric("Cuota mensual obra",  f"${_ofi_fin['cuota_obra']:,.0f}")
+                    st.metric("Cuota combinada total / mes", f"${_ofi_fin['cuota_mensual']:,.0f}")
+
+                with _od_t4:
+                    _sp = _ofi_fin.get("esc_pesimista", {})
+                    _sb = _ofi_fin.get("esc_base", {})
+                    _so = _ofi_fin.get("esc_optimista", {})
+                    st.markdown(
+                        f'<table style="width:100%;border-collapse:collapse;border-radius:8px;overflow:hidden;">'
+                        f'<thead><tr>'
+                        f'<th style="background:#4A1A1A;color:#FFF;padding:10px;text-align:center;width:33%">'
+                        f'PESIMISTA<br><span style="font-size:9px;opacity:0.8">Precio −10% · Costo +8%</span></th>'
+                        f'<th style="background:#1A2737;color:#FFF;padding:10px;text-align:center;width:33%">'
+                        f'BASE<br><span style="font-size:9px;opacity:0.8">Parámetros actuales</span></th>'
+                        f'<th style="background:#1A4731;color:#FFF;padding:10px;text-align:center;width:33%">'
+                        f'OPTIMISTA<br><span style="font-size:9px;opacity:0.8">Precio +8% · Costo −5%</span></th>'
+                        f'</tr></thead><tbody>'
+                        f'<tr style="background:rgba(255,255,255,0.04)">'
+                        f'<td style="color:#E07A5F;font-size:22px;font-weight:800;text-align:center;padding:10px">{_sp.get("margen",0):.1f}%</td>'
+                        f'<td style="color:#D4A853;font-size:22px;font-weight:800;text-align:center;padding:10px">{_sb.get("margen",0):.1f}%</td>'
+                        f'<td style="color:#4CAF50;font-size:22px;font-weight:800;text-align:center;padding:10px">{_so.get("margen",0):.1f}%</td>'
+                        f'</tr><tr><td colspan="3" style="font-size:9px;color:#8AA8C0;text-align:center;padding:2px;text-transform:uppercase;letter-spacing:1px">Margen bruto</td></tr>'
+                        f'<tr style="background:rgba(255,255,255,0.03)">'
+                        f'<td style="color:#FFF;text-align:center;padding:8px">${_sp.get("utilidad",0):,.0f}</td>'
+                        f'<td style="color:#FFF;text-align:center;padding:8px">${_sb.get("utilidad",0):,.0f}</td>'
+                        f'<td style="color:#FFF;text-align:center;padding:8px">${_so.get("utilidad",0):,.0f}</td>'
+                        f'</tr><tr><td colspan="3" style="font-size:9px;color:#8AA8C0;text-align:center;padding:2px;text-transform:uppercase;letter-spacing:1px">Utilidad neta ($)</td></tr>'
+                        f'<tr style="background:rgba(255,255,255,0.04)">'
+                        f'<td style="color:#E07A5F;text-align:center;padding:8px">{_sp.get("roi",0):.1f}%</td>'
+                        f'<td style="color:#D4A853;text-align:center;padding:8px">{_sb.get("roi",0):.1f}%</td>'
+                        f'<td style="color:#4CAF50;text-align:center;padding:8px">{_so.get("roi",0):.1f}%</td>'
+                        f'</tr><tr><td colspan="3" style="font-size:9px;color:#8AA8C0;text-align:center;padding:2px;text-transform:uppercase;letter-spacing:1px">ROI sobre capital propio</td></tr>'
+                        f'</tbody></table>',
+                        unsafe_allow_html=True
+                    )
+
 # ═══════════════════════════════════════════════════════
 # MÓDULO 5: PORTFOLIO
 # ═══════════════════════════════════════════════════════
 elif tipo_op == "Portfolio":
     st.markdown(
-        '<div style="font-size:9px;color:#B8904A;letter-spacing:4px;text-transform:uppercase;'
-        'font-weight:600;margin-bottom:4px;">Osterling Advisory</div>'
+        '<div style="font-size:9px;color:#FFFFFF;letter-spacing:4px;text-transform:uppercase;'
+        'font-weight:600;margin-bottom:4px;">PROYECTOS GUARDADOS · SOLUM</div>'
         '<div style="font-size:26px;font-weight:700;color:#FFFFFF;letter-spacing:-0.5px;">'
-        '📁 Portfolio de Proyectos</div>'
+        'Portfolio de Proyectos</div>'
         '<div style="font-size:13px;color:#B0C0D0;margin-top:6px;margin-bottom:20px;">'
-        'Todos los proyectos guardados con KPIs consolidados e historial de versiones.</div>',
+        'KPIs consolidados por proyecto. Compara escenarios y accede al historial de análisis.</div>',
         unsafe_allow_html=True)
+
+    # ── ALERTAS DE NORMATIVAS (solo admin) ───────────────────────────────
+    if st.session_state.get("_role") == "admin":
+        _sb_al = _get_supabase()
+        if _sb_al:
+            try:
+                _al_resp = (_sb_al.table("alertas_normativas")
+                               .select("id,fecha_publicacion,entidad,tipo_norma,titulo,resumen,url,relevancia,categorias,procesado,creado_en")
+                               .eq("procesado", False)
+                               .order("creado_en", desc=True)
+                               .limit(20)
+                               .execute())
+                _alertas_pend = _al_resp.data or []
+            except Exception:
+                _alertas_pend = []
+
+            if _alertas_pend:
+                _al_altas = [a for a in _alertas_pend if a.get("relevancia") == "alta"]
+                _al_otras = [a for a in _alertas_pend if a.get("relevancia") != "alta"]
+                _badge_color = "#C44A4A" if _al_altas else "#B8862E"
+                st.markdown(
+                    f'<div style="background:rgba(184,144,74,0.08);border:1px solid {_badge_color};'
+                    f'border-radius:8px;padding:14px 18px;margin-bottom:16px;">'
+                    f'<div style="display:flex;align-items:center;gap:10px;">'
+                    f'<div style="font-size:18px;">{"🔴" if _al_altas else "🟡"}</div>'
+                    f'<div>'
+                    f'<div style="font-size:13px;font-weight:700;color:#FFFFFF;">'
+                    f'{len(_alertas_pend)} normas detectadas pendientes de revisión</div>'
+                    f'<div style="font-size:11px;color:#8AA8C0;margin-top:2px;">'
+                    f'Monitor diario SOLUM · {len(_al_altas)} de alta relevancia</div>'
+                    f'</div></div></div>',
+                    unsafe_allow_html=True)
+
+                with st.expander(f"Ver alertas pendientes ({len(_alertas_pend)})", expanded=bool(_al_altas)):
+                    for _al in _alertas_pend:
+                        _rel = _al.get("relevancia", "media")
+                        _rel_icon  = "🔴" if _rel == "alta" else ("🟡" if _rel == "media" else "🟢")
+                        _rel_color = "#C44A4A" if _rel == "alta" else ("#B8862E" if _rel == "media" else "#1A7A4A")
+                        _cats = ", ".join(_al.get("categorias") or []) or "—"
+                        _a1, _a2 = st.columns([4, 1])
+                        with _a1:
+                            st.markdown(
+                                f'<div style="border-left:3px solid {_rel_color};padding:8px 12px;'
+                                f'margin-bottom:8px;background:rgba(255,255,255,0.02);border-radius:0 6px 6px 0;">'
+                                f'<div style="font-size:12px;font-weight:600;color:#C8D8E8;">'
+                                f'{_rel_icon} {_al.get("titulo","")[:120]}</div>'
+                                f'<div style="font-size:10px;color:#8AA8C0;margin-top:3px;">'
+                                f'{_al.get("entidad","")[:60]} · {_al.get("tipo_norma","")[:40]} · '
+                                f'{(_al.get("fecha_publicacion") or "")[:10]}</div>'
+                                f'<div style="font-size:10px;color:#6B8098;margin-top:2px;">'
+                                f'Categorías: {_cats}</div>'
+                                + (f'<div style="font-size:11px;color:#A8B8C8;margin-top:4px;">'
+                                   f'{_al.get("resumen","")}</div>' if _al.get("resumen") else "")
+                                + '</div>', unsafe_allow_html=True)
+                        with _a2:
+                            if _al.get("url"):
+                                st.link_button("Ver norma", _al["url"], use_container_width=True)
+                            if st.button("Marcar revisada", key=f"al_rev_{_al['id']}", use_container_width=True):
+                                try:
+                                    _sb_al.table("alertas_normativas").update(
+                                        {"procesado": True, "revisado_por": st.session_state.get("_username", "admin")}
+                                    ).eq("id", _al["id"]).execute()
+                                    st.rerun()
+                                except Exception as _ae:
+                                    st.error(str(_ae))
 
     _port_proyectos = listar_proyectos(con_resumen=True)
 
     if not _port_proyectos:
         st.info("No hay proyectos guardados aún. Analiza un proyecto y guárdalo para verlo aquí.")
     else:
-        # Filtros
-        _pf1, _pf2, _pf3 = st.columns([2, 1, 1])
-        _port_tipos = sorted({getattr(p, "_tipo", "") for p in _port_proyectos if getattr(p, "_tipo", "")})
-        _port_filtro_tipo = _pf1.selectbox("Filtrar por tipo", ["Todos"] + _port_tipos, key="port_filtro_tipo")
-        _port_orden = _pf2.selectbox("Ordenar por", ["Fecha", "Margen", "TIR", "Utilidad"], key="port_orden")
-        _port_buscar = _pf3.text_input("Buscar proyecto", key="port_buscar", placeholder="nombre...")
+        # ── FILTROS ───────────────────────────────────────────────────────────
+        _pf1, _pf2, _pf3, _pf4 = st.columns([2, 1, 1, 1])
+        _port_tipos = sorted({p._tipo for p in _port_proyectos if p._tipo})
+        _PORT_ESTADOS = ["Todos", "Análisis", "En negociación", "Due diligence", "Cerrado", "Descartado"]
+        _port_filtro_tipo   = _pf1.selectbox("Tipo", ["Todos"] + _port_tipos, key="port_filtro_tipo")
+        _port_filtro_status = _pf2.selectbox("Estado", _PORT_ESTADOS, key="port_filtro_status")
+        _port_orden         = _pf3.selectbox("Ordenar por", ["Fecha", "Margen / Yield", "TIR", "Capital"], key="port_orden")
+        _port_buscar        = _pf4.text_input("Buscar", key="port_buscar", placeholder="nombre...")
 
-        _port_vis = [p for p in _port_proyectos if hasattr(p, "_resumen")]
+        _port_vis = list(_port_proyectos)
         if _port_filtro_tipo != "Todos":
-            _port_vis = [p for p in _port_vis if getattr(p, "_tipo", "") == _port_filtro_tipo]
+            _port_vis = [p for p in _port_vis if p._tipo == _port_filtro_tipo]
+        if _port_filtro_status != "Todos":
+            _port_vis = [p for p in _port_vis if (p._resumen or {}).get("_status", "Análisis") == _port_filtro_status]
         if _port_buscar:
-            _port_vis = [p for p in _port_vis if _port_buscar.lower() in getattr(p, "_nombre", "").lower()]
+            _port_vis = [p for p in _port_vis if _port_buscar.lower() in p._nombre.lower()]
 
-        if _port_orden == "Margen":
-            _port_vis.sort(key=lambda p: float(getattr(p, "_resumen", {}).get("margen_pct", 0) or 0), reverse=True)
+        def _port_kpi1(p):
+            _rs = p._resumen or {}
+            if p._tipo == "industrial":  return float(_rs.get("yield_bruto") or 0)
+            if p._tipo == "residencial": return float(_rs.get("yield_alquiler") or 0)
+            return float(_rs.get("margen_pct") or _rs.get("margen_neto") or 0)
+        def _port_tir(p):
+            _rs = p._resumen or {}
+            if p._tipo == "industrial":  return float(_rs.get("irr_anual") or 0)
+            return float(_rs.get("tir_anual_pct") or 0)
+        def _port_capital(p):
+            _rs = p._resumen or {}
+            return float(_rs.get("costo_total") or _rs.get("precio") or _rs.get("ingresos_brutos") or 0)
+
+        if _port_orden == "Margen / Yield":
+            _port_vis.sort(key=_port_kpi1, reverse=True)
         elif _port_orden == "TIR":
-            _port_vis.sort(key=lambda p: float(getattr(p, "_resumen", {}).get("tir_anual_pct", 0) or 0), reverse=True)
-        elif _port_orden == "Utilidad":
-            _port_vis.sort(key=lambda p: float(getattr(p, "_resumen", {}).get("utilidad_neta", 0) or 0), reverse=True)
+            _port_vis.sort(key=_port_tir, reverse=True)
+        elif _port_orden == "Capital":
+            _port_vis.sort(key=_port_capital, reverse=True)
 
-        st.markdown(f"**{len(_port_vis)} proyectos**")
+        # ── SUMMARY KPIs ROW ──────────────────────────────────────────────────
+        if _port_vis:
+            _sum_capital  = sum(_port_capital(p) for p in _port_vis)
+            _kpi1_vals    = [_port_kpi1(p) for p in _port_vis if _port_kpi1(p) > 0]
+            _avg_kpi1     = sum(_kpi1_vals) / len(_kpi1_vals) if _kpi1_vals else 0
+            _sum_util     = sum(float((p._resumen or {}).get("utilidad_neta") or 0) for p in _port_vis)
+            _sk1, _sk2, _sk3, _sk4 = st.columns(4)
+            _sk1.metric("Proyectos", str(len(_port_vis)))
+            _sk2.metric("Capital total", f"${_sum_capital:,.0f}" if _sum_capital else "—")
+            _sk3.metric("KPI principal prom.", f"{_avg_kpi1:.1f}%" if _avg_kpi1 else "—")
+            _sk4.metric("Utilidad acumulada", f"${_sum_util:,.0f}" if _sum_util else "—")
         st.markdown("---")
 
-        # Cards grid — 2 columnas
-        _GOLD = "#B8904A"
-        _DARK = "#0A1628"
+        # ── CARDS GRID ────────────────────────────────────────────────────────
+        _STATUS_COLORS = {
+            "Análisis":       "#1A3A6B",
+            "En negociación": "#B8862E",
+            "Due diligence":  "#4A1A6B",
+            "Cerrado":        "#1A6B3A",
+            "Descartado":     "#4A4A5A",
+        }
+        _STATUS_LIST  = ["Análisis", "En negociación", "Due diligence", "Cerrado", "Descartado"]
+        _sb_port      = _get_supabase()
+
         for i in range(0, len(_port_vis), 2):
             _pcols = st.columns(2, gap="medium")
             for j, p in enumerate(_port_vis[i:i+2]):
-                _rs  = getattr(p, "_resumen", {})
-                _tip = getattr(p, "_tipo", "—")
-                _zon = getattr(p, "_zona", "—")
-                _fec = getattr(p, "_fecha", "—")
-                _nom = getattr(p, "_nombre", p.name)
-
-                _mg  = _rs.get("margen_pct") or _rs.get("margen_neto") or 0
-                _tir = _rs.get("tir_anual_pct") or 0
-                _un  = _rs.get("utilidad_neta") or 0
-                _ing = _rs.get("ingresos_brutos") or _rs.get("costo_total") or 0
-
-                _mg_color = "#4CAF50" if float(_mg) >= 15 else ("#FFC107" if float(_mg) >= 10 else "#FF4444")
+                _rs   = p._resumen or {}
+                _tip  = p._tipo  or "—"
+                _zon  = p._zona  or "—"
+                _fec  = p._fecha or "—"
+                _nom  = p._nombre or p.name
+                _stat = _rs.get("_status", "Análisis")
                 _tipo_color = {"inmobiliario": "#1A3A6B", "industrial": "#6B3A1A", "residencial": "#1A6B3A"}.get(_tip, "#444")
+                _stat_color = _STATUS_COLORS.get(_stat, "#4A4A5A")
+
+                if _tip == "industrial":
+                    _kv1_val = f"{float(_rs.get('yield_bruto') or 0):.1f}%"
+                    _kv1_lbl = "Yield bruto"
+                    _kv1_col = "#4CAF50" if float(_rs.get('yield_bruto') or 0) >= 8 else "#FFC107"
+                    _kv2_val = f"{float(_rs.get('irr_anual') or 0):.1f}%" if (_rs.get('irr_anual') or 0) > 0 else "—"
+                    _kv2_lbl = "TIR equity"
+                    _kv3_val = f"${float(_rs.get('costo_total') or 0):,.0f}"
+                    _kv3_lbl = "Costo total"
+                    _kv4_val = f"{float(_rs.get('dscr') or 0):.2f}x" if (_rs.get('dscr') or 0) > 0 else "—"
+                    _kv4_lbl = "DSCR"
+                elif _tip == "residencial":
+                    _kv1_val = f"{float(_rs.get('yield_alquiler') or 0):.1f}%"
+                    _kv1_lbl = "Yield alquiler"
+                    _kv1_col = "#4CAF50" if float(_rs.get('yield_alquiler') or 0) >= 5 else "#FFC107"
+                    _kv2_val = f"${float(_rs.get('precio_venta_m2') or 0):,.0f}/m²"
+                    _kv2_lbl = "Precio venta"
+                    _kv3_val = f"${float(_rs.get('precio') or _rs.get('costo_total') or 0):,.0f}"
+                    _kv3_lbl = "Valor inmueble"
+                    _kv4_val = f"{float(_rs.get('margen_pct') or 0):.1f}%"
+                    _kv4_lbl = "Margen"
+                    _kv1_col = "#4CAF50" if float(_rs.get('yield_alquiler') or 0) >= 5 else "#FFC107"
+                else:
+                    _mg = float(_rs.get("margen_pct") or _rs.get("margen_neto") or 0)
+                    _kv1_val = f"{_mg:.1f}%"
+                    _kv1_lbl = "Margen neto"
+                    _kv1_col = "#4CAF50" if _mg >= 15 else ("#FFC107" if _mg >= 10 else "#FF4444")
+                    _kv2_val = f"{float(_rs.get('tir_anual_pct') or 0):.1f}%"
+                    _kv2_lbl = "TIR anual"
+                    _kv3_val = f"${float(_rs.get('utilidad_neta') or 0):,.0f}"
+                    _kv3_lbl = "Utilidad neta"
+                    _kv4_val = f"${float(_rs.get('ingresos_brutos') or 0):,.0f}"
+                    _kv4_lbl = "Ingresos"
 
                 with _pcols[j]:
                     st.markdown(
                         f'<div style="background:linear-gradient(135deg,#1A2737,#1E2D3D);'
                         f'border-radius:12px;padding:18px 20px;border:1px solid rgba(184,144,74,0.2);'
                         f'margin-bottom:4px;">'
-                        f'<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">'
-                        f'<div style="font-size:13px;font-weight:700;color:#FFFFFF;line-height:1.3;max-width:70%;">{_nom}</div>'
+                        f'<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">'
+                        f'<div style="font-size:13px;font-weight:700;color:#FFFFFF;line-height:1.3;max-width:60%;">{_nom}</div>'
+                        f'<div style="display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end;">'
                         f'<div style="font-size:9px;font-weight:700;color:#FFF;background:{_tipo_color};'
                         f'padding:3px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:1px;">{_tip}</div>'
-                        f'</div>'
+                        f'<div style="font-size:9px;font-weight:700;color:#FFF;background:{_stat_color};'
+                        f'padding:3px 8px;border-radius:4px;white-space:nowrap;">{_stat}</div>'
+                        f'</div></div>'
                         f'<div style="font-size:10px;color:#8AA8C0;margin-bottom:12px;">{_zon} · {_fec}</div>'
                         f'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">'
                         f'<div style="background:rgba(255,255,255,0.04);border-radius:6px;padding:8px 10px;">'
-                        f'<div style="font-size:16px;font-weight:800;color:{_mg_color};">{float(_mg):.1f}%</div>'
-                        f'<div style="font-size:9px;color:#8AA8C0;text-transform:uppercase;letter-spacing:1px;">Margen neto</div>'
+                        f'<div style="font-size:16px;font-weight:800;color:{_kv1_col};">{_kv1_val}</div>'
+                        f'<div style="font-size:9px;color:#8AA8C0;text-transform:uppercase;letter-spacing:1px;">{_kv1_lbl}</div>'
                         f'</div>'
                         f'<div style="background:rgba(255,255,255,0.04);border-radius:6px;padding:8px 10px;">'
-                        f'<div style="font-size:16px;font-weight:800;color:#D4A853;">{float(_tir):.1f}%</div>'
-                        f'<div style="font-size:9px;color:#8AA8C0;text-transform:uppercase;letter-spacing:1px;">TIR anual</div>'
+                        f'<div style="font-size:16px;font-weight:800;color:#D4A853;">{_kv2_val}</div>'
+                        f'<div style="font-size:9px;color:#8AA8C0;text-transform:uppercase;letter-spacing:1px;">{_kv2_lbl}</div>'
                         f'</div>'
                         f'<div style="background:rgba(255,255,255,0.04);border-radius:6px;padding:8px 10px;">'
-                        f'<div style="font-size:14px;font-weight:700;color:#FFFFFF;">${float(_un):,.0f}</div>'
-                        f'<div style="font-size:9px;color:#8AA8C0;text-transform:uppercase;letter-spacing:1px;">Utilidad neta</div>'
+                        f'<div style="font-size:14px;font-weight:700;color:#FFFFFF;">{_kv3_val}</div>'
+                        f'<div style="font-size:9px;color:#8AA8C0;text-transform:uppercase;letter-spacing:1px;">{_kv3_lbl}</div>'
                         f'</div>'
                         f'<div style="background:rgba(255,255,255,0.04);border-radius:6px;padding:8px 10px;">'
-                        f'<div style="font-size:14px;font-weight:700;color:#FFFFFF;">${float(_ing):,.0f}</div>'
-                        f'<div style="font-size:9px;color:#8AA8C0;text-transform:uppercase;letter-spacing:1px;">Ingresos / Costo</div>'
+                        f'<div style="font-size:14px;font-weight:700;color:#FFFFFF;">{_kv4_val}</div>'
+                        f'<div style="font-size:9px;color:#8AA8C0;text-transform:uppercase;letter-spacing:1px;">{_kv4_lbl}</div>'
                         f'</div>'
                         f'</div></div>',
                         unsafe_allow_html=True)
+                    # Status selector — persiste en Supabase
+                    _stat_key = f"port_status_{p._id or f'{i}_{j}'}"
+                    _new_stat = st.selectbox(
+                        "Estado del proyecto",
+                        _STATUS_LIST,
+                        index=(_STATUS_LIST.index(_stat) if _stat in _STATUS_LIST else 0),
+                        key=_stat_key,
+                        label_visibility="collapsed",
+                    )
+                    if _new_stat != _stat:
+                        if p._id and _sb_port:
+                            try:
+                                import json as _json_sb
+                                # Sanitizar _rs para garantizar JSON-serializabilidad
+                                _rs_safe = _json_sb.loads(
+                                    _json_sb.dumps(_rs, default=lambda v: str(v) if not isinstance(v, (int, float, bool, type(None), list, dict)) else v)
+                                )
+                                _sb_port.table("proyectos").update(
+                                    {"resumen": {**_rs_safe, "_status": _new_stat}}
+                                ).eq("id", p._id).execute()
+                                st.rerun()
+                            except Exception as _se:
+                                st.error(f"No se pudo guardar el estado: {_se}")
+                                # Revertir session_state para evitar loop infinito
+                                st.session_state[_stat_key] = _stat
+                        else:
+                            st.warning("Proyecto sin ID — guarda el proyecto en Supabase para persistir el estado.")
 
-        # ── Tabla comparativa de todos los proyectos ──
+        # ── TABLA COMPARATIVA + EXPORT EXCEL ──────────────────────────────────
         if len(_port_vis) >= 2:
             st.markdown("---")
-            st.markdown("#### Tabla comparativa")
+            _tc1, _tc2 = st.columns([4, 1])
+            _tc1.markdown("#### Tabla comparativa")
             _port_df_rows = []
             for p in _port_vis:
-                _rs = getattr(p, "_resumen", {})
+                _rs  = p._resumen or {}
+                _tip = p._tipo or "—"
+                if _tip == "industrial":
+                    _kpi_lbl = "Yield bruto (%)"
+                    _kpi_val = round(float(_rs.get("yield_bruto") or 0), 1)
+                    _tir_val = round(float(_rs.get("irr_anual") or 0), 1)
+                    _cap_val = float(_rs.get("costo_total") or 0)
+                    _ret_val = 0.0
+                elif _tip == "residencial":
+                    _kpi_lbl = "Yield alquiler (%)"
+                    _kpi_val = round(float(_rs.get("yield_alquiler") or 0), 1)
+                    _tir_val = 0.0
+                    _cap_val = float(_rs.get("precio") or _rs.get("costo_total") or 0)
+                    _ret_val = 0.0
+                else:
+                    _kpi_lbl = "Margen (%)"
+                    _kpi_val = round(float(_rs.get("margen_pct") or _rs.get("margen_neto") or 0), 1)
+                    _tir_val = round(float(_rs.get("tir_anual_pct") or 0), 1)
+                    _cap_val = float(_rs.get("costo_total") or 0)
+                    _ret_val = float(_rs.get("utilidad_neta") or 0)
                 _port_df_rows.append({
-                    "Proyecto":    getattr(p, "_nombre", p.name),
-                    "Tipo":        getattr(p, "_tipo", "—"),
-                    "Zona":        getattr(p, "_zona", "—"),
-                    "Fecha":       getattr(p, "_fecha", "—"),
-                    "Margen (%)":  round(float(_rs.get("margen_pct") or 0), 1),
-                    "TIR (%)":     round(float(_rs.get("tir_anual_pct") or 0), 1),
-                    "Util. Neta":  f"${float(_rs.get('utilidad_neta') or 0):,.0f}",
-                    "Ingresos":    f"${float(_rs.get('ingresos_brutos') or 0):,.0f}",
+                    "Proyecto":          p._nombre or p.name,
+                    "Tipo":              _tip,
+                    "Zona":              p._zona or "—",
+                    "Estado":            (_rs.get("_status") or "Análisis"),
+                    "Fecha":             p._fecha or "—",
+                    _kpi_lbl:            _kpi_val,
+                    "TIR / IRR (%)":     _tir_val if _tir_val else "—",
+                    "Capital ($)":       f"${_cap_val:,.0f}" if _cap_val else "—",
+                    "Retorno ($)":       f"${_ret_val:,.0f}" if _ret_val else "—",
                 })
             st.dataframe(pd.DataFrame(_port_df_rows), hide_index=True, use_container_width=True)
+
+            # Botón de exportación
+            with _tc2:
+                try:
+                    import io as _io_xp
+                    import openpyxl as _oxl_xp
+                    from openpyxl.styles import PatternFill as _PF_xp, Font as _FN_xp, Alignment as _AL_xp
+                    _wb_xp = _oxl_xp.Workbook()
+                    _ws_xp = _wb_xp.active
+                    _ws_xp.title = "Portfolio SOLUM"
+                    _hf = _PF_xp("solid", fgColor="1A2737")
+                    _hfont = _FN_xp(bold=True, color="FFFFFF", size=10)
+                    _haln  = _AL_xp(horizontal="center", vertical="center", wrap_text=True)
+                    _xcols = list(_port_df_rows[0].keys()) if _port_df_rows else []
+                    for ci, col in enumerate(_xcols, 1):
+                        _c = _ws_xp.cell(row=1, column=ci, value=col)
+                        _c.fill  = _hf
+                        _c.font  = _hfont
+                        _c.alignment = _haln
+                    for ri, rd in enumerate(_port_df_rows, 2):
+                        for ci, col in enumerate(_xcols, 1):
+                            _ws_xp.cell(row=ri, column=ci, value=str(rd.get(col, "")))
+                    for col_cells in _ws_xp.columns:
+                        _mw = max(len(str(c.value or "")) for c in col_cells)
+                        _ws_xp.column_dimensions[col_cells[0].column_letter].width = min(_mw + 4, 32)
+                    _buf_xp = _io_xp.BytesIO()
+                    _wb_xp.save(_buf_xp)
+                    _buf_xp.seek(0)
+                    st.download_button(
+                        "Exportar Excel",
+                        data=_buf_xp.getvalue(),
+                        file_name=f"portfolio_solum_{datetime.datetime.now().strftime('%Y%m%d')}.xlsx",
+                        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                        use_container_width=True,
+                    )
+                except Exception:
+                    pass
+
+    # ── PANEL DE GESTIÓN DE NORMATIVAS (solo admin) ───────────────────────
+    if st.session_state.get("_role") == "admin":
+        st.markdown("---")
+        st.markdown(
+            '<div style="font-size:9px;color:#FFFFFF;letter-spacing:3px;text-transform:uppercase;'
+            'font-weight:600;margin-bottom:4px;">ADMINISTRACIÓN · SOLO ADMIN</div>'
+            '<div style="font-size:20px;font-weight:700;color:#FFFFFF;margin-bottom:6px;">Gestión de Normativas</div>'
+            '<div style="font-size:12px;color:#B0C0D0;margin-bottom:16px;">'
+            'Sube nuevas ordenanzas, decretos o actualizaciones de mercado. '
+            'Claude procesa el documento y actualiza la base de conocimiento de SOLUM.</div>',
+            unsafe_allow_html=True)
+
+        _na1, _na2 = st.columns([2, 1])
+        with _na1:
+            _norm_tab1, _norm_tab2 = st.tabs(["Subir nueva normativa", "Normativas vigentes"])
+
+            with _norm_tab1:
+                _nf1, _nf2 = st.columns(2)
+                _norm_codigo  = _nf1.text_input("Código (ej: ord_mml_933, rin_san_isidro)", key="norm_codigo",
+                                                 placeholder="codigo_unico_sin_extension")
+                _norm_nombre  = _nf2.text_input("Nombre descriptivo", key="norm_nombre",
+                                                 placeholder="Ord. 933-MML — Zonificación ATN-I")
+                _nf3, _nf4 = st.columns(2)
+                _norm_tipo    = _nf3.selectbox("Tipo", ["ordenanza", "rin", "rne", "benchmark", "mercado", "decreto"], key="norm_tipo")
+                _norm_dist    = _nf4.text_input("Distrito (opcional)", key="norm_distrito", placeholder="Lima / San Isidro / ...")
+                _norm_fuente  = st.text_input("Fuente / referencia", key="norm_fuente",
+                                               placeholder="Ej: El Peruano 15/03/2025 · https://...")
+                _norm_cambios = st.text_area("Resumen de cambios respecto a versión anterior",
+                                              key="norm_cambios", height=80,
+                                              placeholder="Ej: Actualiza retiros frontales I2 de 3m a 5m. Deroga Ord. 893-MML Art. 12.")
+                _norm_archivo = st.file_uploader("Documento (PDF, TXT, DOCX)", type=["pdf", "txt", "docx"], key="norm_upload")
+
+                if st.button("PROCESAR Y GUARDAR EN BASE DE CONOCIMIENTO", use_container_width=True,
+                              key="btn_norm_guardar", type="primary"):
+                    if not _norm_codigo or not _norm_nombre or not _norm_archivo:
+                        st.error("Completa código, nombre y sube el archivo.")
+                    else:
+                        with st.spinner("Claude está procesando el documento…"):
+                            try:
+                                _nbytes = _norm_archivo.read()
+                                _nname  = _norm_archivo.name.lower()
+                                # Extraer texto según tipo de archivo
+                                if _nname.endswith(".txt"):
+                                    _ntexto = _nbytes.decode("utf-8", errors="ignore")
+                                elif _nname.endswith(".pdf"):
+                                    import io
+                                    try:
+                                        from pdfminer.high_level import extract_text as _pdf_extract
+                                        _ntexto = _pdf_extract(io.BytesIO(_nbytes))
+                                    except Exception:
+                                        _ntexto = f"[PDF no pudo procesarse localmente — {len(_nbytes)} bytes]"
+                                else:
+                                    _ntexto = _nbytes.decode("utf-8", errors="ignore")
+
+                                # Claude resume y estructura el contenido
+                                _api_k = (st.secrets.get("anthropic", {}) or {}).get("api_key") or st.session_state.get("api_key_input", "")
+                                if _api_k and len(_ntexto) > 100:
+                                    import anthropic as _anth
+                                    _acl = _anth.Anthropic(api_key=_api_k, max_retries=0, timeout=90.0)
+                                    _nr = _acl.messages.create(
+                                        model="claude-sonnet-4-6",
+                                        max_tokens=4096,
+                                        messages=[{"role": "user", "content":
+                                            f"Eres un experto en normativa urbanística de Lima, Perú. "
+                                            f"El siguiente documento es: {_norm_nombre} (tipo: {_norm_tipo}).\n\n"
+                                            f"Procesa este documento para la base de conocimiento de SOLUM. "
+                                            f"Extrae y estructura TODA la información relevante: "
+                                            f"parámetros urbanísticos, alturas, retiros, estacionamientos, usos permitidos, "
+                                            f"fechas de vigencia, artículos clave. Mantén el texto completo pero organizado. "
+                                            f"No truncues información importante.\n\n"
+                                            f"DOCUMENTO:\n{_ntexto[:50000]}"}]
+                                    )
+                                    _ntexto_final = _nr.content[0].text if _nr.content else _ntexto
+                                else:
+                                    _ntexto_final = _ntexto
+
+                                # Desactivar versión anterior del mismo código
+                                _sb3 = _get_supabase()
+                                if _sb3:
+                                    _sb3.table("normativas").update({"activo": False}).eq("codigo", _norm_codigo).execute()
+                                    # Obtener número de versión
+                                    _vr = _sb3.table("normativas").select("version").eq("codigo", _norm_codigo).order("version", desc=True).limit(1).execute()
+                                    _next_v = ((_vr.data[0]["version"] + 1) if _vr.data else 1)
+                                    # Insertar nueva versión activa
+                                    _sb3.table("normativas").insert({
+                                        "codigo":          _norm_codigo.strip(),
+                                        "nombre":          _norm_nombre.strip(),
+                                        "tipo":            _norm_tipo,
+                                        "distrito":        _norm_dist.strip() or None,
+                                        "contenido":       _ntexto_final,
+                                        "version":         _next_v,
+                                        "activo":          True,
+                                        "fuente":          _norm_fuente.strip() or None,
+                                        "resumen_cambios": _norm_cambios.strip() or None,
+                                        "subido_por":      st.session_state.get("_username", "admin"),
+                                    }).execute()
+                                    # Limpiar cache de sesión para que próximos análisis usen la nueva versión
+                                    _ck = f"_norm_cache_{_norm_codigo}.txt"
+                                    st.session_state.pop(_ck, None)
+                                    st.session_state.pop(f"_norm_cache_{_norm_codigo}.md", None)
+                                    st.success(f"✓ '{_norm_nombre}' guardada como versión {_next_v}. Próximos análisis usarán esta versión.")
+                            except Exception as _ne:
+                                st.error(f"Error al guardar: {_ne}")
+
+            with _norm_tab2:
+                _sb4 = _get_supabase()
+                if _sb4:
+                    try:
+                        _nlist = _sb4.table("normativas").select(
+                            "codigo, nombre, tipo, distrito, version, activo, fuente, resumen_cambios, subido_por, creado_en"
+                        ).order("creado_en", desc=True).limit(100).execute()
+                        if _nlist.data:
+                            _ndf_rows = []
+                            for _nr2 in _nlist.data:
+                                _ndf_rows.append({
+                                    "Código":    _nr2.get("codigo", ""),
+                                    "Nombre":    _nr2.get("nombre", ""),
+                                    "Tipo":      _nr2.get("tipo", ""),
+                                    "Distrito":  _nr2.get("distrito") or "—",
+                                    "Ver.":      _nr2.get("version", 1),
+                                    "Vigente":   "✓" if _nr2.get("activo") else "Histórico",
+                                    "Subido":    (_nr2.get("creado_en") or "")[:10],
+                                    "Cambios":   (_nr2.get("resumen_cambios") or "")[:60],
+                                })
+                            st.dataframe(pd.DataFrame(_ndf_rows), hide_index=True, use_container_width=True)
+                        else:
+                            st.info("No hay normativas en la base de datos todavía. Las normativas locales siguen activas.")
+                    except Exception as _ne2:
+                        st.warning(f"No se pudo conectar a Supabase: {_ne2}")
+
+        with _na2:
+            st.markdown(
+                '<div style="background:rgba(184,144,74,0.08);border:1px solid rgba(184,144,74,0.25);'
+                'border-radius:8px;padding:16px;">'
+                '<div style="font-size:11px;font-weight:700;color:#D4A853;margin-bottom:10px;">CÓMO FUNCIONA</div>'
+                '<div style="font-size:11px;color:#B0C0D0;line-height:1.8;">'
+                '① Sube el PDF o texto de la norma nueva<br>'
+                '② Claude extrae y estructura el contenido<br>'
+                '③ Se guarda en Supabase con control de versión<br>'
+                '④ Los próximos análisis usan la versión actualizada automáticamente<br><br>'
+                '<strong style="color:#C8D8E8;">Las normativas locales siguen como respaldo</strong> '
+                'si Supabase no está disponible.'
+                '</div></div>',
+                unsafe_allow_html=True)
 

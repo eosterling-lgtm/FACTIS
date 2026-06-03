@@ -349,6 +349,277 @@ Propuesta real de Aldea Logística Global a Scharff — calibración de benchmar
 
 ---
 
+## 13. DSCR Y FINANCIAMIENTO DE ACTIVOS EN RENTA (INDUSTRIAL / OFICINAS / COMERCIAL)
+
+### DSCR — Debt Service Coverage Ratio
+El DSCR aplica cuando el activo genera renta recurrente (industrial, oficinas, retail) y el crédito es amortizable, NO al crédito promotor residencial.
+
+**Fórmula:**
+```
+DSCR = NOI anual / Servicio anual de deuda (capital + intereses)
+```
+
+**NOI (Net Operating Income):**
+```
+NOI = Renta bruta anual - Gastos operativos
+```
+Gastos operativos típicos nave industrial: **15–20% de la renta bruta** (mantenimiento, seguros, tributos municipales, gestión).
+
+**Exigencia bancaria mínima:**
+| Tipo de activo | DSCR mínimo exigido |
+|---|---|
+| Industrial / logístico | **1.25x** |
+| Oficinas | **1.30x** |
+| Retail / comercial | **1.30–1.40x** |
+| Hoteles / activos operacionales | **1.50x** |
+
+**Ejemplo práctico:**
+- Nave 5,000 m²Te a $6.50/m²/mes = renta bruta $390,000/año
+- NOI = $390,000 × 85% = $331,500
+- Servicio deuda (hipoteca $2M al 9% por 10 años) = ~$305,000/año
+- DSCR = $331,500 / $305,000 = **1.09x → por debajo del mínimo → banco no financia**
+- Para que el banco financie: NOI debe ser ≥ $305,000 × 1.25 = $381,250
+  → equivale a renta mínima de ~$7.49/m²/mes (con esa deuda)
+
+**Implicancia:** El DSCR limita cuánto puede endeudarse el comprador; si la renta es baja o el precio de compra es alto, la deuda no es viable y el comprador debe aportar más equity.
+
+### Tasas crédito hipotecario comercial (USD) — Lima 2025-2026
+| Banco | TEA USD aprox. |
+|---|---|
+| BBVA Perú | 7.5–9.5% |
+| BCP | 7.5–10.0% |
+| Scotiabank | 7.0–9.0% |
+| Credicorp Capital / IFC / fondos privados | 6.5–8.5% |
+
+Los créditos industriales en USD son comunes cuando la renta también está en USD (calce de moneda).
+
+### Métricas adicionales que usan los fondos de inversión para industrial
+| Métrica | Descripción | Benchmark Lima industrial |
+|---|---|---|
+| **Cap rate de entrada** | NOI / precio de compra | 7.5–10.0% |
+| **Cap rate de salida** (exit) | NOI futuro / precio de venta proyectado | 7.0–9.0% |
+| **IRR (USD)** | TIR del equity en USD | 12–15% |
+| **MOIC** | Multiple on Invested Capital | 1.7–2.2x (en 5–7 años) |
+| **Hold period** | Período de tenencia del activo | 5–10 años |
+| **Equity multiple** | Capital retornado / capital invertido | Mínimo 1.5x |
+
+### Sale & Leaseback — cuándo aplicarlo
+Estructura en que la empresa propietaria vende el activo a un inversor y simultáneamente lo arrienda de vuelta:
+- Libera capital inmovilizado → mejora liquidez y ROE operativo
+- El vendedor-arrendatario sigue operando sin interrupción
+- El comprador-inversor obtiene un activo con inquilino ya instalado (menor riesgo)
+- **Renta típica en S&LB industrial Lima**: 6.5–8.0% cap rate sobre precio de compra
+- Plazo contrato mínimo acordado para que el inversor lo acepte: **5–10 años**
+- Ventaja fiscal: la empresa convierte activo fijo en gasto (arrendamiento deducible de IR)
+
+---
+
+## 14. TRIBUTOS INMOBILIARIOS PERÚ — IMPACTO FINANCIERO EN TRANSACCIONES
+
+### Alcabala
+- **Tasa**: 3% sobre el valor de venta del inmueble (o autovalúo si es mayor)
+- **Quién paga**: el comprador
+- **Exoneración**: primeras 10 UIT del valor del inmueble (S/ 51,500 en 2025) están exentas
+- **Primera venta del constructor**: exonerada de alcabala para el comprador final (Ley 29168)
+- **Cronograma de pago**: dentro del mes siguiente a la firma de escritura pública
+- **Distribución**: 50% Municipalidad Distrital + 50% Gobierno Regional
+- **Orientación SOLUM**: siempre verificar si el inmueble es primera venta del constructor (exonerada) o venta posterior (grava al 3%)
+
+### Impuesto a la Renta — ganancia de capital en venta de inmuebles
+| Situación | Tasa IR |
+|---|---|
+| Persona natural — habitualidad (≥3ª venta en el ejercicio) | 5% sobre la ganancia neta |
+| Persona natural — sin habitualidad (1ª o 2ª venta) | Exonerada de IR |
+| Persona jurídica (empresa) | 29.5% IR sobre utilidad + 5–9.3% impuesto a los dividendos |
+| Empresa — venta de bien inmueble del activo fijo | 29.5% sobre utilidad (precio venta - valor en libros) |
+
+**Ganancia neta = precio de venta - costo de adquisición actualizado por inflación (SUNAT publica factor)**
+
+**Implicancia en negociación**: el vendedor persona natural sin habitualidad NO paga IR sobre la ganancia → no tiene "presión fiscal" para subir precio. El vendedor empresa SÍ paga 29.5% sobre la ganancia → puede presionar precio para cubrir IR o estructurar de otra forma (aporte de activo, fusión, etc.).
+
+### Impuesto Predial
+Grava el valor de autovalúo del predio:
+| Tramo (UIT) | Tasa |
+|---|---|
+| Hasta 15 UIT (S/ 77,250) | 0.2% |
+| De 15 UIT a 60 UIT | 0.6% |
+| Más de 60 UIT | 1.0% |
+
+- Base: **autovalúo municipal** (generalmente 30–50% por debajo del valor de mercado)
+- Pago anual; puede pagarse en cuotas trimestrales
+- Para proyectos industriales/comerciales: el predial es un gasto operativo recurrente que afecta el NOI
+
+### IGV en arrendamiento
+- **Inmuebles residenciales**: arrendamiento **no grava IGV** (exonerado)
+- **Inmuebles comerciales / industriales**: arrendamiento **SÍ grava IGV (18%)** cuando el arrendador es empresa
+- La renta industrial en USD que aparece en los benchmarks es **sin IGV** → el usuario deberá añadir el IGV si factura como empresa
+- En contratos triple neto (NNN), el inquilino paga predial, mantenimiento y seguros — el arrendador recibe la renta "limpia"
+
+### Costos de transacción — resumen ejecutivo
+| Concepto | Monto típico | Quién paga |
+|---|---|---|
+| Alcabala | 3% del valor (menos 10 UIT) | Comprador |
+| Escritura pública notarial | 0.1–0.3% del valor | Negociable |
+| Inscripción SUNARP | ~0.3% del valor (con topes) | Comprador |
+| Estudio de títulos / due diligence legal | $5,000–$20,000 | Comprador |
+| Tasación bancaria | $800–$2,500 | Comprador |
+| Comisión broker / advisory | 1–3% del precio | Negociable |
+| **Total costos de transacción típicos** | **3.5–7% del precio** | Mayormente comprador |
+
+---
+
+## 15. VALORACIÓN DE INMUEBLES — METODOLOGÍA Y BRECHAS
+
+### Los tres métodos de valoración
+| Método | Cuándo aplica | Limitación |
+|---|---|---|
+| **Comparativo de mercado** | Residencial, terrenos urbanos | Requiere transacciones comparables recientes |
+| **Ingreso (cap rate / DCF)** | Industrial, oficinas, retail, cualquier inmueble con renta | Sensible a la tasa de descuento y supuestos de renta |
+| **Costo de reposición** | Activos especiales sin mercado (plantas industriales, cámaras frías) | No refleja valor de mercado ni ubicación |
+
+### Método de ingreso — lógica del cap rate
+```
+Valor del activo = NOI / Cap rate
+```
+Ejemplo: Nave industrial con NOI de $300,000/año a un cap rate de 8.5% = **valor $3,529,412**
+
+**Compresión de cap rate**: cuando más inversores compiten por el mismo activo, el cap rate baja y el valor sube. Lurín 2024-2025 ha visto compresión de cap rates de 10% a 8-9% por demanda institucional.
+
+### Brecha tasación bancaria vs. valor de mercado
+- **Tasación bancaria** (Resolución SBS): conservadora por diseño → **10–20% por debajo del precio de compra** en transacciones activas
+- El banco presta sobre la tasación, no sobre el precio → si el precio excede la tasación, el comprador debe cubrir la brecha con equity adicional
+- En Lima industrial: tasaciones bancarias frecuentemente usan valor de reposición (más bajo que el valor de mercado cuando la ubicación tiene prima)
+
+### Valor de descuento / forzado
+- Bancos ejecutores, fondos de recuperación y compradores de activos en liquidación aplican **descuento del 15–30%** sobre el valor de mercado como precio de adquisición objetivo
+- Para el análisis SOLUM, si el precio de compra está >10% por debajo del valor de mercado comparable → señal de distress del vendedor → puede haber riesgo legal no visible
+
+---
+
+## 16. NEGOCIACIÓN Y ESTRUCTURACIÓN DE COMPRA
+
+### Opciones de compra (exclusividades)
+- **Objeto**: el vendedor se compromete a no vender a terceros durante el plazo pactado
+- **Monto típico**: **1–3% del precio de compra** (descontable del precio en cierre)
+- **Plazo estándar**: 30–90 días (suficiente para due diligence + estructuración financiera)
+- **Si no se ejerce la opción**: el monto puede perderse (opción no reembolsable) o devolver parcialmente según contrato
+- **Registro SUNARP**: la opción puede inscribirse para proteger al comprador frente a terceros
+
+### Arras — tipos y diferencias
+| Tipo | Consecuencia si comprador desiste | Consecuencia si vendedor desiste |
+|---|---|---|
+| **Arras confirmatorias** | Pierde las arras + puede exigir cumplimiento forzado | Devuelve el doble de las arras |
+| **Arras penitenciales** | Solo pierde las arras (sin exigir cumplimiento) | Solo devuelve el doble de las arras |
+
+Las arras penitenciales son las más comunes en compraventa de inmuebles entre privados en Lima. Las confirmatorias aplican cuando ambas partes quieren garantizar el cierre obligatorio.
+
+### Estructura de pagos más común — inmuebles comerciales/industriales Lima
+1. **Opción de compra**: 1–2% del precio (día 0)
+2. **Firma de minuta / contrato privado**: 20–30% del precio (sujeto a due diligence aprobado, día 30–60)
+3. **Escritura pública + registro SUNARP**: saldo 70–80% (financiado o al contado, día 60–120)
+
+### Condiciones suspensivas estándar (due diligence gates)
+- Verificación registral sin cargas ni gravámenes (SUNARP)
+- Confirmación de zonificación compatible con uso previsto (municipalidad)
+- Due diligence legal limpio (sin litigios, herencias no resueltas, servidumbres ocultas)
+- Aprobación del financiamiento bancario del comprador
+- Verificación de parámetros urbanísticos (certificado CPUE)
+
+### Financiamiento del vendedor
+Cuando el vendedor acepta financiar parte del precio:
+- Estructura: venta con hipoteca a favor del vendedor inscrita en SUNARP
+- Plazo típico: 1–3 años a tasas de mercado
+- Útil cuando: el activo es difícil de valorar, el comprador no califica para banco, o el vendedor quiere diferir el IR
+- **Riesgo del comprador**: el vendedor puede ejecutar la hipoteca si no se paga puntualmente
+
+---
+
+## 17. RED FLAGS Y SEÑALES DE ALERTA FINANCIERA
+
+### Para proyectos residenciales de desarrollo
+| Señal | Umbral de alerta | Interpretación |
+|---|---|---|
+| Incidencia de terreno | >30% del costo total | Terreno caro → margen muy estrecho |
+| Margen bruto sobre ventas | <20% | Sin colchón para imprevistos |
+| TIR económica | <15% | Por debajo del costo de capital |
+| Velocidad de absorción | <1.0 und/mes | Mercado o precio inadecuado |
+| Ticket promedio | >S/ 750,000 sin diferencial claro | Mercado más pequeño y lento |
+| Precio m² vs. comparable | >10% por encima del comparable | Riesgo de que el banco tase por debajo |
+| Equity aportado | <20% del costo total | Exposición excesiva, banco puede no financiar |
+
+### Para activos industriales / inversión en renta
+| Señal | Umbral de alerta | Interpretación |
+|---|---|---|
+| Cap rate de entrada | <7% en Lima | Precio de compra alto para la renta de mercado |
+| DSCR | <1.20x | El flujo no cubre cómodamente la deuda |
+| Inquilino único | Contrato <3 años | Riesgo de vacancia total al vencimiento |
+| Renta vs. mercado | >10% por encima del promedio | Posible sobrevaluación por inquilino pagador |
+| Altura libre | <8m | Limita usos logísticos modernos → menor liquidez |
+| Vacancia de mercado en zona | >20% | Zona saturada, difícil de re-arrendar |
+| Antigüedad del inmueble | >20 años sin remodelación | Posible CAPEX significativo no previsto |
+
+### Para cualquier transacción — red flags legales/registrales
+- Partida con anotaciones de demanda o medidas cautelares
+- Área registral diferente al área física en >5%
+- Titular con poderes de representación no inscritos
+- Inmueble en zona de expansión urbana sin habilitación formal
+- Deuda de predial o arbitrios por más de 2 años (embargable)
+- Testamentos o sucesiones no tramitados (herederos no registrados)
+
+---
+
+## 18. CRITERIOS DE ORIENTACIÓN PARA EL INFORME — CÓMO SOLUM INTERPRETA LOS RESULTADOS
+
+Esta sección define cómo SOLUM debe contextualizar los indicadores financieros en el informe, como valor agregado de orientación para la toma de decisiones. SOLUM no recomienda comprar ni no comprar; expone la data con contexto para que el usuario decida.
+
+### Residencial — frases orientadoras por indicador
+
+**TIR:**
+- TIR >25%: "La TIR proyectada supera el benchmark para proyectos residenciales premium en Lima (20–25%). El proyecto tiene margen para absorber escenarios adversos."
+- TIR 18–25%: "La TIR se encuentra dentro del rango objetivo para proyectos residenciales en Lima Moderna. Viable para presentación a banco."
+- TIR 15–18%: "La TIR es aceptable pero ajustada. Cualquier alza en costos de construcción o caída en velocidad de ventas comprime el margen. Revisar sensibilidad."
+- TIR <15%: "La TIR está por debajo del costo de capital de mercado (15% mínimo). El proyecto en su estado actual no es viable para financiamiento bancario."
+
+**Margen bruto:**
+- >35%: "Margen sólido — proyecto con colchón financiero amplio frente a imprevistos."
+- 25–35%: "Margen dentro del rango óptimo para Lima. Viable con gestión de costos estándar."
+- 20–25%: "Margen ajustado — requiere ejecución eficiente. Sin holgura para sobrecostos de construcción."
+- <20%: "Margen muy estrecho. Un alza de 10% en costos de obra elimina la rentabilidad."
+
+**Punto de equilibrio:**
+- <70% unidades: "El proyecto alcanza equilibrio antes del umbral bancario estándar (75–85%). Alta viabilidad financiera."
+- 70–85%: "El punto de equilibrio está dentro del rango normal del mercado."
+- >85%: "El proyecto necesita vender más del 85% de sus unidades para recuperar la inversión. Riesgo elevado si el mercado se desacelera."
+
+**Precio vs. mercado:**
+- Precio proyectado debe compararse con el comparable Urbania INDEX del distrito. Si el precio es >10% por encima: "El precio de lanzamiento supera el mercado comparable en X%. Considerar reducir ticket promedio o diferenciar el producto."
+
+### Industrial — frases orientadoras por indicador
+
+**Yield / Cap rate:**
+- >10%: "El yield proyectado supera el cap rate de mercado para activos Clase A en Lima (8–10%). El precio de compra está por debajo del valor de reposición o la renta es alta — validar ambas hipótesis."
+- 8–10%: "El yield está en línea con el cap rate de mercado para activos industriales Clase A en Lima. Precio de compra razonable para la renta de mercado."
+- 6–8%: "El yield está por debajo del cap rate de mercado. El precio de compra es elevado en relación a la renta. Para ser viable en financiamiento, el comprador deberá aportar más equity."
+- <6%: "El yield es bajo para el estándar industrial limeño. Solo justificable si hay potencial de revalorización del suelo o mejora significativa del inmueble."
+
+**DSCR:**
+- >1.35x: "El flujo de caja cubre holgadamente el servicio de la deuda. Perfil bancable sin restricciones."
+- 1.25–1.35x: "El DSCR está en el umbral mínimo bancario (1.25x). El proyecto es financiable pero sin margen para caída de rentas."
+- 1.10–1.25x: "El DSCR está por debajo del mínimo exigido por la banca (1.25x). Para obtener financiamiento, reducir el monto del crédito o negociar mejores condiciones de renta."
+- <1.10x: "El flujo de renta no cubre el servicio de la deuda proyectado. Operación viable solo con equity significativo o sin financiamiento bancario."
+
+**Costo total vs. precio de mercado (industrial desarrollo):**
+- Costo total <60% del valor de mercado de naves similares en la zona: "El proyecto tiene margen de valor frente al mercado. Alta viabilidad como inversión."
+- Costo total 60–80%: "Margen de desarrollo razonable. Consistente con proyectos industriales viables en Lima."
+- Costo total >85% del valor de mercado: "El margen de desarrollo es estrecho. Revisar si la renta proyectada justifica la inversión o renegociar el precio del inmueble."
+
+### Propuesta comercial — orientación general
+- Si el precio ofertado está >15% por encima del valor estimado por ingreso (cap rate): mencionar brecha y sugerir revisión
+- Si el plazo de due diligence es <30 días: advertir que puede ser insuficiente para verificación registral + parámetros + tasación
+- Si no hay opción de compra pactada: advertir que el vendedor podría vender a terceros durante el proceso
+
+---
+
 ## RESUMEN — TABLA MAESTRA DE CIFRAS CLAVE
 
 | Métrica | Valor / Rango |
@@ -357,10 +628,12 @@ Propuesta real de Aldea Logística Global a Scharff — calibración de benchmar
 | **Aporte mínimo del promotor** | 20–40% del costo total |
 | **LTV bancario** | 70–80% del costo total |
 | **Tasa crédito promotor (soles)** | 12–16% TEA (BBVA: ~15%) |
+| **Tasa crédito hipotecario comercial (USD)** | 7.0–10.0% TEA |
 | **Tasa hipotecaria comprador** | 7.24–7.89% TEA |
 | **TIR objetivo residencial Lima** | 20–30% |
 | **TIR mínima aceptable** | >15% |
 | **TIR sobre equity (apalancado)** | 25–40% |
+| **TIR objetivo industrial (USD)** | 12–15% |
 | **Tasa descuento VAN (equity soles)** | 15–20% anual |
 | **Margen bruto sobre ventas** | 25–40% |
 | **Margen neto sobre ventas** | 12–15% |
@@ -368,11 +641,19 @@ Propuesta real de Aldea Logística Global a Scharff — calibración de benchmar
 | **Precio m² Lima Moderna (2025)** | S/ 6,951 |
 | **Precio m² Lima Top (2025)** | S/ 8,578 |
 | **Precio m² Lima Norte (2025)** | S/ 3,497 |
-| **Yield bruto alquiler Lima** | 5.94–6.29% |
+| **Yield bruto alquiler residencial Lima** | 5.94–6.29% |
 | **Cap rate oficinas A+ Lima** | 8.0–9.5% |
 | **Cap rate industrial A Lima** | 8.0–10.0% |
+| **DSCR mínimo exigido (industrial)** | 1.25x |
+| **DSCR mínimo exigido (oficinas)** | 1.30x |
 | **Renta almacén Clase A VES/Lurín** | US$ 6.05–6.75/m²/mes (all-in) |
+| **NOI industrial (% de renta bruta)** | 80–85% (gastos operativos 15–20%) |
 | **IGV efectivo primera venta** | ~9% del valor total |
+| **Alcabala** | 3% del valor (comprador) |
+| **IR ganancia capital persona natural** | 5% (desde 3ª venta) / 0% (1ª y 2ª venta) |
+| **IR ganancia capital persona jurídica** | 29.5% + 5–9.3% dividendos |
+| **Impuesto predial** | 0.2–1.0% del autovalúo |
+| **Costos de transacción totales** | 3.5–7% del precio |
 | **Inflación Lima 2025** | 1.97% |
 | **Tipo de cambio proyectado 2026** | S/ 3.34–3.46 |
 | **Tasa referencia BCRP** | 4.25% |
@@ -383,4 +664,6 @@ Propuesta real de Aldea Logística Global a Scharff — calibración de benchmar
 | **Garantía contrato arrendamiento** | 3 meses (2 garantía + 1 adelanto) |
 | **Módulo mínimo nave Clase A** | ~2,600 m²Te |
 | **Ciclo total proyecto residencial** | 36–48 meses |
-
+| **Hold period típico activo industrial** | 5–10 años |
+| **MOIC objetivo fondo industrial** | 1.7–2.2x |
+| **Opción de compra típica** | 1–3% del precio / 30–90 días |

@@ -1,0 +1,162 @@
+# RIN LURIGANCHO (CHOSICA / HUACHIPA) — REGLAMENTO DE INTEGRACIÓN NORMATIVA
+## Parámetros Urbanísticos y Edificatorios
+### Fuente: CPU N°096-2021-SOPCCU-GDU/MCPSMH (IE — Av. Los Laureles, Mz. Ñ, Lote 2, Urb. Lotización La Capitana, Centro Poblado Santa María de Huachipa, 2021)
+
+---
+
+## 1. MARCO LEGAL VIGENTE
+
+| Norma | Contenido | Estado |
+|---|---|---|
+| Ord. N°1099-MML (12/12/2007) | Reglamento de Zonificación de Lima — **NORMA BASE** aplicable al distrito de Lurigancho-Chosica | **VIGENTE** |
+| Ord. N°1237-MML (02/04/2009) | Asigna calificación de Zona de Habilitación Recreacional (ZHR) y de Industria Especial (IE) a la Mz. Ñ, Lotización La Capitana, C.P. Santa María de Huachipa — **NORMA ESPECÍFICA** | **VIGENTE** |
+| D.S. N°0026-2008-MTC | Referenciado en la Ley N°29090 — marco de habilitaciones y edificaciones | Vigente |
+| D.S. N°0035-2006-VIVIENDA | Referenciado en el marco general de tramitación | Vigente |
+| RNE (D.S. N°011-2006-VIVIENDA y modificatorias) | Norma supletoria | Vigente |
+| Ley N°29090 | Habilitaciones Urbanas y Edificaciones | Vigente |
+
+**Área de Tratamiento Normativo: IV**
+Lurigancho (Centro Poblado Santa María de Huachipa) opera bajo ATN IV — diferente a los distritos metropolitanos de Lima (ATN I y II). La norma base es la Ord. N°1099-MML, con la Ord. N°1237-MML como instrumento específico que asigna la zonificación IE al área de Huachipa.
+
+**Autoridad competente:** Municipalidad del Centro Poblado Santa María de Huachipa (MCPSMH) — Sub Gerencia de Obras Privadas, Catastro y Control Urbano.
+
+---
+
+## 2. ZONA IE — INDUSTRIA ESPECIAL (CPU N°096-2021)
+
+### Av. Los Laureles — Mz. Ñ, Lote 2, Urb. Lotización La Capitana, C.P. Santa María de Huachipa
+
+| Parámetro | Valor |
+|---|---|
+| **Zonificación** | IE — Industria Especial |
+| **ATN** | IV |
+| **Área de lote normativo** | **El existente** (sin mínimo nuevo impuesto) |
+| **Área libre mínima** | **50%** — tratada en su totalidad como área verde |
+| **Altura máxima de edificación** | **9.00 ml** |
+| **Altura de cerco perimétrico** | **5.40 ml** |
+| **Estacionamientos** | **1 espacio por cada 6 personas empleadas** |
+| **Retiro — Av. Los Laureles** | **5.00 ml** |
+| **Sección vial — Av. Los Laureles** | 30.00 ml |
+| **Alineamiento de fachada — Av. Los Laureles** | 20.00 ml (con respecto al eje de vía) |
+
+---
+
+## 3. USOS COMPATIBLES IE — RESTRICCIONES AMBIENTALES CRÍTICAS
+
+**Usos permitidos:** Localización de establecimientos industriales en las ubicaciones establecidas en el Plano de Zonificación.
+
+**Prohibiciones absolutas:**
+- Industrias contaminantes — **terminantemente prohibidas**
+- Actividades que pongan en riesgo la estabilidad del acuífero subterráneo de Huachipa
+- Industrias peligrosas
+
+**Requisitos ambientales obligatorios para TODOS los establecimientos:**
+1. Tecnologías limpias en todos los procesos
+2. Tratamiento de efluentes con disposición final sin impactos negativos
+3. **Estudio de Impacto Ambiental (EIA)** aprobado por la autoridad competente — obligatorio previo a licencia
+
+---
+
+## 4. CONDICIONES ESPECIALES — Ord. N°1237-MML
+
+Para los procesos de Habilitación Urbana de la zona IE, los propietarios deben contemplar:
+
+1. **Derecho de vía:** Dejar el derecho de vía correspondiente para las vías metropolitanas **Av. Los Laureles y Quinta Avenida** (cesión gratuita en habilitación).
+2. **Franja de retiro arborizado:** Considerar franja de retiro arborizado como aislamiento con fines de seguridad, al interior del lote.
+3. **Normas ambientales y de seguridad:** Cumplir con todas las normas ambientales y de seguridad que correspondan.
+
+---
+
+## 5. NOTAS CRÍTICAS
+
+### IE ≠ I3/I2/I1 — categoría especial
+La zonificación IE (Industria Especial) es distinta a la clasificación estándar I1/I2/I3. Impone restricciones ambientales más estrictas (EIA obligatorio, tecnologías limpias, prohibición de industria contaminante) y condiciones específicas para Huachipa (protección de acuífero).
+
+### ATN IV — diferenciador clave
+Lurigancho (Huachipa) opera bajo ATN IV, no ATN I ni ATN II. La norma aplicable es Ord. N°1099-MML como base general + Ord. N°1237-MML como instrumento específico. NO aplican directamente las fórmulas de altura (1.5(a+r)) ni los cuadros de zonificación residencial de ATN I/II.
+
+### Altura máxima: 9.00 ml — más restrictiva que I3
+A diferencia de la zona I3 de Lurín (altura "según proyecto") o I2 de otros distritos, la IE de Huachipa fija un techo de 9.00 ml. Esto equivale aproximadamente a nave de un nivel con estructura metálica estándar (8–9m al hombro).
+
+### Área libre 50% arborizada — impacto en cobertura
+El 50% del lote debe ser área verde tratada. Solo el 50% del lote es techable por planta. Para nave industrial: área nave máx = 50% del terreno.
+
+### EIA obligatorio — plazo adicional de tramitación
+El Estudio de Impacto Ambiental debe ser aprobado por la autoridad competente (MINAM / PRODUCE / municipio según actividad) antes de obtener la licencia. Agregar 3–6 meses adicionales al cronograma de tramitación.
+
+### Acuífero subterráneo de Huachipa
+La protección del acuífero es una restricción estructural del área. Actividades con riesgo de filtración o contaminación de suelos son incompatibles con IE. Considerar en due diligence ambiental.
+
+### Municipalidad del Centro Poblado (MCPSMH)
+La autoridad emisora es la Municipalidad del Centro Poblado Santa María de Huachipa — no la Municipalidad Distrital de Lurigancho. Los trámites (licencias, CPUE, habilitación) se realizan ante la MCPSMH.
+
+### Vías metropolitanas — cesión en habilitación
+La Ord. N°1237-MML exige dejar el derecho de vía para Av. Los Laureles (sección 30.00 ml) y Quinta Avenida. Verificar cuánto área se pierde por esta cesión antes de calcular la cabida.
+
+---
+
+## 6. SÍNTESIS DE PARÁMETROS — IE HUACHIPA
+
+| Parámetro | Valor |
+|---|---|
+| **ATN** | IV |
+| **Norma base** | Ord. N°1099-MML + Ord. N°1237-MML |
+| **Lote normativo** | El existente |
+| **Área libre** | 50% (100% arborizada/verde) |
+| **Altura máxima** | 9.00 ml |
+| **Cerco perimétrico** | 5.40 ml |
+| **Estacionamiento** | 1/6 personas empleadas |
+| **Retiro Av. Los Laureles** | 5.00 ml |
+| **Alineamiento fachada Av. Los Laureles** | 20.00 ml desde eje de vía |
+| **EIA** | Obligatorio para todos los establecimientos |
+| **Industrias contaminantes** | Prohibidas |
+| **Acuífero** | Protección obligatoria |
+
+---
+
+## 7. DATOS DE MERCADO — LURIGANCHO / HUACHIPA (referencial 2025)
+
+| Indicador | Valor |
+|---|---|
+| Precio terreno industrial (Huachipa / Carretera Central) | **$130–135/m²** (estimado) |
+| Renta nave industrial (corredor Huachipa-Lurigancho) | **$4.5–6.0/m²/mes** |
+| Corredor industrial | Huachipa-Lurigancho (Carretera Central) — nodo emergente |
+| Conectividad | Carretera Central → Lima Centro · en proceso de mejora |
+| Precio residencial referencial | ~S/. 3,078/m² → ~USD 900/m² (est.) |
+
+**Nota IE + EIA:** Los plazos adicionales de EIA y la restricción de actividades limpias reducen el universo de arrendatarios potenciales. Verificar compatibilidad de uso con restricciones IE antes de comprometer el activo.
+
+---
+
+## 8. CHECKLIST PRE-FACTIBILIDAD — LURIGANCHO / HUACHIPA (IE)
+
+```
+□ Verificar zona exacta: IE / I2 / I3 / residencial (Plano Ord. N°1237-MML + N°1099-MML)
+□ Confirmar ATN IV — no aplican parámetros ATN I ni ATN II directamente
+□ Autoridad: Municipalidad del Centro Poblado Santa María de Huachipa (MCPSMH)
+□ Área libre: 50% mínimo — tratado íntegramente como área verde. Solo 50% del lote es techable.
+□ Altura máxima: 9.00 ml — confirmar en CPUE del predio específico
+□ Cerco perimétrico: 5.40 ml — incluir en presupuesto
+□ Retiro Av. Los Laureles: 5.00 ml + alineamiento de fachada 20.00 ml desde eje de vía
+□ EIA: obligatorio — agregar 3–6 meses y costo ambiental al cronograma/presupuesto
+□ Industria: solo tecnologías limpias, no contaminantes, no riesgo acuífero
+□ Derecho de vía: verificar cesión Av. Los Laureles y Quinta Avenida (reduce área útil del lote)
+□ Franja retiro arborizado: considerar dentro del lote como aislamiento de seguridad
+□ Estacionamiento: 1/6 personas empleadas — resolver dentro del lote
+□ Habilitación Urbana: obligatoria — verificar estado de la HU del predio
+□ Vigencia CPU: verificar si el CPU N°096-2021 sigue vigente (emisión 01/09/2021 — término 01/09/2024)
+```
+
+---
+
+## 9. RESUMEN EJECUTIVO — OPERATIVO PARA SOLUM
+
+**Zona IE (Huachipa — Centro Poblado Santa María de Huachipa):**
+→ ATN IV · Ord. N°1099-MML + Ord. N°1237-MML · autoridad: MCPSMH
+→ Lote existente · AL 50% verde · altura máx 9.00 ml · estac. 1/6 pers.
+→ Retiro 5.00 ml Av. Los Laureles · alineamiento 20.00 ml desde eje
+→ EIA obligatorio · solo industria limpia · protección acuífero · prohibida industria contaminante
+→ Cesión derecho de vía Av. Los Laureles + Quinta Avenida en habilitación
+→ Terreno industrial Huachipa: ~$130–135/m² · renta nave ~$4.5–6.0/m²/mes
+
+**Restricción operativa clave:** La combinación EIA obligatorio + restricción a industria limpia + AL 50% + altura 9.00 ml hace que IE Huachipa sea idónea para logística limpia, distribución, manufactura no contaminante — NO para industria pesada, química o actividades con residuos peligrosos.

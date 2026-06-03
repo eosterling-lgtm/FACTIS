@@ -4,14 +4,14 @@
 
 Al comenzar cualquier sesión en este proyecto, ANTES de responder cualquier pregunta:
 
-1. Confirmar que `app.py` existe en este directorio (archivo único ~15,000 líneas)
-2. Tener presente que la carpeta `normativas/` contiene **54 archivos** de texto con toda la normativa activa — **LEER `CONOCIMIENTO_INDUSTRIAL_SOLUM.md` para cualquier consulta industrial**
+1. Confirmar que `app.py` existe en este directorio (archivo único ~19,900 líneas)
+2. Tener presente que la carpeta `normativas/` contiene **80 archivos** de texto con toda la normativa activa — **LEER `CONOCIMIENTO_INDUSTRIAL_SOLUM.md` para cualquier consulta industrial**
 3. El conocimiento normativo, de mercado y financiero ya está embebido en los prompts del API de Claude — NO preguntar al usuario por datos que deberían conocerse
 4. Aplicar directamente: RINs, normas, benchmarks, precios de mercado, lógica financiera
 
 **Si el usuario pregunta por estacionamientos en San Isidro → aplicar RIN San Isidro directamente (sin preguntar).**
 **Si el usuario menciona un distrito → buscar en normativas/ el RIN correspondiente.**
-**Si el usuario pregunta precios → usar MERCADO dict en app.py línea ~2687 o mercado_residencial_lima_urbania_2025.txt.**
+**Si el usuario pregunta precios → usar MERCADO dict en app.py línea ~3602 o mercado_residencial_lima_urbania_2025.txt.**
 
 ---
 
@@ -28,7 +28,7 @@ Al comenzar cualquier sesión en este proyecto, ANTES de responder cualquier pre
 
 ## Qué es SOLUM
 
-App Streamlit de pre-factibilidad inmobiliaria. Archivo único: `app.py` (~15,000 líneas).
+App Streamlit de pre-factibilidad inmobiliaria. Archivo único: `app.py` (~19,900 líneas).
 
 **Propósito:** Evaluar terrenos en 15 minutos — cabida arquitectónica + análisis financiero + análisis legal. Lleva al promotor a reunirse con arquitecto/estructurista/banco con números ya trabajados, no reemplaza el expediente técnico.
 
@@ -47,6 +47,7 @@ App Streamlit de pre-factibilidad inmobiliaria. Archivo único: `app.py` (~15,00
 | `extract_parameters(cert_bytes, norm_docs)` | Extrae parámetros del certificado urbanístico vía Claude API → dict |
 | `generate_cabida(params, config)` | Genera programa arquitectónico por distrito → dict |
 | `calcular_financiero(cabida, fin, zona)` | Análisis financiero residencial → dict |
+| `calcular_oficinas(r)` | Análisis financiero oficinas (Alquiler/Compra/Desarrollo) → dict |
 | `calcular_industrial(inp)` | Análisis financiero industrial → dict |
 | `calcular_terreno_maximo(inp)` | Calculadora inversa de precio máximo de terreno |
 | `_run_with_retry(fn, max_retries=3)` | Ejecuta con reintentos en json_parse_error |
@@ -58,7 +59,7 @@ App Streamlit de pre-factibilidad inmobiliaria. Archivo único: `app.py` (~15,00
 | `_geo_poligono_tabular/dxf(...)` | Polígono Shapely desde medidas o DXF |
 | `_geo_aplicar_retiros(...)` | Aplica retiros al polígono del lote |
 | `_gen_massing_3d_solid(...)` | Massing 3D sólido con tipologías por piso (Plotly) |
-| `_load_norm(filename)` (~línea 3287) | Carga archivos normativas/ cacheados por sesión Streamlit |
+| `_load_norm(filename)` (~línea 4291) | Carga archivos normativas/ cacheados por sesión Streamlit |
 
 **Cliente Anthropic:** `max_retries=0, timeout=120.0`, modelo `claude-sonnet-4-6`
 
@@ -66,20 +67,19 @@ App Streamlit de pre-factibilidad inmobiliaria. Archivo único: `app.py` (~15,00
 
 ---
 
-## Distritos con RIN integrado en generate_cabida
+## Distritos con RIN integrado en generate_cabida (27 distritos)
 
-San Isidro · Miraflores · Jesús María · Cercado de Lima · San Borja · Santa Anita · Surco · Surquillo · Villa El Salvador · San Juan de Lurigancho
-
-**GAP PENDIENTE:** No hay RIN para Callao. SMP tiene datos de mercado en `CONOCIMIENTO_INDUSTRIAL_SOLUM.md` (zona Av. Tomás Valle, zonificación I2/CZ) pero sin ordenanza distrital completa.
+San Isidro · Miraflores · Jesús María · Cercado de Lima · San Borja · Santa Anita · Surco · Surquillo · Villa El Salvador · San Juan de Lurigancho · Lince · Magdalena del Mar · La Victoria · Lurín · Lurigancho (Huachipa) · San Juan de Miraflores · San Martín de Porres · San Luis · San Miguel · La Molina · Barranco · Chorrillos · Ate · Breña · Pueblo Libre · Callao · Independencia
 
 ---
 
-## Índice completo de normativas/ (54 archivos)
+## Índice completo de normativas/ (80 archivos)
 
-### RINs por distrito (estacionamientos + parámetros locales)
+### RINs por distrito — 29 archivos / 27 distritos (estacionamientos + parámetros locales)
 | Archivo | Contenido |
 |---|---|
 | `rin_san_isidro.txt` | RIN San Isidro (resumen operativo) |
+| `rin_san_isidro_523_2020.txt` | RIN San Isidro — Ord. 523-MSI texto base |
 | `rin_san_isidro_completo.txt` | Ord. 523-MSI completa (343k chars) — FUENTE PRIMARIA |
 | `rin_miraflores.txt` | RIN Miraflores |
 | `rin_jesus_maria.txt` | RIN Jesús María |
@@ -93,6 +93,20 @@ San Isidro · Miraflores · Jesús María · Cercado de Lima · San Borja · San
 | `rin_lince.txt` | RIN Lince |
 | `rin_magdalena.txt` | RIN Magdalena del Mar |
 | `rin_la_victoria.txt` | RIN La Victoria |
+| `rin_lurin.txt` | RIN Lurín (I3/I2/RDA/RDM — MacrOpolis, Lechucero Bajo) |
+| `rin_lurigancho.txt` | RIN Lurigancho-Chosica / Huachipa (IE — ATN IV) |
+| `rin_san_juan_miraflores.txt` | RIN San Juan de Miraflores (CZ/I2/RDA — ATN I) |
+| `rin_san_martin_de_porres.txt` | RIN San Martín de Porres |
+| `rin_san_luis.txt` | RIN San Luis |
+| `rin_san_miguel.txt` | RIN San Miguel |
+| `rin_la_molina.txt` | RIN La Molina |
+| `rin_barranco.txt` | RIN Barranco |
+| `rin_chorrillos.txt` | RIN Chorrillos |
+| `rin_ate.txt` | RIN Ate |
+| `rin_breña.txt` | RIN Breña |
+| `rin_pueblo_libre.txt` | RIN Pueblo Libre |
+| `rin_callao.txt` | RIN Callao |
+| `rin_independencia.txt` | RIN Independencia |
 
 ### RNE — Reglamento Nacional de Edificaciones
 | Archivo | Norma | Contenido |
@@ -144,6 +158,17 @@ San Isidro · Miraflores · Jesús María · Cercado de Lima · San Borja · San
 | `CONOCIMIENTO_INDUSTRIAL_SOLUM.md` | **BASE DE CONOCIMIENTO INDUSTRIAL COMPLETA** — zonificación I1-I4, A.060, EIV, índice usos, parámetros por distrito, benchmarks mercado 2025, transacciones reales, operadores Lurín, perspectivas 2025-2028 |
 | `mercado_residencial_lima_urbania_2025.txt` | Urbania INDEX Lima Nov 2025 — precios venta/alquiler/rentabilidad por distrito |
 | `benchmarks_industrial.txt` | Parque Logístico 47 ($291.5/m² all-in, 13.6m, payback 3.74 años) + costos nave + rentas + métricas Lurín 2025 + transacciones reales VES Aldea 8/9/10 |
+| `CONOCIMIENTO_RETAIL_MIXEDUSE.md` | Formatos retail Lima, métricas GLA/OCR/cap rate, mixed-use, tendencias 2025-2028 |
+| `CONOCIMIENTO_NEGOCIACION_TACTICA.md` | LOI, procesos competitivos, tácticas por perfil vendedor, criterios walk-away, arbitraje |
+
+### Normativa Legal Inmobiliaria Perú
+| Archivo | Contenido |
+|---|---|
+| `legal_tributacion_inmobiliaria.md` | Alcabala (3%), IR ganancias capital (5% PN / 29.5% PJ), IGV primera venta, Impuesto Predial, renta arrendamiento |
+| `legal_contratos_compraventa.md` | CC Arts. 1529-1601, opción de compra, arras, minuta privada, escritura pública, saneamiento, poderes |
+| `legal_arrendamiento_peru.md` | CC Arts. 1666-1712, desalojo express D.Leg. 1177, garantías, resolución, mejoras, benchmarks Lima |
+| `legal_sunarp_predios.md` | Partida registral, fe pública, prioridad, hipotecas, embargos, servidumbres, checklist DUE diligence |
+| `legal_garantias_comprador_planos.md` | Ley 29571, INDECOPI, Ley 29090 licencias, Art. 1784 garantía 5 años, póliza buen uso, red flags preventa |
 
 ---
 
@@ -214,9 +239,6 @@ San Isidro · Miraflores · Jesús María · Cercado de Lima · San Borja · San
 | Con puente grúa | 14–16m |
 
 "Altura al hombro" = altura libre interior en punto más bajo (gotera), NO la cumbrera.
-
-### Regla buy vs. rent
-Si renta mercado = $7.00/m²/mes → costo efectivo compra debe ser < $7.00/m²/mes para justificar compra. Target optimizado: ~$6.00/m²/mes.
 
 ---
 

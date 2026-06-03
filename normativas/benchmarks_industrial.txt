@@ -29,18 +29,59 @@ Razón: estructura metálica portal frame prefabricada, sin acabados interiores,
   Yield bruto anual (sobre inversión construcción): 26.8%
 
 --- COSTOS DE REFERENCIA POR TIPO DE NAVE (Lima, USD/m² de nave construida) ---
-  Almacén Logístico básico (<10m clara):            $180–220/m²
-  Almacén Logístico estándar (10–12m clara):        $220–260/m²
-  Almacén Logístico Clase A (12–15m clara):         $270–310/m²  ← Ref: Parque Logístico 47
-  Cross-docking (múltiples docks, alta complejidad): $380–500/m²
-  Nave Industrial manufactura (losa reforzada):      $350–450/m²
+
+PRINCIPIO CLAVE: el costo de construcción NO varía por ubicación (VES = Lurín = Chilca).
+  Mismos materiales (acero, paneles, concreto), mismos proveedores, misma mano de obra Lima.
+  Lo que varía por zona es el PRECIO DEL TERRENO, no la construcción.
+
+  Almacén Logístico básico (<10m clara):            $250–300/m²
+  Almacén Logístico estándar (10–12m clara):        $300–340/m²
+  Almacén Logístico Clase A (12–15m clara):         $320–380/m²  ← BENCHMARK: $350/m²
+  Cross-docking (múltiples docks, alta complejidad): $420–550/m²
+  Nave Industrial manufactura (losa reforzada):      $300–340/m²  ← más baja que logística
   Patios / maniobras (losa concreto forklift):       $60–90/m²
   Piso básico exterior (circulación):                $40–60/m²
 
---- KPIs OPERATIVOS (Clase A, Lima) ---
-  Ocupación nave: 70–80% del área del terreno (excluye retiro, patios, maniobras)
-  Altura mínima Clase A: 12 m clara al hombro (columna más baja)
-  Altura estándar Lima Clase A: 12–15 m (Lurín, Huachipa)
+BENCHMARK ESTÁNDAR SOLUM — ALMACÉN CLASE A LIMA:  US$ 350/m² nave
+  - Parque Logístico 47 ($291/m²): promotor serial con contratos marco — 15-20% bajo mercado
+  - Simétrica ($647/m² construc.): contrató Norton (constructor premium), atípico — techo de mercado
+  - Cliente con poder de negociación normal: $320–380/m² → midpoint $350/m²
+  - Patio / maniobras (piso sin techar): $70–80/m²
+
+--- KPIs OPERATIVOS POR TIPO ---
+
+  REGLA GENERAL — LOGÍSTICA Y MANUFACTURA:
+  Proporción óptima: ~80% techado / ~20% patio. SIEMPRE se maximiza el área cubierta
+  porque es el área productiva/rentable. El patio es circulación necesaria, no objetivo.
+
+  LOGÍSTICA CLASE A (almacén):
+  Ocupación nave: ~75–80% del área del terreno
+  Patio: ~20–25% — área de maniobra, no se cobra al inquilino (es área común)
+  Altura mínima Clase A: 12 m clara al hombro
+  Altura ÓPTIMA Clase A Lima: 13.6 m clara al hombro  ← ver sección "Mecánica de rack"
+  Altura estándar Lima: 12–15 m
+  Oficinas: 3–5% del área nave
+
+  IMPORTANTE — PATIO NO SE ARRIENDA:
+  En parques logísticos (Aldea, BSF, Simétrica, Megacentro), el patio/plataforma es área
+  COMÚN — no se cobra como renta. El arrendatario paga solo por m² de nave techada.
+  El gasto común ($0.70/m²) es por servicios (vigilancia, mantenimiento), NO por el patio.
+
+  MANUFACTURA (planta industrial):
+  Proporción techado/patio: igual que logística (~80/20) cuando el terreno está libre de restricciones
+  Alturas típicas Lima: 7.90–8.25 m (liviana/media), 10–11 m (con puente grúa)
+  Oficinas: 10–15% del área nave (módulo por nave + edificio central independiente)
+  Grilla columnas: 7.00 m o 9.07 m entre ejes · Luz nave: 16–19 m por módulo
+
+  REFERENCIA REAL — PLANTA MANUFACTURA LURÍN (Av. Portillo Grande, Parcelas 5 y 7, 2009-2023):
+  Terreno: 127,932 m² · Naves: 28,658 m² · Plataformas pavimentadas: 31,979 m²
+  NOTA: Ocupación techada solo 24% del terreno total — NO es el ratio típico.
+  Causa: parte significativa del terreno está AFECTA por ampliación de vía futura.
+  Solo se construyó en el área no afectada por el trazo vial. El resto fue pavimentado.
+  Naves: Perfiles Livianos (5,630 m², h=8.25m) · Calaminón (5,573 m², h=7.90m)
+         Fera (6,093 m², h=7.90m) · Perfiles Pesados (4,374 m², h=10m, puente grúa 30Tn)
+         Almacenes (3,089 m², h=7.97m) · Frío Panel Parc.7 (2,076 m², h=10.35m)
+  Zonificación: I2 · Actividad: manufactura perfiles de acero + cold chain
   Densidad de almacenamiento: 1.8–2.5 posiciones de pallet/m² (con racking)
   Renta logística Lima 2024–2026 (primaria): $5.5–7.5/m²/mes + IGV
     Lurín/Callao Clase A: $6.0–7.5/m²/mes
@@ -63,6 +104,92 @@ Razón: estructura metálica portal frame prefabricada, sin acabados interiores,
   I1 (Gran Industria): lote mín 10,000 m² — para grandes centros de distribución
   Corredores principales: Av. Argentina (Callao), Lurín, Huachipa/Ate, Lurigancho, VES, Pachacámac
   Retiros: 3 m (calle) · 5 m (avenida) · aplicar por distrito
+
+--- MECÁNICA DE RACK — ALTURA vs. DENSIDAD vs. REVENUE (fuente: Aldea Logística, Francis de la Croix) ---
+
+GEOMETRÍA DE UN NIVEL DE RACK (estándar logístico Lima):
+  Carga (mercadería + paleta):  1.45 m
+  Paleta (estructura rack):     0.15 m
+  Viga:                         0.10 m
+  Holgura (seguridad):          0.07 m
+  ─────────────────────────────────────
+  Por nivel:                    1.77 m
+  Base / piso nivel 1:          0.15 m
+
+RELACIÓN ALTURA AL HOMBRO → NIVELES DE RACK:
+  12.0 m al hombro  →  7 niveles de rack  → MÍNIMO CLASE A
+  13.6 m al hombro  →  8 niveles de rack  → ÓPTIMO CLASE A LIMA
+
+IMPACTO OPERATIVO Y FINANCIERO (proyecto real Centro Logístico Lurín, 2015):
+
+  Propuesta              | ORIGINAL       | PROPUESTA ALDEA | Diferencia
+  ─────────────────────────────────────────────────────────────────────
+  Terreno                | 37,677 m²      | 38,224 m²       | +1.5%
+  Altura al hombro       | 12.00 m        | 13.60 m         | +1.60 m
+  Niveles de rack        | 7              | 8               | +1 nivel
+  Área de almacén        | 22,226 m²      | 28,503 m²       | +28%
+  Ocupación terreno      | 58.99%         | 74.57%          | +26pp (layout)
+  Renta (US$/m²/mes)     | $6.20          | $6.70           | +8%
+  Facturación anual      | $1,653,614     | $2,291,641      | +39%
+  Posiciones de rack     | 35,340         | 57,852          | +64%
+  Densidad (pos/m²)      | 1.59           | 2.03            | +28%
+  Ratio inversión/m²nave | $550/m²        | —               | referencia all-in
+
+CONCLUSIONES CLAVE:
+1. Los 1.60 m adicionales (12→13.6m) son la diferencia entre 7 y 8 niveles de rack.
+   Un nivel más de rack = +28% de densidad SOLO por altura. El costo incremental es mínimo.
+
+2. El layout (diseño de bahías / flujo packing-picking) puede mover la ocupación de terreno
+   en ±15pp. Una nave de 59% de ocupación tiene el mismo potencial que una de 74.6%
+   en el mismo terreno — la diferencia es el diseño de pasillos y bahías.
+
+3. El logístico siempre compra m²/posición. No paga por el m² de nave — paga por cuántas
+   posiciones le caben y a qué costo por posición opera.
+
+4. El P.U. (precio unitario de renta) es mayor en naves más altas: $6.20 (12m) vs $6.70 (13.6m).
+   El logístico acepta pagar más por m² cuando la altura le da más posiciones por m².
+
+5. *** PRINCIPIO CRÍTICO DE PAYBACK — Francis de la Croix, Aldea Logística ***
+   "El precio de alquiler de un local de 12 metros NO ES IGUAL al de uno a 13.6 metros
+   (ambos hombro de almacén), ya que el logístico tiene un 64% más de posiciones por m².
+   El costo constructivo de la propuesta Aldea es MENOR al presupuesto original mostrado
+   (PREANSA), siendo así el payback es mucho mejor de cara al inversionista."
+
+   SÍNTESIS: La nave de 13.6m con layout Aldea tiene SIMULTÁNEAMENTE:
+     → +39% de facturación anual (más área + mayor renta/m²)
+     → MENOR costo de construcción (eficiencia de promotor serial vs. contratista premium)
+     → Resultado: payback significativamente más corto que el proyecto original de 12m
+
+   Esta es la ventaja estructural del promotor serial (Aldea, BSF) vs. el cliente una sola vez:
+   construye más, más alto, más funcional y más barato. El inversionista que contrata a un
+   promotor con experiencia logística no solo ahorra en costos — gana más en ingresos.
+
+6. La inversión total all-in (terreno + construcción + indirectos) en el proyecto original:
+   $12,224,300 / 22,226 m² nave = $550/m² nave all-in (incluye terreno Lurín ~$160/m²).
+   Solo construcción estimada: $550 - ($160 × 37,677/22,226) → ~$279/m² nave.
+   Con propuesta Aldea: costo construcción MENOR a $279/m² nave (promotor serial).
+
+ADVERTENCIA DE DISEÑO (Francis de la Croix, Aldea):
+  "Pensar como logístico, no como arquitecto/financiero."
+  Las bahías (docks) mal diseñadas dañan sustancialmente las áreas de packing y picking.
+  El layout debe simularse con racks reales antes de aprobar el proyecto arquitectónico.
+  Un buen proyecto se evalúa en posiciones/m², no en m² de nave.
+
+TIMELINE CONFIRMADO POR ALDEA (Francis de la Croix, cita directa):
+  "El tiempo de ejecución de un proyecto así NO DEBE SUPERAR los 7 meses
+  incluyendo ingenierías a detalle, tramitologías, construcción, supervisión
+  y hasta la entrega de planos as-built para meter la fábrica en Registros Públicos."
+
+  Desglose referencial:
+    Ingenierías a detalle:    ~30 días
+    Tramitología / licencias: ~30 días (paralelo a ingenierías)
+    Construcción:             ~120 días (nave metálica prefabricada)
+    Supervisión + as-built:   ~30 días
+    ─────────────────────────────────
+    Total:                    ~210 días / 7 meses
+
+  CONDICIÓN: aplica a nave estándar constructivo. Cumple RNE, NFPA, NTP y demás normas aplicables.
+  (Consistente con Parque Logístico 47: 6.5 meses para nave Clase A — validación cruzada)
 
 --- PROCESO CONSTRUCTIVO (referencia) ---
   Fase 1 — Diseño ingenierías: 30 días
@@ -104,12 +231,95 @@ PROYECTOS ANTERIORES MISMA EMPRESA:
   Almacén VIII: 60,833 m² terreno / 48,272 m² nave / 79.4% / $13,880,470 / $288/m² / 10 meses
   Almacén IX:  32,774 m² terreno / 25,080 m² nave / 76.5% / $7,161,595  / $285/m² / 5 meses
 
+CURVA DE APRENDIZAJE (dato crítico):
+  Plazo Almacén VI → IX: 15 meses → 5 meses (-67% en tiempo)
+  Implicancia: menor tiempo = menor costo financiero durante obra + liberación más rápida de capital
+  A 9% anual de costo de capital: 10 meses menos de obra = ahorro ~7.5% sobre inversión de construcción
+
 CONCLUSIONES:
   - Costo construcción nave clase A Lima: US$ 280-292/m² (all-in)
   - Densidad de ocupación real: 76-80% del terreno
   - Renta clase A VES: US$ 6.5/m²/mes confirmado
   - Puertas de embarque: 1 cada ~650 m² de nave
-  - Plazo construcción referencial: ~1 mes por cada 3,000 m² de nave
+  - Plazo construcción referencial: ~1 mes por cada 3,000 m² de nave (promotor serial)
+
+=== VENTAJA ESTRUCTURAL DE COSTOS — PROMOTOR SERIAL vs. CLIENTE UNO-VEZ ===
+
+CONCEPTO:
+  Los US$ 280-292/m² de nave registrados son los costos de un promotor SERIAL (Aldea, Parque 47).
+  Un promotor de primer proyecto ("cliente una vez") paga 15-25% más por las mismas especificaciones.
+  Esta diferencia NO aparece en los presupuestos — está en la cadena de negociación y la estructura.
+
+FUENTES DEL DIFERENCIAL:
+
+  1. CONTRATOS MARCO CON PROVEEDORES
+     Promotor serial: precio acordado para X proyectos/año → acero, paneles, NFPA, eléctrico.
+     Proveedor acepta menor margen a cambio de flujo de trabajo garantizado.
+     Diferencial estimado: -8 a -12% sobre precio spot de cada partida.
+
+  2. EQUIPO TÉCNICO PROPIO
+     No contrata gerencia de proyecto externa (5-8% del costo de obra).
+     Ingenieros, supervisores, trazadores en planilla fija — costo prorrateado entre proyectos.
+     Diferencial estimado: -3 a -5% sobre costo total de construcción.
+
+  3. CURVA DE APRENDIZAJE EN DISEÑO
+     Especificaciones estandarizadas, planos reusables con ajustes menores, permisos conocidos.
+     Tiempo de diseño y licitación: 4-8 semanas (serial) vs. 3-5 meses (primera vez).
+     Costo de tiempo pre-obra: ahorro significativo en honorarios y financiamiento.
+
+  4. PODER DE COMPRA EN MATERIALES
+     Acero estructural y paneles: volumen de compra anual → precio de lista con descuento.
+     Aldea construía 1-2 almacenes/año → compra anticipada de estructura para 2 proyectos.
+     Diferencial estimado: -5 a -8% en partidas de estructura (que son 35-40% del total).
+
+  5. FINANCIAMIENTO CON TRACK RECORD
+     Banco financia con menor garantía y mejor tasa a promotor con 5+ proyectos entregados.
+     Primera obra: DP 40-50%, tasa 10-11%. Promotor serial: DP 20-30%, tasa 8-9%.
+     Diferencial en costo de capital: -1 a -2 puntos de tasa durante 5-12 meses de obra.
+
+ESTIMACIÓN DE COSTO REAL ALDEA (Clase A+, VES, economías de escala):
+  Precio spot mercado (cliente una vez): US$ 280-300/m² nave
+  Descuento promotor serial estimado: 15-20%
+  Costo real estimado Aldea: US$ 230-255/m² nave
+
+IMPACTO EN PAYBACK:
+  A $245/m² construcción (vs. $291.5 anchor) y tierra $160/m²:
+  - Con 65% cobertura: terreno/m² nave = $160/0.65 = $246/m²
+  - Costo total: $246 + $245 = $491/m² nave (vs. $537 del modelo estándar)
+  - A renta $6.05/m²/mes: yield = ($6.05×12)/$491 = 14.8% → payback 6.8 años
+  - Con renta $6.50: yield = 15.9% → payback 6.3 años
+  - Confirmación: el 5-7 años era alcanzable con sus costos reales, no con costos de mercado
+
+USO EN SOLUM:
+  - Las estimaciones SOLUM usan $280-350/m² para cliente una-vez (correcto para usuario promedio)
+  - Si usuario menciona que ya tiene proyectos previos o es promotor serial → aplicar factor 0.80-0.85
+  - NUNCA sugerir que el usuario puede replicar los costos de Aldea sin su estructura operativa
+
+=== TRANSACCIÓN M&A — BSF / ALDEA LOGÍSTICA GLOBAL ===
+
+OPERACIÓN (2025):
+  Comprador:  BSF Almacenes del Perú (Grupo Algeciras + BSF Chile)
+  Vendedor:   Aldea Logística Global SAC
+  Precio:     US$ 160,000,000
+  Portafolio: 10 almacenes VES, 272,000 m² nave total, 9/10 Tipo A (h≥12m)
+  Clientes:   400+ al cierre
+  Regulación: Indecopi aprobó en primera fase (sin concentración)
+
+MÉTRICAS IMPLÍCITAS:
+  Precio por m² nave:     US$ 588/m²    ($160M ÷ 272,000m²)
+  Ratio vs. construcción: ~2.0×         ($588 ÷ $291.5 costo anchor)
+  Cap rate implícito:     ~10–11%       (rent blended $5.80, 90% ocupación)
+  NOI estimado anual:     ~US$ 17M      (272,000 × 90% × $5.80 × 12)
+
+USO EN SOLUM:
+  - Valor de mercado nave Clase A VES en operación: US$ 550–600/m² nave
+  - No confundir con costo de construcción ($280–292/m²)
+  - El diferencial (2x) refleja: tierra + going concern + scarcidad de reposición
+  - Para análisis de valor de activo industrial existente: usar $588/m² como anchor M&A
+  - Para análisis de inversión nueva (build-to-rent): usar $280–292/m² construcción
+
+BSF post-adquisición: 927,000 m² totales (655,000 previos + 272,000 Aldea)
+Mayor portafolio logístico privado Lima Sur al 2025.
 
 === MERCADO INDUSTRIAL LURÍN — DATOS 2024-2025 (investigación mayo 2026) ===
 
@@ -131,13 +341,18 @@ MÉTRICAS DE MERCADO:
   Yield / Cap rate:           8–10% (clase A)
   Absorción neta anual Lima:  83,000–95,000 m²/año
 
-COSTO CONSTRUCCIÓN NAVE (2024-2025):
-  Almacén básico (struct. metálica simple): US$ 215–325/m²
-  Nave industrial (h=8-10m):               US$ 270–430/m²
-  Nave Clase A (h=12-14m, completa):       US$ 430–650/m²
+COSTO CONSTRUCCIÓN NAVE (Lima 2025 — NO varía por ubicación):
+  Almacén básico (<10m clara):             US$ 250–300/m²
+  Nave estándar (10–12m clara):            US$ 300–340/m²
+  Nave Clase A (12–15m clara):             US$ 320–380/m² → BENCHMARK: US$ 350/m²
+  Cross-docking / alta complejidad:        US$ 420–550/m²
   Cámara frigorífica (con equipos):        US$ 675–1,215/m²
-  Proyecto integrado (terreno+obra+indirectos): US$ 600–900/m²
-  Referencia real: Simétrica 22,381 m² = US$ 909/m² all-in
+  Patio / maniobras (sin techar):          US$ 70–80/m²
+
+  REFERENCIA BAJA (piso): Parque Logístico 47 = US$ 291/m² — promotor serial, contratos marco
+  REFERENCIA ALTA (techo): Simétrica Lurín = US$ 647/m² solo construcción — contrató Norton
+    (constructor premium); terreno propio; ask $7.50/m²/mes vs. mercado $5.50–6.50/m²/mes
+  BENCHMARK SOLUM: US$ 350/m² — cliente con poder de negociación normal, sin track record serial
 
 OPERADORES INSTALADOS EN LURÍN:
   Logística 3PL: Ransa (6,066 m²), Megacentro Lurín (+300 unidades)
@@ -160,7 +375,11 @@ NORMATIVA LURÍN:
 COMPARATIVO LURÍN vs CHILCA vs VES:
   Lurín: terreno US$140-200 / renta US$5.5-8.5 / vacancia 11.9% / demanda 54%
   Chilca: terreno US$65-120 / renta US$3.5-5.5 / vacancia 34.1% / demanda 19%
-  VES:    terreno US$300-400 / renta US$5.0-7.0 / saturado / demanda 27%
+  VES:    terreno US$300-400 (lotes pequeños) — SIN OFERTA para lotes ≥20,000m² (2025)
+          renta US$5.0-7.0 / saturado / demanda 27%
+          NOTA CRÍTICA: disponibilidad de tierra grande es prácticamente NULA en VES.
+          Los precios US$140-172/m² de Aldea (2023-2024) son históricos, no replicables.
+          Cualquier paño ≥20,000m² que aparezca en VES cotizará con prima de escasez.
 
 PERSPECTIVAS 2025-2028:
   - Escasez creciente de suelo en Lurín → Chilca como próximo frontier
@@ -179,9 +398,12 @@ DATOS DE COMPRAVENTA VERIFICADOS:
   TOTAL: ~100,777 m² comprados — promedio US$ 157/m²
 
 CONCLUSIÓN CRÍTICA:
-  Lotes GRANDES VES (~30,000 m²): US$ 140–172/m² — no US$ 300-400/m²
+  Lotes GRANDES VES (~30,000 m²): US$ 140–172/m² — precios de 2023-2024, YA NO REPLICABLES
   El rango US$ 300-400/m² aplica a lotes pequeños o zonas residenciales prime
-  Para modelado SOLUM con lotes industriales grandes en VES: usar US$ 140-175/m²
+  PARA MODELADO SOLUM: si usuario ingresa terreno VES ≥20,000m², notar que es activo
+  escaso / excepcional. Usar precio ingresado por usuario (no asumir $140-175/m²).
+  Si usuario pide buscar terreno en VES a escala logística: informar que mercado no ofrece
+  esos paños — redirigir análisis a Lurín, Chilca o SJL como alternativas viables.
 
 CERTIFICADO CZ VES (N°137-2025, Mz.H Parcela 2, vigente a 01/04/2028):
   Zonificación: CZ (Comercio Zonal) — ATN I
@@ -195,3 +417,267 @@ CERTIFICADO CZ VES (N°137-2025, Mz.H Parcela 2, vigente a 01/04/2028):
 UBICACIÓN ALDEA (VES zona industrial):
   Vecinos: BSF Almacenes del Perú, DINET S.A., CD Saga Falabella, Aldea Logística Global
   Vías: Av. Villa del Mar, Av. César Vallejo, Av. Velasco Alvarado
+
+=== TRANSACCIÓN REAL ARRENDAMIENTO — ALDEA LOGÍSTICA → SCHARFF (mayo 2023) ===
+Fuente: Propuesta Económica Aldea Logística Global a Scharff (documento verificado)
+
+OPERACIÓN:
+  Arrendatario: Scharff (operador logístico 3PL)
+  Nave: Aldea 9, Villa El Salvador
+  Área arrendada: 6,800 m²Te
+  Altura al hombro: 14.8 m (Clase A+)
+  Altura libre almacenamiento: 13.6 m (0.9m por debajo de rociadores NFPA)
+  Patio de maniobras exclusivo: 1,500 m²
+  Muelles: 12 overhead doors a 1.20m sobre patio
+
+PRECIO PACTADO:
+  Nave (arrendamiento): US$ 6.05/m²Te/mes
+  Gasto común (mantenimiento áreas comunes): US$ 0.70/m²Te/mes
+  TOTAL ALL-IN: US$ 6.75/m²Te/mes (sin IGV)
+  Facturación mensual total: US$ 45,900
+
+ESTRUCTURA DE DESCUENTOS POR VOLUMEN (Aldea 8, mayo 2023):
+  Tarifa base Año 1: US$ 6.50/m²Te
+  Descuento inicio operaciones: 6.0%
+  Tarifa base ajustada (sin descuento volumen): US$ 6.11/m²Te
+  Por volumen 5,000–10,000 m²Te: -1% → US$ 6.05/m²Te  ← APLICADO A SCHARFF
+  Por volumen 10,000–20,000 m²Te: -2% → US$ 5.99/m²Te
+  Por volumen 20,000–30,000 m²Te: -4% → US$ 5.87/m²Te
+  Por volumen 30,000–40,000 m²Te: -6% → US$ 5.74/m²Te
+  Por volumen 40,000–50,000 m²Te: -8% → US$ 5.62/m²Te
+  Tarifa promedio 3 años (5,000-10,000 m²Te): US$ 6.23/m²Te
+  Reajuste anual mínimo: 3% (IPC)
+
+CONDICIONES CONTRACTUALES:
+  Plazo: 12 meses
+  Garantía: 2 meses de arrendamiento + 1 mes de adelanto
+  Pago: primeros 10 días de cada mes
+  Servicios (agua/luz): medidor propio, facturado por consumo
+  Seguro mercadería: responsabilidad del arrendatario
+  Trámites/licencias: responsabilidad del arrendatario
+
+INFRAESTRUCTURA INCLUIDA EN TARIFA (sin costo adicional):
+  - Patio de maniobras exclusivo 1,500 m²
+  - 12 muelles con overhead doors a 1.20m
+  - 12 estacionamientos vehículos livianos
+  - Sistema NFPA (rociadores + gabinetes) en almacén y áreas comunes
+  - Detección incendios (fotobeams, detectores humo, sirenas estroboscópicas)
+  - Cisterna 565 m³
+  - LED 200 lux @ 0.85m piso (con sensores movimiento)
+  - CCTV áreas comunes
+  - Seguridad perimetral 24/7 + control biométrico
+  - Grupo electrógeno compartido, comedor, baños/vestuarios, lactario, tópico
+  - Renovación de aire eólica 6 veces/hora
+  - Subestación eléctrica 25 KW/nave (hasta 200 KW total)
+
+ADICIONALES A REQUERIMIENTO DEL CLIENTE:
+  - Mezzanine oficinas: US$ 10/m²/mes
+  - Mezzanine baños/camerinos: US$ 11/m²/mes
+  - Rampas hidráulicas niveladoras: US$ 120/unidad/mes
+  - Racks selectivos simples: US$ 2.00/m²/mes (incluye instalación, sin IGV)
+    → Cotización directa Aldea Logística a G. Osterling (documento verificado)
+    → Referencia: 2,000 m² de rack = US$ 4,000/mes
+    → Sujeto a disponibilidad de stock; zona debe estar libre al momento de instalación
+
+CONCLUSIONES CRÍTICAS PARA MODELADO SOLUM:
+
+  1. RENTA ALL-IN REAL: La renta "de nave" reportada en el mercado ($6.05/m²) NO es el costo all-in.
+     El costo total efectivo para el arrendatario = NAVE + GASTO COMÚN = $6.75/m²/mes.
+     Referencia de mercado VES Clase A+: $6.75/m²/mes (nave $6.05 + gasto común $0.70).
+
+  2. GASTO COMÚN Y RENTA NETA DEL PROPIETARIO:
+     El $0.70/m² de gasto común va al administrador del parque (Aldea Logística), no al propietario puro.
+     Si el inversionista es dueño de la nave y la administra directamente, el ingreso bruto es $6.75/m².
+     Si hay un operador del parque tomando el gasto común, la renta neta del propietario es $6.05/m².
+     → En el DCF de SOLUM: usar $6.05–$6.75 según si el proyecto es nave independiente o parque.
+
+  3. MÓDULO MÍNIMO ARRENDABLE: ~2,600 m²Te
+     Las naves en parques logísticos no se subarrendan por debajo de ese módulo.
+     Para dimensionar proyectos: nave mínima viable = 2,600 m² (1 módulo).
+
+  4. CAPITAL DE ENTRADA DEL ARRENDATARIO: 3 MESES
+     2 meses garantía + 1 mes adelanto = flujo inmediato para el propietario al inicio del contrato.
+     En el modelo financiero industrial, este ingreso anticipa liquidez en mes 0.
+
+  5. AGUA Y LUZ: PASS-THROUGH AL CLIENTE (medidor separado)
+     El modelo de renta neta del propietario NO incluye servicios. Son costos directos del arrendatario.
+     No confundir con el gasto común — son conceptos distintos.
+
+  6. ESCALADA ANUAL GARANTIZADA: MÍNIMO 3% (IPC)
+     Protege al propietario contra inflación. Usar en DCF como tasa de crecimiento de rentas.
+     Año 1: $6.05 → Año 2: $6.23 → Año 3: $6.42 (ejemplo 5,000-10,000 m² VES)
+
+=== MATRIZ DE COSTOS POR ALTURA — INTERPOLACIÓN SOLUM ===
+Propósito: SOLUM usa esta matriz para estimar costos de implementación según la altura
+de nave que ingrese el usuario. Anchor point verificado: Aldea 8/9 VES ($291.5/m² @ 13.6m libre).
+La altura al hombro determina la clase y los costos — el usuario puede ingresar cualquier valor.
+
+--- TABLA MAESTRA: ALTURA → CLASE → COSTO → RENTA ---
+
+Altura hombro | Altura libre | Clase      | Costo construc. nave | Renta VES      | Renta Lurín    | Referencia real verificada
+6–8 m         | 5–7 m        | B básico   | $180–220/m²          | $4.0–5.0/m²/mes| $3.5–4.5/m²/mes| Almacén simple, uso manufactura/taller
+8–10 m        | 7–9 m        | B estándar | $200–260/m²          | $4.5–5.5/m²/mes| $4.0–5.5/m²/mes| Aldea 2 VES (8.0m al hombro)
+10–12 m       | 9–11 m       | B+ / pre-A | $240–300/m²          | $5.0–6.0/m²/mes| $5.0–6.0/m²/mes| Transición Clase A, 4–5 niveles rack
+12–13 m       | 11–12 m      | A estándar | $270–350/m²          | $5.5–6.5/m²/mes| $5.5–7.0/m²/mes| Aldeas 1,3,4,5 VES (12.4m); P.L.47 (13.6m=$291.5/m²)
+13–15 m       | 12–14 m      | A+ premium | $290–430/m²          | $6.0–7.0/m²/mes| $6.0–8.5/m²/mes| Aldeas 6,7,8,9 VES (14.8m); Simétrica Lurín
+>15 m         | >14 m        | A++ especial| $450–900/m²         | $7.0–9.0/m²/mes| $7.5–10/m²/mes | Con puente grúa / cold chain / alta carga
+
+NOTA RENTA: Los rangos son sin gasto común. Agregar $0.50–0.80/m²/mes para costo all-in arrendatario.
+NOTA LURÍN: Rangos altos reflejan especificaciones completas (Simétrica $909/m² all-in incl. terreno).
+PUNTO ANCLA VERIFICADO: Parque Logístico 47 = $291.5/m² nave @ 13.6m libre, VES 2024.
+
+--- DESGLOSE DE COSTO POR COMPONENTE (% sobre costo total nave) ---
+Ancla: Aldea 8/9 Clase A+ VES @ $291.5/m² = 100%
+
+Componente                          | % del total | USD/m² (ancla $291.5) | Escala con altura
+Estructura portal frame (acero)     | 35–40%      | $102–117/m²           | SÍ — más altura = más acero (+5–8%/ml extra)
+Loza industrial (concreto reforzado)| 20–25%      | $58–73/m²             | NO — independiente de altura
+Cerramiento (paneles aluminio/zinc) | 12–15%      | $35–44/m²             | SÍ — más altura = más superficie lateral
+Sistema NFPA (rociadores+cisterna)  | 8–10%       | $23–29/m²             | PARCIAL — cisterna fija, rociadores por m²
+Electricidad + iluminación LED      | 5–7%        | $15–20/m²             | NO — fijo por m² de planta
+Puertas + muelles seccionales       | 3–4%        | $9–12/m²              | NO — fijo por cantidad de muelles
+Indirectos (diseño, licencias, GG)  | 8–10%       | $23–29/m²             | NO — % fijo sobre costo directo
+Imprevistos (contingencia)          | 3–5%        | $9–15/m²              | NO — % fijo
+
+REGLA DE INTERPOLACIÓN PARA SOLUM:
+  Costo estimado = Costo ancla ($291.5/m²) × Factor de altura × Factor de zona
+
+  Factor de altura (multiplicador sobre ancla de 13.6m libre):
+    6–8m libre:   × 0.65  → ~$190/m²
+    8–10m libre:  × 0.75  → ~$219/m²
+    10–12m libre: × 0.88  → ~$256/m²
+    12–14m libre: × 1.00  → ~$291/m²  ← ANCLA
+    14–16m libre: × 1.20  → ~$350/m²
+    >16m libre:   × 1.50+ → ~$437/m²+ (puente grúa, cold chain)
+
+  Factor de zona:
+    VES / Callao / SJL:  × 1.00  (ancla = VES)
+    Lurín (estándar):    × 1.10  (mayor costo logístico, acceso, especificaciones)
+    Lurín (premium):     × 1.50–2.00 (Simétrica, MacrOpolis — acabados superiores)
+    Huachipa / Ate:      × 1.05
+
+--- COMPONENTES QUE CAMBIAN POR CLASE (no solo por altura) ---
+
+NFPA (obligatorio según RNE A.130 + uso):
+  Clase B (<1,500 m² nave):  Extintores + gabinetes básicos — $8–12/m²
+  Clase A (≥1,500 m² nave):  Rociadores NFPA full + cisterna — $23–35/m²
+  Clase A+ (>5,000 m² nave): NFPA + fotobeams + detección centralizada — $30–45/m²
+
+LOZA (varía por uso y carga):
+  Almacén básico (montacargas <3TN):   $45–55/m²  (espesor ~15 cm, sin refuerzo especial)
+  Logístico estándar (montacargas 3–5TN): $58–70/m²  (espesor ~18–20 cm)
+  Industrial pesada (puente grúa/7TN): $80–100/m² (espesor ~25 cm, malla doble)
+  Referencia verificada: Aldea 8/9 = 7.2 TN/punto = ~$65–73/m² estimado
+
+ANDÉN DE CARGA (muelles):
+  Sin muelles (acceso a nivel):         $0 adicional
+  Con overhead doors (1.2m altura):     $8,000–12,000/muelle (instalado)
+  Rampa hidráulica niveladora:          $5,000–8,000/unidad (compra) / $120/mes (arrendamiento)
+  Referencia: 1 muelle por cada 550–650 m² de nave (ratio Aldea 8/9)
+
+ELECTRICIDAD:
+  Clase B (iluminación básica):         $8–12/m² nave
+  Clase A (LED + fuerza motriz):        $15–20/m² nave
+  Clase A+ (subestación propia):        $20–30/m² nave (25 KW por módulo 2,600 m²)
+  Cámara frigorífica (compresores):     $80–150/m² adicional (equipo + instalación)
+
+--- CÓMO USA SOLUM ESTA TABLA ---
+1. Usuario ingresa altura de nave (ej: 11 metros al hombro)
+2. SOLUM identifica clase: B+ / pre-A
+3. SOLUM aplica rango de costo: $240–300/m²
+4. SOLUM aplica factor de zona según distrito ingresado
+5. SOLUM reporta: "Para una nave de 11m al hombro en [zona], el costo referencial de
+   implementación es $250–280/m² de nave (Clase B+). Este rango está calibrado sobre
+   el estándar constructivo de Aldea Logística Global, VES, referencia Clase A+ ($291/m²
+   @ 13.6m libre). La diferencia refleja menor estructura de acero, NFPA simplificado
+   y menor densidad de almacenamiento (4–5 niveles de rack vs. 8 niveles)."
+6. Si el usuario baja calidad (sin NFPA, loza básica), SOLUM puede ajustar hacia el
+   límite inferior del rango con la nota técnica correspondiente.
+
+=== ESTÁNDAR CONSTRUCTIVO CLASE A+ LIMA — BASE TÉCNICA SOLUM ===
+Fuente: Ficha técnica Aldea Logística Global, Aldea 8/9, VES (documento verificado mayo 2023)
+Uso: referencia técnica para informes SOLUM y fundamento de estimaciones industriales
+
+GEOMETRÍA Y ESTRUCTURA:
+  Módulo mínimo arrendable:   ~2,600 m²Te (naves se arriendan en múltiplos de este módulo)
+  Altura al hombro:           14.8 m (punto más bajo de la estructura — canaleta/gotera)
+  Altura libre almacenamiento: 13.6 m (0.9 m por debajo de los rociadores NFPA)
+  Altura almacén convencional: 7–8 m (referencia comparativa mercado)
+  Ventaja altura Clase A+:    80% más altura disponible vs. almacén convencional
+  Densidad almacenamiento:    >2.5 m³/m²Te (con racks selectivos, paleta 1.5m)
+  Espaciado de columnas:      Óptimo para racking selectivo (sin columnas intermedias molestas)
+
+LOZA Y PATIO:
+  Resistencia loza:           7.2 TN/punto de apoyo (industrial alta)
+  Acabado loza:               Plana, apta para montacargas y racks
+  Andén de carga:             1.20 m sobre nivel del patio de maniobras
+  Patio de maniobras:         Concreto, tránsito fluido de camiones de gran tonelaje
+  Referencia patio mínimo:    1,500 m² por módulo de 6,800 m²Te (~22% del área nave)
+
+PUERTAS Y MUELLES:
+  Tipo:                       Puertas seccionales overhead doors
+  Cantidad referencial:       12 muelles para 6,800 m²Te (1 muelle c/567 m²)
+  Altura andén-patio:         1.20 m (estándar para camiones con plataforma)
+  Rampas niveladoras:         Opcionales a requerimiento ($120/unidad/mes en arrendamiento)
+
+SISTEMA CONTRA INCENDIOS (NFPA):
+  Rociadores:                 En almacén y áreas comunes, según norma NFPA
+  Gabinetes de ataque rápido: Distribuidos en el almacén
+  Cisterna:                   565 m³ (reserva para operación autónoma del sistema)
+  Detección centralizada:     Fotobeams (haz proyectado), detectores de humo, sirenas estroboscópicas
+  Nota SOLUM:                 EIV obligatorio para naves ≥1,500 m² (RNE A.011)
+
+ELECTRICIDAD:
+  Subestación total:          200 KW por aldea
+  Por módulo 2,600 m²Te:      25 KW (suficiente para iluminación + equipos básicos)
+  Nota para usuario:          Operaciones con cámaras frigoríficas o manufactura pesada requieren subestación propia
+
+VENTILACIÓN:
+  Sistema:                    Extracción eólica pasiva
+  Renovación de aire:         6 veces/hora (elimina calor acumulado en techos altos)
+  Cerramiento de techo:       Panel de aluminio — aísla 2–3°C vs. temperatura exterior
+
+ILUMINACIÓN:
+  Interior:                   LED con sensores de movimiento — 200 lux @ 0.85 m del piso
+  Luz natural:                Paneles traslúcidos en cubierta (ahorro energético)
+  Exterior:                   LED en áreas comunes y perímetro
+
+SEGURIDAD:
+  Garita:                     Control de acceso biométrico
+  CCTV:                       Monitoreo perimetral y áreas comunes
+  Rondas:                     Diarias con empresa de vigilancia + Serenazgo + PNP
+  Perímetro:                  Muro perimétrico con concertina
+
+ÁREAS COMUNES (incluidas en gasto común $0.70/m²/mes):
+  - Grupo electrógeno compartido
+  - Comedor
+  - Baños y vestuarios (sin lockers)
+  - Baños de estibadores
+  - Lactario y Tópico (obligatorio por normativa laboral)
+
+ADICIONALES A REQUERIMIENTO (costo extra mensual):
+  - Mezzanine oficinas:        $10.00/m²/mes (sobre zona recepción/despacho)
+  - Mezzanine baños/camerinos: $11.00/m²/mes
+  - Rampas hidráulicas:        $120.00/unidad/mes
+  - Racks selectivos simples:  $2.00/m²/mes (incluye instalación)
+
+REFERENCIA NORMATIVA PARA INFORMES SOLUM:
+  - Altura al hombro 14.8m → cumple RNE A.060 para almacenamiento en racks >3m
+  - NFPA full → cumple RNE A.130 (seguridad en uso) para almacenes >10,000 m²
+  - EIV requerido si nave ≥1,500 m² con acceso de camiones (RNE A.011)
+  - Loza 7.2 TN/punto → cumple cargas industriales estándar (montacargas hasta 5 TN)
+  - Cisterna 565 m³ → cumple dotación IS.010 para uso industrial (~0.5 L/m²/turno)
+
+CLASIFICACIÓN POR TIPO DE NAVE (para usar en análisis SOLUM):
+  Aldea 2 (VES):           8.0 m al hombro  — Clase B (almacén estándar)
+  Aldeas 1,3,4,5 (VES):   12.4 m al hombro — Clase A (logístico estándar Lima)
+  Aldeas 6,7,8,9 (VES):   14.8 m al hombro — Clase A+ (logístico premium, máx densidad)
+  Referencia Lurín Clase A: 12–15 m al hombro (Simétrica, MacrOpolis)
+
+CLIENTES DE ALDEA LOGÍSTICA (referencia de operadores en VES, mayo 2023):
+  Retail (7): Saga Falabella, Tai Loy, Ripley, Skechers, La Curacao, Moto Corp, Electrolux
+  Consumo Masivo (6): BP, Corporación Life, Efila, Darnel, Cors, Megaproducts
+  3PL (6): Dinet, DHL, Yobel, Polysistemas, JMA Operador Logístico, CEVA Logistics
+  Farma (2): Medifarma, Montana
+  e-commerce (2): Falabella.com, Linio, BuscaLibre.com
+  Bienes Duraderos (4): Sweet Home, Imporper, Velax, Grillcorp

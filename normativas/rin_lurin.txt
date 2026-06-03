@@ -1,0 +1,217 @@
+# RIN LURÍN — REGLAMENTO DE INTEGRACIÓN NORMATIVA
+## Parámetros Urbanísticos y Edificatorios
+### Fuente: CPU N°565-2022-SGOPCHU-GDU/ML (RDA+RDM — Parcela U.C. N°03293, Lechucero Bajo, 31,068m², frente 156ml) · CPUs N°253/254/255/256-2023-SGOPCHU-GDU/ML (I3 — Hab. Urbana Para Uso Industrial El Faro / MacrOpolis, Mz. A-B-C)
+
+---
+
+## 1. MARCO LEGAL VIGENTE
+
+| Norma | Contenido | Estado |
+|---|---|---|
+| Ord. N°1814-MML (27/09/2014) | Aprueba la Anexión al Área Urbana, Asignación de Zonificación y Reajuste de Zonificación del Distrito de Lurín — **NORMA BASE** | **VIGENTE** |
+| Ord. N°933-MML | Índice de Usos para Ubicación de Actividades Urbanas del ATN I | Vigente |
+| Ord. N°1015-MML | Índice de Usos ATN I y II complementaria | Vigente |
+| D.S. N°010-2018-VIVIENDA | Reglamento Especial de Habilitación Urbana y Edificación | Vigente |
+| D.S. N°012-2019-VIVIENDA | Modificatoria del Reglamento Especial HUE | Vigente |
+| D.S. N°029-2019-VIVIENDA | Reglamento de Licencias de Habilitación Urbana y Licencia de Edificación | Vigente |
+| Ley N°29090 + modificatorias (Ley 30494) | Regulación de Habilitaciones Urbanas y Edificaciones | Vigente |
+| RNE (D.S. N°011-2006-VIVIENDA y modificatorias) | Norma supletoria | Vigente |
+
+**Área de Tratamiento Normativo: I**
+Lurín es ATN I. La Ord. N°1814-MML es la norma base del distrito que formalizó la anexión y zonificación de grandes parcelas. Los índices de usos se rigen por Ords. N°933 y N°1015-MML.
+
+---
+
+## 2. ZONAS DEL DISTRITO
+
+| Zona | Descripción | Ubicación principal |
+|---|---|---|
+| **I3** | Gran Industria | Hab. El Faro (MacrOpolis), corredores industriales Lurín |
+| **I2** | Industria Liviana | Predios industriales menores |
+| **RDA** | Residencial de Densidad Alta | Lechucero Bajo y sectores residenciales |
+| **RDM** | Residencial de Densidad Media | Sectores residenciales |
+
+---
+
+## 3. ZONA I3 — GRAN INDUSTRIA (CPUs N°253-256-2023 — MacrOpolis / El Faro)
+
+### Hab. Urbana Para Uso Industrial El Faro — Manzanas A, B, C
+
+| Parámetro | Valor |
+|---|---|
+| **Zonificación** | I3 — Gran Industria |
+| **ATN** | I |
+| **Lote mínimo** | **5,000 m²** |
+| **Frente mínimo** | **40 ml** |
+| **Altura de edificación** | **Según Proyecto** (sin límite fijo) |
+| **Área libre mínima** | **25%** — el 50% de esa área debe ser verde y arborizada |
+| **Usos permitidos** | Según el Índice de Usos ATN I (Ords. N°933 + N°1015-MML), en tanto no se opongan a I3 |
+| **Estacionamiento** | Los estacionamientos serán resueltos dentro del lote |
+| **Retiros** | Frontales, laterales y posterior: se decidirá según proyecto aplicando el área libre arborizada |
+
+**Restricción crítica I3 — Relleno Sanitario Portillo Grande:**
+Los predios colindantes al Relleno Sanitario Portillo Grande **deben contar con opinión favorable de DIGESA** antes de tramitar la licencia. Esta restricción aplica a lotes específicos de la Hab. El Faro — verificar en CPUE si el predio está en esta condición.
+
+**Área libre arborizada:** El 50% del área libre mínima (es decir, el 12.5% del área total del lote) debe ser verde y arborizada. Los retiros frontal, lateral y posterior se aplican dentro de este esquema de área libre arborizada.
+
+---
+
+## 4. ZONA RDA — RESIDENCIAL DE DENSIDAD ALTA (CPU N°565-2022 — Lechucero Bajo)
+
+### Parcela U.C. N°03293 — Lechucero Bajo (31,068.040 m², frente 156 ml)
+
+| Parámetro | Unifamiliar y Multifamiliar | Conjunto Residencial |
+|---|---|---|
+| **Densidad máxima** | 450 viviendas/hectárea | 500 viviendas/hectárea |
+| **Lote mínimo** | **5,000 m²** | **5,000 m²** |
+| **Frente mínimo** | **40 ml** | **40 ml** |
+| **Altura de edificación** | **Sin límite** — resultante de aplicar la densidad máxima | **Sin límite** |
+| **Área libre mínima** | **60%** | **60%** |
+| **Estacionamiento** | **1 cada 3 viviendas** | **1 cada 3 viviendas** |
+| **Retiros** | Según Anexo N°03 | Según Anexo N°03 |
+
+---
+
+## 5. ZONA RDM — RESIDENCIAL DE DENSIDAD MEDIA (CPU N°565-2022 — Lechucero Bajo)
+
+| Parámetro | Quinta** / Multifamiliar | Conjunto Residencial |
+|---|---|---|
+| **Densidad máxima** | 160 viviendas/hectárea | 280 viviendas/hectárea |
+| **Lote mínimo** | **5,000 m²** | **5,000 m²** |
+| **Frente mínimo** | **40 ml** | **40 ml** |
+| **Altura de edificación** | **Sin límite** — resultante de la densidad máxima | **Sin límite** |
+| **Área libre mínima** | **30%** | **50%** |
+| **Estacionamiento** | **1 cada 3 viviendas** | **1 cada 3 viviendas** |
+| **Retiros** | Según Anexo N°03 | Según Anexo N°03 |
+
+(**) Quinta: en este contexto refiere a agrupación de viviendas unifamiliares con acceso común.
+
+---
+
+## 6. RETIROS — ANEXO N°03 LURÍN (RESIDENCIAL)
+
+| Tipo de vía / retiro | Regla |
+|---|---|
+| **Retiro frontal — vías locales** (sin jardín municipal) | **3.00 ml** dentro del lote desde el límite de propiedad colindante con la vía pública |
+| **Retiro frontal — avenidas** (sin jardín municipal) | **5.00 ml** dentro del lote desde el límite de propiedad |
+| **Retiro lateral** | **1/6 de la altura de la edificación** · mínimo **3.00 ml** · aplica en todos los lados del lote según la forma del mismo |
+| **Retiro lateral — exoneración** | Lotes existentes con frente **< 20 ml**: exonerados de retiro lateral |
+| **Retiro posterior** | **1/3 de la altura de la edificación** · mínimo **3.00 ml** |
+| **Pendientes pronunciadas** | Solo se permiten **3 pisos** sobre la superficie del terreno natural |
+
+**Nota crítica sobre retiros dinámicos:** En Lurín, los retiros lateral y posterior dependen de la altura del edificio. Ejemplo: para un edificio de 12 pisos (≈36m): retiro lateral mín = 36/6 = 6.0m; retiro posterior mín = 36/3 = 12.0m. Esto impacta significativamente la cabida en lotes grandes con edificios altos. Calcular siempre el retiro resultante antes de diseñar.
+
+---
+
+## 7. NOTAS CRÍTICAS
+
+### Lotes mínimos: 5,000m² / 40ml — solo proyectos de gran escala
+Lurín requiere lotes mínimos de 5,000m² tanto para uso residencial (RDA/RDM) como industrial (I3). Los proyectos de pequeña escala no son viables normativamente. El mercado opera en parcelas grandes (MacrOpolis: lotes desde 5,000m² a decenas de miles de m²).
+
+### Estacionamiento residencial: 1/3 viviendas — el más favorable de Lima
+Lurín exige solo 1 estacionamiento por cada 3 viviendas — más favorable que SJM (1/2), ATN II (1/1.5) y San Isidro (2/1). Para proyectos de escala residencial en grandes parcelas: minimiza inversión en sótanos.
+
+### Altura sin límite en residencial — densidad como regulador
+La altura de la edificación no está limitada por pisos sino por la densidad máxima (viv/ha). El promotor puede construir edificios de cualquier altura siempre que no supere la densidad establecida. Esto requiere calcular: N° máximo de viviendas = densidad × área terreno en ha → determina el número de pisos viable.
+
+### RDA: densidad máxima 450 viv/ha → cálculo de viviendas
+Para lote de 5,000m² (0.5 ha): máx 450 × 0.5 = 225 viviendas. Para lote de 31,068m² (3.1 ha): máx 450 × 3.1 = 1,395 viviendas (Unifamiliar/Multifamiliar) o 500 × 3.1 = 1,550 (Conjunto Residencial).
+
+### Área libre RDA: 60%
+El 60% de área libre es muy alto — en un lote de 5,000m² solo 2,000m² son área construible por planta. Para lotes grandes esto se vuelve viable con edificios altos.
+
+### Retiro lateral dinámico: crítico para diseño
+El retiro lateral de 1/6 de la altura impacta la cobertura en planta. Para edificios de 6 pisos (≈18m): retiro lateral = 3ml. Para edificios de 12 pisos (≈36m): retiro lateral = 6ml. Diseñar siempre considerando este retiro para evitar sorpresas en la cabida.
+
+### Piso a piso residencial: 3.00 ml máximo
+Confirmado en CPU N°565-2022 ("La altura máxima de piso a piso de las edificaciones será de 3.00 ml").
+
+### Área mínima 3D: 75 m²
+Confirmado en Anexo N°03 del CPU N°565-2022.
+
+### I3 vs. I2 en Lurín
+MacrOpolis opera bajo I3 (Gran Industria) con lote mínimo 5,000m². Predios menores en Lurín pueden ser I2 (lote 1,000m²/20ml) — siempre verificar en CPUE del predio específico.
+
+### Relleno Sanitario Portillo Grande
+Predios colindantes a este relleno sanitario deben obtener **opinión favorable de DIGESA** antes de licencia. Esta restricción puede ser determinante para la viabilidad de algunos lotes en Hab. El Faro.
+
+---
+
+## 8. DATOS DE MERCADO — LURÍN (2025)
+
+| Indicador | Valor |
+|---|---|
+| Precio terreno industrial (MacrOpolis / parque) | **$140–200/m²** |
+| Precio terreno industrial (lotización fuera parque) | **$120–187/m²** |
+| Transacciones reales verificadas (Aldea Logística 2023-2024) | $140–172/m² (lotes grandes 30,000-35,000m²) |
+| Renta nave Clase A (h>12m, sprinklers) | **$5.5–8.5/m²/mes** |
+| Renta promedio mercado 2025 | **$6.1–6.4/m²/mes** |
+| Vacancia (Q3 2025) | **11.9%** |
+| Participación demanda Lima industrial | **54%** (hub líder) |
+| Cap rate / Yield Clase A | **8–10%** |
+| Precio terreno residencial (referencial Lechucero Bajo) | $100–150/m² (estimado, lotes grandes) |
+
+**Operadores instalados en MacrOpolis:** Ransa, Mercado Libre (CD 3,000m²), Cirion Data Center LIM2 (12,000m²), Alicorp, Molitalia, Natura, Yanbal, Ecolab. 350+ empresas, 1.1M m² ocupados.
+
+---
+
+## 9. CHECKLIST PRE-FACTIBILIDAD — LURÍN
+
+```
+□ Verificar zona en Plano Ord. N°1814-MML: I3 / I2 / RDA / RDM
+□ LOTE MÍNIMO: 5,000m²/40ml en TODAS las zonas — no viable bajo este tamaño
+
+SI ZONA I3 (MacrOpolis / El Faro):
+□ Índice de usos ATN I (Ords. N°933 + N°1015-MML) — no I3 puro
+□ Área libre: 25% mínimo — 50% de esa área (12.5% lote) debe ser verde y arborizada
+□ Retiros: según proyecto en el marco del área libre arborizada
+□ Estac.: resueltos dentro del lote — sin ratio fijo
+□ DIGESA: obligatorio si el predio colinda con Relleno Sanitario Portillo Grande
+□ Altura: según proyecto (sin límite) — verificar restricciones aeronáuticas si aplica
+
+SI ZONA RDA (Lechucero Bajo y sectores residenciales):
+□ Densidad máxima: 450 viv/ha (unifam/multifam) / 500 viv/ha (Conj. Residencial)
+□ Calcular: N° max viviendas = densidad × área lote en ha
+□ Altura: sin límite — resultante de la densidad. Calcular pisos viable
+□ Área libre: 60% — solo 40% del lote es techable por planta
+□ Estac.: 1/3 viviendas — muy favorable
+□ Retiro frontal: 3ml vías locales / 5ml avenidas
+□ Retiro lateral: 1/6 de la altura del edificio (mín 3ml) — calcular antes de diseñar
+□ Retiro posterior: 1/3 de la altura del edificio (mín 3ml) — crítico para edificios altos
+□ Exoneración retiro lateral: lotes con frente <20ml
+
+SI ZONA RDM:
+□ Densidad: 160 viv/ha (Quinta/Multifam) / 280 viv/ha (Conj. Residencial)
+□ Área libre: 30% (Quinta/Multifam) / 50% (Conj. Residencial)
+□ Estac.: 1/3 viviendas · mismos retiros que RDA
+
+AMBAS ZONAS:
+□ Piso a piso máximo: 3.00 ml
+□ Área mínima 3D: 75 m² (Anexo N°03)
+□ Pendientes pronunciadas: máximo 3 pisos sobre el terreno natural
+□ Habilitación Urbana: obligatoria — Lurín tiene zonas aún no habilitadas
+□ Base normativa: Ord. N°1814-MML — verificar si ha habido modificatorias posteriores
+```
+
+---
+
+## 10. RESUMEN EJECUTIVO — OPERATIVO PARA SOLUM
+
+**Zona I3 — Gran Industria (MacrOpolis / Hab. El Faro):**
+→ Lote mínimo 5,000m²/40ml · AL 25% (50% verde) · altura según proyecto · estac. dentro del lote
+→ DIGESA obligatorio si colinda Relleno Sanitario Portillo Grande
+→ Índice de usos ATN I (Ords. N°933 + N°1015-MML) — amplio abanico de actividades
+→ Precio terreno: $140–200/m² · Renta: $5.5–8.5/m²/mes · Vacancia: 11.9% · Hub líder Lima (54% demanda)
+
+**Zona RDA (Lechucero Bajo y residencial):**
+→ Lote 5,000m²/40ml · AL 60% · altura sin límite (densidad 450 viv/ha determina pisos máximos)
+→ Retiro lateral 1/6 altura + posterior 1/3 altura — dinámicos y críticos para la cabida
+→ Estac. 1/3 viv — el más favorable de Lima
+→ Solo viable para proyectos de gran escala (≥5,000m² lote)
+
+**Ventajas clave Lurín industrial:**
+1. Hub logístico líder Lima Sur (54% demanda, vacancia 11.9%)
+2. Precio terreno competitivo ($140-200/m² vs. Chilca $65-120/m²)
+3. MacrOpolis: ecosistema de 350+ empresas consolidado
+4. Anillo Vial Periférico en construcción → reduce distancia Lurín-Callao
+5. Pipeline 2025: MacrOpolis Fase 3 (75,000m² en 2 fases)

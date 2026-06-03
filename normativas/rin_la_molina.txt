@@ -1,0 +1,177 @@
+# RIN LA MOLINA — REGLAMENTO DE INTEGRACIÓN NORMATIVA
+## Parámetros Urbanísticos y Edificatorios
+### Fuente: Ord. N°1144-2008-MML · Ord. N°1661-2013-MML · D.A. N°010-2016-MDLM · CPU N°1246-2022 (Monterrico CZ)
+
+---
+
+## 1. MARCO LEGAL VIGENTE
+
+| Norma | Contenido | Estado |
+|---|---|---|
+| Ord. N°1144-2008-MML (18/05/2008) | Reajuste Integral de Zonificación de los Usos del Suelo de La Molina | **VIGENTE — NORMA BASE** |
+| Ord. N°1661-2013-MML (08/03/2013) | Modifica Ord. N°1144-2008-MML — ajustes a parámetros y Anexos | Vigente |
+| D.A. N°010-2016-MDLM (21/07/2016) | Texto Único Ordenado del Reglamento de Parámetros Urbanísticos y Edificatorios | **VIGENTE — REGLAMENTO DISTRITAL** |
+| Ord. N°1661-2013-MML Anexo 2 | Modificaciones específicas por zona y corredor | Vigente |
+| Ord. N°1661-2013-MML Anexo 3 | Índice de Usos para Actividades Urbanas — niveles operacionales y estándares de calidad | Vigente |
+| Ord. N°807-MML (19/08/2005) | Desafectación de terreno en La Molina — Acumulación Mz. B-1 y C-1 Monterrico | Vigente para ese predio |
+| D.S. N°029-2019-VIVIENDA (06/11/2019) | Parámetros habilitaciones urbanas — vigente como referencia | Vigente |
+| RNE (D.S. N°011-2006-VIVIENDA y modificatorias) | Reglamento Nacional de Edificaciones — norma supletoria | Vigente |
+
+**Área de Estructuración Urbana: III**
+La Molina es administrada por la Municipalidad Distrital de La Molina (MDLM). Tiene reglamento propio que complementa la Ord. MML.
+
+---
+
+## 2. ZONAS DEL DISTRITO
+
+### Zonificación principal (Ord. N°1144-2008-MML + Ord. N°1661-2013-MML)
+
+| Zona | Descripción | Ubicación principal |
+|---|---|---|
+| **RDB** | Residencial de Densidad Baja | Mayoría del tejido residencial — casas y condominios horizontales |
+| **RDM** | Residencial de Densidad Media | Corredores de mediana densidad |
+| **RDMA / RDMB** | Residencial de Densidad Media A / B | Zonas intermedias |
+| **CZ** | Comercio Zonal | Corredores comerciales — Av. Javier Prado Este, Av. La Molina |
+| **CV** | Comercio Vecinal | Comercio de barrio |
+| **OU** | Usos Especiales | Equipamientos institucionales |
+| **E3** | Educación Superior Universitaria | — |
+| **ZRP** | Zona de Recreación Pública | Parques y áreas verdes |
+| **ZPP** | Zona de Protección y Paisaje | — |
+| **H** | Equipamiento de Salud | — |
+| **DB** | Densidad Baja | Habilitaciones residenciales especiales |
+
+### Límites relevantes
+- Norte: Ate / Huachipa
+- Sur / Suroeste: Santiago de Surco, Cieneguilla
+- Oeste: Santiago de Surco / San Borja
+- Este: Pachacámac / Lurín
+
+---
+
+## 3. ZONA CZ — COMERCIO ZONAL (CPU N°1246-2022 — Monterrico Plaza)
+
+### Parámetros generales
+
+| Parámetro | Valor | Nota |
+|---|---|---|
+| Zonificación | Comercio Zonal (CZ) | — |
+| Usos Permitidos | Uso Comercial | Ver obs. (2) y (3) |
+| Usos Permisibles Compatibles | Residencial (aplicar normas de zonificación residencial compatible) | Ver obs. (2) |
+| **Altura máxima** | **4 – 5 pisos** | Sin excepción en CZ estándar |
+| Área libre mínima | No exigible (uso comercial) | — |
+| Retiro frontal | 5.00 ml (frente a vías expresas y arteriales) | Av. Javier Prado Este, Av. La Molina |
+| Retiro lateral | 5.00 ml (frente a todas las vías) | Jr. Los Melones, Ca. Los Mangos, Jr. Los Almendros, Ca. Las Zarzamoras |
+| Retiro posterior | 5.00 ml (frente a todas las vías) | — |
+| Alineamiento de fachada | Respetar sección vial del Plano HU modificado (N°0059-2007-MDLM-GDU-SGOPHUC) | — |
+| Lote normativo | El existente (no se permite subdivisión) | D.A. N°010-2016-MDLM Art. 12° lit. g) |
+| Frente mínimo | El existente | — |
+
+### Observación crítica (2) — USO RESIDENCIAL EN ZONA CZ
+**"En las zonas de Comercio Zonal (CZ) NO será obligatorio destinar parte o totalidad del predio a Uso Comercial, pudiendo destinarse el mismo íntegramente al uso residencial, para lo cual deberá aplicarse las normas correspondientes a la zonificación residencial compatibles según el entorno y respetando los parámetros urbanísticos y edificatorios establecidos para el uso residencial."**
+→ **Un lote CZ en La Molina puede desarrollarse 100% residencial aplicando parámetros de la zona residencial compatible del entorno.**
+
+### Observación crítica (3) — RESTRICCIÓN ESPECIAL AV. LA MOLINA/JAVIER PRADO
+**"En la zona calificada como CZ sobre la Av. La Molina entre las Avs. Separadora Industrial y Javier Prado, solo se permitirán nuevas edificaciones comerciales en lotes iguales o mayores a 1,000 m² con frente no menor de 20 ml."** (Ord. N°1661-2013-MML, Anexo 2, literal B14)
+→ Para proyectos comerciales en este corredor: lote mín. 1,000 m² y frente mín. 20 ml. Por debajo de estos umbrales: solo residencial.
+
+### Estacionamiento — Zona CZ
+**(Obs. 6 — D.A. N°010-2016-MDLM Art. 18°, sub numeral 18.4, lit. a)):**
+"En zonas comerciales con estacionamiento público habilitado, de acuerdo a los planos aprobados de Habilitación Urbana y/o recepción de Habilitación Urbana o producto de la modificación de la vía debidamente aprobado por las entidades competentes, se considera como parte del número de estacionamientos requeridos, siempre que no contravenga con las del Plan Vial Metropolitano, para el caso de vías expresas, arteriales y colectoras."
+→ El estacionamiento de la Habilitación Urbana existente puede computar para el proyecto.
+
+### Bahías vehiculares — OBLIGATORIO en CZ frente ≥ 15.00m
+**"En lotes con frente igual o mayor a 15.00 m con zonificación CZ: se habilitarán Bahías Vehiculares en edificaciones nuevas. Dicha área se ubicará en la zona frontal del lote dentro de los límites de su propiedad, se considerará como parte del retiro municipal. El Proyecto deberá considerar un adecuado acceso peatonal directo hacia la bahía vehicular."** (D.A. N°010-2016-MDLM)
+→ En La Molina CZ, cualquier edificación nueva con frente ≥ 15m debe incluir bahías vehiculares en el retiro frontal.
+
+### Índice de Usos — CZ (Ord. N°1661-2013-MML Anexo 3)
+Las actividades deben tener ubicación conforme en el Índice de Usos para Actividades Urbanas de La Molina, cumpliendo los niveles operacionales y estándares de calidad del distrito.
+
+---
+
+## 4. ZONA RDB — RESIDENCIAL DE DENSIDAD BAJA
+
+La Molina es predominantemente residencial de densidad baja. Los parámetros específicos dependen del sector y la habilitación urbana. Referencia general:
+
+| Tipo | Lote mín. (m²) | Frente mín. (ml) | Área libre | Altura máx. | Estac. |
+|---|---|---|---|---|---|
+| Unifamiliar | Según HU | Según HU | 30-40% | 3 pisos / 9ml | 2/vivienda |
+| Multifamiliar RDB | 800+ | 20+ | 40% | 4-5 pisos | 1.5/vivienda |
+
+**Nota:** En La Molina los parámetros residenciales varían significativamente por habilitación urbana. Siempre verificar el CPUE del predio específico. El D.A. N°010-2016-MDLM establece el TUO del reglamento distrital.
+
+---
+
+## 5. RETIROS MUNICIPALES (CPU N°1246-2022 — Zona Monterrico)
+
+| Vía | Tipo | Retiro |
+|---|---|---|
+| Av. Javier Prado Este (Auxiliar) | Vía Expresa | 5.00 ml |
+| Av. La Molina | Vía Arterial | 5.00 ml |
+| Jr. Los Melones | Vía local | 5.00 ml |
+| Ca. Los Mangos | Vía local | 5.00 ml |
+| Jr. Los Almendros | Vía local | 5.00 ml |
+| Ca. Las Zarzamoras | Vía local | 5.00 ml |
+
+**Nota:** En La Molina los retiros de 5.00 ml para todas las vías (incluyendo locales) son inusualmente uniformes — producto de las condiciones específicas de la Ampliación Residencial Monterrico. Verificar retiros en CPUE del predio específico.
+
+---
+
+## 6. REGLAS ESPECIALES — LA MOLINA
+
+### No subdivisión de lotes CZ
+Para lotes con zonificación CZ: se considerará el lote existente y **no se permitirá en ningún caso la subdivisión del lote** (D.A. N°010-2016-MDLM Art. 12°, literal g).
+
+### Acumulación de lotes
+Posible bajo Ord. N°807-MML (2005) — requiere resolución de desafectación y modificación de habilitación urbana. El predio Monterrico Plaza (21,919 m²) fue producto de acumulación de Mz. B-1 + lotes Mz. C-1.
+
+### Alta tensión eléctrica
+Si el lote se encuentra afecto a línea de alta tensión, considerar la faja de servidumbre eléctrica (Art. 111, Ley N°25844 Ley de Concesiones Eléctricas).
+
+### Árboles en vía pública
+Los accesos vehiculares y peatonales deberán respetar los árboles existentes en la vía pública e integrarlos al funcionamiento de las edificaciones.
+
+---
+
+## 7. DATOS DE MERCADO — LA MOLINA (Urbania INDEX nov-2025)
+
+| Indicador | Valor |
+|---|---|
+| Precio venta promedio | S/. 5,337/m² → USD 1,547/m² (TC 3.45) |
+| Rentabilidad bruta alquiler | 6.3% (más alta de Lima prime) |
+| Variación anual | -3.6% |
+| Velocidad absorción referencial | 1.4 und/mes |
+| Alquiler mensual (100m², 3 hab.) | S/. 2,566/mes |
+
+---
+
+## 8. CHECKLIST PRE-FACTIBILIDAD — LA MOLINA
+
+```
+□ Verificar zona exacta en Plano Ord. N°1144-2008-MML + modificatoria Ord. N°1661-2013-MML
+□ Si zona CZ: lote existente (no subdivisión) — decidir si uso comercial o residencial
+□ Si CZ residencial: aplicar parámetros de zona residencial compatible del entorno
+□ Si CZ comercial sobre Av. La Molina/Javier Prado: lote ≥1,000 m² y frente ≥20 ml
+□ Retiros: verificar en CPUE (Monterrico usa 5ml uniformes, otras zonas pueden diferir)
+□ Si frente ≥15m en CZ: bahías vehiculares obligatorias en retiro frontal
+□ Altura CZ: 4-5 pisos (sin excepciones confirmadas en norma estándar)
+□ Estacionamiento CZ: verificar si HU tiene estac. público habilitado computable
+□ Índice de Usos (Ord. N°1661-2013-MML Anexo 3): verificar compatibilidad de actividades
+□ Alta tensión: verificar afectación por servidumbre eléctrica
+□ Habilitación Urbana: verificar existencia y estado (modificaciones previas)
+□ D.A. N°010-2016-MDLM: norma distrital reglamentaria — verificar para todo detalle de parámetros
+```
+
+---
+
+## 9. RESUMEN EJECUTIVO — OPERATIVO PARA SOLUM
+
+**Zona CZ estándar La Molina:**
+→ 4-5 pisos · área libre no exigible (comercial) · retiro 5ml en todas las vías · puede ser 100% residencial · no subdivisión
+
+**Zona CZ sobre Av. La Molina/Javier Prado (comercial nuevo):**
+→ Lote ≥1,000 m² y frente ≥20 ml obligatorio · 4-5 pisos · bahías vehiculares si frente ≥15m
+
+**Zona RDB (mayoría del distrito):**
+→ Baja densidad · 3-5 pisos según HU · verificar CPUE para parámetros exactos
+
+**Mercado:** Precio venta ~USD 1,547/m² · Rentabilidad bruta 6.3% (líder Lima) · Absorción 1.4 und/mes
