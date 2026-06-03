@@ -12569,161 +12569,293 @@ def _build_oficinas_html(inp: dict, fin: dict, fecha: str) -> str:
 
 def generar_informe_residencial_html(r: dict, legal: dict | None, fecha: str,
                                       distrito: str = "", m2: int = 0, antiguedad: int = 0, fotos: list = None) -> str:
-    NAV = "#1E2D3D"; GLD = "#B8904A"; BRD = "#D8D4CC"
-    sem_col = {"verde": "#1A4731", "amarillo": "#7A4F1A", "rojo": "#7A1A1A"}
-    sem_bg  = {"verde": "#E8F5EE", "amarillo": "#FFF8EE", "rojo": "#FFF0F0"}
+    _precio      = r.get("precio", 0) or 0
+    _pie         = r.get("pie", 0) or 0
+    _pct_pie     = r.get("pct_pie", 0) or 0
+    _cuota       = r.get("cuota_mensual", 0) or 0
+    _ingreso     = r.get("ingreso_minimo", 0) or 0
+    _yield_bruto = r.get("yield_bruto", 0) or 0
+    _yield_neto  = r.get("yield_neto", 0) or 0
+    _payback     = r.get("payback_anos", 0) or 0
+    _dorm        = r.get("dormitorios") or "—"
+    _zona        = r.get("zona", "—")
+    _uso         = r.get("uso", "")
+    _monto_cred  = r.get("monto_credito", 0) or 0
+    _tasa        = r.get("tasa_anual", 0) or 0
+    _plazo_anos  = r.get("plazo_anos", "—")
+    _n_meses     = r.get("n_meses", "—")
+    _total_pag   = r.get("total_pagado", 0) or 0
+    _total_int   = r.get("total_intereses", 0) or 0
+    _alq_mes     = r.get("alquiler_mes", 0) or 0
+    _renta_neta  = r.get("renta_neta_mes", 0) or 0
+    _flujo       = r.get("flujo_mensual")
+    _valor_5     = r.get("valor_5", 0) or 0
+    _gan_5       = r.get("ganancia_capital_5", 0) or 0
+    _valor_10    = r.get("valor_10", 0) or 0
+    _gan_10      = r.get("ganancia_capital_10", 0) or 0
+    _precio_m2   = r.get("precio_m2", 0) or 0
 
-    def kpi(label, value, sub=""):
-        sub_html = f'<div style="font-size:10px;color:#7A7268;margin-top:3px;">{sub}</div>' if sub else ""
-        return (f'<div style="background:#FFFFFF;border:1px solid {BRD};border-top:3px solid {GLD};'
-                f'border-radius:5px;padding:14px 16px;min-width:130px;flex:1;">'
-                f'<div style="font-size:9px;color:#9A9080;letter-spacing:2px;text-transform:uppercase;font-weight:600;">{label}</div>'
-                f'<div style="font-size:20px;font-weight:700;color:{NAV};margin-top:6px;">{value}</div>'
-                f'{sub_html}</div>')
+    _titulo = distrito if distrito else _zona
+    _sub_parts = []
+    if m2: _sub_parts.append(f"{m2} m²")
+    if antiguedad: _sub_parts.append(f"{antiguedad} años de antigüedad")
+    _subtitulo = " · ".join(_sub_parts)
 
-    kpis = (kpi("Precio", f"${r.get('precio', 0) or 0:,.0f}") +
-            kpi("Pago inicial", f"${r.get('pie', 0) or 0:,.0f}", f"{r.get('pct_pie', 0) or 0:.0f}%") +
-            kpi("Cuota Mensual", f"${r.get('cuota_mensual', 0) or 0:,.0f}" if (r.get('cuota_mensual') or 0) > 0 else "Al contado") +
-            kpi("Ingreso Mínimo", f"${r.get('ingreso_minimo', 0) or 0:,.0f}" if (r.get('ingreso_minimo') or 0) > 0 else "—", "recomendado") +
-            (kpi("Yield Neto", f"{r.get('yield_neto', 0) or 0:.1f}%") if r.get('uso') == "Inversión" else "") +
-            (kpi("Payback", f"{r.get('payback_anos', 0) or 0:.1f} años") if r.get('payback_anos') else ""))
+    _cuota_lbl   = f"${_cuota:,.0f}" if _cuota > 0 else "Al contado"
+    _ingreso_lbl = f"${_ingreso:,.0f}/mes" if _ingreso > 0 else "—"
+    _yield_lbl   = f"{_yield_neto:.1f}%" if _yield_neto > 0 else (f"{_yield_bruto:.1f}%" if _yield_bruto > 0 else "—")
+    _yield_label = "Yield neto" if _yield_neto > 0 else "Yield bruto"
 
-    amort_rows = "".join(
-        f'<tr><td style="padding:7px 12px;font-size:12px;text-align:center;">{row["año"]}</td>'
-        f'<td style="padding:7px 12px;font-size:12px;text-align:right;color:#1A4731;font-weight:600;">${row["capital"]:,.0f}</td>'
-        f'<td style="padding:7px 12px;font-size:12px;text-align:right;color:#7A4F1A;">${row["interes"]:,.0f}</td>'
-        f'<td style="padding:7px 12px;font-size:12px;text-align:right;">${row["saldo"]:,.0f}</td></tr>'
-        for row in (r.get('amort_tabla') or [])
+    _dorm_str = str(_dorm) if isinstance(_dorm, (int, float)) else _dorm
+    _dorm_display = (f"{int(_dorm)} dorm." if isinstance(_dorm, (int, float)) else _dorm)
+
+    _tag_list = []
+    if _uso: _tag_list.append(_uso)
+    if m2: _tag_list.append(f"{m2} m²")
+    if antiguedad: _tag_list.append(f"{antiguedad} años")
+    if _precio_m2 > 0: _tag_list.append(f"${_precio_m2:,.0f}/m²")
+    _tags_html = "".join(
+        f'<span style="display:inline-block;background:#F0F4F8;color:#1E2D3D;'
+        f'border-radius:20px;padding:4px 14px;font-size:10px;font-weight:600;'
+        f'letter-spacing:0.5px;margin-right:6px;">{t}</span>'
+        for t in _tag_list
     )
 
-    legal_html = ""
+    _amort_rows = "".join(
+        f'<tr><td style="padding:7px 12px;font-size:11px;text-align:center;">{row["año"]}</td>'
+        f'<td style="padding:7px 12px;font-size:11px;text-align:right;color:#1A7A50;font-weight:600;">${row["capital"]:,.0f}</td>'
+        f'<td style="padding:7px 12px;font-size:11px;text-align:right;color:#7A4F1A;">${row["interes"]:,.0f}</td>'
+        f'<td style="padding:7px 12px;font-size:11px;text-align:right;">${row["saldo"]:,.0f}</td></tr>'
+        for row in (r.get("amort_tabla") or [])
+    )
+
+    _sem_col = {"verde": "#1A4731", "amarillo": "#7A4F1A", "rojo": "#7A1A1A"}
+    _sem_bg  = {"verde": "#E8F5EE", "amarillo": "#FFF8EE", "rojo": "#FFF0F0"}
+    _sem_lbl = {"verde": "SIN ALERTAS CRÍTICAS", "amarillo": "OBSERVACIONES MENORES", "rojo": "ALERTAS CRÍTICAS"}
+    _legal_html = ""
     if legal:
-        sg = legal.get("semaforo", "amarillo").lower()
-        legal_html = (
-            f'<h3 style="color:{NAV};font-size:12px;letter-spacing:2px;text-transform:uppercase;'
-            f'margin:28px 0 12px;border-bottom:1px solid {BRD};padding-bottom:6px;">Análisis Legal</h3>'
-            f'<div style="background:{sem_bg.get(sg,"#F5F2ED")};border-left:4px solid {sem_col.get(sg,NAV)};'
+        _sg = (legal.get("semaforo") or "amarillo").lower()
+        _legal_html = (
+            f'<div class="sec-title" style="margin-top:28px;">Análisis Legal</div>'
+            f'<div style="background:{_sem_bg.get(_sg,"#FFF8EE")};border-left:4px solid {_sem_col.get(_sg,"#1E2D3D")};'
             f'border-radius:5px;padding:14px 18px;margin-bottom:12px;">'
-            f'<div style="font-size:12px;color:{sem_col.get(sg,NAV)};font-weight:700;">'
-            f'{"SIN ALERTAS CRÍTICAS" if sg=="verde" else ("OBSERVACIONES MENORES" if sg=="amarillo" else "ALERTAS CRÍTICAS")}</div>'
-            f'<div style="font-size:12px;color:{sem_col.get(sg,NAV)};margin-top:6px;">{legal.get("resumen_legal","")}</div>'
+            f'<div style="font-size:11px;color:{_sem_col.get(_sg,"#1E2D3D")};font-weight:700;">{_sem_lbl.get(_sg,"OBSERVACIONES")}</div>'
+            f'<div style="font-size:11px;color:{_sem_col.get(_sg,"#1E2D3D")};margin-top:6px;">{legal.get("resumen_legal","")}</div>'
             f'</div>'
         )
-        for al in (legal.get("alertas") or []):
-            legal_html += f'<div style="background:#FFF8EE;border-left:3px solid {GLD};border-radius:4px;padding:10px 14px;margin-bottom:6px;font-size:12px;color:{NAV};">⚠ {al}</div>'
+        for _al in (legal.get("alertas") or []):
+            _legal_html += (
+                f'<div style="background:#FFF8EE;border-left:3px solid #C99428;border-radius:4px;'
+                f'padding:10px 14px;margin-bottom:6px;font-size:11px;color:#1E2D3D;">⚠ {_al}</div>'
+            )
 
-    prop_section = ""
-    if r.get('uso') in ["Inversión para alquilar", "Evaluación para venta"]:
-        prop_section = f"""
-<h3 style="color:{NAV};font-size:12px;letter-spacing:2px;text-transform:uppercase;margin:24px 0 12px;border-bottom:1px solid {BRD};padding-bottom:6px;">Análisis de Inversión</h3>
-<table style="margin-bottom:20px;"><thead><tr><th>Indicador</th><th style="text-align:right;">Valor</th></tr></thead><tbody>
-<tr><td style="padding:8px 12px;font-size:12px;">Alquiler mensual estimado</td><td style="padding:8px 12px;font-size:12px;text-align:right;">${r.get('alquiler_mes', 0) or 0:,.0f}</td></tr>
-<tr><td style="padding:8px 12px;font-size:12px;">Renta neta mensual</td><td style="padding:8px 12px;font-size:12px;text-align:right;font-weight:600;">${r.get('renta_neta_mes', 0) or 0:,.0f}</td></tr>
-<tr><td style="padding:8px 12px;font-size:12px;">Yield bruto anual</td><td style="padding:8px 12px;font-size:12px;text-align:right;">{r.get('yield_bruto', 0) or 0:.1f}%</td></tr>
-<tr><td style="padding:8px 12px;font-size:12px;">Yield neto anual</td><td style="padding:8px 12px;font-size:12px;text-align:right;font-weight:600;">{r.get('yield_neto', 0) or 0:.1f}%</td></tr>
-{'<tr><td style="padding:8px 12px;font-size:12px;">Payback</td><td style="padding:8px 12px;font-size:12px;text-align:right;">'+f"{r.get('payback_anos', 0) or 0:.1f} años"+'</td></tr>' if r.get('payback_anos') else ''}
-{'<tr><td style="padding:8px 12px;font-size:12px;">Flujo mensual neto</td><td style="padding:8px 12px;font-size:12px;text-align:right;font-weight:600;">$'+f"{r.get('flujo_mensual', 0) or 0:,.0f}"+'</td></tr>' if r.get('flujo_mensual') is not None else ''}
-</tbody></table>
-<table style="margin-bottom:20px;"><thead><tr><th>Apreciación estimada (4%/año)</th><th style="text-align:right;">Valor</th><th style="text-align:right;">Ganancia</th></tr></thead><tbody>
-<tr><td style="padding:8px 12px;font-size:12px;">Valor a 5 años</td><td style="padding:8px 12px;font-size:12px;text-align:right;">${r.get('valor_5', 0) or 0:,.0f}</td><td style="padding:8px 12px;font-size:12px;text-align:right;color:#1A4731;">+${r.get('ganancia_capital_5', 0) or 0:,.0f}</td></tr>
-<tr><td style="padding:8px 12px;font-size:12px;">Valor a 10 años</td><td style="padding:8px 12px;font-size:12px;text-align:right;">${r.get('valor_10', 0) or 0:,.0f}</td><td style="padding:8px 12px;font-size:12px;text-align:right;color:#1A4731;font-weight:600;">+${r.get('ganancia_capital_10', 0) or 0:,.0f}</td></tr>
-</tbody></table>"""
+    _inv_html = ""
+    if _uso in ["Inversión para alquilar", "Evaluación para venta"]:
+        _payback_row = (f'<tr><td style="padding:8px 12px;font-size:11px;">Payback</td>'
+                        f'<td style="padding:8px 12px;font-size:11px;text-align:right;">{_payback:.1f} años</td></tr>') if _payback else ""
+        _flujo_row = (f'<tr><td style="padding:8px 12px;font-size:11px;">Flujo mensual neto</td>'
+                      f'<td style="padding:8px 12px;font-size:11px;text-align:right;font-weight:600;">${(_flujo or 0):,.0f}</td></tr>') if _flujo is not None else ""
+        _inv_html = (
+            f'<div class="sec-title" style="margin-top:24px;">Análisis de Inversión</div>'
+            f'<table style="margin-bottom:20px;"><thead><tr>'
+            f'<th style="text-align:left;">Indicador</th><th style="text-align:right;">Valor</th>'
+            f'</tr></thead><tbody>'
+            f'<tr><td style="padding:8px 12px;font-size:11px;">Alquiler mensual estimado</td>'
+            f'<td style="padding:8px 12px;font-size:11px;text-align:right;">${_alq_mes:,.0f}</td></tr>'
+            f'<tr><td style="padding:8px 12px;font-size:11px;">Renta neta mensual</td>'
+            f'<td style="padding:8px 12px;font-size:11px;text-align:right;font-weight:600;">${_renta_neta:,.0f}</td></tr>'
+            f'<tr><td style="padding:8px 12px;font-size:11px;">Yield bruto anual</td>'
+            f'<td style="padding:8px 12px;font-size:11px;text-align:right;">{_yield_bruto:.1f}%</td></tr>'
+            f'<tr><td style="padding:8px 12px;font-size:11px;">Yield neto anual</td>'
+            f'<td style="padding:8px 12px;font-size:11px;text-align:right;font-weight:600;">{_yield_neto:.1f}%</td></tr>'
+            f'{_payback_row}{_flujo_row}'
+            f'</tbody></table>'
+            f'<table style="margin-bottom:20px;"><thead><tr>'
+            f'<th style="text-align:left;">Apreciación estimada (4%/año)</th>'
+            f'<th style="text-align:right;">Valor</th><th style="text-align:right;">Ganancia</th>'
+            f'</tr></thead><tbody>'
+            f'<tr><td style="padding:8px 12px;font-size:11px;">Valor a 5 años</td>'
+            f'<td style="padding:8px 12px;font-size:11px;text-align:right;">${_valor_5:,.0f}</td>'
+            f'<td style="padding:8px 12px;font-size:11px;text-align:right;color:#1A7A50;">+${_gan_5:,.0f}</td></tr>'
+            f'<tr><td style="padding:8px 12px;font-size:11px;">Valor a 10 años</td>'
+            f'<td style="padding:8px 12px;font-size:11px;text-align:right;">${_valor_10:,.0f}</td>'
+            f'<td style="padding:8px 12px;font-size:11px;text-align:right;color:#1A7A50;font-weight:600;">+${_gan_10:,.0f}</td></tr>'
+            f'</tbody></table>'
+        )
+
+    _amort_sec = ""
+    if _amort_rows:
+        _amort_sec = (
+            f'<div class="sec-title" style="margin-top:24px;">Tabla de Amortización (primeros 10 años)</div>'
+            f'<table style="margin-bottom:20px;"><thead><tr>'
+            f'<th style="text-align:center;">Año</th>'
+            f'<th style="text-align:right;">Capital Pagado</th>'
+            f'<th style="text-align:right;">Intereses</th>'
+            f'<th style="text-align:right;">Saldo</th>'
+            f'</tr></thead><tbody>{_amort_rows}</tbody></table>'
+        )
 
     _fotos_html = ""
     if fotos:
         import base64
-        _fotos_html = '<div style="page-break-before:always;margin-top:40px;"><div class="section-title">Fotografías del Inmueble</div><div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:16px;">'
+        _fotos_html = (
+            f'<div class="sec-title" style="margin-top:28px;">Fotografías del Inmueble</div>'
+            f'<div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:16px;">'
+        )
         for _fb in fotos[:6]:
             try:
                 _b64 = base64.b64encode(_fb).decode()
-                _fotos_html += f'<img src="data:image/jpeg;base64,{_b64}" style="max-width:48%;max-height:300px;object-fit:cover;border-radius:6px;border:1px solid #E4E0D8;">'
+                _fotos_html += (f'<img src="data:image/jpeg;base64,{_b64}" '
+                                f'style="max-width:48%;max-height:300px;object-fit:cover;'
+                                f'border-radius:6px;border:1px solid #E4E0D8;">')
             except Exception:
                 pass
-        _fotos_html += '</div></div>'
+        _fotos_html += '</div>'
 
-    _rpt_precio    = r.get("precio", 0) or 0
-    _rpt_ppm2      = r.get("precio_m2", 0) or 0
-    _rpt_yield     = r.get("yield_bruto", 0) or 0
-    _rpt_dorm      = r.get("dormitorios") or "—"
-    _rpt_precio_s  = f"{int(_rpt_precio):,}"
-    _rpt_ppm2_s    = f"{int(_rpt_ppm2):,}"
-    _rpt_yield_s   = f"{_rpt_yield:.1f}%" if _rpt_yield > 0 else "—"
+    _tasa_row    = (f'<tr><td style="padding:8px 12px;font-size:11px;">Tasa de interés</td>'
+                    f'<td style="padding:8px 12px;font-size:11px;text-align:right;">{_tasa:.2f}% TEA</td></tr>') if _cuota > 0 else ""
+    _plazo_row   = (f'<tr><td style="padding:8px 12px;font-size:11px;">Plazo</td>'
+                    f'<td style="padding:8px 12px;font-size:11px;text-align:right;">{_plazo_anos} años ({_n_meses} cuotas)</td></tr>') if _cuota > 0 else ""
+    _cuota_row   = (f'<tr><td style="padding:8px 12px;font-size:11px;">Cuota mensual</td>'
+                    f'<td style="padding:8px 12px;font-size:11px;text-align:right;font-weight:600;">${_cuota:,.0f}</td></tr>') if _cuota > 0 else ""
+    _total_row   = (f'<tr><td style="padding:8px 12px;font-size:11px;">Total pagado al banco</td>'
+                    f'<td style="padding:8px 12px;font-size:11px;text-align:right;">${_total_pag:,.0f} (intereses: ${_total_int:,.0f})</td></tr>') if _cuota > 0 else ""
+    _ingreso_row = (f'<tr><td style="padding:8px 12px;font-size:11px;">Ingreso mínimo recomendado</td>'
+                    f'<td style="padding:8px 12px;font-size:11px;text-align:right;font-weight:600;">${_ingreso:,.0f}/mes</td></tr>') if _ingreso > 0 else ""
 
-    return f"""<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
-<title>Informe Residencial — Osterling Advisory</title>
-<style>body{{font-family:'Segoe UI',Arial,sans-serif;background:#EDEAE4;margin:0;padding:32px;color:{NAV};}}
-.page{{background:#FFFFFF;max-width:860px;margin:0 auto;padding:48px 56px;border-radius:6px;}}
-table{{width:100%;border-collapse:collapse;}}thead th{{background:{NAV};color:#FFFFFF;padding:9px 12px;font-size:10px;letter-spacing:1px;text-transform:uppercase;}}
-tbody tr:nth-child(even) td{{background:#F9F7F4;}}
-</style></head><body><div class="page">
-<div style="background:linear-gradient(135deg,#1E2D3D 0%,#2A4060 100%);
-            border-radius:12px;padding:36px 40px;margin-bottom:32px;color:#FFFFFF;">
-    <div style="font-size:8px;letter-spacing:4px;text-transform:uppercase;
-                color:rgba(255,255,255,0.5);margin-bottom:12px;">
-        SOLUM · Informe de Análisis Residencial · {fecha}
-    </div>
-    <div style="font-size:32px;font-weight:800;line-height:1.2;margin-bottom:8px;">
-        {distrito if distrito else r.get("zona", "—")} &nbsp;·&nbsp; {_rpt_dorm}
-    </div>
-    <div style="font-size:14px;color:rgba(255,255,255,0.7);margin-bottom:24px;">
-        {str(m2) + " m²" if m2 else ""}{(" &nbsp;·&nbsp; " + str(antiguedad) + " años de antigüedad") if antiguedad else ""}
-    </div>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
-        <div style="background:rgba(255,255,255,0.10);border-radius:8px;padding:16px;">
-            <div style="font-size:9px;color:rgba(255,255,255,0.5);text-transform:uppercase;
-                        letter-spacing:1px;margin-bottom:4px;">Precio de compra</div>
-            <div style="font-size:20px;font-weight:700;">${_rpt_precio_s}</div>
-        </div>
-        <div style="background:rgba(255,255,255,0.10);border-radius:8px;padding:16px;">
-            <div style="font-size:9px;color:rgba(255,255,255,0.5);text-transform:uppercase;
-                        letter-spacing:1px;margin-bottom:4px;">Precio / m²</div>
-            <div style="font-size:20px;font-weight:700;">${_rpt_ppm2_s}/m²</div>
-        </div>
-        <div style="background:rgba(255,255,255,0.10);border-radius:8px;padding:16px;">
-            <div style="font-size:9px;color:rgba(255,255,255,0.5);text-transform:uppercase;
-                        letter-spacing:1px;margin-bottom:4px;">Yield bruto</div>
-            <div style="font-size:20px;font-weight:700;">{_rpt_yield_s}</div>
-        </div>
-    </div>
-</div>
-<div style="border-bottom:2px solid {GLD};padding-bottom:20px;margin-bottom:28px;display:flex;justify-content:space-between;align-items:flex-end;">
-  <div>
-    <div style="font-size:9px;color:{GLD};letter-spacing:4px;text-transform:uppercase;font-weight:600;">Osterling Advisory</div>
-    <div style="font-size:22px;font-weight:700;color:{NAV};margin-top:6px;">Evaluación Inmueble Residencial</div>
-    <div style="font-size:12px;color:#7A7268;margin-top:4px;">{r.get('uso','—')}{(" · "+distrito) if distrito else ""}{(" · "+str(m2)+" m²") if m2 else ""}{(" · "+str(antiguedad)+" años") if antiguedad else ""}</div>
-  </div>
-  <div style="text-align:right;font-size:11px;color:#9A9080;">{fecha}<br>Lima, Perú</div>
-</div>
+    _pm2_sub  = (f'<div style="font-size:10px;color:#6B7280;margin-top:3px;">${_precio_m2:,.0f}/m²</div>') if _precio_m2 > 0 else ""
+    _sub_div  = (f'<div style="font-size:12px;color:#6B7280;margin-top:12px;">{_subtitulo}</div>') if _subtitulo else ""
+    _ing_sub  = (f'<div style="font-size:10px;color:#6B7280;margin-top:3px;">Ingreso recomendado: {_ingreso_lbl}</div>') if _ingreso > 0 else ""
+    _pay_sub  = (f'<div style="font-size:10px;color:#6B7280;margin-top:3px;">Payback: {_payback:.1f} años</div>') if _payback else ""
 
-<h3 style="color:{NAV};font-size:12px;letter-spacing:2px;text-transform:uppercase;margin:0 0 12px;border-bottom:1px solid {BRD};padding-bottom:6px;">Indicadores Clave</h3>
-<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:28px;">{kpis}</div>
+    _ISO48 = (
+        '<svg viewBox="237 -2 411 837" xmlns="http://www.w3.org/2000/svg" style="height:48px;width:auto;display:block;">'
+        '<rect x="237" y="694" width="38" height="141" fill="#1E2D3D"/>'
+        '<rect x="291" y="631" width="38" height="204" fill="#1E2D3D"/>'
+        '<rect x="345" y="568" width="38" height="267" fill="#1E2D3D"/>'
+        '<rect x="399" y="473" width="38" height="362" fill="#1E2D3D"/>'
+        '<rect x="453" y="378" width="38" height="457" fill="#1E2D3D"/>'
+        '<rect x="507" y="252" width="38" height="583" fill="#1E2D3D"/>'
+        '<rect x="561" y="126" width="38" height="709" fill="#1E2D3D"/>'
+        '<rect x="615" y="63" width="38" height="772" fill="#1E2D3D"/>'
+        '<rect x="648" y="-2" width="38" height="837" fill="#1E2D3D"/>'
+        '</svg>'
+    )
+    _ISO28 = (
+        '<svg viewBox="237 -2 411 837" xmlns="http://www.w3.org/2000/svg" style="height:28px;width:auto;display:block;">'
+        '<rect x="237" y="694" width="38" height="141" fill="#1E2D3D"/>'
+        '<rect x="291" y="631" width="38" height="204" fill="#1E2D3D"/>'
+        '<rect x="345" y="568" width="38" height="267" fill="#1E2D3D"/>'
+        '<rect x="399" y="473" width="38" height="362" fill="#1E2D3D"/>'
+        '<rect x="453" y="378" width="38" height="457" fill="#1E2D3D"/>'
+        '<rect x="507" y="252" width="38" height="583" fill="#1E2D3D"/>'
+        '<rect x="561" y="126" width="38" height="709" fill="#1E2D3D"/>'
+        '<rect x="615" y="63" width="38" height="772" fill="#1E2D3D"/>'
+        '<rect x="648" y="-2" width="38" height="837" fill="#1E2D3D"/>'
+        '</svg>'
+    )
 
-<h3 style="color:{NAV};font-size:12px;letter-spacing:2px;text-transform:uppercase;margin:0 0 12px;border-bottom:1px solid {BRD};padding-bottom:6px;">Estructura de Crédito Hipotecario</h3>
-<table style="margin-bottom:24px;"><thead><tr><th>Concepto</th><th style="text-align:right;">Valor</th></tr></thead><tbody>
-<tr><td style="padding:8px 12px;font-size:12px;">Precio de compra</td><td style="padding:8px 12px;font-size:12px;text-align:right;font-weight:600;">${r.get('precio', 0) or 0:,.0f}</td></tr>
-<tr><td style="padding:8px 12px;font-size:12px;">Pago inicial ({r.get('pct_pie', 0) or 0:.0f}%)</td><td style="padding:8px 12px;font-size:12px;text-align:right;">${r.get('pie', 0) or 0:,.0f}</td></tr>
-<tr><td style="padding:8px 12px;font-size:12px;">Monto del crédito</td><td style="padding:8px 12px;font-size:12px;text-align:right;">${r.get('monto_credito', 0) or 0:,.0f}</td></tr>
-{"<tr><td style='padding:8px 12px;font-size:12px;'>Tasa de interés</td><td style='padding:8px 12px;font-size:12px;text-align:right;'>"+f"{r.get('tasa_anual', 0) or 0:.2f}% TEA"+"</td></tr>" if (r.get('cuota_mensual') or 0)>0 else ""}
-{"<tr><td style='padding:8px 12px;font-size:12px;'>Plazo</td><td style='padding:8px 12px;font-size:12px;text-align:right;'>"+str(r.get('plazo_anos', '—'))+" años ("+str(r.get('n_meses', '—'))+" cuotas)"+"</td></tr>" if (r.get('cuota_mensual') or 0)>0 else ""}
-{"<tr><td style='padding:8px 12px;font-size:12px;'>Cuota mensual</td><td style='padding:8px 12px;font-size:12px;text-align:right;font-weight:600;'>$"+f"{r.get('cuota_mensual', 0) or 0:,.0f}"+"</td></tr>" if (r.get('cuota_mensual') or 0)>0 else ""}
-{"<tr><td style='padding:8px 12px;font-size:12px;'>Total pagado al banco</td><td style='padding:8px 12px;font-size:12px;text-align:right;'>$"+f"{r.get('total_pagado', 0) or 0:,.0f}"+" (intereses: $"+f"{r.get('total_intereses', 0) or 0:,.0f}"+")"+"</td></tr>" if (r.get('cuota_mensual') or 0)>0 else ""}
-{"<tr><td style='padding:8px 12px;font-size:12px;'>Ingreso mínimo recomendado</td><td style='padding:8px 12px;font-size:12px;text-align:right;font-weight:600;'>$"+f"{r.get('ingreso_minimo', 0) or 0:,.0f}"+"/mes</td></tr>" if (r.get('ingreso_minimo') or 0)>0 else ""}
-</tbody></table>
+    return (
+        '<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">'
+        '<title>Informe Residencial — SOLUM</title>'
+        '<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">'
+        '<style>'
+        '* { box-sizing:border-box; margin:0; padding:0; }'
+        ':root { --navy:#0D2137; --gold:#C99428; --gray-bg:#F7F9FC; }'
+        'body { font-family:"Inter",sans-serif; background:#EDEAE4; margin:0; color:#1E2D3D; }'
+        '.page { background:#fff; width:794px; min-height:1123px; margin:0 auto 32px; display:flex; flex-direction:column; overflow:hidden; }'
+        '.topbar { border-top:8px solid #1E2D3D; }'
+        'table { width:100%; border-collapse:collapse; }'
+        'thead th { background:#0D2137; color:#fff; padding:9px 12px; font-size:10px; letter-spacing:1px; text-transform:uppercase; font-weight:600; }'
+        'tbody tr:nth-child(even) td { background:#F7F9FC; }'
+        '.sec-title { font-size:10px; letter-spacing:2px; text-transform:uppercase; color:#0D2137; font-weight:700; border-bottom:1px solid #E0E4EA; padding-bottom:8px; margin-bottom:14px; margin-top:24px; }'
+        '</style></head><body>'
 
-{prop_section}
+        '\n<!-- PAGE 1: COVER -->\n'
+        '<div class="page topbar">'
+        '<div style="display:flex;justify-content:space-between;align-items:center;padding:24px 40px 20px;">'
+        f'<div style="display:flex;align-items:center;gap:12px;">{_ISO48}'
+        '<div><div style="font-size:18px;font-weight:800;color:#0D2137;letter-spacing:1px;">SOLUM</div>'
+        '<div style="font-size:9px;color:#6B7280;letter-spacing:2px;text-transform:uppercase;margin-top:1px;">Osterling Advisory</div></div>'
+        '</div>'
+        '<div style="text-align:right;">'
+        '<div style="font-size:9px;color:#6B7280;text-transform:uppercase;letter-spacing:1px;">Informe de Análisis</div>'
+        f'<div style="font-size:10px;color:#1E2D3D;font-weight:600;margin-top:3px;">{fecha}</div>'
+        '</div></div>'
 
-{"<h3 style='color:"+NAV+";font-size:12px;letter-spacing:2px;text-transform:uppercase;margin:0 0 12px;border-bottom:1px solid "+BRD+";padding-bottom:6px;'>Tabla de Amortización (primeros 10 años)</h3><table><thead><tr><th style='text-align:center;'>Año</th><th style='text-align:right;'>Capital Pagado</th><th style='text-align:right;'>Intereses</th><th style='text-align:right;'>Saldo</th></tr></thead><tbody>"+amort_rows+"</tbody></table>" if amort_rows else ""}
+        '<div style="padding:32px 40px 0;flex:1;display:flex;flex-direction:column;">'
+        '<div style="font-size:9px;color:#C99428;text-transform:uppercase;letter-spacing:3px;font-weight:600;margin-bottom:12px;">Evaluación Inmueble Residencial</div>'
+        f'<div style="font-size:38px;font-weight:800;color:#0D2137;line-height:1.1;margin-bottom:10px;">{_titulo}</div>'
+        f'<div style="font-size:22px;font-weight:600;color:#374151;margin-bottom:14px;">{_dorm_display}</div>'
+        f'<div style="margin-bottom:8px;">{_tags_html}</div>'
+        f'{_sub_div}'
+        '<div style="flex:1;"></div>'
+        '</div>'
 
-{legal_html}
+        '<div style="background:#F7F9FC;border-top:1px solid #E0E4EA;padding:24px 40px;display:flex;gap:0;">'
+        '<div style="flex:1;padding:0 20px 0 0;border-right:1px solid #E0E4EA;">'
+        '<div style="font-size:9px;color:#6B7280;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Precio de compra</div>'
+        f'<div style="font-size:22px;font-weight:800;color:#0D2137;">${_precio:,.0f}</div>'
+        f'{_pm2_sub}'
+        '</div>'
+        '<div style="flex:1;padding:0 20px;border-right:1px solid #E0E4EA;">'
+        '<div style="font-size:9px;color:#6B7280;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Pago inicial</div>'
+        f'<div style="font-size:22px;font-weight:800;color:#0D2137;">${_pie:,.0f}</div>'
+        f'<div style="font-size:10px;color:#6B7280;margin-top:3px;">{_pct_pie:.0f}% del precio</div>'
+        '</div>'
+        '<div style="flex:1;padding:0 20px;border-right:1px solid #E0E4EA;">'
+        '<div style="font-size:9px;color:#6B7280;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Cuota mensual</div>'
+        f'<div style="font-size:22px;font-weight:800;color:#0D2137;">{_cuota_lbl}</div>'
+        f'{_ing_sub}'
+        '</div>'
+        '<div style="flex:1;padding:0 0 0 20px;">'
+        f'<div style="font-size:9px;color:#6B7280;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">{_yield_label}</div>'
+        f'<div style="font-size:22px;font-weight:800;color:#C99428;">{_yield_lbl}</div>'
+        f'{_pay_sub}'
+        '</div>'
+        '</div>'
+        '</div>'
 
-<div style="margin-top:48px;border-top:1px solid {BRD};padding-top:20px;">
-<p style="font-size:11px;font-weight:700;color:{NAV};margin:0;">Enrique Osterling</p>
-<p style="font-size:10px;color:#555;margin:3px 0;">Gerente General — Osterling Advisory · Inmobiliaria Corporativa</p>
-<p style="font-size:10px;color:#555;margin:3px 0;">+51 950 891 995 · eosterling@grupoosterling.com · Lima, Perú</p>
-<p style="font-size:9px;color:#AAA;margin-top:12px;">Análisis referencial. No constituye asesoría legal ni financiera formal.</p>
-</div>
-{_fotos_html}
-</div></body></html>"""
+        '\n<!-- PAGE 2: DETAIL -->\n'
+        '<div class="page topbar">'
+        '<div style="display:flex;justify-content:space-between;align-items:center;padding:18px 40px 14px;border-bottom:1px solid #E0E4EA;">'
+        f'<div style="display:flex;align-items:center;gap:10px;">{_ISO28}'
+        '<span style="font-size:13px;font-weight:700;color:#0D2137;letter-spacing:0.5px;">SOLUM</span>'
+        '</div>'
+        f'<div style="font-size:10px;color:#6B7280;">{_titulo} · Evaluación Residencial · {fecha}</div>'
+        '</div>'
+
+        '<div style="padding:28px 40px 40px;flex:1;">'
+        '<div class="sec-title" style="margin-top:0;">Estructura de Crédito Hipotecario</div>'
+        '<table style="margin-bottom:24px;"><thead><tr>'
+        '<th style="text-align:left;">Concepto</th><th style="text-align:right;">Valor</th>'
+        '</tr></thead><tbody>'
+        f'<tr><td style="padding:8px 12px;font-size:11px;">Precio de compra</td><td style="padding:8px 12px;font-size:11px;text-align:right;font-weight:600;">${_precio:,.0f}</td></tr>'
+        f'<tr><td style="padding:8px 12px;font-size:11px;">Pago inicial ({_pct_pie:.0f}%)</td><td style="padding:8px 12px;font-size:11px;text-align:right;">${_pie:,.0f}</td></tr>'
+        f'<tr><td style="padding:8px 12px;font-size:11px;">Monto del crédito</td><td style="padding:8px 12px;font-size:11px;text-align:right;">${_monto_cred:,.0f}</td></tr>'
+        f'{_tasa_row}{_plazo_row}{_cuota_row}{_total_row}{_ingreso_row}'
+        '</tbody></table>'
+        f'{_inv_html}'
+        f'{_amort_sec}'
+        f'{_legal_html}'
+        f'{_fotos_html}'
+        '</div>'
+
+        '<div style="border-top:1px solid #E0E4EA;padding:18px 40px;display:flex;justify-content:space-between;align-items:center;background:#F7F9FC;">'
+        '<div>'
+        '<div style="font-size:11px;font-weight:700;color:#0D2137;">Enrique Osterling</div>'
+        '<div style="font-size:10px;color:#6B7280;margin-top:2px;">Director General · Osterling Advisory</div>'
+        '<div style="font-size:10px;color:#6B7280;">+51 950 891 995 · eosterling@grupoosterling.com</div>'
+        '</div>'
+        '<div style="text-align:right;font-size:9px;color:#9CA3AF;max-width:280px;">'
+        'Análisis referencial. No constituye asesoría legal ni financiera formal.'
+        '</div>'
+        '</div>'
+        '</div>'
+
+        '\n</body></html>'
+    )
+
 
 
 def generar_informe_html(params, cabida, financ, legal, zona, financ_inputs, fecha):
