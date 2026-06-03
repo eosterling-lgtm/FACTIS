@@ -12035,6 +12035,538 @@ def generar_propuesta_pdf(
     return _html_to_pdf(html)
 
 
+def generar_informe_oficinas_pdf(inp: dict, fin: dict, fecha: str) -> bytes:
+    html = _build_oficinas_html(inp, fin, fecha)
+    return _html_to_pdf(html)
+
+
+def _build_oficinas_html(inp: dict, fin: dict, fecha: str) -> str:
+    import html as _he
+
+    def _e(s):
+        return _he.escape(str(s or ""))
+
+    def _fmt(v):
+        v = float(v or 0)
+        if abs(v) >= 1_000_000:
+            return f"${v/1_000_000:.2f}M"
+        return f"${v:,.0f}"
+
+    # ── Isotipo SVG ────────────────────────────────────────────────────────
+    _ISO_48 = (
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="237 -2 411 837" '
+        'style="height:48px;display:block;margin-bottom:6px;">'
+        '<rect fill="#1E2D3D" x="239.53" y="660.47" width="17.59" height="172.62" rx="8.79" ry="8.79"/>'
+        '<rect fill="#1E2D3D" x="289.66" y="513.49" width="13.7"  height="318.98" rx="6.85" ry="16.25"/>'
+        '<rect fill="#1E2D3D" x="338.93" y="368.79" width="13.7"  height="463.69" rx="6.85" ry="23.62"/>'
+        '<rect fill="#1E2D3D" x="389.88" y="442.34" width="13.7"  height="390.14" rx="6.85" ry="19.88"/>'
+        '<rect fill="#1E2D3D" x="435.62" y="583.81" width="13.7"  height="248.66" rx="6.85" ry="12.67"/>'
+        '<rect fill="#1E2D3D" x="485.6"  y="512.66" width="13.7"  height="319.81" rx="6.85" ry="16.29"/>'
+        '<rect fill="#1E2D3D" x="534.3"  y="367.3"  width="13.7"  height="465.17" rx="6.85" ry="23.7"/>'
+        '<rect fill="#1E2D3D" x="583.52" y="222.58" width="13.7"  height="609.89" rx="6.85" ry="31.07"/>'
+        '<rect fill="#1E2D3D" x="632.05" y="0"      width="13.7"  height="832.47" rx="6.85" ry="42.41"/>'
+        '</svg>'
+    )
+    _ISO_36 = (
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="237 -2 411 837" '
+        'style="height:36px;display:block;margin-bottom:4px;">'
+        '<rect fill="#1E2D3D" x="239.53" y="660.47" width="17.59" height="172.62" rx="8.79" ry="8.79"/>'
+        '<rect fill="#1E2D3D" x="289.66" y="513.49" width="13.7"  height="318.98" rx="6.85" ry="16.25"/>'
+        '<rect fill="#1E2D3D" x="338.93" y="368.79" width="13.7"  height="463.69" rx="6.85" ry="23.62"/>'
+        '<rect fill="#1E2D3D" x="389.88" y="442.34" width="13.7"  height="390.14" rx="6.85" ry="19.88"/>'
+        '<rect fill="#1E2D3D" x="435.62" y="583.81" width="13.7"  height="248.66" rx="6.85" ry="12.67"/>'
+        '<rect fill="#1E2D3D" x="485.6"  y="512.66" width="13.7"  height="319.81" rx="6.85" ry="16.29"/>'
+        '<rect fill="#1E2D3D" x="534.3"  y="367.3"  width="13.7"  height="465.17" rx="6.85" ry="23.7"/>'
+        '<rect fill="#1E2D3D" x="583.52" y="222.58" width="13.7"  height="609.89" rx="6.85" ry="31.07"/>'
+        '<rect fill="#1E2D3D" x="632.05" y="0"      width="13.7"  height="832.47" rx="6.85" ry="42.41"/>'
+        '</svg>'
+    )
+
+    modo      = fin.get("modo", "")
+    distrito  = _e(inp.get("distrito", ""))
+    clase     = _e(inp.get("clase", "B"))
+    edificio  = _e(inp.get("edificio", "") or inp.get("distrito", ""))
+    piso      = _e(inp.get("piso", ""))
+    area      = float(inp.get("area") or 0)
+    modo_label = _e(modo.upper())
+
+    # ── KPI strip for cover ────────────────────────────────────────────────
+    def _kpi_cover(label, val, sub=""):
+        _sub = f'<div style="font-size:10px;color:#6B7A8D;margin-top:3px;">{sub}</div>' if sub else ""
+        return (
+            f'<div style="flex:1;background:#FFFFFF;border-radius:6px;padding:18px 16px;'
+            f'border-top:3px solid #C99428;">'
+            f'<div style="font-size:8px;color:#9AACBA;letter-spacing:2px;text-transform:uppercase;'
+            f'font-weight:600;">{label}</div>'
+            f'<div style="font-size:21px;font-weight:800;color:#0D2137;margin-top:5px;letter-spacing:-0.5px;">{val}</div>'
+            f'{_sub}</div>'
+        )
+
+    if modo == "Alquiler":
+        _k1 = _kpi_cover("Renta base / mes",        _fmt(fin.get("pago_mensual_renta", 0)))
+        _k2 = _kpi_cover("Pago total / mes",         _fmt(fin.get("pago_mensual_total", 0)))
+        _k3 = _kpi_cover("Costo total contrato",     _fmt(fin.get("costo_total_contrato", 0)))
+        _k4 = _kpi_cover("Equiv. compra (6.5%)",     _fmt(fin.get("valor_equivalente_compra", 0)))
+    elif modo == "Compra":
+        _precio_total = float(inp.get("precio_compra") or 0)
+        _k1 = _kpi_cover("Precio total",   _fmt(_precio_total))
+        _k2 = _kpi_cover("Pago inicial",   _fmt(fin.get("pago_inicial", 0)))
+        _k3 = _kpi_cover("Cuota mensual",  _fmt(fin.get("cuota_mensual", 0)))
+        _k4 = _kpi_cover("Yield bruto",    f'{fin.get("yield_bruto_pct", 0):.1f}%')
+    else:
+        _k1 = _kpi_cover("Costo total",       _fmt(fin.get("costo_total", 0)))
+        _k2 = _kpi_cover("Ingresos totales",  _fmt(fin.get("ingresos_totales", 0)))
+        _k3 = _kpi_cover("Utilidad neta",     _fmt(fin.get("utilidad_neta", 0)))
+        _tir_d = fin.get("tir_anual_pct")
+        _mn_d  = fin.get("margen_neto_pct", 0)
+        _k4 = _kpi_cover("Margen neto", f"{_mn_d:.1f}%",
+                          f'TIR: {_tir_d:.1f}%' if _tir_d else "")
+
+    kpi_strip = (
+        f'<div style="display:flex;gap:12px;margin-top:auto;padding:24px 40px 32px;">'
+        f'{_k1}{_k2}{_k3}{_k4}'
+        f'</div>'
+    )
+
+    # ── Page 2 content by mode ─────────────────────────────────────────────
+    def _sec_title(t):
+        return (
+            f'<div style="font-size:9px;color:#1E2D3D;letter-spacing:2.5px;text-transform:uppercase;'
+            f'font-weight:700;padding-bottom:6px;border-bottom:2px solid #1E2D3D;margin:20px 0 12px;'
+            f'position:relative;">{t}'
+            f'<span style="position:absolute;left:0;right:0;bottom:-1px;height:1px;background:#E2E8F0;"></span>'
+            f'</div>'
+        )
+
+    def _kpi_card(label, val, sub=""):
+        _sub = f'<div style="font-size:10px;color:#6B7A8D;margin-top:3px;">{sub}</div>' if sub else ""
+        return (
+            f'<div style="flex:1;background:#FFFFFF;border:1px solid #E2E8F0;border-top:3px solid #C99428;'
+            f'border-radius:5px;padding:14px 15px;">'
+            f'<div style="font-size:8px;color:#9AACBA;letter-spacing:2px;text-transform:uppercase;font-weight:600;">{label}</div>'
+            f'<div style="font-size:20px;font-weight:800;color:#0D2137;margin-top:5px;">{val}</div>'
+            f'{_sub}</div>'
+        )
+
+    def _row(label, val, bold=False):
+        _fw = "font-weight:600;" if bold else ""
+        return (
+            f'<tr>'
+            f'<td style="padding:7px 10px;border-bottom:1px solid #F0F0F0;font-size:12px;color:#4A5568;{_fw}">{label}</td>'
+            f'<td style="padding:7px 10px;border-bottom:1px solid #F0F0F0;font-size:12px;color:#1E2D3D;text-align:right;{_fw}">{val}</td>'
+            f'</tr>'
+        )
+
+    def _table(rows_html):
+        return (
+            f'<table style="width:100%;border-collapse:collapse;background:#FAFBFC;'
+            f'border:1px solid #E2E8F0;border-radius:6px;overflow:hidden;margin-bottom:16px;">'
+            f'{rows_html}</table>'
+        )
+
+    if modo == "Alquiler":
+        _rm2   = fin.get("renta_m2", 0)
+        _gc    = fin.get("gc_total_mes", 0)
+        _coch  = fin.get("cocheras_total_mes", 0)
+        _igv   = fin.get("igv_monto", 0)
+        _prent = fin.get("pago_mensual_renta", 0)
+        _ptot  = fin.get("pago_mensual_total", 0)
+        _gar   = fin.get("garantia_monto", 0)
+        _grace = fin.get("gracia_ahorro", 0)
+        _ctc   = fin.get("costo_total_contrato", 0)
+        _bk    = fin.get("benchmark_m2", 0)
+        _diff  = fin.get("diff_vs_benchmark_pct", 0)
+        _veqc  = fin.get("valor_equivalente_compra", 0)
+        _dur   = fin.get("duracion_anos", 1)
+        _proj  = fin.get("reajuste_proyeccion", [])
+
+        _diff_color = "#1A6B40" if _diff <= 0 else ("#B8900A" if _diff <= 15 else "#9B1C1C")
+        _diff_bg    = "#E8F5EE" if _diff <= 0 else ("#FFF8EE" if _diff <= 15 else "#FFF0F0")
+        _diff_lbl   = f"{_diff:+.1f}% vs. benchmark" if _diff != 0 else "En línea con benchmark"
+
+        _gar_meses = int(inp.get("garantia", 0) or 0)
+        _kpis_alq = (
+            f'<div style="display:flex;gap:10px;margin-bottom:16px;">'
+            f'{_kpi_card("Renta / m²", f"${_rm2:.1f}")}'
+            f'{_kpi_card("Pago total / mes", _fmt(_ptot))}'
+            f'{_kpi_card("Costo total contrato", _fmt(_ctc))}'
+            f'{_kpi_card("Garantía requerida", _fmt(_gar), str(_gar_meses) + " meses")}'
+            f'</div>'
+        )
+
+        _cost_rows = (
+            _row("Renta base mensual", f"${_prent - _igv:,.0f}") +
+            _row("Gastos comunes", f"${_gc:,.0f}") +
+            _row("Cocheras", f"${_coch:,.0f}") +
+            (_row("IGV (18%)", f"${_igv:,.0f}") if _igv > 0 else "") +
+            _row("Pago mensual total", _fmt(_ptot), bold=True)
+        )
+
+        _market_box = (
+            f'<div style="background:{_diff_bg};border-left:4px solid {_diff_color};'
+            f'border-radius:4px;padding:12px 16px;margin-bottom:16px;">'
+            f'<div style="font-size:9px;color:{_diff_color};font-weight:700;letter-spacing:1px;text-transform:uppercase;">POSICIÓN DE MERCADO</div>'
+            f'<div style="font-size:13px;color:{_diff_color};font-weight:600;margin-top:6px;">'
+            f'Renta/m²: <strong>${_rm2:.1f}/m²/mes</strong> · '
+            f'Benchmark Clase {_e(clase)} {distrito}: <strong>${_bk}/m²/mes</strong> · '
+            f'<span style="font-weight:700;">{_diff_lbl}</span>'
+            f'</div>'
+            + (f'<div style="font-size:11px;color:{_diff_color};margin-top:4px;">Ahorro período de gracia: {_fmt(_grace)}</div>' if _grace > 0 else "")
+            + f'<div style="font-size:11px;color:{_diff_color};margin-top:4px;">Equivalente compra (cap 6.5%): {_fmt(_veqc)} · Duración contrato: {_dur} año(s)</div>'
+            f'</div>'
+        )
+
+        _proj_html = ""
+        if _proj:
+            _proj_rows = "".join(
+                _row(f"Año {p['año']}", f"Renta: ${p['renta_mensual']:,.0f}/mes · Total: ${p['pago_mensual']:,.0f}/mes · Costo anual: ${p['costo_anual']:,.0f}")
+                for p in _proj
+            )
+            _proj_html = _sec_title("PROYECCIÓN DE REAJUSTE") + _table(_proj_rows)
+
+        p2_content = (
+            _sec_title("ESTRUCTURA DE COSTOS")
+            + _kpis_alq
+            + _table(_cost_rows)
+            + _market_box
+            + _proj_html
+        )
+
+    elif modo == "Compra":
+        _pm2   = fin.get("precio_m2", 0)
+        _pi    = fin.get("pago_inicial", 0)
+        _mc    = fin.get("monto_credito", 0)
+        _cm    = fin.get("cuota_mensual", 0)
+        _ce    = fin.get("cuota_efectiva", 0)
+        _tp    = fin.get("total_pagado", 0)
+        _it    = fin.get("intereses_totales", 0)
+        _prop  = fin.get("proposito", "Uso propio")
+        _bkp   = fin.get("benchmark_precio_m2", 0)
+        _diffp = fin.get("diff_precio_pct", 0)
+        _noi   = fin.get("noi", 0)
+        _cap   = fin.get("cap_rate_pct", 0)
+        _yb    = fin.get("yield_bruto_pct", 0)
+        _yn    = fin.get("yield_neto_pct", 0)
+        _fl    = fin.get("flujo_mensual", 0)
+        _be    = fin.get("break_even_ano")
+        _irr   = fin.get("irr_anual")
+        _dep   = fin.get("depreciacion_anual", 0)
+        _afs   = fin.get("ahorro_fiscal_anual", 0)
+        _f10   = fin.get("flujo_10", [])
+
+        _precio_total = float(inp.get("precio_compra") or 0)
+        _pi_pct_lbl = f"{float(inp.get('pago_inicial_pct') or 30):.0f}%"
+
+        _kpis_cmp = (
+            f'<div style="display:flex;gap:10px;margin-bottom:16px;">'
+            f'{_kpi_card("Precio / m²", f"${_pm2:,.0f}")}'
+            f'{_kpi_card("Pago inicial", _fmt(_pi), _pi_pct_lbl)}'
+            f'{_kpi_card("Cuota mensual", _fmt(_cm))}'
+            f'{_kpi_card("Cuota efectiva", _fmt(_ce), "c/ escudo fiscal")}'
+            f'</div>'
+        )
+
+        _fin_rows = (
+            _row("Precio total", f"${_precio_total:,.0f}") +
+            _row("Pago inicial", f"${_pi:,.0f}") +
+            _row("Monto crédito", f"${_mc:,.0f}") +
+            _row("Cuota mensual", f"${_cm:,.0f}") +
+            _row("Total pagado (capital + int.)", f"${_tp:,.0f}", bold=True) +
+            _row("Intereses totales", f"${_it:,.0f}")
+        )
+
+        _diffp_color = "#1A6B40" if _diffp <= 0 else ("#B8900A" if _diffp <= 20 else "#9B1C1C")
+        _diffp_bg    = "#E8F5EE" if _diffp <= 0 else ("#FFF8EE" if _diffp <= 20 else "#FFF0F0")
+        _bk_box = (
+            f'<div style="background:{_diffp_bg};border-left:4px solid {_diffp_color};'
+            f'border-radius:4px;padding:12px 16px;margin-bottom:16px;">'
+            f'<div style="font-size:9px;color:{_diffp_color};font-weight:700;letter-spacing:1px;text-transform:uppercase;">BENCHMARK DE PRECIO</div>'
+            f'<div style="font-size:13px;color:{_diffp_color};font-weight:600;margin-top:6px;">'
+            f'Precio/m²: <strong>${_pm2:,.0f}</strong> · '
+            f'Benchmark Clase {_e(clase)} {distrito}: <strong>${_bkp:,}/m²</strong> · '
+            f'Diferencial: <strong>{_diffp:+.1f}%</strong>'
+            f'</div></div>'
+        )
+
+        _rent_html = ""
+        if _prop == "Para rentar":
+            _rent_rows = (
+                _row("NOI anual", f"${_noi:,.0f}") +
+                _row("Cap rate", f"{_cap:.1f}%") +
+                _row("Yield bruto", f"{_yb:.1f}%") +
+                _row("Yield neto", f"{_yn:.1f}%") +
+                _row("Flujo mensual neto", f"${_fl:,.0f}") +
+                _row("Break-even", f"Año {_be}" if _be else "No alcanzado en 10 años") +
+                _row("TIR 10 años", f"{_irr:.1f}%" if _irr else "—")
+            )
+            _rent_html = _sec_title("RENTABILIDAD") + _table(_rent_rows)
+        else:
+            _dep_rows = (
+                _row("Depreciación anual deducible", f"${_dep:,.0f}") +
+                _row("Ahorro fiscal anual (29.5%)", f"${_afs:,.0f}")
+            )
+            _rent_html = (
+                _sec_title("BENEFICIO FISCAL — USO PROPIO")
+                + _table(_dep_rows)
+                + f'<div style="font-size:11px;color:#5A6A7A;padding:10px 14px;background:#F7F9FC;'
+                f'border-radius:4px;margin-bottom:16px;">Apreciación estimada de activo: ~4%/año en oficinas Lima prime.</div>'
+            )
+
+        _f10_html = ""
+        if _f10:
+            _f10_rows = "".join(
+                _row(f"Año {f['año']}", f"Flujo anual: ${f['flujo_anual']:,.0f} · Acumulado: ${f['flujo_acumulado']:,.0f}")
+                for f in _f10
+            )
+            _f10_html = _sec_title("PROYECCIÓN FLUJO 10 AÑOS") + _table(_f10_rows)
+
+        p2_content = (
+            _sec_title("FINANCIAMIENTO")
+            + _kpis_cmp
+            + _table(_fin_rows)
+            + _bk_box
+            + _rent_html
+            + _f10_html
+        )
+
+    else:  # Desarrollo
+        _ar   = fin.get("area_rentable", 0)
+        _ab   = fin.get("area_bruta", 0)
+        _ap   = fin.get("area_planta", 0)
+        _und  = fin.get("unidades", 0)
+        _coch = fin.get("cocheras_total", 0)
+        _sot  = fin.get("sotanos", 0)
+        _ct   = fin.get("costo_terreno_total", 0)
+        _alc  = fin.get("alcabala", 0)
+        _cd   = fin.get("costos_directos", 0)
+        _ci   = fin.get("costos_indirectos", 0)
+        _cm_d = fin.get("costo_marketing", 0)
+        _ctot = fin.get("costo_total", 0)
+        _iv   = fin.get("ingresos_venta", 0)
+        _ra   = fin.get("renta_anual", 0)
+        _rv   = fin.get("valor_renta_capitalizado", 0)
+        _itot = fin.get("ingresos_totales", 0)
+        _ub   = fin.get("utilidad_bruta", 0)
+        _mb   = fin.get("margen_bruto_pct", 0)
+        _un   = fin.get("utilidad_neta", 0)
+        _mn   = fin.get("margen_neto_pct", 0)
+        _roi  = fin.get("roi_pct", 0)
+        _cp   = fin.get("capital_propio", 0)
+        _dt   = fin.get("deuda_total", 0)
+        _cuot = fin.get("cuota_mensual", 0)
+        _palv = fin.get("pct_apalancamiento", 0)
+        _tir  = fin.get("tir_anual_pct")
+        _est  = _e(fin.get("estrategia", "Venta"))
+
+        _kpis_dev = (
+            f'<div style="display:flex;gap:10px;margin-bottom:16px;">'
+            f'{_kpi_card("Área rentable", f"{_ar:,.0f} m²")}'
+            f'{_kpi_card("Unidades", str(_und))}'
+            f'{_kpi_card("Margen neto", f"{_mn:.1f}%")}'
+            f'{_kpi_card("TIR anual", f"{_tir:.1f}%" if _tir else "—")}'
+            f'</div>'
+        )
+
+        _cab_rows = (
+            _row("Área de planta (por piso)", f"{_ap:,.0f} m²") +
+            _row("Área bruta construida", f"{_ab:,.0f} m²") +
+            _row("Área rentable", f"{_ar:,.0f} m²", bold=True) +
+            _row("Unidades de oficina", str(_und)) +
+            _row("Cocheras totales", str(_coch)) +
+            _row("Sótanos", str(_sot))
+        )
+
+        _cost_rows_dev = (
+            _row("Terreno", f"${_ct:,.0f}") +
+            _row("Alcabala (3%)", f"${_alc:,.0f}") +
+            _row("Construcción + sótanos", f"${_cd:,.0f}") +
+            _row("Indirectos", f"${_ci:,.0f}") +
+            _row("Marketing", f"${_cm_d:,.0f}") +
+            _row("COSTO TOTAL", _fmt(_ctot), bold=True)
+        )
+
+        _est_color = "#1A4731" if _est == "Renta" else ("#1A2737" if _est == "Venta" else "#7A4F1A")
+        _est_bg    = "#E8F5EE" if _est == "Renta" else ("#EDF2F7" if _est == "Venta" else "#FFF8EE")
+
+        _res_rows = (
+            _row("Ingresos totales", _fmt(_itot), bold=True) +
+            (_row("  · Ingresos por venta", f"${_iv:,.0f}") if _iv > 0 else "") +
+            (_row("  · Renta anual", f"${_ra:,.0f}") if _ra > 0 else "") +
+            (_row("  · Valor capitalizado (7.5%)", _fmt(_rv)) if _rv > 0 else "") +
+            _row("Utilidad bruta", f"${_ub:,.0f}") +
+            _row("Margen bruto", f"{_mb:.1f}%") +
+            _row("Utilidad neta", _fmt(_un), bold=True) +
+            _row("Margen neto", f"{_mn:.1f}%") +
+            _row("ROI sobre capital propio", f"{_roi:.1f}%") +
+            _row("Capital propio requerido", _fmt(_cp)) +
+            _row("Deuda total", _fmt(_dt)) +
+            _row("Apalancamiento", f"{_palv:.1f}%") +
+            _row("Cuota combinada / mes", _fmt(_cuot))
+        )
+
+        p2_content = (
+            _sec_title("CABIDA ARQUITECTÓNICA")
+            + _kpis_dev
+            + _table(_cab_rows)
+            + _sec_title("DESGLOSE DE COSTOS")
+            + _table(_cost_rows_dev)
+            + _sec_title("RESULTADOS DEL PROYECTO")
+            + _table(_res_rows)
+            + f'<div style="display:inline-block;background:{_est_bg};color:{_est_color};'
+            f'border:1px solid {_est_color};border-radius:4px;padding:6px 14px;'
+            f'font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-top:4px;">'
+            f'Estrategia: {_est}</div>'
+        )
+
+    return f"""<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+  :root {{
+    --navy: #0D2137;
+    --gold: #C99428;
+    --gray-bg: #F7F9FC;
+    --gray-line: #E2E8F0;
+  }}
+  * {{ box-sizing: border-box; margin: 0; padding: 0; }}
+  body {{
+    font-family: 'Inter', Arial, sans-serif;
+    background: #E8ECF2;
+    color: #1E2D3D;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }}
+  .page {{
+    width: 794px;
+    min-height: 1123px;
+    background: #FFFFFF;
+    border-top: 8px solid #1E2D3D;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.10);
+    display: flex;
+    flex-direction: column;
+    page-break-after: always;
+  }}
+  .page-cover {{
+    margin: 32px auto;
+  }}
+  .page-inner {{
+    margin: 6px auto;
+  }}
+  .cover-header {{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 32px 40px 24px;
+  }}
+  .cover-logo-block {{ display: flex; flex-direction: column; }}
+  .cover-solum {{
+    font-size: 22px; font-weight: 800; color: #1E2D3D;
+    letter-spacing: 4px; text-transform: uppercase;
+  }}
+  .cover-sub {{ font-size: 11px; color: #6B7A8D; letter-spacing: 1px; margin-top: 2px; }}
+  .cover-date {{ font-size: 11px; color: #6B7A8D; text-align: right; margin-top: 6px; }}
+  .divider {{ height: 1px; background: #E2E8F0; margin: 0 40px; }}
+  .cover-type {{
+    font-size: 11px; font-weight: 700; color: #C99428;
+    letter-spacing: 3px; text-transform: uppercase;
+    padding: 28px 40px 8px;
+  }}
+  .cover-title {{
+    font-size: 36px; font-weight: 800; color: #0D2137;
+    padding: 0 40px; line-height: 1.15; letter-spacing: -0.5px;
+  }}
+  .cover-meta {{
+    font-size: 13px; color: #6B7A8D; padding: 12px 40px 0;
+  }}
+  .cover-kpi-strip {{
+    background: #F7F9FC;
+    border-top: 1px solid #E2E8F0;
+    margin-top: auto;
+  }}
+  .page-header {{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 40px 16px;
+    border-bottom: 1px solid #E2E8F0;
+  }}
+  .page-header-logo {{ display: flex; align-items: center; gap: 10px; }}
+  .page-header-solum {{
+    font-size: 16px; font-weight: 800; color: #1E2D3D; letter-spacing: 3px;
+  }}
+  .page-header-right {{ font-size: 10px; color: #6B7A8D; text-align: right; }}
+  .page-body {{ padding: 24px 40px; flex: 1; }}
+  .page-footer {{
+    padding: 14px 40px; border-top: 1px solid #E2E8F0;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 9px; color: #9AACBA;
+  }}
+  @media print {{
+    body {{ background: #FFFFFF; }}
+    .page {{ box-shadow: none; margin: 0 auto; }}
+    .page-cover {{ margin: 0 auto; }}
+    .page-inner {{ margin: 0 auto; }}
+  }}
+</style>
+</head>
+<body>
+
+<!-- PAGE 1 — COVER -->
+<div class="page page-cover">
+  <div class="cover-header">
+    <div class="cover-logo-block">
+      {_ISO_48}
+      <div class="cover-solum">SOLUM</div>
+      <div class="cover-sub">Osterling Advisory</div>
+    </div>
+    <div class="cover-date">
+      Proyecto de Oficinas · {_e(fecha)}
+    </div>
+  </div>
+  <div class="divider"></div>
+  <div class="cover-type">ANÁLISIS DE OFICINAS — {modo_label}</div>
+  <div class="cover-title">{edificio} · Clase {clase}</div>
+  <div class="cover-meta">Piso {piso} · {area:,.0f} m² · Clase {clase} · {distrito}</div>
+  <div style="flex:1;"></div>
+  <div class="cover-kpi-strip">
+    {kpi_strip}
+  </div>
+  <div class="page-footer">
+    <span>SOLUM · Herramienta IA de Análisis Inmobiliario</span>
+    <span>Información Confidencial · Osterling Advisory</span>
+  </div>
+</div>
+
+<!-- PAGE 2 — ANÁLISIS -->
+<div class="page page-inner">
+  <div class="page-header">
+    <div class="page-header-logo">
+      {_ISO_36}
+      <div>
+        <div class="page-header-solum">SOLUM</div>
+        <div style="font-size:9px;color:#6B7A8D;letter-spacing:1px;">Análisis de Oficinas</div>
+      </div>
+    </div>
+    <div class="page-header-right">
+      {_e(fecha)}<br/>
+      <span style="color:#C99428;font-weight:600;">{modo_label}</span>
+    </div>
+  </div>
+  <div class="page-body">
+    {p2_content}
+  </div>
+  <div class="page-footer">
+    <span>SOLUM · La información es referencial. Valide con arquitecto, abogado y contador.</span>
+    <span>Pág. 2</span>
+  </div>
+</div>
+
+</body>
+</html>"""
+
+
 def generar_informe_residencial_html(r: dict, legal: dict | None, fecha: str,
                                       distrito: str = "", m2: int = 0, antiguedad: int = 0, fotos: list = None) -> str:
     NAV = "#1E2D3D"; GLD = "#B8904A"; BRD = "#D8D4CC"
@@ -12195,14 +12727,18 @@ tbody tr:nth-child(even) td{{background:#F9F7F4;}}
 
 
 def generar_informe_html(params, cabida, financ, legal, zona, financ_inputs, fecha):
-    """Genera informe HTML descargable con encabezado fijo en impresión y control de saltos."""
+    """Genera informe HTML SOLUM 3 páginas (portada + cabida + financiero/legal)."""
+    import html as _he
+    def _e(s): return _he.escape(str(s or ""))
+
+    # ── Top-level data unpacking ─────────────────────────────
     r   = (financ or {}).get("resumen", {}) if financ else {}
     fi  = financ_inputs or {}
     p   = params or {}
     c   = cabida or {}
     leg = legal  or {}
 
-    # ── Flujo de caja ────────────────────────────────
+    # ── Flujo de caja ────────────────────────────────────────
     tir_real = mes_be = max_exp = None
     if cabida and financ:
         m_data = MERCADO.get(zona, {})
@@ -12228,307 +12764,486 @@ def generar_informe_html(params, cabida, financ, legal, zona, financ_inputs, fec
     _score_r = score_viabilidad(r) if r else (0, 0, "—", "", "", "—", [])
     pts, score_10, etiqueta, _, _, recomendacion, score_items = _score_r
 
-    NAV  = "#1E2D3D"
-    GOLD = "#B8904A"
-    ALT  = "#F4F1EC"
-    BORD = "#D8D4CC"
-    GREY = "#6B7280"
+    # ── Data shortcuts ───────────────────────────────────────
+    ubicacion    = _e(p.get("ubicacion", "—"))
+    zonificacion = _e(p.get("zonificacion", "—"))
+    area_t_raw   = p.get("area_terreno_m2", "—")
+    pisos_max_raw = p.get("pisos_max", "—")
+    area_libre_raw = p.get("area_libre_min_pct", "—")
+    retiro_raw   = p.get("retiro_frontal_ml", p.get("retiro_frontal", "—"))
+    coef_raw     = p.get("coeficiente_edificacion", "—")
 
-    ubicacion    = p.get("ubicacion", "—")
-    zonificacion = p.get("zonificacion", "—")
-    area_t       = f"{p.get('area_terreno_m2', '—')} m²"
-    pisos_max    = f"{p.get('pisos_max', '—')} pisos"
-    area_libre   = f"{p.get('area_libre_min_pct', '—')}%"
-    retiro       = f"{p.get('retiro_frontal_ml', p.get('retiro_frontal', '—'))} ml"
-    coef         = p.get("coeficiente_edificacion", "—")
+    area_t        = _e(f"{area_t_raw} m²")
+    pisos_max_v   = _e(f"{pisos_max_raw} pisos")
+    area_libre_v  = _e(f"{area_libre_raw}%")
+    retiro_v      = _e(f"{retiro_raw} ml")
+    coef_v        = _e(str(coef_raw))
 
-    at_total = c.get("area_techada_total_m2", 0)
-    av_total = c.get("area_vendible_m2", 0)
-    efic     = f"{round(av_total/at_total*100,1)}%" if at_total else "—"
+    at_total  = c.get("area_techada_total_m2") or 0
+    av_total  = c.get("area_vendible_m2") or 0
+    n_unid    = c.get("n_unidades") or c.get("total_unidades") or "—"
+    n_pisos_c = c.get("n_pisos") or c.get("num_pisos") or "—"
+    n_sot     = c.get("n_sotanos") or c.get("num_sotanos") or 0
+    estac     = c.get("estacionamientos") or c.get("estac_total") or "—"
+    efic      = f"{round(av_total / at_total * 100, 1)}%" if at_total else "—"
 
-    semaforo_color = {"verde": "#1A7A4A", "amarillo": "#B8862E", "rojo": "#8B1A1A"}.get(
-        leg.get("semaforo", ""), NAV)
-    semaforo_label = {"verde": "SIN ALERTAS CRÍTICAS", "amarillo": "ALERTAS MENORES",
-                      "rojo": "ALERTAS CRÍTICAS"}.get(leg.get("semaforo", ""), "No ejecutado")
-
-    # viabilidad
-    _mg  = r.get("margen_pct", 0)
-    _tir = r.get("tir_anual_pct", 0)
-    if _mg >= 20 and _tir >= 15:
-        _viab_col, _viab_bg, _viab_txt = "#1A7A4A", "#E8F5EE", "RETORNOS SÓLIDOS"
-    elif _mg >= 12 and _tir >= 10:
-        _viab_col, _viab_bg, _viab_txt = "#B8862E", "#FFF8EE", "RETORNOS MODERADOS"
-    else:
-        _viab_col, _viab_bg, _viab_txt = "#4A4A5A", "#F4F4F6", "RETORNOS AJUSTADOS"
-
-    # ── Helpers ──────────────────────────────────────
-    def kv_row(i, k, v):
-        bg = ALT if i % 2 == 0 else "#fff"
-        return (f'<tr>'
-                f'<td style="background:{bg};padding:7px 12px;font-size:11px;font-weight:600;'
-                f'color:{NAV};width:42%;border-bottom:1px solid {BORD};">{k}</td>'
-                f'<td style="background:{bg};padding:7px 12px;font-size:11px;color:#333;'
-                f'border-bottom:1px solid {BORD};">{v}</td>'
-                f'</tr>')
-
-    def kv_table(rows):
-        body = "".join(kv_row(i, k, v) for i, (k, v) in enumerate(rows))
-        return (f'<table style="width:100%;border-collapse:collapse;margin-bottom:0;">'
-                f'{body}</table>')
-
-    def section(title, force_break=False):
-        pb = 'page-break-before:always;' if force_break else ''
-        return (f'<div class="section-block" style="{pb}padding-top:4px;">'
-                f'<p class="sec-title" style="font-size:12px;font-weight:700;color:{NAV};'
-                f'margin:0 0 2px 0;letter-spacing:0.3px;">{title}</p>'
-                f'<div style="border-top:1.5px solid {GOLD};margin-bottom:10px;"></div>')
-
-    def end_section():
-        return '</div>'
-
-    def _leg_list(val, empty="Ninguna registrada"):
-        if not val or val in ([], "[]"): return empty
-        if isinstance(val, list):
-            items = [str(v.get("descripcion", v) if isinstance(v, dict) else v) for v in val if v]
-            return "; ".join(items) if items else empty
-        return str(val) if val and val != "—" else empty
+    ing_brutos   = r.get("ingresos_brutos", 0) or 0
+    costo_total  = r.get("costo_total", 0) or 0
+    margen_pct   = r.get("margen_pct", 0) or 0
+    tir_pct      = r.get("tir_anual_pct", 0) or 0
+    util_neta    = r.get("utilidad_neta", 0) or 0
+    pv_m2        = r.get("precio_venta_m2", 0) or 0
+    ct_terreno   = r.get("costo_terreno", fi.get("costo_terreno", 0)) or 0
+    ct_constr    = (costo_total - ct_terreno) if costo_total else 0
+    ct_total_pct_terr = f"{ct_terreno / costo_total * 100:.1f}%" if costo_total else "—"
+    ct_total_pct_con  = f"{ct_constr  / costo_total * 100:.1f}%" if costo_total else "—"
+    max_terr_20  = r.get("max_terreno_20pct", 0) or 0
+    max_terr_25  = r.get("max_terreno_25pct", 0) or 0
 
     tir_str = f"{tir_real}%" if tir_real is not None else "—"
     exp_str = fmt_usd(abs(max_exp)) if max_exp is not None else "—"
     be_str  = f"Mes {mes_be}" if mes_be else "—"
 
-    nombre_proyecto = fi.get("nombre_proyecto", "") or zona
+    sem_raw   = leg.get("semaforo", "")
+    sem_color = {"verde": "#1A7A4A", "amarillo": "#B8862E", "rojo": "#8B1A1A"}.get(sem_raw, "#4A5568")
+    sem_label = {
+        "verde":    "SIN ALERTAS CRÍTICAS",
+        "amarillo": "ALERTAS MENORES",
+        "rojo":     "ALERTAS CRÍTICAS",
+    }.get(sem_raw, "Análisis legal no ejecutado")
+    res_legal = _e(leg.get("resumen_legal") or "")
 
-    # ── Unidades mix ─────────────────────────────────
-    unidades_rows = []
-    for u in (c.get("unidades") or []):
-        unidades_rows.append((f"Dpto {u.get('tipo','—')}",
-                              f"{u.get('cantidad',0)} und · {u.get('area_m2',0):.0f} m²/und"))
-
-    # ── Beneficios normativos ─────────────────────────
-    benef_items = ""
-    for b in p.get("beneficios_normativos", []):
-        benef_items += (f'<li style="font-size:10px;color:{GOLD};margin:3px 0;">'
-                        f'<strong>{b.get("descripcion","")}</strong> — {b.get("impacto_estimado","")}</li>')
-    benef_block = (f'<ul style="margin:6px 0 0 16px;padding:0;">{benef_items}</ul>'
-                   if benef_items else "")
-
-    # ── Alertas legales ───────────────────────────────
     alertas_html = ""
-    for a in leg.get("alertas", []):
-        alertas_html += (f'<p style="font-size:10px;color:#8B1A1A;margin:4px 0;'
-                         f'padding:4px 8px;background:#FFF0F0;border-left:3px solid #8B1A1A;">'
-                         f'&#9888; {a}</p>')
+    for _a in leg.get("alertas", []):
+        alertas_html += (
+            f'<li style="font-size:10.5px;color:#7B1A1A;margin:3px 0;">'
+            f'{_e(str(_a))}</li>'
+        )
+    if alertas_html:
+        alertas_html = f'<ul style="margin:6px 0 0 18px;padding:0;">{alertas_html}</ul>'
 
-    # ── HTML ─────────────────────────────────────────
+    # score items table rows
+    score_rows_html = ""
+    for si in (score_items or []):
+        _nom = _e(si.get("nombre", ""))
+        _not = _e(si.get("nota", ""))
+        score_rows_html += (
+            f'<tr>'
+            f'<td style="padding:5px 10px;font-size:10.5px;color:#1E2D3D;border-bottom:1px solid #E2E8F0;">{_nom}</td>'
+            f'<td style="padding:5px 10px;font-size:10.5px;color:#4A5568;border-bottom:1px solid #E2E8F0;">{_not}</td>'
+            f'</tr>'
+        )
+
+    # ── Isotipo SVG ──────────────────────────────────────────
+    ISOTIPO_48 = (
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="237 -2 411 837" '
+        'style="height:48px;display:block;margin-bottom:6px;">'
+        '<rect fill="#1E2D3D" x="239.53" y="660.47" width="17.59" height="172.62" rx="8.79" ry="8.79"/>'
+        '<rect fill="#1E2D3D" x="289.66" y="513.49" width="13.7"  height="318.98" rx="6.85" ry="16.25"/>'
+        '<rect fill="#1E2D3D" x="338.93" y="368.79" width="13.7"  height="463.69" rx="6.85" ry="23.62"/>'
+        '<rect fill="#1E2D3D" x="389.88" y="442.34" width="13.7"  height="390.14" rx="6.85" ry="19.88"/>'
+        '<rect fill="#1E2D3D" x="435.62" y="583.81" width="13.7"  height="248.66" rx="6.85" ry="12.67"/>'
+        '<rect fill="#1E2D3D" x="485.6"  y="512.66" width="13.7"  height="319.81" rx="6.85" ry="16.29"/>'
+        '<rect fill="#1E2D3D" x="534.3"  y="367.3"  width="13.7"  height="465.17" rx="6.85" ry="23.7"/>'
+        '<rect fill="#1E2D3D" x="583.52" y="222.58" width="13.7"  height="609.89" rx="6.85" ry="31.07"/>'
+        '<rect fill="#1E2D3D" x="632.05" y="0"      width="13.7"  height="832.47" rx="6.85" ry="42.41"/>'
+        '</svg>'
+    )
+    ISOTIPO_36 = (
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="237 -2 411 837" '
+        'style="height:36px;display:block;">'
+        '<rect fill="#1E2D3D" x="239.53" y="660.47" width="17.59" height="172.62" rx="8.79" ry="8.79"/>'
+        '<rect fill="#1E2D3D" x="289.66" y="513.49" width="13.7"  height="318.98" rx="6.85" ry="16.25"/>'
+        '<rect fill="#1E2D3D" x="338.93" y="368.79" width="13.7"  height="463.69" rx="6.85" ry="23.62"/>'
+        '<rect fill="#1E2D3D" x="389.88" y="442.34" width="13.7"  height="390.14" rx="6.85" ry="19.88"/>'
+        '<rect fill="#1E2D3D" x="435.62" y="583.81" width="13.7"  height="248.66" rx="6.85" ry="12.67"/>'
+        '<rect fill="#1E2D3D" x="485.6"  y="512.66" width="13.7"  height="319.81" rx="6.85" ry="16.29"/>'
+        '<rect fill="#1E2D3D" x="534.3"  y="367.3"  width="13.7"  height="465.17" rx="6.85" ry="23.7"/>'
+        '<rect fill="#1E2D3D" x="583.52" y="222.58" width="13.7"  height="609.89" rx="6.85" ry="31.07"/>'
+        '<rect fill="#1E2D3D" x="632.05" y="0"      width="13.7"  height="832.47" rx="6.85" ry="42.41"/>'
+        '</svg>'
+    )
+
+    # ── Score table (pre-built to avoid nested f-string complexity) ─────────
+    _score_table = (
+        '<table style="width:100%;border-collapse:collapse;">'
+        '<thead><tr>'
+        '<th style="font-size:9px;font-weight:700;color:#718096;text-transform:uppercase;'
+        'padding:5px 10px;border-bottom:2px solid #D1D9E6;text-align:left;">Indicador</th>'
+        '<th style="font-size:9px;font-weight:700;color:#718096;text-transform:uppercase;'
+        'padding:5px 10px;border-bottom:2px solid #D1D9E6;text-align:left;">Evaluación</th>'
+        '</tr></thead>'
+        f'<tbody>{score_rows_html}</tbody></table>'
+    ) if score_rows_html else (
+        '<p style="font-size:10.5px;color:#718096;">'
+        'Datos financieros insuficientes para calcular score de viabilidad.</p>'
+    )
+
+    _legal_block = (
+        f'<table style="width:100%;border-collapse:collapse;">'
+        f'<tr><td style="padding:6px 12px;font-weight:600;color:#0D2137;width:42%;'
+        f'background:#F7F9FC;border-bottom:1px solid #D1D9E6;font-size:10.5px;">Resumen legal</td>'
+        f'<td style="padding:6px 12px;font-size:10.5px;border-bottom:1px solid #D1D9E6;">'
+        f'{res_legal}</td></tr></table>'
+        f'{alertas_html}'
+    ) if leg else (
+        '<p style="font-size:10.5px;color:#718096;">'
+        'Análisis legal no ejecutado en esta sesión.</p>'
+    )
+
+    # ── HTML ─────────────────────────────────────────────────
     html = f"""<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>SOLUM — Informe — {ubicacion}</title>
+<title>SOLUM — Análisis de Proyecto Inmobiliario</title>
 <style>
-  * {{ box-sizing:border-box; margin:0; padding:0; }}
-  body {{
-    font-family: 'Helvetica Neue', Arial, sans-serif;
-    color: #2C2C2C;
-    font-size: 11px;
-    line-height: 1.65;
-    background: #fff;
-    max-width: 760px;
-    margin: 0 auto;
-    padding: 32px 40px 40px;
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+  :root {{
+    --navy:    #0D2137;
+    --navy2:   #1E2D3D;
+    --gold:    #C99428;
+    --gray-bg: #F7F9FC;
+    --page-bg: #E8ECF2;
+    --border:  #D1D9E6;
+    --text:    #2D3748;
+    --muted:   #718096;
   }}
-  table {{ border-collapse:collapse; width:100%; }}
-  .section-block {{ margin-bottom:20px; }}
-  .sec-title {{ page-break-after: avoid; break-after: avoid; }}
-  .section-block table {{ page-break-inside: auto; }}
-  .section-block tr {{ page-break-inside: avoid; break-inside: avoid; }}
-
-  /* ── Screen header ── */
-  .screen-header {{ display:block; }}
-  .print-header  {{ display:none; }}
-
+  * {{ box-sizing: border-box; margin: 0; padding: 0; }}
+  body {{
+    font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+    background: var(--page-bg);
+    color: var(--text);
+    font-size: 11px;
+    line-height: 1.6;
+  }}
+  .page {{
+    background: #fff;
+    width: 794px;
+    min-height: 1123px;
+    margin: 0 auto 32px;
+    padding: 0 0 72px;
+    border-top: 8px solid var(--navy2);
+    position: relative;
+  }}
+  .page-inner {{ padding: 36px 48px 0; }}
+  .page-header {{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding-bottom: 14px;
+    margin-bottom: 28px;
+    border-bottom: 1.5px solid var(--border);
+  }}
+  .page-header-logo {{ display: flex; align-items: flex-end; gap: 10px; }}
+  .solum-word {{
+    font-size: 17px; font-weight: 800; color: var(--navy);
+    letter-spacing: -0.5px; line-height: 1; margin-bottom: 2px;
+  }}
+  .page-header-meta {{
+    text-align: right; font-size: 9px; color: var(--muted); line-height: 1.5;
+  }}
+  .sec-title {{
+    font-size: 9px; font-weight: 700; color: var(--navy);
+    text-transform: uppercase; letter-spacing: 1.5px;
+    padding-bottom: 6px; margin-bottom: 12px;
+    border-bottom: 2px solid var(--navy2);
+    position: relative;
+  }}
+  .sec-title::after {{
+    content: ""; position: absolute;
+    left: 0; right: 0; bottom: -1px;
+    height: 1px; background: var(--border);
+  }}
+  .section {{ margin-bottom: 28px; }}
+  .kv-table {{ width: 100%; border-collapse: collapse; }}
+  .kv-table td {{
+    padding: 6px 12px; font-size: 10.5px;
+    border-bottom: 1px solid var(--border); vertical-align: top;
+  }}
+  .kv-table td:first-child {{
+    font-weight: 600; color: var(--navy);
+    width: 42%; background: var(--gray-bg);
+  }}
+  .kv-table tr:nth-child(even) td {{ background: #fff; }}
+  .kv-table tr:nth-child(even) td:first-child {{ background: #fff; }}
+  .kpi-strip {{ display: flex; gap: 12px; }}
+  .kpi-card {{
+    flex: 1; background: var(--gray-bg);
+    border: 1px solid var(--border); border-radius: 6px;
+    padding: 14px 16px; text-align: center;
+  }}
+  .kpi-label {{
+    font-size: 8.5px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 1px;
+    color: var(--muted); margin-bottom: 6px;
+  }}
+  .kpi-value {{
+    font-size: 16px; font-weight: 800;
+    color: var(--navy); line-height: 1.1;
+  }}
+  .cost-table {{ width: 100%; border-collapse: collapse; }}
+  .cost-table th {{
+    font-size: 9px; font-weight: 700; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 1px;
+    padding: 6px 12px; border-bottom: 2px solid var(--border); text-align: left;
+  }}
+  .cost-table td {{ padding: 6px 12px; font-size: 10.5px; border-bottom: 1px solid var(--border); }}
+  .cost-table tr.total-row td {{
+    font-weight: 700; color: var(--navy);
+    border-top: 2px solid var(--navy2); border-bottom: none;
+    background: var(--gray-bg);
+  }}
+  .badge {{
+    display: inline-block; padding: 4px 12px; border-radius: 20px;
+    font-size: 9px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 1px;
+  }}
+  .page-footer {{
+    position: absolute; bottom: 20px; left: 48px; right: 48px;
+    display: flex; justify-content: space-between; align-items: flex-end;
+    border-top: 1px solid var(--border); padding-top: 12px;
+  }}
+  .footer-sig {{ font-size: 10px; color: var(--navy); line-height: 1.5; }}
+  .sig-name {{ font-weight: 700; }}
+  .footer-disc {{ font-size: 8px; color: var(--muted); text-align: right; line-height: 1.4; }}
   @media print {{
-    @page {{
-      size: A4;
-      margin: 22mm 18mm 16mm;
-    }}
-    body {{
-      padding: 0;
-      padding-top: 16mm;  /* reserve space for fixed header */
-      max-width: 100%;
-    }}
-    .screen-header {{ display:none !important; }}
-    .print-header {{
-      display: block !important;
-      position: fixed;
-      top: -22mm;        /* reach into the @page top margin */
-      left: -18mm;
-      right: -18mm;
-      background: white;
-      padding: 6mm 18mm 4mm;
-      z-index: 9999;
-    }}
-    .print-header-line {{
-      border-bottom: 1.5px solid {GOLD};
-      margin-top: 3mm;
-    }}
-    .section-block {{ page-break-inside: avoid; break-inside: avoid; }}
-    .sec-title {{ page-break-after: avoid; break-after: avoid; }}
-    .no-break {{ page-break-inside: avoid; break-inside: avoid; }}
-    a {{ text-decoration: none; color: inherit; }}
+    body {{ background: #fff; }}
+    .page {{ margin: 0; page-break-after: always; }}
+    .page:last-child {{ page-break-after: auto; }}
   }}
 </style>
 </head>
 <body>
 
-<!-- ── Print header (fixed, repeats on every page) ── -->
-<div class="print-header">
-  <div style="display:flex;justify-content:space-between;align-items:center;">
-    <div>
-      <span style="font-size:16px;font-weight:800;color:{NAV};letter-spacing:-0.5px;">SOLUM</span>
-      <span style="font-size:8px;color:{GOLD};letter-spacing:3px;text-transform:uppercase;
-                   margin-left:10px;font-weight:600;">IA de Análisis Inmobiliario</span>
+<!-- ══════════════════════════════════════════════════════════
+     PÁGINA 1 — PORTADA
+     ══════════════════════════════════════════════════════════ -->
+<div class="page">
+  <div style="padding:36px 48px 0;display:flex;justify-content:space-between;align-items:flex-start;">
+    <div style="display:flex;flex-direction:column;align-items:flex-start;">
+      {ISOTIPO_48}
+      <div style="font-size:22px;font-weight:800;color:var(--navy);letter-spacing:-1px;line-height:1;">SOLUM</div>
+      <div style="font-size:8.5px;color:var(--gold);letter-spacing:2.5px;text-transform:uppercase;font-weight:600;margin-top:3px;">Análisis Inmobiliario</div>
     </div>
-    <span style="font-size:8px;color:{GREY};">Osterling Advisory &nbsp;·&nbsp; {fecha}</span>
-  </div>
-  <div class="print-header-line"></div>
-</div>
-
-<!-- ── Screen header (only on screen) ── -->
-<div class="screen-header" style="margin-bottom:6px;">
-  <div style="display:flex;justify-content:space-between;align-items:center;">
-    <div>
-      <span style="font-size:22px;font-weight:800;color:{NAV};letter-spacing:-1px;">SOLUM</span>
-      <span style="font-size:9px;color:{GOLD};letter-spacing:3px;text-transform:uppercase;
-                   margin-left:12px;font-weight:600;">IA de Análisis Inmobiliario</span>
-    </div>
-    <div style="text-align:right;">
-      <div style="font-size:9px;color:#555;font-weight:600;">Osterling Advisory</div>
-      <div style="font-size:9px;color:#777;">{fecha}</div>
+    <div style="text-align:right;padding-top:6px;">
+      <div style="font-size:9px;color:var(--muted);font-weight:500;">{_e(fecha)}</div>
+      <div style="font-size:10px;color:var(--navy);font-weight:600;margin-top:4px;">{_e(zona or "—")}</div>
+      <div style="font-size:9px;color:var(--muted);margin-top:2px;">Osterling Advisory</div>
     </div>
   </div>
-  <div style="border-top:1.5px solid {GOLD};margin-top:6px;margin-bottom:16px;"></div>
-</div>
 
-<!-- ── Título ── -->
-<div style="text-align:center;margin-bottom:20px;">
-  <p style="font-size:15px;font-weight:700;color:{NAV};letter-spacing:0.5px;">
-    INFORME DE ANÁLISIS DE CABIDA E INVERSIÓN
-  </p>
-  <p style="font-size:11px;color:{GREY};margin-top:4px;">
-    {ubicacion} &nbsp;·&nbsp; {zona} &nbsp;·&nbsp; {fecha}
-  </p>
-</div>
+  <div style="margin:24px 48px;height:1.5px;background:var(--border);"></div>
 
-<!-- ── Viabilidad banner ── -->
-<div class="no-break" style="background:{_viab_bg};border:1px solid {_viab_col};border-left:4px solid {_viab_col};
-     border-radius:4px;padding:10px 16px;margin-bottom:20px;display:flex;
-     justify-content:space-between;align-items:center;">
-  <div>
-    <div style="font-size:8px;color:{_viab_col};letter-spacing:2px;font-weight:700;text-transform:uppercase;">
-      Perfil de Inversión
+  <div style="padding:0 48px;margin-bottom:40px;">
+    <div style="font-size:26px;font-weight:800;color:var(--navy);line-height:1.2;margin-bottom:8px;">{ubicacion}</div>
+    <div style="font-size:13px;font-weight:500;color:var(--muted);">Análisis de Proyecto Inmobiliario</div>
+    <div style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap;">
+      <span style="font-size:9px;background:var(--gray-bg);border:1px solid var(--border);border-radius:4px;padding:3px 10px;color:var(--navy);font-weight:600;">{zonificacion}</span>
+      <span style="font-size:9px;background:var(--gray-bg);border:1px solid var(--border);border-radius:4px;padding:3px 10px;color:var(--navy);font-weight:600;">{area_t}</span>
+      <span style="font-size:9px;background:var(--gray-bg);border:1px solid var(--border);border-radius:4px;padding:3px 10px;color:var(--navy);font-weight:600;">{pisos_max_v}</span>
     </div>
-    <div style="font-size:16px;font-weight:800;color:{_viab_col};margin-top:2px;">{_viab_txt}</div>
   </div>
-  <div style="text-align:right;">
-    <div style="font-size:9px;color:{_viab_col};opacity:0.8;">Margen neto &nbsp;·&nbsp; TIR anual</div>
-    <div style="font-size:15px;font-weight:700;color:{_viab_col};">{_mg:.1f}% &nbsp;·&nbsp; {_tir:.1f}%</div>
+
+  <div style="padding:0 48px;">
+    <div class="kpi-strip">
+      <div class="kpi-card">
+        <div class="kpi-label">Área Terreno</div>
+        <div class="kpi-value">{area_t}</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Ingresos Brutos</div>
+        <div class="kpi-value" style="font-size:13px;">{_e(fmt_usd(ing_brutos))}</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Costo Total</div>
+        <div class="kpi-value" style="font-size:13px;">{_e(fmt_usd(costo_total))}</div>
+      </div>
+      <div class="kpi-card" style="border-color:var(--gold);background:#FEFBF3;">
+        <div class="kpi-label" style="color:var(--gold);">Margen Neto</div>
+        <div class="kpi-value" style="color:var(--gold);">{_e(f"{margen_pct:.1f}%")}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <div class="footer-sig">
+      <div class="sig-name">Enrique Osterling</div>
+      <div style="color:var(--muted);">Director General · Osterling Advisory</div>
+    </div>
+    <div class="footer-disc">
+      Resultados referenciales — validar con asesores especializados.<br>
+      Generado con SOLUM &copy; 2026 · Osterling Advisory
+    </div>
   </div>
 </div>
 
-<!-- ── I. Inmueble ── -->
-{section("I. Datos del Inmueble")}
-{kv_table([
-    ("Ubicación",           ubicacion),
-    ("Zonificación",        zonificacion),
-    ("Área del terreno",    area_t),
-    ("Altura máxima",       pisos_max),
-    ("Área libre mínima",   area_libre),
-    ("Retiro frontal",      retiro),
-    ("Coeficiente edific.", str(coef)),
-])}
-{benef_block}
-{end_section()}
 
-<!-- ── II. Cabida ── -->
-{section("II. Programa Arquitectónico")}
-{kv_table([
-    ("Pisos / sótanos",    f"{c.get('num_pisos','—')} pisos · {c.get('num_sotanos',0)} sótanos"),
-    ("Área techada total", f"{at_total:,.0f} m²"),
-    ("Área vendible",      f"{av_total:,.0f} m² (eficiencia {efic})"),
-    ("Departamentos",      str(c.get("total_unidades","—"))),
-    *unidades_rows,
-    ("Estacionamientos",   str(c.get("estac_total","—"))),
-    ("Depósitos",          str(c.get("depositos_total", 0))),
-])}
-{end_section()}
+<!-- ══════════════════════════════════════════════════════════
+     PÁGINA 2 — PARÁMETROS Y CABIDA
+     ══════════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-inner">
+    <div class="page-header">
+      <div class="page-header-logo">
+        {ISOTIPO_36}
+        <div>
+          <div class="solum-word">SOLUM</div>
+          <div style="font-size:8px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;font-weight:600;">Análisis Inmobiliario</div>
+        </div>
+      </div>
+      <div class="page-header-meta">
+        Análisis Proyecto Inmobiliario<br>{_e(fecha)}
+      </div>
+    </div>
 
-<!-- ── III. Financiero ── -->
-{section("III. Análisis Financiero")}
-{kv_table([
-    ("Ingresos brutos",           fmt_usd(r.get("ingresos_brutos", 0))),
-    ("Costo total (s/financ.)",   fmt_usd(r.get("costo_total_sin_financ", 0))),
-    ("Gasto financiero banco",    fmt_usd(r.get("costo_financiero", 0))),
-    ("Utilidad neta",             fmt_usd(r.get("utilidad_neta", 0))),
-    ("Margen neto post-IR",       f"{r.get('margen_pct', 0):.1f}%"),
-    ("ROI",                       f"{r.get('roi_pct', 0):.1f}%"),
-    ("TIR anual estimada",        f"{r.get('tir_anual_pct', 0):.1f}%"),
-    ("Duración del proyecto",     f"{r.get('meses_proyecto', 0)} meses"),
-    ("Precio máx. terreno (20%)", fmt_usd(r.get("max_terreno_20pct", 0))),
-    ("Break-even precio/m²",      f"${r.get('be_precio_m2', 0):,}/m²"),
-])}
-{end_section()}
+    <div class="section">
+      <div class="sec-title">Parámetros Urbanísticos</div>
+      <table class="kv-table">
+        <tr><td>Ubicación</td><td>{ubicacion}</td></tr>
+        <tr><td>Zonificación</td><td>{zonificacion}</td></tr>
+        <tr><td>Área del terreno</td><td>{area_t}</td></tr>
+        <tr><td>Altura máxima</td><td>{pisos_max_v}</td></tr>
+        <tr><td>Área libre mínima</td><td>{area_libre_v}</td></tr>
+        <tr><td>Retiro frontal</td><td>{retiro_v}</td></tr>
+        <tr><td>Coeficiente de edificación</td><td>{coef_v}</td></tr>
+      </table>
+    </div>
 
-<!-- ── IV. Flujo de Caja ── -->
-{section("IV. Flujo de Caja", force_break=True)}
-{kv_table([
-    ("TIR anual (bisección numérica)", tir_str),
-    ("Exposición máxima de capital",   exp_str),
-    ("Mes de break-even",              be_str),
-])}
-{end_section()}
+    <div class="section">
+      <div class="sec-title">Programa Arquitectónico</div>
+      <table class="kv-table">
+        <tr><td>Pisos / Sótanos</td><td>{_e(str(n_pisos_c))} pisos · {_e(str(n_sot))} sótanos</td></tr>
+        <tr><td>Área techada total</td><td>{_e(f"{at_total:,.0f} m²")}</td></tr>
+        <tr><td>Área vendible</td><td>{_e(f"{av_total:,.0f} m²")}</td></tr>
+        <tr><td>Eficiencia</td><td>{_e(efic)}</td></tr>
+        <tr><td>Unidades de vivienda</td><td>{_e(str(n_unid))}</td></tr>
+        <tr><td>Estacionamientos</td><td>{_e(str(estac))}</td></tr>
+      </table>
+    </div>
 
-<!-- ── V. Due Diligence Legal ── -->
-{section("V. Due Diligence Legal", force_break=(bool(leg)))}
-<div class="no-break" style="background:{semaforo_color}15;border-left:4px solid {semaforo_color};
-     padding:8px 14px;margin-bottom:10px;border-radius:0 4px 4px 0;">
-  <span style="font-size:12px;font-weight:700;color:{semaforo_color};">{semaforo_label}</span>
-</div>
-{kv_table([
-    ("Propietario(s) Partida",  ", ".join(
-        (x.get("nombre", str(x)) if isinstance(x, dict) else str(x))
-        for x in (leg.get("propietarios_partida") or []) if x
-    ) or "—"),
-    ("Área registral",          f"{leg.get('area_registral_m2','—')} m²" if leg.get('area_registral_m2') else "—"),
-    ("Cargas vigentes",         _leg_list(leg.get("cargas_vigentes"))),
-    ("Hipotecas vigentes",      _leg_list(leg.get("hipotecas_vigentes"))),
-    ("Medidas cautelares",      _leg_list(leg.get("medidas_cautelares"))),
-]) if leg else kv_table([("Estado", "Análisis legal no ejecutado")])}
-{alertas_html}
-{"<p style='font-size:10px;color:#555;margin-top:8px;font-style:italic;'>" + (leg.get("resumen_legal") or "") + "</p>" if leg.get("resumen_legal") else ""}
-{end_section()}
-
-<!-- ── VI. Recomendación ── -->
-{section("VI. Recomendación Estratégica")}
-<div class="no-break" style="background:{_viab_bg};border:1px solid {_viab_col};border-radius:4px;
-     padding:12px 16px;line-height:1.7;">
-  <p style="font-size:11px;color:{NAV};">{recomendacion}</p>
-</div>
-{end_section()}
-
-<!-- ── Firma ── -->
-<div style="margin-top:32px;padding-top:16px;border-top:1px solid {BORD};
-     display:flex;justify-content:space-between;align-items:flex-end;">
-  <div>
-    <p style="font-size:11px;font-weight:700;color:{NAV};">Enrique Osterling</p>
-    <p style="font-size:10px;color:{GREY};">Director General · Osterling Advisory</p>
-    <p style="font-size:10px;color:{GREY};">eosterling@grupoosterling.com</p>
+    <div class="section">
+      <div class="sec-title">Indicadores Financieros</div>
+      <div class="kpi-strip">
+        <div class="kpi-card">
+          <div class="kpi-label">Margen Neto</div>
+          <div class="kpi-value">{_e(f"{margen_pct:.1f}%")}</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">TIR Anual</div>
+          <div class="kpi-value">{_e(f"{tir_pct:.1f}%")}</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Utilidad Neta</div>
+          <div class="kpi-value" style="font-size:13px;">{_e(fmt_usd(util_neta))}</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Precio / m²</div>
+          <div class="kpi-value" style="font-size:13px;">{_e(fmt_usd(pv_m2))}</div>
+        </div>
+      </div>
+    </div>
   </div>
-  <p style="font-size:8px;color:#AAA;text-align:right;">
-    Resultados referenciales — validar con asesores especializados.<br>
-    Generado con SOLUM &copy; 2026 · Osterling Advisory
-  </p>
+
+  <div class="page-footer">
+    <div class="footer-sig">
+      <div class="sig-name">Enrique Osterling</div>
+      <div style="color:var(--muted);">Director General · Osterling Advisory</div>
+    </div>
+    <div class="footer-disc">
+      Resultados referenciales — validar con asesores especializados.<br>
+      Generado con SOLUM &copy; 2026 · Osterling Advisory
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     PÁGINA 3 — FINANCIERO Y LEGAL
+     ══════════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-inner">
+    <div class="page-header">
+      <div class="page-header-logo">
+        {ISOTIPO_36}
+        <div>
+          <div class="solum-word">SOLUM</div>
+          <div style="font-size:8px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;font-weight:600;">Análisis Inmobiliario</div>
+        </div>
+      </div>
+      <div class="page-header-meta">
+        Análisis Proyecto Inmobiliario<br>{_e(fecha)}
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="sec-title">Estructura de Costos</div>
+      <table class="cost-table">
+        <thead>
+          <tr>
+            <th>Componente</th>
+            <th style="text-align:right;">Monto (USD)</th>
+            <th style="text-align:right;">% Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Terreno</td>
+            <td style="text-align:right;">{_e(fmt_usd(ct_terreno))}</td>
+            <td style="text-align:right;">{_e(ct_total_pct_terr)}</td>
+          </tr>
+          <tr>
+            <td>Construcción y otros</td>
+            <td style="text-align:right;">{_e(fmt_usd(ct_constr))}</td>
+            <td style="text-align:right;">{_e(ct_total_pct_con)}</td>
+          </tr>
+          <tr class="total-row">
+            <td>Total</td>
+            <td style="text-align:right;">{_e(fmt_usd(costo_total))}</td>
+            <td style="text-align:right;">100%</td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="margin-top:10px;font-size:9.5px;color:var(--muted);">
+        Precio máximo terreno (20%): <strong style="color:var(--navy);">{_e(fmt_usd(max_terr_20))}</strong>
+        &nbsp;·&nbsp;
+        Precio máximo terreno (25%): <strong style="color:var(--navy);">{_e(fmt_usd(max_terr_25))}</strong>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="sec-title">Viabilidad del Proyecto</div>
+      {_score_table}
+      <div style="margin-top:10px;background:var(--gray-bg);border:1px solid var(--border);border-radius:5px;padding:10px 14px;">
+        <div style="font-size:9px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">TIR · Exposición · Break-even</div>
+        <div style="font-size:10.5px;color:var(--navy);">
+          TIR numérica: <strong>{_e(tir_str)}</strong>&nbsp;&nbsp;·&nbsp;&nbsp;
+          Exposición máxima: <strong>{_e(exp_str)}</strong>&nbsp;&nbsp;·&nbsp;&nbsp;
+          Break-even: <strong>{_e(be_str)}</strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="sec-title">Análisis Legal</div>
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+        <span class="badge" style="background:{_e(sem_color)}1A;color:{_e(sem_color)};border:1px solid {_e(sem_color)};">{_e(sem_label)}</span>
+      </div>
+      {_legal_block}
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <div class="footer-sig">
+      <div class="sig-name">Enrique Osterling</div>
+      <div style="color:var(--muted);">Director General · Osterling Advisory</div>
+      <div style="color:var(--muted);">eosterling@grupoosterling.com</div>
+    </div>
+    <div class="footer-disc">
+      Resultados referenciales — validar con asesores especializados.<br>
+      Generado con SOLUM &copy; 2026 · Osterling Advisory
+    </div>
+  </div>
 </div>
 
 </body></html>"""
@@ -21974,6 +22689,23 @@ elif tipo_op == "Proyecto de Oficinas":
                         f'</tbody></table>',
                         unsafe_allow_html=True
                     )
+
+            # ── Descarga PDF Oficinas ────────────────────────────────────
+            try:
+                _ofi_pdf = generar_informe_oficinas_pdf(
+                    _ofi_r, _ofi_fin,
+                    datetime.datetime.now().strftime("%d de %B de %Y"),
+                )
+                st.download_button(
+                    label="\u2b07 DESCARGAR INFORME PDF",
+                    data=_ofi_pdf,
+                    file_name=f"SOLUM_Oficinas_{datetime.datetime.now().strftime('%Y%m%d')}.pdf",
+                    mime="application/pdf",
+                    use_container_width=True,
+                    type="primary",
+                )
+            except Exception as _ofi_pdf_err:
+                st.caption(f"PDF no disponible: {_ofi_pdf_err}")
 
 # ═══════════════════════════════════════════════════════
 # MÓDULO 5: PORTFOLIO
