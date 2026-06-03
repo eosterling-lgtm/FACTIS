@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOLUM — Negro / Verde Olivo</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=DM+Serif+Display:ital@0;1&display=swap');
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  :root {
+    --olive: #7A8C2E;
+    --olive-light: #9AAA40;
+    --olive-muted: #4A5520;
+    --olive-dim: #2A3010;
+    --black: #080A06;
+    --surface: #0E1009;
+    --border: #1A1E0E;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--black);
+    color: #E8EDD8;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+  }
+
+  .card {
+    width: 440px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 56px 48px;
+    position: relative;
+  }
+
+  /* Línea superior olive */
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--olive) 0%, var(--olive-light) 50%, transparent 100%);
+  }
+
+  /* Decoración esquina */
+  .corner-deco {
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 120px; height: 120px;
+    border-left: 1px solid var(--border);
+    border-top: 1px solid var(--border);
+    margin: 0;
+    opacity: 0.5;
+  }
+
+  .corner-deco::after {
+    content: '';
+    position: absolute;
+    bottom: 20px; right: 20px;
+    width: 60px; height: 60px;
+    border-left: 1px solid var(--olive-dim);
+    border-top: 1px solid var(--olive-dim);
+  }
+
+  /* Header */
+  .header { margin-bottom: 48px; }
+
+  .osterling {
+    font-size: 9px;
+    letter-spacing: 0.35em;
+    color: var(--olive-muted);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .osterling::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .logo-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 6px;
+  }
+
+  .bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+    height: 30px;
+  }
+
+  .bar { width: 4px; background: var(--olive); border-radius: 1px; }
+
+  .logo-name {
+    font-family: 'Inter', sans-serif;
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: 0.15em;
+    color: #E8EDD8;
+  }
+
+  .tagline {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--olive-muted);
+    text-transform: uppercase;
+    padding-left: 42px;
+  }
+
+  /* Separador */
+  .sep {
+    height: 1px;
+    background: linear-gradient(90deg, var(--olive-dim) 0%, transparent 100%);
+    margin: 32px 0;
+  }
+
+  /* Form */
+  .form-label {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    color: #C8D0A8;
+    margin-bottom: 28px;
+    font-style: italic;
+  }
+
+  .field { margin-bottom: 20px; }
+
+  .field label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    color: var(--olive-muted);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+
+  .field label::before {
+    content: '';
+    width: 12px; height: 1px;
+    background: var(--olive-muted);
+  }
+
+  .field input {
+    width: 100%;
+    background: var(--black);
+    border: 1px solid var(--border);
+    color: #E8EDD8;
+    padding: 14px 16px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 300;
+    outline: none;
+    transition: border-color 0.25s;
+  }
+
+  .field input:focus { border-color: var(--olive); }
+  .field input::placeholder { color: #1E2212; }
+
+  .btn {
+    width: 100%;
+    padding: 16px;
+    background: var(--olive);
+    color: #080A06;
+    border: none;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: background 0.2s;
+  }
+
+  .btn:hover { background: var(--olive-light); }
+
+  .foot {
+    margin-top: 36px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .foot-text {
+    font-size: 8px;
+    color: #1E2212;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 8px;
+    color: var(--olive-muted);
+    letter-spacing: 0.15em;
+  }
+
+  .dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--olive);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  .alt-badge {
+    position: fixed; top: 20px; right: 20px;
+    background: var(--olive); color: #080A06;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.1em; padding: 6px 12px;
+  }
+
+  /* Fondo sutil */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 40% at 80% 80%, rgba(122,140,46,0.04) 0%, transparent 70%);
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+  <div class="alt-badge">ALT 07 — NEGRO / VERDE OLIVO</div>
+
+  <div class="card">
+    <div class="corner-deco"></div>
+
+    <div class="header">
+      <div class="osterling">Osterling Advisory</div>
+      <div class="logo-row">
+        <div class="bars">
+          <div class="bar" style="height:12px"></div>
+          <div class="bar" style="height:20px"></div>
+          <div class="bar" style="height:30px"></div>
+          <div class="bar" style="height:22px"></div>
+          <div class="bar" style="height:15px"></div>
+        </div>
+        <div class="logo-name">SOLUM</div>
+      </div>
+      <div class="tagline">Plataforma Analítica Inmobiliaria · Lima, Perú</div>
+    </div>
+
+    <div class="sep"></div>
+
+    <div class="form-label">Acceso a la plataforma</div>
+
+    <div class="field">
+      <label>Usuario</label>
+      <input type="text" placeholder="nombre de usuario">
+    </div>
+    <div class="field">
+      <label>Contraseña</label>
+      <input type="password" placeholder="••••••••">
+    </div>
+
+    <button class="btn">Ingresar →</button>
+
+    <div class="foot">
+      <div class="foot-text">Acceso restringido · 2026</div>
+      <div class="status">
+        <div class="dot"></div>
+        Sistema activo
+      </div>
+    </div>
+  </div>
+</body>
+</html>

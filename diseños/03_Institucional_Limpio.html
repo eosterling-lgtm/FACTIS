@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOLUM — Alternativa 03: Institucional Limpio</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Libre+Baskerville:wght@400;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #F5F4F0;
+    color: #1A1A1A;
+    min-height: 100vh;
+    display: flex;
+    align-items: stretch;
+  }
+
+  /* Panel izquierdo oscuro */
+  .left-panel {
+    width: 50%;
+    background: #1C2B3A;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 52px 60px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .left-panel::after {
+    content: '';
+    position: absolute;
+    bottom: -100px;
+    right: -100px;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(180,140,80,0.08) 0%, transparent 70%);
+  }
+
+  .left-top { position: relative; z-index: 2; }
+  .left-bottom { position: relative; z-index: 2; }
+
+  .osterling-tag {
+    font-size: 10px;
+    letter-spacing: 0.35em;
+    color: #B48C50;
+    text-transform: uppercase;
+    margin-bottom: 60px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .osterling-tag::before {
+    content: '';
+    width: 24px;
+    height: 1px;
+    background: #B48C50;
+  }
+
+  .left-quote {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 36px;
+    line-height: 1.25;
+    color: #FFFFFF;
+    margin-bottom: 24px;
+    max-width: 400px;
+  }
+
+  .left-quote em {
+    font-style: normal;
+    color: #B48C50;
+  }
+
+  .left-desc {
+    font-size: 14px;
+    line-height: 1.7;
+    color: #6B8BA4;
+    max-width: 360px;
+  }
+
+  .modules-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .module-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 18px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .module-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #B48C50;
+    flex-shrink: 0;
+  }
+
+  .module-name {
+    font-size: 12px;
+    color: #AABBCC;
+    letter-spacing: 0.05em;
+  }
+
+  .module-desc {
+    font-size: 11px;
+    color: #445566;
+    margin-left: auto;
+    letter-spacing: 0.05em;
+  }
+
+  /* Panel derecho claro */
+  .right-panel {
+    width: 50%;
+    background: #FAFAF8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px;
+  }
+
+  .form-wrap { width: 100%; max-width: 380px; }
+
+  .logo-area {
+    margin-bottom: 48px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .logo-icon {
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+    height: 30px;
+  }
+
+  .bar { width: 4px; background: #1C2B3A; border-radius: 1px; }
+
+  .logo-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    color: #1C2B3A;
+  }
+
+  .form-heading {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 26px;
+    color: #1C2B3A;
+    margin-bottom: 6px;
+  }
+
+  .form-sub {
+    font-size: 13px;
+    color: #8899AA;
+    margin-bottom: 36px;
+  }
+
+  .field { margin-bottom: 20px; }
+
+  .field label {
+    display: block;
+    font-size: 11px;
+    color: #778899;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+
+  .field input {
+    width: 100%;
+    background: #FFFFFF;
+    border: 1.5px solid #E5E2DC;
+    color: #1C2B3A;
+    padding: 13px 16px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .field input:focus { border-color: #1C2B3A; }
+  .field input::placeholder { color: #CCBBAA; }
+
+  .btn {
+    width: 100%;
+    padding: 15px;
+    background: #1C2B3A;
+    color: #FFF;
+    border: none;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: background 0.2s;
+  }
+
+  .btn:hover { background: #243547; }
+
+  .btn-accent {
+    display: block;
+    width: 40px;
+    height: 3px;
+    background: #B48C50;
+    margin-top: 3px;
+    transition: width 0.3s;
+  }
+
+  .btn:hover + .btn-accent { width: 100%; }
+
+  .form-footer {
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid #E8E5DF;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-text {
+    font-size: 10px;
+    color: #AABBCC;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .footer-year {
+    font-size: 10px;
+    color: #B48C50;
+    letter-spacing: 0.1em;
+  }
+
+  .alt-badge {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #1C2B3A;
+    color: #FFF;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    padding: 6px 12px;
+    font-family: 'Inter', sans-serif;
+  }
+</style>
+</head>
+<body>
+  <div class="alt-badge">ALT 03 — INSTITUCIONAL LIMPIO</div>
+
+  <div class="left-panel">
+    <div class="left-top">
+      <div class="osterling-tag">Osterling Advisory</div>
+      <div class="left-quote">El análisis que tu<br>banco <em>espera</em> ver.</div>
+      <div class="left-desc">
+        Cabida arquitectónica, modelo financiero y due diligence legal
+        en 15 minutos. Construido para Lima, calibrado para la banca peruana.
+      </div>
+    </div>
+
+    <div class="left-bottom">
+      <div class="modules-list">
+        <div class="module-item">
+          <div class="module-dot"></div>
+          <div class="module-name">Proyecto Inmobiliario</div>
+          <div class="module-desc">Residencial · Comercial</div>
+        </div>
+        <div class="module-item">
+          <div class="module-dot" style="background:#4A9EBF"></div>
+          <div class="module-name">Proyecto Industrial</div>
+          <div class="module-desc">Logístico · Manufactura</div>
+        </div>
+        <div class="module-item">
+          <div class="module-dot" style="background:#7A9E7E"></div>
+          <div class="module-name">Proyecto de Oficinas</div>
+          <div class="module-desc">Clase A · B · Boutique</div>
+        </div>
+        <div class="module-item">
+          <div class="module-dot" style="background:#9E7A6A"></div>
+          <div class="module-name">Portfolio</div>
+          <div class="module-desc">Análisis múltiple</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="right-panel">
+    <div class="form-wrap">
+      <div class="logo-area">
+        <div class="logo-icon">
+          <div class="bar" style="height:12px"></div>
+          <div class="bar" style="height:20px"></div>
+          <div class="bar" style="height:30px"></div>
+          <div class="bar" style="height:24px"></div>
+          <div class="bar" style="height:16px"></div>
+        </div>
+        <div class="logo-text">SOLUM</div>
+      </div>
+
+      <div class="form-heading">Bienvenido</div>
+      <div class="form-sub">Plataforma de análisis inmobiliario · Lima, Perú</div>
+
+      <div class="field">
+        <label>Usuario</label>
+        <input type="text" placeholder="nombre de usuario">
+      </div>
+      <div class="field">
+        <label>Contraseña</label>
+        <input type="password" placeholder="••••••••">
+      </div>
+
+      <button class="btn">Ingresar a la plataforma</button>
+      <div class="btn-accent"></div>
+
+      <div class="form-footer">
+        <span class="footer-text">Acceso restringido</span>
+        <span class="footer-year">2026</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

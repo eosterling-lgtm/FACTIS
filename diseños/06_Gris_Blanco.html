@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOLUM — Gris / Blanco</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Cormorant+Garamond:wght@400;500;600&display=swap');
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #EFEFED;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 1fr 440px;
+    max-width: 1080px;
+    width: 100%;
+    background: #FFFFFF;
+    box-shadow: 0 2px 40px rgba(0,0,0,0.06);
+  }
+
+  /* Panel izquierdo */
+  .left {
+    background: #F7F7F5;
+    padding: 72px 64px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-right: 1px solid #E8E8E4;
+  }
+
+  .left-top {}
+  .left-bottom {}
+
+  .eyebrow {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: #AAAAAA;
+    text-transform: uppercase;
+    margin-bottom: 52px;
+  }
+
+  .headline {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 52px;
+    font-weight: 500;
+    line-height: 1.05;
+    color: #1A1A1A;
+    margin-bottom: 24px;
+  }
+
+  .headline span { color: #888; font-style: italic; }
+
+  .body {
+    font-size: 14px;
+    line-height: 1.8;
+    color: #999;
+    max-width: 340px;
+    margin-bottom: 52px;
+    font-weight: 300;
+  }
+
+  /* Módulos como grid */
+  .modules {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: #E8E8E4;
+    border: 1px solid #E8E8E4;
+  }
+
+  .mod {
+    background: #F7F7F5;
+    padding: 20px 22px;
+    transition: background 0.2s;
+  }
+
+  .mod:hover { background: #FFFFFF; }
+
+  .mod-label {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: #AAAAAA;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .mod-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: #444;
+  }
+
+  /* Panel derecho formulario */
+  .right {
+    background: #FFFFFF;
+    padding: 72px 52px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .logo-area { margin-bottom: 52px; }
+
+  .logo-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 4px;
+  }
+
+  .bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+    height: 26px;
+  }
+
+  .bar { width: 3px; background: #1A1A1A; border-radius: 1px; }
+
+  .logo-name {
+    font-family: 'Inter', sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+    color: #1A1A1A;
+  }
+
+  .logo-sub {
+    font-size: 9px;
+    color: #CCCCCC;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    padding-left: 36px;
+  }
+
+  .form-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 500;
+    color: #1A1A1A;
+    margin-bottom: 6px;
+  }
+
+  .form-sub {
+    font-size: 12px;
+    color: #BBBBBB;
+    margin-bottom: 36px;
+    letter-spacing: 0.05em;
+  }
+
+  .field { margin-bottom: 20px; }
+
+  .field label {
+    display: block;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: #BBBBBB;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+
+  .field input {
+    width: 100%;
+    border: none;
+    border-bottom: 1.5px solid #E8E8E4;
+    background: transparent;
+    color: #1A1A1A;
+    padding: 10px 0;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .field input:focus { border-color: #1A1A1A; }
+  .field input::placeholder { color: #DDDDDD; }
+
+  .btn {
+    width: 100%;
+    padding: 16px;
+    background: #1A1A1A;
+    color: #FFFFFF;
+    border: none;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin-top: 28px;
+    transition: background 0.2s;
+  }
+
+  .btn:hover { background: #333; }
+
+  .form-foot {
+    margin-top: 32px;
+    font-size: 9px;
+    color: #DDDDDD;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .alt-badge {
+    position: fixed; top: 20px; right: 20px;
+    background: #1A1A1A; color: #FFF;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.1em; padding: 6px 12px;
+  }
+</style>
+</head>
+<body>
+  <div class="alt-badge">ALT 06 — GRIS / BLANCO</div>
+  <div class="layout">
+    <div class="left">
+      <div class="left-top">
+        <div class="eyebrow">Osterling Advisory · Lima, Perú</div>
+        <div class="headline">Análisis<br>inmobiliario<br><span>inteligente.</span></div>
+        <div class="body">
+          Cabida arquitectónica, modelo financiero y due diligence legal
+          en 15 minutos. Construido exclusivamente para Lima.
+        </div>
+      </div>
+      <div class="left-bottom">
+        <div class="modules">
+          <div class="mod">
+            <div class="mod-label">Módulo 01</div>
+            <div class="mod-name">Proyecto Inmobiliario</div>
+          </div>
+          <div class="mod">
+            <div class="mod-label">Módulo 02</div>
+            <div class="mod-name">Industrial · Logístico</div>
+          </div>
+          <div class="mod">
+            <div class="mod-label">Módulo 03</div>
+            <div class="mod-name">Proyecto de Oficinas</div>
+          </div>
+          <div class="mod">
+            <div class="mod-label">Módulo 04</div>
+            <div class="mod-name">Portfolio</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="right">
+      <div class="logo-area">
+        <div class="logo-row">
+          <div class="bars">
+            <div class="bar" style="height:10px"></div>
+            <div class="bar" style="height:17px"></div>
+            <div class="bar" style="height:26px"></div>
+            <div class="bar" style="height:19px"></div>
+            <div class="bar" style="height:13px"></div>
+          </div>
+          <div class="logo-name">SOLUM</div>
+        </div>
+        <div class="logo-sub">Plataforma Analítica Inmobiliaria</div>
+      </div>
+
+      <div class="form-title">Bienvenido</div>
+      <div class="form-sub">Ingresa tus credenciales para continuar</div>
+
+      <div class="field">
+        <label>Usuario</label>
+        <input type="text" placeholder="nombre de usuario">
+      </div>
+      <div class="field">
+        <label>Contraseña</label>
+        <input type="password" placeholder="••••••••">
+      </div>
+
+      <button class="btn">Ingresar a SOLUM</button>
+      <div class="form-foot">Acceso restringido · Osterling Advisory · 2026</div>
+    </div>
+  </div>
+</body>
+</html>

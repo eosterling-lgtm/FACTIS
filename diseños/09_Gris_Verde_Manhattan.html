@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOLUM — Gris / Verde Manhattan</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap');
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  :root {
+    --green: #2C5F3E;
+    --green-mid: #3A7A52;
+    --green-light: #4A9A66;
+    --green-muted: #1A3A26;
+    --green-dim: #0E2018;
+    --gray: #8A8E87;
+    --gray-light: #C4C8BE;
+    --gray-bg: #F2F2EF;
+    --surface: #FAFAF8;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--gray-bg);
+    min-height: 100vh;
+    display: flex;
+  }
+
+  /* Panel izquierdo — verde Manhattan oscuro */
+  .left {
+    width: 55%;
+    background: var(--green);
+    padding: 72px 64px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Textura sutil: líneas de contorno topográfico */
+  .left::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 59px,
+        rgba(255,255,255,0.04) 60px
+      ),
+      repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 59px,
+        rgba(255,255,255,0.04) 60px
+      );
+  }
+
+  /* Círculo decorativo fondo */
+  .left::after {
+    content: '';
+    position: absolute;
+    right: -160px;
+    bottom: -160px;
+    width: 500px; height: 500px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.06);
+    box-shadow:
+      0 0 0 60px rgba(255,255,255,0.03),
+      0 0 0 120px rgba(255,255,255,0.015);
+  }
+
+  .left-top, .left-bottom { position: relative; z-index: 2; }
+
+  .top-tag {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: rgba(255,255,255,0.35);
+    text-transform: uppercase;
+    margin-bottom: 52px;
+  }
+
+  .top-tag-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.35);
+  }
+
+  .headline {
+    font-family: 'Playfair Display', serif;
+    font-size: 50px;
+    font-weight: 700;
+    line-height: 1.1;
+    color: #FFFFFF;
+    margin-bottom: 24px;
+  }
+
+  .headline em {
+    font-style: italic;
+    font-weight: 600;
+    color: rgba(255,255,255,0.6);
+  }
+
+  .subline {
+    font-size: 15px;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.45);
+    max-width: 380px;
+    font-weight: 300;
+  }
+
+  /* Métricas */
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .metric {
+    background: rgba(0,0,0,0.15);
+    padding: 20px 22px;
+  }
+
+  .metric-val {
+    font-size: 30px;
+    font-weight: 700;
+    color: #FFFFFF;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .metric-label {
+    font-size: 9px;
+    color: rgba(255,255,255,0.35);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  /* Panel derecho formulario */
+  .right {
+    flex: 1;
+    background: var(--surface);
+    padding: 72px 56px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-left: 1px solid #E4E4E0;
+  }
+
+  .logo-area { margin-bottom: 52px; }
+
+  .logo-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 6px;
+  }
+
+  .bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+    height: 28px;
+  }
+
+  .bar { width: 4px; background: var(--green); border-radius: 1px; }
+
+  .logo-name {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    color: #1A1A1A;
+  }
+
+  .logo-sub {
+    font-size: 9px;
+    color: #BBBBBB;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    padding-left: 40px;
+  }
+
+  .form-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 600;
+    color: #1A1A1A;
+    margin-bottom: 6px;
+  }
+
+  .form-sub {
+    font-size: 13px;
+    color: var(--gray);
+    margin-bottom: 36px;
+    font-weight: 300;
+  }
+
+  .field { margin-bottom: 20px; }
+
+  .field label {
+    display: block;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: var(--gray);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+
+  .field input {
+    width: 100%;
+    background: #FFFFFF;
+    border: 1.5px solid #E4E4E0;
+    color: #1A1A1A;
+    padding: 13px 16px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    outline: none;
+    transition: border-color 0.2s;
+    border-radius: 2px;
+  }
+
+  .field input:focus { border-color: var(--green); }
+  .field input::placeholder { color: #CCCCCA; }
+
+  .btn {
+    width: 100%;
+    padding: 15px;
+    background: var(--green);
+    color: #FFFFFF;
+    border: none;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: background 0.2s;
+    border-radius: 2px;
+  }
+
+  .btn:hover { background: var(--green-mid); }
+
+  .form-foot {
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid #EEEEE8;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .foot-left {
+    font-size: 9px;
+    color: #CCCCCA;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .foot-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--green-light);
+  }
+
+  .alt-badge {
+    position: fixed; top: 20px; right: 20px;
+    background: var(--green); color: #FFF;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.1em; padding: 6px 12px;
+  }
+</style>
+</head>
+<body>
+  <div class="alt-badge">ALT 09 — GRIS / VERDE MANHATTAN</div>
+
+  <div class="left">
+    <div class="left-top">
+      <div class="top-tag">
+        <div class="top-tag-dot"></div>
+        Osterling Advisory · Lima, Perú
+      </div>
+      <div class="headline">
+        El terreno<br>
+        correcto.<br>
+        <em>La decisión correcta.</em>
+      </div>
+      <div class="subline">
+        Cabida arquitectónica, modelo financiero y due diligence legal
+        en 15 minutos. La plataforma analítica de Lima.
+      </div>
+    </div>
+
+    <div class="left-bottom">
+      <div class="metrics-grid">
+        <div class="metric">
+          <div class="metric-val">43</div>
+          <div class="metric-label">Distritos Lima</div>
+        </div>
+        <div class="metric">
+          <div class="metric-val">15'</div>
+          <div class="metric-label">Por análisis</div>
+        </div>
+        <div class="metric">
+          <div class="metric-val">3</div>
+          <div class="metric-label">Módulos IA</div>
+        </div>
+        <div class="metric">
+          <div class="metric-val">100%</div>
+          <div class="metric-label">Normativa local</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="right">
+    <div class="logo-area">
+      <div class="logo-row">
+        <div class="bars">
+          <div class="bar" style="height:11px"></div>
+          <div class="bar" style="height:19px"></div>
+          <div class="bar" style="height:28px"></div>
+          <div class="bar" style="height:21px"></div>
+          <div class="bar" style="height:14px"></div>
+        </div>
+        <div class="logo-name">SOLUM</div>
+      </div>
+      <div class="logo-sub">Plataforma Analítica Inmobiliaria</div>
+    </div>
+
+    <div class="form-title">Bienvenido</div>
+    <div class="form-sub">Ingresa tus credenciales para continuar</div>
+
+    <div class="field">
+      <label>Usuario</label>
+      <input type="text" placeholder="nombre de usuario">
+    </div>
+    <div class="field">
+      <label>Contraseña</label>
+      <input type="password" placeholder="••••••••">
+    </div>
+
+    <button class="btn">Ingresar a SOLUM</button>
+
+    <div class="form-foot">
+      <div class="foot-left">Acceso restringido · 2026</div>
+      <div class="foot-dot"></div>
+    </div>
+  </div>
+</body>
+</html>

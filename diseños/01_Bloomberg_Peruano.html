@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOLUM — Alternativa 01: El Bloomberg Peruano</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #0A0A0A;
+    color: #FFFFFF;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Fondo: solo negro puro con un grid arquitectónico muy sutil */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(200,140,60,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200,140,60,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+  }
+
+  /* Banda naranja lateral — firma de Bloomberg Peruano */
+  .accent-bar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 4px;
+    height: 100%;
+    background: #C88C3C;
+  }
+
+  .container {
+    width: 420px;
+    padding: 48px;
+    background: #111111;
+    border: 1px solid #1E1E1E;
+    position: relative;
+  }
+
+  /* Línea superior amber */
+  .container::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: #C88C3C;
+  }
+
+  .brand {
+    margin-bottom: 40px;
+  }
+
+  .brand-top {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: #C88C3C;
+    font-weight: 500;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+
+  .logo-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .logo-icon {
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+    height: 32px;
+  }
+
+  .bar {
+    width: 4px;
+    background: #C88C3C;
+    border-radius: 1px;
+  }
+
+  .logo-text {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: #FFFFFF;
+  }
+
+  .tagline {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: #555;
+    text-transform: uppercase;
+    margin-top: 8px;
+  }
+
+  .divider {
+    height: 1px;
+    background: #1E1E1E;
+    margin: 32px 0;
+  }
+
+  .section-label {
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    color: #444;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .field {
+    margin-bottom: 16px;
+  }
+
+  .field label {
+    display: block;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: #888;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .field input {
+    width: 100%;
+    background: #0A0A0A;
+    border: 1px solid #222;
+    color: #FFF;
+    padding: 14px 16px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .field input:focus {
+    border-color: #C88C3C;
+  }
+
+  .field input::placeholder { color: #333; }
+
+  .btn {
+    width: 100%;
+    padding: 15px;
+    background: #C88C3C;
+    color: #000;
+    border: none;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin-top: 24px;
+    transition: background 0.2s;
+  }
+
+  .btn:hover { background: #D99A47; }
+
+  .footer {
+    margin-top: 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-text {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: #333;
+    text-transform: uppercase;
+  }
+
+  .status-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #C88C3C;
+    box-shadow: 0 0 6px #C88C3C;
+  }
+
+  /* Badge alternativa */
+  .alt-badge {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #C88C3C;
+    color: #000;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    padding: 6px 12px;
+    font-family: 'Space Grotesk', sans-serif;
+  }
+</style>
+</head>
+<body>
+  <div class="accent-bar"></div>
+  <div class="alt-badge">ALT 01 — BLOOMBERG PERUANO</div>
+
+  <div class="container">
+    <div class="brand">
+      <div class="brand-top">Osterling Advisory</div>
+      <div class="logo-row">
+        <div class="logo-icon">
+          <div class="bar" style="height:14px"></div>
+          <div class="bar" style="height:22px"></div>
+          <div class="bar" style="height:32px"></div>
+          <div class="bar" style="height:26px"></div>
+          <div class="bar" style="height:18px"></div>
+        </div>
+        <div class="logo-text">SOLUM</div>
+      </div>
+      <div class="tagline">Plataforma Analítica Inmobiliaria · Lima, Perú</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section-label">Acceso a la plataforma</div>
+
+    <div class="field">
+      <label>Usuario</label>
+      <input type="text" placeholder="nombre de usuario">
+    </div>
+
+    <div class="field">
+      <label>Contraseña</label>
+      <input type="password" placeholder="••••••••">
+    </div>
+
+    <button class="btn">Ingresar →</button>
+
+    <div class="footer">
+      <span class="footer-text">Acceso restringido · 2026</span>
+      <div class="status-dot"></div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOLUM — Alternativa 05: Terra Lima</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #1A1410;
+    color: #E8E0D4;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+  }
+
+  .wrapper {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 0;
+    max-width: 1100px;
+    width: 100%;
+    border: 1px solid #2A2218;
+    overflow: hidden;
+  }
+
+  /* Panel izquierdo: tierra, arena, Lima */
+  .left {
+    background: #221C14;
+    padding: 64px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Textura de suelo/terreno - círculos concéntricos como curvas de nivel */
+  .left::before {
+    content: '';
+    position: absolute;
+    right: -120px;
+    bottom: -120px;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    border: 1px solid rgba(180,140,80,0.08);
+    box-shadow:
+      0 0 0 40px rgba(180,140,80,0.05),
+      0 0 0 80px rgba(180,140,80,0.03),
+      0 0 0 120px rgba(180,140,80,0.02);
+  }
+
+  .left-top { position: relative; z-index: 2; }
+  .left-bottom { position: relative; z-index: 2; }
+
+  .brand-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: #B48C50;
+    text-transform: uppercase;
+    margin-bottom: 48px;
+  }
+
+  .brand-tag-line {
+    width: 32px;
+    height: 1px;
+    background: #B48C50;
+  }
+
+  .headline {
+    font-family: 'Playfair Display', serif;
+    font-size: 48px;
+    font-weight: 700;
+    line-height: 1.1;
+    color: #E8E0D4;
+    margin-bottom: 20px;
+  }
+
+  .headline em {
+    font-style: italic;
+    color: #C4A070;
+  }
+
+  .subline {
+    font-size: 14px;
+    line-height: 1.7;
+    color: #6A5A48;
+    max-width: 360px;
+    margin-bottom: 48px;
+  }
+
+  /* Feature list */
+  .features {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .feature {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .feature-num {
+    font-size: 11px;
+    color: #B48C50;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    margin-top: 2px;
+    flex-shrink: 0;
+    width: 20px;
+  }
+
+  .feature-content {}
+
+  .feature-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #C8B8A0;
+    margin-bottom: 2px;
+  }
+
+  .feature-desc {
+    font-size: 11px;
+    color: #4A3D30;
+    line-height: 1.5;
+  }
+
+  /* Panel derecho: formulario cálido */
+  .right {
+    background: #120E0A;
+    padding: 60px 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-left: 1px solid #2A2218;
+  }
+
+  .logo-area {
+    margin-bottom: 48px;
+  }
+
+  .logo-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 4px;
+  }
+
+  .logo-icon {
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+    height: 28px;
+  }
+
+  .bar { width: 4px; background: #C4A070; border-radius: 1px; }
+
+  .logo-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: #E8E0D4;
+    letter-spacing: 0.1em;
+  }
+
+  .logo-sub {
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    color: #3A2E22;
+    text-transform: uppercase;
+    padding-left: 42px;
+  }
+
+  .form-label {
+    font-size: 14px;
+    color: #6A5A48;
+    margin-bottom: 32px;
+    font-style: italic;
+    font-family: 'Playfair Display', serif;
+  }
+
+  .field {
+    margin-bottom: 20px;
+  }
+
+  .field label {
+    display: block;
+    font-size: 9px;
+    color: #4A3D30;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+
+  .field input {
+    width: 100%;
+    background: #1A1410;
+    border: 1px solid #2A2218;
+    border-bottom: 1px solid #4A3D30;
+    color: #E8E0D4;
+    padding: 13px 16px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+    font-weight: 300;
+  }
+
+  .field input:focus {
+    border-color: #B48C50;
+    background: #1E1812;
+  }
+
+  .field input::placeholder { color: #2A2018; }
+
+  .btn {
+    width: 100%;
+    padding: 16px;
+    background: transparent;
+    color: #C4A070;
+    border: 1px solid #4A3D30;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin-top: 12px;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 0;
+    background: #B48C50;
+    transition: width 0.3s;
+    z-index: 0;
+  }
+
+  .btn:hover::before { width: 100%; }
+  .btn:hover { color: #000; border-color: #B48C50; }
+  .btn span { position: relative; z-index: 1; }
+
+  .form-footer {
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 1px solid #1E1812;
+  }
+
+  .footer-text {
+    font-size: 9px;
+    color: #2A2018;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .alt-badge {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #B48C50;
+    color: #000;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    padding: 6px 12px;
+    font-family: 'Inter', sans-serif;
+  }
+</style>
+</head>
+<body>
+  <div class="alt-badge">ALT 05 — TERRA LIMA</div>
+
+  <div class="wrapper">
+    <div class="left">
+      <div class="left-top">
+        <div class="brand-tag">
+          <div class="brand-tag-line"></div>
+          Osterling Advisory · Lima, Perú
+        </div>
+        <div class="headline">
+          La tierra<br>
+          habla. <em>Escúchala.</em>
+        </div>
+        <div class="subline">
+          SOLUM analiza cualquier terreno en Lima y te dice si el negocio tiene sentido — antes de comprometerte.
+          Cabida, finanzas y legal en 15 minutos.
+        </div>
+      </div>
+
+      <div class="left-bottom">
+        <div class="features">
+          <div class="feature">
+            <div class="feature-num">01</div>
+            <div class="feature-content">
+              <div class="feature-title">Cabida Arquitectónica</div>
+              <div class="feature-desc">Programa óptimo según normativa vigente de Lima</div>
+            </div>
+          </div>
+          <div class="feature">
+            <div class="feature-num">02</div>
+            <div class="feature-content">
+              <div class="feature-title">Análisis Financiero</div>
+              <div class="feature-desc">TIR, VAN, flujo de caja con mecánica bancaria peruana</div>
+            </div>
+          </div>
+          <div class="feature">
+            <div class="feature-num">03</div>
+            <div class="feature-content">
+              <div class="feature-title">Due Diligence Legal</div>
+              <div class="feature-desc">SUNARP, cargas, hipotecas y alertas registrales</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="right">
+      <div class="logo-area">
+        <div class="logo-row">
+          <div class="logo-icon">
+            <div class="bar" style="height:10px"></div>
+            <div class="bar" style="height:18px"></div>
+            <div class="bar" style="height:28px"></div>
+            <div class="bar" style="height:20px"></div>
+            <div class="bar" style="height:13px"></div>
+          </div>
+          <div class="logo-name">SOLUM</div>
+        </div>
+        <div class="logo-sub">Plataforma Analítica Inmobiliaria</div>
+      </div>
+
+      <div class="form-label">Ingresa a la plataforma</div>
+
+      <div class="field">
+        <label>Usuario</label>
+        <input type="text" placeholder="nombre de usuario">
+      </div>
+
+      <div class="field">
+        <label>Contraseña</label>
+        <input type="password" placeholder="••••••••">
+      </div>
+
+      <button class="btn"><span>Ingresar a SOLUM →</span></button>
+
+      <div class="form-footer">
+        <div class="footer-text">Acceso restringido · Osterling Advisory · 2026</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
