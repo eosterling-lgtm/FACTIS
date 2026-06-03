@@ -11091,60 +11091,26 @@ with st.sidebar:
                            f"con el colindante más alto ({_col_max} pisos). Claude calculará la altura permitida.")
 
         st.markdown("---")
-        st.markdown("### COSTOS PROYECTADOS")
-        _financ_inputs_ss = st.session_state.get("financ_inputs") or {}
+        with st.expander("💰 Costos Proyectados", expanded=True):
+            _financ_inputs_ss = st.session_state.get("financ_inputs") or {}
 
-        # Inicializar keys de widgets solo si no existen (evita conflicto value/key en Streamlit)
-        if "cab_precio_compra_inp" not in st.session_state:
-            _pcompra_init = int(
-                ((_financ_inputs_ss.get("costo_terreno") or 0) if isinstance(_financ_inputs_ss, dict) else 0)
-                or 1
-            )
-            st.session_state["cab_precio_compra_inp"] = max(1, _pcompra_init)
-        if "cab_pventa_inp" not in st.session_state:
-            st.session_state["cab_pventa_inp"] = 0
-        if "cab_cconst_inp" not in st.session_state:
-            st.session_state["cab_cconst_inp"] = 700
+            # Inicializar keys de widgets solo si no existen (evita conflicto value/key en Streamlit)
+            if "cab_precio_compra_inp" not in st.session_state:
+                _pcompra_init = int(
+                    ((_financ_inputs_ss.get("costo_terreno") or 0) if isinstance(_financ_inputs_ss, dict) else 0)
+                    or 1
+                )
+                st.session_state["cab_precio_compra_inp"] = max(1, _pcompra_init)
+            if "cab_pventa_inp" not in st.session_state:
+                st.session_state["cab_pventa_inp"] = 0
+            if "cab_cconst_inp" not in st.session_state:
+                st.session_state["cab_cconst_inp"] = 700
 
-        precio_compra   = st.number_input("Precio de compra del inmueble (USD)",
-                                          min_value=1, max_value=50_000_000,
-                                          step=10_000, format="%d", key="cab_precio_compra_inp")
-        # ── Modo MiVivienda ────────────────────────────────────────────
-        _miv_sel = st.radio(
-            "Tipo de proyecto",
-            ["Libre", "FondoMiVivienda (VIS)"],
-            horizontal=True,
-            key="cab_modo_mivivienda",
-            index=0,
-        )
-        _modo_miv = (_miv_sel == "FondoMiVivienda (VIS)")
-        if _modo_miv:
-            _cab_now = st.session_state.get("cabida") or {}
-            _av_now  = float(_cab_now.get("area_vendible_m2") or 0)
-            _nu_now  = int(_cab_now.get("total_unidades") or 0)
-            _avg_unit_m2 = round(_av_now / _nu_now, 1) if _nu_now > 0 else 70.0
-            _tope_pvm_usd = int(_FMVF_TOPE_USD / _avg_unit_m2) if _avg_unit_m2 > 0 else 0
-            st.markdown(
-                f'<div style="background:rgba(184,144,74,0.10);border:1px solid rgba(184,144,74,0.35);'
-                f'border-left:3px solid #B8904A;border-radius:6px;padding:10px 12px;margin:4px 0 8px;">'
-                f'<div style="font-size:9px;color:#B8904A;font-weight:700;letter-spacing:2px;'
-                f'text-transform:uppercase;margin-bottom:6px;">FondoMiVivienda — Topes 2025</div>'
-                f'<div style="font-size:12px;color:rgba(255,255,255,0.90);font-weight:700;margin-bottom:2px;">'
-                f'Tope unidad: <span style="color:#B8904A;">USD {_FMVF_TOPE_USD:,}</span></div>'
-                f'<div style="font-size:10px;color:rgba(200,216,232,0.55);margin-bottom:6px;">'
-                f'93.5 UIT · S/. 500,225</div>'
-                + (f'<div style="font-size:11px;color:rgba(200,216,232,0.80);">'
-                   f'Unidad prom. {_avg_unit_m2:.0f} m² → tope '
-                   f'<b style="color:rgba(255,255,255,0.90);">${_tope_pvm_usd:,}/m²</b></div>'
-                   if _nu_now > 0 else
-                   f'<div style="font-size:10px;color:rgba(200,216,232,0.45);">Genera cabida para ver tope/m²</div>')
-                + f'<div style="font-size:9px;color:rgba(200,216,232,0.45);margin-top:6px;line-height:1.5;">'
-                f'Absorción +50% · BBP hasta S/. 25,700 · NSE C/D</div>'
-                f'</div>',
-                unsafe_allow_html=True,
-            )
+            precio_compra   = st.number_input("Precio de compra del inmueble (USD)",
+                                              min_value=1, max_value=50_000_000,
+                                              step=10_000, format="%d", key="cab_precio_compra_inp")
 
-        precio_venta_m2 = st.number_input("Precio de venta / m² (USD)",
+            precio_venta_m2 = st.number_input("Precio de venta / m² (USD)",
                                           min_value=0, max_value=15_000,
                                           step=100, key="cab_pventa_inp")
         _ref_p1 = MERCADO.get(zona, {}).get("precio_1br", 0)
@@ -11486,58 +11452,57 @@ with st.sidebar:
             st.caption("Ver detalles completos en la pestaña Legal →")
 
         st.markdown("---")
-        st.markdown("### ELABORACIÓN DE PROPUESTA")
-        st.markdown(
-            '<div style="font-size:10px;color:rgba(184,144,74,0.75);background:rgba(184,144,74,0.07);'
-            'border-left:2px solid rgba(184,144,74,0.40);border-radius:4px;padding:7px 10px;margin-bottom:8px;">'
-            'Realiza primero el análisis para contar con el sustento técnico y financiero que respalde la propuesta.'
-            '</div>',
-            unsafe_allow_html=True
-        )
-        prop_tipo        = st.selectbox("Tipo de propuesta", ["Compra", "Arrendamiento"],
-                                        key="prop_tipo")
-        prop_propietario = st.text_input("Propietario(s)", placeholder="Nombre del vendedor/arrendador",
-                                         key="prop_propietario")
-        prop_precio      = st.number_input(
-            "Precio ofertado (USD)" if prop_tipo == "Compra" else "Renta mensual ofertada (USD)",
-            min_value=0, max_value=50_000_000, value=0, step=5_000, format="%d",
-            key="prop_precio"
-        )
-        _fin_ss = st.session_state.get("financ")
-        if _fin_ss:
-            _r_ss  = _fin_ss.get("resumen", {})
-            _v20_ss = _r_ss.get("max_terreno_20pct", 0)
-            _v15_ss = _r_ss.get("max_terreno_15pct", 0)
+        with st.expander("📋 Elaboración de Propuesta", expanded=False):
+            st.markdown(
+                '<div style="font-size:10px;color:rgba(184,144,74,0.75);background:rgba(184,144,74,0.07);'
+                'border-left:2px solid rgba(184,144,74,0.40);border-radius:4px;padding:7px 10px;margin-bottom:8px;">'
+                'Realiza primero el análisis para contar con el sustento técnico y financiero que respalde la propuesta.'
+                '</div>',
+                unsafe_allow_html=True
+            )
+            prop_tipo        = st.selectbox("Tipo de propuesta", ["Compra", "Arrendamiento"],
+                                            key="prop_tipo")
+            with st.expander("Estructura de Compra", expanded=False):
+                _tiene_opcion = st.checkbox("Incluir opción de compra", value=True, key="prop_opcion")
+                if _tiene_opcion:
+                    _dias_opcion = st.number_input("Plazo opción (días)", 1, 360, 90, 15, key="prop_dias_opcion")
+                    _pct_opcion  = st.number_input("Monto opción (% del precio)", 0.0, 20.0, 0.0, 0.5,
+                                                   format="%.1f", key="prop_pct_opcion")
+                else:
+                    _dias_opcion = 0
+                    _pct_opcion  = 0.0
 
-        # ── Estructura de compra / pago ─────────────────
-        with st.expander("Estructura de Compra", expanded=False):
-            _tiene_opcion = st.checkbox("Incluir opción de compra", value=True, key="prop_opcion")
-            if _tiene_opcion:
-                _dias_opcion = st.number_input("Plazo opción (días)", 1, 360, 90, 15, key="prop_dias_opcion")
-                _pct_opcion  = st.number_input("Monto opción (% del precio)", 0.0, 20.0, 0.0, 0.5,
-                                               format="%.1f", key="prop_pct_opcion")
-            else:
-                _dias_opcion = 0
-                _pct_opcion  = 0.0
+                st.caption("Estructura de pagos al precio total")
+                _pct_minuta   = st.number_input("Pago inicial a la firma de minuta (%)", 0.0, 100.0, 20.0, 5.0,
+                                                format="%.1f", key="prop_pct_minuta")
+                _condicion_minuta = st.text_input("Condición para la minuta",
+                                                  value="Aprobación del anteproyecto por la Municipalidad",
+                                                  key="prop_cond_minuta")
+                _pct_escritura = round(100.0 - _pct_minuta - _pct_opcion, 1)
+                st.info(f"Saldo a escritura pública: **{_pct_escritura:.1f}%**")
+                _condicion_escritura = st.text_input("Condición para escritura pública",
+                                                      value="Desocupación y entrega del inmueble libre de cargas",
+                                                      key="prop_cond_escritura")
 
-            st.caption("Estructura de pagos al precio total")
-            _pct_minuta   = st.number_input("Pago inicial a la firma de minuta (%)", 0.0, 100.0, 20.0, 5.0,
-                                            format="%.1f", key="prop_pct_minuta")
-            _condicion_minuta = st.text_input("Condición para la minuta",
-                                              value="Aprobación del anteproyecto por la Municipalidad",
-                                              key="prop_cond_minuta")
-            _pct_escritura = round(100.0 - _pct_minuta - _pct_opcion, 1)
-            st.info(f"Saldo a escritura pública: **{_pct_escritura:.1f}%**")
-            _condicion_escritura = st.text_input("Condición para escritura pública",
-                                                  value="Desocupación y entrega del inmueble libre de cargas",
-                                                  key="prop_cond_escritura")
+            prop_propietario = st.text_input("Propietario(s)", placeholder="Nombre del vendedor/arrendador",
+                                             key="prop_propietario")
+            prop_precio      = st.number_input(
+                "Precio ofertado (USD)" if prop_tipo == "Compra" else "Renta mensual ofertada (USD)",
+                min_value=0, max_value=50_000_000, value=0, step=5_000, format="%d",
+                key="prop_precio"
+            )
+            _fin_ss = st.session_state.get("financ")
+            if _fin_ss:
+                _r_ss  = _fin_ss.get("resumen", {})
+                _v20_ss = _r_ss.get("max_terreno_20pct", 0)
+                _v15_ss = _r_ss.get("max_terreno_15pct", 0)
 
-        prop_plazo       = st.number_input("Plazo de respuesta (días)", 1, 90, 10, 1, key="prop_plazo")
-        prop_condiciones = st.text_area(
-            "Condiciones adicionales",
-            placeholder="Ej:\nDue diligence de 30 días\nInmueble libre de cargas e hipotecas\nServicios al día",
-            height=80, key="prop_condiciones"
-        )
+            prop_plazo       = st.number_input("Plazo de respuesta (días)", 1, 90, 10, 1, key="prop_plazo")
+            prop_condiciones = st.text_area(
+                "Condiciones adicionales",
+                placeholder="Ej:\nDue diligence de 30 días\nInmueble libre de cargas e hipotecas\nServicios al día",
+                height=80, key="prop_condiciones"
+            )
 
 
     # ── MÓDULO 2: LOGÍSTICO / INDUSTRIAL ─────────────────
@@ -11839,49 +11804,48 @@ with st.sidebar:
             step=0.5, key="ind_altura_nave",
         )
 
-        st.markdown("### COSTOS PROYECTADOS")
+        with st.expander("💰 Costos Proyectados", expanded=True):
+            ind_costo_terreno = st.number_input("Costo del Inmueble (USD)", 0, 100_000_000,
+                                                int(st.session_state.get("ind_costo_terreno") or 0),
+                                                50_000, key="ind_costo_terreno")
+            st.markdown(f'<div style="font-size:11px;color:#B8904A;font-weight:600;margin-top:-6px;">= ${ind_costo_terreno:,.0f} USD</div>', unsafe_allow_html=True)
 
-        ind_costo_terreno = st.number_input("Costo del Inmueble (USD)", 0, 100_000_000,
-                                            int(st.session_state.get("ind_costo_terreno") or 0),
-                                            50_000, key="ind_costo_terreno")
-        st.markdown(f'<div style="font-size:11px;color:#B8904A;font-weight:600;margin-top:-6px;">= ${ind_costo_terreno:,.0f} USD</div>', unsafe_allow_html=True)
+            _COSTO_DEFAULTS = {
+                "Almacén Logístico":        (350, "Estándar nave industrial Lima 2025: $350/m². "
+                                                  "Nave baja (8–10m) → ajustar a la baja; nave alta o compleja → a la sube."),
+                "Nave Industrial":          (350, "Estándar nave industrial Lima 2025: $350/m²."),
+                "Cross-docking":            (350, "Estándar nave industrial Lima 2025: $350/m². "
+                                                  "Docks múltiples y MEP complejo → ajustar a $420–500/m²."),
+                "Producción / Manufactura": (350, "Estándar nave industrial Lima 2025: $350/m². "
+                                                  "Nave baja (8–10m) → puede ajustarse a $300–330/m²."),
+            }
+            _def_nave, _help_nave = _COSTO_DEFAULTS.get(
+                st.session_state.get("ind_tipo", "Almacén Logístico"), (280, ""))
+            if not _ind_es_impl:
+                ind_costo_nave = st.number_input(
+                    "Costo nave (USD/m²)", min_value=0, max_value=2000,
+                    value=int(st.session_state.get("ind_costo_nave", max(1, _def_nave))),
+                    step=25, key="ind_costo_nave")
+                ind_costo_piso = st.number_input(
+                    "Costo patios / maniobras (USD/m²)",
+                    min_value=0, max_value=500, value=80, step=10, key="ind_costo_piso")
+                ind_pct_indirectos = st.number_input(
+                    "Costos indirectos (%)",
+                    min_value=0.0, max_value=30.0, value=5.0, step=0.5, key="ind_pct_indirectos")
+            else:
+                ind_costo_nave = 0
+                ind_costo_piso = 0
+                ind_pct_indirectos = 0.0
 
-        _COSTO_DEFAULTS = {
-            "Almacén Logístico":        (350, "Estándar nave industrial Lima 2025: $350/m². "
-                                              "Nave baja (8–10m) → ajustar a la baja; nave alta o compleja → a la sube."),
-            "Nave Industrial":          (350, "Estándar nave industrial Lima 2025: $350/m²."),
-            "Cross-docking":            (350, "Estándar nave industrial Lima 2025: $350/m². "
-                                              "Docks múltiples y MEP complejo → ajustar a $420–500/m²."),
-            "Producción / Manufactura": (350, "Estándar nave industrial Lima 2025: $350/m². "
-                                              "Nave baja (8–10m) → puede ajustarse a $300–330/m²."),
-        }
-        _def_nave, _help_nave = _COSTO_DEFAULTS.get(
-            st.session_state.get("ind_tipo", "Almacén Logístico"), (280, ""))
-        if not _ind_es_impl:
-            ind_costo_nave = st.number_input(
-                "Costo nave (USD/m²)", min_value=0, max_value=2000,
-                value=int(st.session_state.get("ind_costo_nave", max(1, _def_nave))),
-                step=25, key="ind_costo_nave")
-            ind_costo_piso = st.number_input(
-                "Costo patios / maniobras (USD/m²)",
-                min_value=0, max_value=500, value=80, step=10, key="ind_costo_piso")
-            ind_pct_indirectos = st.number_input(
-                "Costos indirectos (%)",
-                min_value=0.0, max_value=30.0, value=5.0, step=0.5, key="ind_pct_indirectos")
-        else:
-            ind_costo_nave = 0
-            ind_costo_piso = 0
-            ind_pct_indirectos = 0.0
-
-        ind_demolicion_activa = st.checkbox(
-            "Incluir costo de demolición", value=False, key="ind_demolicion_activa")
-        if ind_demolicion_activa:
-            ind_costo_demolicion = st.number_input(
-                "Costo de demolición (USD)", 0, 5_000_000,
-                int(st.session_state.get("ind_costo_demolicion", 0)), 10_000,
-                key="ind_costo_demolicion")
-        else:
-            ind_costo_demolicion = 0
+            ind_demolicion_activa = st.checkbox(
+                "Incluir costo de demolición", value=False, key="ind_demolicion_activa")
+            if ind_demolicion_activa:
+                ind_costo_demolicion = st.number_input(
+                    "Costo de demolición (USD)", 0, 5_000_000,
+                    int(st.session_state.get("ind_costo_demolicion", 0)), 10_000,
+                    key="ind_costo_demolicion")
+            else:
+                ind_costo_demolicion = 0
 
         st.markdown("### INFORMACIÓN FINANCIERA")
 
@@ -12014,50 +11978,53 @@ with st.sidebar:
         run_industrial = st.button("GENERAR ANÁLISIS", use_container_width=True, type="primary")
 
         st.markdown("---")
-        st.markdown("### ELABORACIÓN DE PROPUESTA")
-        st.markdown(
-            '<div style="font-size:10px;color:rgba(184,144,74,0.75);background:rgba(184,144,74,0.07);'
-            'border-left:2px solid rgba(184,144,74,0.40);border-radius:4px;padding:7px 10px;margin-bottom:8px;">'
-            'Realiza primero el análisis para contar con el sustento técnico y financiero que respalde la propuesta.'
-            '</div>',
-            unsafe_allow_html=True
-        )
-        with st.expander("Estructura de Compra", expanded=False):
-            ind_prop_comprador = st.text_input(
-                "Comprador / Empresa", placeholder="Ej: Inversiones Logísticas SAC",
-                key="ind_prop_comprador")
+        with st.expander("📋 Elaboración de Propuesta", expanded=False):
+            st.markdown(
+                '<div style="font-size:10px;color:rgba(184,144,74,0.75);background:rgba(184,144,74,0.07);'
+                'border-left:2px solid rgba(184,144,74,0.40);border-radius:4px;padding:7px 10px;margin-bottom:8px;">'
+                'Realiza primero el análisis para contar con el sustento técnico y financiero que respalde la propuesta.'
+                '</div>',
+                unsafe_allow_html=True
+            )
+            ind_prop_tipo = st.selectbox("Tipo de propuesta", ["Compra", "Arrendamiento"],
+                                         key="ind_prop_tipo")
+            with st.expander("Estructura de Compra", expanded=False):
+                _tiene_opcion_ind = st.checkbox("Incluir opción de compra", value=False, key="ind_prop_opcion")
+                if _tiene_opcion_ind:
+                    _iop1, _iop2 = st.columns(2)
+                    ind_prop_dias_op = _iop1.number_input(
+                        "Plazo opción (días)", 1, 360, 60, 15, key="ind_prop_dias_op")
+                    ind_prop_pct_op  = _iop2.number_input(
+                        "Monto opción (% precio)", 0.0, 20.0, 2.0, 0.5,
+                        format="%.1f", key="ind_prop_pct_op")
+                else:
+                    ind_prop_dias_op, ind_prop_pct_op = 0, 0.0
+                st.caption("Estructura de pagos")
+                ind_prop_pct_minuta = st.number_input(
+                    "Pago a firma de minuta (%)", 0.0, 100.0, 30.0, 5.0,
+                    format="%.1f", key="ind_prop_pct_minuta")
+                ind_prop_cond_minuta = st.text_input(
+                    "Condición para la minuta",
+                    value="Aprobación del due diligence legal (30 días)",
+                    key="ind_prop_cond_minuta")
+                _ind_prop_saldo = round(100.0 - ind_prop_pct_minuta - ind_prop_pct_op, 1)
+                st.info(f"Saldo a escritura pública: **{_ind_prop_saldo:.1f}%**")
+                ind_prop_cond_escritura = st.text_input(
+                    "Condición para escritura pública",
+                    value="Entrega libre de cargas, servidumbres y ocupantes",
+                    key="ind_prop_cond_escritura")
+
             ind_prop_vendedor = st.text_input(
                 "Vendedor / Propietario", placeholder="Ej: Fam. García",
                 key="ind_prop_vendedor")
+            ind_prop_comprador = st.text_input(
+                "Comprador / Empresa", placeholder="Ej: Inversiones Logísticas SAC",
+                key="ind_prop_comprador")
             ind_prop_precio = st.number_input(
                 "Precio ofertado (USD)", 0, 100_000_000,
                 int(st.session_state.get("ind_costo_terreno") or 0), 50_000,
                 key="ind_prop_precio")
             st.markdown(f'<div style="font-size:11px;color:#B8904A;font-weight:600;margin-top:-6px;">= ${ind_prop_precio:,.0f} USD</div>', unsafe_allow_html=True)
-            _tiene_opcion_ind = st.checkbox("Incluir opción de compra", value=False, key="ind_prop_opcion")
-            if _tiene_opcion_ind:
-                _iop1, _iop2 = st.columns(2)
-                ind_prop_dias_op = _iop1.number_input(
-                    "Plazo opción (días)", 1, 360, 60, 15, key="ind_prop_dias_op")
-                ind_prop_pct_op  = _iop2.number_input(
-                    "Monto opción (% precio)", 0.0, 20.0, 2.0, 0.5,
-                    format="%.1f", key="ind_prop_pct_op")
-            else:
-                ind_prop_dias_op, ind_prop_pct_op = 0, 0.0
-            st.caption("Estructura de pagos")
-            ind_prop_pct_minuta = st.number_input(
-                "Pago a firma de minuta (%)", 0.0, 100.0, 30.0, 5.0,
-                format="%.1f", key="ind_prop_pct_minuta")
-            ind_prop_cond_minuta = st.text_input(
-                "Condición para la minuta",
-                value="Aprobación del due diligence legal (30 días)",
-                key="ind_prop_cond_minuta")
-            _ind_prop_saldo = round(100.0 - ind_prop_pct_minuta - ind_prop_pct_op, 1)
-            st.info(f"Saldo a escritura pública: **{_ind_prop_saldo:.1f}%**")
-            ind_prop_cond_escritura = st.text_input(
-                "Condición para escritura pública",
-                value="Entrega libre de cargas, servidumbres y ocupantes",
-                key="ind_prop_cond_escritura")
             ind_prop_plazo = st.number_input(
                 "Plazo de respuesta (días)", 1, 90, 15, 1, key="ind_prop_plazo")
             ind_prop_condiciones = st.text_area(
@@ -12320,16 +12287,21 @@ with st.sidebar:
 
         # ── ELABORACIÓN DE PROPUESTA (solo Compra) ────────
         if res_modo == "Compra":
-            st.markdown("### ELABORACIÓN DE PROPUESTA")
-            st.markdown(
-                '<div style="font-size:10px;color:rgba(184,144,74,0.75);background:rgba(184,144,74,0.07);'
-                'border-left:2px solid rgba(184,144,74,0.40);border-radius:4px;padding:7px 10px;margin-bottom:8px;">'
-                'Realiza primero el análisis para contar con el sustento técnico y financiero que respalde la propuesta.'
-                '</div>',
-                unsafe_allow_html=True
-            )
-            with st.expander("Estructura de la Oferta", expanded=False):
-                st.caption("Datos para preparar la carta de intención o propuesta al vendedor.")
+            with st.expander("📋 Elaboración de Propuesta", expanded=False):
+                st.markdown(
+                    '<div style="font-size:10px;color:rgba(184,144,74,0.75);background:rgba(184,144,74,0.07);'
+                    'border-left:2px solid rgba(184,144,74,0.40);border-radius:4px;padding:7px 10px;margin-bottom:8px;">'
+                    'Realiza primero el análisis para contar con el sustento técnico y financiero que respalde la propuesta.'
+                    '</div>',
+                    unsafe_allow_html=True
+                )
+                st.selectbox("Tipo de propuesta", ["Compra"], key="res_prop_tipo",
+                             disabled=True, help="En modo Compra de inmueble residencial")
+                with st.expander("Estructura de la Oferta", expanded=False):
+                    st.caption("Datos para preparar la carta de intención o propuesta al vendedor.")
+                    _res_po1, _res_po2 = st.columns(2)
+                    _res_po1.number_input("Opción de compra (%)", 0.0, 20.0, 5.0, 0.5, key="res_prop_opcion_pct")
+                    _res_po2.number_input("Minuta / contrato (%)", 0.0, 50.0, 20.0, 5.0, key="res_prop_minuta_pct")
                 _res_pv1, _res_pv2 = st.columns(2)
                 _res_pv1.text_input("Vendedor", placeholder="Nombre o empresa", key="res_prop_vendedor")
                 _res_pv2.text_input("Comprador", placeholder="Nombre o empresa", key="res_prop_comprador")
@@ -12338,9 +12310,6 @@ with st.sidebar:
                     max(1, int(res_precio * 0.95)), 5_000, format="%d",
                     key="res_prop_precio_ofertado",
                 )
-                _res_po1, _res_po2 = st.columns(2)
-                _res_po1.number_input("Opción de compra (%)", 0.0, 20.0, 5.0, 0.5, key="res_prop_opcion_pct")
-                _res_po2.number_input("Minuta / contrato (%)", 0.0, 50.0, 20.0, 5.0, key="res_prop_minuta_pct")
                 st.text_area(
                     "Condiciones especiales",
                     placeholder="Ej: sujeto a due diligence, inspección técnica, financiamiento bancario…",
