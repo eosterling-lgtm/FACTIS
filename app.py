@@ -179,7 +179,9 @@ def cargar_proyecto(ref) -> dict:
         sb = _get_supabase()
         if sb:
             try:
-                resp = sb.table("proyectos").select("datos").eq("id", ref._id).single().execute()
+                _owner = st.session_state.get("_username", "")
+                resp = sb.table("proyectos").select("datos") \
+                         .eq("id", ref._id).eq("usuario", _owner).single().execute()
                 return (resp.data or {}).get("datos") or {}
             except Exception:
                 pass
@@ -630,7 +632,10 @@ def calcular_industrial(inp: dict) -> dict:
     cuota_mensual  = cuota_terreno          + cuota_const
     pct_credito    = (monto_credito / costo_total * 100) if costo_total > 0 else 0
     plazo_anos     = max(plazo_terreno, plazo_const)
-    tasa_anual     = (tasa_terreno + tasa_const) / 2
+    # Promedio ponderado por monto de cada crédito (más preciso que promedio aritmético)
+    _mc_tot = monto_credito_terreno + monto_credito_const
+    tasa_anual = ((tasa_terreno * monto_credito_terreno + tasa_const * monto_credito_const) / _mc_tot
+                  if _mc_tot > 0 else (tasa_terreno + tasa_const) / 2)
 
     # Renta base sobre área techada (nave arrendable)
     renta_m2_mes = inp.get("renta_m2_mes", 0)
@@ -1030,12 +1035,11 @@ def _show_shared_view(token: str) -> None:
             pass
         if not proyecto:
             try:
-                # Fallback: token guardado dentro del JSONB datos
-                r2 = sb.table("proyectos").select("*").execute()
-                for row in (r2.data or []):
-                    if (row.get("datos") or {}).get("_share_token") == token:
-                        proyecto = row
-                        break
+                # Fallback: token guardado dentro del JSONB datos — filtrado en servidor
+                r2 = sb.table("proyectos").select("id,datos,tipo,nombre_proyecto,zona,creado_en,resumen") \
+                       .filter("datos->>_share_token", "eq", token).limit(1).execute()
+                if r2.data:
+                    proyecto = r2.data[0]
             except Exception:
                 pass
 
@@ -1150,7 +1154,25 @@ if _qt:
 # ═══════════════════════════════════════════════════════
 
 def _hash_pw(pw: str) -> str:
-    return hashlib.sha256(pw.encode()).hexdigest()
+    """Genera hash PBKDF2-HMAC-SHA256 con salt aleatorio. Formato: salt_hex:key_hex"""
+    import os as _os_pw, hmac as _hmac_pw
+    _salt = _os_pw.urandom(32)
+    _key  = hashlib.pbkdf2_hmac("sha256", pw.encode(), _salt, 100_000)
+    return _salt.hex() + ":" + _key.hex()
+
+def _verify_pw(stored: str, pw: str) -> bool:
+    """Verifica contraseña con soporte legacy (SHA-256) y actual (PBKDF2)."""
+    import hmac as _hmac_pw
+    if ":" in stored:
+        try:
+            _salt = bytes.fromhex(stored.split(":")[0])
+            _exp  = bytes.fromhex(stored.split(":")[1])
+            _act  = hashlib.pbkdf2_hmac("sha256", pw.encode(), _salt, 100_000)
+            return _hmac_pw.compare_digest(_act, _exp)
+        except Exception:
+            return False
+    # Legacy SHA-256 sin salt (backward compat — migrar actualizando secrets.toml)
+    return _hmac_pw.compare_digest(stored, hashlib.sha256(pw.encode()).hexdigest())
 
 def _get_users() -> dict:
     try:
@@ -1275,20 +1297,39 @@ def _show_login() -> None:
         password = st.text_input("Contraseña", type="password", placeholder="••••••••", key="_login_pw")
         submitted = st.form_submit_button("INGRESAR", use_container_width=True)
 
+    # Brute force protection
+    import time as _time_bf
+    _MAX_INTENTOS   = 5
+    _BLOQUEO_SEG    = 300
+    _bloqueado_hasta = st.session_state.get("_login_bloqueado_hasta", 0)
+    if _bloqueado_hasta > _time_bf.time():
+        _seg_restantes = int(_bloqueado_hasta - _time_bf.time())
+        st.error(f"Demasiados intentos fallidos. Intente en {_seg_restantes} segundos.")
+        st.stop()
+
     if submitted:
         users = _get_users()
         user_cfg = users.get(username.strip().lower())
-        if user_cfg and user_cfg.get("password") == _hash_pw(password):
+        if user_cfg and _verify_pw(user_cfg.get("password", ""), password):
             st.session_state["_authenticated"] = True
             st.session_state["_user_name"]     = user_cfg.get("name", username)
             st.session_state["_user_role"]     = user_cfg.get("role", "advisor")
             st.session_state["_username"]      = username.strip().lower()
+            st.session_state.pop("_login_intentos", None)
+            st.session_state.pop("_login_bloqueado_hasta", None)
             for _k in ("_login_pw", "_login_user"):
                 st.session_state.pop(_k, None)
             st.session_state["_auth_loading"] = True
             st.rerun()
         else:
-            st.error("Usuario o contraseña incorrectos.")
+            _intentos = st.session_state.get("_login_intentos", 0) + 1
+            st.session_state["_login_intentos"] = _intentos
+            if _intentos >= _MAX_INTENTOS:
+                st.session_state["_login_bloqueado_hasta"] = _time_bf.time() + _BLOQUEO_SEG
+                st.session_state.pop("_login_intentos", None)
+                st.error(f"Cuenta bloqueada por {_BLOQUEO_SEG // 60} minutos tras {_MAX_INTENTOS} intentos fallidos.")
+            else:
+                st.error(f"Usuario o contraseña incorrectos. Intentos restantes: {_MAX_INTENTOS - _intentos}")
 
     st.markdown(
         f'<div style="text-align:center;margin-top:32px;padding-top:20px;'
@@ -4656,7 +4697,8 @@ def generate_cabida(params: dict, config: dict) -> dict:
             "Inclúyelos en 'observaciones' marcados como 'BENEFICIO POTENCIAL — requiere verificación del usuario'."
         )
 
-    sugerencias_txt = f"\n\nNOTAS DEL ANALISTA:\n{config.get('sugerencias', '')}" if config.get("sugerencias") else ""
+    _sug_raw = (config.get("sugerencias") or "")[:500]
+    sugerencias_txt = f"\n\nNOTAS DEL ANALISTA (contexto adicional):\n{_sug_raw}" if _sug_raw.strip() else ""
 
     # Regla de colindancia — calcular programáticamente y sobreescribir pisos_max
     colind_izq = config.get("colindante_izq_pisos")
@@ -5516,7 +5558,8 @@ SEMÁFORO: verde=todo OK · amarillo=algún amarillo · rojo=cualquier rojo."""
     cross_note = ("Compara y cruza la información entre todos los documentos disponibles."
                   if len(docs_desc) > 1
                   else "Extrae toda la información relevante del documento disponible.")
-    sug_note = f"\n\nInstrucciones adicionales del analista:\n{sugerencias.strip()}" if sugerencias and sugerencias.strip() else ""
+    _sug_s = (sugerencias or "").strip()[:500]
+    sug_note = f"\n\nInstrucciones adicionales del analista (contexto):\n{_sug_s}" if _sug_s else ""
     user_prompt = (
         f"Analiza los siguientes documentos de un inmueble en Lima, Perú:\n"
         f"{chr(10).join(docs_desc)}\n\n{cross_note}{sug_note}\n\n"
@@ -5774,7 +5817,8 @@ SEMÁFORO LEGAL: VERDE=sin cargas activas, propietarios claros · AMARILLO=carga
 SEMÁFORO GLOBAL: el más restrictivo entre técnico y legal. Si un dato no existe usa null."""
 
     # Mensaje dinámico — datos específicos del proyecto
-    sug_note_ind = f"\n\nInstrucciones adicionales del analista:\n{sugerencias.strip()}" if sugerencias and sugerencias.strip() else ""
+    _sug_ind = (sugerencias or "").strip()[:500]
+    sug_note_ind = f"\n\nInstrucciones adicionales del analista (contexto):\n{_sug_ind}" if _sug_ind else ""
     user_prompt_ind = (
         f"Analiza los siguientes documentos de un inmueble industrial/logístico en Lima, Perú:\n"
         f"{chr(10).join(docs_desc)}\n\n"
@@ -5840,11 +5884,19 @@ def calcular_financiero(cabida: dict, fin: dict, zona: str) -> dict:
     c_gerenciamiento  = c_construccion * 0.05    # Gerenciamiento inmobiliario: 5% costo construcción
     c_ventas_marketing = ing_brutos * 0.05       # Ventas y marketing consolidado: 5% ingresos
 
+    # ── Meses de obra con override (debe estar ANTES de c_financiero) ──────────
+    _miv            = fin.get("modo_mivivienda", False)
+    vel             = m.get("velocidad_venta", 1.0) * (1.5 if _miv else 1.0)
+    vel             = min(vel, 4.0)
+    n_unidades      = cabida.get("total_unidades", 0)
+    n_pisos         = cabida.get("num_pisos", 7)
+    _obra_auto      = 24 if n_pisos > 20 else (12 if n_pisos <= 5 else 16)
+    meses_obra      = int(fin.get("meses_obra_override") or _obra_auto)
+    meses_obra      = max(1, min(meses_obra, 60))
+
     # ── Financiamiento (75% del costo construcción × tasa × período obra) ─
-    # Refleja línea de crédito constructor estándar Lima: ~75% del costo de obra
-    _n_pisos_prelim  = cabida.get("num_pisos", 7)
-    _meses_obra_prel = 24 if _n_pisos_prelim > 20 else (12 if _n_pisos_prelim <= 5 else 16)
-    c_financiero   = c_construccion * 0.75 * fin.get("tasa_financ", 9.0) / 100 * (_meses_obra_prel / 12)
+    # Usa meses_obra ya con override aplicado — línea de crédito constructor estándar Lima
+    c_financiero   = c_construccion * 0.75 * fin.get("tasa_financ", 9.0) / 100 * (meses_obra / 12)
 
     # ── Totales ─────────────────────────────────────────
     c_sin_financ = (c_terreno_total + c_construccion + c_arq + c_esp + c_factib +
@@ -5880,15 +5932,6 @@ def calcular_financiero(cabida: dict, fin: dict, zona: str) -> dict:
 
     # TIT: Tasa de Incidencia del Terreno (professional KPI)
     tit_pct         = round(c_terreno_base / ing_brutos * 100, 1) if ing_brutos > 0 else 0
-
-    _miv            = fin.get("modo_mivivienda", False)
-    vel             = m.get("velocidad_venta", 1.0) * (1.5 if _miv else 1.0)
-    vel             = min(vel, 4.0)
-    n_unidades      = cabida.get("total_unidades", 0)
-    n_pisos         = cabida.get("num_pisos", 7)
-    _obra_auto      = 24 if n_pisos > 20 else (12 if n_pisos <= 5 else 16)
-    meses_obra      = int(fin.get("meses_obra_override") or _obra_auto)
-    meses_obra      = max(1, min(meses_obra, 60))
     _meses_venta_raw = round(n_unidades / vel) if (vel and n_unidades) else 0
     # Cap plazo de ventas al window real del proyecto: obra + 6 m post-obra
     meses_venta      = min(_meses_venta_raw, meses_obra + 6)
@@ -9524,6 +9567,7 @@ def generar_propuesta_html(
     NAV  = "#1E2D3D"
     GOLD = "#B8904A"
     tc   = TIPO_CAMBIO
+    _esc = _html_esc.escape  # escape helper para campos de usuario
 
     precio_pen = round(precio_oferta * tc, 0) if moneda_oferta == "USD" else precio_oferta
     precio_usd = precio_oferta if moneda_oferta == "USD" else round(precio_oferta / tc, 0)
@@ -9629,7 +9673,7 @@ def generar_propuesta_html(
                   USD {_monto_minuta:,.0f} ({pct_minuta:.0f}%)
                 </td>
                 <td style="padding:9px 12px;border:1px solid #E0DDD8;font-size:11px;color:#555;">
-                  A la firma de la Minuta de Compraventa ante Notario. Condición: <strong>{condicion_minuta}</strong>.
+                  A la firma de la Minuta de Compraventa ante Notario. Condición: <strong>{_esc(condicion_minuta)}</strong>.
                 </td>
               </tr>"""
         _num += 1
@@ -9640,7 +9684,7 @@ def generar_propuesta_html(
                   USD {_monto_escritura:,.0f} ({_pct_escritura:.0f}%)
                 </td>
                 <td style="padding:9px 12px;border:1px solid #E0DDD8;font-size:11px;color:#555;">
-                  A la firma de la Escritura Pública e inscripción en SUNARP. Condición: <strong>{condicion_escritura}</strong>.
+                  A la firma de la Escritura Pública e inscripción en SUNARP. Condición: <strong>{_esc(condicion_escritura)}</strong>.
                 </td>
               </tr>"""
 
@@ -9710,7 +9754,7 @@ def generar_propuesta_html(
             "Sujeto a due diligence legal (SUNARP) y técnico de 30 días calendario"
         )
     condiciones_html = "".join(
-        f'<li style="margin-bottom:5px;font-size:11px;color:#444;">{c.strip()}</li>'
+        f'<li style="margin-bottom:5px;font-size:11px;color:#444;">{_esc(c.strip())}</li>'
         for c in _cond_src.split("\n") if c.strip()
     ) or '<li style="font-size:11px;color:#888;">—</li>'
 
@@ -9778,7 +9822,7 @@ def generar_propuesta_html(
   <!-- Destinatario -->
   <div style="margin-bottom:24px;">
     <div style="font-size:12px;font-weight:600;color:{NAV};">Señor(es)</div>
-    <div style="font-size:13px;font-weight:700;color:{NAV};margin-top:2px;">{propietario or propietario_reg}</div>
+    <div style="font-size:13px;font-weight:700;color:{NAV};margin-top:2px;">{_esc(propietario or propietario_reg)}</div>
     <div style="font-size:11px;color:#666;margin-top:2px;">Propietario(s) del inmueble</div>
     <div style="margin-top:12px;font-size:11px;color:#444;line-height:1.7;">
       Por medio de la presente, <strong>Osterling Advisory</strong> — en representación de su cliente —
@@ -9853,8 +9897,8 @@ def generar_propuesta_html(
     </p>
     <div style="display:flex;justify-content:space-between;align-items:flex-end;">
       <div>
-        <div style="font-size:12px;font-weight:700;color:{NAV};">{representante}</div>
-        <div style="font-size:10px;color:#666;">{cargo}</div>
+        <div style="font-size:12px;font-weight:700;color:{NAV};">{_esc(representante)}</div>
+        <div style="font-size:10px;color:#666;">{_esc(cargo)}</div>
         <div style="font-size:10px;color:{GOLD};margin-top:2px;">Osterling Advisory</div>
       </div>
       <div style="text-align:right;font-size:9px;color:#AAA;">
