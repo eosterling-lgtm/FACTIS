@@ -4081,25 +4081,23 @@ def _cargar_mercado_sheet() -> tuple:
     except Exception:
         return {}, _tc_secrets
 
-def get_mercado() -> dict:
-    """MERCADO actualizado: Sheet > hardcoded. Fusiona para preservar distritos sin Sheet."""
-    global TIPO_CAMBIO
+def get_mercado() -> tuple:
+    """MERCADO actualizado: Sheet > hardcoded. Retorna (mercado_dict, tipo_cambio) sin mutar globals."""
     live, tc = _cargar_mercado_sheet()
-    TIPO_CAMBIO = tc
     if not live:
-        return MERCADO
+        return MERCADO, tc
     merged = dict(MERCADO)
     for distrito, datos in live.items():
         if distrito in merged:
             merged[distrito] = {**merged[distrito], **datos}
         else:
             merged[distrito] = datos
-    return merged
+    return merged, tc
 
 # Tipo de cambio S./USD — se actualiza desde Sheet (fila CONFIG) o secrets.toml
 TIPO_CAMBIO = float((st.secrets.get("mercado") or {}).get("tipo_cambio", 3.45))
 # Sobrescribe MERCADO con versión live (Sheet > hardcoded, con fallback automático)
-MERCADO = get_mercado()
+MERCADO, TIPO_CAMBIO = get_mercado()
 
 # ═══════════════════════════════════════════════════════
 # FONDO MIVIVIENDA — Parámetros 2025
@@ -9183,26 +9181,6 @@ def generar_informe_industrial_pdf(r: dict, factibilidad, fecha: str, altura_nav
     else:
         kpi4 = _kpi_cell("COSTO TOTAL PROYECTO", f"${_ctot:,.0f}", "terreno + construcción")
 
-    def _kpi_block(items):
-        return Table(items, colWidths=[W*0.25]*4,
-                     style=TableStyle([
-                         ("BACKGROUND",    (0,0), (-1,-1), WHITE),
-                         ("BOX",           (0,0), (0,-1),  0.5, BORD),
-                         ("BOX",           (1,0), (1,-1),  0.5, BORD),
-                         ("BOX",           (2,0), (2,-1),  0.5, BORD),
-                         ("BOX",           (3,0), (3,-1),  0.5, BORD),
-                         ("LINEABOVE",     (0,0), (0,0),   2, GOLD),
-                         ("LINEABOVE",     (1,0), (1,0),   2, GOLD),
-                         ("LINEABOVE",     (2,0), (2,0),   2, GOLD),
-                         ("LINEABOVE",     (3,0), (3,0),   2, GOLD),
-                         ("TOPPADDING",    (0,0), (-1,-1), 8),
-                         ("BOTTOMPADDING", (0,0), (-1,-1), 8),
-                         ("LEFTPADDING",   (0,0), (-1,-1), 8),
-                         ("RIGHTPADDING",  (0,0), (-1,-1), 6),
-                         ("VALIGN",        (0,0), (-1,-1), "TOP"),
-                         ("INNERGRID",     (0,0), (-1,-1), 0,   WHITE),
-                     ]))
-
     # Each KPI column is a nested 3-row table (label, value, note)
     def _kpi_col_tbl(items):
         return Table([[p] for p in items],
@@ -13310,17 +13288,34 @@ elif run:
     # Recopilar documentos normativos adicionales para extract_parameters
     # NOTA: la partida registral NO se incluye aquí — es documento legal, no normativo.
     # La partida se procesa exclusivamente en analizar_legal vía st.session_state.partida_bytes.
+    # Los bytes se leen y cachean en session_state usando huella nombre:tamaño para
+    # evitar race condition (UploadedFile en EOF si se presionan dos botones en el mismo render).
     extra_docs = []
     if pdf_plano:
-        for f in (pdf_plano if isinstance(pdf_plano, list) else [pdf_plano]):
-            extra_docs.append(f.read())
+        _plano_list = pdf_plano if isinstance(pdf_plano, list) else [pdf_plano]
+        for f in _plano_list:
+            _fp_key = f"_fp_plano_{f.name}"
+            _fs = f"{f.name}:{f.size}"
+            if st.session_state.get(_fp_key) != _fs:
+                st.session_state[f"_bytes_plano_{f.name}"] = f.read()
+                st.session_state[_fp_key] = _fs
+            _b = st.session_state.get(f"_bytes_plano_{f.name}") or b""
+            if _b:
+                extra_docs.append(_b)
     if pdf_puhr:
         _puhr_bytes = st.session_state.get("puhr_bytes") or b""
         if _puhr_bytes:
             extra_docs.append(_puhr_bytes)
     if pdf_norms:
         for f in pdf_norms:
-            extra_docs.append(f.read())
+            _fn_key = f"_fp_norm_{f.name}"
+            _fs = f"{f.name}:{f.size}"
+            if st.session_state.get(_fn_key) != _fs:
+                st.session_state[f"_bytes_norm_{f.name}"] = f.read()
+                st.session_state[_fn_key] = _fs
+            _b = st.session_state.get(f"_bytes_norm_{f.name}") or b""
+            if _b:
+                extra_docs.append(_b)
 
     _cert_bytes = st.session_state.get("cert_bytes") or b""
     if not _cert_bytes:
@@ -14346,7 +14341,21 @@ if tipo_op == "Proyecto Inmobiliario":
                         result["resumen"]["max_exposicion"] = _tir_exp
                 except Exception:
                     pass
-                st.session_state.financ = result
+                # Commit: solo al primer cálculo o cuando el usuario confirma explícitamente.
+                # Slider reruns actualizan el display (result local) sin tocar el estado
+                # comprometido que usa el PDF y guardar_proyecto.
+                if st.session_state.financ is None:
+                    st.session_state.financ = result
+                _fin_committed = st.session_state.financ is not None and (
+                    (st.session_state.financ.get("resumen", {}).get("tir_anual_pct"))
+                    != result.get("resumen", {}).get("tir_anual_pct")
+                )
+                if _fin_committed:
+                    st.info("⚡ Los sliders reflejan un escenario diferente al PDF guardado. "
+                            "Presiona **Confirmar escenario** para actualizar.")
+                    if st.button("Confirmar escenario financiero", key="btn_financ_commit"):
+                        st.session_state.financ = result
+                        st.rerun()
                 r = result.get("resumen", {})
 
                 # ── Métricas clave destacadas ─────────────
