@@ -10160,318 +10160,45 @@ f'<div style="font-size:9px;color:#9A9080;letter-spacing:2px;text-transform:uppe
 </div></body></html>"""
 
 
-def generar_informe_industrial_pdf(r: dict, factibilidad, fecha: str, altura_nave: float = 0) -> bytes:
-    from reportlab.lib.pagesizes import A4
-    from reportlab.lib import colors
-    from reportlab.lib.units import mm
-    from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-    from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_RIGHT
-    from reportlab.platypus import (SimpleDocTemplate, Paragraph, Spacer, Table,
-                                    TableStyle, HRFlowable, KeepTogether)
-    import io
 
-    NAV   = colors.HexColor("#1E2D3D")
-    GOLD  = colors.HexColor("#B8904A")
-    CREAM = colors.HexColor("#F8F5F0")
-    BORD  = colors.HexColor("#D8D4CC")
-    GRAY  = colors.HexColor("#7A7268")
-    BLUE  = colors.HexColor("#4A90C4")
-    WHITE = colors.white
+def _build_industrial_html(r: dict, factibilidad, fecha: str, altura_nave: float = 0) -> str:
+    import html as _he
 
-    r = r or {}
-    buf = io.BytesIO()
-    doc = SimpleDocTemplate(buf, pagesize=A4,
-                            leftMargin=20*mm, rightMargin=20*mm,
-                            topMargin=20*mm, bottomMargin=20*mm)
+    def _e(s):
+        return _he.escape(str(s or ""))
 
-    sty = getSampleStyleSheet()
-    def _s(name, **kw):
-        return ParagraphStyle(name, parent=sty["Normal"], **kw)
+    def _fmt(v):
+        v = v or 0
+        if abs(v) >= 1_000_000:
+            return f"${v/1_000_000:.2f}M"
+        return f"${v:,.0f}"
 
-    S_body  = _s("ibody",  fontSize=9,  leading=13, textColor=NAV)
-    S_small = _s("ismall", fontSize=8,  leading=11, textColor=GRAY)
-    S_label = _s("ilabel", fontSize=8,  leading=10, textColor=NAV, fontName="Helvetica-Bold")
-    S_gray  = _s("igray",  fontSize=9,  leading=13, textColor=GRAY)
-    S_gold  = _s("igold",  fontSize=9,  leading=13, textColor=GOLD, fontName="Helvetica-Bold")
-    S_sec   = _s("isec",   fontSize=7,  leading=9,  textColor=NAV, fontName="Helvetica-Bold",
-                 charSpace=2, spaceAfter=4)
-    S_note  = _s("inote",  fontSize=8,  leading=11, textColor=GRAY, fontName="Helvetica-Oblique")
-
-    W = doc.width
-    story = []
-
-    # ── Helpers ──────────────────────────────────────────────────────────────────
-    def _section_items(txt):
-        """Returns the section-title flowables as a list (for use inside KeepTogether)."""
-        return [
-            HRFlowable(width=W, thickness=0.75, color=GOLD, spaceAfter=3),
-            Paragraph((txt or "").upper(), S_sec),
-        ]
-
-    def _section_title(txt):
-        return KeepTogether(_section_items(txt))
-
-    def _kt(*args):
-        """Flatten args (lists are unpacked) and wrap in KeepTogether."""
-        flat = []
-        for a in args:
-            if isinstance(a, list):
-                flat.extend(a)
-            else:
-                flat.append(a)
-        return KeepTogether(flat)
-
-    def _data_table(header_row, data_rows, col_widths, bold_last=False):
-        """3-column data table with NAV header and alternating CREAM/WHITE rows.
-        splitByRow=0 keeps every row on the same page as the header."""
-        hdr = [Paragraph(h, _s(f"dh{i}", fontSize=7, leading=9, textColor=WHITE,
-                                fontName="Helvetica-Bold", alignment=(TA_RIGHT if i > 0 else TA_LEFT)))
-               for i, h in enumerate(header_row)]
-        tbl_data = [hdr]
-        for row in data_rows:
-            tbl_data.append([Paragraph(str(c), S_body) for c in row])
-        ts = TableStyle([
-            ("BACKGROUND",    (0, 0), (-1, 0),  NAV),
-            ("LINEBELOW",     (0, 0), (-1, -1), 0.4, BORD),
-            ("TOPPADDING",    (0, 0), (-1, -1), 5),
-            ("BOTTOMPADDING", (0, 0), (-1, -1), 5),
-            ("LEFTPADDING",   (0, 0), (-1, -1), 7),
-            ("RIGHTPADDING",  (0, 0), (-1, -1), 7),
-            ("ALIGN",         (1, 0), (-1, -1), "RIGHT"),
-            ("VALIGN",        (0, 0), (-1, -1), "MIDDLE"),
-        ])
-        for i in range(len(data_rows)):
-            bg = CREAM if i % 2 == 0 else WHITE
-            ts.add("BACKGROUND", (0, i + 1), (-1, i + 1), bg)
-        if bold_last and data_rows:
-            last = len(data_rows)
-            ts.add("FONTNAME",   (0, last), (-1, last), "Helvetica-Bold")
-            ts.add("BACKGROUND", (0, last), (-1, last), colors.HexColor("#E8E4DC"))
-        return Table(tbl_data, colWidths=col_widths, style=ts, splitByRow=0)
-
-    # ── 1. Header ─────────────────────────────────────────────────────────────────
-    tipo_nave   = r.get("tipo_nave", "—")
+    # ── Extraer campos del dict ───────────────────────────────────────────────────
+    tipo_nave    = r.get("tipo_nave", "—")
     zonificacion = r.get("zonificacion", "—")
-    uso         = r.get("uso", "—")
+    uso          = r.get("uso", "—")
+    act_cat      = r.get("actividad_categoria", "") or ""
+    act_desc     = r.get("actividad_descripcion", "") or ""
 
-    hdr_left = [
-        [Paragraph("OSTERLING ADVISORY", _s("hl1", fontSize=7, leading=9, textColor=GOLD,
-                                             fontName="Helvetica-Bold", charSpace=3))],
-        [Paragraph("SOLUM", _s("hl2", fontSize=20, leading=22, textColor=NAV,
-                                fontName="Helvetica-Bold"))],
-        [Paragraph("ANÁLISIS DE INMUEBLES INDUSTRIALES Y LOGÍSTICOS", _s("hl3", fontSize=6, leading=8,
-                                                                          textColor=GRAY, charSpace=1.5))],
-    ]
-    badge_tbl = Table(
-        [[Paragraph("ANÁLISIS INDUSTRIAL", _s("badge", fontSize=7, leading=9,
-                                               textColor=WHITE, fontName="Helvetica-Bold",
-                                               charSpace=1.5, alignment=TA_CENTER))]],
-        colWidths=[W * 0.38],
-        style=TableStyle([("BACKGROUND",    (0,0), (-1,-1), GOLD),
-                          ("TOPPADDING",    (0,0), (-1,-1), 5),
-                          ("BOTTOMPADDING", (0,0), (-1,-1), 5),
-                          ("LEFTPADDING",   (0,0), (-1,-1), 8),
-                          ("RIGHTPADDING",  (0,0), (-1,-1), 8)])
-    )
-    hdr_right = [
-        [Paragraph(f"{fecha}  ·  Lima, Perú", S_small)],
-        [Paragraph("eosterling@grupoosterling.com", S_small)],
-        [badge_tbl],
-    ]
-    tbl_hdr = Table(
-        [[Table(hdr_left,  colWidths=[W*0.55],
-                style=TableStyle([("LEFTPADDING",(0,0),(-1,-1),0),("TOPPADDING",(0,0),(-1,-1),2),
-                                   ("BOTTOMPADDING",(0,0),(-1,-1),2)])),
-          Table(hdr_right, colWidths=[W*0.45],
-                style=TableStyle([("ALIGN",(0,0),(-1,-1),"RIGHT"),("LEFTPADDING",(0,0),(-1,-1),0),
-                                   ("TOPPADDING",(0,0),(-1,-1),2),("BOTTOMPADDING",(0,0),(-1,-1),2)]))]],
-        colWidths=[W*0.55, W*0.45],
-        style=TableStyle([("BOTTOMPADDING",(0,0),(-1,-1),8),("TOPPADDING",(0,0),(-1,-1),0)])
-    )
-    story.append(tbl_hdr)
-    story.append(HRFlowable(width=W, thickness=1, color=GOLD, spaceAfter=6))
+    _at   = r.get("area_terreno", 0) or 0
+    _ct   = r.get("costo_terreno", 0) or 0
+    _cta  = r.get("costo_terreno_alcabala", 0) or 0
+    _rna  = r.get("renta_neta_anual", 0) or 0
+    _pay  = r.get("payback_anos", 0) or 0
+    _cpm  = r.get("costo_por_m2_nave", 0) or 0
+    _ctot = r.get("costo_total", 0) or 0
+    _alc  = r.get("alcabala", 0) or 0
+    _an   = r.get("area_nave", 0) or 0
+    _al   = r.get("area_libre", 0) or 0
+    _cnm2 = r.get("costo_nave_m2", 0) or 0
+    _cnt  = r.get("costo_nave_total", 0) or 0
+    _cplm2= r.get("costo_piso_libre_m2", 0) or 0
+    _cpl  = r.get("costo_pisos_libres", 0) or 0
+    _sc   = r.get("soft_costs", 0) or 0
+    _pind = r.get("pct_indirectos", 5) or 5
+    _ccs  = r.get("costo_construccion_soft", 0) or 0
 
-    # Title row
-    title_tbl = Table(
-        [[Paragraph("Análisis Logístico / Industrial",
-                    _s("itit", fontSize=14, leading=17, textColor=NAV, fontName="Helvetica-Bold")),
-          Paragraph(f"{tipo_nave}  ·  {zonificacion}  ·  {uso}",
-                    _s("isub2", fontSize=9, leading=12, textColor=GRAY, alignment=TA_RIGHT))]],
-        colWidths=[W*0.58, W*0.42],
-        style=TableStyle([("VALIGN",(0,0),(-1,-1),"MIDDLE"),
-                          ("LEFTPADDING",(0,0),(-1,-1),0),("RIGHTPADDING",(0,0),(-1,-1),0),
-                          ("TOPPADDING",(0,0),(-1,-1),4),("BOTTOMPADDING",(0,0),(-1,-1),6)])
-    )
-    story.append(title_tbl)
-    story.append(Spacer(1, 4*mm))
-
-    # ── 2. Actividad ──────────────────────────────────────────────────────────────
-    act_cat  = r.get("actividad_categoria", "") or ""
-    act_desc = r.get("actividad_descripcion", "") or ""
-    if act_cat or act_desc:
-        act_inner = []
-        act_inner.append(Paragraph("ACTIVIDAD A REALIZAR",
-                                   _s("alab", fontSize=7, leading=9, textColor=GOLD,
-                                      fontName="Helvetica-Bold", charSpace=2)))
-        if act_cat:
-            act_inner.append(Paragraph(act_cat,
-                                        _s("acat", fontSize=10, leading=13, textColor=NAV,
-                                           fontName="Helvetica-Bold")))
-        if act_desc:
-            act_inner.append(Paragraph(act_desc, S_gray))
-        act_inner.append(Paragraph(f"Zonificación: {zonificacion}  ·  RNE A.060", S_small))
-        act_tbl = Table(
-            [[act_inner]],
-            colWidths=[W],
-            style=TableStyle([
-                ("BACKGROUND",   (0,0), (-1,-1), CREAM),
-                ("LINEBEFORE",   (0,0), (0,-1),  3, GOLD),
-                ("TOPPADDING",   (0,0), (-1,-1), 8),
-                ("BOTTOMPADDING",(0,0), (-1,-1), 8),
-                ("LEFTPADDING",  (0,0), (-1,-1), 10),
-                ("RIGHTPADDING", (0,0), (-1,-1), 8),
-            ])
-        )
-        story.append(act_tbl)
-        story.append(Spacer(1, 4*mm))
-
-    # ── 3. Indicadores Clave ──────────────────────────────────────────────────────
-
-    _at  = r.get("area_terreno", 0) or 0
-    _ct  = r.get("costo_terreno", 0) or 0
-    _cta = r.get("costo_terreno_alcabala", 0) or 0
-    _rna = r.get("renta_neta_anual", 0) or 0
-    _pay = r.get("payback_anos", 0) or 0
-    _cpm = r.get("costo_por_m2_nave", 0) or 0
-    _ctot= r.get("costo_total", 0) or 0
-
-    def _kpi_cell(label, value, note):
-        return [
-            Paragraph(label, _s(f"kl{label[:4]}", fontSize=7, leading=9, textColor=GRAY,
-                                 fontName="Helvetica-Bold", charSpace=1.5)),
-            Paragraph(value, _s(f"kv{label[:4]}", fontSize=16, leading=19, textColor=NAV,
-                                 fontName="Helvetica-Bold")),
-            Paragraph(note,  _s(f"kn{label[:4]}", fontSize=7, leading=9,  textColor=GRAY)),
-        ]
-
-    kpi1 = _kpi_cell("COSTO TOTAL TERRENO", f"${_cta:,.0f}", "incl. alcabala")
-    _cpm_terreno = (_ct / _at) if _at > 0 else 0
-    kpi2 = _kpi_cell("COSTO POR m² TERRENO", f"${_cpm_terreno:,.0f}", "USD/m²")
-    if _rna > 0 and _cta > 0:
-        kpi3 = _kpi_cell("YIELD SOBRE TERRENO", f"{(_rna/_cta*100):.1f}%",
-                          "renta neta anual / costo terreno")
-    else:
-        kpi3 = _kpi_cell("COSTO POR m² NAVE", f"${_cpm:,.0f}", "costo total / m² nave")
-    if _pay > 0:
-        kpi4 = _kpi_cell("PAYBACK", f"{_pay:.1f} años", "sobre costo total proyecto")
-    else:
-        kpi4 = _kpi_cell("COSTO TOTAL PROYECTO", f"${_ctot:,.0f}", "terreno + construcción")
-
-    # Each KPI column is a nested 3-row table (label, value, note)
-    def _kpi_col_tbl(items):
-        return Table([[p] for p in items],
-                     colWidths=[W*0.25 - 16],
-                     style=TableStyle([
-                         ("LEFTPADDING",   (0,0), (-1,-1), 0),
-                         ("RIGHTPADDING",  (0,0), (-1,-1), 0),
-                         ("TOPPADDING",    (0,0), (-1,-1), 2),
-                         ("BOTTOMPADDING", (0,0), (-1,-1), 2),
-                     ]))
-
-    kpi_row = Table(
-        [[_kpi_col_tbl(kpi1), _kpi_col_tbl(kpi2), _kpi_col_tbl(kpi3), _kpi_col_tbl(kpi4)]],
-        colWidths=[W*0.25]*4,
-        style=TableStyle([
-            ("BOX",        (0,0), (0,0), 0.5, BORD),
-            ("BOX",        (1,0), (1,0), 0.5, BORD),
-            ("BOX",        (2,0), (2,0), 0.5, BORD),
-            ("BOX",        (3,0), (3,0), 0.5, BORD),
-            ("LINEABOVE",  (0,0), (0,0), 2,   GOLD),
-            ("LINEABOVE",  (1,0), (1,0), 2,   GOLD),
-            ("LINEABOVE",  (2,0), (2,0), 2,   GOLD),
-            ("LINEABOVE",  (3,0), (3,0), 2,   GOLD),
-            ("TOPPADDING", (0,0), (-1,-1), 8),
-            ("BOTTOMPADDING",(0,0),(-1,-1), 8),
-            ("LEFTPADDING",(0,0), (-1,-1), 8),
-            ("RIGHTPADDING",(0,0),(-1,-1), 6),
-            ("BACKGROUND", (0,0), (-1,-1), WHITE),
-            ("VALIGN",     (0,0), (-1,-1), "TOP"),
-        ])
-    )
-    story.append(_kt(_section_items("Indicadores Clave"), Spacer(1, 4*mm), kpi_row))
-    story.append(Spacer(1, 10*mm))
-
-    # ── 4. Estructura de Costos ───────────────────────────────────────────────────
-    _alc   = r.get("alcabala", 0) or 0
-    _an    = r.get("area_nave", 0) or 0
-    _al    = r.get("area_libre", 0) or 0
-    _cnm2  = r.get("costo_nave_m2", 0) or 0
-    _cnt   = r.get("costo_nave_total", 0) or 0
-    _cplm2 = r.get("costo_piso_libre_m2", 0) or 0
-    _cpl   = r.get("costo_pisos_libres", 0) or 0
-    _sc    = r.get("soft_costs", 0) or 0
-    _pind  = r.get("pct_indirectos", 5) or 5
-    _ccs   = r.get("costo_construccion_soft", 0) or 0
-    _ctot_safe = _ctot if _ctot > 0 else 1
-
-    def _pct(v):
-        return f"{v/_ctot_safe*100:.1f}%"
-
-    altura_str = f"  ·  {altura_nave:.0f}m al hombro" if altura_nave and altura_nave > 0 else ""
-
-    terreno_rows = [
-        ["Terreno", f"${_ct:,.0f}", _pct(_ct)],
-        ["Alcabala (3%)", f"${_alc:,.0f}", _pct(_alc)],
-        ["TOTAL TERRENO", f"${_cta:,.0f}", _pct(_cta)],
-    ]
-    const_rows = [
-        [f"Nave techada  {_an:,.0f} m²  ×  ${_cnm2:,.0f}/m²{altura_str}",
-         f"${_cnt:,.0f}", _pct(_cnt)],
-        [f"Piso descubierto / patios  {_al:,.0f} m²  ×  ${_cplm2:,.0f}/m²",
-         f"${_cpl:,.0f}", _pct(_cpl)],
-        [f"Costos indirectos ({_pind:.0f}%)",
-         f"${_sc:,.0f}", _pct(_sc)],
-        ["TOTAL CONSTRUCCIÓN", f"${_ccs:,.0f}", _pct(_ccs)],
-    ]
-    total_tbl = Table(
-        [[Paragraph("COSTO TOTAL PROYECTO (A + B)",
-                    _s("totlbl", fontSize=8, leading=10, textColor=WHITE,
-                       fontName="Helvetica-Bold")),
-          Paragraph(f"${_ctot:,.0f}",
-                    _s("totval", fontSize=9, leading=11, textColor=GOLD,
-                       fontName="Helvetica-Bold", alignment=TA_RIGHT)),
-          Paragraph("100%",
-                    _s("totpct", fontSize=8, leading=10, textColor=WHITE,
-                       alignment=TA_RIGHT))]],
-        colWidths=[W*0.55, W*0.25, W*0.20],
-        splitByRow=0,
-        style=TableStyle([
-            ("BACKGROUND",    (0,0), (-1,-1), NAV),
-            ("TOPPADDING",    (0,0), (-1,-1), 7),
-            ("BOTTOMPADDING", (0,0), (-1,-1), 7),
-            ("LEFTPADDING",   (0,0), (-1,-1), 7),
-            ("RIGHTPADDING",  (0,0), (-1,-1), 7),
-            ("ALIGN",         (1,0), (-1,-1), "RIGHT"),
-            ("VALIGN",        (0,0), (-1,-1), "MIDDLE"),
-        ])
-    )
-    story.append(_kt(
-        _section_items("Estructura de Costos"),
-        Spacer(1, 4*mm),
-        Paragraph("A  ·  TERRENO", _s("subA", fontSize=8, leading=10, textColor=GOLD, fontName="Helvetica-Bold")),
-        Spacer(1, 2*mm),
-        _data_table(["Concepto", "Monto USD", "% Total"], terreno_rows, [W*0.55, W*0.25, W*0.20], bold_last=True),
-        Spacer(1, 5*mm),
-        Paragraph("B  ·  CONSTRUCCIÓN E IMPLEMENTACIÓN", _s("subB", fontSize=8, leading=10, textColor=BLUE, fontName="Helvetica-Bold")),
-        Spacer(1, 2*mm),
-        _data_table(["Concepto", "Monto USD", "% Total"], const_rows, [W*0.55, W*0.25, W*0.20], bold_last=True),
-        Spacer(1, 4*mm),
-        total_tbl,
-    ))
-    story.append(Spacer(1, 10*mm))
-
-    # ── 5. Financiamiento ────────────────────────────────────────────────────────
-
+    # Financiamiento terreno
     _cpt  = r.get("capital_propio_terreno", 0) or 0
     _mct  = r.get("monto_credito_terreno", 0) or 0
     _qut  = r.get("cuota_terreno", 0) or 0
@@ -10479,6 +10206,7 @@ def generar_informe_industrial_pdf(r: dict, factibilidad, fecha: str, altura_nav
     _tast = r.get("tasa_terreno", 0) or 0
     _plzt = r.get("plazo_terreno", 0) or 0
 
+    # Financiamiento construcción
     _cpc  = r.get("capital_propio_const", 0) or 0
     _mcc  = r.get("monto_credito_const", 0) or 0
     _quc  = r.get("cuota_const", 0) or 0
@@ -10486,221 +10214,767 @@ def generar_informe_industrial_pdf(r: dict, factibilidad, fecha: str, altura_nav
     _tasc = r.get("tasa_const", 0) or 0
     _plzc = r.get("plazo_const", 0) or 0
 
-    def _fin_inner_rows(cap, cred, cuota, dp_pct, tasa, plazo, border_color):
-        rows_data = [
-            [Paragraph("Downpayment",    S_label),
-             Paragraph(f"${cap:,.0f}",   S_body),
-             Paragraph(f"{dp_pct:.0f}% al contado", S_small)],
-            [Paragraph("Crédito",        S_label),
-             Paragraph(f"${cred:,.0f}",  S_body),
-             Paragraph(f"{100-dp_pct:.0f}% financiado", S_small)],
-            [Paragraph("Cuota mensual",  S_label),
-             Paragraph(f"${cuota:,.0f}/mes", S_body),
-             Paragraph(f"{tasa:.1f}%  ·  {plazo} años", S_small)],
-        ]
-        ts = TableStyle([
-            ("LINEBELOW",     (0,0), (-1,-1), 0.4, BORD),
-            ("TOPPADDING",    (0,0), (-1,-1), 5),
-            ("BOTTOMPADDING", (0,0), (-1,-1), 5),
-            ("LEFTPADDING",   (0,0), (-1,-1), 6),
-            ("RIGHTPADDING",  (0,0), (-1,-1), 6),
-            ("BACKGROUND",    (0,0), (-1,-1), CREAM),
-            ("LINEBEFORE",    (0,0), (0,-1),  2, border_color),
-        ])
-        return Table(rows_data, colWidths=[(W*0.5-12)*f for f in [0.38,0.30,0.32]], style=ts)
-
-    fin_box_A = Table(
-        [[Paragraph("A  ·  TERRENO",
-                    _s("faH", fontSize=8, leading=10, textColor=GOLD,
-                       fontName="Helvetica-Bold"))],
-         [_fin_inner_rows(_cpt, _mct, _qut, _dpt, _tast, _plzt, GOLD)]],
-        colWidths=[W*0.5 - 4],
-        style=TableStyle([
-            ("BOX",           (0,0), (-1,-1), 0.5, BORD),
-            ("TOPPADDING",    (0,0), (-1,-1), 6),
-            ("BOTTOMPADDING", (0,0), (-1,-1), 4),
-            ("LEFTPADDING",   (0,0), (-1,-1), 6),
-            ("RIGHTPADDING",  (0,0), (-1,-1), 6),
-        ])
-    )
-    fin_box_B = Table(
-        [[Paragraph("B  ·  CONSTRUCCIÓN",
-                    _s("fbH", fontSize=8, leading=10, textColor=BLUE,
-                       fontName="Helvetica-Bold"))],
-         [_fin_inner_rows(_cpc, _mcc, _quc, _dpc, _tasc, _plzc, BLUE)]],
-        colWidths=[W*0.5 - 4],
-        style=TableStyle([
-            ("BOX",           (0,0), (-1,-1), 0.5, BORD),
-            ("TOPPADDING",    (0,0), (-1,-1), 6),
-            ("BOTTOMPADDING", (0,0), (-1,-1), 4),
-            ("LEFTPADDING",   (0,0), (-1,-1), 6),
-            ("RIGHTPADDING",  (0,0), (-1,-1), 6),
-        ])
-    )
-    fin_pair = Table(
-        [[fin_box_A, fin_box_B]],
-        colWidths=[W*0.5 - 2, W*0.5 - 2],
-        style=TableStyle([
-            ("LEFTPADDING",  (0,0), (-1,-1), 2),
-            ("RIGHTPADDING", (0,0), (-1,-1), 2),
-            ("TOPPADDING",   (0,0), (-1,-1), 0),
-            ("BOTTOMPADDING",(0,0), (-1,-1), 0),
-            ("VALIGN",       (0,0), (-1,-1), "TOP"),
-        ])
-    )
-    story.append(_kt(_section_items("Estructura de Financiamiento"), Spacer(1, 4*mm), fin_pair))
-    story.append(Spacer(1, 10*mm))
-
-    # ── 6. Gran Total ─────────────────────────────────────────────────────────────
-
+    # Gran total
     _cp   = r.get("capital_propio", 0) or 0
     _mc   = r.get("monto_credito", 0) or 0
     _qm   = r.get("cuota_mensual", 0) or 0
     _pctc = r.get("pct_credito", 0) or 0
 
-    def _gt_row(label, value, note, bg_row):
-        return [
-            Paragraph(label, _s(f"gtl{label[:3]}", fontSize=9, leading=11,
-                                 textColor=WHITE, fontName="Helvetica-Bold")),
-            Paragraph(value, _s(f"gtv{label[:3]}", fontSize=12, leading=14,
-                                 textColor=GOLD, fontName="Helvetica-Bold", alignment=TA_RIGHT)),
-            Paragraph(note,  _s(f"gtn{label[:3]}", fontSize=8, leading=10,
-                                 textColor=colors.HexColor("#AAAAAA"), alignment=TA_RIGHT)),
-        ]
+    # Rack (opcional)
+    _rak_niv  = r.get("rack_niveles", 0) or 0
+    _rak_tipo = r.get("tipo_nave", "")
+    _h_p      = r.get("altura_nave", 0) or 0
+    _pm2_p    = r.get("rack_pos_m2", 0) or 0
+    _tot_p    = r.get("rack_posiciones", 0) or 0
+    _opt_p    = r.get("rack_posiciones_opt", 0) or 0
+    _dlt_p    = r.get("rack_delta_pos", 0) or 0
+    _pct_p    = r.get("rack_delta_pct", 0) or 0
+    _ok_p     = r.get("rack_es_optima", False)
 
-    gt_data = [
-        _gt_row("CAPITAL PROPIO TOTAL", f"${_cp:,.0f}", "A + B downpayments", NAV),
-        _gt_row("DEUDA TOTAL",          f"${_mc:,.0f}", f"{_pctc:.0f}% del proyecto", NAV),
-        _gt_row("CUOTA MENSUAL TOTAL",  f"${_qm:,.0f}/mes", "Terreno + Obra", NAV),
-    ]
-    gt_tbl = Table(gt_data, colWidths=[W*0.42, W*0.28, W*0.30],
-                   splitByRow=0,
-                   style=TableStyle([
-                       ("BACKGROUND",    (0,0), (-1,-1), NAV),
-                       ("LINEBELOW",     (0,0), (-1,-2), 0.5, colors.HexColor("#3A4D5F")),
-                       ("TOPPADDING",    (0,0), (-1,-1), 8),
-                       ("BOTTOMPADDING", (0,0), (-1,-1), 8),
-                       ("LEFTPADDING",   (0,0), (-1,-1), 10),
-                       ("RIGHTPADDING",  (0,0), (-1,-1), 10),
-                       ("ALIGN",         (1,0), (-1,-1), "RIGHT"),
-                       ("VALIGN",        (0,0), (-1,-1), "MIDDLE"),
-                   ]))
-    _gran_total_note = Paragraph(
-        "El financiamiento puede estructurarse de forma independiente: solo terreno, solo construcción, "
-        "o ambos según la estrategia del inversionista.",
-        S_note)
-    story.append(_kt(
-        _section_items("Gran Total"),
-        Spacer(1, 4*mm), gt_tbl,
-        Spacer(1, 4*mm), _gran_total_note,
-    ))
-    story.append(Spacer(1, 10*mm))
+    # ── Valores derivados para portada ────────────────────────────────────────────
+    _cta_safe     = _cta if _cta > 0 else 1
+    _ctot_safe    = _ctot if _ctot > 0 else 1
+    _cpm_terreno  = (_ct / _at) if _at > 0 else 0
 
-    # ── 6b. Densidad de Rack ──────────────────────────────────────────────────────
-    _rak_niv_pdf  = r.get("rack_niveles", 0) or 0
-    _rak_tipo_pdf = r.get("tipo_nave", "")
-    if _rak_niv_pdf > 0 and _rak_tipo_pdf in ("Almacén Logístico", "Cross-docking", "Nave Industrial"):
-        _h_p    = r.get("altura_nave", 0) or 0
-        _pm2_p  = r.get("rack_pos_m2", 0) or 0
-        _tot_p  = r.get("rack_posiciones", 0) or 0
-        _opt_p  = r.get("rack_posiciones_opt", 0) or 0
-        _dlt_p  = r.get("rack_delta_pos", 0) or 0
-        _pct_p  = r.get("rack_delta_pct", 0) or 0
-        _ok_p   = r.get("rack_es_optima", False)
-        rack_rows = [
-            ["Altura al hombro (ingresada)",           f"{_h_p:.1f} m",      ""],
-            ["Niveles de rack posibles",               str(_rak_niv_pdf),     ""],
-            ["Posiciones totales — rack estándar",     f"{_tot_p:,}",         f"{_pm2_p:.2f} pos/m²"],
-            ["Posiciones Clase A (13.6 m — Aldea)",    f"{_opt_p:,}",         "2.03 pos/m²"],
-            ["Potencial adicional" if not _ok_p else "Diferencia vs. Clase A",
-             f"+{_dlt_p:,}" if _dlt_p > 0 else str(_dlt_p),
-             f"+{_pct_p:.0f}%" if _dlt_p > 0 else "—"],
-        ]
-        _rack_note = (
-            (f"A {_h_p:.1f} m de altura la nave soporta {_rak_niv_pdf} niveles de rack ({_pm2_p:.2f} pos/m²). "
-             f"Elevando a 13.6 m (estándar Clase A, validado por Aldea Logística) se obtienen {_opt_p:,} posiciones — "
-             f"un {_pct_p:.0f}% más de capacidad con una inversión marginal estimada de $15–25/m² nave en estructura. "
-             f"Los operadores logísticos Prime (DHL, CEVA, Ransa) valoran esta especificación y pagan renta premium.")
-            if not _ok_p else
-            (f"Altura {_h_p:.1f} m — especificación Clase A logística. "
-             f"{_tot_p:,} posiciones ({_pm2_p:.2f} pos/m²). "
-             f"Activo posicionado para operadores Prime: DHL, CEVA, Ransa, Saga, Ripley y 3PL Clase A.")
-        )
-        story.append(_kt(
-            _section_items("Densidad de Almacenaje — Análisis de Rack"),
-            Spacer(1, 4*mm),
-            _data_table(["Parámetro", "Valor", "Densidad"], rack_rows, [W*0.55, W*0.25, W*0.20]),
-            Spacer(1, 4*mm),
-            Paragraph(_rack_note, S_note),
-        ))
-        story.append(Spacer(1, 10*mm))
+    # KPI 3: yield si hay renta, si no costo/m² nave
+    if _rna > 0 and _cta > 0:
+        _kpi3_val = f"{(_rna / _cta * 100):.1f}%"
+        _kpi3_lbl = "Yield s/Terreno"
+        _kpi3_ref = "Renta neta anual / costo terreno"
+    else:
+        _kpi3_val = _fmt(_cpm)
+        _kpi3_lbl = "Costo/m² Nave"
+        _kpi3_ref = "USD/m² nave construida"
 
-    # ── 7. Factibilidad ───────────────────────────────────────────────────────────
+    # KPI 4: payback si existe, si no costo total
+    if _pay > 0:
+        _kpi4_val = f"{_pay:.1f} años"
+        _kpi4_lbl = "Payback"
+        _kpi4_ref = "Sobre costo total del proyecto"
+    else:
+        _kpi4_val = _fmt(_ctot)
+        _kpi4_lbl = "Costo Total"
+        _kpi4_ref = "Terreno + Construcción"
+
+    # Subtítulo portada (actividad categoría)
+    _cover_subtitle = f'<div class="cover-type-label" style="margin-top:12px;color:var(--gold);">{_e(act_cat)}</div>' if act_cat else ""
+
+    # Dirección portada
+    _cover_addr = f"Zona {_e(zonificacion)} &nbsp;·&nbsp; {_e(uso)} &nbsp;·&nbsp; Lima, Perú"
+
+    # altura_str para construcción
+    altura_str = f" &nbsp;·&nbsp; {altura_nave:.0f}m al hombro" if altura_nave and altura_nave > 0 else ""
+
+    # ── Porcentajes de estructura de costos ──────────────────────────────────────
+    def _pct(v):
+        return f"{v / _ctot_safe * 100:.1f}%"
+
+    # ── Actividad block (página 2) ────────────────────────────────────────────────
+    if act_cat or act_desc:
+        _act_html = f"""
+    <div class="section-title">Actividad a Realizar</div>
+    <div class="info-block" style="border-left:3px solid var(--gold);margin-bottom:20px;">
+      <div style="font-size:8px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+                  color:var(--gold);margin-bottom:6px;">ACTIVIDAD A REALIZAR</div>
+      {"<div style='font-size:14px;font-weight:800;color:var(--navy);margin-bottom:4px;'>" + _e(act_cat) + "</div>" if act_cat else ""}
+      {"<div style='font-size:12px;color:var(--gray-mid);margin-bottom:6px;'>" + _e(act_desc) + "</div>" if act_desc else ""}
+      <div style="font-size:11px;color:var(--gray-mid);">Zonificación: {_e(zonificacion)} &nbsp;·&nbsp; RNE A.060</div>
+    </div>"""
+    else:
+        _act_html = ""
+
+    # ── Rack block (página 3) ─────────────────────────────────────────────────────
+    _rack_html = ""
+    if _rak_niv > 0 and _rak_tipo in ("Almacén Logístico", "Cross-docking", "Nave Industrial"):
+        _rack_sign  = "+" if _dlt_p > 0 else ""
+        _rack_label = "Potencial adicional" if not _ok_p else "Diferencia vs. Clase A"
+        if not _ok_p:
+            _rack_note = (
+                f"A {_h_p:.1f}m de altura la nave soporta {_rak_niv} niveles de rack ({_pm2_p:.2f} pos/m²). "
+                f"Elevando a 13.6m (estándar Clase A, validado por Aldea Logística) se obtienen {_opt_p:,} posiciones — "
+                f"un {_pct_p:.0f}% más de capacidad con una inversión marginal estimada de $15–25/m² nave en estructura. "
+                f"Los operadores logísticos Prime (DHL, CEVA, Ransa) valoran esta especificación y pagan renta premium."
+            )
+        else:
+            _rack_note = (
+                f"Altura {_h_p:.1f}m — especificación Clase A logística. "
+                f"{_tot_p:,} posiciones ({_pm2_p:.2f} pos/m²). "
+                f"Activo posicionado para operadores Prime: DHL, CEVA, Ransa, Saga, Ripley y 3PL Clase A."
+            )
+        _rack_html = f"""
+    <div class="section-title" style="margin-top:24px;">Densidad de Almacenaje — Análisis de Rack</div>
+    <table class="data-table" style="margin-bottom:12px;">
+      <thead>
+        <tr>
+          <th>Parámetro</th>
+          <th class="right">Valor</th>
+          <th class="right">Densidad</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Altura al hombro (ingresada)</td><td class="right">{_h_p:.1f} m</td><td class="right">—</td></tr>
+        <tr><td>Niveles de rack posibles</td><td class="right">{_rak_niv}</td><td class="right">—</td></tr>
+        <tr><td>Posiciones totales — rack estándar</td><td class="right">{_tot_p:,}</td><td class="right">{_pm2_p:.2f} pos/m²</td></tr>
+        <tr><td>Posiciones Clase A (13.6 m — Aldea)</td><td class="right">{_opt_p:,}</td><td class="right">2.03 pos/m²</td></tr>
+        <tr><td class="strong">{_e(_rack_label)}</td><td class="right strong">{_rack_sign}{_dlt_p:,}</td><td class="right">{_rack_sign}{_pct_p:.0f}%</td></tr>
+      </tbody>
+    </table>
+    <div class="conclusion-box"><p style="font-size:11px;">{_e(_rack_note)}</p></div>"""
+
+    # ── Factibilidad block (página 3) ─────────────────────────────────────────────
+    _fac_html = ""
     if factibilidad:
-        sg = (factibilidad.get("semaforo_global") or "amarillo").lower()
-        sem_bg_map  = {"verde": "#E8F5EE", "amarillo": "#FFF8EE", "rojo": "#FFF0F0"}
-        sem_col_map = {"verde": "#1A4731", "amarillo": "#7A5500", "rojo": "#8B1A1A"}
-        sem_border  = {"verde": colors.HexColor("#1A4731"),
-                       "amarillo": colors.HexColor("#7A5500"),
-                       "rojo":     colors.HexColor("#8B1A1A")}
-        label_map   = {"verde": "SIN ALERTAS CRÍTICAS", "amarillo": "OBSERVACIONES",
-                       "rojo": "ALERTAS CRÍTICAS"}
-        fac_bg  = colors.HexColor(sem_bg_map.get(sg, "#FFF8EE"))
-        fac_brd = sem_border.get(sg, colors.HexColor("#7A5500"))
-        fac_txt = colors.HexColor(sem_col_map.get(sg, "#7A5500"))
+        _sg   = (factibilidad.get("semaforo_global") or "amarillo").lower()
+        _fsc  = {"verde": "#1A4731", "amarillo": "#92651A", "rojo": "#7A1A1A"}.get(_sg, "#92651A")
+        _fsb  = {"verde": "#E8F5EE", "amarillo": "#FFF8E6", "rojo": "#FDECEA"}.get(_sg, "#FFF8E6")
+        _fsl  = {"verde": "SIN ALERTAS CRÍTICAS", "amarillo": "OBSERVACIONES", "rojo": "ALERTAS CRÍTICAS"}.get(_sg, "PENDIENTE")
+        _frt  = _e(factibilidad.get("resumen_tecnico") or "")
+        _frl  = _e(factibilidad.get("resumen_legal") or "")
+        _fac_html = f"""
+    <div class="section-title" style="margin-top:24px;">Factibilidad Técnica y Legal</div>
+    <div style="background:{_fsb};border-left:3px solid {_fsc};padding:14px 20px;margin-bottom:16px;">
+      <div style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+                  color:{_fsc};margin-bottom:4px;">ESTADO</div>
+      <div style="font-size:15px;font-weight:800;color:{_fsc};margin-bottom:{"8px" if _frt or _frl else "0"};">{_fsl}</div>
+      {"<div style='font-size:11px;color:" + _fsc + ";margin-bottom:4px;'>" + _frt + "</div>" if _frt else ""}
+      {"<div style='font-size:11px;color:" + _fsc + ";'>" + _frl + "</div>" if _frl else ""}
+    </div>"""
 
-        fac_inner = [
-            Paragraph(label_map.get(sg, "OBSERVACIONES"),
-                      _s("faclbl", fontSize=9, leading=11, textColor=fac_txt,
-                         fontName="Helvetica-Bold")),
-        ]
-        rt = factibilidad.get("resumen_tecnico") or ""
-        rl = factibilidad.get("resumen_legal") or ""
-        if rt:
-            fac_inner.append(Paragraph(rt, _s("facrt", fontSize=9, leading=13, textColor=fac_txt)))
-        if rl:
-            fac_inner.append(Paragraph(rl, _s("facrl", fontSize=9, leading=13, textColor=fac_txt)))
+    # ── SVG isotipo (inner pages, 36px) ──────────────────────────────────────────
+    _svg36 = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="237 -2 411 837" style="height:36px;display:block;">
+        <rect fill="#1E2D3D" x="239.53" y="660.47" width="17.59" height="172.62" rx="8.79" ry="8.79"/>
+        <rect fill="#1E2D3D" x="289.66" y="513.49" width="13.7"  height="318.98" rx="6.85" ry="16.25"/>
+        <rect fill="#1E2D3D" x="338.93" y="368.79" width="13.7"  height="463.69" rx="6.85" ry="23.62"/>
+        <rect fill="#1E2D3D" x="389.88" y="442.34" width="13.7"  height="390.14" rx="6.85" ry="19.88"/>
+        <rect fill="#1E2D3D" x="435.62" y="583.81" width="13.7"  height="248.66" rx="6.85" ry="12.67"/>
+        <rect fill="#1E2D3D" x="485.6"  y="512.66" width="13.7"  height="319.81" rx="6.85" ry="16.29"/>
+        <rect fill="#1E2D3D" x="534.3"  y="367.3"  width="13.7"  height="465.17" rx="6.85" ry="23.7"/>
+        <rect fill="#1E2D3D" x="583.52" y="222.58" width="13.7"  height="609.89" rx="6.85" ry="31.07"/>
+        <rect fill="#1E2D3D" x="632.05" y="0"      width="13.7"  height="832.47" rx="6.85" ry="42.41"/>
+      </svg>"""
 
-        fac_tbl = Table(
-            [[fac_inner]],
-            colWidths=[W],
-            splitByRow=0,
-            style=TableStyle([
-                ("BACKGROUND",   (0,0), (-1,-1), fac_bg),
-                ("LINEBEFORE",   (0,0), (0,-1),  3, fac_brd),
-                ("TOPPADDING",   (0,0), (-1,-1), 8),
-                ("BOTTOMPADDING",(0,0), (-1,-1), 8),
-                ("LEFTPADDING",  (0,0), (-1,-1), 10),
-                ("RIGHTPADDING", (0,0), (-1,-1), 8),
-            ])
-        )
-        story.append(_kt(_section_items("Factibilidad Técnica y Legal"), Spacer(1, 4*mm), fac_tbl))
-        story.append(Spacer(1, 10*mm))
+    # ── page-header helper (reused for inner pages) ───────────────────────────────
+    _ph = f"""  <div class="page-header">
+    <div class="page-header-logo" style="display:flex;flex-direction:column;align-items:center;gap:3px;">
+      {_svg36}
+      <span style="color:#1E2D3D;font-weight:800;font-size:11px;letter-spacing:2.5px;">SOLUM</span>
+    </div>
+    <div class="page-header-meta">Análisis Industrial / Logístico &nbsp;·&nbsp; {_e(fecha)}</div>
+  </div>"""
 
-    # ── 8. Footer ─────────────────────────────────────────────────────────────────
-    story.append(Spacer(1, 6))
-    story.append(HRFlowable(width=W, thickness=0.5, color=BORD, spaceAfter=4))
-    footer_tbl = Table(
-        [[Paragraph("Preparado por Osterling Advisory  ·  Uso confidencial  ·  Confidencial",
-                    _s("ftl", fontSize=7, leading=9, textColor=GRAY)),
-          Paragraph("SOLUM — Plataforma de Pre-Factibilidad Inmobiliaria",
-                    _s("ftr", fontSize=7, leading=9, textColor=GRAY, alignment=TA_RIGHT))]],
-        colWidths=[W*0.55, W*0.45],
-        style=TableStyle([("TOPPADDING",(0,0),(-1,-1),0),("BOTTOMPADDING",(0,0),(-1,-1),0),
-                          ("LEFTPADDING",(0,0),(-1,-1),0),("RIGHTPADDING",(0,0),(-1,-1),0)])
-    )
-    story.append(footer_tbl)
-    story.append(Spacer(1, 5))
-    story.append(Paragraph(
-        "<b>NOTA:</b> Esta IA de Análisis Inmobiliario debe utilizarse como herramienta complementaria "
-        "al criterio profesional, permitiendo obtener resultados preliminares de manera rápida. "
-        "El profesional podrá definir tipologías, distribución y modificaciones pertinentes. "
-        "La IA irá alineándose con la visión del profesional a medida que se retroalimenta con sus decisiones.",
-        _s("disc_ind", fontSize=6, leading=9, textColor=colors.HexColor("#A89880"),
-           fontName="Helvetica", leftIndent=0, rightIndent=0)))
+    return f"""<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOLUM — Análisis Industrial {_e(tipo_nave)}</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
-    doc.build(story)
-    return buf.getvalue()
+  :root {{
+    --navy:       #0D2137;
+    --navy-mid:   #1A3A5C;
+    --navy-light: #2C5282;
+    --gray-dark:  #4A5568;
+    --gray-mid:   #718096;
+    --gray-light: #A0AEC0;
+    --gray-line:  #E2E8F0;
+    --gray-bg:    #F7F9FC;
+    --white:      #FFFFFF;
+    --gold:       #C99428;
+    --dk-navy:    #0D1C2E;
+    --kpi-navy:   #1A2F45;
+  }}
+
+  * {{ margin:0; padding:0; box-sizing:border-box; }}
+
+  body {{
+    font-family: 'Inter', sans-serif;
+    background: #E8ECF2;
+    color: var(--gray-dark);
+    font-size: 13px;
+    line-height: 1.6;
+  }}
+
+  /* ═══════════════════════════════
+     PORTADA
+  ═══════════════════════════════ */
+  .cover {{
+    width: 794px;
+    min-height: 1123px;
+    background: var(--white);
+    margin: 32px auto;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+  }}
+
+  .cover-topbar {{
+    background: var(--navy);
+    padding: 0 56px;
+    height: 8px;
+    flex-shrink: 0;
+  }}
+
+  .cover-body {{
+    flex: 1;
+    padding: 24px 56px 0;
+    display: flex;
+    flex-direction: column;
+  }}
+
+  .cover-head-row {{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 28px;
+  }}
+
+  .cover-head-logo-name {{
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--navy);
+    letter-spacing: 2px;
+  }}
+
+  .cover-head-logo-sub {{
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gray-light);
+    margin-top: 3px;
+    text-align: center;
+  }}
+
+  .cover-head-meta {{ text-align: right; }}
+
+  .cover-head-meta-label {{
+    font-size: 11px;
+    color: var(--gray-mid);
+    font-weight: 300;
+  }}
+
+  .cover-head-meta-date {{
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-top: 3px;
+  }}
+
+  .cover-divider {{
+    height: 1px;
+    background: var(--gray-line);
+    margin-bottom: 48px;
+  }}
+
+  .cover-type-label {{
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gray-mid);
+    margin-bottom: 18px;
+  }}
+
+  .cover-big-title {{
+    font-size: 38px;
+    font-weight: 800;
+    color: var(--navy);
+    line-height: 1.05;
+    margin-bottom: 4px;
+  }}
+
+  .cover-big-sub {{
+    font-size: 28px;
+    font-weight: 300;
+    color: var(--navy);
+    line-height: 1.15;
+    margin-bottom: 36px;
+  }}
+
+  .cover-addr {{
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 5px;
+  }}
+
+  .cover-addr-sub {{
+    font-size: 12px;
+    color: var(--gray-mid);
+    font-weight: 300;
+  }}
+
+  .cover-spacer {{ flex: 1; min-height: 40px; }}
+
+  .cover-bottom {{
+    background: var(--gray-bg);
+    margin: 0 -56px;
+    padding: 28px 80px 24px;
+  }}
+
+  .cover-footer {{
+    background: rgba(13,33,55,0.07);
+    margin: 0 -56px;
+    padding: 9px 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }}
+
+  .cover-footer-txt {{
+    font-size: 8px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gray-mid);
+  }}
+
+  .cover-footer-dot {{
+    font-size: 8px;
+    color: var(--gray-line);
+  }}
+
+  .cover-kpi-strip {{
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 1px;
+    background: var(--gray-line);
+    margin-bottom: 16px;
+  }}
+
+  .cover-kpi-box {{
+    background: var(--white);
+    padding: 20px 20px 16px;
+  }}
+
+  .cover-kpi-val {{
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1;
+    margin-bottom: 8px;
+  }}
+
+  .cover-kpi-lbl {{
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--gray-mid);
+    display: block;
+    margin-bottom: 3px;
+  }}
+
+  .cover-kpi-ref {{
+    font-size: 10px;
+    color: var(--gray-light);
+  }}
+
+  /* ═══════════════════════════════
+     PÁGINAS INTERIORES
+  ═══════════════════════════════ */
+  .page {{
+    width: 794px;
+    min-height: 1123px;
+    background: var(--white);
+    margin: 6px auto;
+    box-shadow: 0 4px 24px rgba(13,33,55,0.10);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-top: 8px solid #1E2D3D;
+  }}
+
+  .page-header {{
+    padding: 18px 56px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--gray-line);
+  }}
+
+  .page-header-logo {{
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--navy);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }}
+
+  .page-header-meta {{ font-size: 10px; color: var(--gray-mid); text-align: right; }}
+
+  .page-body {{ padding: 32px 56px; flex: 1; }}
+
+  .page-footer {{
+    padding: 14px 56px;
+    border-top: 1px solid var(--gray-line);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }}
+
+  .page-footer-note {{ font-size: 9px; color: var(--gray-light); max-width: 560px; line-height: 1.4; }}
+  .page-num {{ font-size: 10px; color: var(--gray-mid); font-weight: 600; }}
+
+  /* Section title */
+  .section-title {{
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--navy);
+    margin-bottom: 18px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--navy);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }}
+  .section-title::after {{
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--gray-line);
+  }}
+
+  /* KPI grid */
+  .kpi-grid {{ display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-bottom: 24px; }}
+  .kpi-card {{ border: 1px solid var(--gray-line); padding: 16px 14px; background: var(--white); }}
+  .kpi-card.accent {{ border-left: 3px solid var(--navy); background: var(--gray-bg); }}
+  .kpi-card-label {{ font-size: 8px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gray-mid); margin-bottom: 5px; }}
+  .kpi-card-value {{ font-size: 19px; font-weight: 700; color: var(--navy); line-height: 1; }}
+  .kpi-card-ref {{ font-size: 8px; color: var(--gray-light); margin-top: 3px; }}
+
+  /* Info */
+  .info-row {{ display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }}
+  .info-block {{ background: var(--gray-bg); border: 1px solid var(--gray-line); padding: 14px 16px; }}
+  .info-block-title {{ font-size: 8px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gray-mid); margin-bottom: 9px; }}
+  .info-line {{ display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid var(--gray-line); font-size: 12px; }}
+  .info-line:last-child {{ border-bottom: none; }}
+  .info-line .lbl {{ color: var(--gray-mid); }}
+  .info-line .val {{ font-weight: 600; color: var(--navy); }}
+
+  /* Tables */
+  .data-table {{ width: 100%; border-collapse: collapse; margin-bottom: 20px; }}
+  .data-table th {{
+    background: var(--navy); color: var(--white);
+    font-size: 8px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+    padding: 9px 11px; text-align: left;
+  }}
+  .data-table th.right {{ text-align: right; }}
+  .data-table td {{ padding: 8px 11px; font-size: 11px; border-bottom: 1px solid var(--gray-line); color: var(--gray-dark); }}
+  .data-table td.right {{ text-align: right; }}
+  .data-table td.strong {{ font-weight: 600; color: var(--navy); }}
+  .data-table tr:nth-child(even) td {{ background: var(--gray-bg); }}
+  .data-table tfoot td {{
+    background: var(--gray-bg); font-weight: 700; color: var(--navy);
+    border-top: 2px solid var(--navy); border-bottom: none; font-size: 12px;
+  }}
+
+  /* Result box */
+  .result-box {{ border: 1px solid var(--gray-line); margin-bottom: 20px; }}
+  .result-box-header {{ background: var(--navy); color: var(--white); padding: 10px 18px; font-size: 9px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; }}
+  .result-box-body {{ padding: 18px; }}
+  .result-row {{ display: flex; justify-content: space-between; align-items: center; padding: 9px 0; border-bottom: 1px solid var(--gray-line); font-size: 12px; }}
+  .result-row:last-child {{ border-bottom: none; }}
+  .result-row .lbl {{ color: var(--gray-mid); }}
+  .result-row .val {{ font-weight: 600; color: var(--navy); }}
+  .result-row.total {{ border-top: 2px solid var(--navy); margin-top: 4px; padding-top: 12px; }}
+  .result-row.total .lbl {{ font-weight: 700; color: var(--navy); font-size: 13px; }}
+  .result-row.total .val {{ font-size: 18px; }}
+
+  /* Gran total navy box */
+  .gt-box {{ background: var(--navy); padding: 0; margin-bottom: 20px; }}
+  .gt-row {{
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 12px 20px; border-bottom: 1px solid rgba(255,255,255,0.08);
+  }}
+  .gt-row:last-child {{ border-bottom: none; }}
+  .gt-row .lbl {{ font-size: 12px; font-weight: 700; color: var(--white); }}
+  .gt-row .val {{ font-size: 15px; font-weight: 700; color: var(--gold); }}
+  .gt-row .note {{ font-size: 10px; color: rgba(255,255,255,0.45); text-align: right; }}
+
+  /* Two-col */
+  .two-col {{ display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }}
+
+  /* Conclusion */
+  .conclusion-box {{ border-left: 3px solid var(--navy); background: var(--gray-bg); padding: 18px 22px; margin-bottom: 18px; }}
+  .conclusion-box p {{ font-size: 12px; color: var(--gray-dark); margin-bottom: 8px; line-height: 1.7; }}
+  .conclusion-box p:last-child {{ margin-bottom: 0; }}
+  .obs-list {{ list-style: none; }}
+  .obs-list li {{ font-size: 11px; color: var(--gray-dark); padding: 5px 0 5px 14px; border-bottom: 1px solid var(--gray-line); position: relative; line-height: 1.5; }}
+  .obs-list li:last-child {{ border-bottom: none; }}
+  .obs-list li::before {{ content: '—'; position: absolute; left: 0; color: var(--gray-light); }}
+  .disclaimer {{ font-size: 8px; color: var(--gray-light); line-height: 1.5; padding-top: 14px; border-top: 1px solid var(--gray-line); margin-top: 14px; }}
+
+  /* Sub-label for cost sections */
+  .sub-label {{
+    font-size: 9px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--navy); margin-bottom: 8px; margin-top: 20px;
+  }}
+  .sub-label.gold {{ color: var(--gold); }}
+
+  @media print {{
+    body {{ background: white; }}
+    .cover, .page {{ box-shadow: none; margin: 0; width: 100%; }}
+  }}
+</style>
+</head>
+<body>
+
+<!-- ══ PORTADA ══ -->
+<div class="cover">
+  <div class="cover-topbar"></div>
+  <div class="cover-body">
+
+    <div class="cover-head-row">
+      <div style="display:flex;flex-direction:column;align-items:center;">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="237 -2 411 837" style="height:48px;display:block;margin-bottom:6px;">
+          <rect fill="#1E2D3D" x="239.53" y="660.47" width="17.59" height="172.62" rx="8.79" ry="8.79"/>
+          <rect fill="#1E2D3D" x="289.66" y="513.49" width="13.7"  height="318.98" rx="6.85" ry="16.25"/>
+          <rect fill="#1E2D3D" x="338.93" y="368.79" width="13.7"  height="463.69" rx="6.85" ry="23.62"/>
+          <rect fill="#1E2D3D" x="389.88" y="442.34" width="13.7"  height="390.14" rx="6.85" ry="19.88"/>
+          <rect fill="#1E2D3D" x="435.62" y="583.81" width="13.7"  height="248.66" rx="6.85" ry="12.67"/>
+          <rect fill="#1E2D3D" x="485.6"  y="512.66" width="13.7"  height="319.81" rx="6.85" ry="16.29"/>
+          <rect fill="#1E2D3D" x="534.3"  y="367.3"  width="13.7"  height="465.17" rx="6.85" ry="23.7"/>
+          <rect fill="#1E2D3D" x="583.52" y="222.58" width="13.7"  height="609.89" rx="6.85" ry="31.07"/>
+          <rect fill="#1E2D3D" x="632.05" y="0"      width="13.7"  height="832.47" rx="6.85" ry="42.41"/>
+        </svg>
+        <div class="cover-head-logo-name" style="color:#1E2D3D;">SOLUM</div>
+        <div class="cover-head-logo-sub">Osterling Advisory</div>
+      </div>
+      <div class="cover-head-meta">
+        <div class="cover-head-meta-label">Análisis Industrial / Logístico</div>
+        <div class="cover-head-meta-date">{_e(fecha)}</div>
+      </div>
+    </div>
+
+    <div class="cover-divider"></div>
+
+    <div style="height:36px;"></div>
+    <div class="cover-type-label">INFORME DE ANÁLISIS INDUSTRIAL</div>
+    <div class="cover-big-title">{_e(tipo_nave)}</div>
+    <div class="cover-big-sub">Análisis Industrial / Logístico</div>
+    {_cover_subtitle}
+
+    <div class="cover-addr">{_cover_addr}</div>
+
+    <div class="cover-spacer"></div>
+
+    <div class="cover-bottom">
+      <div class="cover-kpi-strip">
+        <div class="cover-kpi-box">
+          <div class="cover-kpi-val">{_fmt(_cta)}</div>
+          <span class="cover-kpi-lbl">Costo Terreno c/Alcabala</span>
+          <div class="cover-kpi-ref">Incl. alcabala 3%</div>
+        </div>
+        <div class="cover-kpi-box">
+          <div class="cover-kpi-val">{_fmt(_cpm_terreno)}/m²</div>
+          <span class="cover-kpi-lbl">Costo/m² Terreno</span>
+          <div class="cover-kpi-ref">USD por m² de terreno</div>
+        </div>
+        <div class="cover-kpi-box">
+          <div class="cover-kpi-val">{_kpi3_val}</div>
+          <span class="cover-kpi-lbl">{_e(_kpi3_lbl)}</span>
+          <div class="cover-kpi-ref">{_e(_kpi3_ref)}</div>
+        </div>
+        <div class="cover-kpi-box">
+          <div class="cover-kpi-val">{_kpi4_val}</div>
+          <span class="cover-kpi-lbl">{_e(_kpi4_lbl)}</span>
+          <div class="cover-kpi-ref">{_e(_kpi4_ref)}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cover-footer">
+      <span class="cover-footer-txt">SOLUM</span>
+      <span class="cover-footer-dot">·</span>
+      <span class="cover-footer-txt">Herramienta IA de Análisis Inmobiliario</span>
+      <span class="cover-footer-dot">·</span>
+      <span class="cover-footer-txt">Información Confidencial</span>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══ PÁG. 2 — COSTOS ══ -->
+<div class="page">
+{_ph}
+  <div class="page-body">
+
+    {_act_html}
+
+    <div class="section-title">Indicadores Clave</div>
+    <div class="kpi-grid" style="margin-bottom:28px;">
+      <div class="kpi-card accent">
+        <div class="kpi-card-label">Área Terreno</div>
+        <div class="kpi-card-value">{_at:,.0f} m²</div>
+        <div class="kpi-card-ref">Superficie total del lote</div>
+      </div>
+      <div class="kpi-card accent">
+        <div class="kpi-card-label">Área Nave</div>
+        <div class="kpi-card-value">{_an:,.0f} m²</div>
+        <div class="kpi-card-ref">Área techada construida</div>
+      </div>
+      <div class="kpi-card accent">
+        <div class="kpi-card-label">Costo/m² Nave</div>
+        <div class="kpi-card-value">{_fmt(_cnm2)}</div>
+        <div class="kpi-card-ref">USD por m² nave</div>
+      </div>
+      <div class="kpi-card accent">
+        <div class="kpi-card-label">Costo Construcción</div>
+        <div class="kpi-card-value">{_fmt(_ccs)}</div>
+        <div class="kpi-card-ref">Nave + piso + indirectos</div>
+      </div>
+    </div>
+
+    <div class="section-title">Estructura de Costos — A. Terreno</div>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Concepto</th>
+          <th class="right">Monto USD</th>
+          <th class="right">% Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Terreno</td><td class="right">{_fmt(_ct)}</td><td class="right">{_pct(_ct)}</td></tr>
+        <tr><td>Alcabala (3%)</td><td class="right">{_fmt(_alc)}</td><td class="right">{_pct(_alc)}</td></tr>
+      </tbody>
+      <tfoot>
+        <tr><td><strong>Total Terreno (A)</strong></td><td class="right"><strong>{_fmt(_cta)}</strong></td><td class="right"><strong>{_pct(_cta)}</strong></td></tr>
+      </tfoot>
+    </table>
+
+    <div class="section-title">Estructura de Costos — B. Construcción</div>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Concepto</th>
+          <th class="right">Monto USD</th>
+          <th class="right">% Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Nave techada &nbsp; {_an:,.0f} m² &nbsp;×&nbsp; {_fmt(_cnm2)}/m²{_e(altura_str)}</td>
+          <td class="right">{_fmt(_cnt)}</td>
+          <td class="right">{_pct(_cnt)}</td>
+        </tr>
+        <tr>
+          <td>Piso descubierto / patios &nbsp; {_al:,.0f} m² &nbsp;×&nbsp; {_fmt(_cplm2)}/m²</td>
+          <td class="right">{_fmt(_cpl)}</td>
+          <td class="right">{_pct(_cpl)}</td>
+        </tr>
+        <tr>
+          <td>Costos indirectos ({_pind:.0f}%)</td>
+          <td class="right">{_fmt(_sc)}</td>
+          <td class="right">{_pct(_sc)}</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr><td><strong>Total Construcción (B)</strong></td><td class="right"><strong>{_fmt(_ccs)}</strong></td><td class="right"><strong>{_pct(_ccs)}</strong></td></tr>
+      </tfoot>
+    </table>
+
+    <div class="result-box">
+      <div class="result-box-header">Costo Total del Proyecto (A + B)</div>
+      <div class="result-box-body">
+        <div class="result-row">
+          <span class="lbl">Total Terreno (A)</span>
+          <span class="val">{_fmt(_cta)}</span>
+        </div>
+        <div class="result-row">
+          <span class="lbl">Total Construcción (B)</span>
+          <span class="val">{_fmt(_ccs)}</span>
+        </div>
+        <div class="result-row total">
+          <span class="lbl">Costo Total Proyecto</span>
+          <span class="val">{_fmt(_ctot)}</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="page-footer">
+    <div class="page-footer-note">Herramienta complementaria al criterio profesional. Valores preliminares sujetos a validación técnica y de mercado.</div>
+    <div class="page-num">Pág. 2</div>
+  </div>
+</div>
+
+
+<!-- ══ PÁG. 3 — FINANCIAMIENTO ══ -->
+<div class="page">
+{_ph}
+  <div class="page-body">
+
+    <div class="section-title">Financiamiento</div>
+
+    <div class="two-col" style="margin-bottom:24px;">
+      <div class="info-block" style="border-left:3px solid var(--gold);">
+        <div class="info-block-title" style="color:var(--gold);">A — Terreno</div>
+        <div class="info-line"><span class="lbl">Downpayment</span><span class="val">{_fmt(_cpt)} ({_dpt:.0f}%)</span></div>
+        <div class="info-line"><span class="lbl">Crédito</span><span class="val">{_fmt(_mct)} ({100-_dpt:.0f}%)</span></div>
+        <div class="info-line"><span class="lbl">Cuota mensual</span><span class="val">{_fmt(_qut)}/mes</span></div>
+        <div class="info-line"><span class="lbl">Tasa anual</span><span class="val">{_tast:.1f}%</span></div>
+        <div class="info-line"><span class="lbl">Plazo</span><span class="val">{_plzt} años</span></div>
+      </div>
+      <div class="info-block" style="border-left:3px solid var(--navy-light);">
+        <div class="info-block-title" style="color:var(--navy-mid);">B — Construcción</div>
+        <div class="info-line"><span class="lbl">Downpayment</span><span class="val">{_fmt(_cpc)} ({_dpc:.0f}%)</span></div>
+        <div class="info-line"><span class="lbl">Crédito</span><span class="val">{_fmt(_mcc)} ({100-_dpc:.0f}%)</span></div>
+        <div class="info-line"><span class="lbl">Cuota mensual</span><span class="val">{_fmt(_quc)}/mes</span></div>
+        <div class="info-line"><span class="lbl">Tasa anual</span><span class="val">{_tasc:.1f}%</span></div>
+        <div class="info-line"><span class="lbl">Plazo</span><span class="val">{_plzc} años</span></div>
+      </div>
+    </div>
+
+    <div class="section-title">Gran Total Consolidado</div>
+    <div class="gt-box">
+      <div class="gt-row">
+        <span class="lbl">Capital Propio Total</span>
+        <span class="val">{_fmt(_cp)}</span>
+        <span class="note">A + B downpayments</span>
+      </div>
+      <div class="gt-row">
+        <span class="lbl">Deuda Total</span>
+        <span class="val">{_fmt(_mc)}</span>
+        <span class="note">{_pctc:.0f}% del proyecto</span>
+      </div>
+      <div class="gt-row">
+        <span class="lbl">Cuota Mensual Total</span>
+        <span class="val">{_fmt(_qm)}/mes</span>
+        <span class="note">Terreno + Obra</span>
+      </div>
+    </div>
+    <p style="font-size:10px;color:var(--gray-mid);margin-bottom:24px;">
+      El financiamiento puede estructurarse de forma independiente: solo terreno, solo construcción,
+      o ambos según la estrategia del inversionista.
+    </p>
+
+    {_rack_html}
+
+    {_fac_html}
+
+  </div>
+  <div class="page-footer">
+    <div class="page-footer-note">NOTA: Esta IA de Análisis Inmobiliario debe utilizarse como herramienta complementaria al criterio profesional, permitiendo obtener resultados preliminares de manera rápida. El profesional podrá definir tipologías, distribución y modificaciones pertinentes.</div>
+    <div class="page-num">Pág. 3</div>
+  </div>
+</div>
+
+</body>
+</html>"""
+
+
+def generar_informe_industrial_pdf(r: dict, factibilidad, fecha: str, altura_nave: float = 0) -> bytes:
+    html = _build_industrial_html(r, factibilidad, fecha, altura_nave)
+    return _html_to_pdf(html)
 
 
 def generar_propuesta_html(
@@ -11077,6 +11351,660 @@ def generar_propuesta_html(
 </html>"""
 
 
+
+def _build_propuesta_html(
+    tipo: str,
+    propietario: str,
+    params: dict,
+    financ: dict | None,
+    legal: dict | None,
+    comps_sunarp: list,
+    precio_oferta: float,
+    moneda_oferta: str,
+    condiciones: str,
+    plazo_respuesta: int,
+    fecha: str,
+    representante: str = "Enrique Osterling",
+    cargo: str = "Director General",
+    tiene_opcion: bool = True,
+    dias_opcion: int = 90,
+    pct_opcion: float = 0.0,
+    pct_minuta: float = 20.0,
+    condicion_minuta: str = "Aprobación del anteproyecto por la Municipalidad",
+    condicion_escritura: str = "Desocupación y entrega del inmueble libre de cargas",
+) -> str:
+    import html as _he
+
+    def _e(s):
+        return _he.escape(str(s or ""))
+
+    # ── Pull params ───────────────────────────────────────────────────────────────
+    p   = params or {}
+    r   = (financ or {}).get("resumen", {})
+    lg  = legal or {}
+    tc  = TIPO_CAMBIO
+
+    precio_usd  = precio_oferta if moneda_oferta == "USD" else round(precio_oferta / tc, 0)
+    precio_pen  = round(precio_usd * tc, 0)
+    area        = p.get("area_terreno_m2") or p.get("area_m2") or 0
+    pm2_usd     = round(precio_usd / area, 0) if area > 0 else 0
+    ubicacion   = p.get("ubicacion") or p.get("direccion") or "—"
+    distrito    = p.get("distrito") or ""
+    zona_res    = p.get("zona_residencial") or p.get("zonificacion") or "—"
+    partida     = lg.get("partida_numero") or "Pendiente de verificación SUNARP"
+    _props_raw2 = lg.get("propietarios_partida") or []
+    propietario_reg = (", ".join(
+        (x.get("nombre", str(x)) if isinstance(x, dict) else str(x))
+        for x in _props_raw2 if x
+    )) or propietario
+    tipo_label  = "COMPRA" if tipo == "Compra" else "ARRENDAMIENTO"
+    tipo_lower  = "compra" if tipo == "Compra" else "arrendamiento"
+
+    # ── Precio display ─────────────────────────────────────────────────────────
+    if tipo == "Compra":
+        precio_str = f"USD {precio_usd:,.0f} &nbsp;|&nbsp; USD {pm2_usd:,.0f}/m²"
+        precio_lbl = "Precio ofertado"
+    else:
+        precio_str = f"USD {precio_usd:,.0f} + IGV &nbsp;|&nbsp; USD {pm2_usd:,.2f}/m²/mes"
+        precio_lbl = "Renta mensual ofertada"
+
+    # ── Condiciones block ─────────────────────────────────────────────────────
+    _cond_text = (condiciones or "").strip()
+    if not _cond_text and tipo == "Compra":
+        _cond_text = (
+            "Libre de cargas, hipotecas y gravámenes registrales\n"
+            "Libre de ocupación y entregado sin mejoras post-oferta\n"
+            "Servicios (agua, luz, predial y arbitrios) al día a la fecha de cierre\n"
+            "Sujeto a due diligence legal (SUNARP) y técnico de 30 días calendario"
+        )
+    cond_items_html = "".join(
+        f'<li>{_e(c.strip())}</li>' for c in _cond_text.split("\n") if c.strip()
+    )
+
+    # ── Sustento SOLUM (solo Compra) ───────────────────────────────────────────
+    _sustento_html = ""
+    if tipo == "Compra" and r:
+        _max_t20 = r.get("max_terreno_20pct", 0) or 0
+        if _max_t20 > 0 and area > 0:
+            _pm2_terr = round(_max_t20 / area, 0)
+            if precio_usd <= _max_t20 * 1.05:
+                _sustento = (
+                    f"El precio ofertado (USD {precio_usd:,.0f}) se calibra al umbral de viabilidad SOLUM: "
+                    f"precio máximo de terreno compatible con margen neto ≥ 20% = "
+                    f"<strong>USD {_max_t20:,.0f}</strong> (USD {_pm2_terr:,.0f}/m²). "
+                    f"La oferta se encuadra dentro del rango de viabilidad del proyecto."
+                )
+            else:
+                _sustento = (
+                    f"Referencia de viabilidad SOLUM: el umbral al 20% de margen neto es USD {_max_t20:,.0f} "
+                    f"(USD {_pm2_terr:,.0f}/m²). La oferta supera este umbral; "
+                    f"se proyecta negociación o ajuste del programa para mantener la rentabilidad objetivo."
+                )
+            _sustento_html = f'<div class="note-box" style="margin-top:10px;">{_sustento}</div>'
+
+    # ── Comparables SUNARP ─────────────────────────────────────────────────────
+    comp_rows_html = ""
+    precios_cierre = []
+    for rc in (comps_sunarp or []):
+        ut  = rc.get("ultima_transferencia") or {}
+        p_v = ut.get("precio")
+        mon = ut.get("moneda", "USD")
+        pm2 = rc.get("precio_m2_estimado")
+        try:
+            p_v = float(p_v) if p_v is not None else None
+        except (TypeError, ValueError):
+            p_v = None
+        try:
+            pm2 = float(pm2) if pm2 is not None else None
+        except (TypeError, ValueError):
+            pm2 = None
+        if p_v and mon == "PEN":
+            p_v = round(p_v / tc, 0)
+            pm2 = round(pm2 / tc, 0) if pm2 else None
+        if pm2:
+            precios_cierre.append(pm2)
+        pv_s  = f"${p_v:,.0f}" if p_v else "—"
+        pm2_s = f"${pm2:,.0f}/m²" if pm2 else "—"
+        comp_rows_html += (
+            f'<tr>'
+            f'<td>{_e(rc.get("descripcion_predio", "—"))}</td>'
+            f'<td class="center">{_e(str(rc.get("area_m2", "—")))}</td>'
+            f'<td class="center">{pv_s}</td>'
+            f'<td class="center">{pm2_s}</td>'
+            f'<td class="center">{_e(ut.get("fecha", "—"))}</td>'
+            f'</tr>'
+        )
+
+    comp_section_html = ""
+    if comp_rows_html:
+        med_html = ""
+        if precios_cierre:
+            med = round(sum(precios_cierre) / len(precios_cierre), 0)
+            med_html = f'<p class="note" style="margin-top:10px;">Precio de cierre promedio (SUNARP): <strong>${med:,.0f}/m²</strong></p>'
+        sec_num_comp = "III"
+        comp_section_html = f"""
+  <div class="section">
+    <div class="section-title">{sec_num_comp}. Sustento de Valor — Comparables SUNARP</div>
+    <p class="intro-text" style="margin-bottom:10px;">Los siguientes precios de cierre, obtenidos de partidas registrales SUNARP, respaldan el valor propuesto:</p>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Predio comparable</th>
+          <th class="center">Área m²</th>
+          <th class="center">Precio cierre</th>
+          <th class="center">USD/m²</th>
+          <th class="center">Fecha</th>
+        </tr>
+      </thead>
+      <tbody>{comp_rows_html}</tbody>
+    </table>
+    {med_html}
+  </div>"""
+        sec_num_pago = "IV"
+    else:
+        sec_num_pago = "III"
+
+    # ── Estructura de pago (solo Compra) ──────────────────────────────────────
+    pago_section_html = ""
+    if tipo == "Compra":
+        _pct_escritura   = round(100.0 - pct_minuta - (pct_opcion if tiene_opcion else 0.0), 1)
+        _monto_opcion    = round(precio_usd * pct_opcion / 100) if tiene_opcion and pct_opcion > 0 else 0
+        _monto_minuta    = round(precio_usd * pct_minuta / 100)
+        _monto_escritura = round(precio_usd * _pct_escritura / 100)
+
+        opcion_row = ""
+        if tiene_opcion:
+            monto_op_s = (f"USD {_monto_opcion:,.0f} ({pct_opcion:.0f}% del precio)"
+                          if _monto_opcion > 0 else "Sin cargo económico")
+            cond_op_s  = (f"A la firma del contrato de opción. Plazo: {dias_opcion} días calendario."
+                          + (" Monto imputable al precio total." if _monto_opcion > 0 else ""))
+            opcion_row = f"""
+        <tr>
+          <td><strong>1. Opción de Compra</strong></td>
+          <td class="gold"><strong>{_e(monto_op_s)}</strong></td>
+          <td>{_e(cond_op_s)}</td>
+        </tr>"""
+
+        _n2 = 2 if tiene_opcion else 1
+        _n3 = _n2 + 1
+        pago_section_html = f"""
+  <div class="section">
+    <div class="section-title">{sec_num_pago}. Estructura de Pago</div>
+    <p class="intro-text" style="margin-bottom:10px;">La presente oferta contempla la siguiente estructura de pago sobre el precio total de <strong>USD {precio_usd:,.0f}</strong>:</p>
+    <table class="data-table pago-table">
+      <thead>
+        <tr>
+          <th>Etapa</th>
+          <th>Monto</th>
+          <th>Condición / Oportunidad de pago</th>
+        </tr>
+      </thead>
+      <tbody>
+        {opcion_row}
+        <tr>
+          <td><strong>{_n2}. Pago Inicial — Minuta</strong></td>
+          <td class="gold"><strong>USD {_monto_minuta:,.0f} ({pct_minuta:.0f}%)</strong></td>
+          <td>A la firma de la Minuta de Compraventa ante Notario. Condición: <strong>{_e(condicion_minuta)}</strong>.</td>
+        </tr>
+        <tr>
+          <td><strong>{_n3}. Saldo — Escritura Pública</strong></td>
+          <td><strong>USD {_monto_escritura:,.0f} ({_pct_escritura:.0f}%)</strong></td>
+          <td>A la firma de la Escritura Pública e inscripción en SUNARP. Condición: <strong>{_e(condicion_escritura)}</strong>.</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td><strong>TOTAL</strong></td>
+          <td class="gold"><strong>USD {precio_usd:,.0f}</strong></td>
+          <td style="color:var(--gray-mid);font-size:10px;">TC referencial: S/. {tc} por USD</td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>"""
+
+    # ── SVG isotipo (cover, 48px) ─────────────────────────────────────────────
+    _svg48 = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="237 -2 411 837" style="height:48px;display:block;margin-bottom:6px;">
+      <rect fill="#1E2D3D" x="239.53" y="660.47" width="17.59" height="172.62" rx="8.79" ry="8.79"/>
+      <rect fill="#1E2D3D" x="289.66" y="513.49" width="13.7"  height="318.98" rx="6.85" ry="16.25"/>
+      <rect fill="#1E2D3D" x="338.93" y="368.79" width="13.7"  height="463.69" rx="6.85" ry="23.62"/>
+      <rect fill="#1E2D3D" x="389.88" y="442.34" width="13.7"  height="390.14" rx="6.85" ry="19.88"/>
+      <rect fill="#1E2D3D" x="435.62" y="583.81" width="13.7"  height="248.66" rx="6.85" ry="12.67"/>
+      <rect fill="#1E2D3D" x="485.6"  y="512.66" width="13.7"  height="319.81" rx="6.85" ry="16.29"/>
+      <rect fill="#1E2D3D" x="534.3"  y="367.3"  width="13.7"  height="465.17" rx="6.85" ry="23.7"/>
+      <rect fill="#1E2D3D" x="583.52" y="222.58" width="13.7"  height="609.89" rx="6.85" ry="31.07"/>
+      <rect fill="#1E2D3D" x="632.05" y="0"      width="13.7"  height="832.47" rx="6.85" ry="42.41"/>
+    </svg>"""
+
+    # ── Ubication string ──────────────────────────────────────────────────────
+    ub_txt = _e(ubicacion) + (f", {_e(distrito)}" if distrito else "")
+
+    return f"""<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOLUM — Propuesta de {_e(tipo_label)} · {_e(propietario)}</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+  :root {{
+    --navy:       #0D2137;
+    --navy-mid:   #1A3A5C;
+    --gray-dark:  #4A5568;
+    --gray-mid:   #718096;
+    --gray-light: #A0AEC0;
+    --gray-line:  #E2E8F0;
+    --gray-bg:    #F7F9FC;
+    --white:      #FFFFFF;
+    --gold:       #B8904A;
+    --cream:      #F8F5F0;
+  }}
+
+  * {{ margin:0; padding:0; box-sizing:border-box; }}
+
+  body {{
+    font-family: 'Inter', sans-serif;
+    background: #E8ECF2;
+    color: var(--gray-dark);
+    font-size: 13px;
+    line-height: 1.6;
+  }}
+
+  .page {{
+    width: 794px;
+    min-height: 1123px;
+    background: var(--white);
+    margin: 32px auto;
+    box-shadow: 0 4px 24px rgba(13,33,55,0.10);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-top: 8px solid #1E2D3D;
+  }}
+
+  .page-body {{ padding: 48px 56px 40px; flex: 1; }}
+
+  /* Header */
+  .doc-header {{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid var(--navy);
+  }}
+
+  .logo-block {{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }}
+
+  .logo-name {{
+    font-size: 18px;
+    font-weight: 800;
+    color: #1E2D3D;
+    letter-spacing: 3px;
+    margin-top: 2px;
+  }}
+
+  .logo-sub {{
+    font-size: 8px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gray-light);
+    margin-top: 2px;
+  }}
+
+  .header-right {{
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+  }}
+
+  .header-meta {{
+    font-size: 11px;
+    color: var(--gray-mid);
+    line-height: 1.5;
+  }}
+
+  .tipo-badge {{
+    background: var(--navy);
+    color: var(--white);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 6px 14px;
+  }}
+
+  /* Destinatario */
+  .recipient-block {{
+    margin-bottom: 24px;
+    padding: 20px 24px;
+    background: var(--gray-bg);
+    border-left: 3px solid var(--navy);
+  }}
+
+  .recipient-label {{
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gray-mid);
+    margin-bottom: 4px;
+  }}
+
+  .recipient-name {{
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 2px;
+  }}
+
+  .recipient-role {{
+    font-size: 11px;
+    color: var(--gray-mid);
+  }}
+
+  /* Intro text */
+  .intro-text {{
+    font-size: 13px;
+    color: var(--gray-dark);
+    line-height: 1.7;
+    margin-bottom: 24px;
+  }}
+
+  /* Sections */
+  .section {{ margin-bottom: 24px; }}
+
+  .section-title {{
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--navy);
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--navy);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }}
+
+  .section-title::after {{
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--gray-line);
+  }}
+
+  /* KV table */
+  .kv-table {{ width: 100%; border-collapse: collapse; margin-bottom: 10px; }}
+  .kv-table td {{
+    padding: 8px 12px;
+    font-size: 12px;
+    border-bottom: 1px solid var(--gray-line);
+    vertical-align: middle;
+  }}
+  .kv-table tr:last-child td {{ border-bottom: none; }}
+  .kv-table .kv-key {{
+    width: 32%;
+    background: var(--cream);
+    font-weight: 600;
+    font-size: 11px;
+    color: var(--navy);
+    border-right: 1px solid var(--gray-line);
+  }}
+  .kv-table .kv-val {{ color: var(--gray-dark); }}
+  .kv-table tr:nth-child(even) .kv-val {{ background: var(--cream); }}
+
+  /* Data table */
+  .data-table {{ width: 100%; border-collapse: collapse; margin-bottom: 10px; }}
+  .data-table th {{
+    background: var(--navy);
+    color: var(--white);
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 9px 11px;
+    text-align: left;
+  }}
+  .data-table th.center {{ text-align: center; }}
+  .data-table td {{
+    padding: 8px 11px;
+    font-size: 11px;
+    border-bottom: 1px solid var(--gray-line);
+    color: var(--gray-dark);
+  }}
+  .data-table td.center {{ text-align: center; }}
+  .data-table td.gold {{ color: var(--gold); }}
+  .data-table tr:nth-child(even) td {{ background: var(--gray-bg); }}
+  .data-table tfoot td {{
+    background: var(--navy);
+    color: var(--white);
+    font-weight: 700;
+    font-size: 12px;
+    border-top: 2px solid var(--navy);
+    border-bottom: none;
+    padding: 10px 11px;
+  }}
+  .data-table tfoot td.gold {{ color: var(--gold); }}
+
+  /* Pago table column widths */
+  .pago-table th:nth-child(1), .pago-table td:nth-child(1) {{ width: 28%; }}
+  .pago-table th:nth-child(2), .pago-table td:nth-child(2) {{ width: 22%; }}
+  .pago-table th:nth-child(3), .pago-table td:nth-child(3) {{ width: 50%; }}
+
+  /* Condiciones list */
+  .cond-list {{
+    list-style: none;
+    margin: 10px 0 0 0;
+  }}
+  .cond-list li {{
+    padding: 6px 0 6px 16px;
+    border-bottom: 1px solid var(--gray-line);
+    font-size: 12px;
+    color: var(--gray-dark);
+    position: relative;
+    line-height: 1.5;
+  }}
+  .cond-list li:last-child {{ border-bottom: none; }}
+  .cond-list li::before {{ content: '—'; position: absolute; left: 0; color: var(--gray-light); }}
+
+  /* Note box */
+  .note-box {{
+    background: var(--gray-bg);
+    border-left: 3px solid var(--navy);
+    padding: 12px 16px;
+    font-size: 11px;
+    color: var(--gray-dark);
+    line-height: 1.6;
+    margin-bottom: 10px;
+  }}
+
+  .note {{ font-size: 11px; color: var(--gray-mid); }}
+
+  /* Closing */
+  .closing-text {{
+    font-size: 12px;
+    color: var(--gray-dark);
+    line-height: 1.7;
+    margin-bottom: 12px;
+  }}
+
+  .disclaimer {{
+    font-size: 9px;
+    color: var(--gray-light);
+    line-height: 1.5;
+    padding: 12px 16px;
+    border-top: 1px solid var(--gray-line);
+    border-bottom: 1px solid var(--gray-line);
+    margin-bottom: 20px;
+    font-style: italic;
+  }}
+
+  /* Signature */
+  .sign-block {{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 8px;
+  }}
+
+  .sign-left .sign-name {{
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--navy);
+  }}
+
+  .sign-left .sign-cargo {{
+    font-size: 10px;
+    color: var(--gray-mid);
+  }}
+
+  .sign-left .sign-org {{
+    font-size: 10px;
+    color: var(--gold);
+    font-weight: 600;
+  }}
+
+  .sign-right {{
+    text-align: right;
+    font-size: 9px;
+    color: var(--gray-light);
+    line-height: 1.5;
+  }}
+
+  /* Footer */
+  .page-footer {{
+    padding: 12px 56px;
+    border-top: 1px solid var(--gray-line);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--gray-bg);
+  }}
+
+  .footer-note {{ font-size: 9px; color: var(--gray-light); }}
+
+  @media print {{
+    body {{ background: white; }}
+    .page {{ box-shadow: none; margin: 0; width: 100%; }}
+  }}
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="page-body">
+
+    <!-- Header -->
+    <div class="doc-header">
+      <div class="logo-block">
+        {_svg48}
+        <div class="logo-name">SOLUM</div>
+        <div class="logo-sub">Osterling Advisory</div>
+      </div>
+      <div class="header-right">
+        <div class="header-meta">
+          Lima, Perú &nbsp;·&nbsp; {_e(fecha)}<br>
+          eosterling@grupoosterling.com
+        </div>
+        <div class="tipo-badge">PROPUESTA DE {_e(tipo_label)}</div>
+      </div>
+    </div>
+
+    <!-- Destinatario -->
+    <div class="recipient-block">
+      <div class="recipient-label">Señor(es)</div>
+      <div class="recipient-name">{_e(propietario or propietario_reg)}</div>
+      <div class="recipient-role">Propietario(s) del inmueble</div>
+    </div>
+
+    <p class="intro-text">
+      Por medio de la presente, <strong>Osterling Advisory</strong> — en representación de su cliente —
+      tiene el agrado de presentar su propuesta formal de <strong>{_e(tipo_lower)}</strong> para el
+      inmueble de su propiedad, con las condiciones que se detallan a continuación.
+    </p>
+
+    <!-- I. Identificación -->
+    <div class="section">
+      <div class="section-title">I. Identificación del Inmueble</div>
+      <table class="kv-table">
+        <tr><td class="kv-key">Ubicación</td><td class="kv-val">{ub_txt}</td></tr>
+        <tr><td class="kv-key">Partida Registral</td><td class="kv-val">{_e(partida)}</td></tr>
+        <tr><td class="kv-key">Área del terreno</td><td class="kv-val">{area:,.1f} m²</td></tr>
+        <tr><td class="kv-key">Zonificación</td><td class="kv-val">{_e(zona_res)}</td></tr>
+        <tr><td class="kv-key">Propietario registral</td><td class="kv-val">{_e(propietario_reg)}</td></tr>
+      </table>
+    </div>
+
+    <!-- II. Propuesta Económica -->
+    <div class="section">
+      <div class="section-title">II. Propuesta Económica y Condiciones</div>
+      <table class="kv-table" style="margin-bottom:14px;">
+        <tr>
+          <td class="kv-key">{_e(precio_lbl)}</td>
+          <td class="kv-val" style="font-weight:700;color:var(--navy);font-size:14px;">{precio_str}</td>
+        </tr>
+        <tr>
+          <td class="kv-key">Plazo de respuesta</td>
+          <td class="kv-val">{plazo_respuesta} días calendario desde la recepción de la presente</td>
+        </tr>
+      </table>
+      {_sustento_html}
+      <p style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+                color:var(--navy);margin-bottom:6px;">Condiciones de la operación</p>
+      <ul class="cond-list">{cond_items_html}</ul>
+    </div>
+
+    {comp_section_html}
+
+    {pago_section_html}
+
+    <!-- Cierre -->
+    <div class="section">
+      <div class="section-title">Declaraciones Finales</div>
+      <p class="closing-text">
+        Quedamos a su disposición para cualquier consulta o coordinación adicional.
+        La presente propuesta tiene carácter indicativo y no genera obligación legal hasta la
+        suscripción de un documento de {_e(tipo_lower)} definitivo.
+      </p>
+      <div class="disclaimer">
+        NOTA: Esta propuesta ha sido elaborada con el apoyo de la IA de Análisis Inmobiliario SOLUM como
+        herramienta complementaria al criterio profesional. Los valores indicados son preliminares y están
+        sujetos a verificación técnica y legal. La propuesta definitiva deberá ser suscrita por las partes.
+      </div>
+      <div class="sign-block">
+        <div class="sign-left">
+          <div class="sign-name">{_e(representante)}</div>
+          <div class="sign-cargo">{_e(cargo)}</div>
+          <div class="sign-org">Osterling Advisory</div>
+        </div>
+        <div class="sign-right">
+          Generado con SOLUM · Osterling Advisory<br>
+          eosterling@grupoosterling.com · Lima, Perú
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-note">SOLUM · Herramienta IA de Análisis Inmobiliario · Información Confidencial</span>
+    <span class="footer-note">Pág. 1</span>
+  </div>
+</div>
+
+</body>
+</html>"""
+
+
 def generar_propuesta_pdf(
     tipo: str,
     propietario: str,
@@ -11098,380 +12026,13 @@ def generar_propuesta_pdf(
     condicion_minuta: str = "Aprobación del anteproyecto por la Municipalidad",
     condicion_escritura: str = "Desocupación y entrega del inmueble libre de cargas",
 ) -> bytes:
-    from reportlab.lib.pagesizes import A4
-    from reportlab.lib import colors
-    from reportlab.lib.units import mm
-    from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-    from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_RIGHT
-    from reportlab.platypus import (SimpleDocTemplate, Paragraph, Spacer, Table,
-                                    TableStyle, HRFlowable, KeepTogether)
-    import io
-
-    NAV  = colors.HexColor("#1E2D3D")
-    GOLD = colors.HexColor("#B8904A")
-    CREAM= colors.HexColor("#F8F5F0")
-    BORD = colors.HexColor("#E0DDD8")
-    GRAY = colors.HexColor("#666666")
-
-    p   = params or {}
-    r   = (financ or {}).get("resumen", {})
-    lg  = legal or {}
-    tc  = TIPO_CAMBIO
-
-    precio_usd  = precio_oferta if moneda_oferta == "USD" else round(precio_oferta / tc, 0)
-    precio_pen  = round(precio_usd * tc, 0)
-    area        = p.get("area_terreno_m2") or p.get("area_m2") or 0
-    pm2_usd     = round(precio_usd / area, 0) if area > 0 else 0
-    ubicacion   = p.get("ubicacion") or p.get("direccion") or "—"
-    distrito    = p.get("distrito") or ""
-    zona_res    = p.get("zona_residencial") or p.get("zonificacion") or "—"
-    partida     = lg.get("partida_numero") or "Pendiente de verificación SUNARP"
-    _props_raw2 = lg.get("propietarios_partida") or []
-    propietario_reg = (", ".join(
-        (x.get("nombre", str(x)) if isinstance(x, dict) else str(x))
-        for x in _props_raw2 if x
-    )) or propietario
-    tipo_label  = "COMPRA" if tipo == "Compra" else "ARRENDAMIENTO"
-
-    buf = io.BytesIO()
-    doc = SimpleDocTemplate(buf, pagesize=A4,
-                            leftMargin=20*mm, rightMargin=20*mm,
-                            topMargin=18*mm, bottomMargin=18*mm)
-
-    sty = getSampleStyleSheet()
-    def _s(name, **kw):
-        base = sty["Normal"]
-        return ParagraphStyle(name, parent=base, **kw)
-
-    S_body   = _s("body",   fontSize=9,  leading=13, textColor=NAV)
-    S_small  = _s("small",  fontSize=8,  leading=11, textColor=GRAY)
-    S_label  = _s("label",  fontSize=8,  leading=10, textColor=NAV, fontName="Helvetica-Bold")
-    S_gold   = _s("gold",   fontSize=9,  leading=13, textColor=GOLD, fontName="Helvetica-Bold")
-    S_h1     = _s("h1",     fontSize=22, leading=26, textColor=NAV, fontName="Helvetica-Bold")
-    S_kicker = _s("kicker", fontSize=7,  leading=9,  textColor=GOLD, fontName="Helvetica-Bold",
-                  charSpace=3)
-    S_sub    = _s("sub",    fontSize=7,  leading=9,  textColor=GRAY, charSpace=2)
-    S_sec    = _s("sec",    fontSize=7,  leading=9,  textColor=NAV,  fontName="Helvetica-Bold",
-                  charSpace=2, spaceAfter=4)
-    S_intro  = _s("intro",  fontSize=9,  leading=14, textColor=colors.HexColor("#444444"))
-    S_cond   = _s("cond",   fontSize=8,  leading=12, textColor=colors.HexColor("#444444"),
-                  leftIndent=8, bulletIndent=0)
-
-    W = doc.width
-
-    story = []
-
-    # ── Header ───────────────────────────────────────────────────────────────────
-    hdr_left = [
-        [Paragraph("OSTERLING ADVISORY", _s("kl", fontSize=7, leading=9, textColor=GOLD,
-                                             fontName="Helvetica-Bold", charSpace=3))],
-        [Paragraph("SOLUM", _s("fct", fontSize=20, leading=22, textColor=NAV,
-                                 fontName="Helvetica-Bold"))],
-        [Paragraph("IA DE ANÁLISIS INMOBILIARIO", _s("sub2", fontSize=6, leading=8,
-                                                              textColor=GRAY, charSpace=1.5))],
-    ]
-    hdr_right = [
-        [Paragraph(f"Lima, Perú  |  {fecha}", S_small)],
-        [Paragraph("eosterling@grupoosterling.com", S_small)],
-        [Table([[Paragraph(f"PROPUESTA DE {tipo_label}", _s("badge", fontSize=7, leading=9,
-                                                             textColor=colors.white,
-                                                             fontName="Helvetica-Bold", charSpace=1.5,
-                                                             alignment=TA_CENTER))]],
-               colWidths=[W*0.38],
-               style=TableStyle([("BACKGROUND", (0,0), (-1,-1), GOLD),
-                                  ("TOPPADDING",  (0,0), (-1,-1), 5),
-                                  ("BOTTOMPADDING",(0,0),(-1,-1), 5),
-                                  ("LEFTPADDING", (0,0), (-1,-1), 8),
-                                  ("RIGHTPADDING",(0,0), (-1,-1), 8)]))],
-    ]
-    tbl_hdr = Table(
-        [[Table(hdr_left,  colWidths=[W*0.55], style=TableStyle([("LEFTPADDING",(0,0),(-1,-1),0),("TOPPADDING",(0,0),(-1,-1),2),("BOTTOMPADDING",(0,0),(-1,-1),2)])),
-          Table(hdr_right, colWidths=[W*0.45], style=TableStyle([("ALIGN",(0,0),(-1,-1),"RIGHT"),("LEFTPADDING",(0,0),(-1,-1),0),("TOPPADDING",(0,0),(-1,-1),2),("BOTTOMPADDING",(0,0),(-1,-1),2)]))]],
-        colWidths=[W*0.55, W*0.45],
-        style=TableStyle([
-            ("LINEBELOW", (0,0), (-1,-1), 2, NAV),
-            ("BOTTOMPADDING", (0,0), (-1,-1), 10),
-            ("TOPPADDING",    (0,0), (-1,-1), 0),
-        ])
+    html = _build_propuesta_html(
+        tipo, propietario, params, financ, legal, comps_sunarp,
+        precio_oferta, moneda_oferta, condiciones, plazo_respuesta, fecha,
+        representante, cargo, tiene_opcion, dias_opcion, pct_opcion,
+        pct_minuta, condicion_minuta, condicion_escritura,
     )
-    story.append(tbl_hdr)
-    story.append(Spacer(1, 10*mm))
-
-    # ── Destinatario ─────────────────────────────────────────────────────────────
-    story.append(Paragraph("Señor(es)", S_small))
-    story.append(Paragraph(propietario or propietario_reg,
-                            _s("rcpt", fontSize=11, leading=14, textColor=NAV, fontName="Helvetica-Bold")))
-    story.append(Paragraph("Propietario(s) del inmueble", S_small))
-    story.append(Spacer(1, 5*mm))
-    story.append(Paragraph(
-        f"Por medio de la presente, <b>Osterling Advisory</b> — en representación de su cliente — "
-        f"tiene el agrado de presentar su propuesta formal de <b>{tipo.lower()}</b> para el "
-        f"inmueble de su propiedad, con las condiciones que se detallan a continuación.",
-        S_intro))
-    story.append(Spacer(1, 6*mm))
-
-    def _section_title(txt):
-        return KeepTogether([
-            Paragraph((txt or "").upper(), _s("stit", fontSize=7, leading=9, textColor=NAV,
-                                              fontName="Helvetica-Bold", charSpace=2)),
-            HRFlowable(width=W, thickness=1.5, color=GOLD, spaceAfter=6),
-        ])
-
-    def _kv_table(rows, col_w=None):
-        if not rows:
-            return Spacer(1, 1)
-        cw = col_w or [W*0.32, W*0.68]
-        data = []
-        for i, (k, v) in enumerate(rows):
-            data.append([Paragraph(k, S_label), Paragraph(str(v), S_body)])
-        ts = TableStyle([
-            ("BACKGROUND",    (0,0), (0,-1), CREAM),
-            ("LINEBELOW",     (0,0), (-1,-1), 0.5, BORD),
-            ("LINEABOVE",     (0,0), (-1,0),  0.5, BORD),
-            ("LINEBEFORE",    (0,0), (0,-1),  0.5, BORD),
-            ("LINEAFTER",     (1,0), (1,-1),  0.5, BORD),
-            ("TOPPADDING",    (0,0), (-1,-1), 5),
-            ("BOTTOMPADDING", (0,0), (-1,-1), 5),
-            ("LEFTPADDING",   (0,0), (-1,-1), 8),
-            ("RIGHTPADDING",  (0,0), (-1,-1), 8),
-            ("VALIGN",        (0,0), (-1,-1), "MIDDLE"),
-        ])
-        for i in range(len(rows)):
-            if i % 2 == 0:
-                ts.add("BACKGROUND", (1, i), (1, i), colors.white)
-            else:
-                ts.add("BACKGROUND", (1, i), (1, i), CREAM)
-        return Table(data, colWidths=cw, style=ts, repeatRows=0)
-
-    # ── I. Identificación ────────────────────────────────────────────────────────
-    story.append(_section_title("I. Identificación del Inmueble"))
-    ub_txt = ubicacion + (f", {distrito}" if distrito else "")
-    story.append(_kv_table([
-        ("Ubicación",          ub_txt),
-        ("Partida Registral",  partida),
-        ("Área del terreno",   f"{area:,.1f} m²"),
-        ("Zonificación",       zona_res),
-        ("Propietario registral", propietario_reg),
-    ]))
-    story.append(Spacer(1, 6*mm))
-
-    # ── II. Propuesta Económica ────────────────────────────────────────────────
-    story.append(_section_title("II. Propuesta Económica y Condiciones"))
-    if tipo == "Compra":
-        precio_str = f"USD {precio_usd:,.0f}  |  USD {pm2_usd:,.0f}/m²"
-        econ_rows  = [("Precio ofertado", precio_str)]
-    else:
-        precio_str = f"USD {precio_usd:,.0f} + IGV  |  USD {pm2_usd:,.2f}/m²/mes"
-        econ_rows  = [("Renta mensual ofertada", precio_str)]
-    econ_rows.append(("Plazo de respuesta",
-                       f"{plazo_respuesta} días calendario desde la recepción de la presente"))
-    story.append(_kv_table(econ_rows))
-
-    # Sustento del precio ofertado basado en umbral de viabilidad SOLUM
-    if tipo == "Compra" and r:
-        _max_t20 = r.get("max_terreno_20pct", 0) or 0
-        if _max_t20 > 0 and area > 0:
-            _pm2_terr = round(_max_t20 / area, 0)
-            if precio_usd <= _max_t20 * 1.05:
-                _sustento = (
-                    f"El precio ofertado (USD {precio_usd:,.0f}) se calibra al umbral de viabilidad estimado por SOLUM: "
-                    f"precio máximo de terreno compatible con margen neto ≥ 20% = "
-                    f"<b>USD {_max_t20:,.0f}</b> (USD {_pm2_terr:,.0f}/m²). "
-                    f"La oferta se encuadra dentro del rango de viabilidad del proyecto."
-                )
-            else:
-                _sustento = (
-                    f"Referencia de viabilidad SOLUM: el umbral al 20% de margen neto es USD {_max_t20:,.0f} "
-                    f"(USD {_pm2_terr:,.0f}/m²). La oferta supera este umbral; "
-                    f"se proyecta negociación o ajuste del programa para mantener la rentabilidad objetivo."
-                )
-            story.append(Spacer(1, 3*mm))
-            story.append(Paragraph(_sustento, S_small))
-
-    story.append(Spacer(1, 4*mm))
-    story.append(Paragraph("Condiciones de la operación", S_label))
-    story.append(Spacer(1, 2*mm))
-    _cond_text = (condiciones or "").strip()
-    if not _cond_text and tipo == "Compra":
-        _cond_text = (
-            "Libre de cargas, hipotecas y gravámenes registrales\n"
-            "Libre de ocupación y entregado sin mejoras post-oferta\n"
-            "Servicios (agua, luz, predial y arbitrios) al día a la fecha de cierre\n"
-            "Sujeto a due diligence legal (SUNARP) y técnico de 30 días calendario"
-        )
-    for c in _cond_text.split("\n"):
-        if c.strip():
-            story.append(Paragraph(f"• {c.strip()}", S_cond))
-    story.append(Spacer(1, 6*mm))
-
-    # ── III. Comparables SUNARP (optional) ───────────────────────────────────────
-    comp_rows_data = []
-    precios_cierre = []
-    for rc in (comps_sunarp or []):
-        ut  = rc.get("ultima_transferencia") or {}
-        p_v = ut.get("precio")
-        mon = ut.get("moneda", "USD")
-        pm2 = rc.get("precio_m2_estimado")
-        try:
-            p_v = float(p_v) if p_v is not None else None
-        except (TypeError, ValueError):
-            p_v = None
-        try:
-            pm2 = float(pm2) if pm2 is not None else None
-        except (TypeError, ValueError):
-            pm2 = None
-        if p_v and mon == "PEN":
-            p_v = round(p_v / tc, 0)
-            pm2 = round(pm2 / tc, 0) if pm2 else None
-        if pm2:
-            precios_cierre.append(pm2)
-        pv_s  = f"${p_v:,.0f}"  if p_v  else "—"
-        pm2_s = f"${pm2:,.0f}/m²" if pm2 else "—"
-        comp_rows_data.append([
-            Paragraph(rc.get("descripcion_predio", "—"), S_small),
-            Paragraph(str(rc.get("area_m2", "—")), S_small),
-            Paragraph(pv_s,  S_small),
-            Paragraph(pm2_s, S_small),
-            Paragraph(ut.get("fecha", "—"), S_small),
-        ])
-    if comp_rows_data:
-        story.append(_section_title("III. Sustento de Valor — Comparables SUNARP"))
-        story.append(Paragraph(
-            "Los siguientes precios de cierre, obtenidos de partidas registrales SUNARP, respaldan el valor propuesto:",
-            S_intro))
-        story.append(Spacer(1, 3*mm))
-        hdr_comp = [[Paragraph(h, _s("ch", fontSize=7, leading=9, textColor=colors.white,
-                                      fontName="Helvetica-Bold"))
-                     for h in ["Predio comparable", "Área m²", "Precio cierre", "USD/m²", "Fecha"]]]
-        comp_tbl = Table(hdr_comp + comp_rows_data,
-                         colWidths=[W*0.38, W*0.1, W*0.16, W*0.16, W*0.2],
-                         style=TableStyle([
-                             ("BACKGROUND",    (0,0), (-1,0),  NAV),
-                             ("LINEBELOW",     (0,0), (-1,-1), 0.5, BORD),
-                             ("LINEBEFORE",    (0,0), (0,-1),  0.5, BORD),
-                             ("LINEAFTER",    (-1,0), (-1,-1), 0.5, BORD),
-                             ("TOPPADDING",    (0,0), (-1,-1), 5),
-                             ("BOTTOMPADDING", (0,0), (-1,-1), 5),
-                             ("LEFTPADDING",   (0,0), (-1,-1), 7),
-                             ("RIGHTPADDING",  (0,0), (-1,-1), 7),
-                             ("ALIGN",         (1,0), (-1,-1), "CENTER"),
-                             ("ROWBACKGROUNDS",(0,1), (-1,-1), [colors.white, CREAM]),
-                         ]))
-        story.append(comp_tbl)
-        if precios_cierre:
-            med = round(sum(precios_cierre)/len(precios_cierre), 0)
-            story.append(Spacer(1, 3*mm))
-            story.append(Paragraph(
-                f"Precio de cierre promedio (SUNARP): <b>${med:,.0f}/m²</b>", S_body))
-        story.append(Spacer(1, 6*mm))
-        sec_num = "IV"
-    else:
-        sec_num = "III"
-
-    # ── Estructura de Pago (solo Compra) ─────────────────────────────────────────
-    if tipo == "Compra":
-        _pct_escritura  = round(100.0 - pct_minuta - (pct_opcion if tiene_opcion else 0.0), 1)
-        _monto_opcion   = round(precio_usd * pct_opcion / 100) if tiene_opcion and pct_opcion > 0 else 0
-        _monto_minuta   = round(precio_usd * pct_minuta / 100)
-        _monto_escritura= round(precio_usd * _pct_escritura / 100)
-
-        story.append(_section_title(f"{sec_num}. Estructura de Pago"))
-        story.append(Paragraph(
-            f"La presente oferta contempla la siguiente estructura de pago sobre el precio total de "
-            f"<b>USD {precio_usd:,.0f}</b>:", S_intro))
-        story.append(Spacer(1, 3*mm))
-
-        pago_hdr = [[Paragraph(h, _s("ph", fontSize=7, leading=9, textColor=colors.white,
-                                      fontName="Helvetica-Bold"))
-                     for h in ["Etapa", "Monto", "Condición / Oportunidad de pago"]]]
-        pago_data = []
-        _num = 1
-        if tiene_opcion:
-            monto_s = (f"USD {_monto_opcion:,.0f}\n({pct_opcion:.0f}% del precio)"
-                       if _monto_opcion > 0 else "Sin cargo")
-            cond_s = (f"A la firma del contrato de opción. Plazo: {dias_opcion} días calendario."
-                      + (" Monto imputable al precio total." if _monto_opcion > 0 else ""))
-            pago_data.append([
-                Paragraph(f"{_num}. Opción de Compra", S_label),
-                Paragraph(monto_s, S_gold),
-                Paragraph(cond_s, S_small),
-            ])
-            _num += 1
-        pago_data.append([
-            Paragraph(f"{_num}. Pago Inicial — Minuta", S_label),
-            Paragraph(f"USD {_monto_minuta:,.0f}\n({pct_minuta:.0f}%)", S_gold),
-            Paragraph(f"A la firma de la Minuta de Compraventa ante Notario. Condición: <b>{condicion_minuta}</b>.", S_small),
-        ])
-        _num += 1
-        pago_data.append([
-            Paragraph(f"{_num}. Saldo — Escritura Pública", S_label),
-            Paragraph(f"USD {_monto_escritura:,.0f}\n({_pct_escritura:.0f}%)",
-                      _s("esc", fontSize=9, leading=13, textColor=NAV, fontName="Helvetica-Bold")),
-            Paragraph(f"A la firma de la Escritura Pública e inscripción en SUNARP. Condición: <b>{condicion_escritura}</b>.", S_small),
-        ])
-        total_row = [
-            Paragraph("TOTAL", _s("tot", fontSize=9, leading=11, textColor=colors.white,
-                                   fontName="Helvetica-Bold")),
-            Paragraph(f"USD {precio_usd:,.0f}", _s("totv", fontSize=10, leading=12,
-                                                     textColor=GOLD, fontName="Helvetica-Bold")),
-            Paragraph(f"TC referencial: S/. {tc} por USD",
-                      _s("tots", fontSize=7, leading=9, textColor=colors.HexColor("#AAAAAA"))),
-        ]
-        pago_tbl_style = TableStyle([
-            ("BACKGROUND",    (0,0), (-1,0),  NAV),
-            ("BACKGROUND",    (0,-1),(-1,-1), NAV),
-            ("LINEBELOW",     (0,0), (-1,-2), 0.5, BORD),
-            ("LINEBEFORE",    (0,0), (0,-1),  0.5, BORD),
-            ("LINEAFTER",    (-1,0), (-1,-1), 0.5, BORD),
-            ("TOPPADDING",    (0,0), (-1,-1), 6),
-            ("BOTTOMPADDING", (0,0), (-1,-1), 6),
-            ("LEFTPADDING",   (0,0), (-1,-1), 8),
-            ("RIGHTPADDING",  (0,0), (-1,-1), 8),
-            ("VALIGN",        (0,0), (-1,-1), "MIDDLE"),
-        ])
-        for i in range(len(pago_data)):
-            if i % 2 == 0:
-                pago_tbl_style.add("BACKGROUND", (0, i+1), (-1, i+1), colors.white)
-            else:
-                pago_tbl_style.add("BACKGROUND", (0, i+1), (-1, i+1), CREAM)
-        pago_tbl = Table(pago_hdr + pago_data + [total_row],
-                         colWidths=[W*0.28, W*0.22, W*0.50],
-                         style=pago_tbl_style)
-        story.append(pago_tbl)
-        story.append(Spacer(1, 6*mm))
-
-    # ── Closing ───────────────────────────────────────────────────────────────────
-    story.append(HRFlowable(width=W, thickness=0.5, color=BORD, spaceAfter=5))
-    story.append(Paragraph(
-        "Quedamos a su disposición para cualquier consulta o coordinación adicional. "
-        "La presente propuesta tiene carácter indicativo y no genera obligación legal hasta la "
-        "suscripción de un documento de compraventa / arrendamiento definitivo.",
-        S_intro))
-    story.append(Spacer(1, 6*mm))
-    story.append(Paragraph(
-        "<i>NOTA: Esta propuesta ha sido elaborada con el apoyo de la IA de Análisis Inmobiliario SOLUM como "
-        "herramienta complementaria al criterio profesional. Los valores indicados son preliminares y están "
-        "sujetos a verificación técnica y legal. La propuesta definitiva deberá ser suscrita por las partes.</i>",
-        _s("disc_prop", fontSize=6.5, leading=10, textColor=colors.HexColor("#AAAAAA"),
-           fontName="Helvetica-Oblique")))
-    story.append(Spacer(1, 5*mm))
-    sign_tbl = Table(
-        [[Paragraph(representante, _s("sig", fontSize=10, leading=13, textColor=NAV,
-                                       fontName="Helvetica-Bold")),
-          Paragraph("Generado con SOLUM · Osterling Advisory<br/>eosterling@grupoosterling.com · Lima, Perú",
-                    _s("ft", fontSize=7, leading=10, textColor=colors.HexColor("#AAAAAA"),
-                       alignment=TA_RIGHT))],
-         [Paragraph(cargo, _s("cgo", fontSize=8, leading=10, textColor=GRAY)), Paragraph("", S_small)],
-         [Paragraph("Osterling Advisory", _s("oa", fontSize=8, leading=10, textColor=GOLD)), Paragraph("", S_small)]],
-        colWidths=[W*0.55, W*0.45],
-        style=TableStyle([("TOPPADDING",(0,0),(-1,-1),2),("BOTTOMPADDING",(0,0),(-1,-1),2),
-                           ("LEFTPADDING",(0,0),(-1,-1),0),("RIGHTPADDING",(0,0),(-1,-1),0),
-                           ("VALIGN",(1,0),(1,0),"MIDDLE")])
-    )
-    story.append(sign_tbl)
-
-    doc.build(story)
-    return buf.getvalue()
+    return _html_to_pdf(html)
 
 
 def generar_informe_residencial_html(r: dict, legal: dict | None, fecha: str,
