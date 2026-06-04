@@ -1,2 +1,12 @@
 [browser]
 gatherUsageStats = false
+
+[theme]
+base = "light"
+backgroundColor = "#F7F9FC"
+secondaryBackgroundColor = "#E8EDF4"
+textColor = "#1E2D3D"
+primaryColor = "#475569"
+
+[runner]
+fastReruns = true
