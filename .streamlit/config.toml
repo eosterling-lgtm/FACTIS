@@ -10,3 +10,6 @@ primaryColor = "#475569"
 
 [runner]
 fastReruns = true
+
+[server]
+enableStaticServing = false

@@ -50,51 +50,59 @@ def _to_display_bytes(raw: bytes) -> bytes:
         return raw
 
 # Logo embebido como base64
-_LOGO_PATH = pathlib.Path(__file__).parent / "logo.png"
-_LOGO_B64 = base64.b64encode(_LOGO_PATH.read_bytes()).decode() if _LOGO_PATH.exists() else ""
+@st.cache_resource
+def _load_static_assets():
+    """Carga y cachea todas las imágenes y SVGs en el primer arranque — no se repite en reruns."""
+    _dir = pathlib.Path(__file__).parent
 
-# SOLUM SVG logo
+    def _b64(p): return base64.b64encode(p.read_bytes()).decode() if p.exists() else ""
+    def _txt(p): return p.read_text(encoding="utf-8") if p.exists() else ""
+
+    logo_b64       = _b64(_dir / "logo.png")
+    wire_b64       = _b64(_dir / "wireframe.png")
+    login_bg_b64   = _b64(_dir / "login_bg.png")   # 1.6 MB — cacheado
+
+    svg_raw        = _txt(_dir / "solum_logo.svg")
+    svg_b64        = base64.b64encode(svg_raw.encode()).decode() if svg_raw else ""
+
+    # Variante T (barras navy, fondo transparente — desde solum_logo_transparent.svg)
+    svg_t_src = _dir / "solum_logo_transparent.svg"
+    if svg_t_src.exists():
+        t = _txt(svg_t_src)
+        t = t.replace('<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">', '')
+        t = t.replace('.fil1 {fill:#FEFEFE}', '.fil1 {fill:#0D2137}')
+        svg_t_b64 = base64.b64encode(t.encode()).decode()
+    else:
+        svg_t_b64 = svg_b64
+
+    # Variante light (fondo transparente, barras navy — para card claro del login)
+    if svg_raw:
+        lt = svg_raw.replace('<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">', '')
+        lt = lt.replace('.fil0 {fill:#1E2D3D}', '.fil0 {fill:none}')
+        lt = lt.replace('.fil1 {fill:#FEFEFE}', '.fil1 {fill:#0D2137}')
+        svg_light_b64 = base64.b64encode(lt.encode()).decode()
+    else:
+        svg_light_b64 = ""
+
+    # Variante white (fondo transparente, barras blancas — para overlay oscuro)
+    if svg_raw:
+        wt = svg_raw.replace('<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">', '')
+        wt = wt.replace('.fil0 {fill:#1E2D3D}', '.fil0 {fill:none}')
+        svg_white_b64 = base64.b64encode(wt.encode()).decode()
+    else:
+        svg_white_b64 = ""
+
+    return logo_b64, wire_b64, login_bg_b64, svg_raw, svg_b64, svg_t_b64, svg_light_b64, svg_white_b64
+
+(
+    _LOGO_B64, _WIRE_B64, _LOGIN_BG_B64,
+    _SOLUM_SVG_RAW, _SOLUM_SVG_B64,
+    _SOLUM_SVG_T_B64, _SOLUM_SVG_LIGHT_B64, _SOLUM_SVG_WHITE_B64
+) = _load_static_assets()
+
+_LOGO_PATH      = pathlib.Path(__file__).parent / "logo.png"
 _SOLUM_SVG_PATH = pathlib.Path(__file__).parent / "solum_logo.svg"
-_SOLUM_SVG_B64 = base64.b64encode(_SOLUM_SVG_PATH.read_bytes()).decode() if _SOLUM_SVG_PATH.exists() else ""
-_SOLUM_SVG_RAW  = _SOLUM_SVG_PATH.read_text(encoding="utf-8") if _SOLUM_SVG_PATH.exists() else ""
-
-# SOLUM SVG — isotipo 9 barras, navy sobre fondo blanco
-_SOLUM_SVG_T_PATH = pathlib.Path(__file__).parent / "solum_logo_transparent.svg"
-if _SOLUM_SVG_T_PATH.exists():
-    _svg_t_txt = _SOLUM_SVG_T_PATH.read_text(encoding="utf-8")
-    _svg_t_txt = _svg_t_txt.replace('<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">', '')
-    _svg_t_txt = _svg_t_txt.replace('.fil1 {fill:#FEFEFE}', '.fil1 {fill:#0D2137}')
-    _SOLUM_SVG_T_B64 = base64.b64encode(_svg_t_txt.encode("utf-8")).decode()
-else:
-    _SOLUM_SVG_T_B64 = _SOLUM_SVG_B64
-
-# SOLUM SVG — fondo transparente, barras y wordmark en negro para usar sobre fondo claro
-if _SOLUM_SVG_PATH.exists():
-    _svg_light_txt = _SOLUM_SVG_RAW
-    _svg_light_txt = _svg_light_txt.replace('<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">', '')
-    _svg_light_txt = _svg_light_txt.replace('.fil0 {fill:#1E2D3D}', '.fil0 {fill:none}')
-    _svg_light_txt = _svg_light_txt.replace('.fil1 {fill:#FEFEFE}', '.fil1 {fill:#0D2137}')
-    _SOLUM_SVG_LIGHT_B64 = base64.b64encode(_svg_light_txt.encode("utf-8")).decode()
-else:
-    _SOLUM_SVG_LIGHT_B64 = ""
-
-# SOLUM SVG — fondo transparente, barras y wordmark blancos para pantalla de carga oscura
-if _SOLUM_SVG_PATH.exists():
-    _svg_white_txt = _SOLUM_SVG_RAW
-    _svg_white_txt = _svg_white_txt.replace('<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">', '')
-    _svg_white_txt = _svg_white_txt.replace('.fil0 {fill:#1E2D3D}', '.fil0 {fill:none}')
-    # fil1 ya es #FEFEFE (blanco) — no se modifica
-    _SOLUM_SVG_WHITE_B64 = base64.b64encode(_svg_white_txt.encode("utf-8")).decode()
-else:
-    _SOLUM_SVG_WHITE_B64 = ""
-
-# Wireframe imagen estado vacío
-_WIRE_PATH = pathlib.Path(__file__).parent / "wireframe.png"
-_WIRE_B64 = base64.b64encode(_WIRE_PATH.read_bytes()).decode() if _WIRE_PATH.exists() else ""
-
-# Login background
-_LOGIN_BG_PATH = pathlib.Path(__file__).parent / "login_bg.png"
-_LOGIN_BG_B64 = base64.b64encode(_LOGIN_BG_PATH.read_bytes()).decode() if _LOGIN_BG_PATH.exists() else ""
+_LOGIN_BG_PATH  = pathlib.Path(__file__).parent / "login_bg.png"
 
 PROJECTS_DIR = pathlib.Path(__file__).parent / "projects"
 
@@ -367,6 +375,8 @@ def calcular_oficinas(r: dict) -> dict:
         precio_compra  = max(float(r.get("precio_compra") or 0), 0)
         proposito      = r.get("proposito", "Uso propio")
         alq_esperado   = max(float(r.get("alq_esperado") or 0), 0)
+        vacancia_pct_c = max(0.0, min(30.0, float(r.get("vacancia_pct") or 0))) / 100
+        alq_efectivo   = alq_esperado * (1 - vacancia_pct_c) if proposito == "Para rentar" else alq_esperado
         pago_ini_pct   = max(float(r.get("pago_inicial_pct") or 30), 10) / 100
         tasa_anual     = max(float(r.get("tasa_anual") or 9), 0) / 100
         plazo_anos     = max(int(r.get("plazo_anos") or 10), 1)
@@ -387,11 +397,11 @@ def calcular_oficinas(r: dict) -> dict:
         intereses_totales = total_pagado - precio_compra
 
         gc_anual    = gc_m2 * area * 12
-        noi         = max(alq_esperado * 12 - gc_anual, 0) if proposito == "Para rentar" else 0
+        noi         = max(alq_efectivo * 12 - gc_anual, 0) if proposito == "Para rentar" else 0
         cap_rate    = (noi / precio_compra * 100)          if precio_compra > 0 and noi > 0 else 0
-        yield_bruto = (alq_esperado * 12 / precio_compra * 100) if precio_compra > 0 and alq_esperado > 0 else 0
+        yield_bruto = (alq_efectivo * 12 / precio_compra * 100) if precio_compra > 0 and alq_esperado > 0 else 0
         yield_neto  = (noi / precio_compra * 100)          if precio_compra > 0 else 0
-        flujo_mensual = (alq_esperado - cuota_mensual - gc_m2 * area) if proposito == "Para rentar" else 0
+        flujo_mensual = (alq_efectivo - cuota_mensual - gc_m2 * area) if proposito == "Para rentar" else 0
         descuento_pct = ((precio_compra - precio_oferta) / precio_compra * 100) if precio_compra > 0 else 0
 
         diff_precio = ((precio_m2 - _bk_precio) / _bk_precio * 100) if _bk_precio > 0 else 0
@@ -401,7 +411,7 @@ def calcular_oficinas(r: dict) -> dict:
         cumul = -pago_inicial
         break_even_ano = None
         for yr in range(1, 11):
-            ingresos_yr = alq_esperado * 12 if proposito == "Para rentar" else 0
+            ingresos_yr = alq_efectivo * 12 if proposito == "Para rentar" else 0
             cuota_yr    = cuota_mensual * 12 if yr <= plazo_anos else 0
             flujo_yr    = ingresos_yr - cuota_yr - (gc_anual if proposito == "Para rentar" else 0)
             cumul      += flujo_yr
@@ -451,6 +461,7 @@ def calcular_oficinas(r: dict) -> dict:
             "proposito": proposito,
             "depreciacion_anual": round(depreciacion_anual),
             "ahorro_fiscal_anual": round(ahorro_fiscal_anual),
+            "vacancia_pct": round(vacancia_pct_c * 100, 1),
         }
 
     # ── MODO DESARROLLO ──────────────────────────────────────────────────
@@ -465,6 +476,7 @@ def calcular_oficinas(r: dict) -> dict:
         estrategia      = r.get("estrategia", "Venta")
         precio_venta    = max(float(r.get("precio_venta") or 2500), 0)
         precio_alquiler = max(float(r.get("precio_alquiler") or 18), 0)
+        vacancia_pct_d  = max(0.0, min(30.0, float(r.get("vacancia_pct") or 0))) / 100
         pct_venta_sl    = max(float(r.get("pct_venta") or 60), 0) / 100
         costo_constr    = max(float(r.get("costo_construccion") or 650), 0)
         costos_ind_pct  = max(float(r.get("costos_ind_pct") or 20), 0) / 100
@@ -505,7 +517,7 @@ def calcular_oficinas(r: dict) -> dict:
             area_renta = area_rentable * (1 - pct_venta_sl)
 
         ingresos_venta          = area_venta * precio_venta
-        renta_anual             = area_renta * precio_alquiler * 12
+        renta_anual             = area_renta * precio_alquiler * 12 * (1 - vacancia_pct_d)
         CAP_RATE_OFI            = 0.075
         valor_renta_capitalizado = renta_anual / CAP_RATE_OFI if renta_anual > 0 else 0
         ingresos_totales        = ingresos_venta + valor_renta_capitalizado
@@ -583,6 +595,7 @@ def calcular_oficinas(r: dict) -> dict:
             "esc_pesimista": _esc(-0.10, +0.08),
             "esc_base":      _esc(0,      0),
             "esc_optimista": _esc(+0.08, -0.05),
+            "vacancia_pct": round(vacancia_pct_d * 100, 1),
         }
 
 
@@ -665,7 +678,8 @@ def calcular_industrial(inp: dict) -> dict:
 
     # Renta base sobre área techada (nave arrendable)
     renta_m2_mes = inp.get("renta_m2_mes", 0)
-    renta_total_mes = renta_m2_mes * area_nave
+    vacancia_pct_ind = max(0.0, min(30.0, inp.get("vacancia_pct", 0.0))) / 100
+    renta_total_mes = renta_m2_mes * area_nave * (1 - vacancia_pct_ind)
     gastos_operacion = renta_total_mes * 12 * 0.08
     renta_neta_anual = max(renta_total_mes * 12 - gastos_operacion, 0)
     yield_bruto = (renta_total_mes * 12 / costo_total * 100) if costo_total > 0 else 0
@@ -792,6 +806,7 @@ def calcular_industrial(inp: dict) -> dict:
         "tasa_const":              tasa_const * 100,
         "plazo_const":             plazo_const,
         "renta_m2_mes": renta_m2_mes, "renta_total_mes": renta_total_mes,
+        "vacancia_pct": round(vacancia_pct_ind * 100, 1),
         "gastos_operacion": gastos_operacion, "renta_neta_anual": renta_neta_anual,
         "yield_bruto": yield_bruto, "yield_neto": yield_neto,
         "payback_anos": payback_anos, "flujo_mensual": flujo_mensual,
@@ -826,6 +841,41 @@ def calcular_industrial(inp: dict) -> dict:
         "rack_es_optima": rack_es_optima,
         "perfil": inp.get("perfil", "Desarrollo Integral"),
     }
+
+
+@st.cache_data(show_spinner=False)
+def calcular_sensibilidad_industrial(base_inp: dict):
+    """Matriz 5×5: yield bruto % + IRR equity % cruzando renta/m²/mes × precio terreno/m².
+    Filas = precio terreno/m² (±30%), Cols = renta/m²/mes (±20%).
+    Returns (grid_yield, grid_irr, rentas, terrenos_m2, renta_base, terreno_m2_base) or None.
+    """
+    renta_base   = base_inp.get("renta_m2_mes", 0)
+    costo_t_base = base_inp.get("costo_terreno", 0)
+    area         = base_inp.get("area_terreno", 0)
+    if renta_base <= 0 or costo_t_base <= 0 or area <= 0:
+        return None
+
+    terreno_m2_base = costo_t_base / area
+
+    pct_r = [-20, -10, 0, 10, 20]
+    rentas = [max(0.5, round(renta_base * (1 + p / 100) * 4) / 4) for p in pct_r]
+
+    pct_t = [-30, -15, 0, 15, 30]
+    terrenos_m2 = [max(50, round(terreno_m2_base * (1 + t / 100) / 50) * 50) for t in pct_t]
+
+    grid_yield = []
+    grid_irr   = []
+    for tm2 in terrenos_m2:
+        row_y = []; row_i = []
+        for rm2 in rentas:
+            inp_adj = {**base_inp, "renta_m2_mes": rm2, "costo_terreno": tm2 * area}
+            res = calcular_industrial(inp_adj)
+            row_y.append(res["yield_bruto"])
+            row_i.append(res["irr_anual"])
+        grid_yield.append(row_y)
+        grid_irr.append(row_i)
+
+    return grid_yield, grid_irr, rentas, terrenos_m2, renta_base, terreno_m2_base
 
 
 # ═══════════════════════════════════════════════════════
@@ -1035,6 +1085,13 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded"
 )
+
+# Inyección inmediata de fondo — elimina el flash blanco antes de que cargue el tema
+st.markdown("""<style>
+html,body,#root,.stApp,[data-testid="stAppViewContainer"],[data-testid="stMain"]{
+    background-color:#F7F9FC!important;
+}
+</style>""", unsafe_allow_html=True)
 
 # ═══════════════════════════════════════════════════════
 # LINK DE COMPARTIR — vista pública (sin login)
@@ -1356,6 +1413,7 @@ def _show_login() -> None:
             for _k in ("_login_pw", "_login_user"):
                 st.session_state.pop(_k, None)
             st.session_state["_auth_loading"] = True
+            st.session_state["_show_welcome"] = True
             st.rerun()
         else:
             _intentos = st.session_state.get("_login_intentos", 0) + 1
@@ -1403,7 +1461,7 @@ if st.session_state.pop("_auth_loading", False):
         background: #0E1B2A;
         display: flex; flex-direction: column; align-items: center; justify-content: center;
         z-index: 999999;
-        animation: overlayFadeOut 0.5s ease 2.4s forwards;
+        animation: overlayFadeOut 0.4s ease 2.2s forwards;
         pointer-events: none;
     }}
     #auth-overlay::before {{
@@ -1489,6 +1547,11 @@ st.markdown("""
         overflow: hidden !important;
     }
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+    /* ── Flash blanco — fondo inmediato antes de que cargue el tema ── */
+    html { background-color: #F7F9FC !important; }
+    body { background-color: #F7F9FC !important; }
+    #root, .stApp, [data-testid="stAppViewContainer"] { background-color: #F7F9FC !important; }
 
     /* ── Base ── */
     html, body, [class*="css"], .stApp, .stMarkdown, .stMetric,
@@ -4454,11 +4517,11 @@ def _run_with_retry(fn, spinner_msg, max_attempts=3):
                     st.stop()
 
         if attempt < max_attempts:
-            wait = 20 if is_rate_limit else 3
+            wait = 20 if is_rate_limit else 1
             for s in range(wait, 0, -1):
                 msg = (f"Optimizando consulta — reintentando en {s}s… ({attempt + 1}/{max_attempts})"
                        if is_rate_limit else
-                       f"Reintentando conexión en {s}s… (intento {attempt + 1}/{max_attempts})")
+                       f"Reintentando conexión… (intento {attempt + 1}/{max_attempts})")
                 _status.info(msg)
                 time.sleep(1)
             _status.empty()
@@ -4876,7 +4939,7 @@ IMPORTANTE: Reemplaza todos los valores del ejemplo con los datos reales del doc
 
     text = _api_call(client,
         model="claude-sonnet-4-6",
-        max_tokens=8192,
+        max_tokens=3072,
         system=[{"type": "text",
                  "text": "Eres un arquitecto experto en normativa urbanística de Lima, Perú. Respondes únicamente con JSON válido, sin texto adicional.",
                  "cache_control": {"type": "ephemeral"}}],
@@ -5581,7 +5644,7 @@ Devuelve SOLO este JSON:
 
     text = _api_call(client,
         model="claude-sonnet-4-6",
-        max_tokens=16384,
+        max_tokens=6144,
         system=[
             {
                 "type": "text",
@@ -7401,8 +7464,8 @@ def _build_solum_html(result: dict, cabida: dict, params: dict,
     _legal_html = ""
     if legal:
         _sem = legal.get("semaforo", "amarillo").lower()
-        _sc  = {"verde":"#1A4731","amarillo":"#92651A","rojo":"#7A1A1A"}.get(_sem,"#92651A")
-        _sb  = {"verde":"#E8F5EE","amarillo":"#FFF8E6","rojo":"#FDECEA"}.get(_sem,"#FFF8E6")
+        _sc  = {"verde":"#1A4731","amarillo":"#1A3A5C","rojo":"#7A1A1A"}.get(_sem,"#1A3A5C")
+        _sb  = {"verde":"#E8F5EE","amarillo":"#EBF0F8","rojo":"#FDECEA"}.get(_sem,"#EBF0F8")
         _sl  = {"verde":"SIN ALERTAS CRÍTICAS","amarillo":"ALERTAS MENORES","rojo":"ALERTAS CRÍTICAS"}.get(_sem,"PENDIENTE")
         _reg = "".join(
             f"<div class='info-line'><span class='lbl'>{_e(k)}</span><span class='val'>{_e(str(v))}</span></div>"
@@ -7443,7 +7506,7 @@ def _build_solum_html(result: dict, cabida: dict, params: dict,
     <div class="conclusion-box" style="margin-top:20px;"><p>{_e(legal.get("conclusion",""))}</p></div>
   </div>
   <div class="page-footer">
-    <div class="page-footer-note">Herramienta complementaria al criterio profesional. Valores preliminares.</div>
+    <div class="page-footer-note">INFORMACIÓN CONFIDENCIAL &nbsp;·&nbsp; SOLUM Herramienta Analítica Inmobiliaria</div>
     <div class="page-num">Pág. 7</div>
   </div>
 </div>"""
@@ -7595,6 +7658,8 @@ def _build_solum_html(result: dict, cabida: dict, params: dict,
     font-size: 12px;
     color: var(--gray-mid);
     font-weight: 300;
+    padding-left: 15px;
+    margin-bottom: 20px;
   }}
 
   .cover-spacer {{ flex: 1; min-height: 40px; }}
@@ -7608,7 +7673,7 @@ def _build_solum_html(result: dict, cabida: dict, params: dict,
   .cover-footer {{
     background: rgba(13,33,55,0.07);
     margin: 0 -56px;
-    padding: 9px 80px;
+    padding: 5px 80px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -7616,15 +7681,15 @@ def _build_solum_html(result: dict, cabida: dict, params: dict,
   }}
 
   .cover-footer-txt {{
-    font-size:11px;
-    font-weight: 600;
+    font-size:10px;
+    font-weight: 300;
     letter-spacing: 2px;
     text-transform: uppercase;
     color: var(--gray-mid);
   }}
 
   .cover-footer-dot {{
-    font-size:11px;
+    font-size:10px;
     color: var(--gray-line);
   }}
 
@@ -7812,7 +7877,7 @@ def _build_solum_html(result: dict, cabida: dict, params: dict,
   }}
 
   /* Result box */
-  .result-box {{ border: 1px solid var(--gray-line); margin-bottom: 20px; }}
+  .result-box {{ border: 1px solid var(--gray-line); margin-bottom: 20px; page-break-inside: avoid; }}
   .result-box-header {{ background: var(--navy); color: var(--white); padding: 10px 18px; font-size:11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; }}
   .result-box-body {{ padding: 18px; }}
   .result-row {{ display: flex; justify-content: space-between; align-items: center; padding: 9px 0; border-bottom: 1px solid var(--gray-line); font-size: 12px; }}
@@ -7953,11 +8018,7 @@ def _build_solum_html(result: dict, cabida: dict, params: dict,
     </div>
 
     <div class="cover-footer">
-      <span class="cover-footer-txt">SOLUM</span>
-      <span class="cover-footer-dot">·</span>
-      <span class="cover-footer-txt">Herramienta IA de Análisis Inmobiliario</span>
-      <span class="cover-footer-dot">·</span>
-      <span class="cover-footer-txt">Información Confidencial</span>
+      <span class="cover-footer-txt">SOLUM Herramienta Analítica Inmobiliaria</span>
     </div>
 
   </div>
@@ -8056,7 +8117,7 @@ def _build_solum_html(result: dict, cabida: dict, params: dict,
     <div class="conclusion-box"><p>{_zona_txt}</p></div>
   </div>
   <div class="page-footer">
-    <div class="page-footer-note">Herramienta complementaria al criterio profesional. Valores preliminares sujetos a validación técnica y de mercado.</div>
+    <div class="page-footer-note">INFORMACIÓN CONFIDENCIAL &nbsp;·&nbsp; SOLUM Herramienta Analítica Inmobiliaria</div>
     <div class="page-num">Pág. 2</div>
   </div>
 </div>
@@ -8142,7 +8203,7 @@ def _build_solum_html(result: dict, cabida: dict, params: dict,
     <ul class="obs-list">{_obs_html}</ul>
   </div>
   <div class="page-footer">
-    <div class="page-footer-note">Herramienta complementaria al criterio profesional. Valores preliminares sujetos a validación técnica y de mercado.</div>
+    <div class="page-footer-note">INFORMACIÓN CONFIDENCIAL &nbsp;·&nbsp; SOLUM Herramienta Analítica Inmobiliaria</div>
     <div class="page-num">Pág. 3</div>
   </div>
 </div>
@@ -8202,7 +8263,7 @@ def _build_solum_html(result: dict, cabida: dict, params: dict,
     </table>
   </div>
   <div class="page-footer">
-    <div class="page-footer-note">Herramienta complementaria al criterio profesional. Valores preliminares sujetos a validación técnica y de mercado.</div>
+    <div class="page-footer-note">INFORMACIÓN CONFIDENCIAL &nbsp;·&nbsp; SOLUM Herramienta Analítica Inmobiliaria</div>
     <div class="page-num">Pág. 4</div>
   </div>
 </div>
@@ -8251,7 +8312,7 @@ def _build_solum_html(result: dict, cabida: dict, params: dict,
     {_matrix_html}
   </div>
   <div class="page-footer">
-    <div class="page-footer-note">Herramienta complementaria al criterio profesional. Valores preliminares sujetos a validación técnica y de mercado.</div>
+    <div class="page-footer-note">INFORMACIÓN CONFIDENCIAL &nbsp;·&nbsp; SOLUM Herramienta Analítica Inmobiliaria</div>
     <div class="page-num">Pág. 5</div>
   </div>
 </div>
@@ -8305,15 +8366,15 @@ def _build_solum_html(result: dict, cabida: dict, params: dict,
     </div>
 
     <div class="disclaimer">
-      Este análisis es de carácter referencial y no sustituye el estudio de mercado detallado, el due diligence legal completo
-      ni la opinión de un arquitecto sobre la cabida definitiva. Los resultados dependen de los supuestos ingresados y pueden
-      variar con la variación de precios de mercado, costos de construcción y normativa municipal.
+      Este informe ha sido preparado por Osterling Advisory con fines de pre-factibilidad y orientación estratégica.
+      Los resultados son referenciales y no sustituyen el expediente técnico definitivo, el due diligence legal,
+      la tasación formal ni la opinión de arquitectos, ingenieros y especialistas. Los supuestos de mercado, costos
+      y normativa pueden variar. Osterling Advisory no asume responsabilidad por decisiones de inversión basadas
+      exclusivamente en este análisis.
     </div>
   </div>
   <div class="page-footer">
-    <div class="page-footer-left" style="font-size:11px;color:var(--gray-mid);">
-      <strong style="color:var(--navy)">Preparado por Osterling Advisory</strong> &nbsp;·&nbsp; Confidencial
-    </div>
+    <div class="page-footer-note">INFORMACIÓN CONFIDENCIAL &nbsp;·&nbsp; SOLUM Herramienta Analítica Inmobiliaria</div>
     <div class="page-num">Pág. 6</div>
   </div>
 </div>
@@ -10370,7 +10431,7 @@ f'<div style="font-size:11px;color:#9A9080;letter-spacing:2px;text-transform:upp
 
 
 
-def _build_industrial_html(r: dict, factibilidad, fecha: str, altura_nave: float = 0) -> str:
+def _build_industrial_html(r: dict, factibilidad, fecha: str, altura_nave: float = 0, ubicacion: str = "") -> str:
     import html as _he
 
     def _e(s):
@@ -10470,9 +10531,28 @@ def _build_industrial_html(r: dict, factibilidad, fecha: str, altura_nave: float
 
     # Dirección portada
     _cover_addr = f"Zona {_e(zonificacion)} &nbsp;·&nbsp; {_e(uso)} &nbsp;·&nbsp; Lima, Perú"
+    _cover_ubicacion_html = f'<div style="font-size:14px;font-weight:700;color:var(--navy);margin-bottom:5px;border-left:3px solid var(--navy);padding-left:12px;">{_e(ubicacion)}</div>' if ubicacion else ""
+    _cover_specs_html = f"""
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--gray-line);border:1px solid var(--gray-line);margin-bottom:0;">
+      <div style="background:var(--white);padding:16px 18px;">
+        <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gray-light);margin-bottom:4px;">Área del Terreno</div>
+        <div style="font-size:15px;font-weight:700;color:var(--navy);">{_at:,.0f} m²</div>
+        <div style="font-size:10px;color:var(--gray-light);margin-top:2px;">Superficie total del lote</div>
+      </div>
+      <div style="background:var(--white);padding:16px 18px;">
+        <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gray-light);margin-bottom:4px;">Área de Nave</div>
+        <div style="font-size:15px;font-weight:700;color:var(--navy);">{_an:,.0f} m²</div>
+        <div style="font-size:10px;color:var(--gray-light);margin-top:2px;">Área techada construida</div>
+      </div>
+      <div style="background:var(--white);padding:16px 18px;">
+        <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gray-light);margin-bottom:4px;">Actividad</div>
+        <div style="font-size:13px;font-weight:700;color:var(--navy);">{_e(act_desc or act_cat or tipo_nave)}</div>
+        <div style="font-size:10px;color:var(--gray-light);margin-top:2px;">{_e(zonificacion)} · RNE A.060</div>
+      </div>
+    </div>""" if _at > 0 else ""
 
     # altura_str para construcción
-    altura_str = f" &nbsp;·&nbsp; {altura_nave:.0f}m al hombro" if altura_nave and altura_nave > 0 else ""
+    altura_str = f" · {altura_nave:.0f}m al hombro" if altura_nave and altura_nave > 0 else ""
 
     # ── Porcentajes de estructura de costos ──────────────────────────────────────
     def _pct(v):
@@ -10534,8 +10614,8 @@ def _build_industrial_html(r: dict, factibilidad, fecha: str, altura_nave: float
     _fac_html = ""
     if factibilidad:
         _sg   = (factibilidad.get("semaforo_global") or "amarillo").lower()
-        _fsc  = {"verde": "#1A4731", "amarillo": "#92651A", "rojo": "#7A1A1A"}.get(_sg, "#92651A")
-        _fsb  = {"verde": "#E8F5EE", "amarillo": "#FFF8E6", "rojo": "#FDECEA"}.get(_sg, "#FFF8E6")
+        _fsc  = {"verde": "#1A4731", "amarillo": "#1A3A5C", "rojo": "#7A1A1A"}.get(_sg, "#1A3A5C")
+        _fsb  = {"verde": "#E8F5EE", "amarillo": "#EBF0F8", "rojo": "#FDECEA"}.get(_sg, "#EBF0F8")
         _fsl  = {"verde": "SIN ALERTAS CRÍTICAS", "amarillo": "OBSERVACIONES", "rojo": "ALERTAS CRÍTICAS"}.get(_sg, "PENDIENTE")
         _frt  = _e(factibilidad.get("resumen_tecnico") or "")
         _frl  = _e(factibilidad.get("resumen_legal") or "")
@@ -10714,6 +10794,8 @@ def _build_industrial_html(r: dict, factibilidad, fecha: str, altura_nave: float
     font-size: 12px;
     color: var(--gray-mid);
     font-weight: 300;
+    padding-left: 15px;
+    margin-bottom: 20px;
   }}
 
   .cover-spacer {{ flex: 1; min-height: 40px; }}
@@ -10727,7 +10809,7 @@ def _build_industrial_html(r: dict, factibilidad, fecha: str, altura_nave: float
   .cover-footer {{
     background: rgba(13,33,55,0.07);
     margin: 0 -56px;
-    padding: 9px 80px;
+    padding: 5px 80px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -10735,15 +10817,15 @@ def _build_industrial_html(r: dict, factibilidad, fecha: str, altura_nave: float
   }}
 
   .cover-footer-txt {{
-    font-size:11px;
-    font-weight: 600;
+    font-size:10px;
+    font-weight: 300;
     letter-spacing: 2px;
     text-transform: uppercase;
     color: var(--gray-mid);
   }}
 
   .cover-footer-dot {{
-    font-size:11px;
+    font-size:10px;
     color: var(--gray-line);
   }}
 
@@ -10885,7 +10967,7 @@ def _build_industrial_html(r: dict, factibilidad, fecha: str, altura_nave: float
   }}
 
   /* Result box */
-  .result-box {{ border: 1px solid var(--gray-line); margin-bottom: 20px; }}
+  .result-box {{ border: 1px solid var(--gray-line); margin-bottom: 20px; page-break-inside: avoid; }}
   .result-box-header {{ background: var(--navy); color: var(--white); padding: 10px 18px; font-size:11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; }}
   .result-box-body {{ padding: 18px; }}
   .result-row {{ display: flex; justify-content: space-between; align-items: center; padding: 9px 0; border-bottom: 1px solid var(--gray-line); font-size: 12px; }}
@@ -10899,12 +10981,12 @@ def _build_industrial_html(r: dict, factibilidad, fecha: str, altura_nave: float
   /* Gran total navy box */
   .gt-box {{ background: var(--navy); padding: 0; margin-bottom: 20px; }}
   .gt-row {{
-    display: flex; justify-content: space-between; align-items: center;
+    display: grid; grid-template-columns: 1fr 1fr 1fr; align-items: center;
     padding: 12px 20px; border-bottom: 1px solid rgba(255,255,255,0.08);
   }}
   .gt-row:last-child {{ border-bottom: none; }}
   .gt-row .lbl {{ font-size: 12px; font-weight: 700; color: var(--white); }}
-  .gt-row .val {{ font-size: 15px; font-weight: 700; color: var(--gold); }}
+  .gt-row .val {{ font-size: 15px; font-weight: 700; color: var(--white); text-align: center; }}
   .gt-row .note {{ font-size: 10px; color: rgba(255,255,255,0.45); text-align: right; }}
 
   /* Two-col */
@@ -10970,7 +11052,10 @@ def _build_industrial_html(r: dict, factibilidad, fecha: str, altura_nave: float
     <div class="cover-big-sub">Análisis Industrial / Logístico</div>
     {_cover_subtitle}
 
-    <div class="cover-addr">{_cover_addr}</div>
+    {_cover_ubicacion_html}
+    <div class="cover-addr-sub">{_cover_addr}</div>
+
+    {_cover_specs_html}
 
     <div class="cover-spacer"></div>
 
@@ -11000,11 +11085,7 @@ def _build_industrial_html(r: dict, factibilidad, fecha: str, altura_nave: float
     </div>
 
     <div class="cover-footer">
-      <span class="cover-footer-txt">SOLUM</span>
-      <span class="cover-footer-dot">·</span>
-      <span class="cover-footer-txt">Herramienta IA de Análisis Inmobiliario</span>
-      <span class="cover-footer-dot">·</span>
-      <span class="cover-footer-txt">Información Confidencial</span>
+      <span class="cover-footer-txt">SOLUM Herramienta Analítica Inmobiliaria</span>
     </div>
 
   </div>
@@ -11071,7 +11152,7 @@ def _build_industrial_html(r: dict, factibilidad, fecha: str, altura_nave: float
       </thead>
       <tbody>
         <tr>
-          <td>Nave techada &nbsp; {_an:,.0f} m² &nbsp;×&nbsp; {_fmt(_cnm2)}/m²{_e(altura_str)}</td>
+          <td>Nave techada &nbsp; {_an:,.0f} m² &nbsp;×&nbsp; {_fmt(_cnm2)}/m²{altura_str}</td>
           <td class="right">{_fmt(_cnt)}</td>
           <td class="right">{_pct(_cnt)}</td>
         </tr>
@@ -11085,6 +11166,7 @@ def _build_industrial_html(r: dict, factibilidad, fecha: str, altura_nave: float
           <td class="right">{_fmt(_sc)}</td>
           <td class="right">{_pct(_sc)}</td>
         </tr>
+        {'<tr><td colspan="3" style="font-size:10px;color:#1A4731;background:#E8F5EE;padding:8px 11px;font-style:italic;">Sin costo de construcción ingresado — análisis de terreno únicamente</td></tr>' if _cnm2 == 0 and _cnt == 0 else ""}
       </tbody>
       <tfoot>
         <tr><td><strong>Total Construcción (B)</strong></td><td class="right"><strong>{_fmt(_ccs)}</strong></td><td class="right"><strong>{_pct(_ccs)}</strong></td></tr>
@@ -11111,7 +11193,7 @@ def _build_industrial_html(r: dict, factibilidad, fecha: str, altura_nave: float
 
   </div>
   <div class="page-footer">
-    <div class="page-footer-note">Herramienta complementaria al criterio profesional. Valores preliminares sujetos a validación técnica y de mercado.</div>
+    <div class="page-footer-note">INFORMACIÓN CONFIDENCIAL &nbsp;·&nbsp; SOLUM Herramienta Analítica Inmobiliaria</div>
     <div class="page-num">Pág. 2</div>
   </div>
 </div>
@@ -11125,8 +11207,8 @@ def _build_industrial_html(r: dict, factibilidad, fecha: str, altura_nave: float
     <div class="section-title">Financiamiento</div>
 
     <div class="two-col" style="margin-bottom:24px;">
-      <div class="info-block" style="border-left:3px solid var(--gold);">
-        <div class="info-block-title" style="color:var(--gold);">A — Terreno</div>
+      <div class="info-block" style="border-left:3px solid var(--navy-light);">
+        <div class="info-block-title" style="color:var(--navy-mid);">A — Terreno</div>
         <div class="info-line"><span class="lbl">Downpayment</span><span class="val">{_fmt(_cpt)} ({_dpt:.0f}%)</span></div>
         <div class="info-line"><span class="lbl">Crédito</span><span class="val">{_fmt(_mct)} ({100-_dpt:.0f}%)</span></div>
         <div class="info-line"><span class="lbl">Cuota mensual</span><span class="val">{_fmt(_qut)}/mes</span></div>
@@ -11170,9 +11252,14 @@ def _build_industrial_html(r: dict, factibilidad, fecha: str, altura_nave: float
 
     {_fac_html}
 
+    <div style="background:var(--gray-bg);border:1px solid var(--gray-line);border-top:3px solid var(--navy);padding:16px 20px;margin-top:28px;">
+      <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gray-light);margin-bottom:6px;">Nota metodológica</div>
+      <p style="font-size:11px;color:var(--gray-mid);line-height:1.7;">Este análisis fue elaborado con SOLUM, plataforma de pre-factibilidad inmobiliaria de Osterling Advisory que integra el RNE, parámetros urbanísticos de 27 distritos de Lima, modelos financieros del sector promotor peruano y base de conocimiento legal inmobiliario. Los resultados tienen carácter orientativo y deben validarse con due diligence formal.</p>
+    </div>
+
   </div>
   <div class="page-footer">
-    <div class="page-footer-note">NOTA: Esta IA de Análisis Inmobiliario debe utilizarse como herramienta complementaria al criterio profesional, permitiendo obtener resultados preliminares de manera rápida. El profesional podrá definir tipologías, distribución y modificaciones pertinentes.</div>
+    <div class="page-footer-note">INFORMACIÓN CONFIDENCIAL &nbsp;·&nbsp; SOLUM Herramienta Analítica Inmobiliaria</div>
     <div class="page-num">Pág. 3</div>
   </div>
 </div>
@@ -11181,8 +11268,8 @@ def _build_industrial_html(r: dict, factibilidad, fecha: str, altura_nave: float
 </html>"""
 
 
-def generar_informe_industrial_pdf(r: dict, factibilidad, fecha: str, altura_nave: float = 0) -> bytes:
-    html = _build_industrial_html(r, factibilidad, fecha, altura_nave)
+def generar_informe_industrial_pdf(r: dict, factibilidad, fecha: str, altura_nave: float = 0, ubicacion: str = "") -> bytes:
+    html = _build_industrial_html(r, factibilidad, fecha, altura_nave, ubicacion)
     return _html_to_pdf(html)
 
 
@@ -12205,7 +12292,7 @@ def _build_propuesta_html(
   </div>
 
   <div class="page-footer">
-    <span class="footer-note">SOLUM · Herramienta IA de Análisis Inmobiliario · Información Confidencial</span>
+    <span class="footer-note">INFORMACIÓN CONFIDENCIAL · SOLUM Herramienta Analítica Inmobiliaria</span>
     <span class="footer-note">Pág. 1</span>
   </div>
 </div>
@@ -12743,8 +12830,7 @@ def _build_oficinas_html(inp: dict, fin: dict, fecha: str) -> str:
     {kpi_strip}
   </div>
   <div class="page-footer">
-    <span>SOLUM · Herramienta IA de Análisis Inmobiliario</span>
-    <span>Información Confidencial · Osterling Advisory</span>
+    <span>INFORMACIÓN CONFIDENCIAL · SOLUM Herramienta Analítica Inmobiliaria</span>
   </div>
 </div>
 
@@ -13660,62 +13746,105 @@ with st.sidebar:
         for k in ["_authenticated","_user_name","_user_role","_username"]:
             st.session_state.pop(k, None)
         st.rerun()
+
+    # Botón Introducción — siempre visible debajo de Cerrar sesión
+    if st.button("Introducción", key="_btn_intro", use_container_width=True):
+        st.session_state["_show_welcome"] = True
+        st.rerun()
+
     st.markdown('<hr style="border:none;border-top:1px solid #CBD5E1;margin:6px 0 10px;">', unsafe_allow_html=True)
     st.markdown(
         '<div style="font-size:10px;color:#6B7280;letter-spacing:3px;text-transform:uppercase;'
         'font-weight:700;padding:0 4px 6px;">Módulo de análisis</div>',
         unsafe_allow_html=True)
-    tipo_op = st.radio(
-        "tipo_op_radio",
-        ["Proyecto Inmobiliario", "Proyecto Logístico / Industrial", "Proyecto de Oficinas", "Inmueble Residencial", "Portfolio"],
-        key="tipo_operacion",
-        label_visibility="collapsed",
-    )
+    _show_welcome_now = st.session_state.get("_show_welcome", False)
 
-    # ── Descripción contextual del módulo seleccionado ───
+    def _on_module_select():
+        st.session_state["_show_welcome"] = False
+        # Si se selecciona desde modo intro, sincronizar al key principal
+        _v = st.session_state.get("_tipo_op_intro_inactive")
+        if _v:
+            st.session_state["tipo_operacion"] = _v
+
+    _modules = ["Proyecto Inmobiliario", "Proyecto Logístico / Industrial", "Proyecto de Oficinas", "Inmueble Residencial", "Portfolio"]
+    _current_mod = st.session_state.get("tipo_operacion", "Proyecto Inmobiliario") or "Proyecto Inmobiliario"
+
+    if _show_welcome_now:
+        # Key distinto → Streamlit lo trata como widget nuevo → index=None funciona de verdad
+        st.radio(
+            "tipo_op_radio",
+            _modules,
+            index=None,
+            key="_tipo_op_intro_inactive",
+            label_visibility="collapsed",
+            on_change=_on_module_select,
+        )
+        tipo_op = _current_mod
+    else:
+        _radio_index = _modules.index(_current_mod) if _current_mod in _modules else 0
+        tipo_op = st.radio(
+            "tipo_op_radio",
+            _modules,
+            index=_radio_index,
+            key="tipo_operacion",
+            label_visibility="collapsed",
+            on_change=_on_module_select,
+        ) or _current_mod
+
+    # ── Descripción contextual — siempre visible (usa módulo activo o Proyecto Inmobiliario como preview)
     _mod_ctx = {
         "Proyecto Inmobiliario": (
-            "🏗",
-            "Desarrollo residencial multifamiliar",
+            "🏗", "Desarrollo residencial multifamiliar",
             "Cabida normativa · Financiero · RIN · PDF",
             "Úsalo cuando tienes un terreno y quieres proyectar pisos, unidades, costos y rentabilidad de un edificio de departamentos.",
         ),
         "Proyecto Logístico / Industrial": (
-            "🏭",
-            "Nave logística · Almacén · Industria",
+            "🏭", "Nave logística · Almacén · Industria",
             "Costo · Yield · DSCR · Comparativa",
             "Úsalo para evaluar la construcción o adquisición de una nave industrial, almacén logístico o planta de manufactura.",
         ),
         "Inmueble Residencial": (
-            "🏠",
-            "Valuación de inmueble existente",
+            "🏠", "Valuación de inmueble existente",
             "Precio · Renta · Yield · Comparables",
             "Úsalo cuando tienes un departamento, casa o unidad residencial ya construida y quieres analizar su valor o rentabilidad.",
         ),
         "Proyecto de Oficinas": (
-            "🏢",
-            "Alquiler · Compra · Desarrollo de Proyecto",
+            "🏢", "Alquiler · Compra · Desarrollo de Proyecto",
             "Yield · TIR · Financiero · Comparativa",
             "Úsalo para analizar el alquiler o compra de una oficina existente, o para proyectar el desarrollo de un edificio de oficinas.",
         ),
         "Portfolio": (
-            "📁",
-            "Proyectos guardados",
+            "📁", "Proyectos guardados",
             "KPIs · Historial · Comparativa",
             "Vista consolidada de todos los proyectos analizados y guardados. Compara KPIs entre proyectos y revisa el historial de versiones.",
         ),
     }
-    _mico, _mtit, _mtag, _mdesc = _mod_ctx.get(tipo_op, _mod_ctx["Proyecto Inmobiliario"])
-    st.markdown(
-        f'<div style="background:#F1F5F9;border-radius:9px;padding:11px 13px;'
-        f'border:1px solid #CBD5E1;margin:6px 0 4px;">'
-        f'<div style="font-size:12px;font-weight:700;color:#0D2137;margin-bottom:2px;">'
-        f'{_mico} {_mtit}</div>'
-        f'<div style="font-size:11px;color:rgba(71,85,105,0.80);letter-spacing:1px;'
-        f'text-transform:uppercase;font-weight:600;margin-bottom:6px;">{_mtag}</div>'
-        f'<div style="font-size:11px;color:#475569;line-height:1.5;">{_mdesc}</div>'
-        f'</div>',
-        unsafe_allow_html=True)
+    # En pantalla introductoria: mostrar las 5 cards para familiarizarse con los módulos
+    if _show_welcome_now:
+        for _mk, (_mmi, _mmt, _mmtag, _mmd) in _mod_ctx.items():
+            st.markdown(
+                f'<div style="background:#F1F5F9;border-radius:9px;padding:10px 12px;'
+                f'border:1px solid #CBD5E1;margin:0 0 6px;">'
+                f'<div style="font-size:11px;font-weight:700;color:#0D2137;margin-bottom:2px;">'
+                f'{_mmi} {_mmt}</div>'
+                f'<div style="font-size:10px;color:rgba(71,85,105,0.80);letter-spacing:1px;'
+                f'text-transform:uppercase;font-weight:600;margin-bottom:4px;">{_mmtag}</div>'
+                f'<div style="font-size:10px;color:#475569;line-height:1.45;">{_mmd}</div>'
+                f'</div>',
+                unsafe_allow_html=True)
+    else:
+        _ctx_key = (tipo_op if tipo_op in _mod_ctx else "Proyecto Inmobiliario")
+        _mi, _mt, _mtag, _md = _mod_ctx[_ctx_key]
+        st.markdown(
+            f'<div style="background:#F1F5F9;border-radius:9px;padding:11px 13px;'
+            f'border:1px solid #CBD5E1;margin:6px 0 4px;">'
+            f'<div style="font-size:12px;font-weight:700;color:#0D2137;margin-bottom:2px;">'
+            f'{_mi} {_mt}</div>'
+            f'<div style="font-size:11px;color:rgba(71,85,105,0.80);letter-spacing:1px;'
+            f'text-transform:uppercase;font-weight:600;margin-bottom:6px;">{_mtag}</div>'
+            f'<div style="font-size:11px;color:#475569;line-height:1.5;">{_md}</div>'
+            f'</div>',
+            unsafe_allow_html=True)
     st.markdown("---")
 
     # ── Helper compartido: render de paso de progreso ────
@@ -14627,10 +14756,16 @@ with st.sidebar:
         ind_tipo_contrato = "Anual"
         ind_ajuste_pct   = 0.0
         ind_inicio_ajuste = 2
+        ind_vacancia_pct  = 0
         if ind_uso == "Inversión":
             ind_renta = st.number_input(
                 "Renta de mercado (USD/m²/mes)",
                 0.0, 50.0, 6.5, 0.25, key="ind_renta")
+            ind_vacancia_pct = st.slider(
+                "Vacancia esperada (%)", 0, 30,
+                int(st.session_state.get("ind_vacancia_pct", 0)),
+                5, key="ind_vacancia_pct",
+                help="% de tiempo sin arrendatario. 0% = ocupación plena. La banca en Lima modela 10–15% para análisis conservador.")
             ind_periodo_anos = st.number_input(
                 "Período de ocupación del inquilino (años)",
                 min_value=1, max_value=30,
@@ -15448,6 +15583,7 @@ with st.sidebar:
             ofi_cr_terreno_dp = 40.0; ofi_cr_terreno_tasa = 8.0; ofi_cr_terreno_plazo = 10
             ofi_cr_obra_dp = 30.0; ofi_cr_obra_tasa = 9.0; ofi_cr_obra_plazo = 8
             ofi_preventa_pct = 30.0; ofi_cert_bytes = None
+            ofi_vacancia_pct = 0.0
 
         elif ofi_modo == "Compra":
             # PRECIO
@@ -15480,10 +15616,16 @@ with st.sidebar:
                 key="ofi_proposito",
                 label_visibility="collapsed",
             )
+            ofi_vacancia_pct = 0.0
             if ofi_proposito == "Para rentar":
                 ofi_alq_esperado = st.number_input(
                     "Alquiler esperado (USD/mes)", min_value=0.0, value=4500.0, step=100.0, key="ofi_alq_esperado"
                 )
+                ofi_vacancia_pct = float(st.slider(
+                    "Vacancia esperada (%)", 0, 30,
+                    int(st.session_state.get("ofi_vacancia_pct", 0)),
+                    5, key="ofi_vacancia_pct",
+                    help="% de tiempo sin arrendatario. 0% = ocupación plena."))
                 _ofi_yield = (ofi_alq_esperado * 12 / ofi_precio_compra * 100) if ofi_precio_compra > 0 else 0.0
                 _ofi_yc = "#6BCEA0" if _ofi_yield >= 6.0 else ("#F4A261" if _ofi_yield >= 4.5 else "#E07A5F")
                 st.markdown(
@@ -15617,8 +15759,14 @@ with st.sidebar:
                     ofi_precio_alquiler = st.number_input(
                         "Precio alquiler (USD/m²/mes)", min_value=5.0, value=18.0, step=0.5, key="ofi_precio_alquiler"
                     )
+                    ofi_vacancia_pct = float(st.slider(
+                        "Vacancia esperada (%)", 0, 30,
+                        int(st.session_state.get("ofi_vacancia_pct_des", 0)),
+                        5, key="ofi_vacancia_pct_des",
+                        help="% de tiempo sin arrendatario en la porción rentada."))
                 else:
                     ofi_precio_alquiler = 0.0
+                    ofi_vacancia_pct = 0.0
             if ofi_estrategia == "Mixta":
                 ofi_pct_venta = float(st.slider(
                     "% a venta", min_value=10, max_value=90, value=60, step=5, key="ofi_pct_venta"
@@ -15741,7 +15889,7 @@ if "ofi_comparativa" not in st.session_state:
 if "comps_sunarp" not in st.session_state:
     st.session_state.comps_sunarp = []
 
-tipo_op = st.session_state.get("tipo_operacion", "Proyecto Inmobiliario")
+tipo_op = st.session_state.get("tipo_operacion", None) or "Proyecto Inmobiliario"
 
 # ── EJECUCIÓN ────────────────────────────────────────
 
@@ -15768,6 +15916,7 @@ if tipo_op == "Proyecto Logístico / Industrial" and run_industrial:
             "pct_indirectos":      ind_pct_indirectos,
             "include_alcabala":    ind_alcabala,
             "renta_m2_mes":        ind_renta,
+            "vacancia_pct":        ind_vacancia_pct,
             "uso":                 ind_uso,
             "tipo_contrato":       ind_tipo_contrato,
             "ajuste_anual_pct":    ind_ajuste_pct,
@@ -15785,6 +15934,7 @@ if tipo_op == "Proyecto Logístico / Industrial" and run_industrial:
         }
         try:
             st.session_state.industrial_result = calcular_industrial(_ind_inp)
+            st.session_state["_ind_inp_sens"] = _ind_inp
             st.session_state.ind_analizado = True
             # Si hay documentos cargados, analizar automáticamente (usar bytes cacheados)
             _ip  = st.session_state.get("partida_bytes")
@@ -16064,7 +16214,222 @@ if tipo_op == "Inmueble Residencial" and st.session_state.get("residencial_resul
 
 # ── TABS ─────────────────────────────────────────────
 
-if tipo_op == "Proyecto Inmobiliario":
+# ── PANTALLA DE BIENVENIDA ────────────────────────────
+if st.session_state.get("_show_welcome", False):
+    _yr_w = datetime.datetime.now().year
+    st.markdown(f"""
+    <style>
+    .sw-hero {{
+        background: #F7F9FC;
+        border: 1px solid #E2E8F0;
+        border-top: 4px solid #0D2137;
+        border-radius: 14px; padding: 48px 64px 44px;
+        margin-bottom: 24px;
+    }}
+    .sw-hero-title {{ font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 40px; font-weight: 800; color: #0D2137;
+        letter-spacing: -1px; line-height: 1.15; margin-bottom: 16px; }}
+    .sw-hero-title span {{ color: #C9A96E; }}
+    .sw-hero-sub {{ font-size: 16px; color: #4A5568;
+        line-height: 1.7; max-width: 620px; margin-bottom: 36px; }}
+    .sw-hero-badges {{ display: flex; gap: 10px; flex-wrap: wrap; }}
+    .sw-hero-badge {{ background: #FFFFFF; border: 1px solid #CBD5E1;
+        border-radius: 20px; padding: 5px 14px; font-size: 11px; font-weight: 600;
+        letter-spacing: 1.5px; text-transform: uppercase; color: #475569; }}
+    .sw-section-title {{ font-size: 11px; font-weight: 700; letter-spacing: 3px;
+        text-transform: uppercase; color: rgba(13,33,55,0.45); margin-bottom: 16px; }}
+    .sw-diff-title {{ font-size: 26px; font-weight: 800; color: #0D2137;
+        letter-spacing: -0.5px; margin-bottom: 10px; }}
+    .sw-diff-sub {{ font-size: 15px; color: #4A5568; line-height: 1.7;
+        max-width: 680px; margin-bottom: 32px; }}
+    .sw-integrations {{ display: grid; grid-template-columns: repeat(5, 1fr);
+        gap: 14px; margin-bottom: 40px; }}
+    .sw-int-card {{ background: #F7F9FC; border: 1px solid #E2E8F0;
+        border-radius: 10px; padding: 18px 16px; border-top: 3px solid #0D2137; }}
+    .sw-int-icon {{ font-size: 18px; margin-bottom: 10px; }}
+    .sw-int-label {{ font-size: 11px; font-weight: 700; color: #0D2137;
+        letter-spacing: 0.5px; margin-bottom: 6px; }}
+    .sw-int-desc {{ font-size: 11px; color: #6B7280; line-height: 1.5; }}
+    .sw-purpose {{ background: #F7F9FC; border-radius: 12px; padding: 40px 48px;
+        margin-bottom: 24px; border: 1px solid #E2E8F0;
+        display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }}
+    .sw-purpose-title {{ font-size: 24px; font-weight: 800; color: #0D2137;
+        line-height: 1.3; margin-bottom: 14px; }}
+    .sw-purpose-title em {{ font-style: normal; color: rgba(201,169,110,0.90); }}
+    .sw-purpose-text {{ font-size: 14px; color: #4A5568; line-height: 1.8; }}
+    .sw-steps {{ display: flex; flex-direction: column; gap: 18px; }}
+    .sw-step {{ display: flex; align-items: flex-start; gap: 14px; }}
+    .sw-step-num {{ width: 32px; height: 32px; border-radius: 50%;
+        background: #0D2137; color: #FFFFFF; font-size: 13px; font-weight: 700;
+        display: flex; align-items: center; justify-content: center; flex-shrink: 0; }}
+    .sw-step-label {{ font-size: 13px; font-weight: 700; color: #0D2137; margin-bottom: 3px; }}
+    .sw-step-desc {{ font-size: 12px; color: #6B7280; line-height: 1.5; }}
+    .sw-footer {{ margin-top: 40px; padding: 28px 32px; background: #F7F9FC;
+        border-radius: 10px; border: 1px solid #E2E8F0; border-left: 4px solid #0D2137;
+        width: 100%; box-sizing: border-box; }}
+    .sw-footer-method {{ font-size: 12px; color: #1E2D3D; line-height: 1.8; margin-bottom: 12px; }}
+    .sw-footer-disc {{ font-size: 11px; color: #718096; line-height: 1.7; margin-bottom: 10px; }}
+    .sw-footer-copy {{ font-size: 10px; color: #A0AEC0; letter-spacing: 0.5px; }}
+    </style>
+
+    <div class="sw-hero">
+      <div>
+        <div class="sw-hero-title">Pre-factibilidad inmobiliaria<br>en <span>15 minutos.</span></div>
+        <div class="sw-hero-sub">
+          SOLUM genera cabida arquitectónica normativa, modelo financiero con estructura bancaria
+          y due diligence legal — en un informe listo para presentar ante banca,
+          comité de inversión o directorio.
+        </div>
+        <div class="sw-hero-badges">
+          <span class="sw-hero-badge">Cabida</span>
+          <span class="sw-hero-badge">Normativa</span>
+          <span class="sw-hero-badge">Financiero</span>
+          <span class="sw-hero-badge">Legal</span>
+          <span class="sw-hero-badge">27 Distritos · Lima</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="padding: 8px 4px 32px;">
+      <div class="sw-section-title">Base de conocimiento integrada</div>
+      <div class="sw-diff-title">SOLUM no es inteligencia artificial genérica.</div>
+      <div class="sw-diff-sub">
+        Integra conocimiento técnico y jurídico especializado del mercado inmobiliario peruano —
+        construido sobre bases normativas, financieras y de mercado reales, no sobre datos genéricos.
+      </div>
+      <div class="sw-integrations">
+        <div class="sw-int-card">
+          <div class="sw-int-icon">📐</div>
+          <div class="sw-int-label">RNE Completo</div>
+          <div class="sw-int-desc">Reglamento Nacional de Edificaciones, modificaciones, anexos y base legal vigente</div>
+        </div>
+        <div class="sw-int-card">
+          <div class="sw-int-icon">🗺</div>
+          <div class="sw-int-label">RIN · 27 Distritos</div>
+          <div class="sw-int-desc">Reglamentación urbanística específica de cada distrito de Lima Metropolitana</div>
+        </div>
+        <div class="sw-int-card">
+          <div class="sw-int-icon">📊</div>
+          <div class="sw-int-label">Modelos Financieros</div>
+          <div class="sw-int-desc">Fórmulas calibradas para el promotor peruano: banco, preventa, flujo de caja y sensibilidad</div>
+        </div>
+        <div class="sw-int-card">
+          <div class="sw-int-icon">⚖️</div>
+          <div class="sw-int-label">Marco Legal</div>
+          <div class="sw-int-desc">Análisis jurídico con fundamento en el derecho inmobiliario y registral nacional</div>
+        </div>
+        <div class="sw-int-card">
+          <div class="sw-int-icon">🏛</div>
+          <div class="sw-int-label">12 Años Advisory</div>
+          <div class="sw-int-desc">Experiencia en advisory corporativo, transacciones reales e interpretación de mercado</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sw-purpose">
+      <div>
+        <div class="sw-purpose-title">SOLUM no reemplaza<br>el criterio profesional —<br><em>lo potencia.</em></div>
+        <div class="sw-purpose-text">
+          Sin importar tu especialidad, en 15 minutos obtienes una pre-factibilidad
+          con la profundidad de una consultoría. Decide con fundamento, cierra en menor
+          tiempo y presenta con confianza ante cualquier interlocutor — banca, directorio,
+          socio o cliente.<br><br>
+          SOLUM entrega el 90% del análisis. El criterio profesional afina los puntos
+          finales según el diseño arquitectónico y los indicadores que busca cada usuario.
+        </div>
+      </div>
+      <div>
+        <div class="sw-section-title" style="margin-bottom:20px;">Cómo funciona</div>
+        <div class="sw-steps">
+          <div class="sw-step">
+            <div class="sw-step-num">1</div>
+            <div>
+              <div class="sw-step-label">Ingresa los datos del inmueble</div>
+              <div class="sw-step-desc">Certificado de parámetros, partida registral, planos y área del lote</div>
+            </div>
+          </div>
+          <div class="sw-step">
+            <div class="sw-step-num">2</div>
+            <div>
+              <div class="sw-step-label">SOLUM procesa cabida, finanzas y legal</div>
+              <div class="sw-step-desc">IA especializada aplica normativa del distrito, calcula programa y modelo financiero</div>
+            </div>
+          </div>
+          <div class="sw-step">
+            <div class="sw-step-num">3</div>
+            <div>
+              <div class="sw-step-label">Descarga el informe listo para presentar</div>
+              <div class="sw-step-desc">PDF y Excel listos para comité de inversión, banco o directorio — en 15 minutos</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown("""
+    <div style="background:#F0FAF4;border:1px solid rgba(22,163,74,0.25);border-left:4px solid #16A34A;
+                border-radius:10px;padding:20px 24px;margin-bottom:28px;display:flex;gap:16px;align-items:flex-start;">
+      <div style="font-size:20px;flex-shrink:0;margin-top:2px;">✅</div>
+      <div>
+        <div style="font-size:12px;font-weight:700;color:#14532D;letter-spacing:0.5px;margin-bottom:6px;">
+          No es necesario contar con todos los documentos para comenzar
+        </div>
+        <div style="font-size:13px;color:#374151;line-height:1.7;">
+          Si dispones únicamente de información parcial — certificado de parámetros urbanísticos,
+          medidas periméricas del lote o precio del inmueble — puedes correr el análisis de igual manera.
+          SOLUM procesará la información disponible y entregará el análisis posible,
+          indicándote qué datos complementar para afinar los resultados.
+        </div>
+      </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown(
+        '<div style="background:linear-gradient(135deg,#1E2D3D 0%,#243D52 100%);'
+        'border-radius:14px;padding:36px 48px;margin:8px 0 36px;'
+        'display:flex;align-items:center;gap:28px;'
+        'box-shadow:0 8px 32px rgba(13,33,55,0.18);">'
+        '<div style="font-size:36px;flex-shrink:0;">←</div>'
+        '<div>'
+        '<div style="font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;'
+        'color:rgba(201,169,110,0.85);margin-bottom:8px;">Para comenzar</div>'
+        '<div style="font-size:18px;font-weight:700;color:#FFFFFF;line-height:1.5;">'
+        'Selecciona el tipo de proyecto que deseas evaluar<br>'
+        '<span style="color:rgba(195,218,240,0.75);font-weight:400;font-size:15px;">'
+        'en el panel de módulos ubicado a la izquierda.</span>'
+        '</div>'
+        '</div>'
+        '</div>',
+        unsafe_allow_html=True
+    )
+
+    st.markdown(f"""
+    <div class="sw-footer">
+      <div class="sw-footer-method">
+        <strong style="color:#0D2137;">Metodología y base de conocimiento —</strong>
+        SOLUM integra el Reglamento Nacional de Edificaciones (RNE) con sus modificaciones y base
+        legal vigente; los parámetros urbanísticos específicos de 27 distritos de Lima (RIN); modelos
+        financieros calibrados para el sector promotor peruano; análisis legal con fundamento en el
+        derecho inmobiliario nacional; y 12 años de experiencia en advisory inmobiliario corporativo
+        — transacciones reales, información de mercado actualizada e interpretación a nivel de
+        consultoría especializada.
+      </div>
+      <div class="sw-footer-disc">
+        Los análisis tienen carácter orientativo y se elaboran con base en los parámetros ingresados
+        y en información de mercado de referencia. No constituyen asesoría legal, financiera ni de
+        ingeniería. Toda decisión de inversión debe respaldarse con due diligence formal y opinión
+        de especialistas. Consultas:
+        <a href="mailto:eosterling@grupoosterling.com" style="color:#475569;">eosterling@grupoosterling.com</a>
+      </div>
+      <div class="sw-footer-copy">
+        Advisory inmobiliario corporativo &nbsp;·&nbsp; grupoosterling.com &nbsp;·&nbsp;
+        © {_yr_w} Osterling Advisory &nbsp;·&nbsp; Lima, Perú &nbsp;·&nbsp; Información confidencial
+      </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+elif tipo_op == "Proyecto Inmobiliario":
     if st.session_state.params:
         p        = st.session_state.params
         c        = st.session_state.cabida
@@ -19212,18 +19577,30 @@ if tipo_op == "Proyecto Inmobiliario":
         )
 
         st.markdown(
-            '<div style="margin-top:32px;padding:20px 32px;border-top:1px solid #E2E8F0;'
-            'text-align:center;">'
-            '<p style="font-size:11px;color:#8A8A8A;line-height:1.7;font-family:Inter,sans-serif;'
-            'max-width:680px;margin:0 auto;">'
-            'Los resultados generados por SOLUM tienen carácter referencial y se basan en los parámetros '
-            'ingresados por el usuario. Se recomienda validar con asesores técnicos, legales y financieros '
-            'antes de tomar decisiones de inversión. Consultas: '
-            '<a href="mailto:eosterling@grupoosterling.com" style="color:#475569;text-decoration:none;">'
-            'eosterling@grupoosterling.com</a>.'
+            '<div style="margin-top:40px;padding:24px 32px 20px;border-top:2px solid #E2E8F0;'
+            'border-left:4px solid #0D2137;background:#F7F9FC;border-radius:0 0 10px 10px;">'
+            '<p style="font-size:11px;color:#1E2D3D;line-height:1.8;font-family:Inter,sans-serif;'
+            'margin:0 0 10px 0;">'
+            '<strong>Metodología y base de conocimiento —</strong> '
+            'SOLUM integra el Reglamento Nacional de Edificaciones (RNE) con sus modificaciones y base '
+            'legal vigente; los parámetros urbanísticos específicos de 27 distritos de Lima (RIN); modelos '
+            'financieros calibrados para el sector promotor peruano; análisis legal con fundamento en el '
+            'derecho inmobiliario nacional; y 12 años de experiencia en advisory inmobiliario corporativo '
+            '— transacciones reales, información de mercado actualizada e interpretación a nivel de '
+            'consultoría especializada.'
             '</p>'
-            '<p style="font-size:10px;color:#AAAAAA;margin-top:12px;font-family:Inter,sans-serif;">'
-            '© 2026 Osterling Advisory — Lima, Perú. Todos los derechos reservados.'
+            '<p style="font-size:11px;color:#718096;line-height:1.7;font-family:Inter,sans-serif;'
+            'margin:0 0 10px 0;">'
+            'Los análisis tienen carácter orientativo y se elaboran con base en los parámetros ingresados '
+            'y en información de mercado de referencia. No constituyen asesoría legal, financiera ni de '
+            'ingeniería. Toda decisión de inversión debe respaldarse con due diligence formal y opinión '
+            'de especialistas. Consultas: '
+            '<a href="mailto:eosterling@grupoosterling.com" style="color:#475569;text-decoration:none;">'
+            'eosterling@grupoosterling.com</a>'
+            '</p>'
+            '<p style="font-size:10px;color:#A0AEC0;font-family:Inter,sans-serif;letter-spacing:0.5px;">'
+            'Advisory inmobiliario corporativo &nbsp;·&nbsp; grupoosterling.com &nbsp;·&nbsp; '
+            '© 2026 Osterling Advisory &nbsp;·&nbsp; Lima, Perú &nbsp;·&nbsp; Información confidencial'
             '</p>'
             '</div>',
             unsafe_allow_html=True
@@ -19290,6 +19667,7 @@ elif tipo_op == "Proyecto de Oficinas" and run_oficinas:
         "cr_obra_tasa": ofi_cr_obra_tasa,
         "cr_obra_plazo": ofi_cr_obra_plazo,
         "preventa_pct": ofi_preventa_pct,
+        "vacancia_pct": ofi_vacancia_pct,
         "instrucciones": ofi_instrucciones,
         "comparativa": list(st.session_state.ofi_comparativa),
     }
@@ -19334,9 +19712,9 @@ elif tipo_op == "Proyecto Logístico / Industrial":
                 _b64_ind = _b64i.b64encode(_ind_hero_fotos[0]).decode()
                 _ind_photo_css = f"url('data:image/jpeg;base64,{_b64_ind}') center/cover no-repeat"
             except Exception:
-                _ind_photo_css = "linear-gradient(135deg,#1A2A1A 0%,#243824 100%)"
+                _ind_photo_css = "linear-gradient(135deg,#0D2137 0%,#1A3556 100%)"
         else:
-            _ind_photo_css = "linear-gradient(135deg,#1A2A1A 0%,#243824 100%)"
+            _ind_photo_css = "linear-gradient(135deg,#0D2137 0%,#1A3556 100%)"
 
         _ind_ubicacion_label = st.session_state.get("ind_ubicacion") or (r.get("zonificacion", "") + " — Lima")
         _ind_yield_bruto = r.get("yield_bruto", 0)
@@ -19786,13 +20164,61 @@ elif tipo_op == "Proyecto Logístico / Industrial":
                 if st.button("REGENERAR MEMORANDUM", key="btn_ind_rsm_regen_re"):
                     st.session_state.ind_resumen = None
                     st.rerun()
+                # ── Descargar Memorandum HTML ──────────────────────────
+                _memo_fecha_dl = datetime.datetime.now().strftime("%d/%m/%Y")
+                def _build_memo_ind_html(_m, _ub, _f):
+                    _N = "#0D2137"
+                    def _il(_lst, _p="→"):
+                        return "".join(f'<div style="font-size:12px;color:{_N};padding:7px 12px;border-bottom:1px solid #E8E4DC;line-height:1.6;">{_p} {x}</div>' for x in (_lst or []))
+                    _obs = "".join(f'<div style="font-size:12px;color:{_N};padding:8px 12px;border-left:3px solid #E07A5F;background:#FFF5F3;border-radius:0 4px 4px 0;margin-bottom:5px;line-height:1.55;">⚠ {x}</div>' for x in (_m.get("observaciones_legales") or []))
+                    _mit = "".join(f'<div style="font-size:12px;color:{_N};padding:8px 12px;border-left:3px solid #6BCEA0;background:#F0FBF5;border-radius:0 4px 4px 0;margin-bottom:5px;line-height:1.55;">→ {x}</div>' for x in (_m.get("sugerencias_mitigacion") or []))
+                    _leg = (f'<div style="margin-top:24px;"><div style="font-size:10px;color:#9A9080;letter-spacing:3px;text-transform:uppercase;font-weight:600;margin-bottom:12px;">⚖ Análisis Legal</div>'
+                            f'<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">'
+                            f'<div><div style="font-size:10px;color:#E07A5F;font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">Observaciones</div>{_obs}</div>'
+                            f'<div><div style="font-size:10px;color:#1A7A4A;font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">Mitigación</div>{_mit}</div>'
+                            f'</div></div>') if (_obs or _mit) else ""
+                    return (
+                        f'<!DOCTYPE html><html><head><meta charset="utf-8"><title>Memorandum — {_m.get("titulo","")}</title>'
+                        f'<style>body{{font-family:"Helvetica Neue",Arial,sans-serif;max-width:800px;margin:40px auto;padding:0 40px;color:{_N};background:#fff;}}'
+                        f'.lbl{{font-size:10px;color:#9A9080;letter-spacing:3px;text-transform:uppercase;font-weight:600;margin:24px 0 8px;}}'
+                        f'.txt{{font-size:13px;color:{_N};line-height:1.8;margin-bottom:16px;}}'
+                        f'.box{{background:#F7F9FC;border-left:3px solid {_N};border-radius:4px;padding:14px 16px;font-size:13px;color:{_N};line-height:1.8;margin-bottom:16px;}}'
+                        f'.grid{{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:16px;}}'
+                        f'.synth{{background:{_N};border-radius:6px;padding:20px 24px;margin:24px 0;}}'
+                        f'footer{{margin-top:48px;padding-top:12px;border-top:1px solid #E8E4DC;font-size:10px;color:#9A9080;}}'
+                        f'@media print{{body{{margin:20px;padding:0 20px;}}}}</style></head><body>'
+                        f'<div style="border-bottom:3px solid {_N};padding-bottom:16px;margin-bottom:28px;">'
+                        f'<div style="font-size:10px;color:#9A9080;letter-spacing:4px;text-transform:uppercase;font-weight:600;margin-bottom:8px;">SOLUM · Memorandum de Advisory Board · Osterling Advisory</div>'
+                        f'<div style="font-size:22px;font-weight:700;color:{_N};">{_m.get("titulo","Análisis Industrial")}</div>'
+                        f'<div style="font-size:11px;color:#9A9080;margin-top:6px;">{_ub} &nbsp;·&nbsp; {_f}</div></div>'
+                        f'<div class="lbl">Perfil del Activo</div><div class="txt">{_m.get("perfil_activo","")}</div>'
+                        f'<div class="grid"><div><div class="lbl">Indicadores Clave</div><div class="box">{_m.get("indicadores_clave","")}</div></div>'
+                        f'<div><div class="lbl">Posicionamiento de Mercado</div><div class="box" style="border-left-color:#475569;">{_m.get("posicionamiento_mercado","")}</div></div></div>'
+                        f'<div class="lbl">Estructura Financiera</div><div class="txt">{_m.get("estructura_financiera","")}</div>'
+                        f'<div class="grid"><div><div class="lbl">Factores Relevantes</div>{_il(_m.get("factores_relevantes"))}</div>'
+                        f'<div><div class="lbl">Consideraciones</div>{_il(_m.get("consideraciones"),"·")}</div></div>'
+                        f'<div class="synth"><div style="font-size:10px;color:#475569;letter-spacing:2px;text-transform:uppercase;font-weight:600;margin-bottom:10px;">Síntesis del Análisis</div>'
+                        f'<div style="font-size:13px;color:#FFFFFF;line-height:1.8;">{_m.get("sintesis","")}</div></div>'
+                        f'{_leg}'
+                        f'<footer>Generado con SOLUM · Osterling Advisory · Lima, Perú · Información confidencial · {_f}</footer>'
+                        f'</body></html>'
+                    )
+                st.download_button(
+                    "⬇ DESCARGAR MEMORANDUM (HTML)",
+                    data=_build_memo_ind_html(_memo_re, _ind_ubicacion_label, _memo_fecha_dl).encode("utf-8"),
+                    file_name=f"SOLUM_Memorandum_Industrial_{datetime.datetime.now().strftime('%Y%m%d')}.html",
+                    mime="text/html",
+                    use_container_width=True,
+                    key="btn_dl_memo_ind_re",
+                )
             # ── Descarga PDF ──────────────────────────────────────────
             st.markdown("---")
             st.markdown('<div class="section-title">Descargar Informe SOLUM</div>', unsafe_allow_html=True)
             _ind_pdf_re = generar_informe_industrial_pdf(
                 r, st.session_state.get("industrial_factibilidad"),
                 datetime.datetime.now().strftime("%d/%m/%Y"),
-                altura_nave=float(st.session_state.get("ind_altura_nave") or st.session_state.get("ind_geo_h_nave_val") or 0))
+                altura_nave=float(st.session_state.get("ind_altura_nave") or st.session_state.get("ind_geo_h_nave_val") or 0),
+                ubicacion=st.session_state.get("ind_ubicacion", ""))
             st.download_button(
                 "DESCARGAR INFORME SOLUM (PDF)",
                 data=_ind_pdf_re,
@@ -20275,6 +20701,72 @@ elif tipo_op == "Proyecto Logístico / Industrial":
                         _dscr_cls = "alert-gold"
                     st.markdown(f'<div class="{_dscr_cls}">{_dscr_msg}</div>', unsafe_allow_html=True)
 
+                # ── Matriz de Sensibilidad ──────────────────────────────────
+                _base_inp_sens = st.session_state.get("_ind_inp_sens", {})
+                if _base_inp_sens and (r.get("renta_m2_mes") or 0) > 0:
+                    _si = calcular_sensibilidad_industrial(_base_inp_sens)
+                    if _si:
+                        _gy, _gi, _rentas_s, _terrenos_m2_s, _r0_s, _t0_s = _si
+                        st.markdown("---")
+                        st.markdown('<div class="section-title">Matriz de Sensibilidad — Yield Bruto & TIR Equity</div>', unsafe_allow_html=True)
+                        st.caption("Renta/m²/mes (columnas) × Precio terreno/m² (filas) · ⭐ = escenario actual")
+
+                        _NAV_S = "#1E2D3D"; _BRD_S = "#D8D4CC"
+                        _r_idx = min(range(len(_rentas_s)), key=lambda i: abs(_rentas_s[i] - _r0_s))
+                        _t_idx = min(range(len(_terrenos_m2_s)), key=lambda i: abs(_terrenos_m2_s[i] - _t0_s))
+
+                        def _cell_ind(yld, irr):
+                            if yld >= 8:   bg, fg = "#E8F5EE", "#1A5C32"
+                            elif yld >= 5: bg, fg = "#EBF0F8", "#1A3A5C"
+                            else:          bg, fg = "#FDECEA", "#7A1A1A"
+                            if irr is None:   irr_txt, irr_c = "—",             "#A0AEC0"
+                            elif irr >= 12:   irr_txt, irr_c = f"TIR {irr:.0f}%", "#1A5C32"
+                            elif irr >= 8:    irr_txt, irr_c = f"TIR {irr:.0f}%", "#1A3A5C"
+                            else:             irr_txt, irr_c = f"TIR {irr:.0f}%", "#7A1A1A"
+                            return bg, fg, irr_txt, irr_c
+
+                        _s_html = (
+                            f'<div style="overflow-x:auto;">'
+                            f'<table style="border-collapse:collapse;min-width:100%;">'
+                            f'<thead><tr>'
+                            f'<th style="background:{_NAV_S};color:#475569;padding:8px 10px;font-size:10px;'
+                            f'font-weight:700;text-align:left;border:1px solid {_BRD_S};white-space:nowrap;">'
+                            f'Terreno ↓ / Renta →</th>'
+                        )
+                        for ci, rm2 in enumerate(_rentas_s):
+                            _is_bc = (ci == _r_idx)
+                            _ch_bg = "#1E3A5A" if _is_bc else _NAV_S
+                            _s_html += (
+                                f'<th style="background:{_ch_bg};color:#FFFFFF;padding:8px 10px;'
+                                f'font-size:10px;font-weight:{"800" if _is_bc else "600"};text-align:center;'
+                                f'border:1px solid {_BRD_S};white-space:nowrap;">'
+                                f'{"⭐ " if _is_bc else ""}${rm2:.2f}/m²</th>'
+                            )
+                        _s_html += '</tr></thead><tbody>'
+                        for ri, (gy_row, gi_row) in enumerate(zip(_gy, _gi)):
+                            _is_br = (ri == _t_idx)
+                            _lbl_bg = "#DDD8D0" if _is_br else "#F0EDE8"
+                            _s_html += (
+                                f'<tr><td style="background:{_lbl_bg};color:{_NAV_S};padding:8px 10px;'
+                                f'font-size:10px;font-weight:{"800" if _is_br else "700"};'
+                                f'border:1px solid {_BRD_S};white-space:nowrap;">'
+                                f'{"⭐ " if _is_br else ""}${_terrenos_m2_s[ri]:,}/m²</td>'
+                            )
+                            for ci, (yld, irr) in enumerate(zip(gy_row, gi_row)):
+                                _is_base = (_is_br and ci == _r_idx)
+                                bg, fg, irr_txt, irr_c = _cell_ind(yld, irr)
+                                _brd = f"3px solid #1A3A5C" if _is_base else f"1px solid {_BRD_S}"
+                                _s_html += (
+                                    f'<td style="background:{bg};padding:8px 10px;text-align:center;border:{_brd};">'
+                                    f'<div style="font-size:13px;font-weight:700;color:{fg};">{yld:.1f}%</div>'
+                                    f'<div style="font-size:10px;color:{irr_c};margin-top:2px;">{irr_txt}</div>'
+                                    f'</td>'
+                                )
+                            _s_html += '</tr>'
+                        _s_html += '</tbody></table></div>'
+                        st.markdown(_s_html, unsafe_allow_html=True)
+                        st.caption("Verde = yield ≥ 8% · Azul = 5–8% · Rojo < 5% · TIR: verde ≥ 12%, azul 8–12%, rojo < 8%")
+
             elif r.get('uso') == "Uso directo":
                 st.markdown('<div class="section-title">Análisis vs. Arrendamiento</div>', unsafe_allow_html=True)
                 ca1, ca2, ca3 = st.columns(3)
@@ -20549,7 +21041,8 @@ elif tipo_op == "Proyecto Logístico / Industrial":
             _ind_pdf_bytes = generar_informe_industrial_pdf(
                 r, st.session_state.get("industrial_factibilidad"),
                 datetime.datetime.now().strftime("%d/%m/%Y"),
-                altura_nave=float(st.session_state.get("ind_altura_nave") or st.session_state.get("ind_geo_h_nave_val") or 0))
+                altura_nave=float(st.session_state.get("ind_altura_nave") or st.session_state.get("ind_geo_h_nave_val") or 0),
+                ubicacion=st.session_state.get("ind_ubicacion", ""))
             st.download_button(
                 "DESCARGAR INFORME SOLUM (PDF)",
                 data=_ind_pdf_bytes,
@@ -21164,18 +21657,30 @@ elif tipo_op == "Proyecto Logístico / Industrial":
 
         # ── Footer disclaimer industrial ──────────────────────
         st.markdown(
-            '<div style="margin-top:32px;padding:20px 32px;border-top:1px solid #E2E8F0;'
-            'text-align:center;">'
-            '<p style="font-size:11px;color:#8A8A8A;line-height:1.7;font-family:Inter,sans-serif;'
-            'max-width:680px;margin:0 auto;">'
-            'Los resultados generados por SOLUM tienen carácter referencial y se basan en los parámetros '
-            'ingresados por el usuario. Se recomienda validar con asesores técnicos, legales y financieros '
-            'antes de tomar decisiones de inversión. Consultas: '
-            '<a href="mailto:eosterling@grupoosterling.com" style="color:#475569;text-decoration:none;">'
-            'eosterling@grupoosterling.com</a>.'
+            '<div style="margin-top:40px;padding:24px 32px 20px;border-top:2px solid #E2E8F0;'
+            'border-left:4px solid #0D2137;background:#F7F9FC;border-radius:0 0 10px 10px;">'
+            '<p style="font-size:11px;color:#1E2D3D;line-height:1.8;font-family:Inter,sans-serif;'
+            'margin:0 0 10px 0;">'
+            '<strong>Metodología y base de conocimiento —</strong> '
+            'SOLUM integra el Reglamento Nacional de Edificaciones (RNE) con sus modificaciones y base '
+            'legal vigente; los parámetros urbanísticos específicos de 27 distritos de Lima (RIN); modelos '
+            'financieros calibrados para el sector promotor peruano; análisis legal con fundamento en el '
+            'derecho inmobiliario nacional; y 12 años de experiencia en advisory inmobiliario corporativo '
+            '— transacciones reales, información de mercado actualizada e interpretación a nivel de '
+            'consultoría especializada.'
             '</p>'
-            '<p style="font-size:10px;color:#AAAAAA;margin-top:12px;font-family:Inter,sans-serif;">'
-            '© 2026 Osterling Advisory — Lima, Perú. Todos los derechos reservados.'
+            '<p style="font-size:11px;color:#718096;line-height:1.7;font-family:Inter,sans-serif;'
+            'margin:0 0 10px 0;">'
+            'Los análisis tienen carácter orientativo y se elaboran con base en los parámetros ingresados '
+            'y en información de mercado de referencia. No constituyen asesoría legal, financiera ni de '
+            'ingeniería. Toda decisión de inversión debe respaldarse con due diligence formal y opinión '
+            'de especialistas. Consultas: '
+            '<a href="mailto:eosterling@grupoosterling.com" style="color:#475569;text-decoration:none;">'
+            'eosterling@grupoosterling.com</a>'
+            '</p>'
+            '<p style="font-size:10px;color:#A0AEC0;font-family:Inter,sans-serif;letter-spacing:0.5px;">'
+            'Advisory inmobiliario corporativo &nbsp;·&nbsp; grupoosterling.com &nbsp;·&nbsp; '
+            '© 2026 Osterling Advisory &nbsp;·&nbsp; Lima, Perú &nbsp;·&nbsp; Información confidencial'
             '</p>'
             '</div>',
             unsafe_allow_html=True
@@ -22291,6 +22796,58 @@ elif tipo_op == "Inmueble Residencial":
                 if st.button("REGENERAR", key="btn_res_rsm_regen"):
                     st.session_state.res_resumen = None
                     st.rerun()
+                # ── Descargar Resumen HTML ─────────────────────────────
+                _rsm_fecha_dl = datetime.datetime.now().strftime("%d/%m/%Y")
+                def _build_rsm_res_html(_s, _ub, _f):
+                    _N = "#0D2137"
+                    _rec = _s.get("recomendacion", "evaluar_con_condiciones")
+                    _rc, _rbg, _retiq = {
+                        "comprar":                ("#1A4731", "#E8F5EE", "RECOMENDADO — COMPRAR"),
+                        "evaluar_con_condiciones":("#7A4F1A", "#FFF8EE", "EVALUAR CON CONDICIONES"),
+                        "no_recomendado":         ("#7A1A1A", "#FFF0F0", "NO RECOMENDADO"),
+                    }.get(_rec, ("#1E2D3D", "#F5F2ED", "—"))
+                    _af = "".join(f'<div style="font-size:12px;color:{_N};padding:7px 12px;border-bottom:1px solid #E8E4DC;line-height:1.6;">✓ {a}</div>' for a in (_s.get("argumentos_favor") or []))
+                    _rk = "".join(f'<div style="font-size:12px;color:{_N};padding:7px 12px;border-bottom:1px solid #E8E4DC;line-height:1.6;">⚠ {r}</div>' for r in (_s.get("riesgos") or []))
+                    _obs = "".join(f'<div style="font-size:12px;color:{_N};padding:8px 12px;border-left:3px solid #E07A5F;background:#FFF5F3;border-radius:0 4px 4px 0;margin-bottom:5px;line-height:1.55;">⚠ {x}</div>' for x in (_s.get("observaciones_legales") or []))
+                    _mit = "".join(f'<div style="font-size:12px;color:{_N};padding:8px 12px;border-left:3px solid #6BCEA0;background:#F0FBF5;border-radius:0 4px 4px 0;margin-bottom:5px;line-height:1.55;">→ {x}</div>' for x in (_s.get("sugerencias_mitigacion") or []))
+                    _leg = (f'<div style="margin-top:24px;"><div style="font-size:10px;color:#9A9080;letter-spacing:3px;text-transform:uppercase;font-weight:600;margin-bottom:12px;">⚖ Análisis Legal</div>'
+                            f'<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">'
+                            f'<div><div style="font-size:10px;color:#E07A5F;font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">Observaciones</div>{_obs}</div>'
+                            f'<div><div style="font-size:10px;color:#1A7A4A;font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">Mitigación</div>{_mit}</div>'
+                            f'</div></div>') if (_obs or _mit) else ""
+                    return (
+                        f'<!DOCTYPE html><html><head><meta charset="utf-8"><title>Resumen Ejecutivo — {_s.get("titulo","")}</title>'
+                        f'<style>body{{font-family:"Helvetica Neue",Arial,sans-serif;max-width:800px;margin:40px auto;padding:0 40px;color:{_N};background:#fff;}}'
+                        f'.lbl{{font-size:10px;color:#9A9080;letter-spacing:3px;text-transform:uppercase;font-weight:600;margin:24px 0 8px;}}'
+                        f'.grid{{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:16px;}}'
+                        f'.synth{{background:{_N};border-radius:6px;padding:20px 24px;margin:24px 0;}}'
+                        f'footer{{margin-top:48px;padding-top:12px;border-top:1px solid #E8E4DC;font-size:10px;color:#9A9080;}}'
+                        f'@media print{{body{{margin:20px;padding:0 20px;}}}}</style></head><body>'
+                        f'<div style="border-bottom:3px solid {_N};padding-bottom:16px;margin-bottom:28px;">'
+                        f'<div style="font-size:10px;color:#9A9080;letter-spacing:4px;text-transform:uppercase;font-weight:600;margin-bottom:8px;">SOLUM · Resumen Ejecutivo · Osterling Advisory</div>'
+                        f'<div style="font-size:22px;font-weight:700;color:{_N};">{_s.get("titulo","Análisis Residencial")}</div>'
+                        f'<div style="font-size:11px;color:#9A9080;margin-top:6px;">{_ub} &nbsp;·&nbsp; {_f}</div></div>'
+                        f'<div style="background:{_rbg};border:1px solid {_rc};border-left:5px solid {_rc};border-radius:8px;padding:22px 28px;margin-bottom:24px;">'
+                        f'<div style="font-size:10px;letter-spacing:3px;color:{_rc};text-transform:uppercase;font-weight:700;margin-bottom:6px;">Recomendación</div>'
+                        f'<div style="font-size:20px;font-weight:700;color:{_rc};margin-bottom:8px;">{_retiq}</div>'
+                        f'<div style="font-size:15px;font-weight:600;color:{_rc};margin-bottom:12px;">{_s.get("titulo","")}</div>'
+                        f'<div style="font-size:13px;color:{_rc};line-height:1.7;">{_s.get("resumen","")}</div></div>'
+                        f'<div class="grid"><div><div class="lbl">A favor</div>{_af}</div>'
+                        f'<div><div class="lbl">Riesgos</div>{_rk}</div></div>'
+                        f'<div class="synth"><div style="font-size:10px;color:#475569;letter-spacing:2px;text-transform:uppercase;font-weight:600;margin-bottom:10px;">Conclusión</div>'
+                        f'<div style="font-size:13px;color:#FFFFFF;line-height:1.8;">{_s.get("conclusion","")}</div></div>'
+                        f'{_leg}'
+                        f'<footer>Generado con SOLUM · Osterling Advisory · Lima, Perú · Información confidencial · {_f}</footer>'
+                        f'</body></html>'
+                    )
+                st.download_button(
+                    "⬇ DESCARGAR RESUMEN EJECUTIVO (HTML)",
+                    data=_build_rsm_res_html(rsm_r, _hero_zona, _rsm_fecha_dl).encode("utf-8"),
+                    file_name=f"SOLUM_Resumen_Residencial_{datetime.datetime.now().strftime('%Y%m%d')}.html",
+                    mime="text/html",
+                    use_container_width=True,
+                    key="btn_dl_rsm_res",
+                )
 
         # TAB 7: DOCUMENTOS
         with res_tabs[7]:
@@ -22535,18 +23092,30 @@ elif tipo_op == "Inmueble Residencial":
         )
 
         st.markdown(
-            '<div style="margin-top:32px;padding:20px 32px;border-top:1px solid #E2E8F0;'
-            'text-align:center;">'
-            '<p style="font-size:11px;color:#8A8A8A;line-height:1.7;font-family:Inter,sans-serif;'
-            'max-width:680px;margin:0 auto;">'
-            'Los resultados generados por SOLUM tienen carácter referencial y se basan en los parámetros '
-            'ingresados por el usuario. Se recomienda validar con asesores técnicos, legales y financieros '
-            'antes de tomar decisiones de inversión. Consultas: '
-            '<a href="mailto:eosterling@grupoosterling.com" style="color:#475569;text-decoration:none;">'
-            'eosterling@grupoosterling.com</a>.'
+            '<div style="margin-top:40px;padding:24px 32px 20px;border-top:2px solid #E2E8F0;'
+            'border-left:4px solid #0D2137;background:#F7F9FC;border-radius:0 0 10px 10px;">'
+            '<p style="font-size:11px;color:#1E2D3D;line-height:1.8;font-family:Inter,sans-serif;'
+            'margin:0 0 10px 0;">'
+            '<strong>Metodología y base de conocimiento —</strong> '
+            'SOLUM integra el Reglamento Nacional de Edificaciones (RNE) con sus modificaciones y base '
+            'legal vigente; los parámetros urbanísticos específicos de 27 distritos de Lima (RIN); modelos '
+            'financieros calibrados para el sector promotor peruano; análisis legal con fundamento en el '
+            'derecho inmobiliario nacional; y 12 años de experiencia en advisory inmobiliario corporativo '
+            '— transacciones reales, información de mercado actualizada e interpretación a nivel de '
+            'consultoría especializada.'
             '</p>'
-            '<p style="font-size:10px;color:#AAAAAA;margin-top:12px;font-family:Inter,sans-serif;">'
-            '© 2026 Osterling Advisory — Lima, Perú. Todos los derechos reservados.'
+            '<p style="font-size:11px;color:#718096;line-height:1.7;font-family:Inter,sans-serif;'
+            'margin:0 0 10px 0;">'
+            'Los análisis tienen carácter orientativo y se elaboran con base en los parámetros ingresados '
+            'y en información de mercado de referencia. No constituyen asesoría legal, financiera ni de '
+            'ingeniería. Toda decisión de inversión debe respaldarse con due diligence formal y opinión '
+            'de especialistas. Consultas: '
+            '<a href="mailto:eosterling@grupoosterling.com" style="color:#475569;text-decoration:none;">'
+            'eosterling@grupoosterling.com</a>'
+            '</p>'
+            '<p style="font-size:10px;color:#A0AEC0;font-family:Inter,sans-serif;letter-spacing:0.5px;">'
+            'Advisory inmobiliario corporativo &nbsp;·&nbsp; grupoosterling.com &nbsp;·&nbsp; '
+            '© 2026 Osterling Advisory &nbsp;·&nbsp; Lima, Perú &nbsp;·&nbsp; Información confidencial'
             '</p>'
             '</div>',
             unsafe_allow_html=True
@@ -22633,18 +23202,30 @@ elif tipo_op == "Proyecto de Oficinas":
 
         # ── Footer disclaimer ─────────────────────────────────
         st.markdown(
-            '<div style="margin-top:32px;padding:20px 32px;border-top:1px solid #E2E8F0;'
-            'text-align:center;">'
-            '<p style="font-size:11px;color:#8A8A8A;line-height:1.7;font-family:Inter,sans-serif;'
-            'max-width:680px;margin:0 auto;">'
-            'Los resultados generados por SOLUM tienen carácter referencial y se basan en los parámetros '
-            'ingresados por el usuario. Se recomienda validar con asesores técnicos, legales y financieros '
-            'antes de tomar decisiones de inversión. Consultas: '
-            '<a href="mailto:eosterling@grupoosterling.com" style="color:#475569;text-decoration:none;">'
-            'eosterling@grupoosterling.com</a>.'
+            '<div style="margin-top:40px;padding:24px 32px 20px;border-top:2px solid #E2E8F0;'
+            'border-left:4px solid #0D2137;background:#F7F9FC;border-radius:0 0 10px 10px;">'
+            '<p style="font-size:11px;color:#1E2D3D;line-height:1.8;font-family:Inter,sans-serif;'
+            'margin:0 0 10px 0;">'
+            '<strong>Metodología y base de conocimiento —</strong> '
+            'SOLUM integra el Reglamento Nacional de Edificaciones (RNE) con sus modificaciones y base '
+            'legal vigente; los parámetros urbanísticos específicos de 27 distritos de Lima (RIN); modelos '
+            'financieros calibrados para el sector promotor peruano; análisis legal con fundamento en el '
+            'derecho inmobiliario nacional; y 12 años de experiencia en advisory inmobiliario corporativo '
+            '— transacciones reales, información de mercado actualizada e interpretación a nivel de '
+            'consultoría especializada.'
             '</p>'
-            '<p style="font-size:10px;color:#AAAAAA;margin-top:12px;font-family:Inter,sans-serif;">'
-            '© 2026 Osterling Advisory — Lima, Perú. Todos los derechos reservados.'
+            '<p style="font-size:11px;color:#718096;line-height:1.7;font-family:Inter,sans-serif;'
+            'margin:0 0 10px 0;">'
+            'Los análisis tienen carácter orientativo y se elaboran con base en los parámetros ingresados '
+            'y en información de mercado de referencia. No constituyen asesoría legal, financiera ni de '
+            'ingeniería. Toda decisión de inversión debe respaldarse con due diligence formal y opinión '
+            'de especialistas. Consultas: '
+            '<a href="mailto:eosterling@grupoosterling.com" style="color:#475569;text-decoration:none;">'
+            'eosterling@grupoosterling.com</a>'
+            '</p>'
+            '<p style="font-size:10px;color:#A0AEC0;font-family:Inter,sans-serif;letter-spacing:0.5px;">'
+            'Advisory inmobiliario corporativo &nbsp;·&nbsp; grupoosterling.com &nbsp;·&nbsp; '
+            '© 2026 Osterling Advisory &nbsp;·&nbsp; Lima, Perú &nbsp;·&nbsp; Información confidencial'
             '</p>'
             '</div>',
             unsafe_allow_html=True

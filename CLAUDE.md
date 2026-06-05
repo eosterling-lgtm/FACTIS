@@ -167,6 +167,12 @@ San Isidro · Miraflores · Jesús María · Cercado de Lima · San Borja · San
 | `legal_tributacion_inmobiliaria.md` | Alcabala (3%), IR ganancias capital (5% PN / 29.5% PJ), IGV primera venta, Impuesto Predial, renta arrendamiento |
 | `legal_contratos_compraventa.md` | CC Arts. 1529-1601, opción de compra, arras, minuta privada, escritura pública, saneamiento, poderes |
 | `legal_arrendamiento_peru.md` | CC Arts. 1666-1712, desalojo express D.Leg. 1177, garantías, resolución, mejoras, benchmarks Lima |
+| `legal_derecho_registral_avanzado.md` | Anotaciones preventivas, bloqueo registral, tracto sucesivo/abreviado, impenetrabilidad, fe pública profunda, inmovilización de partida, nulidad de inscripciones — fuente: Gonzales Barrón |
+| `legal_saneamiento_area_linderos.md` | Diferencia de cabida, 3 vías de saneamiento (Ley 27333 notarial / Ley 26662 no contencioso / CPC 504 judicial), plazos y costos reales, implicancias para pre-factibilidad — fuente: Gonzales Loli |
+| `legal_inmatriculacion_saneamiento_avanzado.md` | Prescripción adquisitiva (judicial 18-36m / notarial 3-4m), Ley 30313 anti-fraude registral, reserva e independización de aires, habilitación urbana inscripción, COFOPRI — fuente: Huerta Ayala |
+| `legal_venta_bien_futuro.md` | Contrato promotor–comprador en planos: Arts. 1534–1541 CC, cuándo transfiere la propiedad, condición suspensiva, hipoteca del promotor y carta de rescate, tipos de contrato (separación/anticipo/escritura), cláusulas abusivas, checklist comprador |
+| `legal_contrato_obra_construccion.md` | Relación promotor–constructor: suma alzada vs. precios unitarios, adicionales, riesgo, garantías (carta fianza 10%, fondo retención, Art. 1784 5 años estructural), resolución, supervisión, recepción y liquidación |
+| `legal_fideicomiso_inmobiliario.md` | Estructura fiduciaria D.Leg. 861: patrimonio fideicometido inembargable, hitos de desembolso, fideicomiso vs. hipoteca, liberación individual de unidades, costo en modelo financiero (0.5–1.5% anual) |
 | `legal_sunarp_predios.md` | Partida registral, fe pública, prioridad, hipotecas, embargos, servidumbres, checklist DUE diligence |
 | `legal_garantias_comprador_planos.md` | Ley 29571, INDECOPI, Ley 29090 licencias, Art. 1784 garantía 5 años, póliza buen uso, red flags preventa |
 
