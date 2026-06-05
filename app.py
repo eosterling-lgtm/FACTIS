@@ -16584,7 +16584,8 @@ elif tipo_op == "Proyecto Inmobiliario":
         else:
             _cab_photo_css = "linear-gradient(135deg,#1E2D3D 0%,#2A4060 100%)"
 
-        _fr = st.session_state.financ.get("resumen") if st.session_state.financ else None
+        _fr_src = st.session_state.get("financ_latest") or st.session_state.financ
+        _fr = _fr_src.get("resumen") if _fr_src else None
         _cab_kpi1_label, _cab_kpi1_val = ("Terreno", f"{p.get('area_terreno_m2','—')} m²")
         _cab_kpi2_label, _cab_kpi2_val = ("Zonificación", _cab_zona_txt)
         _cab_kpi3_label, _cab_kpi3_val = ("Altura máx.", f"{_cab_pisos} pisos")
@@ -17349,6 +17350,7 @@ elif tipo_op == "Proyecto Inmobiliario":
                 # Commit: solo al primer cálculo o cuando el usuario confirma explícitamente.
                 # Slider reruns actualizan el display (result local) sin tocar el estado
                 # comprometido que usa el PDF y guardar_proyecto.
+                st.session_state["financ_latest"] = result  # siempre actualizado — lo usa el header
                 if st.session_state.financ is None:
                     st.session_state.financ = result
                 _fin_committed = st.session_state.financ is not None and (
