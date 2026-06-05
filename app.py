@@ -7370,7 +7370,7 @@ def _build_solum_html(result: dict, cabida: dict, params: dict,
     obs          = cabida.get("observaciones", [])
     _dur_txt     = f"{r.get('meses_proyecto', 0)} meses" if r.get("meses_proyecto") else "—"
     _meses_obra  = r.get("meses_obra", "—")
-    _meses_vtas  = r.get("meses_ventas", "—")
+    _meses_vtas  = r.get("meses_venta", "—")
     _dptos_piso  = round(_total_u / max(_num_pisos, 1), 1)
 
     _tipo_rows = ""
@@ -7489,12 +7489,35 @@ def _build_solum_html(result: dict, cabida: dict, params: dict,
         _sc  = {"verde":"#1A4731","amarillo":"#1A3A5C","rojo":"#7A1A1A"}.get(_sem,"#1A3A5C")
         _sb  = {"verde":"#E8F5EE","amarillo":"#EBF0F8","rojo":"#FDECEA"}.get(_sem,"#EBF0F8")
         _sl  = {"verde":"SIN ALERTAS CRÍTICAS","amarillo":"ALERTAS MENORES","rojo":"ALERTAS CRÍTICAS"}.get(_sem,"PENDIENTE")
+        # Datos registrales — construidos desde los campos reales del schema
+        _reg_fields = {}
+        if legal.get("partida_numero"):
+            _reg_fields["Partida registral"] = legal["partida_numero"]
+        if legal.get("area_registral_m2"):
+            _reg_fields["Área registral"] = f"{legal['area_registral_m2']} m²"
+        if legal.get("area_puhr_m2"):
+            _reg_fields["Área PU/HR"] = f"{legal['area_puhr_m2']} m²"
+        if legal.get("clasificacion_municipal"):
+            _reg_fields["Clasificación municipal"] = legal["clasificacion_municipal"]
+        if legal.get("valor_autoavaluo"):
+            _reg_fields["Autovalúo"] = f"{legal.get('moneda_autoavaluo','PEN')} {legal['valor_autoavaluo']:,}"
+        _props = legal.get("propietarios_partida") or []
+        if _props:
+            _reg_fields["Titulares (SUNARP)"] = " / ".join(
+                p.get("nombre", "") for p in _props if p.get("nombre")
+            )
+        _cargas = legal.get("hipotecas_vigentes") or []
+        if _cargas:
+            _reg_fields["Hipotecas vigentes"] = str(len(_cargas))
+        _caut = legal.get("medidas_cautelares") or []
+        if _caut:
+            _reg_fields["Medidas cautelares"] = str(len(_caut))
         _reg = "".join(
             f"<div class='info-line'><span class='lbl'>{_e(k)}</span><span class='val'>{_e(str(v))}</span></div>"
-            for k, v in (legal.get("registral", {}) or {}).items()
-        )
+            for k, v in _reg_fields.items()
+        ) or "<div class='info-line' style='color:#A0AEC0;font-style:italic;'>No se adjuntó partida registral</div>"
         _ali = "".join(f"<li>{_e(a)}</li>" for a in (legal.get("alertas", []) or []))
-        _sui = "".join(f"<li>{_e(s)}</li>" for s in (legal.get("sugerencias", []) or []))
+        _sui = "".join(f"<li>{_e(s)}</li>" for s in (legal.get("sugerencias_mitigacion", []) or []))
         _legal_html = f"""
 <div class="page">
   <div class="page-header">
@@ -7524,8 +7547,8 @@ def _build_solum_html(result: dict, cabida: dict, params: dict,
     <div class="section-title">Alertas y Observaciones</div>
     <ul class="obs-list">{_ali}</ul>
     <div class="section-title" style="margin-top:20px;">Acciones Sugeridas</div>
-    <ul class="obs-list">{_sui}</ul>
-    <div class="conclusion-box" style="margin-top:20px;"><p>{_e(legal.get("conclusion",""))}</p></div>
+    <ul class="obs-list">{_sui or "<li style='color:#A0AEC0;font-style:italic;'>Sin acciones específicas detectadas</li>"}</ul>
+    <div class="conclusion-box" style="margin-top:20px;"><p>{_e(legal.get("conclusion", legal.get("resumen_legal", "")))}</p></div>
   </div>
   <div class="page-footer">
     <div class="page-footer-note">INFORMACIÓN CONFIDENCIAL &nbsp;·&nbsp; SOLUM Herramienta Analítica Inmobiliaria</div>
