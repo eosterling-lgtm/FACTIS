@@ -617,39 +617,62 @@ Tasación hipotecaria institucional. Hipoteca sindicada pari passu entre BCP, Sc
 
 | Especificación | Almacén | Centro de Distribución |
 |---|---|---|
-| **Altura al hombro** | 8–12 m (según uso) | 12–14 m mínimo (flujos verticales + mezanine oficinas) |
-| **Patio de maniobras** | 30–35 m de profundidad | 40–50 m mínimo (camiones simultáneos en múltiples docks) |
-| **Frente de nave** | Menor — pocas puertas | Mayor — más docks → más frente → más terreno |
+| **Altura al hombro** | **12–14 m — determinante** (optimizar posiciones de rack por m²) | **8–10 m suficiente** (alta rotación, no hay stock paralizado en altura) |
+| **Patio de maniobras** | 30–35 m profundidad | 40–50 m mínimo (múltiples camiones simultáneos) |
+| **Frente de nave** | Menor — pocas puertas dock | Mayor — más docks para recepción y despacho simultáneo |
 | **Área de staging/cross-dock** | No requerida | 10–20% del área nave |
 | **Oficinas operativas** | ~3–5% del área nave | ~5–10% del área nave (control, RRHH, IT) |
-| **Andenes de carga** | Niveladores simples | Niveladores hidráulicos, selladores de dock, shelter |
-| **Iluminación** | Estándar industrial | Alta intensidad — operaciones nocturnas frecuentes |
-| **Energía eléctrica** | Baja demanda | Alta demanda — cargadores de montacargas, automatización |
+| **Energía eléctrica** | Estándar | Alta demanda — cargadores de montacargas, operaciones nocturnas |
+
+**Nota clave sobre altura:** La lógica es inversa a lo que parece intuitivo. El almacén necesita más altura porque **optimiza el m² guardando más en vertical** — cada metro adicional de rack es área vendible/arrendable. El CD no necesita esa altura porque el producto rota en días; lo que importa es el flujo horizontal rápido, no la densidad de almacenaje vertical.
 
 ---
 
 ### Implicaciones para el análisis SOLUM
 
-**Costo de construcción:**
-- Almacén estándar: **$220–350/m²** nave
-- CD Clase A (Lima): **$380–550/m²** nave — mayor complejidad de instalaciones, más andenes, más electricidad
+**Costo de construcción en Lima:**
+- Almacén y CD tienen **costos de construcción prácticamente iguales** en el mercado limeño — la diferencia no es material para el modelo financiero.
+- El diferenciador real no es el costo sino las **implicancias operativas y de ubicación** descritas abajo.
+- Rango vigente ambos tipos: **$220–430/m²** nave según calidad y zona (VES/Lurín).
+
+**Altura como variable de diseño:**
+- Si el usuario busca **maximizar densidad de almacenaje** → priorizar altura 12–14 m → mayor costo de estructura pero mayor ingreso por m² de rack.
+- Si el usuario es un **operador de distribución/e-commerce** → 8–10 m es suficiente → ahorro en estructura, pero diseño debe priorizar número de docks y patio de maniobras.
 
 **EIV (Estudio de Impacto Vial, RNE A.011):**
-- Almacén <10,000 m²: generalmente no requerido
-- CD de cualquier escala: **altamente probable que lo requiera** por volumen de camiones y frecuencia de despacho
-- En Lima: IMP exige EIV para instalaciones con >50 movimientos vehículos/día
+- Almacén <10,000 m²: generalmente no requerido.
+- CD de cualquier escala: **altamente probable que lo requiera** — el volumen diario de camiones de distribución (reparto last-mile, consolidación) supera fácilmente los umbrales de impacto vial.
 
 **Ubicación:**
-- Almacén: puede estar en zonas industriales secundarias alejadas
-- CD: **requiere acceso directo a vías principales** (autopistas, anillos viales) — ubicación es diferenciador crítico de renta
+- Almacén: puede estar en zonas industriales secundarias alejadas.
+- CD: **requiere acceso directo a vías principales** (autopistas, anillos viales) — la ubicación es el diferenciador crítico, no el precio de construcción.
 
 **Renta de mercado Lima (2025):**
-- Almacén estándar I2: **$4.50–6.00/m²/mes**
-- CD Clase A (Lurín, VES, Huachipa): **$6.00–8.50/m²/mes** — premium por especificaciones y ubicación
+- Ambos tipos: **$5.00–8.50/m²/mes** según zona y calidad — la diferencia de renta entre almacén y CD en Lima no es significativa; depende más de la ubicación y especificaciones de la nave que del tipo de operación.
 
 **Gestión:**
-- Almacén: puede operar sin 3PL externo
-- CD: casi siempre operado por 3PL — el propietario del inmueble es landlord puro (ingreso = renta fija)
+- Almacén: puede operar sin 3PL externo.
+- CD: casi siempre operado por 3PL — el propietario del inmueble es landlord puro (ingreso = renta fija).
+
+---
+
+### ⚠️ Riesgo crítico: CD en centro logístico compartido (parque industrial / multiinquilino)
+
+**Este es el punto de mayor riesgo operativo y relacional que SOLUM debe alertar:**
+
+Instalar un Centro de Distribución dentro de un parque logístico o nave multiinquilino con patio común **puede generar conflicto grave con los demás inquilinos.** La razón:
+
+- Un CD opera con alto volumen de camiones de reparto y vehículos de distribución entrando y saliendo continuamente (last-mile, consolidación, cross-docking).
+- En un parque logístico, el **patio es área común de circulación** compartida por todos los inquilinos.
+- El tráfico generado por el CD congestiona el patio, dificulta las maniobras de los camiones de otros inquilinos y genera malestar.
+- Este conflicto puede derivar en quejas al administrador del parque, incumplimiento de reglamento interno o incluso no renovación del contrato.
+
+**SOLUM debe alertar este riesgo cuando:**
+- El usuario indica que el inmueble es una nave dentro de un parque logístico, centro logístico o complejo multiinquilino (Aldea, MacrOpolis, Punta Hermosa, etc.), **Y**
+- El uso previsto es CD, fulfillment, e-commerce, distribución last-mile o cross-docking.
+
+**Recomendación a incluir en el análisis:**
+> *"Un CD en nave compartida con patio común puede generar conflicto con otros inquilinos por el alto volumen de tráfico de camiones de distribución. Evaluar si el reglamento interno del parque lo permite y si el diseño del patio permite segregar la circulación del CD del resto de inquilinos. Para operaciones de CD a escala, lo ideal es una nave independiente con acceso propio o un parque diseñado específicamente para distribución."*
 
 ---
 
