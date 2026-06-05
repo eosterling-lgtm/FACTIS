@@ -7126,17 +7126,13 @@ def generar_excel_solum(result: dict, cabida: dict, params: dict,
     _hdr_fill(ws2, 1, 3, "% TOTAL")
     total_cost = r.get("costo_total_con_financ", r.get("costo_total_sin_financ", 1)) or 1
     for i, (lbl, val) in enumerate(det.items(), start=2):
-        bg = LIGHT if i % 2 == 0 else WHITE
-        _lbl_cell(ws2, i, 1, lbl, bg=bg)
-        _val_cell(ws2, i, 2, val if val else None, fmt="$#,##0", bg=bg)
-        _pct = round((val or 0) / total_cost * 100, 1) if total_cost and val else None
-        _val_cell(ws2, i, 3, _pct, fmt='0.0"%"', bg=bg)
-    # Total
-    n = len(det) + 2
-    _lbl_cell(ws2, n, 1, "TOTAL COSTOS", bold=True, bg=GRAY)
-    _val_cell(ws2, n, 2, sum(det.values()), fmt="$#,##0", bold=True, bg=GRAY)
-    _val_cell(ws2, n, 3, 100.0, fmt='0.0"%"', bold=True, bg=GRAY)
-
+        _is_total = lbl.upper().startswith(("TOTAL", "SUBTOTAL"))
+        _is_sep   = lbl.startswith("──")
+        bg = GRAY if _is_total else (LIGHT if i % 2 == 0 else WHITE)
+        _lbl_cell(ws2, i, 1, lbl, bold=_is_total, bg=bg)
+        _val_cell(ws2, i, 2, val if val else None, fmt="$#,##0", bold=_is_total, bg=bg)
+        _pct = round((val or 0) / total_cost * 100, 1) if (total_cost and val and not _is_sep) else None
+        _val_cell(ws2, i, 3, _pct, fmt='0.0"%"', bold=_is_total, bg=bg)
     # ── Hoja 3: Ingresos ────────────────────────────────
     ws3 = wb.create_sheet("Ingresos")
     ws3.column_dimensions["A"].width = 38
@@ -7147,16 +7143,12 @@ def generar_excel_solum(result: dict, cabida: dict, params: dict,
     _hdr_fill(ws3, 1, 3, "% TOTAL")
     total_ing = r.get("ingresos_brutos", 1) or 1
     for i, (lbl, val) in enumerate(ing.items(), start=2):
-        bg = LIGHT if i % 2 == 0 else WHITE
-        _lbl_cell(ws3, i, 1, lbl, bg=bg)
-        _val_cell(ws3, i, 2, val, fmt="$#,##0", bg=bg)
-        _pct3 = round((val or 0) / total_ing * 100, 1) if total_ing and val else None
-        _val_cell(ws3, i, 3, _pct3, fmt='0.0"%"', bg=bg)
-    n3 = len(ing) + 2
-    _lbl_cell(ws3, n3, 1, "TOTAL INGRESOS", bold=True, bg=GRAY)
-    _val_cell(ws3, n3, 2, sum(ing.values()), fmt="$#,##0", bold=True, bg=GRAY)
-    _val_cell(ws3, n3, 3, 100.0, fmt='0.0"%"', bold=True, bg=GRAY)
-
+        _is_total_ing = lbl.upper().startswith("TOTAL")
+        bg = GRAY if _is_total_ing else (LIGHT if i % 2 == 0 else WHITE)
+        _lbl_cell(ws3, i, 1, lbl, bold=_is_total_ing, bg=bg)
+        _val_cell(ws3, i, 2, val, fmt="$#,##0", bold=_is_total_ing, bg=bg)
+        _pct3 = round((val or 0) / total_ing * 100, 1) if (total_ing and val) else None
+        _val_cell(ws3, i, 3, _pct3, fmt='0.0"%"', bold=_is_total_ing, bg=bg)
     # ── Hoja 4: Parámetros del Terreno ──────────────────
     ws4 = wb.create_sheet("Parámetros")
     ws4.column_dimensions["A"].width = 30
