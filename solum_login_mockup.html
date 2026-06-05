@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOLUM — Login Mockup</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #0A1628;
+  }
+
+  /* ── FONDO: gradiente base ── */
+  .bg {
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 50%,
+        rgba(30, 55, 90, 0.55) 0%,
+        transparent 70%),
+      linear-gradient(160deg, #0C1E35 0%, #0A1628 45%, #0D1F33 100%);
+  }
+
+  /* ── GRID ARQUITECTÓNICO ── */
+  .grid {
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(71, 101, 140, 0.10) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(71, 101, 140, 0.10) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  /* Sub-grid más fino */
+  .grid-fine {
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(71, 101, 140, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(71, 101, 140, 0.05) 1px, transparent 1px);
+    background-size: 12px 12px;
+  }
+
+  /* ── GLOW detrás del card ── */
+  .glow {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 520px;
+    height: 520px;
+    background: radial-gradient(
+      ellipse at center,
+      rgba(42, 72, 112, 0.45) 0%,
+      rgba(20, 40, 70, 0.20) 45%,
+      transparent 75%
+    );
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  /* ── PUNTOS DE INTERSECCIÓN ── */
+  .dots {
+    position: fixed;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(100, 130, 170, 0.18) 1px, transparent 1px);
+    background-size: 48px 48px;
+    background-position: 0 0;
+  }
+
+  /* ── LÍNEAS DE ACENTO — horizontales tenues ── */
+  .accent-lines {
+    position: fixed;
+    inset: 0;
+    background:
+      linear-gradient(transparent 49.9%, rgba(71,101,140,0.06) 50%, transparent 50.1%);
+    background-size: 100% 192px;
+  }
+
+  /* ── CARD ── */
+  .card-wrap {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  /* Marca superior */
+  .brand {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .brand-label {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: rgba(148, 175, 210, 0.45);
+    margin-bottom: 10px;
+  }
+  /* Isotipo SOLUM simplificado: 9 barras */
+  .isotipo {
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+    height: 28px;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+  .isotipo span {
+    display: block;
+    width: 3px;
+    border-radius: 2px;
+    background: rgba(148, 175, 210, 0.55);
+  }
+  .wordmark {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: 6px;
+    color: rgba(210, 225, 242, 0.90);
+    text-transform: uppercase;
+  }
+
+  /* Card box */
+  .card {
+    background: rgba(10, 22, 40, 0.78);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid rgba(71, 101, 140, 0.25);
+    border-radius: 12px;
+    padding: 36px 40px 32px;
+    width: 320px;
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.03) inset,
+      0 24px 48px rgba(0,0,0,0.45),
+      0 4px 16px rgba(0,0,0,0.30);
+  }
+
+  .card-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(148, 175, 210, 0.45);
+    margin-bottom: 24px;
+    text-align: center;
+  }
+
+  .field-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: rgba(148, 175, 210, 0.40);
+    margin-bottom: 6px;
+    margin-top: 16px;
+  }
+  .field-label:first-of-type { margin-top: 0; }
+
+  .input {
+    width: 100%;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(71, 101, 140, 0.30);
+    border-radius: 6px;
+    padding: 10px 14px;
+    color: rgba(210, 225, 242, 0.85);
+    font-size: 13px;
+    font-family: 'Inter', sans-serif;
+    outline: none;
+  }
+  .input::placeholder { color: rgba(148, 175, 210, 0.20); }
+
+  .btn {
+    margin-top: 24px;
+    width: 100%;
+    padding: 11px;
+    background: #1E3A5F;
+    border: 1px solid rgba(71, 101, 140, 0.40);
+    border-radius: 7px;
+    color: rgba(210, 225, 242, 0.90);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    transition: background 0.2s;
+  }
+  .btn:hover { background: #254870; }
+
+  /* Footer */
+  .footer {
+    margin-top: 20px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: rgba(71, 101, 140, 0.45);
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+  <!-- Fondo capas -->
+  <div class="bg"></div>
+  <div class="grid-fine"></div>
+  <div class="grid"></div>
+  <div class="dots"></div>
+  <div class="accent-lines"></div>
+  <div class="glow"></div>
+
+  <!-- Card -->
+  <div class="card-wrap">
+
+    <div class="brand">
+      <div class="brand-label">Osterling Advisory</div>
+      <div class="isotipo">
+        <span style="height:35%"></span>
+        <span style="height:55%"></span>
+        <span style="height:78%"></span>
+        <span style="height:62%"></span>
+        <span style="height:42%"></span>
+        <span style="height:58%"></span>
+        <span style="height:80%"></span>
+        <span style="height:95%"></span>
+        <span style="height:100%"></span>
+      </div>
+      <div class="wordmark">SOLUM</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Acceso a la plataforma</div>
+
+      <div class="field-label">Usuario</div>
+      <input class="input" type="text" placeholder="nombre de usuario" />
+
+      <div class="field-label">Contraseña</div>
+      <input class="input" type="password" placeholder="••••••••" />
+
+      <button class="btn">Ingresar</button>
+    </div>
+
+    <div class="footer">Análisis Inmobiliario · Lima</div>
+
+  </div>
+
+</body>
+</html>

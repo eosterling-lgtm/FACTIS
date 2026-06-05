@@ -1,0 +1,12 @@
+[build]
+builder = "nixpacks"
+
+[build.nixpacksPlan.phases.setup]
+nixPkgs = ["python311", "chromium", "nss", "freetype", "harfbuzz", "ca-certificates", "ttf-opensans"]
+
+[deploy]
+startCommand = "bash start_railway.sh"
+healthcheckPath = "/_stcore/health"
+healthcheckTimeout = 300
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 3

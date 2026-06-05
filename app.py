@@ -1439,6 +1439,27 @@ if not st.session_state.get("_authenticated"):
     _show_login()
     st.stop()
 
+
+# ── Rate limiting por sesión de usuario ─────────────────
+import time as _time_rl
+
+_RL_MAX_PER_HOUR = 10  # análisis máximos por hora por sesión
+
+def _check_rate_limit():
+    now = _time_rl.time()
+    timestamps = st.session_state.get("_rl_timestamps", [])
+    timestamps = [t for t in timestamps if now - t < 3600]
+    if len(timestamps) >= _RL_MAX_PER_HOUR:
+        mins = int((3600 - (now - timestamps[0])) / 60) + 1
+        st.error(
+            f"⚠️ Has alcanzado el límite de {_RL_MAX_PER_HOUR} análisis por hora. "
+            f"Podrás realizar otro análisis en aproximadamente {mins} minutos."
+        )
+        st.stop()
+    timestamps.append(now)
+    st.session_state["_rl_timestamps"] = timestamps
+
+
 # ── Overlay de transición limpia ────────────────────────
 # Se activa en el primer render post-login, cubre la pantalla
 # mientras la app carga por debajo y se desvanece solo.
@@ -4948,6 +4969,7 @@ IMPORTANTE: Reemplaza todos los valores del ejemplo con los datos reales del doc
     return parse_json_safe(text)
 
 
+@st.cache_data(ttl=3600, show_spinner=False)
 def generate_cabida(params: dict, config: dict) -> dict:
     client = get_client()
 
@@ -16080,6 +16102,8 @@ elif run:
             _b = st.session_state.get(f"_bytes_norm_{f.name}") or b""
             if _b:
                 extra_docs.append(_b)
+
+    _check_rate_limit()
 
     _cert_bytes = st.session_state.get("cert_bytes") or b""
     if not _cert_bytes:
