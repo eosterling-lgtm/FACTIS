@@ -596,7 +596,77 @@ Tasación hipotecaria institucional. Hipoteca sindicada pari passu entre BCP, Sc
 
 ---
 
-## 15. NORMATIVA BASE APLICABLE A PROYECTOS INDUSTRIALES LIMA
+## 15. ALMACÉN vs. CENTRO DE DISTRIBUCIÓN — DIFERENCIAS PARA EL ANÁLISIS
+
+### Definición operativa
+
+| Dimensión | Almacén (Warehouse) | Centro de Distribución (CD) |
+|---|---|---|
+| **Función principal** | Guardar stock a largo plazo | Preparar y despachar pedidos (fulfillment) |
+| **Rotación de inventario** | Baja — meses en estantes | Alta — días o semanas |
+| **Operaciones dentro** | Recepción, organización, despacho a granel | + Picking, packing, kitting, gestión de devoluciones, cross-docking |
+| **Puertas dock** | Pocas (2–6 típico) | Muchas (8–20+ según escala) |
+| **Personal** | Bajo | Alto — operaciones continuas |
+| **Tecnología requerida** | Básica (WMS simple) | Alta — WMS avanzado, RFID, automatización |
+| **Operador típico** | Empresa propietaria o 3PL básico | 3PL especializado (Ransa, DHL, GLP) |
+| **Clientes típicos** | Manufactureros, importadores, mayoristas | E-commerce, retail omnicanal, farmacéutica |
+
+---
+
+### Implicaciones físicas para el diseño de la nave
+
+| Especificación | Almacén | Centro de Distribución |
+|---|---|---|
+| **Altura al hombro** | 8–12 m (según uso) | 12–14 m mínimo (flujos verticales + mezanine oficinas) |
+| **Patio de maniobras** | 30–35 m de profundidad | 40–50 m mínimo (camiones simultáneos en múltiples docks) |
+| **Frente de nave** | Menor — pocas puertas | Mayor — más docks → más frente → más terreno |
+| **Área de staging/cross-dock** | No requerida | 10–20% del área nave |
+| **Oficinas operativas** | ~3–5% del área nave | ~5–10% del área nave (control, RRHH, IT) |
+| **Andenes de carga** | Niveladores simples | Niveladores hidráulicos, selladores de dock, shelter |
+| **Iluminación** | Estándar industrial | Alta intensidad — operaciones nocturnas frecuentes |
+| **Energía eléctrica** | Baja demanda | Alta demanda — cargadores de montacargas, automatización |
+
+---
+
+### Implicaciones para el análisis SOLUM
+
+**Costo de construcción:**
+- Almacén estándar: **$220–350/m²** nave
+- CD Clase A (Lima): **$380–550/m²** nave — mayor complejidad de instalaciones, más andenes, más electricidad
+
+**EIV (Estudio de Impacto Vial, RNE A.011):**
+- Almacén <10,000 m²: generalmente no requerido
+- CD de cualquier escala: **altamente probable que lo requiera** por volumen de camiones y frecuencia de despacho
+- En Lima: IMP exige EIV para instalaciones con >50 movimientos vehículos/día
+
+**Ubicación:**
+- Almacén: puede estar en zonas industriales secundarias alejadas
+- CD: **requiere acceso directo a vías principales** (autopistas, anillos viales) — ubicación es diferenciador crítico de renta
+
+**Renta de mercado Lima (2025):**
+- Almacén estándar I2: **$4.50–6.00/m²/mes**
+- CD Clase A (Lurín, VES, Huachipa): **$6.00–8.50/m²/mes** — premium por especificaciones y ubicación
+
+**Gestión:**
+- Almacén: puede operar sin 3PL externo
+- CD: casi siempre operado por 3PL — el propietario del inmueble es landlord puro (ingreso = renta fija)
+
+---
+
+### Guía de clasificación para SOLUM
+
+Cuando el usuario describe el uso del inmueble, clasificar así:
+
+| Descripción del usuario | Clasificación SOLUM |
+|---|---|
+| "guardar mercadería", "stock", "depósito", "almacenaje" | → Almacén |
+| "distribución", "despacho", "e-commerce", "fulfillment", "3PL", "última milla", "cross-docking" | → Centro de Distribución |
+| "Ransa", "DHL Supply Chain", "GLP", "Mercado Libre", "Saga Falabella logística" | → CD (operadores 3PL) |
+| No especifica | → Preguntar o asumir Almacén (caso más conservador) |
+
+---
+
+## 16. NORMATIVA BASE APLICABLE A PROYECTOS INDUSTRIALES LIMA
 
 | Norma | Contenido | Relevancia |
 |---|---|---|
