@@ -633,7 +633,7 @@ Tasación hipotecaria institucional. Hipoteca sindicada pari passu entre BCP, Sc
 **Costo de construcción en Lima:**
 - Almacén y CD tienen **costos de construcción prácticamente iguales** en el mercado limeño — la diferencia no es material para el modelo financiero.
 - El diferenciador real no es el costo sino las **implicancias operativas y de ubicación** descritas abajo.
-- Rango vigente ambos tipos: **$220–430/m²** nave según calidad y zona (VES/Lurín).
+- Usar los benchmarks de costo ya establecidos en la sección de mercado de este documento (Parque Logístico 47: $291.5/m², benchmark estándar SOLUM: $350/m² nave).
 
 **Altura como variable de diseño:**
 - Si el usuario busca **maximizar densidad de almacenaje** → priorizar altura 12–14 m → mayor costo de estructura pero mayor ingreso por m² de rack.
@@ -648,7 +648,8 @@ Tasación hipotecaria institucional. Hipoteca sindicada pari passu entre BCP, Sc
 - CD: **requiere acceso directo a vías principales** (autopistas, anillos viales) — la ubicación es el diferenciador crítico, no el precio de construcción.
 
 **Renta de mercado Lima (2025):**
-- Ambos tipos: **$5.00–8.50/m²/mes** según zona y calidad — la diferencia de renta entre almacén y CD en Lima no es significativa; depende más de la ubicación y especificaciones de la nave que del tipo de operación.
+- La diferencia de renta entre almacén y CD no es significativa en Lima — depende de ubicación y especificaciones de la nave, no del tipo de operación.
+- Usar los benchmarks de renta ya establecidos en este documento ($5.50–$8.50/m²/mes prime; $6.1–6.4/m²/mes promedio Lurín 2025).
 
 **Gestión:**
 - Almacén: puede operar sin 3PL externo.
