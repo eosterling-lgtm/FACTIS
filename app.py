@@ -4,7 +4,9 @@ import anthropic
 import httpx
 import base64
 import hashlib
+import hmac
 import html as _html_esc
+import io
 import json
 import math
 import os
@@ -1245,24 +1247,22 @@ if _qt:
 
 def _hash_pw(pw: str) -> str:
     """Genera hash PBKDF2-HMAC-SHA256 con salt aleatorio. Formato: salt_hex:key_hex"""
-    import os as _os_pw, hmac as _hmac_pw
-    _salt = _os_pw.urandom(32)
+    _salt = os.urandom(32)
     _key  = hashlib.pbkdf2_hmac("sha256", pw.encode(), _salt, 100_000)
     return _salt.hex() + ":" + _key.hex()
 
 def _verify_pw(stored: str, pw: str) -> bool:
     """Verifica contraseña con soporte legacy (SHA-256) y actual (PBKDF2)."""
-    import hmac as _hmac_pw
     if ":" in stored:
         try:
             _salt = bytes.fromhex(stored.split(":")[0])
             _exp  = bytes.fromhex(stored.split(":")[1])
             _act  = hashlib.pbkdf2_hmac("sha256", pw.encode(), _salt, 100_000)
-            return _hmac_pw.compare_digest(_act, _exp)
+            return hmac.compare_digest(_act, _exp)
         except Exception:
             return False
     # Legacy SHA-256 sin salt (backward compat — migrar actualizando secrets.toml)
-    return _hmac_pw.compare_digest(stored, hashlib.sha256(pw.encode()).hexdigest())
+    return hmac.compare_digest(stored, hashlib.sha256(pw.encode()).hexdigest())
 
 def _get_users() -> dict:
     try:
@@ -1271,9 +1271,7 @@ def _get_users() -> dict:
         return {}
 
 def _show_login() -> None:
-    import datetime as _dt_login
-
-    _yr  = _dt_login.date.today().year
+    _yr  = datetime.date.today().year
     _logo_svg = (
         f'<img src="data:image/svg+xml;base64,{_SOLUM_SVG_LIGHT_B64}" '
         f'style="width:160px;height:160px;display:block;margin:0 auto 16px;" />'
@@ -6799,7 +6797,6 @@ _XL = {
 
 def generar_excel_solum(result: dict, cabida: dict, params: dict,
                          fin_inputs: dict, zona: str) -> bytes:
-    import io
     from openpyxl import Workbook
     from openpyxl.styles import (Font, PatternFill, Alignment, Border, Side)
     from openpyxl.utils import get_column_letter
@@ -7050,9 +7047,6 @@ def _build_solum_html(result: dict, cabida: dict, params: dict,
                       fin_inputs: dict, zona: str,
                       legal: dict | None = None) -> str:
     """Generate the SOLUM HTML report — hybrid design: dark cover + Monte Real interior."""
-    import html as _he
-    import datetime
-
     r   = result.get("resumen", {})
     det = result.get("detalle_costos", {})
     ing = result.get("detalle_ingresos", {})
@@ -7064,7 +7058,7 @@ def _build_solum_html(result: dict, cabida: dict, params: dict,
         return f"${v:,.0f}"
 
     def _e(s):
-        return _he.escape(str(s or ""))
+        return _html_esc.escape(str(s or ""))
 
     _meses = ["enero","febrero","marzo","abril","mayo","junio",
               "julio","agosto","septiembre","octubre","noviembre","diciembre"]
@@ -8354,8 +8348,6 @@ def _generar_pdf_solum_LEGACY_UNUSED(result: dict, cabida: dict, params: dict,
         canvas_obj.restoreState()
 
     def _cover_page(canvas_obj, doc):
-        import os as _os
-
         # ── Fondo navy completo ───────────────────────────────────
         canvas_obj.setFillColor(NAV)
         canvas_obj.rect(0, 0, W, H, fill=1, stroke=0)
@@ -9561,7 +9553,6 @@ def _s_curve_weights(n: int) -> list:
 def generar_dcf_excel(df_fl: "pd.DataFrame", result_financiero: dict,
                       fin: dict, escenarios: dict, nombre_proyecto: str = "") -> bytes:
     """Genera un Excel profesional del DCF mensual."""
-    import io
     from openpyxl import Workbook
     from openpyxl.styles import (PatternFill, Font, Alignment, Border, Side,
                                   numbers as xl_numbers)
@@ -9744,10 +9735,9 @@ def generar_flujo(cabida: dict, result_financiero: dict, fin: dict, zona: str):
 
     # ── Preventa: tiempo para alcanzar el % mínimo exigido por banco ─
     # Escala con el tamaño del proyecto: meses = ⌈(n_unidades × pct_preventa) / vel⌉
-    import math as _math
     _pct_pv        = fin.get("pct_preventa_banco", 30.0) / 100
-    _unid_req      = max(1, _math.ceil(n_unidades * _pct_pv))
-    _meses_pv_auto = max(1, _math.ceil(_unid_req / vel))
+    _unid_req      = max(1, math.ceil(n_unidades * _pct_pv))
+    _meses_pv_auto = max(1, math.ceil(_unid_req / vel))
     meses_preventa = int(fin.get("meses_preventa_override") or _meses_pv_auto)
     meses_preventa = max(1, min(meses_preventa, 36))    # clamp 1–36 meses
 
@@ -9756,7 +9746,7 @@ def generar_flujo(cabida: dict, result_financiero: dict, fin: dict, zona: str):
     # Extiende ventana para capturar todas las cuotas del último comprador:
     # la última venta ocurre ~ceil(n_unidades/vel) meses después del inicio,
     # y genera 20 cuotas mensuales adicionales → ventana mínima = last_sale + 22.
-    _last_sale_month = _math.ceil(n_unidades / vel)
+    _last_sale_month = math.ceil(n_unidades / vel)
     total_meses  = max(fin_obra + 6, _last_sale_month + 22)
     n_months     = total_meses + 1
 
@@ -10263,10 +10253,8 @@ f'<div style="font-size:11px;color:#9A9080;letter-spacing:2px;text-transform:upp
 
 
 def _build_industrial_html(r: dict, factibilidad, fecha: str, altura_nave: float = 0, ubicacion: str = "") -> str:
-    import html as _he
-
     def _e(s):
-        return _he.escape(str(s or ""))
+        return _html_esc.escape(str(s or ""))
 
     def _fmt(v):
         v = v or 0
@@ -11500,10 +11488,8 @@ def _build_propuesta_html(
     condicion_minuta: str = "Aprobación del anteproyecto por la Municipalidad",
     condicion_escritura: str = "Desocupación y entrega del inmueble libre de cargas",
 ) -> str:
-    import html as _he
-
     def _e(s):
-        return _he.escape(str(s or ""))
+        return _html_esc.escape(str(s or ""))
 
     # ── Pull params ───────────────────────────────────────────────────────────────
     p   = params or {}
@@ -12168,10 +12154,8 @@ def generar_informe_oficinas_pdf(inp: dict, fin: dict, fecha: str) -> bytes:
 
 
 def _build_oficinas_html(inp: dict, fin: dict, fecha: str) -> str:
-    import html as _he
-
     def _e(s):
-        return _he.escape(str(s or ""))
+        return _html_esc.escape(str(s or ""))
 
     def _fmt(v):
         v = float(v or 0)
@@ -12986,8 +12970,7 @@ def generar_informe_residencial_html(r: dict, legal: dict | None, fecha: str,
 
 def generar_informe_html(params, cabida, financ, legal, zona, financ_inputs, fecha):
     """Genera informe HTML SOLUM 3 páginas (portada + cabida + financiero/legal)."""
-    import html as _he
-    def _e(s): return _he.escape(str(s or ""))
+    def _e(s): return _html_esc.escape(str(s or ""))
 
     # ── Top-level data unpacking ─────────────────────────────
     r   = (financ or {}).get("resumen", {}) if financ else {}
@@ -16579,7 +16562,6 @@ elif tipo_op == "Proyecto Inmobiliario":
                     st.markdown('<div style="font-size:12px;color:#2E6B55;background:#EBF4F0;border-left:3px solid #2E6B55;border-radius:4px;padding:8px 12px;margin-top:4px;">DWG es formato propietario — exporta como DXF desde AutoCAD (Archivo → Guardar como → AutoCAD DXF) y vuelve a cargar.</div>', unsafe_allow_html=True)
                 if _geo_file and _geo_file.name.lower().endswith(".dxf"):
                     if _SHAPELY_OK and _EZDXF_OK:
-                        import io
                         _poly_lote = _geo_poligono_dxf(io.TextIOWrapper(io.BytesIO(_geo_file.read()), encoding="utf-8", errors="ignore"))
                         if _poly_lote:
                             st.session_state["geo_poly_lote"] = _poly_lote
@@ -16847,7 +16829,6 @@ elif tipo_op == "Proyecto Inmobiliario":
                         _cnstr_txt = "Sin restricción normativa de porcentajes"
 
                     # ── Optimizador de mix respetando restricciones ───────
-                    import math as _math
                     def _opt_mix(av, a1, a2, a3, mx1, mx2, mn3):
                         """Maximiza unidades respetando límites normativos de mix."""
                         best_n1, best_n2, best_n3 = 1, 1, 1
@@ -16855,7 +16836,7 @@ elif tipo_op == "Proyecto Inmobiliario":
                         _n_max = int(av / min(a1, a2, a3)) + 1 if min(a1,a2,a3) > 0 else 50
                         for N in range(3, _n_max + 1):
                             # máximo 1D y 2D según restricciones, mínimo 3D
-                            n3 = max(1, _math.ceil(mn3 * N))
+                            n3 = max(1, math.ceil(mn3 * N))
                             n1 = max(1, min(int(mx1 * N), N - n3 - 1))
                             n2 = N - n1 - n3
                             if n2 < 1:
@@ -18117,12 +18098,11 @@ elif tipo_op == "Proyecto Inmobiliario":
                 _mo      = _r_fl.get("meses_obra", 16)
                 _mv      = _r_fl.get("meses_venta", 12)
                 # Preventa: recalcular con la misma fórmula que generar_flujo
-                import math as _math_g
                 _n_unid_g   = max(c.get("total_unidades", 1) or 1, 1)
                 _vel_g      = float((MERCADO.get(zona_sel, {}) or {}).get("velocidad_venta", 1.5) or 1.5)
                 _pct_pv_g   = fi.get("pct_preventa_banco", 30.0) / 100
-                _unid_req_g = max(1, _math_g.ceil(_n_unid_g * _pct_pv_g))
-                _pv_auto_g  = max(1, _math_g.ceil(_unid_req_g / _vel_g))
+                _unid_req_g = max(1, math.ceil(_n_unid_g * _pct_pv_g))
+                _pv_auto_g  = max(1, math.ceil(_unid_req_g / _vel_g))
                 _preventa_m = int(fi.get("meses_preventa_override") or _pv_auto_g)
                 _preventa_m = max(1, min(_preventa_m, 36))
                 _pct_pv_lbl = fi.get("pct_preventa_banco", 30.0)
@@ -18151,7 +18131,7 @@ elif tipo_op == "Proyecto Inmobiliario":
                 ]
                 # Alerta: unidades restantes post-preventa vs window de obra+post-obra
                 _unid_post_pv   = _n_unid_g * (1 - _pct_pv_g)  # unidades a vender tras preventa
-                _mv_post_pv     = (_math_g.ceil(_unid_post_pv / _vel_g) if _vel_g > 0 else 0)
+                _mv_post_pv     = (math.ceil(_unid_post_pv / _vel_g) if _vel_g > 0 else 0)
                 _mv_calc        = _r_fl.get("meses_venta_calc", _mv)
                 if _mv_post_pv > _mo + 6:
                     st.markdown(
@@ -23710,7 +23690,6 @@ elif tipo_op == "Portfolio":
                                 if _nname.endswith(".txt"):
                                     _ntexto = _nbytes.decode("utf-8", errors="ignore")
                                 elif _nname.endswith(".pdf"):
-                                    import io
                                     try:
                                         from pdfminer.high_level import extract_text as _pdf_extract
                                         _ntexto = _pdf_extract(io.BytesIO(_nbytes))
