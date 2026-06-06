@@ -4708,6 +4708,156 @@ def _load_norm(filename: str) -> str:
         return path.read_text(encoding="utf-8")
     return f"[NORMATIVA NO ENCONTRADA: {filename}]"
 
+# ── NORMATIVA INTELIGENTE — helpers ──────────────────────────────────────────────────────────────
+
+_CPUE_WARN_HTML = """
+<div style="background:#FFFBF2;border:1px solid #E2C97A;border-left:4px solid #B8942F;
+             border-radius:6px;padding:14px 16px;margin:10px 0 14px 0;">
+  <div style="font-size:10px;font-weight:700;color:#1E2D3D;letter-spacing:2px;
+               text-transform:uppercase;margin-bottom:7px;">⚠ CPUE no adjunto</div>
+  <div style="font-size:11px;color:#4A5568;line-height:1.75;">
+    Sin el Certificado de Parámetros, SOLUM utilizará normativa distrital general.<br>
+    <span style="color:#718096;">· Parámetros pueden diferir del escenario real autorizado</span><br>
+    <span style="color:#718096;">· No se detectarán beneficios normativos post-CPUE</span><br>
+    <span style="color:#718096;">· Análisis legal quedará incompleto</span>
+  </div>
+</div>"""
+
+
+@st.cache_data(ttl=86400, show_spinner=False)
+def _extract_cpue_fecha(doc_bytes: bytes) -> str | None:
+    """Extracts CPUE emission date via Haiku. Cached by document content hash."""
+    from datetime import datetime as _dt
+    client = get_client()
+    content = [
+        smart_block(doc_bytes),
+        {"type": "text", "text": (
+            "Extrae la FECHA DE EMISIÓN del Certificado de Parámetros Urbanísticos y Edificatorios. "
+            "Responde ÚNICAMENTE con la fecha en formato YYYY-MM-DD. "
+            "Si no encuentras la fecha de emisión (no la de caducidad), responde exactamente: null"
+        )},
+    ]
+    try:
+        text = (_api_call(
+            client,
+            model="claude-haiku-4-5-20251001",
+            max_tokens=30,
+            messages=[{"role": "user", "content": content}],
+        ) or "").strip()
+        if text.lower() == "null" or not text:
+            return None
+        _dt.strptime(text, "%Y-%m-%d")
+        return text
+    except Exception:
+        return None
+
+
+@st.cache_data(ttl=1800, show_spinner=False)
+def _get_normativas_post_cpue(fecha_emision: str, categorias: tuple) -> list:
+    """Query alertas_normativas for records published after CPUE emission date."""
+    sb = _get_supabase()
+    if not sb or not fecha_emision:
+        return []
+    try:
+        resp = (
+            sb.table("alertas_normativas")
+            .select("fecha_publicacion,entidad,tipo_norma,titulo,resumen,categorias,relevancia")
+            .gte("fecha_publicacion", fecha_emision)
+            .in_("relevancia", ["alta", "media"])
+            .order("fecha_publicacion", desc=True)
+            .limit(8)
+            .execute()
+        )
+        rows = resp.data or []
+        if categorias and rows:
+            cat_set = {c.lower() for c in categorias}
+            filtered = [
+                r for r in rows
+                if not r.get("categorias") or
+                   bool(cat_set & {x.lower() for x in (r.get("categorias") or [])})
+            ]
+            return filtered if filtered else rows
+        return rows
+    except Exception:
+        return []
+
+
+def _render_normativa_post_cpue_banner(normativas: list, fecha_emision: str) -> None:
+    """Renders the post-analysis normativa intelligence banner."""
+    if not normativas:
+        return
+    rows_html = ""
+    for n in normativas:
+        rel = n.get("relevancia", "media")
+        rel_color = "#1A7A4A" if rel == "alta" else "#7C6D3F"
+        rel_bg    = "#EBF4F0" if rel == "alta" else "#FFF8EC"
+        res_txt = (
+            f'<div style="font-size:11px;color:#4A5568;margin-top:3px;">{n["resumen"]}</div>'
+            if n.get("resumen") else ""
+        )
+        rows_html += f"""
+        <div style="padding:10px 0;border-bottom:1px solid #E2E8F0;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;">
+            <div style="flex:1;">
+              <div style="font-size:10px;color:#718096;letter-spacing:1px;text-transform:uppercase;margin-bottom:2px;">
+                {n.get("fecha_publicacion","")} &nbsp;·&nbsp; {n.get("entidad","")} &nbsp;·&nbsp; {n.get("tipo_norma","")}
+              </div>
+              <div style="font-size:12px;font-weight:600;color:#1E2D3D;">{n.get("titulo","")}</div>
+              {res_txt}
+            </div>
+            <span style="font-size:10px;font-weight:700;color:{rel_color};background:{rel_bg};
+                         border-radius:4px;padding:2px 8px;white-space:nowrap;flex-shrink:0;">
+              {rel.upper()}
+            </span>
+          </div>
+        </div>"""
+    n_count = len(normativas)
+    n_txt = f"{n_count} normativa{'s' if n_count > 1 else ''} publicada{'s' if n_count > 1 else ''}"
+    st.markdown(f"""
+    <div style="background:#F7F9FC;border:1px solid #E2E8F0;border-left:4px solid #1E2D3D;
+                border-radius:8px;padding:16px 20px;margin:4px 0 20px 0;">
+      <div style="font-size:10px;color:#718096;letter-spacing:2.5px;text-transform:uppercase;
+                  font-weight:700;margin-bottom:4px;">NORMATIVA INTELIGENTE · POST-CPUE</div>
+      <div style="font-size:14px;font-weight:700;color:#1E2D3D;margin-bottom:3px;">
+        {n_txt} después de la emisión de su CPUE ({fecha_emision})
+      </div>
+      <div style="font-size:11px;color:#718096;margin-bottom:12px;">
+        Pueden beneficiar su proyecto. No están incorporadas en el análisis base.
+        Verifique con su arquitecto y municipalidad antes de incorporarlas al diseño.
+      </div>
+      {rows_html}
+    </div>""", unsafe_allow_html=True)
+
+
+def _cpue_gate_ui(module_key: str, cpue_file: object) -> tuple:
+    """
+    Renders CPUE gate UI. Returns (run_flag, show_disabled).
+    Manages session state for warning, acceptance, and trigger.
+    """
+    warn_key    = f"_cpue_warn_{module_key}"
+    ok_key      = f"_cpue_ok_{module_key}"
+    trig_key    = f"_cpue_trig_{module_key}"
+    cpue_ok     = bool(cpue_file) or st.session_state.get(ok_key, False)
+    run_from_trig = st.session_state.pop(trig_key, False)
+
+    if st.session_state.get(warn_key, False):
+        st.markdown(_CPUE_WARN_HTML, unsafe_allow_html=True)
+        _wc1, _wc2 = st.columns(2)
+        with _wc1:
+            if st.button("↑ Adjuntar CPUE", use_container_width=True, key=f"btn_cpue_sub_{module_key}"):
+                st.session_state.pop(warn_key, None)
+                st.rerun()
+        with _wc2:
+            if st.button("Continuar sin CPUE →", use_container_width=True, key=f"btn_cpue_cont_{module_key}"):
+                st.session_state[ok_key]   = True
+                st.session_state[trig_key] = True
+                st.session_state.pop(warn_key, None)
+                st.rerun()
+        return False, True
+
+    return run_from_trig, False
+
+
 # ── ÍNDICE DE USOS ATN-I (6,349 actividades) — carga y parseo cacheados ──────────────────────────
 
 def _parse_indice_usos_entries(raw: str) -> list:
@@ -4823,6 +4973,7 @@ Devuelve ÚNICAMENTE el siguiente JSON, sin texto antes ni después, sin bloques
   "estac_visitas_norma": "texto exacto del CPU sobre estacionamiento de visitas, ej: '15% máximo del total' o '1 espacio' o '10% de residentes' — null si no especifica",
   "ambito_urbano": "B",
   "sector_urbano": "A",
+  "fecha_emision": "2024-03-15",
   "fecha_caducidad": "2026-12-31",
   "notas_altura": ["Nota 12: lote esquina aplica promedio de alturas"],
   "ordenanzas_base": ["RIN 523-2020"],
@@ -4854,7 +5005,8 @@ IMPORTANTE: Reemplaza todos los valores del ejemplo con los datos reales del doc
 - afectacion_vial: true si el documento menciona afectación vial, ampliación de vía, cesión de área para vía, sección vial que requiere retroceso, fajas de afectación o similar — false si no hay mención
 - afectacion_vial_detalle: descripción exacta copiada del documento (vía afectante, metros de retiro, observaciones del certificado). null si afectacion_vial=false
 - afectacion_vial_ml: metros lineales de afectación desde el límite de propiedad. null si no se especifica o no hay afectación
-- area_afectada_m2: si el documento indica el área afectada en m², extráela. Si no, usa null (SOLUM la calculará con frente × afectacion_vial_ml)"""
+- area_afectada_m2: si el documento indica el área afectada en m², extráela. Si no, usa null (SOLUM la calculará con frente × afectacion_vial_ml)
+- fecha_emision: fecha de EMISIÓN del certificado en formato YYYY-MM-DD. Diferente a la fecha de caducidad. null si no está explícita en el documento"""
 
     content.append({"type": "text", "text": prompt})
 
@@ -13892,7 +14044,17 @@ with st.sidebar:
         )
 
         st.markdown("---")
-        run = st.button("GENERAR ANÁLISIS", use_container_width=True, type="primary")
+        # ── PUERTA 1: CPUE Gate ──────────────────────────────
+        _inm_trig, _inm_warn_active = _cpue_gate_ui("inm", pdf_cert)
+        _run_btn_inm = st.button(
+            "GENERAR ANÁLISIS", use_container_width=True, type="primary",
+            disabled=_inm_warn_active, key="btn_run_inm_main",
+        )
+        run = _run_btn_inm or _inm_trig
+        if run and not (bool(pdf_cert) or st.session_state.get("_cpue_ok_inm", False)):
+            st.session_state["_cpue_warn_inm"] = True
+            run = False
+            st.rerun()
 
         st.markdown(
             '<div style="margin:18px 0 10px;border-top:1px solid #E2E8F0;">'
@@ -14576,7 +14738,17 @@ with st.sidebar:
 
         # ── EJECUTAR ─────────────────────────────────────────
         st.markdown("---")
-        run_industrial = st.button("GENERAR ANÁLISIS", use_container_width=True, type="primary")
+        # ── PUERTA 1: CPUE Gate ──────────────────────────────
+        _ind_trig, _ind_warn_active = _cpue_gate_ui("ind", ind_doc_params)
+        _run_btn_ind = st.button(
+            "GENERAR ANÁLISIS", use_container_width=True, type="primary",
+            disabled=_ind_warn_active, key="btn_run_ind_main",
+        )
+        run_industrial = _run_btn_ind or _ind_trig
+        if run_industrial and not (bool(ind_doc_params) or st.session_state.get("_cpue_ok_ind", False)):
+            st.session_state["_cpue_warn_ind"] = True
+            run_industrial = False
+            st.rerun()
 
         st.markdown(
             '<div style="margin:18px 0 10px;border-top:1px solid #E2E8F0;">'
@@ -15037,7 +15209,17 @@ with st.sidebar:
 
         # ── EJECUTAR ─────────────────────────────────────────
         st.markdown("---")
-        run_residencial = st.button("GENERAR ANÁLISIS", use_container_width=True, type="primary")
+        # ── PUERTA 1: CPUE Gate ──────────────────────────────
+        _res_trig, _res_warn_active = _cpue_gate_ui("res", res_doc_params)
+        _run_btn_res = st.button(
+            "GENERAR ANÁLISIS", use_container_width=True, type="primary",
+            disabled=_res_warn_active, key="btn_run_res_main",
+        )
+        run_residencial = _run_btn_res or _res_trig
+        if run_residencial and not (bool(res_doc_params) or st.session_state.get("_cpue_ok_res", False)):
+            st.session_state["_cpue_warn_res"] = True
+            run_residencial = False
+            st.rerun()
 
         # ── ELABORACIÓN DE PROPUESTA (solo Compra, después del análisis) ──
         if res_modo == "Compra":
@@ -15429,6 +15611,8 @@ with st.sidebar:
                     type=["pdf","png","jpg","jpeg"], key="ofi_cert_file"
                 )
                 ofi_cert_bytes = _ofi_cert_file.read() if _ofi_cert_file else None
+                if ofi_cert_bytes:
+                    st.session_state["ofi_cert_bytes"] = ofi_cert_bytes
 
             # CABIDA — calculada automáticamente por SOLUM
             ofi_pisos_oficinas = max(2, ofi_pisos_max - 1)  # reserva 1 piso para lobby/servicios
@@ -15587,12 +15771,23 @@ with st.sidebar:
             height=90,
         )
 
-        run_oficinas = st.button(
+        # ── PUERTA 1: CPUE Gate (solo Desarrollo de Proyecto) ───────────────
+        _ofi_cpue_file = _ofi_cert_file if ofi_modo == "Desarrollo de Proyecto" else None
+        _ofi_trig, _ofi_warn_active = _cpue_gate_ui("ofi", _ofi_cpue_file)
+        _run_btn_ofi = st.button(
             "⚡ GENERAR ANÁLISIS DE OFICINAS",
             key="btn_run_oficinas",
             use_container_width=True,
             type="primary",
+            disabled=_ofi_warn_active,
         )
+        run_oficinas = _run_btn_ofi or _ofi_trig
+        if run_oficinas and ofi_modo == "Desarrollo de Proyecto" and not (
+            bool(_ofi_cpue_file) or st.session_state.get("_cpue_ok_ofi", False)
+        ):
+            st.session_state["_cpue_warn_ofi"] = True
+            run_oficinas = False
+            st.rerun()
 
 # ── SESSION STATE ────────────────────────────────────
 
@@ -15660,6 +15855,10 @@ if tipo_op == "Proyecto Logístico / Industrial" and run_industrial:
             st.session_state.industrial_result = calcular_industrial(_ind_inp)
             st.session_state["_ind_inp_sens"] = _ind_inp
             st.session_state.ind_analizado = True
+            # Extraer fecha CPUE para Normativa Inteligente
+            _ind_cb = st.session_state.get("ind_params_bytes")
+            if _ind_cb:
+                st.session_state["_ind_cpue_fecha"] = _extract_cpue_fecha(_ind_cb)
             # Si hay documentos cargados, analizar automáticamente (usar bytes cacheados)
             _ip  = st.session_state.get("partida_bytes")
             _ic  = st.session_state.get("ind_params_bytes")
@@ -15711,6 +15910,14 @@ if tipo_op == "Inmueble Residencial" and run_res_docs:
     st.rerun()
 
 elif tipo_op == "Inmueble Residencial" and run_residencial:
+    # Almacenar bytes CPUE y extraer fecha para Normativa Inteligente
+    if res_doc_params:
+        try:
+            _res_cpue_b = res_doc_params.read()
+            st.session_state["res_params_bytes"] = _res_cpue_b
+            st.session_state["_res_cpue_fecha"] = _extract_cpue_fecha(_res_cpue_b)
+        except Exception:
+            pass
     _m_res_run = MERCADO.get(res_zona, {})
     # Referencia por tipo de acabados (punto medio del rango)
     _ACABADOS_RUN = {
@@ -16337,6 +16544,15 @@ elif tipo_op == "Proyecto Inmobiliario":
                 </div>
             </div>
         </div>""", unsafe_allow_html=True)
+
+        # ── PUERTA 2: Normativa Inteligente post-CPUE ────────────────────────
+        _inm_fecha_em = (st.session_state.params or {}).get("fecha_emision")
+        if _inm_fecha_em:
+            _inm_normas = _get_normativas_post_cpue(
+                _inm_fecha_em,
+                ("residencial", "edificacion", "urbanismo", "vivienda", "estacionamientos"),
+            )
+            _render_normativa_post_cpue_banner(_inm_normas, _inm_fecha_em)
 
         tabs = st.tabs(["Parámetros", "Cabida", "Financiero", "Flujo de Caja", "Legal", "Resumen", "Propuesta", "Renta / Holding"], key="proj_tabs")
         st.components.v1.html("""<script>
@@ -19396,6 +19612,10 @@ elif tipo_op == "Proyecto de Oficinas" and run_oficinas:
         "instrucciones": ofi_instrucciones,
         "comparativa": list(st.session_state.ofi_comparativa),
     }
+    # Extraer fecha CPUE para Normativa Inteligente (solo Desarrollo)
+    _ofi_cb = st.session_state.get("ofi_cert_bytes")
+    if _ofi_cb and ofi_modo == "Desarrollo de Proyecto":
+        st.session_state["_ofi_cpue_fecha"] = _extract_cpue_fecha(_ofi_cb)
     st.rerun()
 
 # ═══════════════════════════════════════════════════════
@@ -19500,6 +19720,15 @@ elif tipo_op == "Proyecto Logístico / Industrial":
                         <div style="font-size:20px;font-weight:700;color:#FFFFFF;">{r.get("zonificacion","—")}</div>
                     </div>
                     {_kpi_items}</div></div></div>""", unsafe_allow_html=True)
+
+        # ── PUERTA 2: Normativa Inteligente post-CPUE ────────────────────────
+        _ind_fecha_em = st.session_state.get("_ind_cpue_fecha")
+        if _ind_fecha_em:
+            _ind_normas = _get_normativas_post_cpue(
+                _ind_fecha_em,
+                ("industrial", "logistica", "zonificacion", "urbanismo"),
+            )
+            _render_normativa_post_cpue_banner(_ind_normas, _ind_fecha_em)
 
         _ind_goto = st.session_state.pop("_goto_tab_name_ind", None)
         _ind_perfil_activo = r.get("perfil", "Desarrollo Integral")
@@ -21502,6 +21731,15 @@ elif tipo_op == "Inmueble Residencial":
             </div>
         </div>""", unsafe_allow_html=True)
 
+        # ── PUERTA 2: Normativa Inteligente post-CPUE ────────────────────────
+        _res_fecha_em = st.session_state.get("_res_cpue_fecha")
+        if _res_fecha_em:
+            _res_normas = _get_normativas_post_cpue(
+                _res_fecha_em,
+                ("residencial", "edificacion", "urbanismo", "vivienda"),
+            )
+            _render_normativa_post_cpue_banner(_res_normas, _res_fecha_em)
+
         res_tab_labels = ["Parámetros", "Financiero", "Inversión"] if r.get('uso') in ["Inversión para alquilar", "Evaluación para venta"] else ["Parámetros", "Financiero", "Escenarios"]
         res_tabs = st.tabs(res_tab_labels + ["Comparativa", "Amortización", "Legal", "Resumen", "Documentos"])
         st.components.v1.html("""<script>
@@ -23126,6 +23364,15 @@ elif tipo_op == "Proyecto de Oficinas":
 
             # ── DESARROLLO ────────────────────────────────────────────────
             else:
+                # ── PUERTA 2: Normativa Inteligente post-CPUE ────────────
+                _ofi_fecha_em = st.session_state.get("_ofi_cpue_fecha")
+                if _ofi_fecha_em:
+                    _ofi_normas = _get_normativas_post_cpue(
+                        _ofi_fecha_em,
+                        ("oficinas", "urbanismo", "estacionamientos", "edificacion"),
+                    )
+                    _render_normativa_post_cpue_banner(_ofi_normas, _ofi_fecha_em)
+
                 _od_t1, _od_t2, _od_t3, _od_t4 = st.tabs(["Cabida", "Rentabilidad", "Financiamiento", "Escenarios"])
 
                 with _od_t1:
@@ -23247,7 +23494,10 @@ elif tipo_op == "Portfolio":
         if _sb_al:
             try:
                 _al_resp = (_sb_al.table("alertas_normativas")
-                               .select("id,fecha_publicacion,entidad,tipo_norma,titulo,resumen,url,relevancia,categorias,procesado,creado_en")
+                               .select("id,fecha_publicacion,entidad,tipo_norma,titulo,resumen,url,"
+                                       "relevancia,categorias,procesado,creado_en,"
+                                       "texto_procesado,codigo_propuesto,tipo_normativa_solum,"
+                                       "aprobado_por,aprobado_en")
                                .eq("procesado", False)
                                .order("creado_en", desc=True)
                                .limit(20)
@@ -23256,20 +23506,67 @@ elif tipo_op == "Portfolio":
             except Exception:
                 _alertas_pend = []
 
+            # ── SLA Dashboard ─────────────────────────────────────────────────
+            try:
+                _sla_ultima_det = (_sb_al.table("alertas_normativas")
+                                   .select("creado_en").order("creado_en", desc=True)
+                                   .limit(1).execute())
+                _sla_ultima_aprob = (_sb_al.table("alertas_normativas")
+                                     .select("aprobado_en").eq("procesado", True)
+                                     .order("aprobado_en", desc=True).limit(1).execute())
+                _sla_con_borrador = (_sb_al.table("alertas_normativas")
+                                     .select("id", count="exact").eq("procesado", False)
+                                     .neq("texto_procesado", None).execute())
+
+                def _dias_desde(ts_str: str | None) -> str:
+                    if not ts_str:
+                        return "—"
+                    try:
+                        import dateutil.parser as _dp
+                        _dt = _dp.parse(ts_str)
+                        _d  = (datetime.datetime.now(datetime.timezone.utc) - _dt).days
+                        return f"hace {_d}d" if _d > 0 else "hoy"
+                    except Exception:
+                        return "—"
+
+                _sla_d  = _sla_ultima_det.data[0]["creado_en"]  if _sla_ultima_det.data  else None
+                _sla_a  = _sla_ultima_aprob.data[0]["aprobado_en"] if _sla_ultima_aprob.data else None
+                _n_bord = _sla_con_borrador.count or 0
+                _n_pend = len(_alertas_pend)
+
+                st.markdown(
+                    '<div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;">'
+                    + "".join([
+                        f'<div style="flex:1;min-width:120px;background:rgba(13,33,55,0.5);border:1px solid rgba(71,85,105,0.35);'
+                        f'border-radius:8px;padding:10px 14px;text-align:center;">'
+                        f'<div style="font-size:18px;font-weight:700;color:#C8D8E8;">{v}</div>'
+                        f'<div style="font-size:10px;color:#8AA8C0;margin-top:2px;">{label}</div></div>'
+                        for v, label in [
+                            (_n_pend,          "pendientes revisión"),
+                            (_n_bord,          "borradores listos"),
+                            (_dias_desde(_sla_d),  "última detección"),
+                            (_dias_desde(_sla_a),  "última activada"),
+                        ]
+                    ])
+                    + '</div>',
+                    unsafe_allow_html=True)
+            except Exception:
+                pass
+
             if _alertas_pend:
                 _al_altas = [a for a in _alertas_pend if a.get("relevancia") == "alta"]
-                _al_otras = [a for a in _alertas_pend if a.get("relevancia") != "alta"]
                 _badge_color = "#C44A4A" if _al_altas else "#B8862E"
                 st.markdown(
                     f'<div style="background:rgba(71,85,105,0.08);border:1px solid {_badge_color};'
-                    f'border-radius:8px;padding:14px 18px;margin-bottom:16px;">'
+                    f'border-radius:8px;padding:14px 18px;margin-bottom:12px;">'
                     f'<div style="display:flex;align-items:center;gap:10px;">'
                     f'<div style="font-size:18px;">{"🔴" if _al_altas else "🟡"}</div>'
                     f'<div>'
                     f'<div style="font-size:13px;font-weight:700;color:#FFFFFF;">'
                     f'{len(_alertas_pend)} normas detectadas pendientes de revisión</div>'
                     f'<div style="font-size:11px;color:#8AA8C0;margin-top:2px;">'
-                    f'Monitor diario SOLUM · {len(_al_altas)} de alta relevancia</div>'
+                    f'Monitor diario SOLUM · {len(_al_altas)} de alta relevancia · '
+                    f'{sum(1 for a in _alertas_pend if a.get("texto_procesado"))} borradores listos para activar</div>'
                     f'</div></div></div>',
                     unsafe_allow_html=True)
 
@@ -23279,28 +23576,91 @@ elif tipo_op == "Portfolio":
                         _rel_icon  = "🔴" if _rel == "alta" else ("🟡" if _rel == "media" else "🟢")
                         _rel_color = "#C44A4A" if _rel == "alta" else ("#B8862E" if _rel == "media" else "#1A7A4A")
                         _cats = ", ".join(_al.get("categorias") or []) or "—"
+                        _tiene_borrador = bool(_al.get("texto_procesado"))
+
                         _a1, _a2 = st.columns([4, 1])
                         with _a1:
+                            _borr_badge = (
+                                '<span style="display:inline-block;background:#1A5C3A;color:#4ADE80;'
+                                'font-size:9px;font-weight:700;padding:1px 6px;border-radius:4px;'
+                                'margin-left:6px;vertical-align:middle;">BORRADOR LISTO</span>'
+                                if _tiene_borrador else ""
+                            )
                             st.markdown(
                                 f'<div style="border-left:3px solid {_rel_color};padding:8px 12px;'
                                 f'margin-bottom:8px;background:rgba(255,255,255,0.02);border-radius:0 6px 6px 0;">'
                                 f'<div style="font-size:12px;font-weight:600;color:#C8D8E8;">'
-                                f'{_rel_icon} {_al.get("titulo","")[:120]}</div>'
+                                f'{_rel_icon} {_al.get("titulo","")[:120]}{_borr_badge}</div>'
                                 f'<div style="font-size:10px;color:#8AA8C0;margin-top:3px;">'
                                 f'{_al.get("entidad","")[:60]} · {_al.get("tipo_norma","")[:40]} · '
                                 f'{(_al.get("fecha_publicacion") or "")[:10]}</div>'
                                 f'<div style="font-size:10px;color:#6B8098;margin-top:2px;">'
-                                f'Categorías: {_cats}</div>'
+                                f'Categorías: {_cats}'
+                                + (f' · Código propuesto: <code style="background:rgba(255,255,255,0.08);'
+                                   f'padding:0 4px;border-radius:3px;">{_al["codigo_propuesto"]}</code>'
+                                   if _al.get("codigo_propuesto") else "")
+                                + '</div>'
                                 + (f'<div style="font-size:11px;color:#A8B8C8;margin-top:4px;">'
                                    f'{_al.get("resumen","")}</div>' if _al.get("resumen") else "")
                                 + '</div>', unsafe_allow_html=True)
+
+                            # Mostrar borrador en expander colapsado
+                            if _tiene_borrador:
+                                with st.expander("Ver borrador generado por SOLUM Monitor"):
+                                    st.code(_al["texto_procesado"][:3000]
+                                            + ("\n... (truncado)" if len(_al["texto_procesado"]) > 3000 else ""),
+                                            language="text")
+
                         with _a2:
+                            # Activación directa si hay borrador
+                            if _tiene_borrador:
+                                if st.button("✓ Activar en SOLUM", key=f"al_act_{_al['id']}",
+                                             use_container_width=True, type="primary"):
+                                    try:
+                                        _sb_act = _get_supabase()
+                                        _codigo = _al.get("codigo_propuesto") or f"auto_{_al['id']}"
+                                        _tipo_n = _al.get("tipo_normativa_solum") or "ord"
+                                        # Desactivar versión anterior si existe
+                                        _sb_act.table("normativas").update({"activo": False}).eq("codigo", _codigo).execute()
+                                        _vr_act = (_sb_act.table("normativas").select("version")
+                                                   .eq("codigo", _codigo).order("version", desc=True)
+                                                   .limit(1).execute())
+                                        _next_v_act = ((_vr_act.data[0]["version"] + 1) if _vr_act.data else 1)
+                                        # Insertar en normativas
+                                        _sb_act.table("normativas").insert({
+                                            "codigo":          _codigo,
+                                            "nombre":          _al.get("titulo", "")[:200],
+                                            "tipo":            _tipo_n,
+                                            "distrito":        None,
+                                            "contenido":       _al["texto_procesado"],
+                                            "version":         _next_v_act,
+                                            "activo":          True,
+                                            "fuente":          _al.get("url") or None,
+                                            "resumen_cambios": _al.get("resumen") or None,
+                                            "subido_por":      st.session_state.get("_username", "admin"),
+                                        }).execute()
+                                        # Marcar alerta como procesada
+                                        _sb_act.table("alertas_normativas").update({
+                                            "procesado":    True,
+                                            "aprobado_por": st.session_state.get("_username", "admin"),
+                                            "aprobado_en":  datetime.datetime.now(datetime.timezone.utc).isoformat(),
+                                        }).eq("id", _al["id"]).execute()
+                                        # Limpiar cache de sesión
+                                        st.session_state.pop(f"_norm_cache_{_codigo}.txt", None)
+                                        st.session_state.pop(f"_norm_cache_{_codigo}.md", None)
+                                        st.success(f"✓ '{_al.get('titulo','')[:60]}' activada en SOLUM como v{_next_v_act}")
+                                        st.rerun()
+                                    except Exception as _ae_act:
+                                        st.error(str(_ae_act))
+
                             if _al.get("url"):
                                 st.link_button("Ver norma", _al["url"], use_container_width=True)
-                            if st.button("Marcar revisada", key=f"al_rev_{_al['id']}", use_container_width=True):
+                            if st.button("Descartar", key=f"al_rev_{_al['id']}", use_container_width=True):
                                 try:
                                     _sb_al.table("alertas_normativas").update(
-                                        {"procesado": True, "revisado_por": st.session_state.get("_username", "admin")}
+                                        {"procesado": True,
+                                         "aprobado_por": st.session_state.get("_username", "admin"),
+                                         "aprobado_en":  datetime.datetime.now(datetime.timezone.utc).isoformat()}
                                     ).eq("id", _al["id"]).execute()
                                     st.rerun()
                                 except Exception as _ae:

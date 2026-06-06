@@ -1,10 +1,17 @@
-streamlit>=1.35.0
-anthropic>=0.28.0
-pandas>=2.0.0
-plotly>=5.18.0
-reportlab>=4.0.0
-supabase>=2.0.0
-openpyxl>=3.1.0
-ezdxf>=1.0.0
-shapely>=2.0.0
-playwright>=1.44.0
+# SOLUM — dependencias de aplicación (Railway / local)
+streamlit>=1.35.0,<2.0
+anthropic>=0.28.0,<1.0
+pandas>=2.0.0,<3.0
+plotly>=5.18.0,<6.0
+reportlab>=4.0.0,<5.0
+supabase>=2.0.0,<3.0
+openpyxl>=3.1.0,<4.0
+ezdxf>=1.0.0,<2.0
+shapely>=2.0.0,<3.0
+playwright>=1.44.0,<2.0
+pdfminer.six>=20221105
+# Dependencias del monitor de normativas (monitor_normativas.py — GitHub Actions)
+# En GitHub Actions se instalan inline en el workflow; se listan aquí para referencia y entornos locales
+requests>=2.31.0,<3.0
+beautifulsoup4>=4.12.0,<5.0
+python-dateutil>=2.9.0
