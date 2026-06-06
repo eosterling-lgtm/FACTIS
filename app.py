@@ -6467,6 +6467,11 @@ def calcular_escenarios_programa(cabida: dict, fin_base: dict, zona: str) -> lis
 # ALERTAS FINANCIERAS — DETERMINÍSTICAS (Proyecto Inmobiliario)
 # ═══════════════════════════════════════════════════════
 
+def _mk_alert(severidad: str, texto: str, accion=None, origen: str = "financiero") -> dict:
+    """Constructor único para todos los dicts de alerta — evita repetir la estructura de 4 claves."""
+    return {"severidad": severidad, "origen": origen, "texto": texto, "accion": accion}
+
+
 def generar_alertas_financieras(r: dict, fin: dict, cabida: dict, zona: str) -> list:
     """Genera alertas financieras estructuradas basadas en umbrales de mercado Lima."""
     alertas = []
@@ -6482,71 +6487,31 @@ def generar_alertas_financieras(r: dict, fin: dict, cabida: dict, zona: str) -> 
 
     # TIR
     if tir < 10:
-        alertas.append({
-            "severidad": "rojo",
-            "origen": "financiero",
-            "texto": f"TIR anual {tir:.1f}% — por debajo del umbral mínimo institucional (10%)",
-            "accion": "Renegociar precio de terreno o aumentar precio de venta proyectado — revisar supuestos de cabida"
-        })
+        alertas.append(_mk_alert("rojo", f"TIR anual {tir:.1f}% — por debajo del umbral mínimo institucional (10%)", "Renegociar precio de terreno o aumentar precio de venta proyectado — revisar supuestos de cabida"))
     elif tir < 15:
-        alertas.append({
-            "severidad": "amarillo",
-            "origen": "financiero",
-            "texto": f"TIR anual {tir:.1f}% — moderada, por debajo del objetivo típico de promotores (15–20%)",
-            "accion": "Evaluar si el perfil de riesgo del proyecto justifica este retorno — considerar optimización del mix de unidades"
-        })
+        alertas.append(_mk_alert("amarillo", f"TIR anual {tir:.1f}% — moderada, por debajo del objetivo típico de promotores (15–20%)", "Evaluar si el perfil de riesgo del proyecto justifica este retorno — considerar optimización del mix de unidades"))
 
     # Margen
     if margen < 15:
-        alertas.append({
-            "severidad": "rojo",
-            "origen": "financiero",
-            "texto": f"Margen neto {margen:.1f}% — insuficiente para cubrir imprevistos y obtener retorno razonable",
-            "accion": "Revisar precio de terreno, costos de construcción o precio de venta — mínimo viable 15%"
-        })
+        alertas.append(_mk_alert("rojo", f"Margen neto {margen:.1f}% — insuficiente para cubrir imprevistos y obtener retorno razonable", "Revisar precio de terreno, costos de construcción o precio de venta — mínimo viable 15%"))
     elif margen < 20:
-        alertas.append({
-            "severidad": "amarillo",
-            "origen": "financiero",
-            "texto": f"Margen neto {margen:.1f}% — ajustado; deja poco colchón ante imprevistos de obra",
-            "accion": "Verificar partida de contingencias en presupuesto — negociar precio de terreno si es posible"
-        })
+        alertas.append(_mk_alert("amarillo", f"Margen neto {margen:.1f}% — ajustado; deja poco colchón ante imprevistos de obra", "Verificar partida de contingencias en presupuesto — negociar precio de terreno si es posible"))
 
     # Preventa
     if meses_preventa > 12:
-        alertas.append({
-            "severidad": "rojo",
-            "origen": "financiero",
-            "texto": f"Preventa estimada {meses_preventa} meses — riesgo de liquidez alto antes del primer desembolso bancario",
-            "accion": "Considerar reducir umbral de preventa, ajustar velocidad de absorción o revisar estrategia de precios"
-        })
+        alertas.append(_mk_alert("rojo", f"Preventa estimada {meses_preventa} meses — riesgo de liquidez alto antes del primer desembolso bancario", "Considerar reducir umbral de preventa, ajustar velocidad de absorción o revisar estrategia de precios"))
     elif meses_preventa > 8:
-        alertas.append({
-            "severidad": "amarillo",
-            "origen": "financiero",
-            "texto": f"Preventa estimada {meses_preventa} meses — plazo largo; planificar capital de trabajo para ese período",
-            "accion": "Asegurar liquidez pre-obra — considerar línea puente o socio de equity"
-        })
+        alertas.append(_mk_alert("amarillo", f"Preventa estimada {meses_preventa} meses — plazo largo; planificar capital de trabajo para ese período", "Asegurar liquidez pre-obra — considerar línea puente o socio de equity"))
 
     # Estructura con financiamiento: costo financiero alto
     if estructura != "estandar" and costo_financ > 0:
         pct_costo_financ = costo_financ / (r.get("costo_total_sin_financ", 1) or 1) * 100
         if pct_costo_financ > 12:
-            alertas.append({
-                "severidad": "amarillo",
-                "origen": "financiero",
-                "texto": f"Costo financiero representa {pct_costo_financ:.1f}% del costo total — impacto significativo en margen",
-                "accion": "Evaluar negociar tasa con el banco o aumentar aporte propio para reducir carga financiera"
-            })
+            alertas.append(_mk_alert("amarillo", f"Costo financiero representa {pct_costo_financ:.1f}% del costo total — impacto significativo en margen", "Evaluar negociar tasa con el banco o aumentar aporte propio para reducir carga financiera"))
 
     # Aporte propio < 30% en estructura estándar
     if estructura == "estandar" and aporte_pct < 30:
-        alertas.append({
-            "severidad": "amarillo",
-            "origen": "financiero",
-            "texto": f"Aporte propio {aporte_pct:.0f}% — bajo; banco puede requerir garantías adicionales",
-            "accion": "Preparar garantías complementarias o evaluar estructura con track record promotor"
-        })
+        alertas.append(_mk_alert("amarillo", f"Aporte propio {aporte_pct:.0f}% — bajo; banco puede requerir garantías adicionales", "Preparar garantías complementarias o evaluar estructura con track record promotor"))
 
     return alertas
 
@@ -6569,79 +6534,34 @@ def generar_alertas_financieras_industrial(r: dict, inp: dict) -> list:
     # Yield (solo si hay renta declarada)
     if renta_m2 > 0:
         if yield_bruto < 5:
-            alertas.append({
-                "severidad": "rojo",
-                "origen": "financiero",
-                "texto": f"Yield bruto {yield_bruto:.1f}% — por debajo del umbral mínimo (5%) para activo industrial en Lima",
-                "accion": "Revisar renta proyectada vs. mercado o renegociar precio de adquisición del activo"
-            })
+            alertas.append(_mk_alert("rojo", f"Yield bruto {yield_bruto:.1f}% — por debajo del umbral mínimo (5%) para activo industrial en Lima", "Revisar renta proyectada vs. mercado o renegociar precio de adquisición del activo"))
         elif yield_bruto < 7:
-            alertas.append({
-                "severidad": "amarillo",
-                "origen": "financiero",
-                "texto": f"Yield bruto {yield_bruto:.1f}% — por debajo del objetivo típico prime Lima (8–10%)",
-                "accion": "Evaluar si la ubicación y perfil del arrendatario justifican el diferencial de yield"
-            })
+            alertas.append(_mk_alert("amarillo", f"Yield bruto {yield_bruto:.1f}% — por debajo del objetivo típico prime Lima (8–10%)", "Evaluar si la ubicación y perfil del arrendatario justifican el diferencial de yield"))
 
     # DSCR (solo si hay financiamiento y renta)
     if dscr and dscr > 0 and renta_m2 > 0:
         if dscr < 1.0:
-            alertas.append({
-                "severidad": "rojo",
-                "origen": "financiero",
-                "texto": f"DSCR {dscr:.2f}x — flujo operativo insuficiente para cubrir servicio de deuda",
-                "accion": "Incrementar renta, reducir deuda o ampliar plazo del crédito — banco rechazará financiamiento bajo estas condiciones"
-            })
+            alertas.append(_mk_alert("rojo", f"DSCR {dscr:.2f}x — flujo operativo insuficiente para cubrir servicio de deuda", "Incrementar renta, reducir deuda o ampliar plazo del crédito — banco rechazará financiamiento bajo estas condiciones"))
         elif dscr < 1.2:
-            alertas.append({
-                "severidad": "amarillo",
-                "origen": "financiero",
-                "texto": f"DSCR {dscr:.2f}x — ajustado; banca comercial Lima exige mínimo 1.20x",
-                "accion": "Aumentar aporte propio o reducir cuota mensual para mejorar cobertura antes de presentar al banco"
-            })
+            alertas.append(_mk_alert("amarillo", f"DSCR {dscr:.2f}x — ajustado; banca comercial Lima exige mínimo 1.20x", "Aumentar aporte propio o reducir cuota mensual para mejorar cobertura antes de presentar al banco"))
 
     # Payback
     if payback and payback > 0:
         if payback > 20:
-            alertas.append({
-                "severidad": "rojo",
-                "origen": "financiero",
-                "texto": f"Payback {payback:.1f} años — retorno de inversión muy largo para activo industrial",
-                "accion": "Revisar renta objetivo o costo del proyecto — payback > 20 años no es bancable ni atractivo para fondos"
-            })
+            alertas.append(_mk_alert("rojo", f"Payback {payback:.1f} años — retorno de inversión muy largo para activo industrial", "Revisar renta objetivo o costo del proyecto — payback > 20 años no es bancable ni atractivo para fondos"))
         elif payback > 15:
-            alertas.append({
-                "severidad": "amarillo",
-                "origen": "financiero",
-                "texto": f"Payback {payback:.1f} años — largo; objetivo mercado prime Lima es 10–13 años",
-                "accion": "Evaluar indexación de renta contractual para acelerar el payback"
-            })
+            alertas.append(_mk_alert("amarillo", f"Payback {payback:.1f} años — largo; objetivo mercado prime Lima es 10–13 años", "Evaluar indexación de renta contractual para acelerar el payback"))
 
     # IRR (solo inversión)
     if uso == "Inversión" and irr and irr > 0:
         if irr < 8:
-            alertas.append({
-                "severidad": "rojo",
-                "origen": "financiero",
-                "texto": f"IRR {irr:.1f}% — retorno insuficiente para perfil de inversión industrial",
-                "accion": "Revisar supuestos de renta, apreciación del activo o precio de compra"
-            })
+            alertas.append(_mk_alert("rojo", f"IRR {irr:.1f}% — retorno insuficiente para perfil de inversión industrial", "Revisar supuestos de renta, apreciación del activo o precio de compra"))
         elif irr < 12:
-            alertas.append({
-                "severidad": "amarillo",
-                "origen": "financiero",
-                "texto": f"IRR {irr:.1f}% — moderado; fondos institucionales exigen 12–15% para industrial Lima",
-                "accion": "Evaluar si el perfil de riesgo del activo justifica el retorno — considerar indexación contractual"
-            })
+            alertas.append(_mk_alert("amarillo", f"IRR {irr:.1f}% — moderado; fondos institucionales exigen 12–15% para industrial Lima", "Evaluar si el perfil de riesgo del activo justifica el retorno — considerar indexación contractual"))
 
     # Aporte propio muy bajo
     if dp_terreno < 20:
-        alertas.append({
-            "severidad": "amarillo",
-            "origen": "financiero",
-            "texto": f"Down payment terreno {dp_terreno:.0f}% — banco puede requerir mayor garantía hipotecaria",
-            "accion": "Incrementar aporte propio o preparar garantías adicionales para viabilizar el crédito hipotecario"
-        })
+        alertas.append(_mk_alert("amarillo", f"Down payment terreno {dp_terreno:.0f}% — banco puede requerir mayor garantía hipotecaria", "Incrementar aporte propio o preparar garantías adicionales para viabilizar el crédito hipotecario"))
 
     return alertas
 
@@ -6677,51 +6597,23 @@ def generar_alertas_oficinas(r: dict) -> list:
             diff_pct = (pm2 - bm) / bm * 100 if bm > 0 else 0
             distrito_label = r.get("distrito", "Lima")
             if diff_pct > 15:
-                alertas.append({
-                    "severidad": "rojo", "origen": "financiero",
-                    "texto": f"Renta ${pm2:.1f}/m²/mes (+{diff_pct:.0f}% sobre benchmark Clase {clase} en {distrito_label}) — precio fuera de mercado",
-                    "accion": f"Negociar reducción hacia benchmark de mercado (${bm:.0f}/m²/mes) o exigir mejoras significativas en TI (Tenant Improvements)"
-                })
+                alertas.append(_mk_alert("rojo", f"Renta ${pm2:.1f}/m²/mes (+{diff_pct:.0f}% sobre benchmark Clase {clase} en {distrito_label}) — precio fuera de mercado", f"Negociar reducción hacia benchmark de mercado (${bm:.0f}/m²/mes) o exigir mejoras significativas en TI (Tenant Improvements)"))
             elif diff_pct > 5:
-                alertas.append({
-                    "severidad": "amarillo", "origen": "financiero",
-                    "texto": f"Renta ${pm2:.1f}/m²/mes ({diff_pct:+.0f}% vs. benchmark Clase {clase} en {distrito_label})",
-                    "accion": "Evaluar si piso, estado y amenidades del espacio justifican el diferencial"
-                })
+                alertas.append(_mk_alert("amarillo", f"Renta ${pm2:.1f}/m²/mes ({diff_pct:+.0f}% vs. benchmark Clase {clase} en {distrito_label})", "Evaluar si piso, estado y amenidades del espacio justifican el diferencial"))
             else:
-                alertas.append({
-                    "severidad": "verde", "origen": "financiero",
-                    "texto": f"Renta ${pm2:.1f}/m²/mes — alineada con benchmark Clase {clase} en {distrito_label} (ref. ${bm:.0f}/m²/mes)",
-                    "accion": None
-                })
+                alertas.append(_mk_alert("verde", f"Renta ${pm2:.1f}/m²/mes — alineada con benchmark Clase {clase} en {distrito_label} (ref. ${bm:.0f}/m²/mes)", None))
 
         if duracion < 1:
-            alertas.append({
-                "severidad": "amarillo", "origen": "normativo",
-                "texto": "Contrato menor a 1 año — plazo muy corto, genera incertidumbre de renovación",
-                "accion": "Negociar extensión mínima a 12–24 meses o incluir opción de renovación automática con aviso previo de 90 días"
-            })
+            alertas.append(_mk_alert("amarillo", "Contrato menor a 1 año — plazo muy corto, genera incertidumbre de renovación", "Negociar extensión mínima a 12–24 meses o incluir opción de renovación automática con aviso previo de 90 días", "normativo"))
 
         if garantia < 1:
-            alertas.append({
-                "severidad": "amarillo", "origen": "legal",
-                "texto": f"Garantía {garantia} meses — inferior al estándar de mercado para oficinas (2–3 meses)",
-                "accion": "Exigir garantía de al menos 2 meses para cubrir incumplimientos o daños al local"
-            })
+            alertas.append(_mk_alert("amarillo", f"Garantía {garantia} meses — inferior al estándar de mercado para oficinas (2–3 meses)", "Exigir garantía de al menos 2 meses para cubrir incumplimientos o daños al local", "legal"))
 
         if reajuste == 0 and duracion >= 1:
-            alertas.append({
-                "severidad": "amarillo", "origen": "financiero",
-                "texto": "Sin cláusula de reajuste — contrato pierde poder adquisitivo ante inflación durante el plazo",
-                "accion": "Incorporar ajuste anual por IPC o pactar reajuste fijo del 3–5% anual desde el segundo año"
-            })
+            alertas.append(_mk_alert("amarillo", "Sin cláusula de reajuste — contrato pierde poder adquisitivo ante inflación durante el plazo", "Incorporar ajuste anual por IPC o pactar reajuste fijo del 3–5% anual desde el segundo año"))
 
         if igv:
-            alertas.append({
-                "severidad": "amarillo", "origen": "legal",
-                "texto": "IGV marcado como incluido — en arrendamiento de oficinas prime el IGV (18%) se agrega al alquiler base",
-                "accion": "Verificar tratamiento tributario con contador — si el arrendador es PJ, el IGV es adicional al alquiler pactado"
-            })
+            alertas.append(_mk_alert("amarillo", "IGV marcado como incluido — en arrendamiento de oficinas prime el IGV (18%) se agrega al alquiler base", "Verificar tratamiento tributario con contador — si el arrendador es PJ, el IGV es adicional al alquiler pactado", "legal"))
 
     # ── COMPRA ────────────────────────────────────────────────────────────
     elif modo == "Compra":
@@ -6745,66 +6637,30 @@ def generar_alertas_oficinas(r: dict) -> list:
             diff_pct = (pm2 - bm) / bm * 100 if bm > 0 else 0
             distrito_label = r.get("distrito", "Lima")
             if diff_pct > 20:
-                alertas.append({
-                    "severidad": "rojo", "origen": "financiero",
-                    "texto": f"Precio ${pm2:,.0f}/m² (+{diff_pct:.0f}% sobre benchmark Clase {clase} en {distrito_label})",
-                    "accion": "Respaldar con tasación independiente — diferencial significativo puede indicar sobreprecio o falta de comparables"
-                })
+                alertas.append(_mk_alert("rojo", f"Precio ${pm2:,.0f}/m² (+{diff_pct:.0f}% sobre benchmark Clase {clase} en {distrito_label})", "Respaldar con tasación independiente — diferencial significativo puede indicar sobreprecio o falta de comparables"))
             elif diff_pct > 10:
-                alertas.append({
-                    "severidad": "amarillo", "origen": "financiero",
-                    "texto": f"Precio ${pm2:,.0f}/m² ({diff_pct:+.0f}% vs. benchmark Clase {clase} en {distrito_label})",
-                    "accion": "Obtener tasación bancaria antes de comprometerse — el diferencial puede reducir el monto del crédito hipotecario"
-                })
+                alertas.append(_mk_alert("amarillo", f"Precio ${pm2:,.0f}/m² ({diff_pct:+.0f}% vs. benchmark Clase {clase} en {distrito_label})", "Obtener tasación bancaria antes de comprometerse — el diferencial puede reducir el monto del crédito hipotecario"))
             else:
-                alertas.append({
-                    "severidad": "verde", "origen": "financiero",
-                    "texto": f"Precio ${pm2:,.0f}/m² — alineado con mercado Clase {clase} en {distrito_label} (ref. ${bm:,}/m²)",
-                    "accion": None
-                })
+                alertas.append(_mk_alert("verde", f"Precio ${pm2:,.0f}/m² — alineado con mercado Clase {clase} en {distrito_label} (ref. ${bm:,}/m²)", None))
 
         if precio_compra > 0 and alq_esperado > 0:
             yield_bruto = alq_esperado * 12 / precio_compra * 100
             if yield_bruto < 4:
-                alertas.append({
-                    "severidad": "rojo", "origen": "financiero",
-                    "texto": f"Yield bruto {yield_bruto:.1f}% — por debajo del mínimo aceptable para oficinas Lima (6–8%)",
-                    "accion": "Revisar precio de compra o proyección de renta — yield insuficiente no justifica la inversión a las condiciones actuales"
-                })
+                alertas.append(_mk_alert("rojo", f"Yield bruto {yield_bruto:.1f}% — por debajo del mínimo aceptable para oficinas Lima (6–8%)", "Revisar precio de compra o proyección de renta — yield insuficiente no justifica la inversión a las condiciones actuales"))
             elif yield_bruto < 6:
-                alertas.append({
-                    "severidad": "amarillo", "origen": "financiero",
-                    "texto": f"Yield bruto {yield_bruto:.1f}% — por debajo del objetivo prime Lima (6–8%)",
-                    "accion": "Evaluar si la apreciación del activo compensa el bajo yield corriente — verificar vacancia y condiciones del edificio"
-                })
+                alertas.append(_mk_alert("amarillo", f"Yield bruto {yield_bruto:.1f}% — por debajo del objetivo prime Lima (6–8%)", "Evaluar si la apreciación del activo compensa el bajo yield corriente — verificar vacancia y condiciones del edificio"))
             else:
-                alertas.append({
-                    "severidad": "verde", "origen": "financiero",
-                    "texto": f"Yield bruto {yield_bruto:.1f}% — dentro del rango prime Lima (6–8%)",
-                    "accion": None
-                })
+                alertas.append(_mk_alert("verde", f"Yield bruto {yield_bruto:.1f}% — dentro del rango prime Lima (6–8%)", None))
 
         if pago_ini_pct < 20:
-            alertas.append({
-                "severidad": "rojo", "origen": "financiero",
-                "texto": f"Cuota inicial {pago_ini_pct:.0f}% — por debajo del mínimo bancario típico (20%) para compra de oficina",
-                "accion": "Incrementar aporte propio o explorar garantía hipotecaria adicional para viabilizar el financiamiento"
-            })
+            alertas.append(_mk_alert("rojo", f"Cuota inicial {pago_ini_pct:.0f}% — por debajo del mínimo bancario típico (20%) para compra de oficina", "Incrementar aporte propio o explorar garantía hipotecaria adicional para viabilizar el financiamiento"))
 
         if 0 < dd_plazo < 15:
-            alertas.append({
-                "severidad": "amarillo", "origen": "legal",
-                "texto": f"Due diligence {dd_plazo} días — plazo ajustado para revisar partida, PU/HR, cargas y obligaciones técnicas",
-                "accion": "Negociar extensión a mínimo 15–20 días hábiles para revisión legal y técnica completa"
-            })
+            alertas.append(_mk_alert("amarillo", f"Due diligence {dd_plazo} días — plazo ajustado para revisar partida, PU/HR, cargas y obligaciones técnicas", "Negociar extensión a mínimo 15–20 días hábiles para revisión legal y técnica completa", "legal"))
 
         if precio_oferta > 0 and precio_compra > 0 and precio_oferta < precio_compra:
             desc = (precio_compra - precio_oferta) / precio_compra * 100
-            alertas.append({
-                "severidad": "verde", "origen": "financiero",
-                "texto": f"Oferta ${precio_oferta:,.0f} vs. precio pedido ${precio_compra:,.0f} — descuento negociado de {desc:.1f}%",
-                "accion": None
-            })
+            alertas.append(_mk_alert("verde", f"Oferta ${precio_oferta:,.0f} vs. precio pedido ${precio_compra:,.0f} — descuento negociado de {desc:.1f}%", None))
 
     # ── DESARROLLO DE PROYECTO ────────────────────────────────────────────
     elif modo == "Desarrollo de Proyecto":
@@ -6833,38 +6689,18 @@ def generar_alertas_oficinas(r: dict) -> list:
             if ingresos_tot > 0 and costo_total > 0:
                 margen = (ingresos_tot - costo_total) / ingresos_tot * 100
                 if margen < 15:
-                    alertas.append({
-                        "severidad": "rojo", "origen": "financiero",
-                        "texto": f"Margen bruto estimado {margen:.1f}% — insuficiente para desarrollo de oficinas (mínimo 20–25%)",
-                        "accion": "Revisar precio del terreno, costo de construcción o incrementar precio objetivo para mejorar la estructura financiera"
-                    })
+                    alertas.append(_mk_alert("rojo", f"Margen bruto estimado {margen:.1f}% — insuficiente para desarrollo de oficinas (mínimo 20–25%)", "Revisar precio del terreno, costo de construcción o incrementar precio objetivo para mejorar la estructura financiera"))
                 elif margen < 25:
-                    alertas.append({
-                        "severidad": "amarillo", "origen": "financiero",
-                        "texto": f"Margen bruto estimado {margen:.1f}% — ajustado (objetivo: ≥25% para proyecto de oficinas)",
-                        "accion": "Optimizar mix venta/renta o mejorar eficiencia de planta para incrementar el margen"
-                    })
+                    alertas.append(_mk_alert("amarillo", f"Margen bruto estimado {margen:.1f}% — ajustado (objetivo: ≥25% para proyecto de oficinas)", "Optimizar mix venta/renta o mejorar eficiencia de planta para incrementar el margen"))
                 else:
-                    alertas.append({
-                        "severidad": "verde", "origen": "financiero",
-                        "texto": f"Margen bruto estimado {margen:.1f}% — dentro del objetivo para desarrollo de oficinas",
-                        "accion": None
-                    })
+                    alertas.append(_mk_alert("verde", f"Margen bruto estimado {margen:.1f}% — dentro del objetivo para desarrollo de oficinas", None))
 
         if eficiencia < 70:
-            alertas.append({
-                "severidad": "amarillo", "origen": "normativo",
-                "texto": f"Eficiencia de planta {eficiencia:.0f}% — por debajo del estándar para oficinas Clase A/B (70–80%)",
-                "accion": "Revisar distribución arquitectónica — eficiencias bajas impactan directamente el GLA arrendable"
-            })
+            alertas.append(_mk_alert("amarillo", f"Eficiencia de planta {eficiencia:.0f}% — por debajo del estándar para oficinas Clase A/B (70–80%)", "Revisar distribución arquitectónica — eficiencias bajas impactan directamente el GLA arrendable", "normativo"))
 
         # RNE A.080: 1 cochera/40m² área rentable de oficinas
         if ratio_e > 40:
-            alertas.append({
-                "severidad": "amarillo", "origen": "normativo",
-                "texto": f"Ratio estacionamiento {ratio_e:.0f} m²/cochera — inferior al estándar RNE A.080 (1 cochera/40m² área de oficinas)",
-                "accion": "Verificar con arquitecto el número de cocheras requerido — déficit reduce comercialidad y puede bloquear la licencia"
-            })
+            alertas.append(_mk_alert("amarillo", f"Ratio estacionamiento {ratio_e:.0f} m²/cochera — inferior al estándar RNE A.080 (1 cochera/40m² área de oficinas)", "Verificar con arquitecto el número de cocheras requerido — déficit reduce comercialidad y puede bloquear la licencia", "normativo"))
 
     return alertas
 
@@ -6891,109 +6727,70 @@ def generar_alertas_financieras_residencial(r: dict) -> list:
     if precio_m2 > 0 and precio_m2_mkt > 0:
         diff_pct = (precio_m2 - precio_m2_mkt) / precio_m2_mkt * 100
         if diff_pct > 20:
-            alertas.append({
-                "severidad": "rojo", "origen": "financiero",
-                "texto": f"Precio/m² ${precio_m2:,} (+{diff_pct:.0f}% sobre mediana {zona} ${precio_m2_mkt:,}/m²) — prima significativa vs. mercado",
-                "accion": "Solicitar tasación independiente — precio por encima de mediana reduce plusvalía esperada y puede generar sobreendeudamiento"
-            })
+            alertas.append(_mk_alert("rojo", f"Precio/m² ${precio_m2:,} (+{diff_pct:.0f}% sobre mediana {zona} ${precio_m2_mkt:,}/m²) — prima significativa vs. mercado", "Solicitar tasación independiente — precio por encima de mediana reduce plusvalía esperada y puede generar sobreendeudamiento"))
         elif diff_pct > 10:
-            alertas.append({
-                "severidad": "amarillo", "origen": "financiero",
-                "texto": f"Precio/m² ${precio_m2:,} ({diff_pct:+.0f}% vs. mediana {zona} ${precio_m2_mkt:,}/m²)",
-                "accion": "Verificar atributos diferenciales del inmueble (piso, vista, estado, amenidades) que justifiquen la prima"
-            })
+            alertas.append(_mk_alert("amarillo", f"Precio/m² ${precio_m2:,} ({diff_pct:+.0f}% vs. mediana {zona} ${precio_m2_mkt:,}/m²)", "Verificar atributos diferenciales del inmueble (piso, vista, estado, amenidades) que justifiquen la prima"))
         elif diff_pct < -10:
-            alertas.append({
-                "severidad": "verde", "origen": "financiero",
-                "texto": f"Precio/m² ${precio_m2:,} ({diff_pct:.0f}% bajo mediana {zona}) — descuento respecto al mercado",
-                "accion": None
-            })
+            alertas.append(_mk_alert("verde", f"Precio/m² ${precio_m2:,} ({diff_pct:.0f}% bajo mediana {zona}) — descuento respecto al mercado", None))
 
     # ── Cuota inicial ─────────────────────────────────────
     if cuota > 0:
         if pct_pie < 10:
-            alertas.append({
-                "severidad": "rojo", "origen": "financiero",
-                "texto": f"Cuota inicial {pct_pie:.0f}% del precio — muy por debajo del mínimo bancario (10–20%)",
-                "accion": "Incrementar el pie o evaluar programas MIVIVIENDA/Techo Propio con condiciones especiales de cuota inicial"
-            })
+            alertas.append(_mk_alert("rojo", f"Cuota inicial {pct_pie:.0f}% del precio — muy por debajo del mínimo bancario (10–20%)", "Incrementar el pie o evaluar programas MIVIVIENDA/Techo Propio con condiciones especiales de cuota inicial"))
         elif pct_pie < 20:
-            alertas.append({
-                "severidad": "amarillo", "origen": "financiero",
-                "texto": f"Cuota inicial {pct_pie:.0f}% — por debajo del estándar bancario (20%) para crédito hipotecario convencional",
-                "accion": "Evaluar si el banco acepta menor pie o explorar crédito hipotecario + crédito complementario"
-            })
+            alertas.append(_mk_alert("amarillo", f"Cuota inicial {pct_pie:.0f}% — por debajo del estándar bancario (20%) para crédito hipotecario convencional", "Evaluar si el banco acepta menor pie o explorar crédito hipotecario + crédito complementario"))
 
     # ── Yield (inversión) ─────────────────────────────────
     if uso in ("Inversión para alquilar", "Evaluación para venta") and alquiler_mes > 0:
         if yield_bruto < 4:
-            alertas.append({
-                "severidad": "rojo", "origen": "financiero",
-                "texto": f"Yield bruto {yield_bruto:.1f}% — por debajo del mínimo aceptable para inversión residencial Lima (4%)",
-                "accion": "Revisar precio de compra o renta esperada — retorno insuficiente no justifica la inversión"
-            })
+            alertas.append(_mk_alert("rojo", f"Yield bruto {yield_bruto:.1f}% — por debajo del mínimo aceptable para inversión residencial Lima (4%)", "Revisar precio de compra o renta esperada — retorno insuficiente no justifica la inversión"))
         elif yield_mkt > 0 and yield_bruto < yield_mkt - 0.5:
-            alertas.append({
-                "severidad": "amarillo", "origen": "financiero",
-                "texto": f"Yield bruto {yield_bruto:.1f}% — por debajo del promedio de {zona} ({yield_mkt:.1f}%)",
-                "accion": "Evaluar si la plusvalía esperada y la ubicación compensan el diferencial de yield"
-            })
+            alertas.append(_mk_alert("amarillo", f"Yield bruto {yield_bruto:.1f}% — por debajo del promedio de {zona} ({yield_mkt:.1f}%)", "Evaluar si la plusvalía esperada y la ubicación compensan el diferencial de yield"))
         else:
-            alertas.append({
-                "severidad": "verde", "origen": "financiero",
-                "texto": f"Yield bruto {yield_bruto:.1f}% — {('por encima' if yield_bruto > yield_mkt else 'alineado con')} el promedio de {zona} ({yield_mkt:.1f}%)",
-                "accion": None
-            })
+            alertas.append(_mk_alert("verde", f"Yield bruto {yield_bruto:.1f}% — {('por encima' if yield_bruto > yield_mkt else 'alineado con')} el promedio de {zona} ({yield_mkt:.1f}%)", None))
 
         # Renta vs. mercado
         if m2 > 0 and alq_mkt_m2 > 0:
             alq_mkt_total = alq_mkt_m2 * m2
             diff_alq = (alquiler_mes - alq_mkt_total) / alq_mkt_total * 100 if alq_mkt_total > 0 else 0
             if diff_alq > 15:
-                alertas.append({
-                    "severidad": "amarillo", "origen": "financiero",
-                    "texto": f"Renta ${alquiler_mes:,.0f}/mes ({diff_alq:+.0f}% sobre mercado {zona}) — puede generar vacancia",
-                    "accion": "Evaluar si el inmueble tiene atributos suficientes para sostener la renta pedida vs. comparables del edificio"
-                })
+                alertas.append(_mk_alert("amarillo", f"Renta ${alquiler_mes:,.0f}/mes ({diff_alq:+.0f}% sobre mercado {zona}) — puede generar vacancia", "Evaluar si el inmueble tiene atributos suficientes para sostener la renta pedida vs. comparables del edificio"))
             elif diff_alq < -15:
-                alertas.append({
-                    "severidad": "verde", "origen": "financiero",
-                    "texto": f"Renta ${alquiler_mes:,.0f}/mes ({diff_alq:.0f}% bajo mercado) — potencial de ajuste al alza en próxima renovación",
-                    "accion": None
-                })
+                alertas.append(_mk_alert("verde", f"Renta ${alquiler_mes:,.0f}/mes ({diff_alq:.0f}% bajo mercado) — potencial de ajuste al alza en próxima renovación", None))
 
         # Flujo mensual (inversión con crédito)
         if flujo is not None:
             if flujo < 0:
-                alertas.append({
-                    "severidad": "amarillo", "origen": "financiero",
-                    "texto": f"Flujo mensual negativo: −${abs(flujo):,.0f}/mes (cuota > renta neta)",
-                    "accion": "Incrementar cuota inicial para reducir la cuota mensual, o ajustar precio de compra — el diferencial es aporte mensual adicional del inversor"
-                })
+                alertas.append(_mk_alert("amarillo", f"Flujo mensual negativo: −${abs(flujo):,.0f}/mes (cuota > renta neta)", "Incrementar cuota inicial para reducir la cuota mensual, o ajustar precio de compra — el diferencial es aporte mensual adicional del inversor"))
             else:
-                alertas.append({
-                    "severidad": "verde", "origen": "financiero",
-                    "texto": f"Flujo mensual positivo: +${flujo:,.0f}/mes (renta neta cubre la cuota)",
-                    "accion": None
-                })
+                alertas.append(_mk_alert("verde", f"Flujo mensual positivo: +${flujo:,.0f}/mes (renta neta cubre la cuota)", None))
 
         # Payback
         if payback and payback > 0:
             if payback > 20:
-                alertas.append({
-                    "severidad": "rojo", "origen": "financiero",
-                    "texto": f"Payback {payback:.1f} años — retorno de inversión muy largo para residencial Lima",
-                    "accion": "Revisar precio o renta objetivo — payback > 20 años reduce atractivo vs. otras alternativas de inversión"
-                })
+                alertas.append(_mk_alert("rojo", f"Payback {payback:.1f} años — retorno de inversión muy largo para residencial Lima", "Revisar precio o renta objetivo — payback > 20 años reduce atractivo vs. otras alternativas de inversión"))
             elif payback > 15:
-                alertas.append({
-                    "severidad": "amarillo", "origen": "financiero",
-                    "texto": f"Payback {payback:.1f} años — largo; promedio Lima es 15–18 años según análisis de mercado",
-                    "accion": "Evaluar indexación de renta en contrato plurianual para acelerar el payback"
-                })
+                alertas.append(_mk_alert("amarillo", f"Payback {payback:.1f} años — largo; promedio Lima es 15–18 años según análisis de mercado", "Evaluar indexación de renta en contrato plurianual para acelerar el payback"))
 
     return alertas
 
+
+# ═══════════════════════════════════════════════════════
+# PALETA EXCEL — fuente única de verdad para todos los reportes
+# ═══════════════════════════════════════════════════════
+_XL = {
+    "GOLD":  "B8904A",
+    "DARK":  "0A1628",
+    "LIGHT": "F5F2ED",
+    "WHITE": "FFFFFF",
+    "GRAY":  "E8E4DC",
+    "NAV":   "1E2D3D",
+    "ALT":   "EAE6DF",
+    "GRN_D": "1A4731",
+    "GRN_L": "E8F5EE",
+    "RED_D": "7A1A1A",
+    "RED_L": "FDECEA",
+}
 
 # ═══════════════════════════════════════════════════════
 # GENERADOR DE REPORTE EXCEL
@@ -7006,11 +6803,11 @@ def generar_excel_solum(result: dict, cabida: dict, params: dict,
     from openpyxl.styles import (Font, PatternFill, Alignment, Border, Side)
     from openpyxl.utils import get_column_letter
 
-    GOLD   = "B8904A"
-    DARK   = "0A1628"
-    LIGHT  = "F5F2ED"
-    WHITE  = "FFFFFF"
-    GRAY   = "E8E4DC"
+    GOLD   = _XL["GOLD"]
+    DARK   = _XL["DARK"]
+    LIGHT  = _XL["LIGHT"]
+    WHITE  = _XL["WHITE"]
+    GRAY   = _XL["GRAY"]
 
     def _hdr_fill(ws, row, col, value, bg=DARK, fg=WHITE, bold=True, size=10):
         c = ws.cell(row=row, column=col, value=value)
@@ -9773,10 +9570,10 @@ def generar_dcf_excel(df_fl: "pd.DataFrame", result_financiero: dict,
     ws = wb.active
     ws.title = "DCF Mensual"
 
-    # ── Paleta ──────────────────────────────────────────────────────────────
-    DARK   = "0A1628"; GOLD   = "B8904A"; WHITE  = "FFFFFF"
-    GRN_D  = "1A4731"; GRN_L  = "E8F5EE"; RED_D  = "7A1A1A"; RED_L  = "FDECEA"
-    NAV    = "1E2D3D"; LIGHT  = "F5F2ED"; ALT    = "EAE6DF"
+    # ── Paleta — desde _XL (fuente única de verdad) ─────────────────────────
+    DARK  = _XL["DARK"];  GOLD  = _XL["GOLD"];  WHITE = _XL["WHITE"]
+    GRN_D = _XL["GRN_D"]; GRN_L = _XL["GRN_L"]; RED_D = _XL["RED_D"]; RED_L = _XL["RED_L"]
+    NAV   = _XL["NAV"];   LIGHT = _XL["LIGHT"]; ALT   = _XL["ALT"]
 
     def _fill(hex_): return PatternFill("solid", fgColor=hex_)
     def _font(hex_="000000", bold=False, sz=10):
