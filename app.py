@@ -4707,87 +4707,7 @@ def _load_norm(filename: str) -> str:
         return path.read_text(encoding="utf-8")
     return f"[NORMATIVA NO ENCONTRADA: {filename}]"
 
-RIN_SAN_ISIDRO = _load_norm("rin_san_isidro.txt")
-
-
-# ── NORMATIVA ESPECÍFICA MIRAFLORES ──────────────────────────────────────────────────────────────
-RIN_MIRAFLORES = _load_norm("rin_miraflores.txt")
-
-
-# ── NORMATIVA ESPECÍFICA: LA VICTORIA ────────────────────────────────────────────────────────────
-# Fuente: CPU N°000371-2021 (Av. Javier Prado/Palomar Norte), CPU N°000367-2021 (Av. Carlos Villarán/Palomar Norte),
-#         CPU N°000132-2024 (Av. Javier Prado Este 1197-1199, caduca 01/04/2027)
-RIN_LA_VICTORIA = _load_norm("rin_la_victoria.txt")
-
-
-# ── NORMATIVA ESPECÍFICA: LINCE ───────────────────────────────────────────────────────────────────
-# Fuente: CPU N°006-2021-MDL/GDU/SOPPUC (Av. Arequipa 2698 esq. Jr. Soledad, Ámbito C, caduca 14/01/2024)
-RIN_LINCE = _load_norm("rin_lince.txt")
-
-
-# ── NORMATIVA ESPECÍFICA: MAGDALENA DEL MAR ──────────────────────────────────────────────────────
-# Fuente: CPU N°00377-2019 (Pque. Francisco Graña — RDB/Sector III), CPU N°00104-2020 (Jr. Flora Tristán — RDB/Sector IV),
-#         CPU N°00100-2023 (Av. Javier Prado Oeste 2281-2291 — E3/Sector IV, caduca 29/03/2026)
-RIN_MAGDALENA = _load_norm("rin_magdalena.txt")
-
-
-# ── NORMATIVA ESPECÍFICA: SAN MIGUEL ─────────────────────────────────────────────────────────────
-# Fuente: Cert. N°020-2018 (CM/RDA — Calle Manco Segundo), Cert. N°340-2020 (RDA — Av. Bertolotto)
-#         Ord. N°2146-MML (13-dic-2018) — Reajuste Integral Zonificación San Miguel
-RIN_SAN_MIGUEL = _load_norm("rin_san_miguel.txt")
-
-
-# ── NORMATIVA ESPECÍFICA: JESÚS MARÍA ────────────────────────────────────────────────────────────
-# Fuente: CPU N°391-2019-MDJM (Av. Garzón 550-572, RDA, caduca 03/10/2022)
-#         CPU N°489-2018-MDJM (Av. Garzón 082, RDA+RDM, caduca 27/11/2021)
-RIN_JESUS_MARIA = _load_norm("rin_jesus_maria.txt")
-
-RIN_CERCADO_LIMA = _load_norm("rin_cercado_lima.txt")
-
-RIN_SAN_BORJA = _load_norm("rin_san_borja.txt")
-
-RIN_SANTA_ANITA = _load_norm("rin_santa_anita.txt")
-
-RIN_SURCO = _load_norm("rin_surco.txt")
-
-RIN_SURQUILLO = _load_norm("rin_surquillo.txt")
-
-RIN_VILLA_EL_SALVADOR = _load_norm("rin_villa_el_salvador.txt")
-
-RIN_SAN_JUAN_LURIGANCHO = _load_norm("rin_san_juan_lurigancho.txt")
-RIN_LURIGANCHO = _load_norm("rin_lurigancho.txt")
-
-RIN_LA_MOLINA = _load_norm("rin_la_molina.txt")
-
-RIN_CALLAO = _load_norm("rin_callao.txt")
-
-RIN_INDEPENDENCIA = _load_norm("rin_independencia.txt")
-
-RIN_SAN_MARTIN_PORRES = _load_norm("rin_san_martin_de_porres.txt")
-
-RIN_BARRANCO = _load_norm("rin_barranco.txt")
-
-RIN_PUEBLO_LIBRE = _load_norm("rin_pueblo_libre.txt")
-
-RIN_CHORRILLOS = _load_norm("rin_chorrillos.txt")
-
-RIN_BREÑA = _load_norm("rin_breña.txt")
-
-RIN_SAN_LUIS = _load_norm("rin_san_luis.txt")
-
-RIN_ATE = _load_norm("rin_ate.txt")
-
-RIN_SAN_JUAN_MIRAFLORES = _load_norm("rin_san_juan_miraflores.txt")
-RIN_LURIN = _load_norm("rin_lurin.txt")
-
-# ── CONOCIMIENTO NORMATIVO: LIMA METROPOLITANA Y DISTRITOS ───────────────────────────────────────
-REFERENCIAS_NORMATIVAS_LIMA = _load_norm("referencias_lima.txt")
-
-# ── BENCHMARKS INDUSTRIALES (costos nave, Parque Logístico 47, retornos) ─────────────────────────
-BENCHMARKS_INDUSTRIAL = _load_norm("benchmarks_industrial.txt")
-
-# ── ÍNDICE DE USOS ATN-I (6,349 actividades, P=Permitido H=Compatible) ──────────────────────────
-_INDICE_USOS_ATN_RAW = _load_norm("indice_usos_atni.txt")
+# ── ÍNDICE DE USOS ATN-I (6,349 actividades) — carga y parseo cacheados ──────────────────────────
 
 def _parse_indice_usos_entries(raw: str) -> list:
     entries = []
@@ -4807,7 +4727,10 @@ def _parse_indice_usos_entries(raw: str) -> list:
             entries.append({"desc": desc, "zones": zones})
     return entries
 
-_INDICE_USOS_ENTRIES = _parse_indice_usos_entries(_INDICE_USOS_ATN_RAW)
+@st.cache_data(show_spinner=False)
+def _get_indice_usos_entries() -> list:
+    """Carga y parsea el índice de usos una sola vez por proceso (~383KB)."""
+    return _parse_indice_usos_entries(_load_norm("indice_usos_atni.txt"))
 
 
 def _ascii_lower(s: str) -> str:
@@ -4841,7 +4764,7 @@ def _buscar_actividad_indice(query: str, zona_sel: str, max_results: int = 12) -
         return False
 
     scored = []
-    for entry in _INDICE_USOS_ENTRIES:
+    for entry in _get_indice_usos_entries():
         desc_l = _ascii_lower(entry["desc"])
         desc_words = desc_l.split()
         score = sum(1 for kw in keywords if _kw_match(kw, desc_l, desc_words))
@@ -4852,20 +4775,6 @@ def _buscar_actividad_indice(query: str, zona_sel: str, max_results: int = 12) -
     return [{"desc": d, "zones": z, "compat": c} for _, d, z, c in scored[:max_results]]
 
 
-# ── REGLAMENTO NACIONAL DE EDIFICACIONES (RNE) ───────────────────────────────────────────────────
-# Norma A.010 (RM 191-2021-VIVIENDA) y Norma A.020 (RM 188-2021-VIVIENDA)
-RNE_NACIONAL = _load_norm("rne_nacional.txt")
-CONOCIMIENTO_INDUSTRIAL   = _load_norm("CONOCIMIENTO_INDUSTRIAL_SOLUM.md")
-CONOCIMIENTO_DD           = _load_norm("CONOCIMIENTO_DUE_DILIGENCE_TECNICO.md")
-CONOCIMIENTO_NEGOCIACION  = _load_norm("CONOCIMIENTO_NEGOCIACION_TACTICA.md")
-CONOCIMIENTO_CICLO        = _load_norm("CONOCIMIENTO_CICLO_MERCADO_LIMA.md")
-CONOCIMIENTO_SOCIETARIA   = _load_norm("CONOCIMIENTO_ESTRUCTURACION_SOCIETARIA.md")
-CONOCIMIENTO_RETAIL       = _load_norm("CONOCIMIENTO_RETAIL_MIXEDUSE.md")
-LEGAL_TRIBUTACION         = _load_norm("legal_tributacion_inmobiliaria.md")
-LEGAL_CONTRATOS           = _load_norm("legal_contratos_compraventa.md")
-LEGAL_ARRENDAMIENTO       = _load_norm("legal_arrendamiento_peru.md")
-LEGAL_SUNARP              = _load_norm("legal_sunarp_predios.md")
-LEGAL_GARANTIAS           = _load_norm("legal_garantias_comprador_planos.md")
 
 
 def extract_parameters(cert_bytes: bytes, norm_docs: list[bytes]) -> dict:
@@ -5016,14 +4925,14 @@ def generate_cabida(params: dict, config: dict) -> dict:
             estac_visitas_instruccion = f"El CPU especifica visitas: '{_visitas_norma}'. Aplica exactamente ese criterio, mínimo 1."
     else:
         estac_visitas_instruccion = "El CPU no especifica visitas. Usa estac_visitas = 4."
-    # RNE_NACIONAL y REFERENCIAS_NORMATIVAS_LIMA van cacheados en el system prompt
+    # _load_norm("rne_nacional.txt") y _load_norm("referencias_lima.txt") van cacheados en el system prompt
     normativa_note = ""
     if "san isidro" in distrito.lower():
-        normativa_note += f"\n\nNORMATIVA ESPECÍFICA SAN ISIDRO (Ord. 523-MSI):\n{RIN_SAN_ISIDRO}"
+        normativa_note += f"\n\nNORMATIVA ESPECÍFICA SAN ISIDRO (Ord. 523-MSI):\n{_load_norm("rin_san_isidro.txt")}"
         if ambito:
             normativa_note += f"\n\nÁMBITO IDENTIFICADO: {ambito} — aplica reglas de estacionamiento y áreas mínimas del ámbito correspondiente."
     elif "miraflores" in distrito.lower():
-        normativa_note += f"\n\nNORMATIVA ESPECÍFICA MIRAFLORES (Ord. 342-MM y modificatorias):\n{RIN_MIRAFLORES}"
+        normativa_note += f"\n\nNORMATIVA ESPECÍFICA MIRAFLORES (Ord. 342-MM y modificatorias):\n{_load_norm("rin_miraflores.txt")}"
         if sector:
             normativa_note += (
                 f"\n\nSECTOR URBANO IDENTIFICADO: {sector} — aplica altura normativa del sector según "
@@ -5031,14 +4940,14 @@ def generate_cabida(params: dict, config: dict) -> dict:
                 f"(condición: área edificable total ≤ 0.60 × área_terreno × 12 pisos, Ord. 342-MM Art. 6° literal g)."
             )
     elif "la victoria" in distrito.lower() or "lavictoria" in distrito.lower():
-        normativa_note += f"\n\nNORMATIVA ESPECÍFICA LA VICTORIA (Ord. N°355-MLV + Ord. N°1082-MML):\n{RIN_LA_VICTORIA}"
+        normativa_note += f"\n\nNORMATIVA ESPECÍFICA LA VICTORIA (Ord. N°355-MLV + Ord. N°1082-MML):\n{_load_norm("rin_la_victoria.txt")}"
         normativa_note += (
             "\n\nCLAVE PARA CZ LA VICTORIA: la altura CZ = 1.5×(a+r) donde a=ancho vía y r=suma retiros ambos lados. "
             "No hay tope fijo de pisos — calcular con datos del certificado. "
             "El uso residencial compatible (RDM o RDA) determina áreas mínimas y estacionamientos."
         )
     elif "lince" in distrito.lower():
-        normativa_note += f"\n\nNORMATIVA ESPECÍFICA LINCE (Ord. N°235-MDL y modificatorias):\n{RIN_LINCE}"
+        normativa_note += f"\n\nNORMATIVA ESPECÍFICA LINCE (Ord. N°235-MDL y modificatorias):\n{_load_norm("rin_lince.txt")}"
         normativa_note += (
             "\n\nCLAVES PARA LINCE: (1) Altura CM = 1.5×(a+r) — sin tope fijo de pisos; calcular con ancho de vía y retiros del certificado. "
             "(2) Si el ámbito es C (Parque Castilla), aplicar alturas especiales: 10/15/20 pisos según tamaño de lote. "
@@ -5046,7 +4955,7 @@ def generate_cabida(params: dict, config: dict) -> dict:
             "(4) Máx 40% de unidades de 1 dormitorio."
         )
     elif "magdalena" in distrito.lower():
-        normativa_note += f"\n\nNORMATIVA ESPECÍFICA MAGDALENA DEL MAR (Ord. N°950-MML + Ord. N°017-2016-MDMM):\n{RIN_MAGDALENA}"
+        normativa_note += f"\n\nNORMATIVA ESPECÍFICA MAGDALENA DEL MAR (Ord. N°950-MML + Ord. N°017-2016-MDMM):\n{_load_norm("rin_magdalena.txt")}"
         normativa_note += (
             "\n\nCLAVES PARA MAGDALENA: (1) Altura máxima FIJA = 4 pisos = 12.00 ml — no hay excepciones confirmadas. "
             "(2) Estacionamiento = 1 est por vivienda — el más restrictivo de todos los distritos. "
@@ -5054,7 +4963,7 @@ def generate_cabida(params: dict, config: dict) -> dict:
             "(4) Lotes E3 sobre Av. Javier Prado pueden reconvertirse a residencial sin cambio de zonificación."
         )
     elif "san miguel" in distrito.lower():
-        normativa_note += f"\n\nNORMATIVA ESPECÍFICA SAN MIGUEL (Ord. N°2146-MML dic-2018 + Ord. N°1098-MML):\n{RIN_SAN_MIGUEL}"
+        normativa_note += f"\n\nNORMATIVA ESPECÍFICA SAN MIGUEL (Ord. N°2146-MML dic-2018 + Ord. N°1098-MML):\n{_load_norm("rin_san_miguel.txt")}"
         normativa_note += (
             "\n\nCLAVES PARA SAN MIGUEL: "
             "(1) ATN II — Ord. N°2146-MML (dic-2018) es la norma vigente. "
@@ -5069,7 +4978,7 @@ def generate_cabida(params: dict, config: dict) -> dict:
             "(10) Zona CM (Av. La Marina): altura 1.5(a+r); uso residencial compatible RDA; estac. comercial 1/50m²."
         )
     elif "jes" in distrito.lower() and "mar" in distrito.lower():
-        normativa_note += f"\n\nNORMATIVA ESPECÍFICA JESÚS MARÍA (Ord. N°1017-MML + Ord. N°1076-MML):\n{RIN_JESUS_MARIA}"
+        normativa_note += f"\n\nNORMATIVA ESPECÍFICA JESÚS MARÍA (Ord. N°1017-MML + Ord. N°1076-MML):\n{_load_norm("rin_jesus_maria.txt")}"
         normativa_note += (
             "\n\nCLAVES PARA JESÚS MARÍA: (1) ATN II — normativa MML directa. "
             "(2) Estacionamiento DIFERENCIADO: RDA = 1/1 viv; RDM = 1/1.5 viv (Ord. N°586-MDJM). "
@@ -5077,7 +4986,7 @@ def generate_cabida(params: dict, config: dict) -> dict:
             "(4) Área mínima 3D = 75m². Frente a pasaje: máx 3 pisos."
         )
     elif "cercado" in distrito.lower() or ("lima" in distrito.lower() and "cercado" in distrito.lower()):
-        normativa_note += f"\n\nNORMATIVA ESPECÍFICA CERCADO DE LIMA (Ord. N°893-MML + N°946-MML + N°1229-MML + N°2635-MML):\n{RIN_CERCADO_LIMA}"
+        normativa_note += f"\n\nNORMATIVA ESPECÍFICA CERCADO DE LIMA (Ord. N°893-MML + N°946-MML + N°1229-MML + N°2635-MML):\n{_load_norm("rin_cercado_lima.txt")}"
         normativa_note += (
             "\n\nCLAVES PARA CERCADO DE LIMA: "
             "(1) ATN II — administrado directamente por MML (GDU-SPHU o ICL). "
@@ -5089,7 +4998,7 @@ def generate_cabida(params: dict, config: dict) -> dict:
             "(6) Áreas mínimas: 3D=75m², 2D=55m², 1D=40m²."
         )
     elif "san borja" in distrito.lower() or "sanborja" in distrito.lower():
-        normativa_note += f"\n\nNORMATIVA ESPECÍFICA SAN BORJA (Ord. N°491-MSB + TUO D.Alc. N°002-2025-MSB-A):\n{RIN_SAN_BORJA}"
+        normativa_note += f"\n\nNORMATIVA ESPECÍFICA SAN BORJA (Ord. N°491-MSB + TUO D.Alc. N°002-2025-MSB-A):\n{_load_norm("rin_san_borja.txt")}"
         normativa_note += (
             "\n\nCLAVES PARA SAN BORJA: "
             "(1) ATN III — reglamento propio MSB, 5 Áreas Diferenciadas (A/B/C/D/E). "
@@ -5102,7 +5011,7 @@ def generate_cabida(params: dict, config: dict) -> dict:
             "(7) Identificar el Área Diferenciada del predio — es la clave de todos los parámetros."
         )
     elif "santa anita" in distrito.lower() or "santaanita" in distrito.lower():
-        normativa_note += f"\n\nNORMATIVA ESPECÍFICA SANTA ANITA (Ord. N°1025-MML + Ord. N°341-MML):\n{RIN_SANTA_ANITA}"
+        normativa_note += f"\n\nNORMATIVA ESPECÍFICA SANTA ANITA (Ord. N°1025-MML + Ord. N°341-MML):\n{_load_norm("rin_santa_anita.txt")}"
         normativa_note += (
             "\n\nCLAVES PARA SANTA ANITA: "
             "(1) ATN I — distrito industrial/periférico, normativa MML base, sin reglamento premium propio. "
@@ -5113,7 +5022,7 @@ def generate_cabida(params: dict, config: dict) -> dict:
             "(5) No hay zonas residenciales puras premium — el potencial está en reconversión CM→residencial."
         )
     elif "surco" in distrito.lower() or "santiago de surco" in distrito.lower():
-        normativa_note += f"\n\nNORMATIVA ESPECÍFICA SANTIAGO DE SURCO (Ord. N°1076-MML + Ord. N°912-MML + D.A. N°04-2023-MSS):\n{RIN_SURCO}"
+        normativa_note += f"\n\nNORMATIVA ESPECÍFICA SANTIAGO DE SURCO (Ord. N°1076-MML + Ord. N°912-MML + D.A. N°04-2023-MSS):\n{_load_norm("rin_surco.txt")}"
         normativa_note += (
             "\n\nCLAVES PARA SURCO: "
             "(1) Surco tiene DOS sectores: ATN II (Ord. N°1076-MML, zonas intermedias/Paseo de la República) "
@@ -5126,7 +5035,7 @@ def generate_cabida(params: dict, config: dict) -> dict:
             "(6) Área mínima 3D = 75 m². Retiros: 5m Paseo de la República / 3m calles / 0m algunas calles locales."
         )
     elif "surquillo" in distrito.lower():
-        normativa_note += f"\n\nNORMATIVA ESPECÍFICA SURQUILLO (Ord. N°1076-MML + Ord. N°501-MDS + Ord. N°533-2023-MDS):\n{RIN_SURQUILLO}"
+        normativa_note += f"\n\nNORMATIVA ESPECÍFICA SURQUILLO (Ord. N°1076-MML + Ord. N°501-MDS + Ord. N°533-2023-MDS):\n{_load_norm("rin_surquillo.txt")}"
         normativa_note += (
             "\n\nCLAVES PARA SURQUILLO: "
             "(1) ATN II — Ord. N°1076-MML para zonificación, Ord. N°501-MDS para estacionamientos vigentes. "
@@ -5138,7 +5047,7 @@ def generate_cabida(params: dict, config: dict) -> dict:
             "(6) ⚠ CPUs anteriores a jun 2023 citan Ord. N°391-MDS derogada — estacionamiento desactualizado."
         )
     elif "villa el salvador" in distrito.lower() or "ves" == distrito.lower().strip():
-        normativa_note += f"\n\nNORMATIVA ESPECÍFICA VILLA EL SALVADOR (Ord. N°933-MML y modificatorias):\n{RIN_VILLA_EL_SALVADOR}"
+        normativa_note += f"\n\nNORMATIVA ESPECÍFICA VILLA EL SALVADOR (Ord. N°933-MML y modificatorias):\n{_load_norm("rin_villa_el_salvador.txt")}"
         normativa_note += (
             "\n\nCLAVES PARA VILLA EL SALVADOR: "
             "(1) ATN I — normativa base MML Ord. N°933-MML, sin reglamento premium propio. "
@@ -5152,7 +5061,7 @@ def generate_cabida(params: dict, config: dict) -> dict:
             "verificar factibilidad SEDAPAL y Luz del Sur por sector antes de análisis financiero."
         )
     elif "san juan de lurigancho" in distrito.lower() or "sjl" == distrito.lower().strip():
-        normativa_note += f"\n\nNORMATIVA ESPECÍFICA SAN JUAN DE LURIGANCHO (Ord. N°933-MML + Ord. N°284-MDSJL):\n{RIN_SAN_JUAN_LURIGANCHO}"
+        normativa_note += f"\n\nNORMATIVA ESPECÍFICA SAN JUAN DE LURIGANCHO (Ord. N°933-MML + Ord. N°284-MDSJL):\n{_load_norm("rin_san_juan_lurigancho.txt")}"
         normativa_note += (
             "\n\nCLAVES PARA SAN JUAN DE LURIGANCHO: "
             "(1) ATN I — distrito más poblado de Lima (~1.2M hab.), mercado residencial masivo. "
@@ -5164,7 +5073,7 @@ def generate_cabida(params: dict, config: dict) -> dict:
             "(7) Mercado objetivo: segmento B/C · precios USD 1,200-1,800/m² · tipologías 2D y 3D."
         )
     elif "lurigancho" in distrito.lower() and "san juan" not in distrito.lower():
-        normativa_note += f"\n\nNORMATIVA ESPECÍFICA LURIGANCHO (HUACHIPA) (Ord. N°1099-MML + Ord. N°1237-MML — ATN IV):\n{RIN_LURIGANCHO}"
+        normativa_note += f"\n\nNORMATIVA ESPECÍFICA LURIGANCHO (HUACHIPA) (Ord. N°1099-MML + Ord. N°1237-MML — ATN IV):\n{_load_norm("rin_lurigancho.txt")}"
         normativa_note += (
             "\n\nCLAVES PARA LURIGANCHO (CHOSICA / HUACHIPA — ATN IV): "
             "(1) ATN IV — distinto a los distritos metropolitanos (ATN I/II). Norma base: Ord. N°1099-MML + Ord. N°1237-MML. Autoridad: Municipalidad del Centro Poblado Santa María de Huachipa (MCPSMH). "
@@ -5181,7 +5090,7 @@ def generate_cabida(params: dict, config: dict) -> dict:
             "(12) Solo compatible con logística limpia, distribución, manufactura no contaminante — NO industria pesada, química ni residuos peligrosos."
         )
     elif "la molina" in distrito.lower():
-        normativa_note += f"\n\nNORMATIVA ESPECÍFICA LA MOLINA (Ord. N°1144-2008-MML + Ord. N°1661-2013-MML + D.A. N°010-2016-MDLM):\n{RIN_LA_MOLINA}"
+        normativa_note += f"\n\nNORMATIVA ESPECÍFICA LA MOLINA (Ord. N°1144-2008-MML + Ord. N°1661-2013-MML + D.A. N°010-2016-MDLM):\n{_load_norm("rin_la_molina.txt")}"
         normativa_note += (
             "\n\nCLAVES PARA LA MOLINA: "
             "(1) ATN III — reglamento propio MDLM. Norma base Ord. N°1144-2008-MML. "
@@ -5195,7 +5104,7 @@ def generate_cabida(params: dict, config: dict) -> dict:
             "(9) Mercado: USD 1,547/m² · rentabilidad bruta 6.3% (líder Lima prime) · absorción 1.4 und/mes."
         )
     elif "callao" in distrito.lower():
-        normativa_note += f"\n\nNORMATIVA ESPECÍFICA CALLAO (PDU Callao 2011-2022 — Ord. N°000068-2010):\n{RIN_CALLAO}"
+        normativa_note += f"\n\nNORMATIVA ESPECÍFICA CALLAO (PDU Callao 2011-2022 — Ord. N°000068-2010):\n{_load_norm("rin_callao.txt")}"
         normativa_note += (
             "\n\nCLAVES PARA CALLAO: "
             "(1) ATN I — administrado por GORE Callao + MPC. Norma base PDU Callao Ord. N°000068-2010 (prorrogado Ord. N°023-2018/019). "
@@ -5209,7 +5118,7 @@ def generate_cabida(params: dict, config: dict) -> dict:
             "(7) Alta tensión: verificar servidumbre eléctrica si aplica."
         )
     elif "independencia" in distrito.lower():
-        normativa_note += f"\n\nNORMATIVA ESPECÍFICA INDEPENDENCIA (Ord. N°1015-2007-MML + Ord. N°933-2006-MML):\n{RIN_INDEPENDENCIA}"
+        normativa_note += f"\n\nNORMATIVA ESPECÍFICA INDEPENDENCIA (Ord. N°1015-2007-MML + Ord. N°933-2006-MML):\n{_load_norm("rin_independencia.txt")}"
         normativa_note += (
             "\n\nCLAVES PARA INDEPENDENCIA: "
             "(1) ATN I — normativa MML base Ord. N°1015-2007-MML. "
@@ -5222,7 +5131,7 @@ def generate_cabida(params: dict, config: dict) -> dict:
             "(8) Mercado: Lima Norte NSE B/C · ~S/. 4,200–5,000/m² · alta demanda acumulada."
         )
     elif "san martin" in distrito.lower() or "smp" == distrito.lower().strip():
-        normativa_note += f"\n\nNORMATIVA ESPECÍFICA SAN MARTÍN DE PORRES (Ord. N°1015-07-MML + Ord. N°933-2006-MML):\n{RIN_SAN_MARTIN_PORRES}"
+        normativa_note += f"\n\nNORMATIVA ESPECÍFICA SAN MARTÍN DE PORRES (Ord. N°1015-07-MML + Ord. N°933-2006-MML):\n{_load_norm("rin_san_martin_de_porres.txt")}"
         normativa_note += (
             "\n\nCLAVES PARA SAN MARTÍN DE PORRES: "
             "(1) ATN I — normativa MML base Ord. N°1015-07-MML. "
@@ -5235,7 +5144,7 @@ def generate_cabida(params: dict, config: dict) -> dict:
             "(8) Mercado: Lima Norte NSE B/C · ~S/. 4,500–5,500/m² · Industrial Tomás Valle: nodo clave SMP-Callao."
         )
     elif "chorrillos" in distrito.lower():
-        normativa_note += f"\n\nNORMATIVA ESPECÍFICA CHORRILLOS (Ord. N°1076-MML + Ord. N°2264-MML + Ord. N°2504-MML):\n{RIN_CHORRILLOS}"
+        normativa_note += f"\n\nNORMATIVA ESPECÍFICA CHORRILLOS (Ord. N°1076-MML + Ord. N°2264-MML + Ord. N°2504-MML):\n{_load_norm("rin_chorrillos.txt")}"
         normativa_note += (
             "\n\nCLAVES PARA CHORRILLOS — DOS SECTORES: "
             "PASO 1: verificar si el predio es ATN IV (zona costero/PROHVILLA) o ATN II (La Campiña/interior). "
@@ -5255,7 +5164,7 @@ def generate_cabida(params: dict, config: dict) -> dict:
             "(11) Mercado: USD 1,658/m² · Rentabilidad 5.7% (3° Lima) · NSE B/B+."
         )
     elif "bre" in distrito.lower() and "ña" in distrito.lower() or "breña" in distrito.lower():
-        normativa_note += f"\n\nNORMATIVA ESPECÍFICA BREÑA (Ord. N°1017-MML + Ord. N°1347-10-MML + Ord. N°1785-13-MML):\n{RIN_BREÑA}"
+        normativa_note += f"\n\nNORMATIVA ESPECÍFICA BREÑA (Ord. N°1017-MML + Ord. N°1347-10-MML + Ord. N°1785-13-MML):\n{_load_norm("rin_breña.txt")}"
         normativa_note += (
             "\n\nCLAVES PARA BREÑA: "
             "(1) ATN II — Ord. N°1017-MML como base con modificatorias N°1347-10-MML y N°1785-13-MML. "
@@ -5269,7 +5178,7 @@ def generate_cabida(params: dict, config: dict) -> dict:
             "(9) Mercado: USD 1,514/m² · NSE B/B+ · proximidad hospitales y Av. Brasil."
         )
     elif "pueblo libre" in distrito.lower() or "pueblolibre" in distrito.lower():
-        normativa_note += f"\n\nNORMATIVA ESPECÍFICA PUEBLO LIBRE (Ord. N°1015-MML + Ord. N°1017-MML + Ords. MPL propias):\n{RIN_PUEBLO_LIBRE}"
+        normativa_note += f"\n\nNORMATIVA ESPECÍFICA PUEBLO LIBRE (Ord. N°1015-MML + Ord. N°1017-MML + Ords. MPL propias):\n{_load_norm("rin_pueblo_libre.txt")}"
         normativa_note += (
             "\n\nCLAVES PARA PUEBLO LIBRE: "
             "(1) ATN II — Ord. N°1015-MML + Ord. N°1017-MML como base; Ords. MPL propias prevalecen en estac. y conjuntos. "
@@ -5282,7 +5191,7 @@ def generate_cabida(params: dict, config: dict) -> dict:
             "(8) Mercado: USD 1,820/m² · NSE B/B+ · precio inferior a Jesús María — favorable para promotores con restricción de precio terreno."
         )
     elif "barranco" in distrito.lower():
-        normativa_note += f"\n\nNORMATIVA ESPECÍFICA BARRANCO (Ord. N°1076-MML + Ord. N°343-MML + Ord. N°516-2019-MDB):\n{RIN_BARRANCO}"
+        normativa_note += f"\n\nNORMATIVA ESPECÍFICA BARRANCO (Ord. N°1076-MML + Ord. N°343-MML + Ord. N°516-2019-MDB):\n{_load_norm("rin_barranco.txt")}"
         normativa_note += (
             "\n\nCLAVES PARA BARRANCO — DOS REGÍMENES: "
             "PASO 1: verificar si el predio está en Zona Monumental (ATN IV) o Fuera Zona Monumental (ATN II). "
@@ -5303,7 +5212,7 @@ def generate_cabida(params: dict, config: dict) -> dict:
         )
 
     elif "san luis" in distrito.lower():
-        normativa_note += f"\n\nNORMATIVA ESPECÍFICA SAN LUIS (Ord. N°2358-2021 + Ord. N°1082-MML + Ord. N°1015-MML + Ord. N°1076-MML):\n{RIN_SAN_LUIS}"
+        normativa_note += f"\n\nNORMATIVA ESPECÍFICA SAN LUIS (Ord. N°2358-2021 + Ord. N°1082-MML + Ord. N°1015-MML + Ord. N°1076-MML):\n{_load_norm("rin_san_luis.txt")}"
         normativa_note += (
             "\n\nCLAVES PARA SAN LUIS: "
             "(1) ATN II — Ord. N°2358-2021 como norma base distrital (Reajuste Integral San Luis) + Ords. MML. "
@@ -5320,7 +5229,7 @@ def generate_cabida(params: dict, config: dict) -> dict:
         )
 
     elif "ate" in distrito.lower() and "santa anita" not in distrito.lower():
-        normativa_note += f"\n\nNORMATIVA ESPECÍFICA ATE (Ord. N°1099-MML + Ord. N°1076-MML + Ord. N°1015-MML):\n{RIN_ATE}"
+        normativa_note += f"\n\nNORMATIVA ESPECÍFICA ATE (Ord. N°1099-MML + Ord. N°1076-MML + Ord. N°1015-MML):\n{_load_norm("rin_ate.txt")}"
         normativa_note += (
             "\n\nCLAVES PARA ATE: "
             "(1) ATN II — Ord. N°1099-MML como norma base distrital (Reajuste Integral Ate) + Ords. MML N°1076 + N°1015. "
@@ -5337,7 +5246,7 @@ def generate_cabida(params: dict, config: dict) -> dict:
         )
 
     elif "san juan" in distrito.lower() and "miraflore" in distrito.lower():
-        normativa_note += f"\n\nNORMATIVA ESPECÍFICA SAN JUAN DE MIRAFLORES (Ord. N°2144-MML + Ord. N°620-MML + Ord. N°1015-MML ATN I):\n{RIN_SAN_JUAN_MIRAFLORES}"
+        normativa_note += f"\n\nNORMATIVA ESPECÍFICA SAN JUAN DE MIRAFLORES (Ord. N°2144-MML + Ord. N°620-MML + Ord. N°1015-MML ATN I):\n{_load_norm("rin_san_juan_miraflores.txt")}"
         normativa_note += (
             "\n\nCLAVES PARA SAN JUAN DE MIRAFLORES — ATN I: "
             "(1) ATN I — Ord. N°2144-MML como norma base distrital. NO es ATN II. "
@@ -5353,7 +5262,7 @@ def generate_cabida(params: dict, config: dict) -> dict:
             "(11) Mercado: terreno CZ Av. Los Héroes USD ~2,500/m² (tasación 2023) · residencial ~USD 1,014–1,217/m² · NSE C/C+."
         )
     elif "lurin" in distrito.lower() or "lurín" in distrito.lower():
-        normativa_note += f"\n\nNORMATIVA ESPECÍFICA LURÍN (Ord. N°1814-MML + Ords. N°933 + N°1015-MML — ATN I):\n{RIN_LURIN}"
+        normativa_note += f"\n\nNORMATIVA ESPECÍFICA LURÍN (Ord. N°1814-MML + Ords. N°933 + N°1015-MML — ATN I):\n{_load_norm("rin_lurin.txt")}"
         normativa_note += (
             "\n\nCLAVES PARA LURÍN — ATN I: "
             "(1) ATN I — Ord. N°1814-MML como norma base distrital. Lote MÍNIMO 5,000m²/40ml en TODAS las zonas (I3, RDA y RDM). Proyectos pequeños no son viables normativamente. "
@@ -5663,8 +5572,8 @@ Devuelve SOLO este JSON:
                 "text": (
                     "Eres un arquitecto experto en normativa urbanística de Lima, Perú. "
                     "Respondes únicamente con JSON válido, sin texto adicional.\n\n"
-                    f"REGLAMENTO NACIONAL DE EDIFICACIONES (RNE):\n{RNE_NACIONAL}\n\n"
-                    f"MARCO NORMATIVO LIMA METROPOLITANA Y DISTRITOS:\n{REFERENCIAS_NORMATIVAS_LIMA}"
+                    f"REGLAMENTO NACIONAL DE EDIFICACIONES (RNE):\n{_load_norm("rne_nacional.txt")}\n\n"
+                    f"MARCO NORMATIVO LIMA METROPOLITANA Y DISTRITOS:\n{_load_norm("referencias_lima.txt")}"
                 ),
                 "cache_control": {"type": "ephemeral"},
             }
@@ -5834,10 +5743,10 @@ SEMÁFORO: verde=todo OK · amarillo=algún amarillo · rojo=cualquier rojo."""
         "\n\n═══════════════════════════════════════\n"
         "CONOCIMIENTO ADICIONAL — DUE DILIGENCE\n"
         "═══════════════════════════════════════\n"
-        + CONOCIMIENTO_DD[:3000]
-        + f"\n\nNORMATIVA SUNARP Y REGISTRO DE PREDIOS:\n{LEGAL_SUNARP[:500]}"
-        + f"\n\nNORMATIVA CONTRATOS Y COMPRAVENTA:\n{LEGAL_CONTRATOS[:350]}"
-        + f"\n\nNORMATIVA TRIBUTACIÓN INMOBILIARIA:\n{LEGAL_TRIBUTACION[:300]}"
+        + _load_norm("CONOCIMIENTO_DUE_DILIGENCE_TECNICO.md")[:3000]
+        + f"\n\nNORMATIVA SUNARP Y REGISTRO DE PREDIOS:\n{_load_norm("legal_sunarp_predios.md")[:500]}"
+        + f"\n\nNORMATIVA CONTRATOS Y COMPRAVENTA:\n{_load_norm("legal_contratos_compraventa.md")[:350]}"
+        + f"\n\nNORMATIVA TRIBUTACIÓN INMOBILIARIA:\n{_load_norm("legal_tributacion_inmobiliaria.md")[:300]}"
     )
 
     # Mensaje dinámico — solo los datos específicos del análisis
@@ -9956,23 +9865,23 @@ def generar_resumen_ejecutivo_ia(tipo: str, datos: dict) -> dict:
         ref = ("Referencia Lima 2025-2026: yield neto residencial 4–6%, payback típico 18–25 años, "
                "cuota recomendada máx. 30% del ingreso mensual, apreciación histórica ~4%/año.")
 
-    _bench_ctx = f"\n\nBENCHMARKS INDUSTRIALES DE REFERENCIA:\n{BENCHMARKS_INDUSTRIAL}" if tipo_label.startswith("industrial") else ""
+    _bench_ctx = f"\n\nBENCHMARKS INDUSTRIALES DE REFERENCIA:\n{_load_norm("benchmarks_industrial.txt")}" if tipo_label.startswith("industrial") else ""
 
     if tipo_label.startswith("industrial"):
         _legal_ctx = (
-            f"\n\nNORMATIVA LEGAL — ARRENDAMIENTO INDUSTRIAL:\n{LEGAL_ARRENDAMIENTO[:400]}"
-            f"\n\nNORMATIVA LEGAL — SUNARP Y CARGAS:\n{LEGAL_SUNARP[:350]}"
-            f"\n\nNORMATIVA LEGAL — TRIBUTACIÓN:\n{LEGAL_TRIBUTACION[:300]}"
+            f"\n\nNORMATIVA LEGAL — ARRENDAMIENTO INDUSTRIAL:\n{_load_norm("legal_arrendamiento_peru.md")[:400]}"
+            f"\n\nNORMATIVA LEGAL — SUNARP Y CARGAS:\n{_load_norm("legal_sunarp_predios.md")[:350]}"
+            f"\n\nNORMATIVA LEGAL — TRIBUTACIÓN:\n{_load_norm("legal_tributacion_inmobiliaria.md")[:300]}"
         )
     else:
         _legal_ctx = (
-            f"\n\nNORMATIVA LEGAL — TRIBUTACIÓN INMOBILIARIA:\n{LEGAL_TRIBUTACION[:400]}"
-            f"\n\nNORMATIVA LEGAL — CONTRATOS COMPRAVENTA:\n{LEGAL_CONTRATOS[:350]}"
-            f"\n\nNORMATIVA LEGAL — SUNARP Y CARGAS:\n{LEGAL_SUNARP[:300]}"
+            f"\n\nNORMATIVA LEGAL — TRIBUTACIÓN INMOBILIARIA:\n{_load_norm("legal_tributacion_inmobiliaria.md")[:400]}"
+            f"\n\nNORMATIVA LEGAL — CONTRATOS COMPRAVENTA:\n{_load_norm("legal_contratos_compraventa.md")[:350]}"
+            f"\n\nNORMATIVA LEGAL — SUNARP Y CARGAS:\n{_load_norm("legal_sunarp_predios.md")[:300]}"
         )
 
     if tipo_label.startswith("industrial"):
-        _ciclo_ctx = f"\n\nPOSICIONAMIENTO DE MERCADO — LIMA 2026:\n{CONOCIMIENTO_CICLO[:3000]}"
+        _ciclo_ctx = f"\n\nPOSICIONAMIENTO DE MERCADO — LIMA 2026:\n{_load_norm("CONOCIMIENTO_CICLO_MERCADO_LIMA.md")[:3000]}"
         _orient_ind = """
 CRITERIOS DE ORIENTACIÓN (Sección 18 — SOLUM):
 Yield >10%: supera cap rate Clase A Lima (8–10%). Validar hipótesis precio/renta.
@@ -10078,15 +9987,15 @@ def generar_memorandum_advisory_ind(datos: dict) -> dict:
         "- Tasa libre de riesgo Perú: ~7.5% (bonos soberanos PEN)"
     )
 
-    _neg_ctx = f"\n\nESTRATEGIAS DE NEGOCIACIÓN Y ESTRUCTURACIÓN:\n{CONOCIMIENTO_NEGOCIACION[:800]}"
-    _soc_ctx = f"\n\nESTRUCTURACIÓN SOCIETARIA:\n{CONOCIMIENTO_SOCIETARIA[:600]}"
-    _ciclo_ctx_memo = f"\n\nCICLO DE MERCADO LIMA 2026:\n{CONOCIMIENTO_CICLO[:800]}"
-    _dd_ctx = f"\n\nDUE DILIGENCE Y RED FLAGS:\n{CONOCIMIENTO_DD[:600]}"
+    _neg_ctx = f"\n\nESTRATEGIAS DE NEGOCIACIÓN Y ESTRUCTURACIÓN:\n{_load_norm("CONOCIMIENTO_NEGOCIACION_TACTICA.md")[:800]}"
+    _soc_ctx = f"\n\nESTRUCTURACIÓN SOCIETARIA:\n{_load_norm("CONOCIMIENTO_ESTRUCTURACION_SOCIETARIA.md")[:600]}"
+    _ciclo_ctx_memo = f"\n\nCICLO DE MERCADO LIMA 2026:\n{_load_norm("CONOCIMIENTO_CICLO_MERCADO_LIMA.md")[:800]}"
+    _dd_ctx = f"\n\nDUE DILIGENCE Y RED FLAGS:\n{_load_norm("CONOCIMIENTO_DUE_DILIGENCE_TECNICO.md")[:600]}"
     _legal_memo_ctx = (
-        f"\n\nNORMATIVA LEGAL — ARRENDAMIENTO INDUSTRIAL (CC + D.Leg. 1177):\n{LEGAL_ARRENDAMIENTO[:400]}"
-        f"\n\nNORMATIVA LEGAL — SUNARP, HIPOTECAS Y CARGAS:\n{LEGAL_SUNARP[:350]}"
-        f"\n\nNORMATIVA LEGAL — TRIBUTACIÓN (Alcabala, IR, IGV):\n{LEGAL_TRIBUTACION[:300]}"
-        f"\n\nNORMATIVA LEGAL — CONTRATOS COMPRAVENTA:\n{LEGAL_CONTRATOS[:250]}"
+        f"\n\nNORMATIVA LEGAL — ARRENDAMIENTO INDUSTRIAL (CC + D.Leg. 1177):\n{_load_norm("legal_arrendamiento_peru.md")[:400]}"
+        f"\n\nNORMATIVA LEGAL — SUNARP, HIPOTECAS Y CARGAS:\n{_load_norm("legal_sunarp_predios.md")[:350]}"
+        f"\n\nNORMATIVA LEGAL — TRIBUTACIÓN (Alcabala, IR, IGV):\n{_load_norm("legal_tributacion_inmobiliaria.md")[:300]}"
+        f"\n\nNORMATIVA LEGAL — CONTRATOS COMPRAVENTA:\n{_load_norm("legal_contratos_compraventa.md")[:250]}"
     )
 
     _sys_memo = f"""Eres consultor senior de Osterling Advisory, especializado en activos logísticos e industriales en Lima, Perú.
