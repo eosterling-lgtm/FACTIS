@@ -6779,13 +6779,14 @@ def generar_alertas_financieras_residencial(r: dict) -> list:
 # PALETA EXCEL — fuente única de verdad para todos los reportes
 # ═══════════════════════════════════════════════════════
 _XL = {
-    "GOLD":  "B8904A",
-    "DARK":  "0A1628",
-    "LIGHT": "F5F2ED",
-    "WHITE": "FFFFFF",
-    "GRAY":  "E8E4DC",
-    "NAV":   "1E2D3D",
-    "ALT":   "EAE6DF",
+    # Paleta oficial SOLUM — tokens del :root CSS (navy / gray / white)
+    "DARK":  "0D2137",   # --navy          → headers, texto oscuro
+    "NAV":   "1A3A5C",   # --navy-mid      → subheaders, bordes fuertes
+    "LIGHT": "F7F9FC",   # --gray-bg       → fondo celdas alternas
+    "GRAY":  "E2E8F0",   # --gray-line     → bordes, separadores
+    "WHITE": "FFFFFF",   # --white         → celdas de valor
+    "GOLD":  "C9A96E",   # --gold          → acento mínimo (ej. fila base sensibilidad)
+    # Semáforos funcionales (no parte del diseño visual, sí del lenguaje analítico)
     "GRN_D": "1A4731",
     "GRN_L": "E8F5EE",
     "RED_D": "7A1A1A",
@@ -6978,7 +6979,7 @@ def generar_excel_solum(result: dict, cabida: dict, params: dict,
         ws5.cell(row=2, column=1, value="Celda: Margen neto % · Verde ≥18% · Amarillo 12–18% · Rojo <12%").font = Font(size=8, italic=True, color="888888")
         ws5.merge_cells(start_row=2, start_column=1, end_row=2, end_column=len(_s_precios)+1)
         # Cabecera de columnas (precio de venta)
-        _hdr_fill(ws5, 3, 1, "Terreno ↓  /  Precio m² →", bg=DARK, fg="B8904A")
+        _hdr_fill(ws5, 3, 1, "Terreno ↓  /  Precio m² →", bg=DARK, fg=GOLD)
         for ci, p in enumerate(_s_precios):
             _is_base = abs(p - _s_p0) == min(abs(x - _s_p0) for x in _s_precios)
             _bg = "1E3A5A" if _is_base else DARK
@@ -6988,7 +6989,7 @@ def generar_excel_solum(result: dict, cabida: dict, params: dict,
         for ri, t in enumerate(_s_terrenos):
             _is_base_row = abs(t - _s_t0) == min(abs(x - _s_t0) for x in _s_terrenos)
             _rh_bg = "1E3A5A" if _is_base_row else DARK
-            _rh_fg = "B8904A" if _is_base_row else WHITE
+            _rh_fg = GOLD if _is_base_row else WHITE
             _hdr_fill(ws5, ri+4, 1, f"${t:,.0f}", bg=_rh_bg, fg=_rh_fg)
             for ci in range(len(_s_precios)):
                 mg  = float(_df_mg.iloc[ri, ci])
@@ -7007,7 +7008,7 @@ def generar_excel_solum(result: dict, cabida: dict, params: dict,
                 cell.alignment = Alignment(horizontal="center", vertical="center")
                 if _is_base_row and _is_base_col:
                     from openpyxl.styles import Border as XlBorder, Side as XlSide
-                    _gold_side = XlSide(style="medium", color="B8904A")
+                    _gold_side = XlSide(style="medium", color=GOLD)
                     cell.border = XlBorder(top=_gold_side, bottom=_gold_side,
                                            left=_gold_side, right=_gold_side)
         ws5.row_dimensions[3].height = 18
