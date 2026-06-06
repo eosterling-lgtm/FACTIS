@@ -4366,8 +4366,9 @@ def _cargar_mercado_sheet() -> tuple:
     except Exception:
         return {}, _tc_secrets
 
+@st.cache_data(ttl=300, show_spinner=False)
 def get_mercado() -> tuple:
-    """MERCADO actualizado: Sheet > hardcoded. Retorna (mercado_dict, tipo_cambio) sin mutar globals."""
+    """MERCADO actualizado: Sheet > hardcoded. Cacheado 5 min — no re-merge en cada rerun."""
     live, tc = _cargar_mercado_sheet()
     if not live:
         return MERCADO, tc
