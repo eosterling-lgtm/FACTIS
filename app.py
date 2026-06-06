@@ -23493,46 +23493,53 @@ elif tipo_op == "Portfolio":
         _sb_al = _get_supabase()
         if _sb_al:
             try:
+                # texto_procesado excluido del listado — se fetcha on-demand por id
                 _al_resp = (_sb_al.table("alertas_normativas")
                                .select("id,fecha_publicacion,entidad,tipo_norma,titulo,resumen,url,"
-                                       "relevancia,categorias,procesado,creado_en,"
-                                       "texto_procesado,codigo_propuesto,tipo_normativa_solum,"
-                                       "aprobado_por,aprobado_en")
+                                       "relevancia,categorias,creado_en,"
+                                       "codigo_propuesto,tipo_normativa_solum,aprobado_en")
                                .eq("procesado", False)
                                .order("creado_en", desc=True)
                                .limit(20)
                                .execute())
                 _alertas_pend = _al_resp.data or []
+                # Marcar cuáles tienen borrador sin traer el texto (columna booleana derivada)
+                _ids_con_borrador: set = set()
+                if _alertas_pend:
+                    _bord_ids = (_sb_al.table("alertas_normativas")
+                                 .select("id")
+                                 .eq("procesado", False)
+                                 .not_.is_("texto_procesado", "null")
+                                 .execute())
+                    _ids_con_borrador = {r["id"] for r in (_bord_ids.data or [])}
+                for _a in _alertas_pend:
+                    _a["_tiene_borrador"] = _a["id"] in _ids_con_borrador
             except Exception:
                 _alertas_pend = []
+                _ids_con_borrador = set()
 
-            # ── SLA Dashboard ─────────────────────────────────────────────────
+            # ── SLA Dashboard — 1 query extra; resto derivado de _alertas_pend ──
             try:
-                _sla_ultima_det = (_sb_al.table("alertas_normativas")
-                                   .select("creado_en").order("creado_en", desc=True)
-                                   .limit(1).execute())
                 _sla_ultima_aprob = (_sb_al.table("alertas_normativas")
                                      .select("aprobado_en").eq("procesado", True)
                                      .order("aprobado_en", desc=True).limit(1).execute())
-                _sla_con_borrador = (_sb_al.table("alertas_normativas")
-                                     .select("id", count="exact").eq("procesado", False)
-                                     .neq("texto_procesado", None).execute())
 
                 def _dias_desde(ts_str: str | None) -> str:
                     if not ts_str:
                         return "—"
                     try:
                         import dateutil.parser as _dp
-                        _dt = _dp.parse(ts_str)
-                        _d  = (datetime.datetime.now(datetime.timezone.utc) - _dt).days
+                        _d = (datetime.datetime.now(datetime.timezone.utc)
+                              - _dp.parse(ts_str)).days
                         return f"hace {_d}d" if _d > 0 else "hoy"
                     except Exception:
                         return "—"
 
-                _sla_d  = _sla_ultima_det.data[0]["creado_en"]  if _sla_ultima_det.data  else None
-                _sla_a  = _sla_ultima_aprob.data[0]["aprobado_en"] if _sla_ultima_aprob.data else None
-                _n_bord = _sla_con_borrador.count or 0
                 _n_pend = len(_alertas_pend)
+                _n_bord = sum(1 for a in _alertas_pend if a.get("texto_procesado"))
+                _sla_d  = _alertas_pend[0].get("creado_en") if _alertas_pend else None
+                _sla_a  = (_sla_ultima_aprob.data[0]["aprobado_en"]
+                           if _sla_ultima_aprob.data else None)
 
                 st.markdown(
                     '<div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;">'
@@ -23566,7 +23573,7 @@ elif tipo_op == "Portfolio":
                     f'{len(_alertas_pend)} normas detectadas pendientes de revisión</div>'
                     f'<div style="font-size:11px;color:#8AA8C0;margin-top:2px;">'
                     f'Monitor diario SOLUM · {len(_al_altas)} de alta relevancia · '
-                    f'{sum(1 for a in _alertas_pend if a.get("texto_procesado"))} borradores listos para activar</div>'
+                    f'{len(_ids_con_borrador)} borradores listos para activar</div>'
                     f'</div></div></div>',
                     unsafe_allow_html=True)
 
@@ -23576,7 +23583,7 @@ elif tipo_op == "Portfolio":
                         _rel_icon  = "🔴" if _rel == "alta" else ("🟡" if _rel == "media" else "🟢")
                         _rel_color = "#C44A4A" if _rel == "alta" else ("#B8862E" if _rel == "media" else "#1A7A4A")
                         _cats = ", ".join(_al.get("categorias") or []) or "—"
-                        _tiene_borrador = bool(_al.get("texto_procesado"))
+                        _tiene_borrador = _al.get("_tiene_borrador", False)
 
                         _a1, _a2 = st.columns([4, 1])
                         with _a1:
@@ -23596,7 +23603,7 @@ elif tipo_op == "Portfolio":
                                 f'{(_al.get("fecha_publicacion") or "")[:10]}</div>'
                                 f'<div style="font-size:10px;color:#6B8098;margin-top:2px;">'
                                 f'Categorías: {_cats}'
-                                + (f' · Código propuesto: <code style="background:rgba(255,255,255,0.08);'
+                                + (f' · Código: <code style="background:rgba(255,255,255,0.08);'
                                    f'padding:0 4px;border-radius:3px;">{_al["codigo_propuesto"]}</code>'
                                    if _al.get("codigo_propuesto") else "")
                                 + '</div>'
@@ -23604,51 +23611,65 @@ elif tipo_op == "Portfolio":
                                    f'{_al.get("resumen","")}</div>' if _al.get("resumen") else "")
                                 + '</div>', unsafe_allow_html=True)
 
-                            # Mostrar borrador en expander colapsado
+                            # Borrador: fetch on-demand solo al abrir el expander
                             if _tiene_borrador:
-                                with st.expander("Ver borrador generado por SOLUM Monitor"):
-                                    st.code(_al["texto_procesado"][:3000]
-                                            + ("\n... (truncado)" if len(_al["texto_procesado"]) > 3000 else ""),
-                                            language="text")
+                                with st.expander("Ver borrador generado por Monitor"):
+                                    _btext = ""
+                                    try:
+                                        _br = (_sb_al.table("alertas_normativas")
+                                               .select("texto_procesado")
+                                               .eq("id", _al["id"]).single().execute())
+                                        _btext = (_br.data or {}).get("texto_procesado", "")
+                                    except Exception:
+                                        pass
+                                    if _btext:
+                                        st.code(_btext[:3000]
+                                                + ("\n...(truncado)" if len(_btext) > 3000 else ""),
+                                                language="text")
+                                    else:
+                                        st.info("No se pudo cargar el borrador.")
 
                         with _a2:
-                            # Activación directa si hay borrador
+                            # Activación: fetch texto_procesado solo al hacer click
                             if _tiene_borrador:
                                 if st.button("✓ Activar en SOLUM", key=f"al_act_{_al['id']}",
                                              use_container_width=True, type="primary"):
                                     try:
                                         _sb_act = _get_supabase()
+                                        _br2 = (_sb_act.table("alertas_normativas")
+                                                .select("texto_procesado")
+                                                .eq("id", _al["id"]).single().execute())
+                                        _texto_act = (_br2.data or {}).get("texto_procesado", "")
+                                        if not _texto_act:
+                                            st.error("No se encontró el borrador.")
+                                            st.stop()
                                         _codigo = _al.get("codigo_propuesto") or f"auto_{_al['id']}"
                                         _tipo_n = _al.get("tipo_normativa_solum") or "ord"
-                                        # Desactivar versión anterior si existe
                                         _sb_act.table("normativas").update({"activo": False}).eq("codigo", _codigo).execute()
                                         _vr_act = (_sb_act.table("normativas").select("version")
                                                    .eq("codigo", _codigo).order("version", desc=True)
                                                    .limit(1).execute())
                                         _next_v_act = ((_vr_act.data[0]["version"] + 1) if _vr_act.data else 1)
-                                        # Insertar en normativas
                                         _sb_act.table("normativas").insert({
                                             "codigo":          _codigo,
                                             "nombre":          _al.get("titulo", "")[:200],
                                             "tipo":            _tipo_n,
                                             "distrito":        None,
-                                            "contenido":       _al["texto_procesado"],
+                                            "contenido":       _texto_act,
                                             "version":         _next_v_act,
                                             "activo":          True,
                                             "fuente":          _al.get("url") or None,
                                             "resumen_cambios": _al.get("resumen") or None,
                                             "subido_por":      st.session_state.get("_username", "admin"),
                                         }).execute()
-                                        # Marcar alerta como procesada
                                         _sb_act.table("alertas_normativas").update({
                                             "procesado":    True,
                                             "aprobado_por": st.session_state.get("_username", "admin"),
                                             "aprobado_en":  datetime.datetime.now(datetime.timezone.utc).isoformat(),
                                         }).eq("id", _al["id"]).execute()
-                                        # Limpiar cache de sesión
                                         st.session_state.pop(f"_norm_cache_{_codigo}.txt", None)
                                         st.session_state.pop(f"_norm_cache_{_codigo}.md", None)
-                                        st.success(f"✓ '{_al.get('titulo','')[:60]}' activada en SOLUM como v{_next_v_act}")
+                                        st.success(f"✓ '{_al.get('titulo','')[:60]}' activada como v{_next_v_act}")
                                         st.rerun()
                                     except Exception as _ae_act:
                                         st.error(str(_ae_act))
