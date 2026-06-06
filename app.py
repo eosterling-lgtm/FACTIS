@@ -12,6 +12,7 @@ import re
 import uuid
 import pathlib
 import datetime
+import time
 import pandas as pd
 import plotly.graph_objects as go
 import plotly.express as px
@@ -120,17 +121,17 @@ class _Proyecto:
         self._nombre  = name
 
 
+@st.cache_resource
 def _get_supabase():
-    if "_sb_client" not in st.session_state:
-        try:
-            from supabase import create_client
-            _sb = st.secrets.get("supabase", {}) or {}
-            _url = _sb.get("url", "")
-            _key = _sb.get("key", "")
-            st.session_state["_sb_client"] = create_client(_url, _key) if (_url and _key) else None
-        except Exception:
-            st.session_state["_sb_client"] = None
-    return st.session_state.get("_sb_client")
+    """Cliente Supabase compartido entre todas las sesiones — una conexión para todos los usuarios."""
+    try:
+        from supabase import create_client
+        _sb = st.secrets.get("supabase", {}) or {}
+        _url = _sb.get("url", "")
+        _key = _sb.get("key", "")
+        return create_client(_url, _key) if (_url and _key) else None
+    except Exception:
+        return None
 
 
 def guardar_proyecto(nombre: str, estado: dict, tipo: str = "", zona: str = "") -> "_Proyecto":
@@ -1391,12 +1392,12 @@ def _show_login() -> None:
         submitted = st.form_submit_button("INGRESAR", use_container_width=True)
 
     # Brute force protection
-    import time as _time_bf
+
     _MAX_INTENTOS   = 5
     _BLOQUEO_SEG    = 300
     _bloqueado_hasta = st.session_state.get("_login_bloqueado_hasta", 0)
-    if _bloqueado_hasta > _time_bf.time():
-        _seg_restantes = int(_bloqueado_hasta - _time_bf.time())
+    if _bloqueado_hasta > time.time():
+        _seg_restantes = int(_bloqueado_hasta - time.time())
         st.error(f"Demasiados intentos fallidos. Intente en {_seg_restantes} segundos.")
         st.stop()
 
@@ -1419,7 +1420,7 @@ def _show_login() -> None:
             _intentos = st.session_state.get("_login_intentos", 0) + 1
             st.session_state["_login_intentos"] = _intentos
             if _intentos >= _MAX_INTENTOS:
-                st.session_state["_login_bloqueado_hasta"] = _time_bf.time() + _BLOQUEO_SEG
+                st.session_state["_login_bloqueado_hasta"] = time.time() + _BLOQUEO_SEG
                 st.session_state.pop("_login_intentos", None)
                 st.error(f"Cuenta bloqueada por {_BLOQUEO_SEG // 60} minutos tras {_MAX_INTENTOS} intentos fallidos.")
             else:
@@ -1441,12 +1442,12 @@ if not st.session_state.get("_authenticated"):
 
 
 # ── Rate limiting por sesión de usuario ─────────────────
-import time as _time_rl
+
 
 _RL_MAX_PER_HOUR = 10  # análisis máximos por hora por sesión
 
 def _check_rate_limit():
-    now = _time_rl.time()
+    now = time.time()
     timestamps = st.session_state.get("_rl_timestamps", [])
     timestamps = [t for t in timestamps if now - t < 3600]
     if len(timestamps) >= _RL_MAX_PER_HOUR:
@@ -4474,7 +4475,6 @@ def get_client():
 
 def _run_with_retry(fn, spinner_msg, max_attempts=3):
     """Ejecuta fn() reintentando en errores de red, servidor ocupado o rate limit."""
-    import time
     _status = st.empty()
     last_err = ""
     is_rate_limit = False
@@ -4686,10 +4686,7 @@ def smart_block(file_bytes: bytes) -> dict:
 @st.cache_data(show_spinner=False)
 def _load_norm(filename: str) -> str:
     """Carga normativa: Supabase (versión vigente) → archivo local → mensaje de error.
-    Cache de sesión para evitar queries repetidas en el mismo rerun."""
-    _cache_key = f"_norm_cache_{filename}"
-    if _cache_key in st.session_state:
-        return st.session_state[_cache_key]
+    @st.cache_data es global al proceso — una sola carga para todos los usuarios."""
     # 1. Intentar Supabase (versión activa más reciente)
     codigo = filename.replace(".txt", "").replace(".md", "")
     sb = _get_supabase()
@@ -4703,18 +4700,13 @@ def _load_norm(filename: str) -> str:
                       .limit(1)
                       .execute())
             if resp.data:
-                text = resp.data[0]["contenido"]
-                st.session_state[_cache_key] = text
-                return text
+                return resp.data[0]["contenido"]
         except Exception:
             pass
     # 2. Fallback: archivo local
-    base = pathlib.Path(__file__).parent / "normativas"
-    path = base / filename
+    path = pathlib.Path(__file__).parent / "normativas" / filename
     if path.exists():
-        text = path.read_text(encoding="utf-8")
-        st.session_state[_cache_key] = text
-        return text
+        return path.read_text(encoding="utf-8")
     return f"[NORMATIVA NO ENCONTRADA: {filename}]"
 
 RIN_SAN_ISIDRO = _load_norm("rin_san_isidro.txt")
