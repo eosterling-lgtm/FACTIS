@@ -14963,6 +14963,29 @@ with st.sidebar:
         run_industrial = False
         run_res_docs = False
 
+        # ── Indicador de progreso guiado Residencial ──────
+        _res1_done = bool(st.session_state.get("res_zona_sel", ""))
+        _res2_done = any([st.session_state.get("res_doc_partida"), st.session_state.get("res_doc_puhr"),
+                          st.session_state.get("res_doc_params"),  st.session_state.get("res_doc_planos")])
+        _res3_done = int(st.session_state.get("res_precio_k", 0) or 0) > 50_000
+        _res4_done = st.session_state.get("residencial_result") is not None
+        _steps_res = [
+            ("Información del Inmueble", "Distrito, área, características",    _res1_done),
+            ("Documentos del Inmueble",  "Partida, PU/HR, parámetros",         _res2_done),
+            ("Precio y Financiamiento",  "Precio, modo compra / alquiler",     _res3_done),
+            ("Valoración y Resumen",     "Análisis IA, ratios, due diligence", _res4_done),
+        ]
+        _cur_res = next((i for i, (_, _, d) in enumerate(_steps_res) if not d), 4)
+        _res_prog_html = "".join([_sp(i,l,s,d,i==_cur_res,i==3) for i,(l,s,d) in enumerate(_steps_res)])
+        st.markdown(
+            f'<div style="background:#F1F5F9;border-radius:10px;padding:12px 14px 10px;'
+            f'border:1px solid #CBD5E1;margin-bottom:10px;">'
+            f'<div style="font-size:11px;font-weight:700;color:#94A3B8;'
+            f'letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;">FLUJO DE ANÁLISIS IA</div>'
+            f'{_res_prog_html}</div>',
+            unsafe_allow_html=True)
+        st.markdown("---")
+
         # ── MODO DE ANÁLISIS ──────────────────────────────
         st.markdown("### ¿QUÉ DESEAS ANALIZAR?")
         res_modo = st.radio(
@@ -15402,6 +15425,32 @@ with st.sidebar:
         run_industrial = False
         run_residencial = False
         run_oficinas = False
+
+        # ── Indicador de progreso guiado Oficinas ─────────
+        _ofi1_done = bool(st.session_state.get("ofi_edificio", "").strip())
+        _ofi2_done = bool(st.session_state.get("ofi_modo", ""))
+        _ofi3_done = (
+            float(st.session_state.get("ofi_alq_base",      0.0) or 0.0) > 0 or
+            float(st.session_state.get("ofi_precio_compra", 0.0) or 0.0) > 0 or
+            float(st.session_state.get("ofi_area_terreno",  0.0) or 0.0) > 0
+        )
+        _ofi4_done = st.session_state.get("oficinas_result") is not None
+        _steps_ofi = [
+            ("Información del Inmueble", "Edificio, distrito, clase",            _ofi1_done),
+            ("Parámetros del Inmueble",  "Modo, área, año, condición",           _ofi2_done),
+            ("Información Financiera",   "Precio, renta, mantenimiento",         _ofi3_done),
+            ("Análisis IA y Resumen",    "Valoración, comparativa, informe PDF", _ofi4_done),
+        ]
+        _cur_ofi = next((i for i, (_, _, d) in enumerate(_steps_ofi) if not d), 4)
+        _ofi_prog_html = "".join([_sp(i,l,s,d,i==_cur_ofi,i==3) for i,(l,s,d) in enumerate(_steps_ofi)])
+        st.markdown(
+            f'<div style="background:#F1F5F9;border-radius:10px;padding:12px 14px 10px;'
+            f'border:1px solid #CBD5E1;margin-bottom:10px;">'
+            f'<div style="font-size:11px;font-weight:700;color:#94A3B8;'
+            f'letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;">FLUJO DE ANÁLISIS IA</div>'
+            f'{_ofi_prog_html}</div>',
+            unsafe_allow_html=True)
+        st.markdown("---")
 
         # ── MODO DE ANÁLISIS ──────────────────────────────
         st.markdown("### ¿QUÉ DESEAS ANALIZAR?")
