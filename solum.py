@@ -146,6 +146,46 @@ def _get_supabase():
         return None
 
 
+def _sb_set_user_context(sb, username: str) -> None:
+    """Establece el contexto de usuario para las políticas RLS de proyectos.
+
+    Las políticas RLS de SOLUM usan current_setting('app.current_user') para
+    asegurar que cada usuario solo vea sus propios proyectos. Esta función debe
+    llamarse antes de cualquier operación en la tabla proyectos.
+
+    Args:
+        sb: Cliente Supabase activo.
+        username: Nombre de usuario del sesión actual (st.session_state._username).
+    """
+    if not sb or not username:
+        return
+    try:
+        sb.rpc("set_app_user", {"p_user": username}).execute()
+    except Exception as _e:
+        # No bloquear la operación si falla — loguear y continuar
+        # (el código de la app ya filtra por usuario en las queries como defensa en profundidad)
+        _log.warning("_sb_set_user_context: no se pudo establecer contexto RLS para '%s': %s", username, _e)
+
+
+def _sb_set_share_token_context(sb, token: str) -> None:
+    """Establece el share_token en contexto de sesión para la policy proyectos_share_token_read.
+
+    Permite que la vista pública (sin login) lea un proyecto específico por su token.
+
+    Args:
+        sb: Cliente Supabase activo.
+        token: Share token de 32 chars (uuid.uuid4().hex).
+    """
+    if not sb or not token:
+        return
+    try:
+        sb.rpc("set_app_user", {"p_user": ""}).execute()   # sin usuario en vista pública
+        # Seteamos el share_token en la config de sesión via SQL directo
+        sb.postgrest.session.headers.update({"x-share-token": token})
+    except Exception as _e:
+        _log.warning("_sb_set_share_token_context: error seteando contexto de token: %s", _e)
+
+
 def _sb_exec(fn, max_retries: int = 3, base_wait: float = 1.0):
     """Ejecuta una operación Supabase con reintentos y backoff exponencial.
 
@@ -188,6 +228,7 @@ def guardar_proyecto(nombre: str, estado: dict, tipo: str = "", zona: str = "") 
     usuario = st.session_state.get("_username", "unknown")
     sb = _get_supabase()
     if sb:
+        _sb_set_user_context(sb, usuario)   # Establece contexto RLS antes de INSERT
         try:
             row = {
                 "usuario": usuario,
@@ -216,6 +257,7 @@ def listar_proyectos(con_resumen: bool = False) -> list:
     usuario = st.session_state.get("_username", "unknown")
     sb = _get_supabase()
     if sb:
+        _sb_set_user_context(sb, usuario)   # Establece contexto RLS antes de SELECT
         try:
             cols = "id, nombre_proyecto, tipo, zona, creado_en" + (", resumen" if con_resumen else "")
             resp = _sb_exec(lambda: (
@@ -254,8 +296,9 @@ def cargar_proyecto(ref) -> dict:
     if isinstance(ref, _Proyecto) and ref._id:
         sb = _get_supabase()
         if sb:
+            _owner = st.session_state.get("_username", "")
+            _sb_set_user_context(sb, _owner)   # Establece contexto RLS antes de SELECT
             try:
-                _owner = st.session_state.get("_username", "")
                 resp = _sb_exec(lambda: (
                     sb.table("proyectos").select("datos")
                       .eq("id", ref._id).eq("usuario", _owner).single().execute()
@@ -283,6 +326,8 @@ def generar_link_compartido(proyecto_id: str) -> str:
     expira = (datetime.datetime.utcnow() + datetime.timedelta(days=_SHARE_TOKEN_TTL_DAYS)).isoformat() + "Z"
     sb = _get_supabase()
     if sb and proyecto_id:
+        # Establece contexto RLS — UPDATE solo funciona si el usuario es dueño del proyecto
+        _sb_set_user_context(sb, st.session_state.get("_username", ""))
         try:
             # Guarda token + fecha de expiración en columna top-level
             _sb_exec(lambda: sb.table("proyectos").update({
