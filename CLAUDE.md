@@ -4,14 +4,14 @@
 
 Al comenzar cualquier sesión en este proyecto, ANTES de responder cualquier pregunta:
 
-1. Confirmar que `app.py` existe en este directorio (archivo único ~19,900 líneas)
+1. Confirmar que `solum.py` existe en este directorio (archivo único ~19,900 líneas)
 2. Tener presente que la carpeta `normativas/` contiene **80 archivos** de texto con toda la normativa activa — **LEER `CONOCIMIENTO_INDUSTRIAL_SOLUM.md` para cualquier consulta industrial**
 3. El conocimiento normativo, de mercado y financiero ya está embebido en los prompts del API de Claude — NO preguntar al usuario por datos que deberían conocerse
 4. Aplicar directamente: RINs, normas, benchmarks, precios de mercado, lógica financiera
 
 **Si el usuario pregunta por estacionamientos en San Isidro → aplicar RIN San Isidro directamente (sin preguntar).**
 **Si el usuario menciona un distrito → buscar en normativas/ el RIN correspondiente.**
-**Si el usuario pregunta precios → usar MERCADO dict en app.py línea ~3602 o mercado_residencial_lima_urbania_2025.txt.**
+**Si el usuario pregunta precios → usar MERCADO dict en solum.py línea ~3602 o mercado_residencial_lima_urbania_2025.txt.**
 
 ---
 
@@ -28,7 +28,7 @@ Al comenzar cualquier sesión en este proyecto, ANTES de responder cualquier pre
 
 ## Qué es SOLUM
 
-App Streamlit de pre-factibilidad inmobiliaria. Archivo único: `app.py` (~19,900 líneas).
+App Streamlit de pre-factibilidad inmobiliaria. Archivo único: `solum.py` (~19,900 líneas).
 
 **Propósito:** Evaluar terrenos en 15 minutos — cabida arquitectónica + análisis financiero + análisis legal. Lleva al promotor a reunirse con arquitecto/estructurista/banco con números ya trabajados, no reemplaza el expediente técnico.
 

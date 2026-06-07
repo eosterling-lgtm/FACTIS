@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>SOLUM — Mockup Notificación Normativa</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'Inter', sans-serif;
+  background: #E8ECF2;
+  padding: 40px 20px;
+  color: #4A5568;
+}
+
+/* ── Contexto: simula la app de SOLUM alrededor ── */
+.app-context {
+  max-width: 860px;
+  margin: 0 auto;
+}
+.app-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #718096;
+  margin-bottom: 8px;
+}
+.app-section {
+  background: #F7F9FC;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  padding: 20px 24px;
+  margin-bottom: 12px;
+  opacity: 0.45;
+  filter: blur(0.5px);
+}
+.app-section-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1E2D3D;
+  margin-bottom: 8px;
+}
+.fake-input {
+  height: 36px;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 6px;
+  margin-bottom: 8px;
+}
+.fake-button {
+  height: 40px;
+  background: #1E2D3D;
+  border-radius: 6px;
+  width: 200px;
+  opacity: 0.6;
+}
+
+/* ══════════════════════════════════════════════
+   NOTIFICACIÓN PRINCIPAL
+══════════════════════════════════════════════ */
+.notif-wrapper {
+  max-width: 860px;
+  margin: 0 auto 12px;
+  position: relative;
+}
+
+/* Etiqueta flotante encima */
+.notif-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #1E2D3D;
+  color: #FFFFFF;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: 4px 4px 0 0;
+  margin-bottom: 0;
+}
+.notif-badge .dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #F6C90E;
+  animation: pulse 1.8s infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.notif-box {
+  background: #FFFFFF;
+  border: 1.5px solid #1E2D3D;
+  border-top: none;
+  border-radius: 0 8px 8px 8px;
+  overflow: hidden;
+}
+
+/* Header */
+.notif-header {
+  background: #1E2D3D;
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.notif-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.notif-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #FFFFFF;
+  letter-spacing: 0.3px;
+}
+.notif-subtitle {
+  font-size: 10px;
+  color: rgba(255,255,255,0.55);
+  letter-spacing: 0.5px;
+}
+.notif-meta {
+  font-size: 10px;
+  color: rgba(255,255,255,0.45);
+  text-align: right;
+  line-height: 1.6;
+}
+
+/* Cuerpo */
+.notif-body {
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Fila de cada ordenanza */
+.norm-row {
+  border: 1px solid #E2E8F0;
+  border-radius: 6px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+.norm-row.selected {
+  border-color: #1E2D3D;
+  box-shadow: 0 0 0 2px rgba(30,45,61,0.08);
+}
+
+.norm-row-header {
+  display: flex;
+  align-items: stretch;
+}
+.norm-check-col {
+  background: #F7F9FC;
+  border-right: 1px solid #E2E8F0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+.norm-row.selected .norm-check-col {
+  background: #1E2D3D;
+}
+
+/* Checkbox custom */
+.checkbox {
+  width: 18px; height: 18px;
+  border: 2px solid #A0AEC0;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #FFFFFF;
+  flex-shrink: 0;
+}
+.norm-row.selected .checkbox {
+  background: #FFFFFF;
+  border-color: #FFFFFF;
+}
+.checkbox-tick {
+  font-size: 11px;
+  color: #1E2D3D;
+  font-weight: 700;
+  display: none;
+}
+.norm-row.selected .checkbox-tick { display: block; }
+
+.norm-content {
+  padding: 14px 16px;
+  flex: 1;
+}
+.norm-tipo-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.norm-tipo {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #718096;
+}
+.norm-fecha {
+  font-size: 9px;
+  color: #A0AEC0;
+}
+.norm-num {
+  font-size: 12px;
+  font-weight: 700;
+  color: #1E2D3D;
+  margin-bottom: 4px;
+}
+.norm-desc {
+  font-size: 11.5px;
+  color: #4A5568;
+  line-height: 1.55;
+  margin-bottom: 8px;
+}
+.norm-impacto {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.imp-chip {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: #F7F9FC;
+  border: 1px solid #E2E8F0;
+  border-radius: 4px;
+  padding: 4px 10px;
+  font-size: 10px;
+  color: #4A5568;
+}
+.imp-chip .val {
+  font-weight: 700;
+  color: #1E2D3D;
+}
+.norm-row.selected .imp-chip {
+  background: #F0F4F8;
+  border-color: #CBD5E0;
+}
+
+/* Condición de acogimiento */
+.norm-cond {
+  background: #F7F9FC;
+  border-top: 1px solid #E2E8F0;
+  padding: 8px 16px;
+  font-size: 10px;
+  color: #718096;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.norm-cond strong { color: #4A5568; }
+
+/* Aviso legal no retroactividad */
+.legal-note {
+  background: #F7F9FC;
+  border-left: 3px solid #718096;
+  border-radius: 0 4px 4px 0;
+  padding: 10px 14px;
+  font-size: 10.5px;
+  color: #718096;
+  line-height: 1.6;
+  margin-top: 4px;
+}
+.legal-note strong { color: #4A5568; }
+
+/* Pie del recuadro con acciones */
+.notif-footer {
+  background: #F7F9FC;
+  border-top: 1px solid #E2E8F0;
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.notif-footer-left {
+  font-size: 11px;
+  color: #718096;
+  line-height: 1.5;
+}
+.notif-footer-left strong { color: #1E2D3D; }
+.btn-group {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.btn {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 9px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  border: none;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+.btn-primary {
+  background: #1E2D3D;
+  color: #FFFFFF;
+}
+.btn-primary:hover { background: #2D3F52; }
+.btn-secondary {
+  background: #FFFFFF;
+  color: #1E2D3D;
+  border: 1.5px solid #1E2D3D;
+}
+.btn-ghost {
+  background: transparent;
+  color: #718096;
+  border: 1.5px solid #E2E8F0;
+}
+
+/* ── CPU info chip arriba ── */
+.cpu-info {
+  max-width: 860px;
+  margin: 0 auto 6px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 10px;
+  color: #718096;
+}
+.cpu-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 4px;
+  padding: 4px 10px;
+  font-size: 10px;
+  color: #4A5568;
+}
+.cpu-chip strong { color: #1E2D3D; }
+
+/* ── Nota de referencia abajo ── */
+.ref-note {
+  max-width: 860px;
+  margin: 8px auto 0;
+  font-size: 9.5px;
+  color: #A0AEC0;
+  text-align: center;
+}
+
+</style>
+</head>
+<body>
+
+<!-- Contexto app arriba (borroso) -->
+<div class="app-context">
+  <div class="app-label">Datos del inmueble</div>
+  <div class="app-section">
+    <div class="app-section-title">Parámetros urbanísticos extraídos</div>
+    <div class="fake-input"></div>
+    <div class="fake-input"></div>
+  </div>
+</div>
+
+<!-- Info del CPU detectado -->
+<div class="cpu-info">
+  CPU detectado:
+  <div class="cpu-chip">
+    <strong>San Isidro</strong> · Zona RDM · Emitido: 14/03/2023 · Vigente hasta: 14/03/2026
+  </div>
+  <span>→ Buscando normativas posteriores a esa fecha...</span>
+</div>
+
+<!-- ════════════════════════════════════════════
+     NOTIFICACIÓN
+════════════════════════════════════════════ -->
+<div class="notif-wrapper">
+  <div class="notif-badge">
+    <span class="dot"></span>
+    3 normativas posteriores a su CPU detectadas
+  </div>
+
+  <div class="notif-box">
+
+    <!-- Header -->
+    <div class="notif-header">
+      <div class="notif-header-left">
+        <div class="notif-title">Normativas vigentes posteriores a su CPU</div>
+        <div class="notif-subtitle">Seleccione las que desea incorporar al análisis — o continúe solo con su CPU</div>
+      </div>
+      <div class="notif-meta">
+        CPU emitido: 14/03/2023<br>
+        Normativas encontradas: 3
+      </div>
+    </div>
+
+    <!-- Cuerpo: filas de ordenanzas -->
+    <div class="notif-body">
+
+      <!-- ORDENANZA 1 — seleccionada -->
+      <div class="norm-row selected">
+        <div class="norm-row-header">
+          <div class="norm-check-col">
+            <div class="checkbox"><span class="checkbox-tick">✓</span></div>
+          </div>
+          <div class="norm-content">
+            <div class="norm-tipo-row">
+              <span class="norm-tipo">Decreto Supremo</span>
+              <span class="norm-fecha">El Peruano · 08/09/2023</span>
+            </div>
+            <div class="norm-num">DS N° 012-2023-VIVIENDA — MVCS</div>
+            <div class="norm-desc">
+              Permite reducción del número de estacionamientos de visitas de <strong>25% a 15%</strong> del total de unidades en predios ubicados a menos de 500m de una estación de transporte masivo (Metro de Lima, Metropolitano).
+            </div>
+            <div class="norm-impacto">
+              <div class="imp-chip">Parámetro afectado: <span class="val">&nbsp;Estacionamientos visitas</span></div>
+              <div class="imp-chip">Antes: <span class="val">&nbsp;5 cocheras</span></div>
+              <div class="imp-chip">Con norma: <span class="val">&nbsp;3 cocheras</span></div>
+              <div class="imp-chip">Ahorro estimado: <span class="val">&nbsp;$36,000</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="norm-cond">
+          ⚡ <strong>Acogimiento:</strong> Automático — declaración en expediente de licencia ante municipalidad. No requiere trámite previo.
+          &nbsp;|&nbsp; Art. 4°, inciso b) DS 012-2023-VIVIENDA
+        </div>
+      </div>
+
+      <!-- ORDENANZA 2 — seleccionada -->
+      <div class="norm-row selected">
+        <div class="norm-row-header">
+          <div class="norm-check-col">
+            <div class="checkbox"><span class="checkbox-tick">✓</span></div>
+          </div>
+          <div class="norm-content">
+            <div class="norm-tipo-row">
+              <span class="norm-tipo">Ordenanza Municipal</span>
+              <span class="norm-fecha">El Peruano · 22/01/2024</span>
+            </div>
+            <div class="norm-num">Ord. N° 2456-MML — Municipalidad Metropolitana de Lima</div>
+            <div class="norm-desc">
+              Modifica el área libre mínima en zonas RDM de <strong>35% a 30%</strong> para lotes con frente mayor a 15m en distritos del Área de Tratamiento Normativo II y III.
+            </div>
+            <div class="norm-impacto">
+              <div class="imp-chip">Parámetro afectado: <span class="val">&nbsp;Área libre mínima</span></div>
+              <div class="imp-chip">Antes: <span class="val">&nbsp;35%</span></div>
+              <div class="imp-chip">Con norma: <span class="val">&nbsp;30%</span></div>
+              <div class="imp-chip">Área ganada: <span class="val">&nbsp;+28 m² construibles</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="norm-cond">
+          ⚡ <strong>Acogimiento:</strong> Automático — aplica al frente ≥15m de este predio (17.5m ✓). Art. 8°, Ord. 2456-MML.
+        </div>
+      </div>
+
+      <!-- ORDENANZA 3 — no seleccionada -->
+      <div class="norm-row">
+        <div class="norm-row-header">
+          <div class="norm-check-col">
+            <div class="checkbox"><span class="checkbox-tick">✓</span></div>
+          </div>
+          <div class="norm-content">
+            <div class="norm-tipo-row">
+              <span class="norm-tipo">Resolución Ministerial</span>
+              <span class="norm-fecha">El Peruano · 05/06/2024</span>
+            </div>
+            <div class="norm-num">RM N° 087-2024-VIVIENDA — MVCS</div>
+            <div class="norm-desc">
+              Amplía calificación para acceso al Bono Buen Pagador (BBP): eleva el techo de valor de unidad a <strong>$95,000</strong> (antes $82,000) para proyectos multifamiliares con mínimo 30% de unidades tipo 1D.
+            </div>
+            <div class="norm-impacto">
+              <div class="imp-chip">Parámetro afectado: <span class="val">&nbsp;Precio máximo BBP</span></div>
+              <div class="imp-chip">Antes: <span class="val">&nbsp;$82,000/unidad</span></div>
+              <div class="imp-chip">Con norma: <span class="val">&nbsp;$95,000/unidad</span></div>
+              <div class="imp-chip">Su proyecto califica: <span class="val">&nbsp;20% tipo 1D (insuficiente)</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="norm-cond">
+          ⚠️ <strong>Condición no cumplida:</strong> Su mix actual tiene 20% de unidades 1D. Para acceder al BBP necesita ≥ 30%. Requiere ajuste de mix tipológico.
+          &nbsp;|&nbsp; Art. 2°, RM 087-2024-VIVIENDA
+        </div>
+      </div>
+
+      <!-- Nota legal no retroactividad -->
+      <div class="legal-note">
+        <strong>Principio de no retroactividad —</strong>
+        Su CPU emitido el 14/03/2023 es un documento oficial vigente hasta el 14/03/2026.
+        Las normativas posteriores <em>no pueden reducir</em> los parámetros que su CPU certifica.
+        Solo puede acogerse a ellas si le benefician, y es su decisión hacerlo.
+        Las normativas seleccionadas aparecerán en el informe y PDF de forma independiente
+        al escenario que elija, como referencia informativa con su fundamento legal.
+      </div>
+
+    </div><!-- /notif-body -->
+
+    <!-- Footer con acciones -->
+    <div class="notif-footer">
+      <div class="notif-footer-left">
+        <strong>2 de 3 normativas seleccionadas.</strong><br>
+        Las seleccionadas se incorporan al análisis. Todas aparecen en el informe como referencia.
+      </div>
+      <div class="btn-group">
+        <button class="btn btn-ghost">Continuar solo con CPU</button>
+        <button class="btn btn-secondary">Seleccionar todas</button>
+        <button class="btn btn-primary">Generar análisis →</button>
+      </div>
+    </div>
+
+  </div><!-- /notif-box -->
+</div><!-- /notif-wrapper -->
+
+<!-- Contexto app abajo (borroso) -->
+<div class="app-context">
+  <div class="app-section">
+    <div class="fake-button"></div>
+  </div>
+</div>
+
+<div class="ref-note">
+  Mockup de referencia — SOLUM · Osterling Advisory · Paleta: #1E2D3D · #4A5568 · #718096 · #F7F9FC · #FFFFFF
+</div>
+
+</body>
+</html>
