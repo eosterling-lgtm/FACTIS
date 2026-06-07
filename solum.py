@@ -1236,8 +1236,8 @@ html, body, .stApp, [data-testid="stAppViewContainer"] {
 
 # Verificar link compartido ANTES del login
 _qt = st.query_params.get("share", "")
-if _qt:
-    _show_shared_view(str(_qt))
+if _qt and re.fullmatch(r"[0-9a-f]{32}|[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}", str(_qt).strip()):
+    _show_shared_view(str(_qt).strip())
     st.stop()
 
 # ═══════════════════════════════════════════════════════
