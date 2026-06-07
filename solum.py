@@ -8,6 +8,7 @@ import hmac
 import html as _html_esc
 import io
 import json
+import logging
 import math
 import os
 import re
@@ -18,6 +19,14 @@ import time
 import pandas as pd
 import plotly.graph_objects as go
 import plotly.express as px
+
+# Logging centralizado — stderr (visible en Railway/Streamlit logs)
+logging.basicConfig(
+    level=logging.WARNING,
+    format="%(asctime)s [SOLUM] %(levelname)s %(funcName)s: %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+)
+_log = logging.getLogger("solum")
 
 try:
     from shapely.geometry import Polygon as ShapelyPolygon
@@ -132,8 +141,38 @@ def _get_supabase():
         _url = _sb.get("url", "")
         _key = _sb.get("key", "")
         return create_client(_url, _key) if (_url and _key) else None
-    except Exception:
+    except Exception as _e:
+        _log.error("_get_supabase: no se pudo crear cliente Supabase: %s", _e)
         return None
+
+
+def _sb_exec(fn, max_retries: int = 3, base_wait: float = 1.0):
+    """Ejecuta una operación Supabase con reintentos y backoff exponencial.
+
+    Args:
+        fn: Callable sin argumentos que ejecuta la operación Supabase.
+        max_retries: Número máximo de intentos (default 3).
+        base_wait: Espera inicial en segundos; se duplica en cada reintento.
+
+    Returns:
+        El resultado de fn() si tiene éxito.
+
+    Raises:
+        Exception: Si todos los reintentos fallan, relanza la última excepción.
+    """
+    last_err = None
+    for attempt in range(max_retries):
+        try:
+            return fn()
+        except Exception as _e:
+            last_err = _e
+            if attempt < max_retries - 1:
+                wait = base_wait * (2 ** attempt)   # 1s → 2s → 4s
+                _log.warning("_sb_exec intento %d/%d falló (%s) — reintentando en %.1fs",
+                             attempt + 1, max_retries, _e, wait)
+                time.sleep(wait)
+    _log.error("_sb_exec falló en todos los %d intentos: %s", max_retries, last_err)
+    raise last_err
 
 
 def guardar_proyecto(nombre: str, estado: dict, tipo: str = "", zona: str = "") -> "_Proyecto":
@@ -158,13 +197,13 @@ def guardar_proyecto(nombre: str, estado: dict, tipo: str = "", zona: str = "") 
                 "datos": estado,
                 "resumen": estado.get("resumen") or {},
             }
-            resp = sb.table("proyectos").insert(row).execute()
+            resp = _sb_exec(lambda: sb.table("proyectos").insert(row).execute())
             if resp.data:
                 _id = resp.data[0]["id"]
                 display = f"{nombre.strip() or 'sin_nombre'}  ·  {datetime.datetime.now().strftime('%d/%m/%Y')}"
                 return _Proyecto(display, id=_id)
-        except Exception:
-            pass
+        except Exception as _e:
+            _log.warning("guardar_proyecto Supabase falló (3 intentos) — usando fallback local: %s", _e)
     PROJECTS_DIR.mkdir(exist_ok=True)
     slug = re.sub(r"[^\w\-]", "_", nombre.strip())[:40]
     fp = PROJECTS_DIR / f"{slug}_{datetime.datetime.now().strftime('%Y%m%d_%H%M')}.json"
@@ -179,14 +218,14 @@ def listar_proyectos(con_resumen: bool = False) -> list:
     if sb:
         try:
             cols = "id, nombre_proyecto, tipo, zona, creado_en" + (", resumen" if con_resumen else "")
-            resp = (
+            resp = _sb_exec(lambda: (
                 sb.table("proyectos")
                   .select(cols)
                   .eq("usuario", usuario)
                   .order("creado_en", desc=True)
                   .limit(100)
                   .execute()
-            )
+            ))
             result = []
             for row in (resp.data or []):
                 fecha = (row.get("creado_en") or "")[:10]
@@ -201,8 +240,8 @@ def listar_proyectos(con_resumen: bool = False) -> list:
                     p._nombre  = row.get("nombre_proyecto") or display
                 result.append(p)
             return result
-        except Exception:
-            pass
+        except Exception as _e:
+            _log.warning("listar_proyectos Supabase falló — usando fallback local: %s", _e)
     if not PROJECTS_DIR.exists():
         return []
     return [
@@ -217,11 +256,13 @@ def cargar_proyecto(ref) -> dict:
         if sb:
             try:
                 _owner = st.session_state.get("_username", "")
-                resp = sb.table("proyectos").select("datos") \
-                         .eq("id", ref._id).eq("usuario", _owner).single().execute()
+                resp = _sb_exec(lambda: (
+                    sb.table("proyectos").select("datos")
+                      .eq("id", ref._id).eq("usuario", _owner).single().execute()
+                ))
                 return (resp.data or {}).get("datos") or {}
-            except Exception:
-                pass
+            except Exception as _e:
+                _log.warning("cargar_proyecto Supabase falló (3 intentos) — intentando fallback local: %s", _e)
     if isinstance(ref, _Proyecto):
         path = ref._path
     elif isinstance(ref, pathlib.Path):
@@ -234,22 +275,31 @@ def cargar_proyecto(ref) -> dict:
     return {}
 
 
+_SHARE_TOKEN_TTL_DAYS = 30   # Los tokens expiran a los 30 días
+
 def generar_link_compartido(proyecto_id: str) -> str:
-    """Genera token único, lo guarda en Supabase y retorna la URL completa."""
-    token = uuid.uuid4().hex          # 32 chars hex sin guiones
+    """Genera token único con TTL de 30 días, lo guarda en Supabase y retorna la URL completa."""
+    token = uuid.uuid4().hex          # 32 chars hex — 128 bits de entropía
+    expira = (datetime.datetime.utcnow() + datetime.timedelta(days=_SHARE_TOKEN_TTL_DAYS)).isoformat() + "Z"
     sb = _get_supabase()
     if sb and proyecto_id:
         try:
-            # Intenta update en columna top-level share_token
-            sb.table("proyectos").update({"share_token": token}).eq("id", proyecto_id).execute()
-        except Exception:
+            # Guarda token + fecha de expiración en columna top-level
+            _sb_exec(lambda: sb.table("proyectos").update({
+                "share_token": token,
+                "share_token_expires_at": expira,
+            }).eq("id", proyecto_id).execute())
+        except Exception as _e:
+            _log.warning("generar_link_compartido: fallo en update share_token — intentando fallback JSONB: %s", _e)
             try:
                 # Fallback: guarda dentro del JSONB datos
-                resp = sb.table("proyectos").select("datos").eq("id", proyecto_id).single().execute()
+                resp = _sb_exec(lambda: sb.table("proyectos").select("datos").eq("id", proyecto_id).single().execute())
                 datos = dict((resp.data or {}).get("datos") or {})
                 datos["_share_token"] = token
-                sb.table("proyectos").update({"datos": datos}).eq("id", proyecto_id).execute()
-            except Exception:
+                datos["_share_token_expires_at"] = expira
+                _sb_exec(lambda: sb.table("proyectos").update({"datos": datos}).eq("id", proyecto_id).execute())
+            except Exception as _e2:
+                _log.error("generar_link_compartido: fallo total al guardar token — proyecto_id=%s err=%s", proyecto_id, _e2)
                 return ""
     base = (st.secrets.get("app") or {}).get("base_url", "http://localhost:8501")
     return f"{base}?share={token}"
@@ -273,7 +323,8 @@ def _irr_bisect(flujos, lo=-0.9999, hi=10.0, tol=1e-7, max_iter=300):
                 lo = mid
                 v_lo = npv(lo)
         return (lo + hi) / 2
-    except Exception:
+    except Exception as _e:
+        _log.warning("_irr_bisect falló con flujos=%d items: %s", len(flujos), _e)
         return None
 
 
@@ -529,7 +580,8 @@ def calcular_oficinas(r: dict) -> dict:
 
         utilidad_bruta  = ingresos_totales - costo_total
         margen_bruto    = (utilidad_bruta / ingresos_totales * 100) if ingresos_totales > 0 else 0
-        igv_ventas      = ingresos_venta * 0.18
+        # IGV primera venta: base imponible = precio_venta - valor_terreno (SUNAT/IGV Art. 1)
+        igv_ventas      = max(0, ingresos_venta - costo_terreno_total) * 0.18
         utilidad_neta   = utilidad_bruta - igv_ventas
         margen_neto     = (utilidad_neta / ingresos_totales * 100) if ingresos_totales > 0 else 0
 
@@ -1049,9 +1101,10 @@ def calcular_terreno_maximo(inp: dict) -> dict:
     # c_legales también sube 0.5% del terreno: factor_trans * 0.005 extra por cada $ de terreno
     factor_terreno = factor_trans * 1.005
 
+    # NOTA: c_factib ya está incluido en c_base_constr (línea anterior) — NO sumar de nuevo
     C_fixed = (c_base_constr + c_supervision + c_legales_base + c_permisos
                + c_gerencia + c_ventas_marketing
-               + c_due_dilig + c_factib + c_financiero)
+               + c_due_dilig + c_financiero)
 
     k = max(1 - tasa_ir, 0.01)
 
@@ -1114,23 +1167,38 @@ def _show_shared_view(token: str) -> None:
     proyecto = None
     if sb:
         try:
-            r = sb.table("proyectos").select("*").eq("share_token", token).single().execute()
+            r = _sb_exec(lambda: sb.table("proyectos").select("*").eq("share_token", token).single().execute())
             proyecto = r.data
-        except Exception:
-            pass
+        except Exception as _e:
+            _log.warning("_show_shared_view: lookup por share_token falló: %s", _e)
         if not proyecto:
             try:
                 # Fallback: token guardado dentro del JSONB datos — filtrado en servidor
-                r2 = sb.table("proyectos").select("id,datos,tipo,nombre_proyecto,zona,creado_en,resumen") \
-                       .filter("datos->>_share_token", "eq", token).limit(1).execute()
+                r2 = _sb_exec(lambda: (
+                    sb.table("proyectos").select("id,datos,tipo,nombre_proyecto,zona,creado_en,resumen")
+                      .filter("datos->>_share_token", "eq", token).limit(1).execute()
+                ))
                 if r2.data:
                     proyecto = r2.data[0]
-            except Exception:
-                pass
+            except Exception as _e:
+                _log.warning("_show_shared_view: fallback JSONB también falló: %s", _e)
 
     if not proyecto:
         st.error("Este enlace no es válido o ya no está disponible.")
         return
+
+    # Verificar expiración del token (TTL de 30 días)
+    _expira_raw = proyecto.get("share_token_expires_at") or (proyecto.get("datos") or {}).get("_share_token_expires_at")
+    if _expira_raw:
+        try:
+            _expira_dt = datetime.datetime.fromisoformat(_expira_raw.replace("Z", "+00:00"))
+            _ahora = datetime.datetime.now(datetime.timezone.utc)
+            if _ahora > _expira_dt:
+                st.error("Este enlace ha expirado. Solicita uno nuevo al propietario del análisis.")
+                _log.info("_show_shared_view: token expirado — proyecto_id=%s expiró=%s", proyecto.get("id"), _expira_raw)
+                return
+        except Exception:
+            pass  # Si no se puede parsear la fecha, continuar (token sin TTL legacy)
 
     datos  = proyecto.get("datos") or {}
     tipo   = proyecto.get("tipo", "inmobiliario")
@@ -4414,7 +4482,8 @@ def _cargar_mercado_sheet() -> tuple:
             if entry:
                 out[distrito] = entry
         return out, tc
-    except Exception:
+    except Exception as _e:
+        _log.warning("_cargar_mercado_sheet falló — usando precios hardcoded (posiblemente desactualizados): %s", _e)
         return {}, _tc_secrets
 
 @st.cache_data(ttl=300, show_spinner=False)
@@ -4733,7 +4802,7 @@ def smart_block(file_bytes: bytes) -> dict:
 
 
 # ── CARGA DE NORMATIVAS DESDE ARCHIVOS EXTERNOS ─────────────────────────────────────────────────
-@st.cache_data(show_spinner=False)
+@st.cache_data(ttl=3600, show_spinner=False)   # TTL 1 hora — refresca si normativa se actualiza en Supabase
 def _load_norm(filename: str) -> str:
     """Carga normativa: Supabase (versión vigente) → archivo local → mensaje de error.
     @st.cache_data es global al proceso — una sola carga para todos los usuarios."""
@@ -4829,7 +4898,8 @@ def _get_normativas_post_cpue(fecha_emision: str, categorias: tuple) -> list:
             ]
             return filtered if filtered else rows
         return rows
-    except Exception:
+    except Exception as _e:
+        _log.warning("_get_normativas_post_cpue falló — usuario no verá alertas normativas: %s", _e)
         return []
 
 
@@ -7134,26 +7204,61 @@ def generar_excel_solum(result: dict, cabida: dict, params: dict,
 # PDF HELPERS — HTML → PDF via Playwright
 # ═══════════════════════════════════════════════════════
 
-def _html_to_pdf(html: str) -> bytes:
-    """Convert HTML string to A4 PDF bytes using Playwright Chromium."""
-    import asyncio
-    from playwright.async_api import async_playwright
+@st.cache_resource
+def _get_playwright_browser():
+    """Singleton de browser Playwright compartido entre todas las generaciones de PDF.
 
-    async def _render():
-        async with async_playwright() as p:
-            browser = await p.chromium.launch()
-            page    = await browser.new_page()
-            await page.set_content(html, wait_until="networkidle")
-            pdf_bytes = await page.pdf(
+    @st.cache_resource garantiza una sola instancia por proceso Streamlit.
+    Evita lanzar Chromium (~300MB RAM, 3-8s) en cada exportación de PDF.
+    """
+    import asyncio as _asyncio
+    from playwright.sync_api import sync_playwright as _sync_pw
+    _pw = _sync_pw().__enter__()          # playwright context persistente
+    browser = _pw.chromium.launch()
+    return browser, _pw
+
+
+def _html_to_pdf(html: str) -> bytes:
+    """Convert HTML string to A4 PDF bytes usando browser Playwright singleton.
+
+    Reutiliza la instancia de Chromium (vs. lanzar una nueva cada vez).
+    Reducción estimada de latencia: 70% (8s → ~1-2s en generaciones subsecuentes).
+    """
+    try:
+        browser, _pw = _get_playwright_browser()
+        page = browser.new_page()
+        try:
+            page.set_content(html, wait_until="networkidle")
+            pdf_bytes = page.pdf(
                 format="A4",
                 print_background=True,
                 margin={"top": "0mm", "bottom": "0mm",
                         "left": "0mm", "right": "0mm"},
             )
-            await browser.close()
             return pdf_bytes
+        finally:
+            page.close()
+    except Exception as _e:
+        _log.warning("_html_to_pdf singleton falló (%s) — fallback a instancia nueva", _e)
+        # Fallback: nueva instancia si el singleton está en estado inválido
+        import asyncio
+        from playwright.async_api import async_playwright
 
-    return asyncio.run(_render())
+        async def _render_fallback():
+            async with async_playwright() as p:
+                browser_fb = await p.chromium.launch()
+                page_fb    = await browser_fb.new_page()
+                await page_fb.set_content(html, wait_until="networkidle")
+                pdf_bytes = await page_fb.pdf(
+                    format="A4",
+                    print_background=True,
+                    margin={"top": "0mm", "bottom": "0mm",
+                            "left": "0mm", "right": "0mm"},
+                )
+                await browser_fb.close()
+                return pdf_bytes
+
+        return asyncio.run(_render_fallback())
 
 
 def _build_solum_html(result: dict, cabida: dict, params: dict,
@@ -18271,7 +18376,7 @@ elif tipo_op == "Proyecto Inmobiliario":
                 _dl_c1, _dl_c2 = st.columns(2)
                 with _dl_c1:
                     if st.session_state.get("_pdf_dl"):
-                        st.download_button(
+                        _pdf_clicked = st.download_button(
                             label="⬇ DESCARGAR PDF",
                             data=st.session_state["_pdf_dl"],
                             file_name=f"Reporte Financiero - {_nombre_dl}.pdf",
@@ -18280,12 +18385,15 @@ elif tipo_op == "Proyecto Inmobiliario":
                             type="primary",
                             key="btn_pdf_dl",
                         )
+                        if _pdf_clicked:
+                            # Liberar memoria tras descarga (~5-50MB por reporte)
+                            st.session_state.pop("_pdf_dl", None)
                     else:
                         st.button("⬇ DESCARGAR PDF", use_container_width=True, type="primary",
                                   key="btn_pdf_na", disabled=True)
                 with _dl_c2:
                     if st.session_state.get("_xl_dl"):
-                        st.download_button(
+                        _xl_clicked = st.download_button(
                             label="⬇ DESCARGAR EXCEL",
                             data=st.session_state["_xl_dl"],
                             file_name=f"Reporte Financiero - {_nombre_dl}.xlsx",
@@ -18293,6 +18401,9 @@ elif tipo_op == "Proyecto Inmobiliario":
                             use_container_width=True,
                             key="btn_xl_dl",
                         )
+                        if _xl_clicked:
+                            # Liberar memoria tras descarga (~5-20MB por reporte)
+                            st.session_state.pop("_xl_dl", None)
                     else:
                         st.button("⬇ DESCARGAR EXCEL", use_container_width=True,
                                   key="btn_xl_na", disabled=True)
