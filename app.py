@@ -63,7 +63,7 @@ def _load_static_assets():
 
     logo_b64       = _b64(_dir / "logo.png")
     wire_b64       = _b64(_dir / "wireframe.png")
-    login_bg_b64   = _b64(_dir / "login_bg.png")   # 1.6 MB — cacheado
+    login_bg_b64   = _b64(_dir / "login_bg.webp")  # 97 KB WebP — 94% menos que PNG original
 
     svg_raw        = _txt(_dir / "solum_logo.svg")
     svg_b64        = base64.b64encode(svg_raw.encode()).decode() if svg_raw else ""
@@ -105,7 +105,7 @@ def _load_static_assets():
 
 _LOGO_PATH      = pathlib.Path(__file__).parent / "logo.png"
 _SOLUM_SVG_PATH = pathlib.Path(__file__).parent / "solum_logo.svg"
-_LOGIN_BG_PATH  = pathlib.Path(__file__).parent / "login_bg.png"
+_LOGIN_BG_PATH  = pathlib.Path(__file__).parent / "login_bg.webp"
 
 PROJECTS_DIR = pathlib.Path(__file__).parent / "projects"
 
@@ -1101,8 +1101,7 @@ html,body,#root,.stApp,[data-testid="stAppViewContainer"],[data-testid="stMain"]
 # ═══════════════════════════════════════════════════════
 
 def _show_shared_view(token: str) -> None:
-    logo_path = pathlib.Path(__file__).parent / "logo.png"
-    logo_b64  = base64.b64encode(logo_path.read_bytes()).decode() if logo_path.exists() else ""
+    logo_b64 = _LOGO_B64  # usa el asset ya cacheado en memoria — no releer disco
     st.markdown("""
     <style>
     html, body, .stApp { background: #F7F9FC !important; }
@@ -1291,7 +1290,7 @@ def _show_login() -> None:
         content: "" !important;
         position: fixed !important;
         inset: 0 !important;
-        background-image: url("data:image/png;base64,{_LOGIN_BG_B64}") !important;
+        background-image: url("data:image/webp;base64,{_LOGIN_BG_B64}") !important;
         background-size: cover !important;
         background-position: center !important;
         background-repeat: no-repeat !important;
@@ -1469,7 +1468,7 @@ if st.session_state.pop("_auth_loading", False):
                 '<div style="font-size:38px;font-weight:900;color:#FFFFFF;letter-spacing:-2px;'
                 'text-align:center;margin-bottom:28px;">SOLUM</div>')
     _oa_bg = (
-        f'background-image:url("data:image/png;base64,{_LOGIN_BG_B64}");'
+        f'background-image:url("data:image/webp;base64,{_LOGIN_BG_B64}");'
         f'background-size:cover;background-position:center;background-repeat:no-repeat;'
         if _LOGIN_BG_B64 else
         'background:linear-gradient(160deg,#0E1B2A 0%,#192535 55%,#0E1B2A 100%);'
@@ -1559,6 +1558,48 @@ def _step_header(num: str, title: str) -> None:
 
 st.markdown("""
 <style>
+    /* ── Design tokens — fuente única de la paleta SOLUM ── */
+    :root {
+        --c-bg:      #F7F9FC;
+        --c-bg2:     #E8EDF4;
+        --c-navy:    #0D2137;
+        --c-carbon:  #1E2D3D;
+        --c-primary: #475569;
+        --c-border:  #CBD5E1;
+        --c-muted:   #8A9AB0;
+        --c-white:   #FFFFFF;
+        --font:      'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        --radius:    8px;
+        --transition: 0.15s ease;
+    }
+
+    /* ── Scrollbar delgado consistente con la paleta ── */
+    ::-webkit-scrollbar              { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track        { background: #F7F9FC; }
+    ::-webkit-scrollbar-thumb        { background: #CBD5E1; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover  { background: #94A3B8; }
+    * { scrollbar-width: thin; scrollbar-color: #CBD5E1 #F7F9FC; }
+
+    /* ── Mobile guard — SOLUM es exclusivo de escritorio ── */
+    @media (max-width: 900px) {
+        [data-testid="stApp"],
+        [data-testid="stAppViewContainer"] { display: none !important; }
+        body {
+            background: #1E2D3D !important;
+            display: flex !important; align-items: center !important;
+            justify-content: center !important;
+            min-height: 100vh !important; text-align: center !important;
+            padding: 48px !important; margin: 0 !important;
+        }
+        body::before {
+            content: "SOLUM está optimizado para pantallas de escritorio.\\A Por favor accede desde una computadora.";
+            white-space: pre;
+            color: #E8EDF4;
+            font-family: 'Inter', -apple-system, sans-serif;
+            font-size: 15px; line-height: 1.7; font-weight: 500;
+        }
+    }
+
     /* Ocultar "Press Enter to apply" globalmente */
     [data-testid="InputInstructions"] {
         display: none !important;
@@ -1707,6 +1748,16 @@ st.markdown("""
         font-size: 13px !important;
         font-weight: 500 !important;
         padding: 8px 12px !important;
+        transition: border-color 0.15s ease !important;
+    }
+    section[data-testid="stSidebar"] textarea:focus {
+        border-color: #475569 !important;
+        outline: none !important;
+    }
+    section[data-testid="stSidebar"] [data-baseweb="input"]:focus-within,
+    section[data-testid="stSidebar"] [data-baseweb="base-input"]:focus-within {
+        box-shadow: 0 0 0 2px rgba(71,85,105,0.20) !important;
+        transition: box-shadow 0.15s ease !important;
     }
     section[data-testid="stSidebar"] input::placeholder,
     section[data-testid="stSidebar"] textarea::placeholder {
