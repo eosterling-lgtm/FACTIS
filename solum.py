@@ -1585,6 +1585,41 @@ def _get_users() -> dict:
     except Exception:
         return {}
 
+# ── Brute-force tracker server-side (module-level, persiste entre sesiones) ──
+# Dict: { username_lower: {"intentos": int, "bloqueado_hasta": float} }
+# Persiste mientras el proceso Streamlit esté corriendo — inmune a nuevas tabs/sesiones.
+_BF_TRACKER: dict[str, dict] = {}
+_BF_MAX      = 5      # intentos antes de bloqueo
+_BF_BLOQUEO  = 300    # segundos de bloqueo
+
+def _bf_check(username: str) -> tuple[bool, int]:
+    """Retorna (bloqueado: bool, segundos_restantes: int)."""
+    entry = _BF_TRACKER.get(username.lower(), {})
+    hasta = entry.get("bloqueado_hasta", 0)
+    if hasta > time.time():
+        return True, int(hasta - time.time())
+    return False, 0
+
+def _bf_fallo(username: str) -> None:
+    """Registra intento fallido. Bloquea si supera el máximo."""
+    key = username.lower()
+    entry = _BF_TRACKER.setdefault(key, {"intentos": 0, "bloqueado_hasta": 0})
+    # Resetear si el bloqueo anterior ya expiró
+    if entry["bloqueado_hasta"] < time.time():
+        entry["intentos"] = 0
+    entry["intentos"] += 1
+    if entry["intentos"] >= _BF_MAX:
+        entry["bloqueado_hasta"] = time.time() + _BF_BLOQUEO
+        entry["intentos"] = 0
+        _log.warning("brute_force: usuario '%s' bloqueado %ds", key, _BF_BLOQUEO)
+    else:
+        _log.warning("brute_force: fallo %d/%d para usuario '%s'",
+                     entry["intentos"], _BF_MAX, key)
+
+def _bf_exito(username: str) -> None:
+    """Limpia el contador tras login exitoso."""
+    _BF_TRACKER.pop(username.lower(), None)
+
 def _show_login() -> None:
     _yr  = datetime.date.today().year
     _logo_svg = (
@@ -1704,40 +1739,38 @@ def _show_login() -> None:
         password = st.text_input("Contraseña", type="password", placeholder="••••••••", key="_login_pw")
         submitted = st.form_submit_button("INGRESAR", use_container_width=True)
 
-    # Brute force protection
-
-    _MAX_INTENTOS   = 5
-    _BLOQUEO_SEG    = 300
-    _bloqueado_hasta = st.session_state.get("_login_bloqueado_hasta", 0)
-    if _bloqueado_hasta > time.time():
-        _seg_restantes = int(_bloqueado_hasta - time.time())
-        st.error(f"Demasiados intentos fallidos. Intente en {_seg_restantes} segundos.")
-        st.stop()
+    # Brute force protection — server-side por username (inmune a nuevas tabs/sesiones)
+    _uname_key = username.strip().lower() if username else ""
+    if _uname_key:
+        _bf_bloqueado, _bf_seg = _bf_check(_uname_key)
+        if _bf_bloqueado:
+            st.error(f"Cuenta bloqueada por demasiados intentos. Intente en {_bf_seg} segundos.")
+            st.stop()
 
     if submitted:
         users = _get_users()
-        user_cfg = users.get(username.strip().lower())
+        _uname_clean = username.strip().lower()
+        user_cfg = users.get(_uname_clean)
         if user_cfg and _verify_pw(user_cfg.get("password", ""), password):
+            _bf_exito(_uname_clean)
             st.session_state["_authenticated"] = True
             st.session_state["_user_name"]     = user_cfg.get("name", username)
             st.session_state["_user_role"]     = user_cfg.get("role", "advisor")
-            st.session_state["_username"]      = username.strip().lower()
-            st.session_state.pop("_login_intentos", None)
-            st.session_state.pop("_login_bloqueado_hasta", None)
+            st.session_state["_username"]      = _uname_clean
             for _k in ("_login_pw", "_login_user"):
                 st.session_state.pop(_k, None)
             st.session_state["_auth_loading"] = True
             st.session_state["_show_welcome"] = True
             st.rerun()
         else:
-            _intentos = st.session_state.get("_login_intentos", 0) + 1
-            st.session_state["_login_intentos"] = _intentos
-            if _intentos >= _MAX_INTENTOS:
-                st.session_state["_login_bloqueado_hasta"] = time.time() + _BLOQUEO_SEG
-                st.session_state.pop("_login_intentos", None)
-                st.error(f"Cuenta bloqueada por {_BLOQUEO_SEG // 60} minutos tras {_MAX_INTENTOS} intentos fallidos.")
+            _bf_fallo(_uname_clean)
+            _, _bf_seg2 = _bf_check(_uname_clean)
+            if _bf_seg2 > 0:
+                st.error(f"Cuenta bloqueada por {_BF_BLOQUEO // 60} minutos tras {_BF_MAX} intentos fallidos.")
             else:
-                st.error(f"Usuario o contraseña incorrectos. Intentos restantes: {_MAX_INTENTOS - _intentos}")
+                entry = _BF_TRACKER.get(_uname_clean, {})
+                _intentos_act = entry.get("intentos", 0)
+                st.error(f"Usuario o contraseña incorrectos. Intentos restantes: {_BF_MAX - _intentos_act}")
 
     st.markdown(
         f'<div style="text-align:center;margin-top:32px;padding-top:20px;'
@@ -26296,22 +26329,28 @@ elif tipo_op == "Portfolio":
                                 'margin-left:6px;vertical-align:middle;">BORRADOR LISTO</span>'
                                 if _tiene_borrador else ""
                             )
+                            _al_titulo_esc  = _html_esc.escape(_al.get("titulo","")[:120])
+                            _al_entidad_esc = _html_esc.escape(_al.get("entidad","")[:60])
+                            _al_tipo_esc    = _html_esc.escape(_al.get("tipo_norma","")[:40])
+                            _al_cats_esc    = _html_esc.escape(_cats)
+                            _al_codigo_esc  = _html_esc.escape(_al.get("codigo_propuesto",""))
+                            _al_resumen_esc = _html_esc.escape(_al.get("resumen",""))
+                            _al_fecha_esc   = _html_esc.escape((_al.get("fecha_publicacion") or "")[:10])
                             st.markdown(
                                 f'<div style="border-left:3px solid {_rel_color};padding:8px 12px;'
                                 f'margin-bottom:8px;background:rgba(255,255,255,0.02);border-radius:0 6px 6px 0;">'
                                 f'<div style="font-size:12px;font-weight:600;color:#C8D8E8;">'
-                                f'{_rel_icon} {_al.get("titulo","")[:120]}{_borr_badge}</div>'
+                                f'{_rel_icon} {_al_titulo_esc}{_borr_badge}</div>'
                                 f'<div style="font-size:10px;color:#8AA8C0;margin-top:3px;">'
-                                f'{_al.get("entidad","")[:60]} · {_al.get("tipo_norma","")[:40]} · '
-                                f'{(_al.get("fecha_publicacion") or "")[:10]}</div>'
+                                f'{_al_entidad_esc} · {_al_tipo_esc} · {_al_fecha_esc}</div>'
                                 f'<div style="font-size:10px;color:#6B8098;margin-top:2px;">'
-                                f'Categorías: {_cats}'
+                                f'Categorías: {_al_cats_esc}'
                                 + (f' · Código: <code style="background:rgba(255,255,255,0.08);'
-                                   f'padding:0 4px;border-radius:3px;">{_al["codigo_propuesto"]}</code>'
+                                   f'padding:0 4px;border-radius:3px;">{_al_codigo_esc}</code>'
                                    if _al.get("codigo_propuesto") else "")
                                 + '</div>'
                                 + (f'<div style="font-size:11px;color:#A8B8C8;margin-top:4px;">'
-                                   f'{_al.get("resumen","")}</div>' if _al.get("resumen") else "")
+                                   f'{_al_resumen_esc}</div>' if _al.get("resumen") else "")
                                 + '</div>', unsafe_allow_html=True)
 
                             # Borrador: fetch on-demand solo al abrir el expander

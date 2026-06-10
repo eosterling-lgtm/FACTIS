@@ -9,6 +9,7 @@ jobs:
   monitorear:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    if: github.ref == 'refs/heads/main'
 
     steps:
       - name: Checkout
@@ -26,7 +27,10 @@ jobs:
         env:
           ANTHROPIC_API_KEY:  ${{ secrets.ANTHROPIC_API_KEY }}
           SUPABASE_URL:        ${{ secrets.SUPABASE_URL }}
-          SUPABASE_KEY:        ${{ secrets.SUPABASE_KEY }}
+          # SUPABASE_MONITOR_KEY: clave restringida (solo INSERT alertas_normativas + SELECT normativas)
+          # Crear en: Supabase Dashboard → Settings → API → Service Role Keys → New Key
+          # Si no existe, cae al anon key (solo lectura pública)
+          SUPABASE_KEY:        ${{ secrets.SUPABASE_MONITOR_KEY || secrets.SUPABASE_KEY }}
           GITHUB_TOKEN:        ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY:   ${{ github.repository }}
         run: python .github/scripts/monitor_normativas.py
