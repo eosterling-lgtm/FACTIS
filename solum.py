@@ -979,6 +979,14 @@ def calcular_industrial(inp: dict) -> dict:
     # Renta base sobre área techada (nave arrendable)
     renta_m2_mes = inp.get("renta_m2_mes", 0)
     vacancia_pct_ind = max(0.0, min(30.0, inp.get("vacancia_pct", 0.0))) / 100
+    # vacancy_schedule: dict opcional de vacancia por año {1: 0.30, 2: 0.15}
+    # Si no se provee, usa vacancia fija para todos los años (comportamiento previo)
+    _vac_sched_raw = inp.get("vacancy_schedule") or {}
+    _vac_sched = {int(k): max(0.0, min(1.0, float(v))) for k, v in _vac_sched_raw.items()} if _vac_sched_raw else {}
+
+    def _vacancia_ano(yr: int) -> float:
+        return _vac_sched.get(yr, vacancia_pct_ind)
+
     renta_total_mes = renta_m2_mes * area_nave * (1 - vacancia_pct_ind)
     gastos_operacion = renta_total_mes * 12 * 0.08
     renta_neta_anual = max(renta_total_mes * 12 - gastos_operacion, 0)
@@ -997,11 +1005,13 @@ def calcular_industrial(inp: dict) -> dict:
     _es_plurianual_ind   = tipo_contrato_ind != "Anual" and ajuste_anual_ind_pct > 0
 
     def _renta_neta_ind(yr):
-        """Renta neta anual del año yr con o sin ajuste contractual."""
+        """Renta neta anual del año yr con ajuste contractual y vacancia variable."""
+        _vac_yr = _vacancia_ano(yr)
+        _renta_base_mes = renta_m2_mes * area_nave * (1 - _vac_yr)
         if not _es_plurianual_ind or yr < inicio_ajuste_ind:
-            return renta_neta_anual
+            return max(_renta_base_mes * 12 * (1 - 0.08), 0)
         factor = (1 + ajuste_anual_ind_pct) ** (yr - inicio_ajuste_ind + 1)
-        return max(renta_total_mes * factor * 12 * (1 - 0.08), 0)
+        return max(_renta_base_mes * factor * 12 * (1 - 0.08), 0)
 
     # Proyecciones año 3 y 5 (renta mensual/m² y yield)
     _rn3 = _renta_neta_ind(3)
@@ -1109,6 +1119,15 @@ def calcular_industrial(inp: dict) -> dict:
         "plazo_const":             plazo_const,
         "renta_m2_mes": renta_m2_mes, "renta_total_mes": renta_total_mes,
         "vacancia_pct": round(vacancia_pct_ind * 100, 1),
+        "vacancy_schedule": {str(k): round(v * 100, 1) for k, v in _vac_sched.items()},
+        "flujo_anual_detalle": [
+            {
+                "ano": yr,
+                "vacancia_pct": round(_vacancia_ano(yr) * 100, 1),
+                "renta_neta": round(_renta_neta_ind(yr)),
+            }
+            for yr in range(1, 11)
+        ] if uso == "Inversión" and renta_m2_mes > 0 else [],
         "gastos_operacion": gastos_operacion, "renta_neta_anual": renta_neta_anual,
         "yield_bruto": yield_bruto, "yield_neto": yield_neto,
         "payback_anos": payback_anos, "flujo_mensual": flujo_mensual,
@@ -15893,6 +15912,7 @@ with st.sidebar:
         ind_ajuste_pct   = 0.0
         ind_inicio_ajuste = 2
         ind_vacancia_pct  = 0
+        ind_vacancy_schedule = {}
         if ind_uso == "Inversión":
             ind_renta = st.number_input(
                 "Renta de mercado (USD/m²/mes)",
@@ -15902,6 +15922,39 @@ with st.sidebar:
                 int(st.session_state.get("ind_vacancia_pct", 0)),
                 5, key="ind_vacancia_pct",
                 help="% de tiempo sin arrendatario. 0% = ocupación plena. La banca en Lima modela 10–15% para análisis conservador.")
+            with st.expander("📈 Vacancia por fases (ramp-up)", expanded=False):
+                st.caption(
+                    "Define vacancia diferente por año para modelar la estabilización del activo. "
+                    "Año 1 típico: 25-40%. Año 2: 10-15%. Año 3+: vacancia estabilizada del slider."
+                )
+                _vac_col1, _vac_col2, _vac_col3 = st.columns(3)
+                _vac_yr1 = _vac_col1.number_input(
+                    "Año 1 (%)", min_value=0, max_value=100,
+                    value=int(st.session_state.get("ind_vac_yr1", ind_vacancia_pct)),
+                    step=5, key="ind_vac_yr1"
+                )
+                _vac_yr2 = _vac_col2.number_input(
+                    "Año 2 (%)", min_value=0, max_value=100,
+                    value=int(st.session_state.get("ind_vac_yr2", max(0, ind_vacancia_pct - 10))),
+                    step=5, key="ind_vac_yr2"
+                )
+                _vac_yr3 = _vac_col3.number_input(
+                    "Año 3+ (%)", min_value=0, max_value=100,
+                    value=int(st.session_state.get("ind_vac_yr3", ind_vacancia_pct)),
+                    step=5, key="ind_vac_yr3"
+                )
+                _use_schedule = (_vac_yr1 != ind_vacancia_pct or _vac_yr2 != ind_vacancia_pct)
+                if _use_schedule:
+                    ind_vacancy_schedule = {1: _vac_yr1 / 100, 2: _vac_yr2 / 100}
+                    if _vac_yr3 != ind_vacancia_pct:
+                        for _y in range(3, 11):
+                            ind_vacancy_schedule[_y] = _vac_yr3 / 100
+                    st.info(
+                        f"Flujo con ramp-up: Año 1={_vac_yr1}% · Año 2={_vac_yr2}% · "
+                        f"Año 3+={_vac_yr3 if _vac_yr3 != ind_vacancia_pct else ind_vacancia_pct}%"
+                    )
+                else:
+                    ind_vacancy_schedule = {}
             ind_periodo_anos = st.number_input(
                 "Período de ocupación del inquilino (años)",
                 min_value=1, max_value=30,
@@ -17361,6 +17414,7 @@ if tipo_op == "Proyecto Logístico / Industrial" and run_industrial:
             "include_alcabala":    ind_alcabala,
             "renta_m2_mes":        ind_renta,
             "vacancia_pct":        ind_vacancia_pct,
+            "vacancy_schedule":    ind_vacancy_schedule,
             "uso":                 ind_uso,
             "tipo_contrato":       ind_tipo_contrato,
             "ajuste_anual_pct":    ind_ajuste_pct,
@@ -22886,6 +22940,17 @@ elif tipo_op == "Proyecto Logístico / Industrial":
                     f'</div>',
                     unsafe_allow_html=True
                 )
+
+                # ── Ramp-up de vacancia: detalle por año ──────────────────────
+                if r.get("flujo_anual_detalle") and any(
+                    d["vacancia_pct"] != r.get("vacancia_pct", 0)
+                    for d in r["flujo_anual_detalle"]
+                ):
+                    with st.expander("📊 Flujo por año con ramp-up de vacancia", expanded=False):
+                        _df_vac = pd.DataFrame(r["flujo_anual_detalle"])
+                        _df_vac.columns = ["Año", "Vacancia %", "Renta Neta Anual (USD)"]
+                        _df_vac["Renta Neta Anual (USD)"] = _df_vac["Renta Neta Anual (USD)"].apply(lambda x: f"${x:,.0f}")
+                        st.dataframe(_df_vac, use_container_width=True, hide_index=True)
 
                 if (r.get('cuota_mensual') or 0) > 0:
                     st.markdown('<div class="section-title">Flujo con Financiamiento</div>', unsafe_allow_html=True)
