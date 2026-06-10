@@ -18446,10 +18446,62 @@ elif tipo_op == "Proyecto Inmobiliario":
                 else:
                     _ag_sotan  = int(c.get("num_sotanos") or 0)
 
+                # ── Modo geometría: tabular (default) o DXF ──────────────
+                _cab_geo_modo = st.radio(
+                    "Fuente de geometría del lote",
+                    ["Desde parámetros (automático)", "Adjuntar plano DXF"],
+                    horizontal=True, key="cab_geo_modo",
+                    help="El modo automático usa frente/fondo extraídos del certificado. DXF permite cargar el levantamiento topográfico real."
+                )
+
+                _cab_poly_lote_override = st.session_state.get("cab_geo_poly_lote")
+
+                if _cab_geo_modo == "Adjuntar plano DXF":
+                    _cab_dxf_file = st.file_uploader(
+                        "Plano perimétrico (.dxf)",
+                        type=["dxf"], key="cab_geo_dxf_file",
+                        help="Exporta desde AutoCAD: Archivo → Guardar como → AutoCAD DXF (*.dxf). SOLUM extrae la LWPOLYLINE o POLYLINE más grande."
+                    )
+                    if _cab_dxf_file:
+                        if _SHAPELY_OK and _EZDXF_OK:
+                            import io as _cio
+                            _cab_poly_parsed = _geo_poligono_dxf(
+                                _cio.TextIOWrapper(_cio.BytesIO(_cab_dxf_file.read()),
+                                                  encoding="utf-8", errors="ignore")
+                            )
+                            if _cab_poly_parsed:
+                                st.session_state["cab_geo_poly_lote"] = _cab_poly_parsed
+                                _cab_poly_lote_override = _cab_poly_parsed
+                                st.success(
+                                    f"✓ Polígono extraído del DXF — "
+                                    f"área geométrica: **{_cab_poly_parsed.area:,.1f} m²** "
+                                    f"(declarada en certificado: {_ag_area:,.0f} m²)"
+                                )
+                                if abs(_cab_poly_parsed.area - _ag_area) / max(_ag_area, 1) > 0.05:
+                                    st.warning(
+                                        f"⚠ Diferencia de área >5% entre DXF ({_cab_poly_parsed.area:,.0f} m²) "
+                                        f"y certificado ({_ag_area:,.0f} m²). "
+                                        "Verificar escala del plano o usar el área del certificado para cálculos normativos."
+                                    )
+                            else:
+                                st.error(
+                                    "No se encontró perímetro en el DXF. "
+                                    "Verifica que el archivo tenga una LWPOLYLINE o POLYLINE cerrando el lote."
+                                )
+                        else:
+                            st.info("ezdxf / shapely no disponibles — usando geometría tabular.")
+                else:
+                    if st.session_state.get("cab_geo_poly_lote"):
+                        st.session_state.pop("cab_geo_poly_lote", None)
+                        st.session_state.pop("cab_geo_dxf_file", None)
+
                 # ── Massing 3D automático ──────────────────────────────────────
                 _unids_3d = c.get("unidades") or []
                 if _SHAPELY_OK and _ag_frente > 0:
-                    _poly_ag = _geo_poligono_tabular(_ag_frente, _ag_fondo, _ag_lado, _ag_lado)
+                    if _cab_poly_lote_override and not _cab_poly_lote_override.is_empty:
+                        _poly_ag = _cab_poly_lote_override
+                    else:
+                        _poly_ag = _geo_poligono_tabular(_ag_frente, _ag_fondo, _ag_lado, _ag_lado)
                     _poly_hue = _geo_aplicar_retiros(_poly_ag, _ag_ret_f, _ag_ret_l, _ag_ret_p)
                     _fig_3d = _gen_massing_3d_solid(
                         _poly_ag, _poly_hue, _ag_pisos, _ag_sotan, 2.65,
