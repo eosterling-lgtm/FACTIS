@@ -1,5 +1,104 @@
 # Conocimiento Retail Lima — Base Completa SOLUM
-## Fuentes: CBRE, JLL, Cushman & Wakefield, ACCEP, Osterling Advisory — 2025-2026
+## Fuentes: CBRE, JLL, Cushman & Wakefield, ACCEP, Binswanger, Osterling Advisory — 2025-2026
+
+---
+
+## 0. MERCADO DE MALLS LIMA — REPORTE BINSWANGER MAYO 2026
+
+### Inventario y estructura del mercado
+- **40 centros comerciales** en operación en Lima Metropolitana
+- **GLA total: ~2,000,000 m²** de área arrendable
+- **Vacancia global: 4.3%** — saludable, mercado estable
+- **En construcción: >160,000 m²** (75%+ son proyectos nuevos)
+
+### Distribución geográfica de malls
+| Zona | N° de malls |
+|---|---|
+| Lima Top (Miraflores, San Isidro, Surco) | 10 |
+| Lima Este (Ate, SJL, La Molina) | 9 |
+| Lima Moderna + Lima Norte | 6 c/u |
+| Callao | 3 |
+| Lima Centro | 1 |
+
+### Clasificación por formato y vacancia
+| Formato | GLA mínimo | Tiendas ancla | Vacancia | Ejemplos Lima |
+|---|---|---|---|---|
+| Super Regional | >70,000 m² | 3–8 | 5.2% | Jockey Plaza (170k m²), Plaza Norte, MegaPlaza, Plaza San Miguel |
+| Regional | 35,000–70,000 m² | hasta 3 | 2.6% | Mallplaza Angamos, La Rambla San Borja, Mall Aventura SJL |
+| Comunitario / Vecinal | 10,000–35,000 m² | 1–2 | 4.4% | Cenco La Molina, Royal Plaza, Real Plaza Villa María |
+| Estilo de Vida | Variable | experiencia | **1.8%** (menor vacancia) | Larcomar, Parque La Molina, El Polo |
+
+**Nota Cenco La Molina:** vacancia comunitaria elevada por ampliación de 19,000 m² adicionales (2ª etapa), en proceso de absorción.
+
+### Rentas en malls Lima (solo componente fijo, S/./m²/mes — mayo 2026)
+| Formato | Rango S/./m²/mes | USD equiv. (TC 3.45) |
+|---|---|---|
+| Super Regional | S/110 – S/375 | $32 – $109 |
+| Regional | S/80 – S/270 | $23 – $78 |
+| Comunitario / Vecinal | S/60 – S/160 | $17 – $46 |
+| Estilo de vida | S/80 – S/200 | $23 – $58 |
+
+**Ajuste 2024→2025:** +3% a +4% en rentas fijas (impulsado por mayor ocupación y contexto inflacionario).  
+**Outlook 2025→2026:** comportamiento más estable por cautela electoral (elecciones presidenciales 2026). Nuevo ajuste si ocurre: rango similar ~3-4%.
+
+**Componentes de costo total para el tenant (además de renta fija):**
+- Renta variable (% de ventas)
+- Gastos de mantenimiento
+- Impuestos
+- Fondo de promoción (campañas marketing del mall)
+
+### Mix comercial en malls Lima (% de tiendas)
+| Rubro | Participación |
+|---|---|
+| Prendas de vestir y accesorios | 39% |
+| Restaurantes y cadenas de comida | 21% |
+| Belleza y cosmética | 9% |
+| Otros | 31% |
+
+### Tendencias clave 2026
+- **Cadenas chinas (Miniso, Yoyoso):** expansión agresiva, locales más grandes que el formato típico
+- **Formatos outlet:** crecimiento en ropa deportiva, calzado, accesorios — captan consumidor price-sensitive
+- **Retailers combinando tienda regular + outlet:** estrategia dual para captar distintos perfiles
+- **Cenco SJL (en construcción):** ~80,000 m² GLA — uno de los desarrollos más grandes en ejecución
+
+---
+
+## 0.B. LO QUE BUSCAN LAS MARCAS EN UN LOCAL COMERCIAL (Brokerage Lima, feb 2026)
+**Fuente:** Roberto Torres, Brokerage & Propiedades, febrero 2026
+
+### Formato ideal por demanda de mercado
+- **Tamaño preferido:** 100–250 m²
+- **Frente mínimo:** 6–7 ml (mayor frontis = mejor exhibición y posicionamiento)
+- **Layout:** espacios amplios, pocas divisiones internas, eficientes
+- **Altura:** estándar, salvo conceptos que requieran mezanine
+
+### Especificaciones técnicas que aceleran cierre
+- Servicios básicos activos (luz y agua)
+- Contadores individuales de consumo
+- Zonificación comercial compatible (CZ, CS, CE)
+- Acabados neutros: cemento pulido + paredes blancas (personalización sin sobrecosto)
+
+### Requisitos adicionales para restaurantes
+- Viabilidad para ductos de extracción
+- Sin restricciones estructurales
+- Mínima interferencia con ocupantes de niveles superiores
+- Estacionamiento en frontis o cercano
+
+### Condiciones contractuales de mercado (referencial Lima 2026)
+| Variable | Marca consolidada | Operador en expansión inicial |
+|---|---|---|
+| Plazo | 5–10 años | 3–5 años |
+| Garantía | 2 meses | 2 meses |
+| Adelanto | 1 mes | 1 mes |
+| Incremento anual | 2–3% o indexado IPC | 2–3% |
+| Período de gracia | 1–2 meses (ampliable según inversión) | 1 mes |
+
+### Drivers de decisión de ubicación según tipo de negocio
+| Tipo | Driver principal |
+|---|---|
+| Negocios de impulso (conveniencia, fast food) | Flujo peatonal y vehicular alto, visibilidad inmediata |
+| Negocios de destino (mueblerías, bicicletas, electrónico) | Accesibilidad, estacionamiento, reconocimiento del punto |
+| Clusters (automotriz, cosmético, joyería) | Concentración de marcas del rubro — cliente ya segmentado |
 
 ---
 
