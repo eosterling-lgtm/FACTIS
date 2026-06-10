@@ -11233,7 +11233,8 @@ def generar_resumen_ejecutivo_ia(tipo: str, datos: dict) -> dict:
         )
     elif "oficin" in tipo_label.lower():
         _bench_ctx = (
-            f"\n\nBENCHMARKS OFICINAS LIMA 2025:\n{_load_norm('mercado_oficinas_lima_2025.md')[:2000]}"
+            f"\n\nBENCHMARKS OFICINAS LIMA 2026 (granular por clase, corredor, cap rate):\n{_load_norm('benchmarks_oficinas_lima_2026.md')[:3500]}"
+            f"\n\nCONOCIMIENTO OFICINAS LIMA (contexto estratégico):\n{_load_norm('CONOCIMIENTO_OFICINAS_SOLUM.md')[:2000]}"
             f"\n\nRNE A.080 — OFICINAS (condiciones mínimas, estacionamientos, dotaciones):\n{_load_norm('rne_a080_oficinas_full.txt')}"
         )
     else:
