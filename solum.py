@@ -13439,6 +13439,181 @@ def generar_informe_oficinas_pdf(inp: dict, fin: dict, fecha: str) -> bytes:
     return _html_to_pdf(html)
 
 
+def generar_informe_retail_pdf(r: dict, fecha: str) -> bytes:
+    html = _build_retail_html(r, fecha)
+    return _html_to_pdf(html)
+
+
+def _build_retail_html(r: dict, fecha: str) -> str:
+    def _e(s):
+        return _html_esc.escape(str(s or ""))
+
+    def _fmt(v):
+        v = float(v or 0)
+        if abs(v) >= 1_000_000:
+            return f"${v/1_000_000:.2f}M"
+        return f"${v:,.0f}"
+
+    _ISO_36 = (
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="237 -2 411 837" '
+        'style="height:36px;display:block;margin-bottom:4px;">'
+        '<rect fill="#1E2D3D" x="239.53" y="660.47" width="17.59" height="172.62" rx="8.79"/>'
+        '<rect fill="#1E2D3D" x="289.66" y="513.49" width="13.7"  height="318.98" rx="6.85"/>'
+        '<rect fill="#1E2D3D" x="338.93" y="368.79" width="13.7"  height="463.69" rx="6.85"/>'
+        '<rect fill="#1E2D3D" x="389.88" y="442.34" width="13.7"  height="390.14" rx="6.85"/>'
+        '<rect fill="#1E2D3D" x="435.62" y="583.81" width="13.7"  height="248.66" rx="6.85"/>'
+        '<rect fill="#1E2D3D" x="485.6"  y="512.66" width="13.7"  height="319.81" rx="6.85"/>'
+        '<rect fill="#1E2D3D" x="534.3"  y="367.3"  width="13.7"  height="465.17" rx="6.85"/>'
+        '<rect fill="#1E2D3D" x="583.52" y="222.58" width="13.7"  height="609.89" rx="6.85"/>'
+        '<rect fill="#1E2D3D" x="632.05" y="0"      width="13.7"  height="832.47" rx="6.85"/>'
+        '</svg>'
+    )
+
+    modo        = _e(r.get("modo", "Inversión"))
+    formato     = _e(r.get("formato", "Local Comercial"))
+    area_gla    = float(r.get("area_gla") or 0)
+    area_total  = float(r.get("area_total") or r.get("area_gla") or 0)
+    noi         = float(r.get("noi") or 0)
+    yield_bruto = float(r.get("yield_bruto") or 0)
+    yield_neto  = float(r.get("yield_neto") or 0)
+    dscr        = float(r.get("dscr") or 0)
+    irr         = r.get("irr_anual")
+    payback     = r.get("payback_anos")
+    costo_total = float(r.get("costo_total") or 0)
+    cap_rate_m  = float(r.get("cap_rate_mercado_pct") or 8.0)
+    val_cap     = float(r.get("valor_por_cap_rate") or 0)
+    renta_m2    = float(r.get("renta_m2_mes") or 0)
+    vacancia    = float(r.get("vacancia_pct") or 0)
+    cuota       = float(r.get("cuota_mensual") or 0)
+    capital     = float(r.get("capital_propio") or 0)
+    eficiencia  = float(r.get("eficiencia_gla") or 0)
+    ocr         = float(r.get("ocr_referencial_pct") or 10.0)
+    ventas_impl = float(r.get("ventas_implicitas_m2_ano") or 0)
+
+    _NAVY = "#1E2D3D"
+    _GOLD = "#C9A96E"
+    _BRD  = "#E2E8F0"
+    _LBG  = "#F7F9FC"
+
+    def _kpi(label, val, sub="", accent=False):
+        _border = _GOLD if accent else "#475569"
+        _sub_h = f'<div style="font-size:10px;color:#6B7A8D;margin-top:2px;">{sub}</div>' if sub else ""
+        return (
+            f'<div style="flex:1;background:#FFF;border-radius:6px;padding:14px 12px;'
+            f'border-top:3px solid {_border};">'
+            f'<div style="font-size:10px;color:#9AACBA;letter-spacing:2px;text-transform:uppercase;'
+            f'font-weight:600;margin-bottom:6px;">{label}</div>'
+            f'<div style="font-size:20px;font-weight:700;color:{_NAVY};">{val}</div>'
+            f'{_sub_h}</div>'
+        )
+
+    def _row(label, val, bold=False):
+        _fw = "700" if bold else "400"
+        return (
+            f'<tr><td style="padding:6px 10px;color:#475569;font-size:12px;">{label}</td>'
+            f'<td style="padding:6px 10px;text-align:right;font-weight:{_fw};font-size:12px;'
+            f'color:{_NAVY};">{val}</td></tr>'
+        )
+
+    if modo == "Arrendatario":
+        _kpis = "".join([
+            _kpi("Renta mensual", f"${renta_m2:.1f}/m²/mes"),
+            _kpi("GLA arrendado", f"{area_gla:,.0f} m²"),
+            _kpi("Renta total mes", f"${renta_m2 * area_gla:,.0f}"),
+            _kpi("OCR referencial", f"{ocr:.0f}%", sub=f"Ventas impl. ${ventas_impl:,.0f}/m²/año"),
+        ])
+        _fin_rows = "".join([
+            _row("Renta mensual total", f"${renta_m2 * area_gla:,.0f}"),
+            _row("Ventas implícitas/m²/año", f"${ventas_impl:,.0f}"),
+            _row("OCR referencial", f"{ocr:.0f}%"),
+        ])
+    else:
+        _kpis = "".join([
+            _kpi("NOI anual", _fmt(noi), accent=True),
+            _kpi("Yield Bruto", f"{yield_bruto:.1f}%", sub=f"Yield Neto {yield_neto:.1f}%"),
+            _kpi("Cap Rate mercado", f"{cap_rate_m:.1f}%", sub=f"Valor por cap {_fmt(val_cap)}"),
+            _kpi("DSCR", f"{dscr:.2f}x" if dscr else "N/A", sub="≥1.25x bancable"),
+        ])
+        _fin_rows = "".join([
+            _row("Inversión total", _fmt(costo_total), bold=True),
+            _row("Capital propio", _fmt(capital)),
+            _row("Cuota mensual combinada", f"${cuota:,.0f}/mes"),
+            _row("Yield bruto", f"{yield_bruto:.2f}%"),
+            _row("Yield neto (cap rate propio)", f"{yield_neto:.2f}%"),
+            _row("Valor por cap rate mercado", _fmt(val_cap)),
+            _row("TIR 10 años (equity)", f"{irr:.1f}%" if irr is not None else "N/A"),
+            _row("Payback estimado", f"{payback:.1f} años" if payback else "N/A"),
+        ])
+
+    html = f"""<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<style>
+  * {{ box-sizing: border-box; margin: 0; padding: 0; }}
+  body {{ font-family: 'Helvetica Neue', Arial, sans-serif; background: #FFF; color: {_NAVY}; font-size: 12px; }}
+  .page {{ max-width: 800px; margin: 0 auto; padding: 32px; }}
+  table {{ width: 100%; border-collapse: collapse; }}
+  tr:nth-child(even) {{ background: {_LBG}; }}
+  .section-title {{ font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+    font-weight: 700; color: #9AACBA; margin: 22px 0 10px; }}
+  .divider {{ border: none; border-top: 1px solid {_BRD}; margin: 18px 0; }}
+  .footer {{ font-size: 9px; color: #9AACBA; text-align: center; margin-top: 30px;
+    border-top: 1px solid {_BRD}; padding-top: 12px; }}
+</style>
+</head>
+<body>
+<div class="page">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;">
+    <div>
+      {_ISO_36}
+      <div style="font-size:9px;color:#9AACBA;letter-spacing:3px;text-transform:uppercase;margin-bottom:4px;">
+        ANÁLISIS RETAIL / LOCAL COMERCIAL
+      </div>
+      <div style="font-size:22px;font-weight:700;letter-spacing:-0.5px;">{formato}</div>
+      <div style="font-size:12px;color:#475569;margin-top:4px;">
+        Modo: <strong>{modo}</strong> · GLA: <strong>{area_gla:,.0f} m²</strong> ·
+        Eficiencia: <strong>{eficiencia:.1f}%</strong>
+      </div>
+    </div>
+    <div style="text-align:right;font-size:10px;color:#9AACBA;">
+      <div style="font-weight:700;font-size:14px;color:{_NAVY};">SOLUM</div>
+      <div>Osterling Advisory</div>
+      <div>{_e(fecha)}</div>
+    </div>
+  </div>
+  <hr class="divider">
+  <div class="section-title">Indicadores Clave</div>
+  <div style="display:flex;gap:10px;margin-bottom:20px;">{_kpis}</div>
+  <div class="section-title">Estructura Financiera</div>
+  <table>
+    {_row("Área GLA", f"{{area_gla:,.0f}} m²")}
+    {_row("Área total construida", f"{{area_total:,.0f}} m²")}
+    {_row("Eficiencia GLA/Total", f"{{eficiencia:.1f}}%")}
+    {_row("Renta unitaria", f"${{renta_m2:.2f}}/m²/mes")}
+    {_row("Vacancia aplicada", f"{{vacancia:.1f}}%")}
+    {_row("Renta bruta efectiva anual", _fmt(float(r.get("renta_bruta_anual") or 0)))}
+    {_row("Opex anual", _fmt(float(r.get("opex_anual") or 0)))}
+    {_row("NOI anual", _fmt(noi), bold=True)}
+    {_fin_rows}
+  </table>
+  <hr class="divider">
+  <div style="background:{_LBG};border-radius:6px;padding:14px;font-size:11px;
+    color:#475569;line-height:1.7;margin-top:8px;">
+    <strong>Nota metodológica:</strong> Análisis de pre-factibilidad con datos a {_e(fecha)}.
+    Los valores son estimados a partir de datos de mercado Lima 2025-2026.
+    No reemplaza una tasación formal ni un estudio de mercado primario.
+    Tasa de referencia BCRP: 4.25% · TC referencial: S/3.45/USD (BCR Marzo 2026).
+  </div>
+  <div class="footer">
+    SOLUM · Osterling Advisory · {_e(fecha)} · Documento de pre-factibilidad — uso confidencial
+  </div>
+</div>
+</body>
+</html>"""
+    return html
+
+
 def _build_oficinas_html(inp: dict, fin: dict, fecha: str) -> str:
     def _e(s):
         return _html_esc.escape(str(s or ""))
@@ -26374,8 +26549,24 @@ elif tipo_op == "Retail / Local Comercial":
                     f'font-size:13px;color:{NAV};line-height:1.7;">{_narrative}</div>',
                     unsafe_allow_html=True)
                 st.markdown("---")
-                st.button("📄 Descarga PDF (próximamente)", disabled=True, use_container_width=True, key="btn_ret_pdf")
-                st.caption("Exportación PDF disponible en próxima versión.")
+                if st.button("📄 Descargar Informe PDF", key="btn_ret_pdf", use_container_width=True):
+                    with st.spinner("Generando PDF..."):
+                        try:
+                            import datetime as _dt_ret
+                            _ret_fecha = _dt_ret.datetime.now().strftime("%d/%m/%Y")
+                            _ret_pdf_bytes = generar_informe_retail_pdf(
+                                st.session_state.get("retail_result", {}),
+                                _ret_fecha
+                            )
+                            st.download_button(
+                                "⬇ Descargar PDF",
+                                data=_ret_pdf_bytes,
+                                file_name=f"SOLUM_Retail_{_ret_fecha.replace('/', '-')}.pdf",
+                                mime="application/pdf",
+                                key="btn_ret_pdf_dl"
+                            )
+                        except Exception as _e_ret:
+                            st.error(f"Error generando PDF retail: {_e_ret}")
 
 # ═══════════════════════════════════════════════════════
 # MÓDULO 5: PORTFOLIO (renumerado a MÓDULO 6)
