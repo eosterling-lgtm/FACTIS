@@ -4155,11 +4155,22 @@ def _gen_massing_3d_solid(poly_lote, poly_huella, n_pisos: int,
     GREY = "#5A6A7A"
     GAP  = 0.05
 
-    _TIPO_COLOR = {"1D": "#4AB3D9", "2D": "#2A78C8", "3D": "#C8A050", "PH": "#9B59B6"}
+    _TIPO_COLOR = {
+        "1D":     "#4AB3D9",   # azul claro — unidades pequeñas
+        "2D":     "#2A78C8",   # azul medio — unidades estándar
+        "3D":     "#E8833A",   # naranja — unidades premium (diferenciado de azotea)
+        "PH":     "#9B59B6",   # púrpura — penthouse
+        "DUP":    "#7D3C98",   # púrpura oscuro — dúplex último piso
+        "AZ":     "#C8A050",   # dorado — reservado para azotea técnica
+        "AZ_HAB": "#E67E22",   # naranja cálido — azotea habitable (con dúplex)
+    }
     _TIPO_AREA  = {"1D": 50, "2D": 80, "3D": 120, "PH": 160}   # fallback m² estimado
-    _TIPO_SHORT = {"1 Dorm.": "1D", "2 Dorm.": "2D", "3 Dorm.": "3D",
-                   "1D": "1D", "2D": "2D", "3D": "3D",
-                   "Dúplex": "PH", "PH": "PH"}
+    _TIPO_SHORT = {
+        "1 Dorm.": "1D", "2 Dorm.": "2D", "3 Dorm.": "3D",
+        "1D": "1D", "2D": "2D", "3D": "3D",
+        "Dúplex": "DUP", "Duplex": "DUP", "PH": "PH",
+        "Azotea": "AZ_HAB", "Azotea habitable": "AZ_HAB",
+    }
 
     # ── Construir mapa piso → lista de tipologías (una por unidad) ────────
     def _build_floor_cells(unids, n):
@@ -4219,6 +4230,15 @@ def _gen_massing_3d_solid(poly_lote, poly_huella, n_pisos: int,
             hoverinfo=hover,
             hovertemplate=customdata if customdata else None,
         )
+
+    def _tiene_duplex(unids):
+        """True si hay unidades de tipo Dúplex o PH en el proyecto."""
+        if not unids:
+            return False
+        return any(_TIPO_SHORT.get(u.get("tipo", ""), "") in {"DUP", "PH"}
+                   for u in unids)
+
+    _hay_duplex = _tiene_duplex(unidades or [])
 
     traces = []
 
@@ -4317,19 +4337,34 @@ def _gen_massing_3d_solid(poly_lote, poly_huella, n_pisos: int,
             showlegend=False, hoverinfo="skip", name="",
         ))
 
-    # ── Azotea cap ────────────────────────────────────────────────────────
+    # ── Azotea cap — color diferenciado según tipología ───────────────────
     ax_m  = bw * 0.07
     ay_m  = bd * 0.07
     z_az0 = n_pisos * h_piso
-    z_az1 = z_az0 + max(h_piso * 0.45, 1.2)
-    traces.append(_box(hx0+ax_m, hy0+ay_m, hx1-ax_m, hy1-ay_m,
-                       z_az0, z_az1, "#C8A050", opacity=0.90,
-                       name="Azotea", show_leg=True))
+    # Dúplex: azotea más alta (ocupa espacio de un piso completo)
+    # Sin dúplex: azotea técnica delgada
+    _az_h     = h_piso * 0.85 if _hay_duplex else max(h_piso * 0.45, 1.2)
+    z_az1     = z_az0 + _az_h
+    # Color: azotea habitable (dúplex) → naranja cálido; azotea técnica → dorado
+    _az_color = _TIPO_COLOR["AZ_HAB"] if _hay_duplex else _TIPO_COLOR["AZ"]
+    _az_label = "Azotea / Dúplex" if _hay_duplex else "Azotea"
+    # Retranque mayor si hay dúplex (RNE A.020: 2.50m desde fachada)
+    _ret_az   = max(bw * 0.12, 2.5) if _hay_duplex else ax_m
+    _ret_az_y = max(bd * 0.12, 2.5) if _hay_duplex else ay_m
+    traces.append(_box(
+        hx0 + _ret_az, hy0 + _ret_az_y,
+        hx1 - _ret_az, hy1 - _ret_az_y,
+        z_az0, z_az1,
+        _az_color, opacity=0.88,
+        name=_az_label, show_leg=True,
+    ))
     traces.append(go.Scatter3d(
         x=[hx0 - bw * 0.12], y=[lbl_y],
         z=[(z_az0 + z_az1) / 2],
-        mode='text', text=["AZ"],
-        textfont=dict(size=9, color=GOLD, family="Courier New, monospace"),
+        mode='text', text=["DUP" if _hay_duplex else "AZ"],
+        textfont=dict(size=9,
+                      color="#E67E22" if _hay_duplex else GOLD,
+                      family="Courier New, monospace"),
         showlegend=False, hoverinfo="skip", name="",
     ))
 
