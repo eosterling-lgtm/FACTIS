@@ -15943,7 +15943,11 @@ with st.sidebar:
                     value=int(st.session_state.get("ind_vac_yr3", ind_vacancia_pct)),
                     step=5, key="ind_vac_yr3"
                 )
-                _use_schedule = (_vac_yr1 != ind_vacancia_pct or _vac_yr2 != ind_vacancia_pct)
+                _use_schedule = (
+                        _vac_yr1 != ind_vacancia_pct
+                        or _vac_yr2 != ind_vacancia_pct
+                        or _vac_yr3 != ind_vacancia_pct
+                    )
                 if _use_schedule:
                     ind_vacancy_schedule = {1: _vac_yr1 / 100, 2: _vac_yr2 / 100}
                     if _vac_yr3 != ind_vacancia_pct:
