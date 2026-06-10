@@ -6510,6 +6510,14 @@ INSTRUCCIONES:
 9. Si es San Isidro: existe la posibilidad normativa de uso de azotea bajo régimen de propiedad exclusiva del último piso (30% del área utilizable después de retranques). NO lo apliques en el análisis — agrégalo en "beneficios_potenciales" con texto: "Azotea exclusiva último piso (30% área utilizable tras retranques) — Ord. 523-MSI" y accion: "Verificar con Municipalidad de San Isidro antes de incorporar al proyecto".
 10. Calcula depositos_total: número de depósitos/bodegas de almacenamiento del proyecto. En Lima el mercado compra depósitos como adicional, pero no todas las unidades incluyen uno. Usa: 40-50% de total_unidades en distritos premium (San Isidro, Miraflores, Barranco); 25-35% en distritos medios (San Borja, Surco, Jesús María, Magdalena, Lince, La Molina, San Miguel); 10-20% en distritos periféricos (SJL, VES, Santa Anita, La Victoria, Cercado); 0 si el mercado objetivo es económico. Redondea al entero más cercano.
 
+CONTEXTO MACROECONÓMICO VIGENTE (BCR Marzo 2026):
+- PBI Perú 2026 proyectado: +3.2% (revisado al alza). Construcción como sector líder.
+- Inflación: 2.21% (feb.26), proyección 2.4% — dentro del rango meta. Costos de construcción sin presión desbocada.
+- Tasa de referencia BCRP: 4.25% (sin cambio). Tasa hipotecaria bancaria: ~9% (vigente).
+- Tipo de cambio: S/3.453 por USD (13 mar.26). Parámetro app S/3.45 alineado.
+- Crédito hipotecario: +7.1% interanual (ene.26), proyección +8% en 2026 → absorción residencial sostenida.
+- El Niño Costero débil: considerar en proyectos con riesgo hídrico (RNE E.050 suelos).
+
 IMPORTANTE — RESPUESTA CONCISA: Las strings en observaciones, alertas y metodologia deben ser CORTAS (máx 80 caracteres cada una). observaciones: máx 4 items. alertas_normativas: máx 5 items. beneficios_potenciales: máx 4 items. metodologia: 1 oración breve. No repitas información entre campos.
 
 Devuelve SOLO este JSON:
@@ -11190,6 +11198,8 @@ def generar_resumen_ejecutivo_ia(tipo: str, datos: dict) -> dict:
             f"\n\nNORMATIVA LEGAL — SUNARP Y CARGAS:\n{_load_norm("legal_sunarp_predios.md")[:300]}"
         )
 
+    _bcr_ctx_resumen = f"\n\nMACROECONOMÍA PERÚ — BCR MARZO 2026:\n{_load_norm('bcr_reporte_inflacion_marzo_2026.md')[:1500]}"
+
     if tipo_label.startswith("industrial"):
         _ciclo_ctx = f"\n\nPOSICIONAMIENTO DE MERCADO — LIMA 2026:\n{_load_norm("CONOCIMIENTO_CICLO_MERCADO_LIMA.md")[:3000]}"
         _orient_ind = """
@@ -11224,7 +11234,7 @@ Precio vs. mercado: si precio > mercado >8%: hay margen de negociación hacia ab
 
     _sys_resumen = f"""Eres Enrique Osterling, director de Osterling Advisory, con 20 años de experiencia en activos comerciales e industriales en Lima. Eres directo, preciso y orientado a la decisión.
 
-{ref}{_bench_ctx}{_ciclo_ctx}{_orient_ind}{_orient_res}{_legal_ctx}
+{ref}{_bcr_ctx_resumen}{_bench_ctx}{_ciclo_ctx}{_orient_ind}{_orient_res}{_legal_ctx}
 Tasa libre de riesgo Perú: ~7.5% (bonos soberanos PEN).
 
 Devuelve ÚNICAMENTE este JSON sin texto adicional:
@@ -11302,6 +11312,7 @@ def generar_memorandum_advisory_ind(datos: dict) -> dict:
     _jv_ctx  = f"\n\nJOINT VENTURE / ASOCIACIÓN EN PARTICIPACIÓN:\n{_load_norm('legal_jv_asociacion_participacion.md')[:800]}"
     _ciclo_ctx_memo = f"\n\nCICLO DE MERCADO LIMA 2026:\n{_load_norm("CONOCIMIENTO_CICLO_MERCADO_LIMA.md")[:800]}"
     _dd_ctx = f"\n\nDUE DILIGENCE Y RED FLAGS:\n{_load_norm("CONOCIMIENTO_DUE_DILIGENCE_TECNICO.md")[:600]}"
+    _bcr_ctx = f"\n\nMACROECONOMÍA PERÚ — BCR REPORTE DE INFLACIÓN MARZO 2026:\n{_load_norm('bcr_reporte_inflacion_marzo_2026.md')[:2000]}"
     _legal_memo_ctx = (
         f"\n\nNORMATIVA LEGAL — ARRENDAMIENTO INDUSTRIAL (CC + D.Leg. 1177):\n{_load_norm("legal_arrendamiento_peru.md")[:400]}"
         f"\n\nNORMATIVA LEGAL — SUNARP, HIPOTECAS Y CARGAS:\n{_load_norm("legal_sunarp_predios.md")[:350]}"
@@ -11316,7 +11327,7 @@ Tu trabajo es elaborar un Memorandum de Advisory Board: un documento de análisi
 PRINCIPIO FUNDAMENTAL: No emitas recomendación de compra, venta ni decisión. Presenta la data analítica, crítica, verificable y exacta. Los inversionistas tienen objetivos distintos — generación de flujo, acumulación de patrimonio, uso operativo propio, escudo fiscal — y solo ellos pueden evaluar si este proyecto se alinea con su estrategia.
 
 Referencias de mercado:
-{ref}{_ciclo_ctx_memo}{_neg_ctx}{_soc_ctx}{_jv_ctx}{_dd_ctx}{_legal_memo_ctx}
+{ref}{_bcr_ctx}{_ciclo_ctx_memo}{_neg_ctx}{_soc_ctx}{_jv_ctx}{_dd_ctx}{_legal_memo_ctx}
 
 Devuelve ÚNICAMENTE este JSON sin texto adicional ni markdown:
 {{
