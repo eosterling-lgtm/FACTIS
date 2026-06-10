@@ -18454,8 +18454,6 @@ elif tipo_op == "Proyecto Inmobiliario":
                     help="El modo automático usa frente/fondo extraídos del certificado. DXF permite cargar el levantamiento topográfico real."
                 )
 
-                _cab_poly_lote_override = st.session_state.get("cab_geo_poly_lote")
-
                 if _cab_geo_modo == "Adjuntar plano DXF":
                     _cab_dxf_file = st.file_uploader(
                         "Plano perimétrico (.dxf)",
@@ -18464,14 +18462,11 @@ elif tipo_op == "Proyecto Inmobiliario":
                     )
                     if _cab_dxf_file:
                         if _SHAPELY_OK and _EZDXF_OK:
-                            import io as _cio
                             _cab_poly_parsed = _geo_poligono_dxf(
-                                _cio.TextIOWrapper(_cio.BytesIO(_cab_dxf_file.read()),
-                                                  encoding="utf-8", errors="ignore")
+                                io.BytesIO(_cab_dxf_file.read())
                             )
                             if _cab_poly_parsed:
                                 st.session_state["cab_geo_poly_lote"] = _cab_poly_parsed
-                                _cab_poly_lote_override = _cab_poly_parsed
                                 st.success(
                                     f"✓ Polígono extraído del DXF — "
                                     f"área geométrica: **{_cab_poly_parsed.area:,.1f} m²** "
@@ -18494,6 +18489,9 @@ elif tipo_op == "Proyecto Inmobiliario":
                     if st.session_state.get("cab_geo_poly_lote"):
                         st.session_state.pop("cab_geo_poly_lote", None)
                         st.session_state.pop("cab_geo_dxf_file", None)
+
+                # Read AFTER branch — reflects current session_state
+                _cab_poly_lote_override = st.session_state.get("cab_geo_poly_lote")
 
                 # ── Massing 3D automático ──────────────────────────────────────
                 _unids_3d = c.get("unidades") or []
