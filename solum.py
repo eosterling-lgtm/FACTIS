@@ -987,7 +987,7 @@ def calcular_industrial(inp: dict) -> dict:
     def _vacancia_ano(yr: int) -> float:
         return _vac_sched.get(yr, vacancia_pct_ind)
 
-    renta_total_mes = renta_m2_mes * area_nave * (1 - vacancia_pct_ind)
+    renta_total_mes = renta_m2_mes * area_nave * (1 - _vacancia_ano(1))
     gastos_operacion = renta_total_mes * 12 * 0.08
     renta_neta_anual = max(renta_total_mes * 12 - gastos_operacion, 0)
     yield_bruto = (renta_total_mes * 12 / costo_total * 100) if costo_total > 0 else 0
@@ -13587,11 +13587,11 @@ def _build_retail_html(r: dict, fecha: str) -> str:
   <div style="display:flex;gap:10px;margin-bottom:20px;">{_kpis}</div>
   <div class="section-title">Estructura Financiera</div>
   <table>
-    {_row("Área GLA", f"{{area_gla:,.0f}} m²")}
-    {_row("Área total construida", f"{{area_total:,.0f}} m²")}
-    {_row("Eficiencia GLA/Total", f"{{eficiencia:.1f}}%")}
-    {_row("Renta unitaria", f"${{renta_m2:.2f}}/m²/mes")}
-    {_row("Vacancia aplicada", f"{{vacancia:.1f}}%")}
+    {_row("Área GLA", f"{area_gla:,.0f} m²")}
+    {_row("Área total construida", f"{area_total:,.0f} m²")}
+    {_row("Eficiencia GLA/Total", f"{eficiencia:.1f}%")}
+    {_row("Renta unitaria", f"${renta_m2:.2f}/m²/mes")}
+    {_row("Vacancia aplicada", f"{vacancia:.1f}%")}
     {_row("Renta bruta efectiva anual", _fmt(float(r.get("renta_bruta_anual") or 0)))}
     {_row("Opex anual", _fmt(float(r.get("opex_anual") or 0)))}
     {_row("NOI anual", _fmt(noi), bold=True)}
