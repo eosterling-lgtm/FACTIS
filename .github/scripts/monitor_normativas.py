@@ -5,6 +5,8 @@ Fuentes: El Peruano · MVCS · IMP Lima
 
 Flujo completo:
   1. Scraping 3 fuentes → pre-filtrado por entidad/tipo/keyword
+     El Peruano: descarga PDF de Índice Quincenal (diariooficial.elperuano.pe/Normas/Indices)
+                 → parsea con pdfminer → filtra secciones relevantes
   2. Claude evalúa relevancia + genera resumen (1 llamada batch)
   3. Para relevancia=alta: Claude fetcha texto completo + genera borrador SOLUM
   4. Supabase alertas_normativas ← guardar (con texto_procesado si disponible)
@@ -13,6 +15,7 @@ Flujo completo:
 
 import os
 import re
+import io
 import json
 import logging
 import datetime
@@ -92,50 +95,301 @@ KEYWORDS_RELEVANTES = [
 # FASE 1 — SCRAPING
 # ══════════════════════════════════════════════════════════════════════════════
 
-def buscar_el_peruano() -> list[dict]:
-    """Consulta el buscador de El Peruano filtrando por entidad y fecha."""
-    resultados = []
-    fecha_str = AYER.strftime("%d/%m/%Y")
-    log.info(f"[El Peruano] Buscando publicaciones del {fecha_str}")
+# Secciones del Índice El Peruano que interesan a SOLUM
+# Estas cadenas aparecen como encabezados de sección en el PDF del índice
+SECCIONES_OBJETIVO = [
+    "VIVIENDA",
+    "VIVIENDA, CONSTRUCCION Y SANEAMIENTO",
+    "MUNICIPALIDAD METROPOLITANA DE LIMA",
+    "INSTITUTO METROPOLITANO DE PLANIFICACION",
+    "MUNICIPALIDAD DISTRITAL DE MIRAFLORES",
+    "MUNICIPALIDAD DISTRITAL DE SAN ISIDRO",
+    "MUNICIPALIDAD DISTRITAL DE SANTIAGO DE SURCO",
+    "MUNICIPALIDAD DISTRITAL DE SAN BORJA",
+    "MUNICIPALIDAD DISTRITAL DE JESUS MARIA",
+    "MUNICIPALIDAD DISTRITAL DE LA VICTORIA",
+    "MUNICIPALIDAD DISTRITAL DE VILLA EL SALVADOR",
+    "MUNICIPALIDAD DISTRITAL DE SAN JUAN DE LURIGANCHO",
+    "MUNICIPALIDAD DISTRITAL DE LURIN",
+    "MUNICIPALIDAD DISTRITAL DE LINCE",
+    "MUNICIPALIDAD DISTRITAL DE MAGDALENA DEL MAR",
+    "MUNICIPALIDAD DISTRITAL DE SURQUILLO",
+    "MUNICIPALIDAD DISTRITAL DE CALLAO",
+    "MUNICIPALIDAD DISTRITAL DE SAN MARTIN DE PORRES",
+    "MUNICIPALIDAD DISTRITAL DE ATE",
+    "MUNICIPALIDAD DISTRITAL DE LA MOLINA",
+    "SUNARP",
+    "MINISTERIO DE TRANSPORTES",
+]
 
-    base_url = "https://busquedas.elperuano.pe/normaslegales/"
-    params = {"k": "", "fini": fecha_str, "ffin": fecha_str, "p": 1}
+# Nombres de mes en español para construir fechas desde el índice (e.g. "Lun 4")
+MESES_ES = {
+    1: "enero", 2: "febrero", 3: "marzo", 4: "abril",
+    5: "mayo", 6: "junio", 7: "julio", 8: "agosto",
+    9: "setiembre", 10: "octubre", 11: "noviembre", 12: "diciembre",
+}
 
+
+def _descargar_pdf_indice(mes: int, anio: int, quincena: int) -> bytes | None:
+    """
+    Descarga el PDF del Índice Quincenal de El Peruano para el mes/año indicado.
+    quincena=1 → primera quincena (días 1-15), quincena=2 → segunda (días 16-fin).
+
+    Flujo:
+    1. Obtiene la página de Índices y extrae los enlaces PDF del mes/año solicitado.
+    2. Si no encuentra en HTML (sitio dinámico), intenta URL directa por convención
+       de nombre de archivo del El Peruano: IN{YYYYMM}{15|DD_fin}.pdf
+    """
+    base = "https://diariooficial.elperuano.pe"
+    indices_url = f"{base}/Normas/Indices"
+    nombre_mes = MESES_ES.get(mes, "").lower()
+
+    # ── Intento 1: scraping de la página de Índices ───────────────────────────
     try:
-        resp = requests.get(base_url, params=params, headers=HEADERS, timeout=30)
+        resp = requests.get(indices_url, headers=HEADERS, timeout=30)
         resp.raise_for_status()
         soup = BeautifulSoup(resp.text, "html.parser")
 
-        items = soup.find_all("div", class_=re.compile(r"item.*norma|norma.*item", re.I))
-        if not items:
-            items = soup.find_all("tr", class_=re.compile(r"norma|row", re.I))
-
-        log.info(f"[El Peruano] {len(items)} ítems encontrados")
-
-        for item in items:
-            texto = item.get_text(" ", strip=True).upper()
-            titulo_tag = item.find(["h3", "h4", "a", "strong"])
-            titulo = titulo_tag.get_text(strip=True) if titulo_tag else texto[:200]
-            link_tag = item.find("a", href=True)
-            url = link_tag["href"] if link_tag else ""
-            if url and not url.startswith("http"):
-                url = "https://busquedas.elperuano.pe" + url
-
-            if any(e in texto for e in ENTIDADES_OBJETIVO) or \
-               any(t in texto for t in TIPOS_NORMA_OBJETIVO):
-                resultados.append({
-                    "fuente":            "el_peruano",
-                    "titulo":            titulo,
-                    "url":               url,
-                    "fecha_publicacion": str(AYER),
-                    "entidad":           _extraer_entidad(texto),
-                    "tipo_norma":        _extraer_tipo(texto),
-                    "texto_raw":         texto[:800],
-                })
+        # Buscar todos los enlaces que contengan el año, el mes y sean PDF
+        for a in soup.find_all("a", href=True):
+            href  = a["href"]
+            texto = (a.get_text(" ", strip=True) + " " + href).lower()
+            if (
+                str(anio) in href
+                and nombre_mes in texto
+                and ".pdf" in href.lower()
+            ):
+                # Distinguir quincena por "primera" / "segunda" o por el día en el href
+                es_primera = (
+                    "primera" in texto
+                    or re.search(r"IN\d{6}(0[1-9]|1[0-5])", href)
+                )
+                es_segunda = (
+                    "segunda" in texto
+                    or re.search(r"IN\d{6}(1[6-9]|[23]\d)", href)
+                )
+                if (quincena == 1 and es_primera) or (quincena == 2 and es_segunda):
+                    pdf_url = href if href.startswith("http") else base + href
+                    log.info(f"[El Peruano] PDF hallado en página: {pdf_url}")
+                    r2 = requests.get(pdf_url, headers=HEADERS, timeout=60)
+                    r2.raise_for_status()
+                    return r2.content
     except Exception as e:
-        log.warning(f"[El Peruano] Error: {e}")
+        log.debug(f"[El Peruano] Scraping índices: {e}")
 
-    log.info(f"[El Peruano] {len(resultados)} pre-filtradas")
+    # ── Intento 2: URL directa por convención de nombre ──────────────────────
+    # Primera quincena → día 15, segunda → último día del mes
+    import calendar
+    dia = 15 if quincena == 1 else calendar.monthrange(anio, mes)[1]
+    candidatos = [
+        f"{base}/pdf/0177/IN{anio:04d}{mes:02d}{dia:02d}.pdf",
+        f"{base}/Ediciones/PDF/IN{anio:04d}{mes:02d}{dia:02d}.pdf",
+        f"{base}/normas/indices/IN{anio:04d}{mes:02d}{dia:02d}.pdf",
+    ]
+    for pdf_url in candidatos:
+        try:
+            r = requests.get(pdf_url, headers=HEADERS, timeout=60)
+            if r.status_code == 200 and r.headers.get("Content-Type", "").startswith("application/pdf"):
+                log.info(f"[El Peruano] PDF directo OK: {pdf_url}")
+                return r.content
+        except Exception:
+            pass
+
+    log.warning(f"[El Peruano] No se pudo descargar PDF índice {mes}/{anio} Q{quincena}")
+    return None
+
+
+def _parsear_indice_pdf(pdf_bytes: bytes, mes: int, anio: int) -> list[dict]:
+    """
+    Parsea el PDF del Índice Quincenal y extrae las normas de las secciones objetivo.
+    Retorna lista de dicts con campos estándar del monitor.
+
+    Estructura del PDF (observada en IN20260515.pdf):
+      - Encabezados de sección en MAYÚSCULAS (e.g. "vivienda, construccion...")
+      - Bullet ● seguido del tipo, número y título de la norma
+      - Línea termina con número de página y día abreviado + número (e.g. "Lun 4")
+    """
+    try:
+        from pdfminer.high_level import extract_text
+    except ImportError:
+        log.error("[El Peruano] pdfminer.six no instalado")
+        return []
+
+    try:
+        text = extract_text(io.BytesIO(pdf_bytes))
+    except Exception as e:
+        log.warning(f"[El Peruano] Error extrayendo texto del PDF: {e}")
+        return []
+
+    resultados = []
+    seccion_actual = ""
+    en_seccion_objetivo = False
+
+    # Día abreviado → número (para construir fecha de publicación)
+    dias_abrev = {
+        "lun": "lunes", "mar": "martes", "mié": "miércoles", "mie": "miércoles",
+        "jue": "jueves", "vie": "viernes", "sáb": "sábado", "sab": "sábado",
+        "dom": "domingo",
+    }
+
+    def _fecha_desde_dia(dia_num: int) -> str:
+        """Construye fecha YYYY-MM-DD a partir del día del mes."""
+        try:
+            return datetime.date(anio, mes, dia_num).isoformat()
+        except Exception:
+            return f"{anio}-{mes:02d}-{dia_num:02d}"
+
+    # Normalizar texto: colapsar espacios, quitar guiones de quiebre de línea
+    text = re.sub(r"-\s*\n\s*", "", text)
+    text = re.sub(r"\s+", " ", text)
+
+    # Dividir en "bloques" por cada bullet ●
+    # Primero identificar la sección por encabezado (texto MAYÚSCULA sin bullet)
+    # Patrón bullet: ● seguido del tipo de norma + número + título + página + día
+    patron_bullet = re.compile(
+        r"●\s*"
+        r"((?:R\.M\.|R\.S\.|R\.D\.|R\.J\.|D\.S\.|D\.U\.|Ley|Ord\.|Acuerdo|Decreto|Resolución|Resolucion)"
+        r"[^●]{10,400?})"
+        r"\s+(\d{1,3})\s+"          # página
+        r"([A-ZÁÉÍÓÚa-záéíóú]{3})\s+(\d{1,2})",  # día abrev + número
+        re.IGNORECASE | re.DOTALL,
+    )
+
+    # Procesar línea a línea para detectar cambios de sección
+    lineas = text.split("  ")  # el PDF usa espacios dobles como separador de bloques
+    buffer = ""
+
+    for linea in lineas:
+        linea = linea.strip()
+        if not linea:
+            continue
+
+        # Detectar cambio de sección: línea en MAYÚSCULAS sin bullet, sin números al inicio
+        linea_upper = linea.upper()
+        es_encabezado = (
+            linea_upper == linea
+            and len(linea) > 5
+            and not linea.startswith("●")
+            and not re.match(r"^\d", linea)
+            and not linea.startswith("=")
+        )
+        if es_encabezado:
+            seccion_actual = linea_upper.strip()
+            en_seccion_objetivo = any(
+                obj in seccion_actual for obj in SECCIONES_OBJETIVO
+            )
+            continue
+
+        buffer += " " + linea
+
+    # Ahora parsear el texto completo buscando secciones y bullets
+    # Re-procesar el texto completo con context de sección
+    secciones_encontradas: dict[str, str] = {}
+
+    # Buscar todos los encabezados de sección objetivo en el texto completo
+    for seccion in SECCIONES_OBJETIVO:
+        idx = text.upper().find(seccion)
+        if idx != -1:
+            # Extraer texto desde este encabezado hasta el siguiente encabezado conocido
+            fin = len(text)
+            for otra in SECCIONES_OBJETIVO:
+                if otra == seccion:
+                    continue
+                idx2 = text.upper().find(otra, idx + len(seccion))
+                if 0 < idx2 < fin:
+                    fin = idx2
+            bloque = text[idx:fin]
+            secciones_encontradas[seccion] = bloque
+            log.info(f"[El Peruano] Sección '{seccion}': {len(bloque)} chars")
+
+    # Parsear bullets de cada sección
+    for seccion, bloque in secciones_encontradas.items():
+        entidad = seccion.title()
+        for m in patron_bullet.finditer(bloque):
+            titulo_raw = m.group(1).strip()
+            dia_abrev  = m.group(3).lower()[:3]
+            dia_num    = int(m.group(4))
+
+            # Limpiar título: quitar número de página final si quedó pegado
+            titulo = re.sub(r"\s+\d{1,3}\s*$", "", titulo_raw).strip()
+            titulo = re.sub(r"\s{2,}", " ", titulo)
+
+            fecha_pub = _fecha_desde_dia(dia_num)
+            tipo_norma = _extraer_tipo(titulo.upper())
+
+            # URL de búsqueda como fallback (no tenemos URL directa desde el índice)
+            num_match = re.search(r"N[°º\.]\s*([\d\-]+)", titulo)
+            num_norma = num_match.group(1).replace("-", "") if num_match else ""
+            url_busqueda = (
+                f"https://busquedas.elperuano.pe/normaslegales/"
+                + re.sub(r"\s+", "-", titulo[:60].lower())
+                + f"-{num_norma}/"
+                if num_norma else
+                "https://diariooficial.elperuano.pe/Normas/Indices"
+            )
+
+            resultados.append({
+                "fuente":            "el_peruano_indice",
+                "titulo":            titulo,
+                "url":               url_busqueda,
+                "fecha_publicacion": fecha_pub,
+                "entidad":           entidad,
+                "tipo_norma":        tipo_norma,
+                "texto_raw":         titulo[:800],
+            })
+
+    log.info(f"[El Peruano] {len(resultados)} normas parseadas del PDF")
+    return resultados
+
+
+def buscar_el_peruano() -> list[dict]:
+    """
+    Descarga y parsea los Índices Quincenales del Diario Oficial El Peruano.
+    URL: https://diariooficial.elperuano.pe/Normas/Indices
+    Revisa las dos quincenas del mes actual + la quincena que incluye AYER.
+    """
+    resultados: list[dict] = []
+    mes_actual = HOY.month
+    anio_actual = HOY.year
+    mes_anterior = (HOY.replace(day=1) - datetime.timedelta(days=1)).month
+    anio_anterior = (HOY.replace(day=1) - datetime.timedelta(days=1)).year
+
+    # Determinar qué quincenas revisar según el día de hoy
+    quincenas_a_revisar = []
+    if HOY.day <= 16:
+        # Primeros días del mes: revisar Q1 actual + Q2 mes anterior
+        quincenas_a_revisar = [
+            (mes_actual,   anio_actual,   1),
+            (mes_anterior, anio_anterior, 2),
+        ]
+    else:
+        # Segunda mitad: revisar Q1 y Q2 del mes actual
+        quincenas_a_revisar = [
+            (mes_actual, anio_actual, 1),
+            (mes_actual, anio_actual, 2),
+        ]
+
+    normas_vistas: set[str] = set()  # dedup por título normalizado
+
+    for mes, anio, quincena in quincenas_a_revisar:
+        log.info(f"[El Peruano] Descargando índice {mes}/{anio} Q{quincena}")
+        pdf_bytes = _descargar_pdf_indice(mes, anio, quincena)
+        if not pdf_bytes:
+            log.warning(f"[El Peruano] Sin PDF para {mes}/{anio} Q{quincena} — saltando")
+            continue
+
+        normas = _parsear_indice_pdf(pdf_bytes, mes, anio)
+        for n in normas:
+            key = re.sub(r"\s+", " ", n["titulo"][:100].upper())
+            if key not in normas_vistas:
+                normas_vistas.add(key)
+                resultados.append(n)
+
+    # Filtrar: solo normas publicadas ayer o hoy (evitar reprocesar todo el mes)
+    fechas_validas = {str(AYER), str(HOY)}
+    resultados = [r for r in resultados if r["fecha_publicacion"] in fechas_validas]
+
+    log.info(f"[El Peruano] {len(resultados)} normas relevantes de ayer/hoy")
     return resultados
 
 
