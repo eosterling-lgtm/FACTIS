@@ -1,0 +1,14 @@
+{
+  "recommendations": [
+    "ms-python.python",
+    "ms-python.pylance",
+    "charliermarsh.ruff",
+    "usernamehw.errorlens",
+    "oderwat.indent-rainbow",
+    "eamodio.gitlens",
+    "mhutchie.git-graph",
+    "tamasfe.even-better-toml",
+    "rangav.vscode-thunder-client",
+    "njpwerner.autodocstring"
+  ]
+}

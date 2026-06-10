@@ -2426,3 +2426,99 @@ Gráﬁ co Nº 02. Cálculo de pozos de luz
 
  
 
+
+═══════════════════════════════════════════════════════════════
+MODIFICACIÓN PROPUESTA — RM 214-2025-VIVIENDA (27 agosto 2025)
+Prepublicación para consulta pública — Período: 28 ago – 11 sep 2025
+Resolución Ministerial N° 214-2025-VIVIENDA — MVCS
+═══════════════════════════════════════════════════════════════
+
+NORMAS AFECTADAS: G.040 "Definiciones" + A.020 "Vivienda"
+
+──────────────────────────────────────────────────────────────
+CAMBIOS EN G.040 — DEFINICIONES (cuadro comparativo oficial)
+──────────────────────────────────────────────────────────────
+
+DEFINICIÓN                  TEXTO ANTERIOR (RM 188-2021)         TEXTO PROPUESTO
+─────────────────────────────────────────────────────────────────────────────────
+Vivienda multifamiliar      "Edificación de DOS A MÁS unidades   "Edificación de TRES A MÁS viviendas
+                             de vivienda en un edificio…"         en un edificio, estando bajo el
+                                                                  régimen de propiedad horizontal."
+
+Vivienda bifamiliar         "…constituida por dos unidades de    "…constituida por dos viviendas con
+                             vivienda con acceso independiente,   acceso independiente, ESTANDO BAJO
+                             cuyo predio es de propiedad común."  EL RÉGIMEN DE PROPIEDAD HORIZONTAL."
+
+Vivienda unifamiliar        "Unidad de vivienda sobre un lote    "Edificación constituida por UNA
+                             único, destinado a la residencia de  unidad de vivienda sobre un lote,
+                             un solo grupo familiar."             NO ESTANDO bajo régimen de PH."
+
+Vivienda de uso colectivo   "…habitaciones individuales para     "…ambientes o espacios que albergan
+                             descanso, aseo personal, y áreas    como mínimo las necesidades de
+                             compartidas para actividades de      DORMIR Y ASEAR; y áreas comunes;
+                             lavado, alimentación y reunión."     NO ESTANDO bajo régimen de PH."
+
+Conjunto habitacional       "…compuestas por varias unidades     "…grupo de viviendas MULTIFAMILIARES
+/ residencial               de vivienda… donde predominan        independientes funcionalmente sobre
+                             las áreas libres."                   un mismo predio, bajo RÉGIMEN DE PH."
+
+NUEVA DEFINICIÓN INCORPORADA:
+- "Lote Único": Predio resultante de habilitación urbana, poligonal inscrita en
+  una sola partida registral con aportes reglamentarios cedidos.
+- "Vivienda de interés social": Unidad que satisface necesidades de dormir, cocinar,
+  comer, estar, asear, lavar; sus condiciones técnicas se establecen en programas
+  estatales de vivienda.
+
+──────────────────────────────────────────────────────────────
+CAMBIOS EN A.020 — VIVIENDA
+──────────────────────────────────────────────────────────────
+
+ART. 4 — TIPOLOGÍAS (nueva lista completa):
+a) Vivienda unifamiliar
+b) Vivienda bifamiliar
+c) Quinta
+d) Vivienda taller
+e) Vivienda multifamiliar
+f) Conjunto habitacional / residencial
+g) Vivienda de uso colectivo  ← NUEVA TIPOLOGÍA DIFERENCIADA
+
+REGLA CRÍTICA NUEVA (Art. 4.2):
+"Las viviendas de uso colectivo SÓLO pueden desarrollarse con otros usos
+compatibles DIFERENTES A LAS TIPOLOGÍAS DE USO RESIDENCIAL."
+(Texto anterior permitía desarrollarla junto con multifamiliar y conjuntos
+residenciales — RESTRICCIÓN IMPORTANTE para proyectos mixtos)
+
+ART. 8 — ÁREAS TECHADAS MÍNIMAS:
+a) Vivienda de uso colectivo (dormitorio + baño): DESDE 16.00 m²
+   → NO sujeta a régimen de propiedad horizontal
+   → NO puede ser objeto de independización registral
+b) Departamento en multifamiliar / conjunto residencial (bajo PH): DESDE 40.00 m²
+c) Vivienda unifamiliar módulo básico con posibilidad de expansión: DESDE 25.00 m²
+
+NUEVA DISPOSICIÓN MUNICIPAL (Art. 8.2 propuesto):
+"Las Municipalidades, conforme a sus competencias, determinan las ZONAS DONDE
+PUEDEN EJECUTARSE las viviendas de uso colectivo, promoviendo su desarrollo en
+zonas estratégicas de alta densidad, infraestructura y servicios."
+
+──────────────────────────────────────────────────────────────
+IMPACTO OPERATIVO PARA SOLUM — PRE-FACTIBILIDAD
+──────────────────────────────────────────────────────────────
+
+1. PROYECTOS DE 2 UNIDADES: Con la nueva definición, un edificio de 2 departamentos
+   ya NO es "multifamiliar" — es "bifamiliar". Diferente tramitación municipal.
+   → SOLUM debe alertar si total_unidades = 2.
+
+2. MICRODEPARTAMENTOS (< 40m²): Solo viables como "vivienda de uso colectivo"
+   (mínimo 16m²). NO son inscribibles en RRPP como unidades independientes.
+   → Modelo de negocio de venta individual INVIABLE para esta tipología.
+   → Viable como hotel, hostal, coliving bajo un solo propietario operador.
+
+3. PROYECTOS MIXTOS COLECTIVA + MULTIFAMILIAR: La nueva norma LO PROHÍBE.
+   Vivienda colectiva solo puede ir con usos NO residenciales (comercio, servicios).
+
+4. ZONIFICACIÓN MUNICIPAL: Requiere verificar que el distrito permita vivienda
+   colectiva antes de proyectar. Lima aún no ha emitido la norma distrital.
+
+ESTADO: Prepublicada para consulta pública el 27-ago-2025.
+Período de consulta vencido 11-sep-2025. Pendiente aprobación final por RM.
+FUENTE: RM 214-2025-VIVIENDA + Reporte CODIP, Lima 27 agosto 2025

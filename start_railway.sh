@@ -14,7 +14,7 @@ if ! playwright install chromium --with-deps 2>/dev/null; then
 fi
 
 # Iniciar Streamlit
-exec streamlit run app.py \
+exec streamlit run solum.py \
     --server.port "${PORT:-8501}" \
     --server.headless true \
     --server.enableCORS false \

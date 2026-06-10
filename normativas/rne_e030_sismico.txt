@@ -302,3 +302,61 @@ CAPACIDAD PORTANTE TÍPICA EN LIMA:
 
 FUENTE: RNE Norma E.030 — DS 003-2016-VIVIENDA y modificatoria DS 031-2019-VIVIENDA.
 Complementado con Norma E.050 (Suelos y Cimentaciones) y práctica estructural Lima.
+
+
+═══════════════════════════════════════════════════════════════
+MODIFICACIÓN VIGENTE — RM 183-2026-VIVIENDA (28 abril 2026)
+Publicada en El Peruano: 3 mayo 2026 — VIGENTE DESDE ESA FECHA
+═══════════════════════════════════════════════════════════════
+
+REEMPLAZA: DS 003-2016-VIVIENDA + modificatoria DS 031-2019-VIVIENDA
+
+CINCO INNOVACIONES PRINCIPALES:
+
+1. NUEVA CLASIFICACIÓN DE PERFILES DE SUELO
+   Criterios actualizados con tres parámetros medibles en campo:
+   - Velocidad de onda cortante (Vs) — m/s
+   - Número de golpes corregido (N60) — SPT
+   - Resistencia al corte no drenado (Su) — kPa
+   Alineado con estándares internacionales (ASCE 7, Eurocode 8).
+
+2. PERÍODO DE VIBRACIÓN PREDOMINANTE DEL SUELO (Ts) — NUEVO
+   Obligatorio para edificios Categoría A y B en zona sísmica Z4.
+   Debe calcularse e incorporarse en el análisis.
+   Fuente: estudios de microzonificación o ensayos de refracción sísmica.
+
+3. ANÁLISIS SÍSMICO EN DOS DIRECCIONES SIMULTÁNEAS — NUEVO
+   Las estructuras deben considerar fuerzas sísmicas actuando
+   simultáneamente en dos ejes perpendiculares.
+   Antes: se analizaba independientemente cada dirección.
+
+4. MUROS DE DUCTILIDAD LIMITADA (MDL) — CRITERIOS ACTUALIZADOS
+   Nuevos límites máximos de pisos para MDL.
+   Nuevo coeficiente de reducción R₀ actualizado.
+   Nuevos límites de distorsión de entrepiso.
+   Basado en investigación experimental peruana reciente.
+
+5. MICROZONIFICACIÓN SÍSMICA — REQUISITOS MÍNIMOS
+   Nuevos estándares mínimos para estudios de microzonificación a nivel distrital.
+   Estandariza metodologías a nivel nacional.
+   Relevante para proyectos en distritos sin microzonificación oficial aprobada.
+
+ZONAS SÍSMICAS (sin cambio en el mapa de zonas Z1-Z4):
+- Lima Metropolitana: Zona Z4 (factor Z = 0.45g) — SIN CAMBIO
+- Callao: Zona Z4 — SIN CAMBIO
+
+DISPOSICIÓN TRANSITORIA:
+"Los proyectos de edificación que, a la fecha de entrada en vigencia, cuenten con:
+(a) expediente técnico aprobado en el marco de Invierte.pe
+(b) procedimiento de licencia de edificación iniciado ante municipalidad
+(c) fase de ejecución iniciada mediante Fast Track
+→ Se rigen por la norma E.030 ANTERIOR hasta su conclusión."
+
+IMPACTO EN PRE-FACTIBILIDAD SOLUM:
+- Estudio de mecánica de suelos con Vs, N60 y Su ahora requerido para clasificar suelo
+- Para edificios A y B en Lima (Z4): calcular Ts del suelo como requisito adicional
+- Proyectos de MDL: verificar nuevo límite de pisos con la nueva norma
+- Sin cambio en zonas sísmicas — Lima sigue siendo Z4
+
+FUENTE: RM N° 183-2026-VIVIENDA — El Peruano (Separata Especial), 3 mayo 2026
+Ministro firmante: Wilder Alejandro Sifuentes Quilcate — MVCS

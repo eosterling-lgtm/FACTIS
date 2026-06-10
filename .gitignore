@@ -24,3 +24,4 @@ env/
 
 # PDFs generados
 *.pdf
+app.py

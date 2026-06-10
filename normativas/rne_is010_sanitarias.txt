@@ -1103,3 +1103,41 @@ sanitario, como resultado de la pérdida de agua contenida en ella.
 - Succión (tubería de.).- Tubería de ingreso al equipo de bombeo.
 - Tanque elevado.- Depósito de almacenamiento de agua que da servicio por gravedad.
 
+
+
+═══════════════════════════════════════════════════════════════
+MODIFICACIÓN VIGENTE — RM 107-2025-VIVIENDA (12 abril 2025)
+═══════════════════════════════════════════════════════════════
+
+MODIFICA: Literal a) del párrafo 2.2 "Dotaciones", numeral 2 "Agua Fría"
+DEROGA: Literal b) del párrafo 2.2 (dotación por dormitorios en multifamiliar)
+
+TEXTO VIGENTE NUEVO — Párrafo 2.2, literal a):
+
+"Las viviendas unifamiliares y los edificios multifamiliares deben contar con dotación
+de agua potable según el carácter del clima de la zona en la cual se ubiquen,
+conforme a la siguiente Tabla:
+
+Carácter de clima          Dotación (lppd) — Litros/persona/día
+────────────────────────────────────────────────────────────────
+Cálido                     169
+Templado                   155
+Frío                       129
+
+El carácter de clima debe determinarse a partir de la descripción del clima
+correspondiente a la zona geográfica del proyecto, utilizando para ello el
+'Mapa climático del Perú', disponible en el portal del SENAMHI.
+En caso se identifique el clima semifrígido, frígido o glaciar, se debe
+considerar la dotación del carácter frío (129 lppd)."
+
+APLICACIÓN PARA LIMA METROPOLITANA:
+- Lima tiene clima TEMPLADO → dotación 155 lppd/persona
+- Dotación anterior era 200 lppd/dormitorio (multifamiliar) → reducción ~22%
+- Impacto en cisterna y cuarto de bombas: capacidades se reducen proporcionalmente
+
+DISPOSICIÓN TRANSITORIA:
+Proyectos con expediente técnico aprobado en Invierte.pe o con procedimiento
+de licencia de edificación iniciado a la fecha de vigencia → se rigen por la
+norma anterior hasta su conclusión.
+
+FUENTE: RM 0107-2025-VIVIENDA — El Peruano, 12 de abril de 2025

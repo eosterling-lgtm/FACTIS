@@ -1,0 +1,57 @@
+{
+  // Intérprete apuntando al venv del proyecto
+  "python.defaultInterpreterPath": "${workspaceFolder}/venv/bin/python3",
+
+  // Ruff como formatter y linter (reemplaza flake8 + black + isort)
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.ruff": "explicit",
+      "source.organizeImports.ruff": "explicit"
+    }
+  },
+
+  // Pylance — análisis de tipos estricto
+  "python.languageServer": "Pylance",
+  "python.analysis.typeCheckingMode": "basic",
+  "python.analysis.autoImportCompletions": true,
+  "python.analysis.inlayHints.variableTypes": true,
+  "python.analysis.inlayHints.functionReturnTypes": true,
+
+  // Error Lens — errores inline en la línea exacta
+  "errorLens.enabledDiagnosticLevels": ["error", "warning"],
+  "errorLens.delay": 300,
+
+  // Indent Rainbow — colores por nivel de indentación
+  "indentRainbow.colors": [
+    "rgba(184,144,74,0.12)",
+    "rgba(74,144,196,0.12)",
+    "rgba(107,206,160,0.12)",
+    "rgba(196,74,74,0.12)"
+  ],
+
+  // Editor general
+  "editor.rulers": [100],
+  "editor.tabSize": 4,
+  "editor.insertSpaces": true,
+  "editor.wordWrap": "on",
+  "editor.minimap.enabled": true,
+  "editor.bracketPairColorization.enabled": true,
+  "editor.guides.bracketPairs": true,
+
+  // Excluir carpetas pesadas del explorador
+  "files.exclude": {
+    "**/__pycache__": true,
+    "**/*.pyc": true,
+    "**/venv": true,
+    "**/.streamlit/cache": true
+  },
+  "search.exclude": {
+    "**/venv": true,
+    "**/__pycache__": true
+  },
+
+  // Terminal integrada apunta al venv automáticamente
+  "python.terminal.activateEnvironment": true
+}
