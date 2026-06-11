@@ -24355,7 +24355,7 @@ elif tipo_op == "Inmueble Residencial":
             _render_normativa_post_cpue_banner(_res_normas, _res_fecha_em)
 
         res_tab_labels = ["Parámetros", "Financiero", "Inversión"] if r.get('uso') in ["Inversión para alquilar", "Evaluación para venta"] else ["Parámetros", "Financiero", "Escenarios"]
-        res_tabs = st.tabs(res_tab_labels + ["Comparativa", "Legal", "Resumen", "Documentos"])
+        res_tabs = st.tabs(res_tab_labels + ["Comparativa", "Legal", "Resumen", "Emisión de Documentos"])
         st.components.v1.html("""<script>
         (function(){
             var KEY='solum_res_tab';
@@ -25549,16 +25549,55 @@ elif tipo_op == "Inmueble Residencial":
 
         # TAB 6: DOCUMENTOS
         with res_tabs[6]:
-            st.markdown('<div class="section-title">Documentos Profesionales</div>', unsafe_allow_html=True)
+            st.markdown('<div class="section-title">Emisión de Documentos Profesionales</div>', unsafe_allow_html=True)
 
             _doc_tipo = st.radio("Tipo de documento",
                                   ["Informe de Valoración", "Propuesta de Alquiler", "Propuesta de Compra", "Contraoferta"],
                                   horizontal=True)
 
             _dc1, _dc2 = st.columns(2)
-            _doc_agente = _dc1.text_input("Nombre del agente", placeholder="Tu nombre completo")
+            # Pre-llenar desde el Panel del Broker si ya se ingresó
+            _bk_nombre_saved = st.session_state.get("bk_nombre", "")
+            _bk_tel_saved    = st.session_state.get("bk_tel", "")
+            _doc_agente  = _dc1.text_input("Nombre del agente", value=_bk_nombre_saved, placeholder="Tu nombre completo")
             _doc_cliente = _dc2.text_input("Nombre del cliente / propietario", placeholder="A quién va dirigido")
-            _doc_obs = st.text_area("Observaciones adicionales", placeholder="Condiciones especiales, notas del cliente, etc.", height=80)
+            _doc_obs = st.text_area("Observaciones adicionales", placeholder="Condiciones especiales, notas del cliente, etc.", height=68)
+
+            # ── Acuerdo de Comercialización ───────────────────────
+            st.markdown("---")
+            _incluir_acuerdo = st.checkbox(
+                "📋  Incluir **Acuerdo de Comercialización** como anexo",
+                value=st.session_state.get("_acuerdo_checked", False),
+                key="_acuerdo_checked",
+                help="Genera un acuerdo de encargo de venta/alquiler listo para firma en campo."
+            )
+            if _incluir_acuerdo:
+                st.markdown('<div style="background:#F0F4FF;border-left:3px solid #3B82F6;border-radius:0 6px 6px 0;padding:10px 14px;margin-bottom:12px;font-size:12px;color:#1E3A8A;">El acuerdo se adjunta como Anexo A al informe. El propietario firma en campo autorizando la gestión de la propiedad.</div>', unsafe_allow_html=True)
+                _ac1, _ac2 = st.columns(2)
+                _prop_nombre = _ac1.text_input("Nombre completo del propietario", placeholder="Ej: María López Torres", key="ac_prop_nombre")
+                _prop_dni    = _ac2.text_input("DNI del propietario", placeholder="Ej: 12345678", key="ac_prop_dni")
+                _inmueble_dir = st.text_input("Dirección exacta del inmueble", placeholder="Ej: Av. Javier Prado Este 1234, Piso 8, Dpto. 802, San Isidro", key="ac_dir")
+                _ac3, _ac4, _ac5 = st.columns(3)
+                _exclusividad = _ac3.selectbox("Tipo de encargo", ["Exclusiva", "No exclusiva"], key="ac_excl")
+                _plazo_meses  = _ac4.selectbox("Plazo del encargo", [3, 4, 5, 6], index=1,
+                                               format_func=lambda x: f"{x} meses", key="ac_plazo")
+                _precio_pub   = _ac5.number_input("Precio de publicación (USD)",
+                                                   min_value=0, value=int(r.get("precio", 0)),
+                                                   step=1000, key="ac_precio")
+                _ac6, _ac7 = st.columns(2)
+                _com_acuerdo  = _ac6.number_input("Comisión pactada (%)", 0.0, 10.0,
+                                                   float(st.session_state.get("bk_com_pct", 3.0)),
+                                                   0.5, format="%.1f", key="ac_com")
+                _quien_paga   = _ac7.selectbox("¿Quién paga la comisión?",
+                                               ["El propietario (vendedor)", "El comprador", "Ambas partes por igual"],
+                                               key="ac_quien_paga")
+                _autoriza_portales = st.checkbox("Autoriza publicación en portales (Urbania, Nexo, etc.)", value=True, key="ac_portales")
+                _autoriza_fotos    = st.checkbox("Autoriza toma de fotografías y visitas coordinadas", value=True, key="ac_fotos")
+            else:
+                _prop_nombre = _prop_dni = _inmueble_dir = ""
+                _exclusividad = "No exclusiva"; _plazo_meses = 4; _precio_pub = int(r.get("precio", 0))
+                _com_acuerdo = float(st.session_state.get("bk_com_pct", 3.0)); _quien_paga = "El propietario (vendedor)"
+                _autoriza_portales = _autoriza_fotos = True
 
             if st.button("GENERAR DOCUMENTO", use_container_width=True, type="primary"):
                 # Generate document HTML
@@ -25669,23 +25708,110 @@ elif tipo_op == "Inmueble Residencial":
   <div class="metric-box"><div class="metric-label">Valor a 10 años</div><div class="metric-value">${r.get('valor_10', 0):,.0f}</div></div>
 </div>
 
-{('<div class="section-title">VI. Observaciones</div><div class="alert">' + _doc_obs + '</div>') if _doc_obs else ""}
+{('<div class="section-title">VI. Observaciones del Agente</div><div class="alert">' + _doc_obs + '</div>') if _doc_obs else ""}
 
 <div class="footer">
-  Documento generado por SOLUM · Osterling Advisory<br>
-  Los valores de mercado corresponden a referencias de precios Lima — Noviembre 2025 · Tipo de cambio SUNAT: 3.45 S./USD<br>
-  {_fecha_doc}<br><br>
-  <span style="font-size:11px;color:#B8AA9A;">
-  NOTA: Esta IA de Análisis Inmobiliario debe utilizarse como herramienta complementaria al criterio profesional,
-  permitiendo obtener resultados preliminares de manera rápida. Como paso final, el profesional podrá terminar de
-  definir las tipologías, distribución y las modificaciones pertinentes. La IA irá volviéndose más responsiva y
-  alineada con la visión del profesional a medida que se retroalimenta con sus decisiones.
-  </span>
+  Documento generado por SOLUM · {'Agente: ' + _doc_agente + (' · ' + _bk_tel_saved if _bk_tel_saved else '') if _doc_agente else 'Osterling Advisory'}<br>
+  Valores de mercado: Urbania INDEX Lima — Noviembre 2025 · Tipo de cambio SUNAT: 3.45 S./USD<br>
+  {_fecha_doc} · Este documento es de carácter referencial y no reemplaza la tasación formal ni el asesoramiento legal.
 </div>
 
 </div>
 </body>
 </html>"""
+
+                # ── Acuerdo de Comercialización (Anexo A) ─────────
+                if _incluir_acuerdo:
+                    _fecha_venc = (datetime.datetime.now() + datetime.timedelta(days=_plazo_meses * 30)).strftime("%d/%m/%Y")
+                    _com_monto  = int(_precio_pub * _com_acuerdo / 100)
+                    _excl_txt   = ("en EXCLUSIVA" if _exclusividad == "Exclusiva"
+                                   else "en modalidad NO EXCLUSIVA")
+                    _portales_txt = "Urbania, Nexo Inmuebles y portales equivalentes" if _autoriza_portales else "portales a coordinar con el agente"
+                    _fotos_txt  = "autoriza expresamente" if _autoriza_fotos else "deberá coordinar previamente"
+
+                    _acuerdo_html = f"""
+<div style="page-break-before:always;"></div>
+<div class="page" style="margin-top:32px;">
+
+<div class="header">
+  <div class="header-sub">Anexo A · Acuerdo de Comercialización</div>
+  <div class="header-title">Encargo de {'Venta' if r.get('uso','') != 'Inversión para alquilar' else 'Alquiler'} — {_exclusividad}</div>
+  <div class="header-meta">Fecha: {_fecha_doc} &nbsp;·&nbsp; Vigencia hasta: {_fecha_venc}</div>
+</div>
+
+<div class="section-title">I. Partes del Acuerdo</div>
+<table>
+  <tr><th>Parte</th><th>Nombre</th><th>Identificación</th><th>Rol</th></tr>
+  <tr><td><strong>PROPIETARIO</strong></td>
+      <td>{_prop_nombre or "___________________________"}</td>
+      <td>DNI: {_prop_dni or "________________"}</td>
+      <td>Propietario del inmueble</td></tr>
+  <tr><td><strong>AGENTE</strong></td>
+      <td>{_doc_agente or "___________________________"}</td>
+      <td>Tel: {_bk_tel_saved or "________________"}</td>
+      <td>Agente inmobiliario autorizado</td></tr>
+</table>
+
+<div class="section-title">II. Inmueble Objeto del Encargo</div>
+<table>
+  <tr><th>Característica</th><th>Detalle</th></tr>
+  <tr><td>Dirección</td><td>{_inmueble_dir or "___________________________"}</td></tr>
+  <tr><td>Distrito</td><td>{r.get('zona', '___')}</td></tr>
+  <tr><td>Tipología</td><td>{r.get('dormitorios', '___')}</td></tr>
+  <tr><td>Área construida</td><td>{r.get('m2', 0)} m²</td></tr>
+  <tr><td>Precio de publicación acordado</td><td><strong>USD {_precio_pub:,}</strong></td></tr>
+</table>
+
+<div class="section-title">III. Condiciones del Encargo</div>
+<div class="alert">
+  <strong>Modalidad:</strong> El propietario encarga {_excl_txt} al agente la gestión de {'venta' if r.get('uso','') != 'Inversión para alquilar' else 'alquiler'} del inmueble descrito.<br><br>
+  {"<strong>Exclusividad:</strong> Durante la vigencia del presente acuerdo, el propietario se compromete a no encargar la gestión del mismo inmueble a otros agentes ni a realizar gestiones directas de comercialización sin comunicación previa al agente.<br><br>" if _exclusividad == "Exclusiva" else "<strong>No exclusividad:</strong> El propietario podrá gestionar simultáneamente con otros agentes. En caso de cierre, se reconocerá la comisión únicamente al agente que introdujo al comprador/arrendatario efectivo.<br><br>"}
+  <strong>Plazo:</strong> El presente encargo tiene vigencia de <strong>{_plazo_meses} meses</strong> a partir de la fecha de firma ({_fecha_doc}), hasta el {_fecha_venc}. Al vencimiento, las partes podrán renovar de mutuo acuerdo.<br><br>
+  <strong>Precio mínimo:</strong> El propietario autoriza al agente a negociar hasta un máximo del <strong>10% de descuento</strong> sobre el precio de publicación sin consulta previa. Cualquier oferta por debajo de USD {int(_precio_pub * 0.90):,} deberá ser aprobada expresamente por el propietario.
+</div>
+
+<div class="section-title">IV. Honorarios del Agente</div>
+<table>
+  <tr><th>Concepto</th><th>Detalle</th></tr>
+  <tr><td>Comisión pactada</td><td><strong>{_com_acuerdo:.1f}%</strong> del precio final de cierre</td></tr>
+  <tr><td>Monto referencial</td><td>USD {_com_monto:,} (calculado sobre precio de publicación)</td></tr>
+  <tr><td>Responsable del pago</td><td>{_quien_paga}</td></tr>
+  <tr><td>Momento del pago</td><td>A la firma de la minuta de compraventa o contrato de arrendamiento</td></tr>
+  <tr><td>Incluye IGV</td><td>Los honorarios están afectos al IGV (18%) si el agente emite comprobante</td></tr>
+</table>
+
+<div class="section-title">V. Autorizaciones del Propietario</div>
+<div class="market-box" style="font-size:12px;line-height:1.8;">
+  El propietario <strong>{'autoriza' if _autoriza_portales else 'no autoriza'}</strong> la publicación del inmueble en {_portales_txt}.<br>
+  El propietario <strong>{_fotos_txt}</strong> la toma de fotografías, videos y visitas de potenciales compradores/arrendatarios coordinadas por el agente.<br>
+  El propietario autoriza al agente a presentar ofertas formales (LOI / carta de intención) y trasladarlas para su evaluación.<br>
+  El agente se compromete a mantener confidencialidad sobre la información del propietario y del inmueble.
+</div>
+
+<div class="section-title">VI. Firmas</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:28px;">
+  <div style="text-align:center;">
+    <div style="border-bottom:1px solid #1E2D3D;height:60px;margin-bottom:10px;"></div>
+    <div style="font-size:11px;font-weight:700;color:#1E2D3D;">{_prop_nombre or "PROPIETARIO"}</div>
+    <div style="font-size:10px;color:#9A9080;">DNI: {_prop_dni or "________________"}</div>
+    <div style="font-size:10px;color:#9A9080;margin-top:4px;">Lugar y fecha: ________________________</div>
+  </div>
+  <div style="text-align:center;">
+    <div style="border-bottom:1px solid #1E2D3D;height:60px;margin-bottom:10px;"></div>
+    <div style="font-size:11px;font-weight:700;color:#1E2D3D;">{_doc_agente or "AGENTE INMOBILIARIO"}</div>
+    <div style="font-size:10px;color:#9A9080;">{_bk_tel_saved or ""}</div>
+    <div style="font-size:10px;color:#9A9080;margin-top:4px;">Lugar y fecha: ________________________</div>
+  </div>
+</div>
+
+<div class="footer" style="margin-top:40px;">
+  Acuerdo de Comercialización — Anexo A al Informe de Valoración SOLUM<br>
+  Generado el {_fecha_doc} · Este documento tiene carácter contractual entre las partes firmantes.<br>
+  <span style="font-size:10px;">Referencia legal: Arts. 1529-1601 Código Civil Peruano (mandato de comercialización) · Ley 29080 (Agente Inmobiliario)</span>
+</div>
+
+</div>"""
+                    _doc_html = _doc_html.replace("</body>", _acuerdo_html + "\n</body>")
 
                 st.session_state["_res_doc_html"] = _doc_html
                 st.success("Documento generado.")
