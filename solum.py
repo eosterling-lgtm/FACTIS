@@ -11212,8 +11212,12 @@ def generar_resumen_ejecutivo_ia(tipo: str, datos: dict) -> dict:
     else:
         _payback_str = (f"{datos['payback_anos']:.1f} años" if datos.get('payback_anos') else 'N/A')
         _flujo_str = (f"${datos['flujo_mensual']:,.0f}" if datos.get('flujo_mensual') is not None else 'N/A')
+        _antig_val = datos.get('antiguedad', 1)
+        _es_estreno = (_antig_val == 0)
         ctx = (
             f"Inmueble: {datos.get('uso')} · Precio: ${datos.get('precio',0):,.0f}\n"
+            f"Antigüedad: {'ESTRENO — primera venta del promotor' if _es_estreno else str(_antig_val) + ' años'}\n"
+            f"Alcabala: {'EXENTO — inmueble de estreno, primera venta (Art. 22 D.Leg. 776). NO mencionar alcabala como obligación del comprador.' if _es_estreno else 'Aplica 3% sobre valor de compra (excluidas primeras 10 UIT). Se paga en SAT de Lima, NO en municipalidad.'}\n"
             f"Cuota mensual: ${datos.get('cuota_mensual',0):,.0f} · Plazo: {datos.get('plazo_anos')} años\n"
             f"Ingreso mínimo recomendado: ${datos.get('ingreso_minimo',0):,.0f}/mes\n"
             f"Yield bruto: {datos.get('yield_bruto',0):.1f}% · Yield neto: {datos.get('yield_neto',0):.1f}%\n"
@@ -11285,6 +11289,12 @@ Payback 18–25 años: típico Lima. Aceptable si la apreciación es sostenida.
 Payback >25 años: largo. La ganancia de capital debe ser el argumento principal.
 Cuota/ingreso >30%: el comprador estaría sobre-endeudado. Revisar financiamiento.
 Precio vs. mercado: si precio > mercado >8%: hay margen de negociación hacia abajo.
+
+TRIBUTACIÓN INMOBILIARIA — REGLAS EXACTAS (aplicar siempre con precisión):
+ALCABALA: Tributo del 3% sobre el valor de compra (excluidas las primeras 10 UIT). Se paga en el SAT (Servicio de Administración Tributaria de Lima), NO en la municipalidad distrital. IMPORTANTE: la primera venta de inmueble nuevo por parte del promotor/constructor está EXENTA de alcabala (Art. 22 D.Leg. 776). Si el inmueble es ESTRENO (antigüedad=0), NO mencionar alcabala como carga del comprador.
+IMPUESTO PREDIAL: El VENDEDOR es responsable del impuesto predial del año en curso. Si ya pagó el año completo adelantado, no hay obligación de reembolso proporcional — se considera un acuerdo estándar. Lo normal en transacciones Lima es que el vendedor cubra hasta el mes de la transferencia.
+ARBITRIOS MUNICIPALES: El vendedor paga los arbitrios hasta el mes en que se celebra la compraventa. Si pagó el año adelantado, eso es aceptable comercialmente y no genera reembolso.
+IR GANANCIA CAPITAL: PN: 5% sobre la ganancia (precio venta - valor actualizado). PJ: 29.5%. Primera venta de inmueble nuevo: afecta IGV (18%) en lugar de alcabala.
 """
 
     _sys_resumen = f"""Eres Enrique Osterling, director de Osterling Advisory, con 20 años de experiencia en activos comerciales e industriales en Lima. Eres directo, preciso y orientado a la decisión.
@@ -24885,7 +24895,7 @@ elif tipo_op == "Inmueble Residencial":
                     _dorm_disp  = _ci.get("dormitorios", "—")
                     _piso_disp  = f"Piso {_ci.get('piso', 0)}" if _ci.get("piso", 0) > 0 else "PB"
                     _patio_disp = "✓ Patio/terraza" if _ci.get("patio") else ""
-                    _antig_disp = f"{_ci.get('antiguedad', 0)} años" if _ci.get("antiguedad", 0) > 0 else "Nuevo"
+                    _antig_disp = f"{_ci.get('antiguedad', 0)} años" if _ci.get("antiguedad", 0) > 0 else "Estreno"
                     _precio_str = f"${_ci['precio']:,}"
                     _pm2_str    = f"${_ci['precio_m2']:,}/m²" if _ci["precio_m2"] > 0 else "—"
                     _alq_str    = f"${_ci['alquiler']:,}/mes" if _ci.get("alquiler", 0) > 0 else "—"
@@ -25518,6 +25528,197 @@ elif tipo_op == "Inmueble Residencial":
                     st.rerun()
                 # ── Descargar Resumen HTML ─────────────────────────────
                 _rsm_fecha_dl = datetime.datetime.now().strftime("%d/%m/%Y")
+                def _build_rsm_res_pdf(_s, _ub, _f):
+                    """Genera Resumen Ejecutivo en PDF usando ReportLab."""
+                    import io
+                    from reportlab.lib.pagesizes import A4
+                    from reportlab.lib.units import cm
+                    from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+                    from reportlab.lib.colors import HexColor, white, black
+                    from reportlab.platypus import (SimpleDocTemplate, Paragraph, Spacer,
+                                                    Table, TableStyle, HRFlowable, KeepTogether)
+                    from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_JUSTIFY
+                    from reportlab.lib import colors as _rl_colors
+
+                    _buf = io.BytesIO()
+                    _NAV_C  = HexColor("#0D2137")
+                    _GOLD_C = HexColor("#C9A96E")
+                    _GRAY_C = HexColor("#475569")
+                    _LGR_C  = HexColor("#9A9080")
+                    _BG_C   = HexColor("#F7F5F0")
+                    _WHT_C  = HexColor("#FFFFFF")
+
+                    _rec = _s.get("recomendacion", "evaluar_con_condiciones")
+                    _rec_colors = {
+                        "comprar":                 (HexColor("#1A4731"), HexColor("#E8F5EE")),
+                        "evaluar_con_condiciones": (HexColor("#7A4F1A"), HexColor("#FFF8EE")),
+                        "no_recomendado":          (HexColor("#7A1A1A"), HexColor("#FFF0F0")),
+                    }
+                    _rec_labels = {
+                        "comprar":                 "RECOMENDADO — COMPRAR",
+                        "evaluar_con_condiciones": "EVALUAR CON CONDICIONES",
+                        "no_recomendado":          "NO RECOMENDADO",
+                    }
+                    _rc_txt, _rc_bg = _rec_colors.get(_rec, (HexColor("#1E2D3D"), HexColor("#F5F2ED")))
+                    _retiq = _rec_labels.get(_rec, "—")
+
+                    doc = SimpleDocTemplate(
+                        _buf, pagesize=A4,
+                        leftMargin=2.2*cm, rightMargin=2.2*cm,
+                        topMargin=2.0*cm, bottomMargin=2.0*cm,
+                        title=f"Resumen Ejecutivo — {_s.get('titulo','')}"
+                    )
+
+                    _SS = getSampleStyleSheet()
+                    def _sty(name, parent="Normal", **kw):
+                        s = ParagraphStyle(name, parent=_SS[parent])
+                        for k, v in kw.items():
+                            setattr(s, k, v)
+                        return s
+
+                    sty_label  = _sty("lbl",  fontSize=7,  textColor=_LGR_C, letterSpacing=2, spaceAfter=3, leading=10)
+                    sty_tag    = _sty("tag",   fontSize=8,  textColor=_GOLD_C, letterSpacing=2, spaceAfter=2, leading=10)
+                    sty_h1     = _sty("h1",    fontSize=18, textColor=_NAV_C, fontName="Helvetica-Bold", spaceAfter=4, leading=22)
+                    sty_sub    = _sty("sub",   fontSize=9,  textColor=_LGR_C, spaceAfter=8, leading=12)
+                    sty_rec    = _sty("rec",   fontSize=11, textColor=_rc_txt, fontName="Helvetica-Bold", spaceAfter=4, leading=14)
+                    sty_title2 = _sty("ttl2",  fontSize=13, textColor=_rc_txt, fontName="Helvetica-Bold", spaceAfter=6, leading=16)
+                    sty_body   = _sty("body",  fontSize=10, textColor=_NAV_C, spaceAfter=4, leading=14, alignment=TA_JUSTIFY)
+                    sty_body_rc= _sty("bodyrc",fontSize=10, textColor=_rc_txt, spaceAfter=4, leading=14, alignment=TA_JUSTIFY)
+                    sty_bullet = _sty("blt",   fontSize=9,  textColor=_NAV_C, spaceAfter=3, leading=13, leftIndent=8)
+                    sty_secttl = _sty("stl",   fontSize=7,  textColor=_LGR_C, fontName="Helvetica-Bold",
+                                      letterSpacing=2, spaceAfter=5, spaceBefore=14, leading=10)
+                    sty_concl  = _sty("con",   fontSize=10, textColor=_WHT_C, spaceAfter=4, leading=14, alignment=TA_JUSTIFY)
+                    sty_footer = _sty("ftr",   fontSize=7,  textColor=_LGR_C, alignment=TA_CENTER, leading=10)
+                    sty_obs    = _sty("obs",   fontSize=9,  textColor=HexColor("#7A1A1A"), spaceAfter=3, leading=13, leftIndent=8)
+                    sty_mit    = _sty("mit",   fontSize=9,  textColor=HexColor("#1A4731"), spaceAfter=3, leading=13, leftIndent=8)
+
+                    story = []
+
+                    # ── Header ───────────────────────────────────────────
+                    story.append(Paragraph("SOLUM · RESUMEN EJECUTIVO · OSTERLING ADVISORY", sty_tag))
+                    story.append(Paragraph(_s.get("titulo", "Análisis Residencial"), sty_h1))
+                    story.append(Paragraph(f"{_ub}  ·  {_f}", sty_sub))
+                    story.append(HRFlowable(width="100%", thickness=2, color=_NAV_C, spaceAfter=12))
+
+                    # ── Recommendation badge ──────────────────────────────
+                    _rec_tbl = Table(
+                        [[Paragraph(_retiq, sty_rec)],
+                         [Paragraph(_s.get("titulo", ""), sty_title2)],
+                         [Paragraph(_s.get("resumen", ""), sty_body_rc)]],
+                        colWidths=["100%"]
+                    )
+                    _rec_tbl.setStyle(TableStyle([
+                        ("BACKGROUND", (0,0), (-1,-1), _rc_bg),
+                        ("LEFTPADDING",  (0,0), (-1,-1), 16),
+                        ("RIGHTPADDING", (0,0), (-1,-1), 16),
+                        ("TOPPADDING",   (0,0), (0,0),   12),
+                        ("BOTTOMPADDING",(0,-1),(-1,-1), 12),
+                        ("BOX", (0,0), (-1,-1), 0, _rc_bg),
+                        ("LINEBEFORE", (0,0), (0,-1), 4, _rc_txt),
+                        ("ROUNDEDCORNERS", [4]),
+                    ]))
+                    story.append(_rec_tbl)
+                    story.append(Spacer(1, 14))
+
+                    # ── Orientación ───────────────────────────────────────
+                    _orient = _s.get("orientacion_indicadores", "")
+                    if _orient:
+                        story.append(Paragraph("CONTEXTO DE MERCADO", sty_secttl))
+                        story.append(Paragraph(_orient, sty_body))
+                        story.append(Spacer(1, 6))
+
+                    # ── A favor / Riesgos (2 columns) ────────────────────
+                    _af_items = _s.get("argumentos_favor") or []
+                    _rk_items = _s.get("riesgos") or []
+                    _max_rows = max(len(_af_items), len(_rk_items), 1)
+
+                    def _af_cell(items):
+                        p = [Paragraph("A FAVOR", sty_secttl)]
+                        for x in items:
+                            p.append(Paragraph(f"✓  {x}", sty_bullet))
+                        return p
+
+                    def _rk_cell(items):
+                        p = [Paragraph("RIESGOS", sty_secttl)]
+                        for x in items:
+                            p.append(Paragraph(f"⚠  {x}", sty_bullet))
+                        return p
+
+                    _grid = Table(
+                        [[_af_cell(_af_items), _rk_cell(_rk_items)]],
+                        colWidths=["50%", "50%"]
+                    )
+                    _grid.setStyle(TableStyle([
+                        ("VALIGN", (0,0), (-1,-1), "TOP"),
+                        ("LEFTPADDING",  (0,0), (-1,-1), 0),
+                        ("RIGHTPADDING", (0,0), (-1,-1), 8),
+                        ("TOPPADDING",   (0,0), (-1,-1), 0),
+                        ("BOTTOMPADDING",(0,0), (-1,-1), 0),
+                        ("LINEAFTER", (0,0), (0,-1), 0.5, HexColor("#E4E0D8")),
+                        ("LEFTPADDING", (1,0), (1,-1), 12),
+                    ]))
+                    story.append(_grid)
+                    story.append(Spacer(1, 14))
+
+                    # ── Conclusión ────────────────────────────────────────
+                    _concl = _s.get("conclusion", "")
+                    if _concl:
+                        _concl_tbl = Table(
+                            [[Paragraph("CONCLUSIÓN", _sty("ctag", fontSize=7, textColor=HexColor("#475569"),
+                                        fontName="Helvetica-Bold", letterSpacing=2, leading=10))],
+                             [Paragraph(_concl, sty_concl)]],
+                            colWidths=["100%"]
+                        )
+                        _concl_tbl.setStyle(TableStyle([
+                            ("BACKGROUND", (0,0), (-1,-1), _NAV_C),
+                            ("LEFTPADDING",  (0,0), (-1,-1), 18),
+                            ("RIGHTPADDING", (0,0), (-1,-1), 18),
+                            ("TOPPADDING",   (0,0), (0,0),  14),
+                            ("BOTTOMPADDING",(0,-1),(-1,-1),14),
+                            ("ROUNDEDCORNERS", [4]),
+                        ]))
+                        story.append(KeepTogether(_concl_tbl))
+                        story.append(Spacer(1, 14))
+
+                    # ── Análisis Legal ────────────────────────────────────
+                    _obs_l = _s.get("observaciones_legales") or []
+                    _mit_l = _s.get("sugerencias_mitigacion") or []
+                    if _obs_l or _mit_l:
+                        story.append(HRFlowable(width="100%", thickness=0.5, color=HexColor("#E4E0D8"), spaceAfter=8))
+                        story.append(Paragraph("⚖  ANÁLISIS LEGAL", sty_secttl))
+                        _leg_grid = Table(
+                            [[
+                                [Paragraph("OBSERVACIONES", _sty("ohead", fontSize=7, textColor=HexColor("#E07A5F"),
+                                            fontName="Helvetica-Bold", letterSpacing=1, leading=10, spaceAfter=5))]
+                                + [Paragraph(f"⚠  {x}", sty_obs) for x in _obs_l],
+                                [Paragraph("MITIGACIÓN", _sty("mhead", fontSize=7, textColor=HexColor("#1A7A4A"),
+                                            fontName="Helvetica-Bold", letterSpacing=1, leading=10, spaceAfter=5))]
+                                + [Paragraph(f"→  {x}", sty_mit) for x in _mit_l],
+                            ]],
+                            colWidths=["50%", "50%"]
+                        )
+                        _leg_grid.setStyle(TableStyle([
+                            ("VALIGN", (0,0), (-1,-1), "TOP"),
+                            ("LEFTPADDING",  (0,0), (-1,-1), 0),
+                            ("RIGHTPADDING", (0,0), (-1,-1), 8),
+                            ("TOPPADDING",   (0,0), (-1,-1), 0),
+                            ("BOTTOMPADDING",(0,0), (-1,-1), 0),
+                            ("LINEAFTER", (0,0), (0,-1), 0.5, HexColor("#E4E0D8")),
+                            ("LEFTPADDING", (1,0), (1,-1), 12),
+                        ]))
+                        story.append(_leg_grid)
+                        story.append(Spacer(1, 14))
+
+                    # ── Footer ────────────────────────────────────────────
+                    story.append(HRFlowable(width="100%", thickness=0.5, color=HexColor("#E4E0D8"), spaceAfter=6))
+                    story.append(Paragraph(
+                        f"Generado con SOLUM · Osterling Advisory · Lima, Perú · Información confidencial · {_f}",
+                        sty_footer
+                    ))
+
+                    doc.build(story)
+                    return _buf.getvalue()
+
                 def _build_rsm_res_html(_s, _ub, _f):
                     _N = "#0D2137"
                     _rec = _s.get("recomendacion", "evaluar_con_condiciones")
@@ -25561,10 +25762,10 @@ elif tipo_op == "Inmueble Residencial":
                         f'</body></html>'
                     )
                 st.download_button(
-                    "⬇ DESCARGAR RESUMEN EJECUTIVO (HTML)",
-                    data=_build_rsm_res_html(rsm_r, _hero_zona, _rsm_fecha_dl).encode("utf-8"),
-                    file_name=f"SOLUM_Resumen_Residencial_{datetime.datetime.now().strftime('%Y%m%d')}.html",
-                    mime="text/html",
+                    "⬇ DESCARGAR RESUMEN EJECUTIVO (PDF)",
+                    data=_build_rsm_res_pdf(rsm_r, _hero_zona, _rsm_fecha_dl),
+                    file_name=f"SOLUM_Resumen_Residencial_{datetime.datetime.now().strftime('%Y%m%d')}.pdf",
+                    mime="application/pdf",
                     use_container_width=True,
                     key="btn_dl_rsm_res",
                 )
