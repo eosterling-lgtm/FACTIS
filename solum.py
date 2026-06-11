@@ -23513,8 +23513,8 @@ elif tipo_op == "Proyecto Logístico / Industrial":
             st.markdown('<div class="section-title">Cronograma del Proyecto</div>', unsafe_allow_html=True)
             _meses_dd_p  = 4
             _meses_const_p = int(st.session_state.get("ind_tplazo_const") or 6)
-            _const_start_p = 1  # construcción arranca mes 1, en paralelo con DD
-            _inicio_renta_p = _const_start_p + _meses_const_p  # 1+6=7
+            _const_start_p  = _meses_dd_p          # obra arranca al obtener licencia (mes 4)
+            _inicio_renta_p = _const_start_p + _meses_const_p  # 4+6=10
             _phases_ind = [
                 ("Due Diligence / Permisos", 0, _meses_dd_p, "Gestión"),
                 (f"Construcción Nave ({_meses_const_p} meses)", _const_start_p, _inicio_renta_p, "Obra"),
