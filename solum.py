@@ -16488,47 +16488,67 @@ with st.sidebar:
             unsafe_allow_html=True,
         )
         res_col1, res_col2 = st.columns(2)
-        res_m2 = res_col1.number_input("Área (m²)", 1, 2000, max(1, int(st.session_state.get("res_m2_k", 80))), 5, key="res_m2_k")
+        res_m2         = res_col1.number_input("Área (m²)", 1, 2000, max(1, int(st.session_state.get("res_m2_k", 80))), 5, key="res_m2_k")
         res_antiguedad = res_col2.number_input("Antigüedad (años)", 0, 100, int(st.session_state.get("res_antig_k", 5)), 1, key="res_antig_k")
-        _res_ec1, _res_ec2 = st.columns(2)
-        res_cocheras  = _res_ec1.number_input("Cocheras", 0, 10, 0, 1, key="res_cocheras")
-        res_depositos = _res_ec2.number_input("Depósitos", 0, 5, 0, 1, key="res_depositos")
-        _RES_P_COCH = 15_000
-        _RES_P_DEP  = 3_000
-        _res_extras = res_cocheras * _RES_P_COCH + res_depositos * _RES_P_DEP
-        if _res_extras > 0:
-            st.markdown(
-                f'<div style="font-size:11px;color:#475569;margin:-4px 0 6px 0;">'
-                f'Cocheras: <b>${res_cocheras * _RES_P_COCH:,}</b>'
-                + (f' &nbsp;·&nbsp; Depósitos: <b>${res_depositos * _RES_P_DEP:,}</b>' if res_depositos > 0 else "")
-                + f' &nbsp;·&nbsp; Total extras: <b style="color:#1E2D3D;">${_res_extras:,}</b></div>',
-                unsafe_allow_html=True
-            )
-        _dorm_opts = ["1 Dormitorio", "2 Dormitorios", "3 Dormitorios", "Dúplex", "Tríplex", "Otro"]
+
+        # ── Tipología ──────────────────────────────────────
+        _dorm_opts = ["Flat", "Dúplex", "Tríplex", "Loft", "Penthouse", "Otro"]
         try:
             _dorm_saved = st.session_state.get("res_dorm_k", "")
-            # compatibilidad con valor legacy "Dúplex / Otro"
-            if _dorm_saved == "Dúplex / Otro":
-                _dorm_saved = "Dúplex"
-            _dorm_default_idx = _dorm_opts.index(_dorm_saved) if _dorm_saved in _dorm_opts else 1
+            # compatibilidad con valores legacy
+            _DORM_LEGACY = {"Dúplex / Otro": "Dúplex", "1 Dormitorio": "Flat",
+                            "2 Dormitorios": "Flat", "3 Dormitorios": "Flat"}
+            if _dorm_saved in _DORM_LEGACY:
+                _dorm_saved = _DORM_LEGACY[_dorm_saved]
+            _dorm_default_idx = _dorm_opts.index(_dorm_saved) if _dorm_saved in _dorm_opts else 0
         except (ValueError, KeyError):
-            _dorm_default_idx = 1
-        _dorm_tipo = st.selectbox("Tipología", _dorm_opts, index=_dorm_default_idx, key="res_dorm_k")
+            _dorm_default_idx = 0
+        _dorm_tipo = st.selectbox("Tipología", _dorm_opts, index=_dorm_default_idx, key="res_dorm_k",
+                                  help="Flat = depto estándar de 1 a 4 dorm. Loft = planta abierta sin división.")
 
-        # Número de dormitorios para Dúplex y Tríplex
-        if _dorm_tipo in ("Dúplex", "Tríplex"):
-            _ndorm_default = {"Dúplex": 3, "Tríplex": 4}[_dorm_tipo]
-            _ndorm_saved   = int(st.session_state.get("res_ndorm_k", _ndorm_default))
-            _ndorm = st.selectbox(
+        # N° dormitorios — para todo excepto Loft
+        _NDORM_OPTS  = {"Flat": [1, 2, 3, 4], "Dúplex": [2, 3, 4, 5],
+                        "Tríplex": [3, 4, 5], "Penthouse": [2, 3, 4, 5], "Otro": [1, 2, 3, 4, 5]}
+        _NDORM_DEF   = {"Flat": 2, "Dúplex": 3, "Tríplex": 4, "Penthouse": 3, "Otro": 2}
+        if _dorm_tipo in _NDORM_OPTS:
+            _opts_nd   = _NDORM_OPTS[_dorm_tipo]
+            _def_nd    = _NDORM_DEF.get(_dorm_tipo, _opts_nd[0])
+            _saved_nd  = int(st.session_state.get("res_ndorm_k", _def_nd))
+            _saved_nd  = _saved_nd if _saved_nd in _opts_nd else _def_nd
+            _ndorm     = st.selectbox(
                 "N° de dormitorios",
-                [2, 3, 4, 5],
-                index=min(max([2, 3, 4, 5].index(_ndorm_saved) if _ndorm_saved in [2, 3, 4, 5] else 1, 0), 3),
+                _opts_nd,
+                index=_opts_nd.index(_saved_nd),
                 key="res_ndorm_k",
-                help="En dúplex/tríplex el dormitorio principal suele estar en el piso superior."
+                help="En Dúplex/Tríplex el dormitorio principal está en el piso superior.",
             )
             res_dormitorios = f"{_dorm_tipo} · {_ndorm} Dorm."
         else:
+            # Loft — sin selector de dormitorios
             res_dormitorios = _dorm_tipo
+
+        # ── Piso y patio ───────────────────────────────────
+        _piso_col, _patio_col = st.columns(2)
+        res_piso = _piso_col.number_input(
+            "N° de piso", 0, 60,
+            int(st.session_state.get("res_piso_k", 0)), 1,
+            key="res_piso_k",
+            help="0 = Planta Baja / Semisótano. Pisos altos tienen prima de precio en Lima."
+        )
+        res_patio = _patio_col.checkbox(
+            "Tiene patio / terraza privada",
+            value=bool(st.session_state.get("res_patio_k", False)),
+            key="res_patio_k",
+        )
+
+        # ── Cocheras y depósitos (internos al cálculo, no se muestra precio) ──
+        _res_ec1, _res_ec2 = st.columns(2)
+        res_cocheras  = _res_ec1.number_input("Cocheras",  0, 10, 0, 1, key="res_cocheras",
+                                              help="Las cocheras pueden estar incluidas en el precio o venderse por separado.")
+        res_depositos = _res_ec2.number_input("Depósitos", 0,  5, 0, 1, key="res_depositos")
+        _RES_P_COCH = 15_000   # valor referencial interno — no se muestra
+        _RES_P_DEP  =  2_500   # valor referencial interno — no se muestra
+        _res_extras = res_cocheras * _RES_P_COCH + res_depositos * _RES_P_DEP
 
         _res_fotos = st.file_uploader(
             "📷 Fotos del inmueble",
@@ -17722,12 +17742,14 @@ elif tipo_op == "Inmueble Residencial" and run_residencial:
         "antiguedad": res_antiguedad,
         "cocheras":   st.session_state.get("res_cocheras", 0),
         "depositos":  st.session_state.get("res_depositos", 0),
+        "piso":       st.session_state.get("res_piso_k", 0),
+        "patio":      bool(st.session_state.get("res_patio_k", False)),
         "valor_extras": (st.session_state.get("res_cocheras", 0) * 15000 +
-                         st.session_state.get("res_depositos", 0) * 3000),
+                         st.session_state.get("res_depositos", 0) * 2500),
         "precio_depa_puro": max(0, res_precio - (st.session_state.get("res_cocheras", 0) * 15000 +
-                                                  st.session_state.get("res_depositos", 0) * 3000)),
+                                                  st.session_state.get("res_depositos", 0) * 2500)),
         "precio_m2":  max(0, res_precio - (st.session_state.get("res_cocheras", 0) * 15000 +
-                                            st.session_state.get("res_depositos", 0) * 3000)) / res_m2 if res_m2 > 0 else 0,
+                                            st.session_state.get("res_depositos", 0) * 2500)) / res_m2 if res_m2 > 0 else 0,
         "precio_m2_mercado": _res_precio_m2_mercado,
         "yield_mercado_pct": _m_res_run.get("yield_mercado_pct", 0),
         "alquiler_mercado_m2": _m_res_run.get("alquiler_m2_mes", 0),
