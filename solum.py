@@ -22922,87 +22922,39 @@ elif tipo_op == "Proyecto Logístico / Industrial":
 
         # TAB 1: PARÁMETROS / GEOMETRÍA + RESUMEN
         with ind_tabs[0]:
-            # ── GEOMETRÍA DEL LOTE INDUSTRIAL ────────────────────
-            st.markdown('<div class="section-title">Geometría del Lote</div>', unsafe_allow_html=True)
-
-            _ind_geo_modo = st.radio(
-                "Fuente de medidas",
-                ["Tabular medidas", "Adjuntar plano (DXF/DWG)"],
-                horizontal=True, key="ind_geo_modo"
-            )
-
+            # ── GEOMETRÍA DEL LOTE INDUSTRIAL — auto desde Parámetros ──
+            # El polígono se genera automáticamente con frente/fondo de la sección
+            # de Parámetros (ind_frente / ind_fondo). Si el usuario subió un DXF
+            # en Parámetros (ind_doc_planos), se usa ese polígono guardado.
             _ind_poly_lote = st.session_state.get("ind_geo_poly_lote")
+            _auto_frente = float(st.session_state.get("ind_frente") or 0)
+            _auto_fondo  = float(st.session_state.get("ind_fondo")  or 0)
+            _auto_area   = float(st.session_state.get("ind_area")   or 0)
 
-            if _ind_geo_modo == "Tabular medidas":
-                _igc1, _igc2, _igc3, _igc4 = st.columns(4)
-                _ig_frente = _igc1.number_input("Frente (ml)",         min_value=0.0, value=float(st.session_state.get("ind_geo_frente", 0.0)), step=1.0, key="ind_geo_frente")
-                _ig_fondo  = _igc2.number_input("Fondo (ml)",          min_value=0.0, value=float(st.session_state.get("ind_geo_fondo",  0.0)), step=1.0, key="ind_geo_fondo")
-                _ig_izq    = _igc3.number_input("Lado izquierdo (ml)", min_value=0.0, value=float(st.session_state.get("ind_geo_izq",   0.0)), step=1.0, key="ind_geo_izq")
-                _ig_der    = _igc4.number_input("Lado derecho (ml)",   min_value=0.0, value=float(st.session_state.get("ind_geo_der",   0.0)), step=1.0, key="ind_geo_der")
+            # Si no hay polígono guardado (o cambió frente/fondo), regenerar
+            _prev_f = float(st.session_state.get("ind_geo_frente_val", 0) or 0)
+            _prev_d = float(st.session_state.get("ind_geo_fondo_val",  0) or 0)
+            _needs_regen = (_ind_poly_lote is None or
+                            abs(_auto_frente - _prev_f) > 0.1 or
+                            abs(_auto_fondo  - _prev_d) > 0.1)
 
-                if st.button("Calcular geometría", key="ind_geo_calc_btn", type="primary"):
-                    if _SHAPELY_OK:
-                        _ind_poly_lote = _geo_poligono_tabular(_ig_frente, _ig_fondo, _ig_izq, _ig_der)
-                        # Si el área declarada en Parámetros difiere >3%, recalcular
-                        # la altura del trapezoide para que el área coincida.
-                        # Caso típico: lote irregular donde los lados laterales no son
-                        # paralelos entre sí (izq y der muy diferentes), lo que invalida
-                        # el modelo de altura promedio.
-                        _area_decl_fix = float(st.session_state.get("ind_area", 0) or 0)
-                        if (_area_decl_fix > 0 and _ind_poly_lote and
-                                abs(_ind_poly_lote.area - _area_decl_fix) / _area_decl_fix > 0.03):
-                            _h_adj  = 2 * _area_decl_fix / max(_ig_frente + _ig_fondo, 1)
-                            _off_adj = (_ig_frente - _ig_fondo) / 2.0
-                            from shapely.geometry import Polygon as _SPfix
-                            _ind_poly_lote = _SPfix([
-                                (0, 0), (_ig_frente, 0),
-                                (_ig_frente - _off_adj, _h_adj),
-                                (_off_adj, _h_adj),
-                            ])
-                            st.session_state["ind_geo_adjusted"] = True
-                        else:
-                            st.session_state["ind_geo_adjusted"] = False
-                        st.session_state["ind_geo_poly_lote"]  = _ind_poly_lote
-                        st.session_state["ind_geo_frente_val"] = _ig_frente
-                        st.session_state["ind_geo_fondo_val"]  = _ig_fondo
-                        st.session_state["_goto_tab_name_ind"] = "Parámetros"
-                        st.rerun()
-                    else:
-                        st.markdown('<div class="alert-info">ℹ️ ' + "Librería shapely no disponible." + '</div>', unsafe_allow_html=True)
-
-                if st.session_state.get("ind_geo_adjusted"):
-                    _area_decl_note = float(st.session_state.get("ind_area", 0) or 0)
-                    st.markdown(
-                        f'<div style="background:#E8F5EE;border-left:3px solid #1A4731;border-radius:4px;'
-                        f'padding:7px 11px;font-size:11px;color:#1A4731;margin-top:4px;">'
-                        f'✓ Polígono ajustado para coincidir con el área declarada en Parámetros '
-                        f'<strong>({_area_decl_note:,.0f} m²)</strong>. '
-                        f'Los lados laterales desiguales (izq ≠ der) indican un lote irregular — '
-                        f'para máxima precisión sube el DXF del levantamiento topográfico.'
-                        f'</div>', unsafe_allow_html=True)
-
-            else:
-                _ind_geo_file = st.file_uploader(
-                    "Cargar plano perimétrico (.dxf / .dwg / .pdf)",
-                    type=["dxf", "dwg", "pdf"], key="ind_geo_dxf_file")
-                if _ind_geo_file:
-                    if _ind_geo_file.name.lower().endswith(".pdf"):
-                        st.info("PDF cargado como referencia. Para análisis 3D automático sube el archivo DXF exportado desde AutoCAD o adjunta las medidas en 'Tabular medidas'.")
-                    elif _ind_geo_file.name.lower().endswith(".dwg"):
-                        st.warning(
-                            "**DWG es formato propietario binario** — SOLUM no puede extraer el polígono directamente. "
-                            "Exporta como DXF desde AutoCAD: **Archivo → Guardar como → AutoCAD DXF (\\*.dxf)**. "
-                            "Una vez en DXF, SOLUM extrae el perímetro automáticamente.")
-                    elif _SHAPELY_OK and _EZDXF_OK:
-                        import io as _io
-                        _ind_poly_lote = _geo_poligono_dxf(_io.TextIOWrapper(_io.BytesIO(_ind_geo_file.read()), encoding="utf-8", errors="ignore"))
-                        if _ind_poly_lote:
-                            st.session_state["ind_geo_poly_lote"] = _ind_poly_lote
-                            st.success(f"Polígono extraído — área geométrica: {_ind_poly_lote.area:,.1f} m²")
-                        else:
-                            st.error("No se encontró perímetro en el DXF. Verifica que el archivo tenga una LWPOLYLINE o POLYLINE cerrando el lote.")
-                    else:
-                        st.markdown('<div class="alert-info">ℹ️ ' + "Instala ezdxf y shapely para usar esta función." + '</div>', unsafe_allow_html=True)
+            if _needs_regen and _SHAPELY_OK:
+                if _auto_frente > 0 and _auto_fondo > 0:
+                    _ind_poly_lote = _geo_poligono_tabular(_auto_frente, _auto_fondo, _auto_fondo, _auto_fondo)
+                    # Ajustar área si difiere >3% respecto a ind_area
+                    if _auto_area > 0 and abs(_ind_poly_lote.area - _auto_area) / _auto_area > 0.03:
+                        _h_adj   = _auto_area / max(_auto_frente, 1)
+                        from shapely.geometry import Polygon as _SPfix
+                        _ind_poly_lote = _SPfix([(0,0),(_auto_frente,0),(_auto_frente,_h_adj),(0,_h_adj)])
+                elif _auto_area > 0:
+                    import math as _math
+                    _lado = _math.sqrt(_auto_area)
+                    from shapely.geometry import Polygon as _SPfix
+                    _ind_poly_lote = _SPfix([(0,0),(_lado,0),(_lado,_lado),(0,_lado)])
+                if _ind_poly_lote:
+                    st.session_state["ind_geo_poly_lote"]  = _ind_poly_lote
+                    st.session_state["ind_geo_frente_val"] = _auto_frente
+                    st.session_state["ind_geo_fondo_val"]  = _auto_fondo
 
             if _ind_poly_lote and not _ind_poly_lote.is_empty:
                 st.markdown('<div class="section-title">Actividad y Altura de Nave</div>', unsafe_allow_html=True)
