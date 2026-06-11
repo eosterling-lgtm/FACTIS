@@ -17344,7 +17344,7 @@ with st.sidebar:
         _ret2_done = (float(st.session_state.get("ret_area_gla", 0) or 0) > 0
                       and float(st.session_state.get("ret_renta_m2", 0) or 0) > 0)
         _ret3_done = (float(st.session_state.get("ret_costo_terreno", 0) or 0) > 0
-                      or ret_modo == "Arrendatario")
+                      or st.session_state.get("ret_modo", "") == "Arrendatario")
         _ret4_done = st.session_state.get("retail_result") is not None
         _steps_ret = [
             ("Información del Inmueble", "Formato, distrito, nombre",        _ret1_done),
