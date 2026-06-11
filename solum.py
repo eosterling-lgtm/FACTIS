@@ -5017,6 +5017,67 @@ def _guardar_precio_supabase(distrito: str, campo: str, valor) -> bool:
         return False
 
 
+def _guardar_historial(modulo: str, distrito: str, tipo: str, kpis: dict, inputs_resumen=None) -> bool:
+    """Guarda un registro de análisis en la tabla analisis_historial de Supabase."""
+    try:
+        sb = _get_supabase()
+        if sb is None:
+            return False
+        import datetime as _dt_h, json as _j
+        _usuario = ""
+        try:
+            _usuario = st.session_state.get("_user_name", "") or ""
+        except Exception:
+            pass
+        # Serializar kpis — solo tipos básicos
+        def _safe(v):
+            if isinstance(v, (str, int, float, bool)) or v is None:
+                return v
+            try:
+                return float(v)
+            except Exception:
+                return str(v)
+        kpis_safe = {k: _safe(v) for k, v in (kpis or {}).items()}
+        inp_safe  = {k: _safe(v) for k, v in (inputs_resumen or {}).items()}
+        row = {
+            "usuario":        _usuario[:100],
+            "modulo":         modulo[:50],
+            "distrito":       (distrito or "")[:100],
+            "tipo":           (tipo or "")[:100],
+            "kpis":           kpis_safe,
+            "inputs_resumen": inp_safe,
+        }
+        sb.table("analisis_historial").insert(row).execute()
+        return True
+    except Exception as _e_h:
+        _log.warning("_guardar_historial: %s", _e_h)
+        return False
+
+
+def _guardar_escenario(nombre: str, modulo: str, kpis: dict, inputs_resumen=None) -> None:
+    """Guarda un escenario en st.session_state['_escenarios'] (máx 3)."""
+    try:
+        import streamlit as _st3
+        _lista = _st3.session_state.get("_escenarios") or []
+        if not isinstance(_lista, list):
+            _lista = []
+        # Evitar duplicados por nombre
+        _lista = [e for e in _lista if e.get("nombre") != nombre]
+        import datetime as _dt3
+        _lista.insert(0, {
+            "nombre":   nombre,
+            "modulo":   modulo,
+            "ts":       _dt3.datetime.now().strftime("%H:%M %d/%m"),
+            "kpis":     {k: v for k, v in (kpis or {}).items()
+                         if isinstance(v, (str, int, float, bool, type(None)))},
+            "inputs":   {k: v for k, v in (inputs_resumen or {}).items()
+                         if isinstance(v, (str, int, float, bool, type(None)))},
+        })
+        _st3.session_state["_escenarios"] = _lista[:3]  # máx 3
+    except Exception as _e_esc:
+        _log.warning("_guardar_escenario: %s", _e_esc)
+
+
 # Tipo de cambio S./USD — se actualiza desde Sheet (fila CONFIG) o secrets.toml
 TIPO_CAMBIO = float((st.secrets.get("mercado") or {}).get("tipo_cambio", 3.45))
 # Sobrescribe MERCADO con versión live (Sheet > hardcoded, Supabase override > Sheet)
@@ -15111,6 +15172,142 @@ with st.sidebar:
         st.session_state["_show_welcome"] = True
         st.rerun()
 
+    # ── Export / Import JSON de Proyecto ─────────────────────
+    st.markdown('<hr style="border:none;border-top:1px solid rgba(255,255,255,0.12);margin:8px 0 8px;">', unsafe_allow_html=True)
+    st.markdown(
+        '<div style="font-size:10px;color:#6B7280;letter-spacing:2px;text-transform:uppercase;'
+        'font-weight:700;padding:0 4px 4px;">Proyecto</div>',
+        unsafe_allow_html=True)
+
+    # ── GUARDAR: serializar session_state con inputs de todos los módulos ──
+    def _snapshot_proyecto() -> dict:
+        """Captura todos los inputs relevantes de session_state para exportar."""
+        _KEYS_INDUSTRIAL = [k for k in st.session_state.keys() if k.startswith("ind_")]
+        _KEYS_OFICINAS   = [k for k in st.session_state.keys() if k.startswith("ofi_") or k.startswith("_ofi_")]
+        _KEYS_RETAIL     = [k for k in st.session_state.keys() if k.startswith("ret_") or k.startswith("_ret_")]
+        _KEYS_GENERAL    = ["zona_sel","_modulo_activo","_user_name","_user_role"]
+
+        _all_keys = set(_KEYS_GENERAL + _KEYS_INDUSTRIAL + _KEYS_OFICINAS + _KEYS_RETAIL)
+        snap = {}
+        for k in _all_keys:
+            v = st.session_state.get(k)
+            # Solo serializar tipos básicos — excluir bytes, figuras, objetos Shapely, etc.
+            if v is None:
+                continue
+            if isinstance(v, (str, int, float, bool)):
+                snap[k] = v
+            elif isinstance(v, (list, dict)):
+                try:
+                    import json as _j
+                    _j.dumps(v)  # test serializable
+                    snap[k] = v
+                except (TypeError, ValueError):
+                    pass
+        # Agregar fin_params si existe
+        _fin_src = st.session_state.get("fin_params") or st.session_state.get("_fin_base")
+        if isinstance(_fin_src, dict):
+            snap["_export_fin"] = {k: v for k, v in _fin_src.items()
+                                   if isinstance(v, (str, int, float, bool))}
+        snap["_export_ts"]      = __import__("datetime").datetime.now().isoformat()
+        snap["_export_version"] = "SOLUM-1.0"
+        return snap
+
+    import json as _json_mod
+    _snap = _snapshot_proyecto()
+    _snap_bytes = _json_mod.dumps(_snap, ensure_ascii=False, indent=2).encode("utf-8")
+    _ts_str = __import__("datetime").datetime.now().strftime("%Y%m%d_%H%M")
+    st.download_button(
+        label="💾 Guardar proyecto",
+        data=_snap_bytes,
+        file_name=f"solum_proyecto_{_ts_str}.json",
+        mime="application/json",
+        use_container_width=True,
+        key="_btn_export_json",
+        help="Descarga los inputs actuales como JSON para retomar el análisis luego",
+    )
+
+    # ── CARGAR: restaurar session_state desde JSON ──────────────
+    _uploaded_json = st.file_uploader(
+        "📂 Cargar proyecto",
+        type=["json"],
+        key="_uploader_json",
+        label_visibility="collapsed",
+        help="Carga un archivo .json exportado por SOLUM para restaurar los inputs",
+    )
+    if _uploaded_json is not None:
+        try:
+            _loaded = _json_mod.loads(_uploaded_json.read().decode("utf-8"))
+            if _loaded.get("_export_version", "").startswith("SOLUM"):
+                _restored = 0
+                _SKIP_KEYS = {"_export_ts", "_export_version", "_export_fin",
+                              "_authenticated", "_user_name", "_user_role", "_username"}
+                for _k, _v in _loaded.items():
+                    if _k not in _SKIP_KEYS:
+                        st.session_state[_k] = _v
+                        _restored += 1
+                # Restaurar fin_params si existe
+                if "_export_fin" in _loaded and isinstance(_loaded["_export_fin"], dict):
+                    st.session_state["fin_params"] = _loaded["_export_fin"]
+                st.success(f"✅ Proyecto cargado — {_restored} parámetros restaurados")
+                st.rerun()
+            else:
+                st.error("Archivo no reconocido. Use un JSON exportado por SOLUM.")
+        except Exception as _e_load:
+            st.error(f"Error al cargar: {_e_load}")
+
+    # ── Botón Historial ───────────────────────────────────────
+    if st.button("📋 Ver historial", key="_btn_historial", use_container_width=True,
+                 help="Últimos análisis ejecutados"):
+        st.session_state["_show_historial"] = not st.session_state.get("_show_historial", False)
+
+    # ── Panel Historial (sidebar) ─────────────────────────────
+    if st.session_state.get("_show_historial", False):
+        st.markdown('<hr style="border:none;border-top:1px solid rgba(255,255,255,0.12);margin:8px 0;">', unsafe_allow_html=True)
+        st.markdown(
+            '<div style="font-size:10px;color:#6B7280;letter-spacing:2px;text-transform:uppercase;'
+            'font-weight:700;padding:0 4px 4px;">Historial reciente</div>',
+            unsafe_allow_html=True)
+        try:
+            _sb_hist = _get_supabase()
+            if _sb_hist:
+                _hist_rows = (
+                    _sb_hist.table("analisis_historial")
+                    .select("created_at,modulo,distrito,tipo,kpis")
+                    .order("created_at", desc=True)
+                    .limit(10)
+                    .execute()
+                ).data or []
+                if _hist_rows:
+                    for _hr in _hist_rows:
+                        _dt = (_hr.get("created_at","")[:16] or "").replace("T"," ")
+                        _km = _hr.get("kpis") or {}
+                        _kpi_str = ""
+                        _mod = _hr.get("modulo","")
+                        if _mod == "Residencial":
+                            _tir = _km.get("tir_anual_pct")
+                            _kpi_str = f"TIR {_tir:.1f}%" if _tir else ""
+                        elif _mod == "Industrial":
+                            _y = _km.get("yield_bruto_pct")
+                            _kpi_str = f"Yield {_y:.1f}%" if _y else ""
+                        elif _mod == "Oficinas":
+                            _c = _km.get("cap_rate")
+                            _kpi_str = f"Cap {_c:.1f}%" if _c else ""
+                        elif _mod == "Retail":
+                            _n = _km.get("noi")
+                            _kpi_str = f"NOI ${_n:,.0f}" if _n else ""
+                        st.markdown(
+                            f'<div style="padding:4px 0;font-size:11px;color:#CBD5E1;border-bottom:1px solid rgba(255,255,255,0.06);">'
+                            f'<span style="color:#94A3B8;">{_dt}</span> '
+                            f'<b style="color:#FFFFFF;">{_mod}</b> · {_hr.get("distrito","")} '
+                            f'<span style="color:#4A90C4;">{_kpi_str}</span></div>',
+                            unsafe_allow_html=True)
+                else:
+                    st.markdown('<div style="font-size:11px;color:#6B7280;padding:4px 0;">Sin análisis guardados aún.</div>', unsafe_allow_html=True)
+            else:
+                st.markdown('<div style="font-size:11px;color:#6B7280;padding:4px 0;">Supabase no disponible.</div>', unsafe_allow_html=True)
+        except Exception as _e_hist_view:
+            st.markdown(f'<div style="font-size:11px;color:#6B7280;">Error: {_e_hist_view}</div>', unsafe_allow_html=True)
+
     st.markdown('<hr style="border:none;border-top:1px solid #CBD5E1;margin:6px 0 10px;">', unsafe_allow_html=True)
     st.markdown(
         '<div style="font-size:10px;color:#6B7280;letter-spacing:3px;text-transform:uppercase;'
@@ -17782,6 +17979,24 @@ with st.sidebar:
                 "duracion_anos":         ret_duracion,
             }
             st.session_state["retail_result"] = calcular_retail(_retail_inp)
+            # ── Historial Supabase ────────────────────────────────
+            _rr_h = st.session_state.get("retail_result") or {}
+            _guardar_historial(
+                modulo="Retail",
+                distrito=str(st.session_state.get("ret_distrito","") or ""),
+                tipo=str(st.session_state.get("ret_modo","") or ""),
+                kpis={
+                    "noi":             _rr_h.get("noi"),
+                    "valor_activo":    _rr_h.get("valor_activo"),
+                    "cap_rate_real":   _rr_h.get("cap_rate_real"),
+                    "tir_proyecto":    _rr_h.get("tir_proyecto"),
+                },
+                inputs_resumen={
+                    "area_gla":        _retail_inp.get("area_gla"),
+                    "renta_m2":        _retail_inp.get("renta_m2"),
+                    "costo_terreno":   _retail_inp.get("costo_terreno"),
+                },
+            )
             st.session_state["retail_inp"] = _retail_inp
             st.rerun()
 
@@ -17852,6 +18067,24 @@ if tipo_op == "Proyecto Logístico / Industrial" and run_industrial:
         }
         try:
             st.session_state.industrial_result = calcular_industrial(_ind_inp)
+            # ── Historial Supabase ────────────────────────────────
+            _ir_h = st.session_state.industrial_result or {}
+            _guardar_historial(
+                modulo="Industrial",
+                distrito=str(st.session_state.get("ind_ubicacion","") or ""),
+                tipo=str(st.session_state.get("ind_tipo","") or st.session_state.get("ind_uso","") or ""),
+                kpis={
+                    "yield_bruto_pct": _ir_h.get("yield_bruto_pct"),
+                    "costo_total":     _ir_h.get("costo_total"),
+                    "noi_anual":       _ir_h.get("noi_anual"),
+                    "payback_anos":    _ir_h.get("payback_anos"),
+                },
+                inputs_resumen={
+                    "area_terreno":    _ind_inp.get("area_terreno"),
+                    "costo_terreno":   _ind_inp.get("costo_terreno"),
+                    "tipo_nave":       _ind_inp.get("tipo_nave"),
+                },
+            )
             st.session_state["_ind_inp_sens"] = _ind_inp
             st.session_state.ind_analizado = True
             # Extraer fecha CPUE para Normativa Inteligente
@@ -18766,6 +18999,24 @@ elif tipo_op == "Proyecto Inmobiliario":
             }
             try:
                 st.session_state.financ = calcular_financiero(c, _fin_eager, zona_sel)
+                # ── Historial Supabase ────────────────────────────────
+                _fr_h = (st.session_state.financ or {}).get("resumen", {})
+                _guardar_historial(
+                    modulo="Residencial",
+                    distrito=str(zona_sel or ""),
+                    tipo="Multifamiliar",
+                    kpis={
+                        "tir_anual_pct":    _fr_h.get("tir_anual_pct"),
+                        "margen_pct":       _fr_h.get("margen_pct"),
+                        "ingresos_ventas":  _fr_h.get("ingresos_ventas"),
+                        "precio_max_terreno": _fr_h.get("precio_max_terreno"),
+                    },
+                    inputs_resumen={
+                        "area_terreno":    (c or {}).get("area_terreno"),
+                        "n_unidades":      (c or {}).get("n_unidades"),
+                        "precio_venta_m2": _fin_eager.get("precio_venta_m2"),
+                    },
+                )
             except Exception:
                 pass
 
@@ -21768,6 +22019,36 @@ elif tipo_op == "Proyecto Inmobiliario":
 
             st.markdown('<div class="section-title">Resumen Ejecutivo</div>', unsafe_allow_html=True)
 
+            # ── Guardar escenario ────────────────────────────────────
+            _fin_r_snap = (st.session_state.financ or {}).get("resumen", {})
+            if _fin_r_snap:
+                _col_esc_res = st.columns([3, 1])[1]
+                with _col_esc_res:
+                    _esc_nombre_res = st.text_input(
+                        "Nombre escenario",
+                        value=f"Residencial {zona_sel or ''}",
+                        key="_esc_nombre_res",
+                        label_visibility="collapsed",
+                        placeholder="Nombre del escenario...",
+                    )
+                    if st.button("📌 Guardar escenario", key="_btn_esc_res", use_container_width=True):
+                        _guardar_escenario(
+                            nombre=_esc_nombre_res or "Residencial",
+                            modulo="Residencial",
+                            kpis={
+                                "tir_anual_pct":      _fin_r_snap.get("tir_anual_pct"),
+                                "margen_pct":         _fin_r_snap.get("margen_pct"),
+                                "ingresos_ventas":    _fin_r_snap.get("ingresos_ventas"),
+                                "precio_max_terreno": _fin_r_snap.get("precio_max_terreno"),
+                                "van":                _fin_r_snap.get("van"),
+                            },
+                            inputs_resumen={
+                                "zona":       zona_sel,
+                                "n_unidades": (c or {}).get("n_unidades"),
+                            },
+                        )
+                        st.success("✅ Escenario guardado en Portfolio")
+
             col1, col2 = st.columns(2)
             with col1:
                 st.markdown('<div class="section-title" style="font-size:11px">Datos del Inmueble</div>', unsafe_allow_html=True)
@@ -23205,6 +23486,37 @@ elif tipo_op == "Proyecto Logístico / Industrial":
                     f'<span style="font-size:10px;color:#4A5568;">Referencia orientativa — el profesional aplica su criterio según la operación específica.</span>'
                     f'</div>',
                     unsafe_allow_html=True)
+
+            # ── Guardar escenario ────────────────────────────────────
+            _ind_r_snap = st.session_state.industrial_result or {}
+            if _ind_r_snap:
+                _col_esc_ind = st.columns([3, 1])[1]
+                with _col_esc_ind:
+                    _esc_nombre_ind = st.text_input(
+                        "Nombre del escenario",
+                        value=f"Industrial {st.session_state.get('ind_ubicacion','') or 'Sin nombre'}",
+                        key="_esc_nombre_ind",
+                        label_visibility="collapsed",
+                        placeholder="Nombre del escenario...",
+                    )
+                    if st.button("📌 Guardar escenario", key="_btn_esc_ind", use_container_width=True):
+                        _guardar_escenario(
+                            nombre=_esc_nombre_ind or "Industrial",
+                            modulo="Industrial",
+                            kpis={
+                                "yield_bruto_pct": _ind_r_snap.get("yield_bruto_pct"),
+                                "costo_total":     _ind_r_snap.get("costo_total"),
+                                "noi_anual":       _ind_r_snap.get("noi_anual"),
+                                "payback_anos":    _ind_r_snap.get("payback_anos"),
+                                "area_nave":       _ind_r_snap.get("area_nave"),
+                            },
+                            inputs_resumen={
+                                "area_terreno":  st.session_state.get("ind_area"),
+                                "ubicacion":     st.session_state.get("ind_ubicacion"),
+                                "tipo_nave":     st.session_state.get("ind_tipo_nave"),
+                            },
+                        )
+                        st.success("✅ Escenario guardado en Portfolio")
 
         # TAB 2: FINANCIERO
         with ind_tabs[1]:
@@ -26485,6 +26797,23 @@ elif tipo_op == "Proyecto de Oficinas":
             _ofi_fin = {}
 
         if _ofi_fin:
+            # ── Historial Supabase ────────────────────────────────
+            _guardar_historial(
+                modulo="Oficinas",
+                distrito=str(_ofi_r.get("distrito","") or ""),
+                tipo=str(_ofi_r.get("modo","") or ""),
+                kpis={
+                    "pago_mensual_total": _ofi_fin.get("pago_mensual_total"),
+                    "costo_total_contrato": _ofi_fin.get("costo_total_contrato"),
+                    "cap_rate":          _ofi_fin.get("cap_rate"),
+                    "tir_proyecto":      _ofi_fin.get("tir_proyecto"),
+                },
+                inputs_resumen={
+                    "area":    _ofi_r.get("area"),
+                    "distrito": _ofi_r.get("distrito"),
+                    "modo":    _ofi_r.get("modo"),
+                },
+            )
             # ── M4-A: Hero banner ─────────────────────────────────
             _ofi_modo_disp = _ofi_fin.get("modo", "") or _ofi_r.get("modo", "")
             _ofi_distrito  = _ofi_r.get("distrito", "")
@@ -26550,6 +26879,70 @@ elif tipo_op == "Proyecto de Oficinas":
             _ofi_modo_fin = _ofi_fin.get("modo", "")
             _ofi_dis_lbl  = _ofi_r.get("distrito", "")
             _ofi_cls_lbl  = _ofi_r.get("clase", "B")
+
+            # ── Cronograma del Proyecto — Oficinas ────────────────────────
+            st.markdown('<div class="section-title">Cronograma del Proyecto</div>', unsafe_allow_html=True)
+            _NAV_GO = "#0A1628"; _PLT_GO = "#0E1E2E"
+            _cmap_ofi = {"Gestión": "#4A90C4", "Obra": "#475569", "Comercial": "#2E7D32", "Entrega": "#7A5500"}
+            if _ofi_modo_fin == "Alquiler":
+                _ofi_phases = [
+                    ("Due Diligence",              0, 1,  "Gestión"),
+                    ("Negociación / Contrato",      1, 2,  "Gestión"),
+                    ("Implementación TI / Fit-out", 2, 4,  "Obra"),
+                    ("Inicio de Ocupación",         4, 16, "Comercial"),
+                ]
+                _ofi_kpis = [("Due Diligence", "1 mes"), ("Negociación / Contrato", "1 mes"),
+                             ("Implementación TI", "2 meses"), ("Inicio de Ocupación", "Mes 4")]
+            elif _ofi_modo_fin == "Compra":
+                _ofi_phases = [
+                    ("Due Diligence",              0, 2,  "Gestión"),
+                    ("Escritura / Registro SUNARP", 2, 3,  "Gestión"),
+                    ("Implementación TI / Fit-out", 3, 5,  "Obra"),
+                    ("Inicio de Ocupación",         5, 17, "Comercial"),
+                ]
+                _ofi_kpis = [("Due Diligence", "2 meses"), ("Escritura / Registro", "1 mes"),
+                             ("Implementación TI", "2 meses"), ("Inicio de Ocupación", "Mes 5")]
+            else:  # Desarrollo de Proyecto
+                _ofi_phases = [
+                    ("Due Diligence",              0,  2,  "Gestión"),
+                    ("Permisos / Licencias",        2,  5,  "Gestión"),
+                    ("Construcción / Remodelación", 5,  13, "Obra"),
+                    ("Inicio de Operaciones",       13, 25, "Comercial"),
+                ]
+                _ofi_kpis = [("Due Diligence", "2 meses"), ("Permisos / Licencias", "3 meses"),
+                             ("Construcción", "8 meses"), ("Inicio de Operaciones", "Mes 13")]
+            _fig_g_ofi = go.Figure()
+            _seen_ofi = set()
+            for _pf, _ps, _pe, _pet in reversed(_ofi_phases):
+                _show_l = _pet not in _seen_ofi; _seen_ofi.add(_pet)
+                _fig_g_ofi.add_trace(go.Bar(
+                    x=[_pe - _ps], y=[_pf], base=[_ps], orientation="h",
+                    marker_color=_cmap_ofi[_pet], name=_pet,
+                    text=[f"{_pe-_ps} mes{'es' if _pe-_ps != 1 else ''}"],
+                    textposition="inside", insidetextanchor="middle",
+                    textfont=dict(color="white", size=11, family="Inter"),
+                    hovertemplate=f"<b>{_pf}</b><br>Inicio: mes {_ps}<br>Fin: mes {_pe}<br>Duración: {_pe-_ps} meses<extra></extra>",
+                    showlegend=_show_l,
+                ))
+            _fig_g_ofi.add_vline(x=0, line_color="#475569", line_width=1.5, line_dash="dot")
+            _ofi_total_range = max(p[2] for p in _ofi_phases) + 2
+            _fig_g_ofi.update_layout(
+                barmode="overlay", paper_bgcolor=_NAV_GO, plot_bgcolor=_PLT_GO,
+                font=dict(color="white", size=10, family="Inter"),
+                margin=dict(l=0, r=20, t=10, b=30), height=200,
+                xaxis=dict(title="Mes del proyecto", tickmode="linear", tick0=0, dtick=2,
+                           gridcolor="#1E2D3D", tickfont=dict(size=10),
+                           range=[-0.5, _ofi_total_range]),
+                yaxis=dict(showgrid=False, tickfont=dict(size=11)),
+                legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0,
+                            font=dict(size=10), bgcolor="rgba(0,0,0,0)"),
+                showlegend=True,
+            )
+            st.plotly_chart(_fig_g_ofi, use_container_width=True)
+            _gko = st.columns(4)
+            for _ci, (_klbl, _kval) in enumerate(_ofi_kpis):
+                _gko[_ci].metric(_klbl, _kval)
+            st.markdown("---")
 
             # ── ALQUILER ──────────────────────────────────────────────────
             if _ofi_modo_fin == "Alquiler":
@@ -26773,6 +27166,36 @@ elif tipo_op == "Proyecto de Oficinas":
                 )
             except Exception as _ofi_pdf_err:
                 st.caption(f"PDF no disponible: {_ofi_pdf_err}")
+
+            # ── Guardar escenario ────────────────────────────────────
+            _col_esc_ofi = st.columns([3, 1])[1]
+            with _col_esc_ofi:
+                _esc_nombre_ofi = st.text_input(
+                    "Nombre escenario",
+                    value=f"Oficinas {_ofi_r.get('distrito','')} {_ofi_r.get('modo','')}",
+                    key="_esc_nombre_ofi",
+                    label_visibility="collapsed",
+                    placeholder="Nombre del escenario...",
+                )
+                if st.button("📌 Guardar escenario", key="_btn_esc_ofi", use_container_width=True):
+                    _guardar_escenario(
+                        nombre=_esc_nombre_ofi or "Oficinas",
+                        modulo="Oficinas",
+                        kpis={
+                            "pago_mensual_total":   _ofi_fin.get("pago_mensual_total"),
+                            "costo_total_contrato": _ofi_fin.get("costo_total_contrato"),
+                            "cap_rate":             _ofi_fin.get("cap_rate"),
+                            "tir_proyecto":         _ofi_fin.get("tir_proyecto"),
+                            "alq_efectivo_m2":      _ofi_fin.get("renta_m2"),
+                        },
+                        inputs_resumen={
+                            "area":     _ofi_r.get("area"),
+                            "distrito": _ofi_r.get("distrito"),
+                            "modo":     _ofi_r.get("modo"),
+                            "clase":    _ofi_r.get("clase"),
+                        },
+                    )
+                    st.success("✅ Escenario guardado en Portfolio")
 
 # ═══════════════════════════════════════════════════════
 # MÓDULO 5: RETAIL / LOCAL COMERCIAL
@@ -27054,8 +27477,93 @@ elif tipo_op == "Retail / Local Comercial":
                     f'</span></div></div>',
                     unsafe_allow_html=True)
 
+            # ── Guardar escenario ────────────────────────────────────
+            _ret_r_snap = st.session_state.get("retail_result") or {}
+            if _ret_r_snap:
+                _col_esc_ret = st.columns([3, 1])[1]
+                with _col_esc_ret:
+                    _esc_nombre_ret = st.text_input(
+                        "Nombre escenario",
+                        value=f"Retail {st.session_state.get('ret_distrito','') or ''} {st.session_state.get('ret_modo','')}",
+                        key="_esc_nombre_ret",
+                        label_visibility="collapsed",
+                        placeholder="Nombre del escenario...",
+                    )
+                    if st.button("📌 Guardar escenario", key="_btn_esc_ret", use_container_width=True):
+                        _guardar_escenario(
+                            nombre=_esc_nombre_ret or "Retail",
+                            modulo="Retail",
+                            kpis={
+                                "noi":           _ret_r_snap.get("noi"),
+                                "valor_activo":  _ret_r_snap.get("valor_activo"),
+                                "cap_rate_real": _ret_r_snap.get("cap_rate_real"),
+                                "tir_proyecto":  _ret_r_snap.get("tir_proyecto"),
+                            },
+                            inputs_resumen={
+                                "area_gla":     st.session_state.get("ret_area_gla"),
+                                "distrito":     st.session_state.get("ret_distrito"),
+                                "modo":         st.session_state.get("ret_modo"),
+                            },
+                        )
+                        st.success("✅ Escenario guardado en Portfolio")
+
         # ══════ TAB 1: FLUJO DE CAJA ══════════════════════
         with ret_tabs[1]:
+            # ── Cronograma del Proyecto — Retail ──────────────────────────
+            st.markdown('<div class="section-title">Cronograma del Proyecto</div>', unsafe_allow_html=True)
+            _NAV_GR = "#0A1628"; _PLT_GR = "#0E1E2E"
+            _cmap_ret = {"Gestión": "#4A90C4", "Obra": "#475569", "Comercial": "#2E7D32", "Operación": "#1A5C32"}
+            if _ret_modo == "Arrendatario":
+                _ret_phases = [
+                    ("Due Diligence",                0, 1,  "Gestión"),
+                    ("Negociación / Contrato",        1, 2,  "Gestión"),
+                    ("Implementación TI / Obras",     2, 4,  "Obra"),
+                    ("Inicio de Operaciones",         4, 16, "Operación"),
+                ]
+                _ret_kpis = [("Due Diligence", "1 mes"), ("Negociación / Contrato", "1 mes"),
+                             ("Implementación / Obras", "2 meses"), ("Inicio de Operaciones", "Mes 4")]
+            else:  # Propietario / Inversión
+                _ret_phases = [
+                    ("Due Diligence",              0, 2,  "Gestión"),
+                    ("Permisos / Licencias",        2, 4,  "Gestión"),
+                    ("Remodelación / Construcción", 4, 7,  "Obra"),
+                    ("Inicio de Renta",             7, 19, "Operación"),
+                ]
+                _ret_kpis = [("Due Diligence", "2 meses"), ("Permisos / Licencias", "2 meses"),
+                             ("Remodelación", "3 meses"), ("Inicio de Renta", "Mes 7")]
+            _fig_g_ret = go.Figure()
+            _seen_ret = set()
+            for _pf, _ps, _pe, _pet in reversed(_ret_phases):
+                _show_l = _pet not in _seen_ret; _seen_ret.add(_pet)
+                _fig_g_ret.add_trace(go.Bar(
+                    x=[_pe - _ps], y=[_pf], base=[_ps], orientation="h",
+                    marker_color=_cmap_ret[_pet], name=_pet,
+                    text=[f"{_pe-_ps} mes{'es' if _pe-_ps != 1 else ''}"],
+                    textposition="inside", insidetextanchor="middle",
+                    textfont=dict(color="white", size=11, family="Inter"),
+                    hovertemplate=f"<b>{_pf}</b><br>Inicio: mes {_ps}<br>Fin: mes {_pe}<br>Duración: {_pe-_ps} meses<extra></extra>",
+                    showlegend=_show_l,
+                ))
+            _fig_g_ret.add_vline(x=0, line_color="#475569", line_width=1.5, line_dash="dot")
+            _ret_total_range = max(p[2] for p in _ret_phases) + 2
+            _fig_g_ret.update_layout(
+                barmode="overlay", paper_bgcolor=_NAV_GR, plot_bgcolor=_PLT_GR,
+                font=dict(color="white", size=10, family="Inter"),
+                margin=dict(l=0, r=20, t=10, b=30), height=200,
+                xaxis=dict(title="Mes del proyecto", tickmode="linear", tick0=0, dtick=2,
+                           gridcolor="#1E2D3D", tickfont=dict(size=10),
+                           range=[-0.5, _ret_total_range]),
+                yaxis=dict(showgrid=False, tickfont=dict(size=11)),
+                legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0,
+                            font=dict(size=10), bgcolor="rgba(0,0,0,0)"),
+                showlegend=True,
+            )
+            st.plotly_chart(_fig_g_ret, use_container_width=True)
+            _gkr = st.columns(4)
+            for _ci, (_klbl, _kval) in enumerate(_ret_kpis):
+                _gkr[_ci].metric(_klbl, _kval)
+            st.markdown("---")
+
             if _ret_modo == "Arrendatario":
                 st.markdown(f'<div style="font-size:13px;font-weight:700;color:{NAV};margin-bottom:12px;">Proyección de costos de arrendamiento</div>', unsafe_allow_html=True)
                 _proj = r.get("proyeccion_anos", [])
@@ -27333,6 +27841,111 @@ elif tipo_op == "Portfolio":
         '<div style="font-size:13px;color:#475569;margin-top:6px;margin-bottom:20px;">'
         'KPIs consolidados por proyecto. Compara escenarios y accede al historial de análisis.</div>',
         unsafe_allow_html=True)
+
+    # ── COMPARADOR DE ESCENARIOS ─────────────────────────────────────────
+    _escenarios = st.session_state.get("_escenarios") or []
+    if _escenarios:
+        st.markdown(
+            '<div class="section-title">Comparador de Escenarios</div>',
+            unsafe_allow_html=True)
+
+        # Tabla comparativa
+        _KPI_LABELS = {
+            # Industrial
+            "yield_bruto_pct":      ("Yield Bruto",        "%",    1),
+            "costo_total":          ("Inversión Total",     "USD",  0),
+            "noi_anual":            ("NOI Anual",           "USD",  0),
+            "payback_anos":         ("Payback",             "años", 1),
+            "area_nave":            ("Área Nave",           "m²",   0),
+            # Oficinas
+            "pago_mensual_total":   ("Pago Mensual",        "USD",  0),
+            "costo_total_contrato": ("Costo Contrato",      "USD",  0),
+            "cap_rate":             ("Cap Rate",            "%",    1),
+            "tir_proyecto":         ("TIR Proyecto",        "%",    1),
+            "alq_efectivo_m2":      ("Alquiler /m²/mes",   "USD",  2),
+            # Retail
+            "noi":                  ("NOI",                 "USD",  0),
+            "valor_activo":         ("Valor Activo",        "USD",  0),
+            "cap_rate_real":        ("Cap Rate Real",       "%",    1),
+            # Residencial
+            "tir_anual_pct":        ("TIR Anual",           "%",    1),
+            "margen_pct":           ("Margen Neto",         "%",    1),
+            "ingresos_ventas":      ("Ingresos Ventas",     "USD",  0),
+            "precio_max_terreno":   ("Precio Máx Terreno",  "USD",  0),
+            "van":                  ("VAN",                 "USD",  0),
+        }
+
+        # Encabezados
+        _n_esc = len(_escenarios)
+        _cols_esc = st.columns([2] + [1] * _n_esc)
+        _cols_esc[0].markdown(
+            '<div style="font-size:11px;font-weight:700;color:#475569;padding:6px 0;">KPI</div>',
+            unsafe_allow_html=True)
+        for _ci, _esc in enumerate(_escenarios):
+            _mod_color = {"Industrial": "#2E7D32", "Oficinas": "#4A90C4", "Retail": "#B45309", "Residencial": "#7C3AED"}.get(_esc["modulo"], "#475569")
+            _cols_esc[_ci+1].markdown(
+                f'<div style="background:{_mod_color}18;border:1px solid {_mod_color}44;'
+                f'border-radius:6px;padding:6px 8px;text-align:center;">'
+                f'<div style="font-size:10px;color:{_mod_color};font-weight:700;letter-spacing:1px;">{_esc["modulo"].upper()}</div>'
+                f'<div style="font-size:12px;font-weight:700;color:#0D2137;">{_esc["nombre"]}</div>'
+                f'<div style="font-size:10px;color:#94A3B8;">{_esc["ts"]}</div></div>',
+                unsafe_allow_html=True)
+
+        # Filas de KPIs — solo las que al menos un escenario tiene
+        _all_kpi_keys = set()
+        for _esc in _escenarios:
+            _all_kpi_keys.update(_esc.get("kpis", {}).keys())
+
+        for _kkey in _all_kpi_keys:
+            if _kkey not in _KPI_LABELS:
+                continue
+            _klbl, _kunit, _kdec = _KPI_LABELS[_kkey]
+            _row_cols = st.columns([2] + [1] * _n_esc)
+            _row_cols[0].markdown(
+                f'<div style="font-size:12px;color:#475569;padding:5px 0;'
+                f'border-bottom:1px solid #F1F5F9;">{_klbl}</div>',
+                unsafe_allow_html=True)
+
+            # Encontrar mejor valor para highlight
+            _vals = [_esc.get("kpis", {}).get(_kkey) for _esc in _escenarios]
+            _nums = [v for v in _vals if isinstance(v, (int, float)) and v is not None]
+            _best = max(_nums) if _nums else None
+
+            for _ci, _esc in enumerate(_escenarios):
+                _v = _esc.get("kpis", {}).get(_kkey)
+                if _v is None:
+                    _row_cols[_ci+1].markdown(
+                        '<div style="font-size:12px;color:#CBD5E1;text-align:center;padding:5px 0;">—</div>',
+                        unsafe_allow_html=True)
+                else:
+                    _is_best = isinstance(_v, (int, float)) and _best is not None and abs(_v - _best) < 0.001
+                    if _kunit == "%":
+                        _vstr = f"{_v:.{_kdec}f}%"
+                    elif _kunit == "USD":
+                        _vstr = f"${_v:,.0f}" if _v >= 1000 else f"${_v:.{_kdec}f}"
+                    elif _kunit == "años":
+                        _vstr = f"{_v:.{_kdec}f} años"
+                    elif _kunit == "m²":
+                        _vstr = f"{_v:,.0f} m²"
+                    else:
+                        _vstr = str(_v)
+                    _bg = "#DCFCE7" if _is_best else "transparent"
+                    _fw = "700" if _is_best else "400"
+                    _row_cols[_ci+1].markdown(
+                        f'<div style="font-size:12px;color:#0D2137;text-align:center;'
+                        f'padding:5px 0;border-bottom:1px solid #F1F5F9;'
+                        f'background:{_bg};font-weight:{_fw};border-radius:3px;">{_vstr}</div>',
+                        unsafe_allow_html=True)
+
+        # Botón limpiar
+        st.markdown("<br>", unsafe_allow_html=True)
+        if st.button("🗑️ Limpiar comparador", key="_btn_clear_esc"):
+            st.session_state["_escenarios"] = []
+            st.rerun()
+        st.markdown("---")
+    else:
+        st.info("💡 Ejecuta un análisis en cualquier módulo y usa **📌 Guardar escenario** para comparar hasta 3 proyectos aquí.")
+        st.markdown("---")
 
     # ── ALERTAS DE NORMATIVAS (solo admin) ───────────────────────────────
     if st.session_state.get("_role") == "admin":
