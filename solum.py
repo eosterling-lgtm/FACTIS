@@ -16157,7 +16157,7 @@ with st.sidebar:
             ind_hurdle_rate = st.number_input(
                 "hurdle_rate_lbl", min_value=4.0, max_value=30.0,
                 value=float(st.session_state.get("ind_hurdle_rate", 10.0)),
-                step=0.5, format="%.1f%%",
+                step=0.5, format="%.1f",
                 label_visibility="collapsed",
                 key="ind_hurdle_rate",
                 help="Tasa de retorno mínima exigida por el inversionista (WACC / costo oportunidad). "
@@ -17511,7 +17511,7 @@ with st.sidebar:
             ret_hurdle = st.number_input(
                 "hurdle_ret_lbl", min_value=4.0, max_value=30.0,
                 value=float(st.session_state.get("ret_hurdle", 10.0) or 10.0),
-                step=0.5, format="%.1f%%",
+                step=0.5, format="%.1f",
                 label_visibility="collapsed", key="ret_hurdle",
                 help="Tasa de retorno mínima exigida por el inversionista. Lima retail prime: 8–12%.")
 
