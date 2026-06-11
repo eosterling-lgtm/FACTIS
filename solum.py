@@ -24175,12 +24175,15 @@ elif tipo_op == "Inmueble Residencial":
         else:
             _hero_photo_css = "linear-gradient(135deg,#1E2D3D 0%,#2A4060 100%)"
 
-        _hero_yield_html = (
-            f'<div><div style="font-size:11px;color:rgba(255,255,255,0.55);text-transform:uppercase;'
-            f'letter-spacing:1px;">Yield bruto</div>'
-            f'<div style="font-size:20px;font-weight:700;color:#FFFFFF;">{float(_hero_yield):.1f}%</div></div>'
-            if _hero_yield and float(_hero_yield) > 0 else ""
-        )
+        if _hero_yield and float(_hero_yield) > 0:
+            _hero_yield_html = (
+                f'<div>'
+                f'<div style="font-size:11px;color:rgba(255,255,255,0.55);text-transform:uppercase;letter-spacing:1px;">Yield bruto</div>'
+                f'<div style="font-size:20px;font-weight:700;color:#FFFFFF;">{float(_hero_yield):.1f}%</div>'
+                f'</div>'
+            )
+        else:
+            _hero_yield_html = ""
         st.markdown(f"""
         <div style="position:relative;border-radius:16px;overflow:hidden;margin-bottom:20px;
                     box-shadow:0 6px 30px rgba(30,45,61,0.22);">
