@@ -16504,13 +16504,31 @@ with st.sidebar:
                 + f' &nbsp;·&nbsp; Total extras: <b style="color:#1E2D3D;">${_res_extras:,}</b></div>',
                 unsafe_allow_html=True
             )
-        _dorm_opts = ["1 Dormitorio", "2 Dormitorios", "3 Dormitorios", "Dúplex / Otro"]
+        _dorm_opts = ["1 Dormitorio", "2 Dormitorios", "3 Dormitorios", "Dúplex", "Tríplex", "Otro"]
         try:
             _dorm_saved = st.session_state.get("res_dorm_k", "")
+            # compatibilidad con valor legacy "Dúplex / Otro"
+            if _dorm_saved == "Dúplex / Otro":
+                _dorm_saved = "Dúplex"
             _dorm_default_idx = _dorm_opts.index(_dorm_saved) if _dorm_saved in _dorm_opts else 1
         except (ValueError, KeyError):
             _dorm_default_idx = 1
-        res_dormitorios = st.selectbox("Tipología", _dorm_opts, index=_dorm_default_idx, key="res_dorm_k")
+        _dorm_tipo = st.selectbox("Tipología", _dorm_opts, index=_dorm_default_idx, key="res_dorm_k")
+
+        # Número de dormitorios para Dúplex y Tríplex
+        if _dorm_tipo in ("Dúplex", "Tríplex"):
+            _ndorm_default = {"Dúplex": 3, "Tríplex": 4}[_dorm_tipo]
+            _ndorm_saved   = int(st.session_state.get("res_ndorm_k", _ndorm_default))
+            _ndorm = st.selectbox(
+                "N° de dormitorios",
+                [2, 3, 4, 5],
+                index=min(max([2, 3, 4, 5].index(_ndorm_saved) if _ndorm_saved in [2, 3, 4, 5] else 1, 0), 3),
+                key="res_ndorm_k",
+                help="En dúplex/tríplex el dormitorio principal suele estar en el piso superior."
+            )
+            res_dormitorios = f"{_dorm_tipo} · {_ndorm} Dorm."
+        else:
+            res_dormitorios = _dorm_tipo
 
         _res_fotos = st.file_uploader(
             "📷 Fotos del inmueble",
