@@ -918,15 +918,23 @@ def calcular_industrial(inp: dict) -> dict:
     area_libre = area * (1 - pct_techada)   # patios, maniobras, circulación
 
     # Costos de construcción — usuario puede sobreescribir con su propio dato.
-    # Estándar único: $350/m² nave (Lima 2025, cliente con negociación normal).
-    # Altura afecta costo: nave 8-10m cuesta menos que 12-14m, pero el usuario ajusta.
+    # Defaults diferenciados por zona y tipo (Lima 2025):
+    #   · VES / SJL / SMP: nave estándar 10-12m → $300/m² (ref. Parque Logístico 47: $291.5/m²)
+    #   · Lurín Clase A (12-15m, sprinklers): $480/m² (mid Cushman & Wakefield mayo 2026: $430-650)
+    #   · Otras zonas: $350/m² (punto medio prudente)
+    #   · Cross-docking (múltiples docks, losa reforzada): $420/m²
+    #   · Producción / Manufactura (losa reforzada): $400/m²
+    # Detectar zona por ubicación/distrito (campo "ubicacion" o "zona_ind")
+    _ub_lower   = str(inp.get("ubicacion", "") or inp.get("zona_ind", "") or "").lower()
+    _es_lurin   = "lurín" in _ub_lower or "lurin" in _ub_lower
+    _es_ves_sjl = any(x in _ub_lower for x in ("ves", "villa el salvador", "sjl", "san juan", "smp", "san martín", "san martin", "huachipa"))
     _DEFAULTS_NAVE = {
-        "Almacén Logístico":        350,
-        "Nave Industrial":          350,
-        "Cross-docking":            350,
-        "Producción / Manufactura": 350,
+        "Almacén Logístico":        480 if _es_lurin else (300 if _es_ves_sjl else 350),
+        "Nave Industrial":          480 if _es_lurin else (300 if _es_ves_sjl else 350),
+        "Cross-docking":            420,
+        "Producción / Manufactura": 400,
     }
-    _default_nave = _DEFAULTS_NAVE.get(tipo_nave, 300)
+    _default_nave = _DEFAULTS_NAVE.get(tipo_nave, 350)
     _cn = inp.get("costo_nave_m2")
     costo_nave_m2 = _cn if _cn is not None else _default_nave
     _cp = inp.get("costo_piso_libre_m2")
@@ -17840,6 +17848,7 @@ if tipo_op == "Proyecto Logístico / Industrial" and run_industrial:
             "plazo_const":      int(ind_plazo_const),
             "perfil":           st.session_state.get("ind_perfil", "Desarrollo Integral"),
             "hurdle_rate_pct":  float(st.session_state.get("ind_hurdle_rate", 10.0)),
+            "ubicacion":        st.session_state.get("ind_ubicacion", ""),
         }
         try:
             st.session_state.industrial_result = calcular_industrial(_ind_inp)
