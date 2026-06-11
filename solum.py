@@ -3990,32 +3990,37 @@ def _geo_render_planta_industrial(poly_lote, poly_nave, h_nave: float) -> go.Fig
         except Exception:
             pass
 
-    # ── 4. Flecha Norte ───────────────────────────────────────
+    # ── 4. Símbolo Norte — interior esquina sup-derecha del lote ─
     if poly_lote and not poly_lote.is_empty:
         _bx  = poly_lote.bounds
         _w   = _bx[2] - _bx[0]
         _h   = _bx[3] - _bx[1]
-        _nx  = _bx[2] + _w * 0.05
-        _ny1 = _bx[3] - _h * 0.07
-        _ny2 = _bx[3]
+        # Posición: dentro del lote, esquina superior derecha
+        _nx   = _bx[2] - _w * 0.05   # 5% desde el borde derecho
+        _ny_t = _bx[3] - _h * 0.02   # punta de la flecha (casi en el borde top)
+        _ny_b = _bx[3] - _h * 0.09   # cola de la flecha
         annotations.append(dict(
-            x=_nx, y=_ny2,
-            ax=_nx, ay=_ny1,
+            x=_nx, y=_ny_t,
+            ax=_nx, ay=_ny_b,
             xref="x", yref="y", axref="x", ayref="y",
-            text="N", showarrow=True,
-            arrowhead=2, arrowsize=1.8, arrowwidth=2.5,
+            text="<b>N</b>", showarrow=True,
+            arrowhead=2, arrowsize=1.6, arrowwidth=2.2,
             arrowcolor=NEGRO,
-            font=dict(size=12, color=NEGRO, family=FONT_DRF),
-            xanchor="center",
+            font=dict(size=10, color=NEGRO, family=FONT_DRF),
+            xanchor="center", yanchor="top",
+            bgcolor="rgba(255,255,255,0.85)",
+            bordercolor=NEGRO,
+            borderwidth=1,
+            borderpad=2,
         ))
-        # Cuadro leyenda docks (abajo del norte)
+        # ── Leyenda — esquina inferior izquierda del lote ────────
         annotations.append(dict(
-            x=_bx[0], y=_bx[1],
+            x=_bx[0] + _w * 0.02, y=_bx[1] + _h * 0.02,
             text="■ Dock de carga  ── Pasillo central",
             showarrow=False,
             font=dict(size=8, color="#555555", family=FONT_DRF),
-            xanchor="left", yanchor="top",
-            bgcolor="rgba(255,255,255,0.75)",
+            xanchor="left", yanchor="bottom",
+            bgcolor="rgba(255,255,255,0.80)",
             bordercolor="#AAAAAA",
             borderwidth=1,
             borderpad=3,
