@@ -16803,10 +16803,10 @@ with st.sidebar:
             with st.expander("📋 Elaboración de Propuesta", expanded=False):
                 st.selectbox("Tipo de propuesta", ["Compra"], key="res_prop_tipo",
                              disabled=True, help="En modo Compra de inmueble residencial")
-                with st.expander("Estructura de la Oferta", expanded=False):
-                    _res_po1, _res_po2 = st.columns(2)
-                    _res_po1.number_input("Opción de compra (%)", 0.0, 20.0, 5.0, 0.5, key="res_prop_opcion_pct")
-                    _res_po2.number_input("Minuta / contrato (%)", 0.0, 50.0, 20.0, 5.0, key="res_prop_minuta_pct")
+                st.markdown("**Estructura de la Oferta**")
+                _res_po1, _res_po2 = st.columns(2)
+                _res_po1.number_input("Opción de compra (%)", 0.0, 20.0, 5.0, 0.5, key="res_prop_opcion_pct")
+                _res_po2.number_input("Minuta / contrato (%)", 0.0, 50.0, 20.0, 5.0, key="res_prop_minuta_pct")
                 _res_pv1, _res_pv2 = st.columns(2)
                 _res_pv1.text_input("Vendedor", placeholder="Nombre o empresa", key="res_prop_vendedor")
                 _res_pv2.text_input("Comprador", placeholder="Nombre o empresa", key="res_prop_comprador")
@@ -24551,10 +24551,10 @@ elif tipo_op == "Inmueble Residencial":
                 _pm2_negociado       = int(_precio_negociado / r.get("m2", 1)) if r.get("m2", 0) > 0 else 0
                 _gap_negociado       = ((_pm2_negociado - _est_pm2) / _est_pm2 * 100) if _est_pm2 > 0 else 0
                 st.markdown(
-                    f'<div style="background:#EEF4FF;border-left:3px solid #3B82F6;border-radius:0 6px 6px 0;'
+                    f'<div style="background:#F0F4F8;border-left:3px solid #475569;border-radius:0 6px 6px 0;'
                     f'padding:10px 16px;margin:6px 0 12px;">'
-                    f'<span style="font-size:11px;font-weight:700;color:#1E3A8A;letter-spacing:1px;text-transform:uppercase;">Simulación de negociación — descuento del 10%</span><br>'
-                    f'<span style="font-size:13px;color:#1E3A8A;">'
+                    f'<span style="font-size:11px;font-weight:700;color:#1E2D3D;letter-spacing:1px;text-transform:uppercase;">Simulación de negociación — descuento del 10%</span><br>'
+                    f'<span style="font-size:13px;color:#1E2D3D;">'
                     f'Precio negociado: <strong>${_precio_negociado:,}</strong> (${_pm2_negociado:,}/m²) — '
                     f'Quedaría <strong>{_gap_negociado:+.1f}%</strong> {"sobre" if _gap_negociado > 0 else "bajo"} el valor estimado.'
                     f'</span></div>', unsafe_allow_html=True)
@@ -25335,11 +25335,11 @@ elif tipo_op == "Inmueble Residencial":
             # ── Banner de rol del broker ──────────────────────────────────
             _bk_lado_em = st.session_state.get("bk_lado", "Vendedor")
             _ROL_CFG = {
-                "Vendedor":      ("#1A3A5A", "#EEF4FF", "🏠  Representando al Vendedor",
+                "Vendedor":      ("#1E2D3D", "#F0F2F5", "🏠  Representando al Vendedor",
                                   "El análisis evalúa si el precio de lista es competitivo y defiende la valorización ante el propietario."),
-                "Comprador":     ("#1A4731", "#E8F5EE", "🔍  Representando al Comprador",
+                "Comprador":     ("#2D4A3A", "#EEF2EF", "🔍  Representando al Comprador",
                                   "El análisis determina si el precio pedido es justo, cuánto negociar y si el inmueble es buena inversión."),
-                "Ambas partes":  ("#5C3D10", "#FFF8E6", "⚖️  Representando Ambas Partes",
+                "Ambas partes":  ("#7A5500", "#F5F0E5", "⚖️  Representando Ambas Partes",
                                   "Vista completa: valorización de mercado, posición de precio y análisis de oportunidad para ambas partes."),
             }
             _rol_tc, _rol_bg, _rol_titulo, _rol_desc = _ROL_CFG.get(_bk_lado_em, _ROL_CFG["Vendedor"])
@@ -25686,14 +25686,14 @@ elif tipo_op == "Inmueble Residencial":
   .header{{background:linear-gradient(135deg,#1E2D3D,#243850);padding:28px 32px;border-radius:6px;margin-bottom:32px;}}
   .header-title{{font-size:24px;font-weight:800;color:#FFFFFF;letter-spacing:-0.5px;}}
   .header-sub{{font-size:11px;color:{_GOLD};letter-spacing:3px;text-transform:uppercase;font-weight:600;margin-bottom:10px;}}
-  .header-meta{{font-size:11px;color:#8AA8C0;margin-top:8px;}}
+  .header-meta{{font-size:11px;color:#7A8A99;margin-top:8px;}}
   .section-title{{font-size:11px;color:#9A9080;letter-spacing:2.5px;text-transform:uppercase;font-weight:700;border-bottom:1px solid #D8D4CC;padding-bottom:6px;margin:28px 0 14px;}}
   .metric-row{{display:flex;gap:20px;flex-wrap:wrap;margin-bottom:20px;}}
   .metric-box{{flex:1;min-width:140px;background:#F9F7F4;border:1px solid #E4E0D8;border-top:3px solid {_GOLD};border-radius:6px;padding:14px 16px;}}
   .metric-label{{font-size:11px;color:#9A9080;letter-spacing:1.5px;text-transform:uppercase;font-weight:600;margin-bottom:4px;}}
   .metric-value{{font-size:20px;font-weight:700;color:{_NAV};letter-spacing:-0.5px;}}
-  .alert{{border-left:4px solid {_GOLD};background:#FFFBF3;border-radius:4px;padding:12px 16px;margin:12px 0;font-size:12px;color:#5C3D10;line-height:1.6;}}
-  .market-box{{background:#F0F4F8;border:1px solid #C8D4DE;border-radius:6px;padding:16px 20px;margin:12px 0;}}
+  .alert{{border-left:4px solid {_GOLD};background:#FBF8F2;border-radius:4px;padding:12px 16px;margin:12px 0;font-size:12px;color:#475569;line-height:1.6;}}
+  .market-box{{background:#F4F2EE;border:1px solid #D8D4CC;border-radius:6px;padding:16px 20px;margin:12px 0;}}
   table{{width:100%;border-collapse:collapse;margin:12px 0;}}
   th{{background:{_NAV};color:#FFFFFF;padding:9px 14px;font-size:10px;text-transform:uppercase;letter-spacing:1px;text-align:left;}}
   td{{padding:9px 14px;font-size:12px;border-bottom:1px solid #E8E4DC;color:{_NAV};}}
