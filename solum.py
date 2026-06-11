@@ -17735,14 +17735,48 @@ elif tipo_op == "Inmueble Residencial" and run_residencial:
         except Exception:
             pass
     _m_res_run = MERCADO.get(res_zona, {})
-    # Referencia por tipo de acabados (punto medio del rango)
-    _ACABADOS_RUN = {
-        "B  — Básico": (1700, 1800), "B+ — Medio-alto": (2000, 2400),
-        "A  — Alto": (2500, 2900), "A+ — Muy alto": (3000, 3900), "Premium — Lujo": (4000, 5500),
-    }
-    _res_acab = st.session_state.get("res_acabados", "A  — Alto")
-    _aca_lo_r, _aca_hi_r = _ACABADOS_RUN.get(_res_acab, (2500, 2900))
-    _res_precio_m2_mercado = (_aca_lo_r + _aca_hi_r) // 2
+
+    # ── Valorización automática por atributos (Urbania INDEX + ajustes) ──────
+    import re as _re_val
+    _ndorm_match  = _re_val.search(r'(\d+)\s*Dorm', res_dormitorios or "")
+    _ndorm_int    = int(_ndorm_match.group(1)) if _ndorm_match else 2
+    _dorm_key_val = "precio_1br" if _ndorm_int <= 1 else ("precio_3br" if _ndorm_int >= 3 else "precio_2br")
+    _base_pm2_urb = _m_res_run.get(_dorm_key_val, _m_res_run.get("precio_2br", 0))
+
+    # Ajuste por tipología
+    _res_tipo_run = (res_dormitorios or "").split(" · ")[0] if " · " in (res_dormitorios or "") else (res_dormitorios or "Flat")
+    _TIPO_ADJ_RUN = {"Penthouse": 0.15, "Tríplex": 0.08, "Dúplex": 0.05, "Loft": 0.05, "Flat": 0.0, "Otro": 0.0}
+    _adj_tipo_run = _TIPO_ADJ_RUN.get(_res_tipo_run, 0.0)
+
+    # Ajuste por piso (+0.5% por piso, cap +7.5% en piso 15)
+    _piso_run   = int(st.session_state.get("res_piso_k", 0))
+    _adj_piso_run = min(_piso_run * 0.005, 0.075)
+
+    # Ajuste por patio/terraza privada (+3%)
+    _patio_run  = bool(st.session_state.get("res_patio_k", False))
+    _adj_patio_run = 0.03 if _patio_run else 0.0
+
+    # Ajuste por antigüedad (-1% por año, cap -20%)
+    _adj_antig_run = -min(res_antiguedad * 0.01, 0.20)
+
+    _precio_m2_estimado = int(_base_pm2_urb * (1 + _adj_tipo_run + _adj_piso_run + _adj_patio_run + _adj_antig_run)) if _base_pm2_urb > 0 else 0
+    _precio_total_estimado = int(_precio_m2_estimado * res_m2) if _precio_m2_estimado > 0 and res_m2 > 0 else 0
+
+    # Precio depa puro (sin cocheras/depósitos)
+    _extras_run      = (st.session_state.get("res_cocheras", 0) * 15000 +
+                        st.session_state.get("res_depositos", 0) * 2500)
+    _pm2_pagado_run  = max(0, res_precio - _extras_run) / res_m2 if res_m2 > 0 else 0
+    _diff_sem_run    = ((_pm2_pagado_run - _precio_m2_estimado) / _precio_m2_estimado * 100) if _precio_m2_estimado > 0 else 0
+
+    if _diff_sem_run <= 0:       _sem_precio_run = "verde"
+    elif _diff_sem_run <= 12:    _sem_precio_run = "amarillo"
+    elif _diff_sem_run <= 25:    _sem_precio_run = "naranja"
+    else:                        _sem_precio_run = "rojo"
+
+    # Velocidad de venta (meses estimados a precio de mercado)
+    _vel_venta_run = _m_res_run.get("velocidad_venta", 0)  # und/mes → no aplica directo; usamos duracion_base
+    _dur_venta_run = _m_res_run.get("duracion_base_meses", 0)  # meses típicos en venta
+
     st.session_state.residencial_result = calcular_residencial({
         "precio":     res_precio,
         "pct_pie":    res_pct_pie,
@@ -17768,8 +17802,17 @@ elif tipo_op == "Inmueble Residencial" and run_residencial:
                                                   st.session_state.get("res_depositos", 0) * 2500)),
         "precio_m2":  max(0, res_precio - (st.session_state.get("res_cocheras", 0) * 15000 +
                                             st.session_state.get("res_depositos", 0) * 2500)) / res_m2 if res_m2 > 0 else 0,
-        "precio_m2_mercado": _res_precio_m2_mercado,
-        "yield_mercado_pct": _m_res_run.get("yield_mercado_pct", 0),
+        "precio_m2_mercado":   _precio_m2_estimado,
+        "precio_total_estimado": _precio_total_estimado,
+        "semaforo_precio":     _sem_precio_run,
+        "diff_vs_estimado":    round(_diff_sem_run, 1),
+        "duracion_venta_meses": _dur_venta_run,
+        "base_pm2_urbania":    _base_pm2_urb,
+        "adj_piso_pct":        round(_adj_piso_run * 100, 1),
+        "adj_patio_pct":       round(_adj_patio_run * 100, 1),
+        "adj_antig_pct":       round(_adj_antig_run * 100, 1),
+        "adj_tipo_pct":        round(_adj_tipo_run * 100, 1),
+        "yield_mercado_pct":   _m_res_run.get("yield_mercado_pct", 0),
         "alquiler_mercado_m2": _m_res_run.get("alquiler_m2_mes", 0),
         "variacion_anual_pct": _m_res_run.get("variacion_anual_pct", 0),
     })
@@ -24279,6 +24322,28 @@ elif tipo_op == "Inmueble Residencial":
             </div>
         </div>""", unsafe_allow_html=True)
 
+        # ── Panel del Broker ──────────────────────────────────────────────────
+        with st.expander("🏷️  Panel del Broker", expanded=False):
+            _bk_c1, _bk_c2, _bk_c3, _bk_c4 = st.columns([2, 2, 1, 1])
+            _bk_nombre  = _bk_c1.text_input("Nombre del agente", value=st.session_state.get("bk_nombre", ""), placeholder="Ej: Juan García", key="bk_nombre")
+            _bk_tel     = _bk_c2.text_input("Teléfono / WhatsApp", value=st.session_state.get("bk_tel", ""), placeholder="+51 999 000 000", key="bk_tel")
+            _bk_com_pct = _bk_c3.number_input("Comisión (%)", 0.0, 10.0, float(st.session_state.get("bk_com_pct", 3.0)), 0.5, format="%.1f", key="bk_com_pct")
+            _bk_lado    = _bk_c4.selectbox("Representa", ["Vendedor", "Comprador", "Ambas partes"], key="bk_lado")
+            _precio_op  = r.get("precio", 0)
+            _multiplier = 2 if _bk_lado == "Ambas partes" else 1
+            _bk_comision = _precio_op * (_bk_com_pct / 100) * _multiplier
+            _bk_igv      = _bk_comision * 0.18
+            _bk_neto     = _bk_comision - _bk_igv
+            if _precio_op > 0:
+                _bk_col1, _bk_col2, _bk_col3 = st.columns(3)
+                _bk_col1.metric("Honorarios brutos", f"${_bk_comision:,.0f}",
+                                f"{_bk_com_pct:.1f}% × {'2 partes' if _multiplier == 2 else '1 parte'}")
+                _bk_col2.metric("IGV (18%)", f"${_bk_igv:,.0f}", "Si emite factura")
+                _bk_col3.metric("Neto estimado", f"${_bk_neto:,.0f}", "Descontado IGV")
+                _dur_v = r.get("duracion_venta_meses", 0)
+                if _dur_v > 0:
+                    st.info(f"📅  Tiempo estimado de venta en {r.get('zona','—')} a precio de mercado: **{_dur_v} meses** (Urbania INDEX Nov-2025)")
+
         # ── PUERTA 2: Normativa Inteligente post-CPUE ────────────────────────
         _res_fecha_em = st.session_state.get("_res_cpue_fecha")
         if _res_fecha_em:
@@ -24428,37 +24493,71 @@ elif tipo_op == "Inmueble Residencial":
                 st.plotly_chart(fig_gauge, use_container_width=True, config={"displayModeBar": False})
                 st.caption("Aguja naranja = precio pagado · Línea negra = mediana de zona · Verde = oportunidad · Rojo = sobre mercado")
 
-            # ── Posición de precio (KPIs) ────────────────────────
-            _ppm2_r = r.get("precio_m2", 0)
-            _ref_r   = r.get("precio_m2_mercado", 0)
-            _diff_r  = ((_ppm2_r - _ref_r) / _ref_r * 100) if _ref_r > 0 else 0
-            st.markdown('<div class="section-title">Posición de Precio en el Mercado</div>', unsafe_allow_html=True)
+            # ── Valorización inteligente — Semáforo 4 niveles ────
+            _ppm2_r   = r.get("precio_m2", 0)
+            _est_pm2  = r.get("precio_m2_mercado", 0)   # ahora = precio estimado con ajustes
+            _est_tot  = r.get("precio_total_estimado", 0)
+            _diff_r   = r.get("diff_vs_estimado", 0)
+            _sem_p    = r.get("semaforo_precio", "amarillo")
+            _base_urb = r.get("base_pm2_urbania", 0)
+            _adj_p    = r.get("adj_piso_pct", 0)
+            _adj_pa   = r.get("adj_patio_pct", 0)
+            _adj_an   = r.get("adj_antig_pct", 0)
+            _adj_ti   = r.get("adj_tipo_pct", 0)
 
-            if abs(_diff_r) <= 8:
-                _sem_color, _sem_bg, _sem_label = "#1A4731", "#E8F5EE", "EN LÍNEA CON EL MERCADO"
-            elif _diff_r > 8:
-                _sem_color, _sem_bg, _sem_label = "#7A1A1A", "#FDECEA", "SOBRE EL MERCADO"
-            else:
-                _sem_color, _sem_bg, _sem_label = "#1A4731", "#E8F5EE", "POR DEBAJO — OPORTUNIDAD"
+            _SEM_MAP = {
+                "verde":    ("#1A4731", "#E8F5EE", "🟢  PRECIO POR DEBAJO DEL ESTIMADO — OPORTUNIDAD",
+                             "El precio pedido está por debajo del valor estimado por atributos. Buena entrada para el comprador."),
+                "amarillo": ("#7A5500", "#FFF8E6", "🟡  PRECIO DENTRO DEL RANGO NEGOCIABLE",
+                             f"El precio está {abs(_diff_r):.1f}% sobre el estimado. Una negociación típica del 10% lo llevaría a rango de mercado."),
+                "naranja":  ("#7A3500", "#FFF0E0", "🟠  PRECIO ALTO — REQUIERE JUSTIFICACIÓN",
+                             f"{abs(_diff_r):.1f}% sobre el estimado. Justificable solo por vistas premium, ubicación excepcional o estado impecable. Negociar."),
+                "rojo":     ("#7A1A1A", "#FDECEA", "🔴  PRECIO SOBREVALUADO — DIFÍCIL DE COLOCAR",
+                             f"{abs(_diff_r):.1f}% sobre el estimado. Muy por encima del mercado. Improbable colocar sin ajuste significativo de precio."),
+            }
+            _sc, _sb, _slabel, _smsg = _SEM_MAP.get(_sem_p, _SEM_MAP["amarillo"])
 
+            st.markdown('<div class="section-title">Valorización Automática del Inmueble</div>', unsafe_allow_html=True)
             pm1, pm2, pm3 = st.columns(3)
-            pm1.metric("Precio pagado / m²", f"${_ppm2_r:,.0f}/m²")
-            pm2.metric("Mediana zona", f"${_ref_r:,}/m²",
-                       delta=f"{_diff_r:+.1f}% vs. mercado")
-            pm3.metric("Precio justo estimado", f"${int(r.get('m2',0) * _ref_r):,}")
+            pm1.metric("Precio pedido / m²",     f"${_ppm2_r:,.0f}/m²")
+            pm2.metric("Precio estimado / m²",   f"${_est_pm2:,.0f}/m²",
+                       delta=f"{_diff_r:+.1f}% vs. estimado")
+            pm3.metric("Valor total estimado",   f"${_est_tot:,}")
+
+            # Desglose de ajustes aplicados
+            if _base_urb > 0:
+                _adj_lines = [f"Base Urbania INDEX ({r.get('dormitorios','—').split(' · ')[-1] if ' · ' in r.get('dormitorios','') else 'zona'}) → <strong>${_base_urb:,}/m²</strong>"]
+                if _adj_ti  != 0: _adj_lines.append(f"Tipología ({r.get('dormitorios','').split(' · ')[0]}): {_adj_ti:+.1f}%")
+                if _adj_p   != 0: _adj_lines.append(f"Piso {r.get('piso','')}: {_adj_p:+.1f}%")
+                if _adj_pa  != 0: _adj_lines.append(f"Patio/terraza: {_adj_pa:+.1f}%")
+                if _adj_an  != 0: _adj_lines.append(f"Antigüedad {r.get('antiguedad',0)} años: {_adj_an:+.1f}%")
+                st.markdown(
+                    '<div style="background:#F7F9FC;border-radius:6px;padding:10px 16px;margin:8px 0;font-size:12px;color:#475569;">'
+                    '<span style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:#9A9080;font-weight:700;">Factores de ajuste</span><br>'
+                    + " &nbsp;·&nbsp; ".join(_adj_lines) +
+                    '</div>', unsafe_allow_html=True)
 
             st.markdown(
-                f'<div style="background:{_sem_bg};border:1px solid {_sem_color};border-left:4px solid {_sem_color};'
-                f'border-radius:6px;padding:14px 20px;margin:12px 0;">'
-                f'<div style="font-size:11px;color:{_sem_color};letter-spacing:2px;font-weight:700;text-transform:uppercase;">Posición de Mercado</div>'
-                f'<div style="font-size:20px;font-weight:800;color:{_sem_color};margin:4px 0;">{_sem_label}</div>'
-                f'<div style="font-size:12px;color:{_sem_color};opacity:0.85;">'
-                f'El precio pagado (${_ppm2_r:,.0f}/m²) está {abs(_diff_r):.1f}% '
-                f'{"sobre" if _diff_r > 0 else "bajo"} la mediana de {r.get("zona","la zona")} (${_ref_r:,}/m²). '
-                f'{"Considera negociar." if _diff_r > 8 else ("Precio competitivo — buena entrada." if _diff_r < -8 else "Precio consistente con el mercado.")}'
-                f'</div></div>',
-                unsafe_allow_html=True
+                f'<div style="background:{_sb};border-left:4px solid {_sc};border-radius:0 6px 6px 0;'
+                f'padding:14px 20px;margin:12px 0;">'
+                f'<div style="font-size:15px;font-weight:800;color:{_sc};margin-bottom:4px;">{_slabel}</div>'
+                f'<div style="font-size:12px;color:{_sc};opacity:0.9;line-height:1.5;">{_smsg}</div>'
+                f'</div>', unsafe_allow_html=True
             )
+
+            # Precio con negociación del 10%
+            if _diff_r > 5 and _est_pm2 > 0:
+                _precio_negociado    = int(r.get("precio", 0) * 0.90)
+                _pm2_negociado       = int(_precio_negociado / r.get("m2", 1)) if r.get("m2", 0) > 0 else 0
+                _gap_negociado       = ((_pm2_negociado - _est_pm2) / _est_pm2 * 100) if _est_pm2 > 0 else 0
+                st.markdown(
+                    f'<div style="background:#EEF4FF;border-left:3px solid #3B82F6;border-radius:0 6px 6px 0;'
+                    f'padding:10px 16px;margin:6px 0 12px;">'
+                    f'<span style="font-size:11px;font-weight:700;color:#1E3A8A;letter-spacing:1px;text-transform:uppercase;">Simulación de negociación — descuento del 10%</span><br>'
+                    f'<span style="font-size:13px;color:#1E3A8A;">'
+                    f'Precio negociado: <strong>${_precio_negociado:,}</strong> (${_pm2_negociado:,}/m²) — '
+                    f'Quedaría <strong>{_gap_negociado:+.1f}%</strong> {"sobre" if _gap_negociado > 0 else "bajo"} el valor estimado.'
+                    f'</span></div>', unsafe_allow_html=True)
 
             # ── Alquiler de mercado ─────────────────────────────
             st.markdown('<div class="section-title">Renta de Mercado — Zona</div>', unsafe_allow_html=True)
