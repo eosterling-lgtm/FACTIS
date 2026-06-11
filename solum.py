@@ -16724,19 +16724,37 @@ with st.sidebar:
             _rc_precio = _rc_col1.number_input("Precio USD", 0, 10_000_000, 200_000, 5_000, format="%d", key="rc_precio_inp")
             _rc_m2     = _rc_col2.number_input("m²", 10, 2000, 80, 5, key="rc_m2")
             _rc_col3, _rc_col4 = st.columns(2)
-            _rc_alq  = _rc_col3.number_input("Alquiler/mes USD", 0, 20_000, 800, 50, key="rc_alq")
-            _rc_dorm = _rc_col4.selectbox("Dorm.", ["1D", "2D", "3D"], key="rc_dorm")
+            _rc_alq   = _rc_col3.number_input("Alquiler/mes USD", 0, 20_000, 800, 50, key="rc_alq")
+            _rc_antig = _rc_col4.number_input("Antigüedad (años)", 0, 100, 5, 1, key="rc_antig")
+            _rc_col5, _rc_col6 = st.columns(2)
+            _rc_tipo  = _rc_col5.selectbox("Tipología", ["Flat", "Dúplex", "Tríplex", "Loft", "Penthouse", "Otro"], key="rc_tipo")
+            _rc_piso  = _rc_col6.number_input("N° de piso", 0, 60, 0, 1, key="rc_piso")
+            _rc_col7, _rc_col8 = st.columns(2)
+            _rc_ndorm_opts = {"Flat":[1,2,3,4],"Dúplex":[2,3,4,5],"Tríplex":[3,4,5],"Penthouse":[2,3,4,5],"Otro":[1,2,3,4,5]}
+            if _rc_tipo in _rc_ndorm_opts:
+                _rc_ndorm = _rc_col7.selectbox("N° dorm.", _rc_ndorm_opts[_rc_tipo], key="rc_ndorm")
+                _rc_dorm_str = f"{_rc_tipo} · {_rc_ndorm} Dorm."
+            else:
+                _rc_ndorm = None
+                _rc_dorm_str = _rc_tipo
+            _rc_patio = _rc_col8.checkbox("Patio / terraza", key="rc_patio")
             _rc_zona = st.selectbox("Distrito", list(MERCADO.keys()), key="rc_zona_sel")
             _rc_img  = st.file_uploader("Foto del inmueble (opcional)", type=["jpg", "jpeg", "png", "webp", "heic"], key="rc_img_upload")
             if st.button("AGREGAR", use_container_width=True, key="btn_rc_agregar", type="primary"):
                 if _rc_nombre.strip():
                     _rc_img_bytes = _rc_img.read() if _rc_img else None
                     st.session_state.res_inmuebles_comp.append({
-                        "nombre":    _rc_nombre.strip(),
-                        "precio":    _rc_precio, "m2": _rc_m2,
-                        "alquiler":  _rc_alq, "dormitorios": _rc_dorm,
-                        "zona":      _rc_zona,
-                        "precio_m2": round(_rc_precio / _rc_m2) if _rc_m2 > 0 else 0,
+                        "nombre":      _rc_nombre.strip(),
+                        "precio":      _rc_precio, "m2": _rc_m2,
+                        "alquiler":    _rc_alq,
+                        "dormitorios": _rc_dorm_str,
+                        "tipologia":   _rc_tipo,
+                        "ndorm":       _rc_ndorm,
+                        "piso":        _rc_piso,
+                        "patio":       _rc_patio,
+                        "antiguedad":  _rc_antig,
+                        "zona":        _rc_zona,
+                        "precio_m2":   round(_rc_precio / _rc_m2) if _rc_m2 > 0 else 0,
                         "yield_bruto": round(_rc_alq * 12 / _rc_precio * 100, 1) if _rc_precio > 0 and _rc_alq > 0 else 0,
                         "imagen_bytes":  _rc_img_bytes,
                         "imagen_nombre": _rc_img.name if _rc_img else None,
@@ -24712,13 +24730,19 @@ elif tipo_op == "Inmueble Residencial":
                              'padding:2px 8px;border-radius:10px;letter-spacing:1px;">EMERGENTE</span>')
 
                 # ── All properties including current ──────────────
+                _dorm_main = r.get("dormitorios", "—")
+                _tipo_main = _dorm_main.split(" · ")[0] if " · " in _dorm_main else _dorm_main
                 _all = [{"nombre": "Este inmueble", "is_main": True,
                          "precio": r.get("precio", 0) or 0, "m2": r.get("m2", 0),
                          "precio_m2": r.get("precio_m2", 0),
                          "alquiler": r.get("alquiler_mes", 0),
                          "yield_bruto": r.get("yield_bruto", 0),
                          "zona": r.get("zona", "—"),
-                         "dormitorios": r.get("dormitorios", "—"),
+                         "dormitorios": _dorm_main,
+                         "tipologia":   _tipo_main,
+                         "piso":        r.get("piso", 0),
+                         "patio":       bool(r.get("patio", False)),
+                         "antiguedad":  r.get("antiguedad", 0),
                          "imagen_bytes": (st.session_state.get("res_fotos_bytes") or [None])[0],
                         }] + [dict(c, is_main=False) for c in _comps]
 
@@ -24757,14 +24781,23 @@ elif tipo_op == "Inmueble Residencial":
                     if _ci["yield_bruto"] == _best_yield and _ci["yield_bruto"] > 0:
                         _best_badges += '<span style="background:#1A4731;color:#FFFFFF;font-size:11px;font-weight:700;padding:2px 6px;border-radius:2px;">✓ MEJOR YIELD</span>'
 
-                    _zona_disp = _ci.get("zona", "—")
-                    _tier_html = _tier_badge(_zona_disp) if _zona_disp in MERCADO else ""
-                    _dorm_disp = _ci.get("dormitorios", "—")
+                    _zona_disp  = _ci.get("zona", "—")
+                    _tier_html  = _tier_badge(_zona_disp) if _zona_disp in MERCADO else ""
+                    _dorm_disp  = _ci.get("dormitorios", "—")
+                    _piso_disp  = f"Piso {_ci.get('piso', 0)}" if _ci.get("piso", 0) > 0 else "PB"
+                    _patio_disp = "✓ Patio/terraza" if _ci.get("patio") else ""
+                    _antig_disp = f"{_ci.get('antiguedad', 0)} años" if _ci.get("antiguedad", 0) > 0 else "Nuevo"
                     _precio_str = f"${_ci['precio']:,}"
                     _pm2_str    = f"${_ci['precio_m2']:,}/m²" if _ci["precio_m2"] > 0 else "—"
                     _alq_str    = f"${_ci['alquiler']:,}/mes" if _ci.get("alquiler", 0) > 0 else "—"
                     _yield_str  = f"{_ci['yield_bruto']:.1f}%" if _ci.get("yield_bruto", 0) > 0 else "—"
                     _m2_str     = f"{_ci['m2']:,} m²" if _ci.get("m2", 0) > 0 else "—"
+                    _attr_chips = ""
+                    if _piso_disp:
+                        _attr_chips += f'<span style="background:#EEF2F7;color:#475569;font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px;margin-right:4px;">{_piso_disp}</span>'
+                    if _patio_disp:
+                        _attr_chips += f'<span style="background:#EDF7EE;color:#2D6A4F;font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px;margin-right:4px;">{_patio_disp}</span>'
+                    _attr_chips += f'<span style="background:#F5F2ED;color:#6A5C4A;font-size:10px;padding:2px 7px;border-radius:10px;">{_antig_disp}</span>'
 
                     _cards_html += f'''
                     <div style="border:{_border};border-radius:12px;overflow:hidden;box-shadow:0 2px 12px rgba(30,45,61,0.10);background:#FFFFFF;">
@@ -24779,10 +24812,11 @@ elif tipo_op == "Inmueble Residencial":
                         </div>
                         <div style="padding:14px 16px;">
                             <div style="font-size:13px;font-weight:700;color:#1E2D3D;margin-bottom:4px;">{_ci["nombre"]}</div>
-                            <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;">
+                            <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;">
                                 <span style="font-size:11px;color:#6A7A8A;">{_zona_disp}</span>
                                 {_tier_html}
                             </div>
+                            <div style="margin-bottom:8px;">{_attr_chips}</div>
                             <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px;">
                                 <div style="background:#F7F9FC;border-radius:6px;padding:8px 10px;">
                                     <div style="font-size:11px;color:#9A9080;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px;">Tipología</div>
@@ -24807,6 +24841,47 @@ elif tipo_op == "Inmueble Residencial":
 
                 _cards_html += '</div>'
                 st.markdown(_cards_html, unsafe_allow_html=True)
+
+                # ── Diferenciaciones automáticas ───────────────────
+                if len(_all) > 1:
+                    _main = _all[0]
+                    _flags = []
+                    _tipos_uniq = set(c.get("tipologia", "") for c in _all if c.get("tipologia"))
+                    if len(_tipos_uniq) > 1:
+                        _flags.append(("⚠", "amber", f"Tipologías distintas en la comparativa ({' / '.join(sorted(_tipos_uniq))}) — comparar precios con cautela"))
+                    _pisos = [c.get("piso", 0) for c in _all]
+                    if max(_pisos) - min(_pisos) >= 5:
+                        _flags.append(("ℹ", "blue", f"Diferencia de {max(_pisos) - min(_pisos)} pisos entre inmuebles — el piso influye en precio y vista"))
+                    _patios = [c.get("patio", False) for c in _all]
+                    if any(_patios) and not all(_patios):
+                        _n_con = sum(1 for p in _patios if p)
+                        _flags.append(("ℹ", "green", f"{_n_con} de {len(_all)} inmueble(s) tienen patio/terraza — factor de diferenciación de precio"))
+                    _antigs = [c.get("antiguedad", 0) for c in _all]
+                    if max(_antigs) - min(_antigs) >= 10:
+                        _flags.append(("⚠", "amber", f"Rango de antigüedad amplio ({min(_antigs)}–{max(_antigs)} años) — afecta estado de conservación y precio"))
+                    _pm2s_v = [c["precio_m2"] for c in _all if c["precio_m2"] > 0]
+                    if len(_pm2s_v) >= 2:
+                        _spread = (max(_pm2s_v) - min(_pm2s_v)) / min(_pm2s_v) * 100
+                        if _spread > 25:
+                            _flags.append(("⚠", "amber", f"Dispersión de precio/m² elevada ({_spread:.0f}%) — verificar si los inmuebles son realmente comparables"))
+                    _zonas_uniq = set(c.get("zona", "") for c in _all if c.get("zona") and c.get("zona") != "—")
+                    if len(_zonas_uniq) > 1:
+                        _flags.append(("ℹ", "blue", f"Inmuebles en distintos distritos ({' / '.join(sorted(_zonas_uniq))}) — mercados con precios referencia diferente"))
+
+                    if _flags:
+                        _col_map = {"amber": ("#FFF8E6","#92600A","#F59E0B"),
+                                    "blue":  ("#EEF4FF","#1E3A8A","#3B82F6"),
+                                    "green": ("#EDFAF3","#14532D","#22C55E")}
+                        _diff_html = '<div style="margin-top:16px;margin-bottom:8px;">'
+                        _diff_html += '<div style="font-size:11px;font-weight:700;color:#475569;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;">DIFERENCIACIONES DETECTADAS</div>'
+                        for _icon, _col, _msg in _flags:
+                            _bg, _tc, _bc = _col_map[_col]
+                            _diff_html += (f'<div style="background:{_bg};border-left:3px solid {_bc};border-radius:0 6px 6px 0;'
+                                          f'padding:8px 12px;margin-bottom:6px;display:flex;gap:8px;align-items:flex-start;">'
+                                          f'<span style="color:{_bc};font-size:13px;flex-shrink:0;">{_icon}</span>'
+                                          f'<span style="font-size:12px;color:{_tc};line-height:1.5;">{_msg}</span></div>')
+                        _diff_html += '</div>'
+                        st.markdown(_diff_html, unsafe_allow_html=True)
 
                 # ── Comparison chart ───────────────────────────────
                 if any(c["precio_m2"] > 0 for c in _all):
