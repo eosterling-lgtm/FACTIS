@@ -1414,7 +1414,53 @@ st.markdown("""<style>
 html,body,#root,.stApp,[data-testid="stAppViewContainer"],[data-testid="stMain"]{
     background-color:#F7F9FC!important;
 }
+/* Ocultar cualquier elemento que contenga solo tags de cierre HTML sueltos */
+.solum-hidden-artifact { display:none!important; }
 </style>""", unsafe_allow_html=True)
+
+# ── Limpieza global de artefactos HTML ("<\/div><\/div>" visible) ────────────
+st.components.v1.html("""<script>
+(function(){
+    var _TAG_RE = /^(<\\s*\\/\\s*div\\s*>\\s*)+$/i;
+    function _clean(root){
+        if(!root) return;
+        var nodes = root.querySelectorAll('p,div,span,section,article');
+        for(var i=0;i<nodes.length;i++){
+            var el = nodes[i];
+            // skip elements with children (we only want leaf-ish nodes)
+            if(el.children.length > 0) continue;
+            var txt = el.textContent.trim();
+            if(_TAG_RE.test(txt)){
+                el.style.setProperty('display','none','important');
+                el.setAttribute('aria-hidden','true');
+            }
+        }
+    }
+    function _start(){
+        var body = window.parent.document.body;
+        if(!body){ setTimeout(_start,100); return; }
+        _clean(body);
+        var obs = new MutationObserver(function(muts){
+            for(var i=0;i<muts.length;i++){
+                var m=muts[i];
+                for(var j=0;j<m.addedNodes.length;j++){
+                    var n=m.addedNodes[j];
+                    if(n.nodeType===1){ _clean(n); }
+                }
+                if(m.type==='characterData'){
+                    var par=m.target.parentElement;
+                    if(par && par.children.length===0){
+                        var t=m.target.textContent.trim();
+                        if(_TAG_RE.test(t)) par.style.setProperty('display','none','important');
+                    }
+                }
+            }
+        });
+        obs.observe(body,{childList:true,subtree:true,characterData:true});
+    }
+    _start();
+})();
+</script>""", height=0)
 
 # ═══════════════════════════════════════════════════════
 # LINK DE COMPARTIR — vista pública (sin login)
