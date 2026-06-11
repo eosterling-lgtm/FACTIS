@@ -896,6 +896,8 @@ def calcular_retail(inp: dict) -> dict:
         "proyeccion_anos": proyeccion_anos,
         "gastos_comunes_m2": gastos_comunes_m2,
         "duracion_anos": duracion_anos,
+        "actividad": inp.get("actividad", ""),
+        "zonificacion": inp.get("zonificacion", "CZ"),
     }
 
 
@@ -17497,6 +17499,115 @@ with st.sidebar:
         ret_distrito = st.selectbox("Distrito", _DISTRITOS_RET, key="ret_distrito")
         ret_nombre = st.text_input("Nombre / referencia del local", placeholder="Ej: Local Av. Javier Prado Este", key="ret_nombre")
 
+        # ── Zonificación + Actividad ──────────────────────────────────────
+        ret_zona_com = st.selectbox(
+            "Zonificación",
+            ["CV", "CE", "CZ", "CM", "CC", "OU"],
+            index=2,
+            key="ret_zona_com",
+            help="CV=Vecinal · CE=Especializado · CZ=Zonal · CM=Metropolitano · CC=Centro Comercial · OU=Otros Usos",
+        )
+
+        def _mark_ret_act_touched():
+            st.session_state["_ret_act_touched"] = True
+
+        ret_actividad_desc = st.text_input(
+            "Actividad a desarrollar",
+            value=st.session_state.get("ret_actividad_desc", ""),
+            placeholder="Ej: restaurante, farmacia, supermercado, tienda ropa...",
+            key="ret_actividad_desc",
+            on_change=_mark_ret_act_touched,
+        )
+
+        # ── Badge de compatibilidad ───────────────────────────────────────
+        _show_ret_compat = (
+            st.session_state.get("_ret_act_touched", False)
+            or bool(st.session_state.get("ret_actividad_desc", "").strip())
+            or st.session_state.get("ret_zona_com") is not None
+        )
+        if _show_ret_compat:
+            # Orden jerárquico de zonas comerciales
+            _ZONA_ORD_RET = {"CV": 1, "CE": 2, "CZ": 3, "CM": 4, "CC": 4, "OU": 0}
+            # Mínimo de zona requerido por formato
+            _FORMATO_ZONA_MIN = {
+                "Local en Avenida":          "CV",
+                "Strip Mall / Power Center": "CZ",
+                "Dark Kitchen":              "CV",
+                "Mixed-Use PB":              "CV",
+            }
+            _zona_sel_r  = st.session_state.get("ret_zona_com", "CZ")
+            _fmt_sel_r   = st.session_state.get("ret_formato", "Local en Avenida")
+            _zona_min_r  = _FORMATO_ZONA_MIN.get(_fmt_sel_r, "CV")
+            _ord_sel_r   = _ZONA_ORD_RET.get(_zona_sel_r, 0)
+            _ord_min_r   = _ZONA_ORD_RET.get(_zona_min_r, 1)
+            _act_r       = st.session_state.get("ret_actividad_desc", "").lower()
+
+            # Actividades incompatibles en zonas comerciales
+            _INCOMPAT_RET = [
+                "explosiv", "municione", "armament", "pólvora", "polvor", "detonant",
+                "radioactiv", "nuclear", "prostíbulo", "prostibulo", "burdel",
+                "manufactura pesada", "fundición", "fundicion", "refinería", "refineria",
+                "cementera", "minera", "chancadora", "planta industrial",
+            ]
+            # Actividades que requieren CZ mínimo (no permitidas en CV/CE)
+            _REQUIERE_CZ = [
+                "supermercado", "hipermercado", "hipermarket", "supermarket",
+                "mayorista", "bodega mayorista", "almacén comercial", "almacen comercial",
+                "ferreterí­a mayor", "ferreteria mayor",
+            ]
+            # Actividades que requieren CM/CC mínimo
+            _REQUIERE_CM = [
+                "centro comercial", "mall", "shopping", "tienda por departamento",
+                "hotel", "apart hotel", "casino", "hipódromo", "hipodromo",
+                "estadio", "coliseo",
+            ]
+            # Actividades condicionadas (permitidas con restricciones)
+            _CONDICIONADAS = [
+                "discoteca", "bar", "karaoke", "pub ", "licores", "tragos",
+                "taller mec", "taller autom", "lubricent", "lavado de auto",
+                "depósito", "deposito", "grifo", "gasolinera", "estacion de servicio",
+                "estación de servicio", "veterinari", "cementerio",
+            ]
+
+            _act_incompat  = any(k in _act_r for k in _INCOMPAT_RET)
+            _act_req_cz    = any(k in _act_r for k in _REQUIERE_CZ)
+            _act_req_cm    = any(k in _act_r for k in _REQUIERE_CM)
+            _act_condicion = any(k in _act_r for k in _CONDICIONADAS)
+
+            if _zona_sel_r == "OU":
+                _ret_icon, _ret_label, _ret_color, _ret_bg = "⛔", "INCOMPATIBLE", "#C44A4A", "rgba(196,74,74,0.12)"
+                _ret_sub = "Zonificación OU no admite uso comercial — verificar certificado de parámetros."
+            elif _act_incompat:
+                _ret_icon, _ret_label, _ret_color, _ret_bg = "⛔", "INCOMPATIBLE", "#C44A4A", "rgba(196,74,74,0.12)"
+                _ret_sub = "Actividad no permitida en zona comercial — requiere autorización especial o zonificación diferente."
+            elif _act_req_cm and _ord_sel_r < 4:
+                _ret_icon, _ret_label, _ret_color, _ret_bg = "⛔", "INCOMPATIBLE", "#C44A4A", "rgba(196,74,74,0.12)"
+                _ret_sub = f"Actividad requiere CM o CC mínimo. Zona {_zona_sel_r} no es suficiente."
+            elif _act_req_cz and _ord_sel_r < 3:
+                _ret_icon, _ret_label, _ret_color, _ret_bg = "⛔", "INCOMPATIBLE", "#C44A4A", "rgba(196,74,74,0.12)"
+                _ret_sub = f"Actividad requiere CZ mínimo. Zona {_zona_sel_r} ({_zona_min_r} mínimo del formato) no es suficiente."
+            elif _ord_sel_r < _ord_min_r:
+                _ret_icon, _ret_label, _ret_color, _ret_bg = "⛔", "INCOMPATIBLE", "#C44A4A", "rgba(196,74,74,0.12)"
+                _ret_sub = f"Formato {_fmt_sel_r} requiere {_zona_min_r} mínimo — zona {_zona_sel_r} no es suficiente."
+            elif _act_condicion:
+                _ret_icon, _ret_label, _ret_color, _ret_bg = "⚠", "CONDICIONADO", "#B8862E", "rgba(184,134,46,0.12)"
+                _ret_sub = f"Actividad permitida con condiciones en zona {_zona_sel_r} · Verificar restricciones en Índice de Usos ATN."
+            elif _act_r and _ord_sel_r >= _ord_min_r:
+                _ret_icon, _ret_label, _ret_color, _ret_bg = "✓", "COMPATIBLE", "#1A7A4A", "rgba(26,122,74,0.12)"
+                _ret_sub = f"Zona {_zona_sel_r} compatible con {_fmt_sel_r} · mínimo requerido {_zona_min_r} · Ord. 933-MML"
+            else:
+                _ret_icon, _ret_label, _ret_color, _ret_bg = "✓", "COMPATIBLE", "#1A7A4A", "rgba(26,122,74,0.12)"
+                _ret_sub = f"Zona {_zona_sel_r} compatible con formato {_fmt_sel_r} · mínimo {_zona_min_r} · Ord. 933-MML"
+
+            st.markdown(
+                f'<div style="background:{_ret_bg};border-radius:6px;padding:8px 12px;margin:6px 0 10px;'
+                f'display:flex;align-items:flex-start;gap:10px;">'
+                f'<span style="font-size:15px;line-height:1.2;">{_ret_icon}</span>'
+                f'<div>'
+                f'<div style="font-size:10px;font-weight:700;letter-spacing:1px;color:{_ret_color};">{_ret_label}</div>'
+                f'<div style="font-size:10px;color:#A8B8C8;margin-top:1px;">{_ret_sub}</div>'
+                f'</div></div>', unsafe_allow_html=True)
+
         st.markdown("### ÁREAS")
         _ra1, _ra2 = st.columns(2)
         ret_area_gla = _ra1.number_input(
@@ -17637,6 +17748,8 @@ with st.sidebar:
                 "costo_construccion_m2": ret_costo_const_m2,
                 "modo":                  ret_modo,
                 "formato":               ret_formato,
+                "actividad":             st.session_state.get("ret_actividad_desc", ""),
+                "zonificacion":          st.session_state.get("ret_zona_com", "CZ"),
                 "renta_m2_mes":          ret_renta_m2,
                 "vacancia_pct":          float(st.session_state.get("ret_vacancia", 8) or 8),
                 "opex_pct":              float(st.session_state.get("ret_opex_pct", 20) or 20),
@@ -26783,6 +26896,9 @@ elif tipo_op == "Retail / Local Comercial":
                 <div style="display:flex;gap:20px;margin-top:12px;flex-wrap:wrap;">
                     <div><div style="font-size:11px;color:rgba(255,255,255,0.55);text-transform:uppercase;letter-spacing:1px;">Formato</div>
                     <div style="font-size:18px;font-weight:700;color:#FFFFFF;">{r.get("formato","—")}</div></div>
+                    {(f'<div><div style="font-size:11px;color:rgba(255,255,255,0.55);text-transform:uppercase;letter-spacing:1px;">Actividad</div><div style="font-size:16px;font-weight:700;color:#FFFFFF;">{r.get("actividad","—")}</div></div>') if r.get("actividad") else ""}
+                    <div><div style="font-size:11px;color:rgba(255,255,255,0.55);text-transform:uppercase;letter-spacing:1px;">Zona</div>
+                    <div style="font-size:18px;font-weight:700;color:#C9A96E;">{r.get("zonificacion","—")}</div></div>
                     <div><div style="font-size:11px;color:rgba(255,255,255,0.55);text-transform:uppercase;letter-spacing:1px;">GLA</div>
                     <div style="font-size:18px;font-weight:700;color:#FFFFFF;">{r.get("area_gla",0):,.0f} m²</div></div>
                     <div><div style="font-size:11px;color:rgba(255,255,255,0.55);text-transform:uppercase;letter-spacing:1px;">Renta/m²/mes</div>
@@ -27196,10 +27312,18 @@ elif tipo_op == "Retail / Local Comercial":
                         f"a {r.get('duracion_anos',1)} años es ${sum(row['total_anual'] for row in r.get('proyeccion_anos',[]))if r.get('proyeccion_anos') else r.get('costo_anual_total',0)*r.get('duracion_anos',1):,.0f}."
                     )
                 else:
+                    _act_txt  = r.get("actividad", "").strip()
+                    _zona_txt = r.get("zonificacion", "")
+                    _act_zone_str = ""
+                    if _act_txt and _zona_txt:
+                        _act_zone_str = f"Actividad: {_act_txt} · Zonificación {_zona_txt}. "
+                    elif _zona_txt:
+                        _act_zone_str = f"Zonificación {_zona_txt}. "
                     _narrative = (
                         f"El activo retail ({_fmt_txt}) en {_dist_txt} presenta un NOI anual de "
                         f"${r.get('noi',0):,.0f} sobre una inversión total de ${r.get('costo_total',0):,.0f} "
                         f"(${r.get('costo_por_m2_gla',0):,.0f}/m² GLA). "
+                        f"{_act_zone_str}"
                         f"El yield neto es {r.get('yield_neto',0):.1f}% vs. cap rate de mercado {r.get('cap_rate_mercado_pct',8):.1f}%, "
                         f"lo que implica un valor por capitalización de ${r.get('valor_por_cap_rate',0):,.0f}. "
                     )
