@@ -24355,7 +24355,7 @@ elif tipo_op == "Inmueble Residencial":
             _render_normativa_post_cpue_banner(_res_normas, _res_fecha_em)
 
         res_tab_labels = ["Parámetros", "Financiero", "Inversión"] if r.get('uso') in ["Inversión para alquilar", "Evaluación para venta"] else ["Parámetros", "Financiero", "Escenarios"]
-        res_tabs = st.tabs(res_tab_labels + ["Comparativa", "Legal", "Resumen", "Emisión de Documentos"])
+        res_tabs = st.tabs(res_tab_labels + ["Comparativa", "Legal", "Emisión de Documentos"])
         st.components.v1.html("""<script>
         (function(){
             var KEY='solum_res_tab';
@@ -25332,6 +25332,28 @@ elif tipo_op == "Inmueble Residencial":
 
         # TAB 5: RESUMEN IA (residencial)
         with res_tabs[5]:
+            # ── Banner de rol del broker ──────────────────────────────────
+            _bk_lado_em = st.session_state.get("bk_lado", "Vendedor")
+            _ROL_CFG = {
+                "Vendedor":      ("#1A3A5A", "#EEF4FF", "🏠  Representando al Vendedor",
+                                  "El análisis evalúa si el precio de lista es competitivo y defiende la valorización ante el propietario."),
+                "Comprador":     ("#1A4731", "#E8F5EE", "🔍  Representando al Comprador",
+                                  "El análisis determina si el precio pedido es justo, cuánto negociar y si el inmueble es buena inversión."),
+                "Ambas partes":  ("#5C3D10", "#FFF8E6", "⚖️  Representando Ambas Partes",
+                                  "Vista completa: valorización de mercado, posición de precio y análisis de oportunidad para ambas partes."),
+            }
+            _rol_tc, _rol_bg, _rol_titulo, _rol_desc = _ROL_CFG.get(_bk_lado_em, _ROL_CFG["Vendedor"])
+            st.markdown(
+                f'<div style="background:{_rol_bg};border-left:4px solid {_rol_tc};border-radius:0 8px 8px 0;'
+                f'padding:12px 18px;margin-bottom:18px;display:flex;gap:12px;align-items:flex-start;">'
+                f'<div><div style="font-size:13px;font-weight:700;color:{_rol_tc};">{_rol_titulo}</div>'
+                f'<div style="font-size:12px;color:{_rol_tc};opacity:0.85;margin-top:3px;line-height:1.5;">{_rol_desc}</div></div>'
+                f'<div style="margin-left:auto;font-size:10px;color:{_rol_tc};opacity:0.6;white-space:nowrap;padding-top:2px;">'
+                f'Cambiar rol → Panel del Broker ↑</div></div>',
+                unsafe_allow_html=True)
+
+            st.markdown('<div class="section-title">Análisis IA del Inmueble</div>', unsafe_allow_html=True)
+
             # ── Matriz de Riesgos ─────────────────────────────────────────
             _res_alertas_fin = generar_alertas_financieras_residencial(r)
             _res_legal       = st.session_state.get("residencial_legal") or {}
@@ -25548,28 +25570,49 @@ elif tipo_op == "Inmueble Residencial":
                 )
 
         # TAB 6: DOCUMENTOS
-        with res_tabs[6]:
+        with res_tabs[5]:
+            st.markdown("---")
             st.markdown('<div class="section-title">Emisión de Documentos Profesionales</div>', unsafe_allow_html=True)
 
+            # Opciones de documento según rol del broker
+            _bk_lado_doc = st.session_state.get("bk_lado", "Vendedor")
+            _DOC_OPTS = {
+                "Vendedor":     ["Informe de Valoración", "Propuesta de Alquiler", "Contraoferta"],
+                "Comprador":    ["Informe de Asesoría al Comprador", "Propuesta de Compra", "Contraoferta"],
+                "Ambas partes": ["Informe de Valoración", "Informe de Asesoría al Comprador",
+                                 "Propuesta de Compra", "Propuesta de Alquiler", "Contraoferta"],
+            }
             _doc_tipo = st.radio("Tipo de documento",
-                                  ["Informe de Valoración", "Propuesta de Alquiler", "Propuesta de Compra", "Contraoferta"],
+                                  _DOC_OPTS.get(_bk_lado_doc, _DOC_OPTS["Vendedor"]),
                                   horizontal=True)
 
             _dc1, _dc2 = st.columns(2)
             # Pre-llenar desde el Panel del Broker si ya se ingresó
             _bk_nombre_saved = st.session_state.get("bk_nombre", "")
             _bk_tel_saved    = st.session_state.get("bk_tel", "")
-            _doc_agente  = _dc1.text_input("Nombre del agente", value=_bk_nombre_saved, placeholder="Tu nombre completo")
-            _doc_cliente = _dc2.text_input("Nombre del cliente / propietario", placeholder="A quién va dirigido")
-            _doc_obs = st.text_area("Observaciones adicionales", placeholder="Condiciones especiales, notas del cliente, etc.", height=68)
+            _doc_agente  = _dc1.text_input("Nombre del agente", value=_bk_nombre_saved,
+                                            placeholder="Tu nombre completo", key="doc_agente_k")
+            # Label del segundo campo según rol
+            _cliente_label = ("Nombre del propietario" if _bk_lado_doc == "Vendedor"
+                              else "Nombre del comprador / cliente"
+                              if _bk_lado_doc == "Comprador" else "Nombre del cliente")
+            _doc_cliente = _dc2.text_input(_cliente_label, placeholder="A quién va dirigido", key="doc_cliente_k")
+            _doc_obs = st.text_area("Observaciones adicionales",
+                                    placeholder="Condiciones especiales, notas del cliente, etc.",
+                                    height=68, key="doc_obs_k")
 
-            # ── Acuerdo de Comercialización ───────────────────────
+            # ── Acuerdo de Comercialización (solo lado Vendedor) ──
             st.markdown("---")
+            _puede_acuerdo = _bk_lado_doc in ("Vendedor", "Ambas partes")
+            if not _puede_acuerdo:
+                st.info("ℹ️  El Acuerdo de Comercialización aplica cuando representas al vendedor. "
+                        "Cambia el rol en el Panel del Broker ↑ si necesitas incluirlo.")
             _incluir_acuerdo = st.checkbox(
                 "📋  Incluir **Acuerdo de Comercialización** como anexo",
-                value=st.session_state.get("_acuerdo_checked", False),
+                value=st.session_state.get("_acuerdo_checked", False) and _puede_acuerdo,
                 key="_acuerdo_checked",
-                help="Genera un acuerdo de encargo de venta/alquiler listo para firma en campo."
+                disabled=not _puede_acuerdo,
+                help="Genera un acuerdo de encargo de venta/alquiler listo para firma en campo. Solo disponible representando al vendedor."
             )
             if _incluir_acuerdo:
                 st.markdown('<div style="background:#F0F4FF;border-left:3px solid #3B82F6;border-radius:0 6px 6px 0;padding:10px 14px;margin-bottom:12px;font-size:12px;color:#1E3A8A;">El acuerdo se adjunta como Anexo A al informe. El propietario firma en campo autorizando la gestión de la propiedad.</div>', unsafe_allow_html=True)
@@ -25623,6 +25666,16 @@ elif tipo_op == "Inmueble Residencial":
                 _posicion = ("por debajo del mercado — precio competitivo" if _diff_doc < -5
                              else ("en línea con el mercado" if abs(_diff_doc) <= 8
                                    else f"{_diff_doc:.1f}% sobre la mediana de zona"))
+                # Consejo role-aware para el párrafo de posición
+                if _bk_lado_doc == "Vendedor":
+                    _consejo_rol = ("Precio bien posicionado para captar interés del mercado." if _diff_doc <= 8
+                                    else "Considera ajustar el precio de lista para reducir el tiempo en el mercado.")
+                elif _bk_lado_doc == "Comprador":
+                    _consejo_rol = ("Buena oportunidad — el precio está por debajo del estimado." if _diff_doc < -5
+                                    else ("Precio justo — márgenes de negociación ajustados." if abs(_diff_doc) <= 8
+                                          else f"Precio alto — recomendar oferta inicial con {min(abs(_diff_doc), 15):.0f}% de descuento."))
+                else:
+                    _consejo_rol = "Ver posición relativa en la tabla de mercado."
 
                 _doc_html = f"""<!DOCTYPE html>
 <html lang="es">
@@ -25656,11 +25709,11 @@ elif tipo_op == "Inmueble Residencial":
 <div class="page">
 
 <div class="header">
-  <div class="header-sub">Osterling Advisory · SOLUM</div>
+  <div class="header-sub">{'Asesoría al Vendedor' if _bk_lado_doc == 'Vendedor' else ('Asesoría al Comprador' if _bk_lado_doc == 'Comprador' else 'Análisis Bilateral')} · SOLUM</div>
   <div class="header-title">{_doc_tipo}</div>
   <div class="header-meta">
-    {'Preparado por: ' + _doc_agente + ' · ' if _doc_agente else ''}Zona: {_zona_doc} · Fecha: {_fecha_doc}
-    {' · Para: ' + _doc_cliente if _doc_cliente else ''}
+    {'Agente: ' + _doc_agente + (' · ' + _bk_tel_saved if _bk_tel_saved else '') + ' · ' if _doc_agente else ''}Zona: {_zona_doc} · Fecha: {_fecha_doc}
+    {(' · ' + _cliente_label + ': ' + _doc_cliente) if _doc_cliente else ''}
   </div>
 </div>
 
@@ -25695,6 +25748,7 @@ elif tipo_op == "Inmueble Residencial":
 <div class="alert">
   <strong>Posición de precio:</strong> El inmueble se encuentra <strong>{_posicion}</strong>.
   {"La variación anual de la zona (" + str(_var_doc) + "%) indica " + ("potencial de plusvalía." if _var_doc > 2 else ("mercado estable." if abs(_var_doc) <= 2 else "presión a la baja — oportunidad de negociación."))}
+  <br><strong>{"Recomendación al vendedor" if _bk_lado_doc == "Vendedor" else ("Recomendación al comprador" if _bk_lado_doc == "Comprador" else "Análisis")}:</strong> {_consejo_rol}
 </div>
 
 {'<div class="section-title">III. Análisis Financiero del Comprador</div><div class="metric-row"><div class="metric-box"><div class="metric-label">Pago inicial (' + str(int(r.get("pct_pie", 0))) + '%)</div><div class="metric-value">$' + f"{_pie_doc:,.0f}" + '</div></div><div class="metric-box"><div class="metric-label">Cuota mensual</div><div class="metric-value">$' + f"{_cuota_doc:,.0f}" + '</div></div><div class="metric-box"><div class="metric-label">Ingreso mínimo</div><div class="metric-value">$' + f"{_ingreso_min_doc:,.0f}" + '/mes</div></div></div>' if _cuota_doc > 0 else ""}
