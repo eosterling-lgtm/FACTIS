@@ -24333,6 +24333,25 @@ elif tipo_op == "Inmueble Residencial":
         </div>""", unsafe_allow_html=True)
 
         # ── Panel del Broker ──────────────────────────────────────────────────
+        st.components.v1.html("""<script>
+        (function(){
+            function _bkStyle(){
+                var exps=window.parent.document.querySelectorAll('[data-testid="stExpander"]');
+                for(var e of exps){
+                    var sp=e.querySelector('summary p, summary span');
+                    if(sp && sp.textContent.includes('Panel del Broker')){
+                        e.style.background='#D6F0EA';
+                        e.style.borderRadius='10px';
+                        e.style.border='1.5px solid #7CC4B5';
+                        e.style.boxShadow='0 2px 8px rgba(124,196,181,0.18)';
+                        return;
+                    }
+                }
+                setTimeout(_bkStyle,150);
+            }
+            _bkStyle();
+        })();
+        </script>""", height=0)
         with st.expander("🏷️  Panel del Broker", expanded=False):
             _bk_c1, _bk_c2, _bk_c3, _bk_c4 = st.columns([2, 2, 1, 1])
             _bk_nombre  = _bk_c1.text_input("Nombre del agente", value=st.session_state.get("bk_nombre", ""), placeholder="Ej: Juan García", key="bk_nombre")
