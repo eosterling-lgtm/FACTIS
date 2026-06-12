@@ -28062,8 +28062,7 @@ div[data-testid="stHorizontalBlock"] > div[data-testid="column"]
             'para comparar hasta 3 proyectos lado a lado aquí.</div>'
             '</div></div>',
             unsafe_allow_html=True)
-        st.markdown('<div style="height:12px;"></div>', unsafe_allow_html=True)
-        st.markdown("---")
+        st.markdown('<div style="height:16px;"></div>', unsafe_allow_html=True)
 
     # ── ALERTAS DE NORMATIVAS (solo admin) ───────────────────────────────
     if st.session_state.get("_role") == "admin":
