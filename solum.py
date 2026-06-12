@@ -28043,7 +28043,26 @@ div[data-testid="stHorizontalBlock"] > div[data-testid="column"]
             st.rerun()
         st.markdown("---")
     else:
-        st.info("💡 Ejecuta un análisis en cualquier módulo y usa **📌 Guardar escenario** para comparar hasta 3 proyectos aquí.")
+        st.markdown(
+            '<div style="background:#F0FDFA;border:1px solid #99F6E4;border-left:4px solid #0D9488;'
+            'border-radius:8px;padding:18px 22px;display:flex;align-items:flex-start;gap:14px;">'
+            '<div style="flex-shrink:0;width:32px;height:32px;background:#CCFBF1;border-radius:6px;'
+            'display:flex;align-items:center;justify-content:center;">'
+            '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0D9488" '
+            'stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">'
+            '<path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/>'
+            '<path d="M2 12l10 5 10-5"/></svg></div>'
+            '<div>'
+            '<div style="font-size:13px;font-weight:700;color:#134E4A;margin-bottom:4px;">'
+            'Comparador de Escenarios</div>'
+            '<div style="font-size:12px;color:#0F766E;line-height:1.6;">'
+            'Ejecuta un análisis en cualquier módulo y usa el botón '
+            '<span style="background:#CCFBF1;color:#0D9488;font-weight:700;padding:2px 8px;'
+            'border-radius:4px;font-size:11px;letter-spacing:0.5px;">GUARDAR ESCENARIO</span> '
+            'para comparar hasta 3 proyectos lado a lado aquí.</div>'
+            '</div></div>',
+            unsafe_allow_html=True)
+        st.markdown('<div style="height:12px;"></div>', unsafe_allow_html=True)
         st.markdown("---")
 
     # ── ALERTAS DE NORMATIVAS (solo admin) ───────────────────────────────
@@ -28254,7 +28273,25 @@ div[data-testid="stHorizontalBlock"] > div[data-testid="column"]
     _port_proyectos = listar_proyectos(con_resumen=True)
 
     if not _port_proyectos:
-        st.info("No hay proyectos guardados aún. Analiza un proyecto y guárdalo para verlo aquí.")
+        st.markdown(
+            '<div style="background:#F0FDFA;border:1px solid #99F6E4;border-left:4px solid #0D9488;'
+            'border-radius:8px;padding:18px 22px;display:flex;align-items:flex-start;gap:14px;">'
+            '<div style="flex-shrink:0;width:32px;height:32px;background:#CCFBF1;border-radius:6px;'
+            'display:flex;align-items:center;justify-content:center;">'
+            '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0D9488" '
+            'stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">'
+            '<rect x="2" y="3" width="20" height="14" rx="2"/>'
+            '<path d="M8 21h8M12 17v4"/></svg></div>'
+            '<div>'
+            '<div style="font-size:13px;font-weight:700;color:#134E4A;margin-bottom:4px;">'
+            'Sin proyectos guardados</div>'
+            '<div style="font-size:12px;color:#0F766E;line-height:1.6;">'
+            'Ejecuta un análisis completo en cualquier módulo — al finalizar aparecerá '
+            'el botón <span style="background:#CCFBF1;color:#0D9488;font-weight:700;padding:2px 8px;'
+            'border-radius:4px;font-size:11px;letter-spacing:0.5px;">GUARDAR PROYECTO</span> '
+            'para registrarlo aquí.</div>'
+            '</div></div>',
+            unsafe_allow_html=True)
     else:
         # ── FILTROS ───────────────────────────────────────────────────────────
         _pf1, _pf2, _pf3, _pf4 = st.columns([2, 1, 1, 1])
