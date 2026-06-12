@@ -15172,142 +15172,6 @@ with st.sidebar:
         st.session_state["_show_welcome"] = True
         st.rerun()
 
-    # ── Export / Import JSON de Proyecto ─────────────────────
-    st.markdown('<hr style="border:none;border-top:1px solid rgba(255,255,255,0.12);margin:8px 0 8px;">', unsafe_allow_html=True)
-    st.markdown(
-        '<div style="font-size:10px;color:#6B7280;letter-spacing:2px;text-transform:uppercase;'
-        'font-weight:700;padding:0 4px 4px;">Proyecto</div>',
-        unsafe_allow_html=True)
-
-    # ── GUARDAR: serializar session_state con inputs de todos los módulos ──
-    def _snapshot_proyecto() -> dict:
-        """Captura todos los inputs relevantes de session_state para exportar."""
-        _KEYS_INDUSTRIAL = [k for k in st.session_state.keys() if k.startswith("ind_")]
-        _KEYS_OFICINAS   = [k for k in st.session_state.keys() if k.startswith("ofi_") or k.startswith("_ofi_")]
-        _KEYS_RETAIL     = [k for k in st.session_state.keys() if k.startswith("ret_") or k.startswith("_ret_")]
-        _KEYS_GENERAL    = ["zona_sel","_modulo_activo","_user_name","_user_role"]
-
-        _all_keys = set(_KEYS_GENERAL + _KEYS_INDUSTRIAL + _KEYS_OFICINAS + _KEYS_RETAIL)
-        snap = {}
-        for k in _all_keys:
-            v = st.session_state.get(k)
-            # Solo serializar tipos básicos — excluir bytes, figuras, objetos Shapely, etc.
-            if v is None:
-                continue
-            if isinstance(v, (str, int, float, bool)):
-                snap[k] = v
-            elif isinstance(v, (list, dict)):
-                try:
-                    import json as _j
-                    _j.dumps(v)  # test serializable
-                    snap[k] = v
-                except (TypeError, ValueError):
-                    pass
-        # Agregar fin_params si existe
-        _fin_src = st.session_state.get("fin_params") or st.session_state.get("_fin_base")
-        if isinstance(_fin_src, dict):
-            snap["_export_fin"] = {k: v for k, v in _fin_src.items()
-                                   if isinstance(v, (str, int, float, bool))}
-        snap["_export_ts"]      = __import__("datetime").datetime.now().isoformat()
-        snap["_export_version"] = "SOLUM-1.0"
-        return snap
-
-    import json as _json_mod
-    _snap = _snapshot_proyecto()
-    _snap_bytes = _json_mod.dumps(_snap, ensure_ascii=False, indent=2).encode("utf-8")
-    _ts_str = __import__("datetime").datetime.now().strftime("%Y%m%d_%H%M")
-    st.download_button(
-        label="💾 Guardar proyecto",
-        data=_snap_bytes,
-        file_name=f"solum_proyecto_{_ts_str}.json",
-        mime="application/json",
-        use_container_width=True,
-        key="_btn_export_json",
-        help="Descarga los inputs actuales como JSON para retomar el análisis luego",
-    )
-
-    # ── CARGAR: restaurar session_state desde JSON ──────────────
-    _uploaded_json = st.file_uploader(
-        "📂 Cargar proyecto",
-        type=["json"],
-        key="_uploader_json",
-        label_visibility="collapsed",
-        help="Carga un archivo .json exportado por SOLUM para restaurar los inputs",
-    )
-    if _uploaded_json is not None:
-        try:
-            _loaded = _json_mod.loads(_uploaded_json.read().decode("utf-8"))
-            if _loaded.get("_export_version", "").startswith("SOLUM"):
-                _restored = 0
-                _SKIP_KEYS = {"_export_ts", "_export_version", "_export_fin",
-                              "_authenticated", "_user_name", "_user_role", "_username"}
-                for _k, _v in _loaded.items():
-                    if _k not in _SKIP_KEYS:
-                        st.session_state[_k] = _v
-                        _restored += 1
-                # Restaurar fin_params si existe
-                if "_export_fin" in _loaded and isinstance(_loaded["_export_fin"], dict):
-                    st.session_state["fin_params"] = _loaded["_export_fin"]
-                st.success(f"✅ Proyecto cargado — {_restored} parámetros restaurados")
-                st.rerun()
-            else:
-                st.error("Archivo no reconocido. Use un JSON exportado por SOLUM.")
-        except Exception as _e_load:
-            st.error(f"Error al cargar: {_e_load}")
-
-    # ── Botón Historial ───────────────────────────────────────
-    if st.button("📋 Ver historial", key="_btn_historial", use_container_width=True,
-                 help="Últimos análisis ejecutados"):
-        st.session_state["_show_historial"] = not st.session_state.get("_show_historial", False)
-
-    # ── Panel Historial (sidebar) ─────────────────────────────
-    if st.session_state.get("_show_historial", False):
-        st.markdown('<hr style="border:none;border-top:1px solid rgba(255,255,255,0.12);margin:8px 0;">', unsafe_allow_html=True)
-        st.markdown(
-            '<div style="font-size:10px;color:#6B7280;letter-spacing:2px;text-transform:uppercase;'
-            'font-weight:700;padding:0 4px 4px;">Historial reciente</div>',
-            unsafe_allow_html=True)
-        try:
-            _sb_hist = _get_supabase()
-            if _sb_hist:
-                _hist_rows = (
-                    _sb_hist.table("analisis_historial")
-                    .select("created_at,modulo,distrito,tipo,kpis")
-                    .order("created_at", desc=True)
-                    .limit(10)
-                    .execute()
-                ).data or []
-                if _hist_rows:
-                    for _hr in _hist_rows:
-                        _dt = (_hr.get("created_at","")[:16] or "").replace("T"," ")
-                        _km = _hr.get("kpis") or {}
-                        _kpi_str = ""
-                        _mod = _hr.get("modulo","")
-                        if _mod == "Residencial":
-                            _tir = _km.get("tir_anual_pct")
-                            _kpi_str = f"TIR {_tir:.1f}%" if _tir else ""
-                        elif _mod == "Industrial":
-                            _y = _km.get("yield_bruto_pct")
-                            _kpi_str = f"Yield {_y:.1f}%" if _y else ""
-                        elif _mod == "Oficinas":
-                            _c = _km.get("cap_rate")
-                            _kpi_str = f"Cap {_c:.1f}%" if _c else ""
-                        elif _mod == "Retail":
-                            _n = _km.get("noi")
-                            _kpi_str = f"NOI ${_n:,.0f}" if _n else ""
-                        st.markdown(
-                            f'<div style="padding:4px 0;font-size:11px;color:#CBD5E1;border-bottom:1px solid rgba(255,255,255,0.06);">'
-                            f'<span style="color:#94A3B8;">{_dt}</span> '
-                            f'<b style="color:#FFFFFF;">{_mod}</b> · {_hr.get("distrito","")} '
-                            f'<span style="color:#4A90C4;">{_kpi_str}</span></div>',
-                            unsafe_allow_html=True)
-                else:
-                    st.markdown('<div style="font-size:11px;color:#6B7280;padding:4px 0;">Sin análisis guardados aún.</div>', unsafe_allow_html=True)
-            else:
-                st.markdown('<div style="font-size:11px;color:#6B7280;padding:4px 0;">Supabase no disponible.</div>', unsafe_allow_html=True)
-        except Exception as _e_hist_view:
-            st.markdown(f'<div style="font-size:11px;color:#6B7280;">Error: {_e_hist_view}</div>', unsafe_allow_html=True)
-
     st.markdown('<hr style="border:none;border-top:1px solid #CBD5E1;margin:6px 0 10px;">', unsafe_allow_html=True)
     st.markdown(
         '<div style="font-size:10px;color:#6B7280;letter-spacing:3px;text-transform:uppercase;'
@@ -27841,6 +27705,170 @@ elif tipo_op == "Portfolio":
         '<div style="font-size:13px;color:#475569;margin-top:6px;margin-bottom:20px;">'
         'KPIs consolidados por proyecto. Compara escenarios y accede al historial de análisis.</div>',
         unsafe_allow_html=True)
+
+    # ── GESTIÓN DE PROYECTO — Export / Import / Historial ────────────────
+    _port_cols = st.columns([1, 1])
+
+    # ── Export JSON ──────────────────────────────────────────────────────
+    with _port_cols[0]:
+        st.markdown(
+            '<div style="background:#FFFFFF;border:1px solid #E2E8F0;border-radius:8px;padding:16px 18px;height:100%;">'
+            '<div style="font-size:11px;font-weight:700;color:#64748B;letter-spacing:2px;'
+            'text-transform:uppercase;margin-bottom:6px;">Exportar Proyecto</div>'
+            '<div style="font-size:12px;color:#475569;margin-bottom:12px;">'
+            'Descarga los parámetros actuales como archivo JSON para retomar el análisis en cualquier momento.</div>',
+            unsafe_allow_html=True)
+        def _snapshot_proyecto() -> dict:
+            _KEYS_INDUSTRIAL = [k for k in st.session_state.keys() if k.startswith("ind_")]
+            _KEYS_OFICINAS   = [k for k in st.session_state.keys() if k.startswith("ofi_") or k.startswith("_ofi_")]
+            _KEYS_RETAIL     = [k for k in st.session_state.keys() if k.startswith("ret_") or k.startswith("_ret_")]
+            _KEYS_GENERAL    = ["zona_sel", "_modulo_activo", "_user_name", "_user_role"]
+            _all_keys = set(_KEYS_GENERAL + _KEYS_INDUSTRIAL + _KEYS_OFICINAS + _KEYS_RETAIL)
+            snap = {}
+            for k in _all_keys:
+                v = st.session_state.get(k)
+                if v is None:
+                    continue
+                if isinstance(v, (str, int, float, bool)):
+                    snap[k] = v
+                elif isinstance(v, (list, dict)):
+                    try:
+                        import json as _jt
+                        _jt.dumps(v)
+                        snap[k] = v
+                    except (TypeError, ValueError):
+                        pass
+            _fin_src = st.session_state.get("fin_params") or st.session_state.get("_fin_base")
+            if isinstance(_fin_src, dict):
+                snap["_export_fin"] = {k: v for k, v in _fin_src.items()
+                                       if isinstance(v, (str, int, float, bool))}
+            snap["_export_ts"]      = __import__("datetime").datetime.now().isoformat()
+            snap["_export_version"] = "SOLUM-1.0"
+            return snap
+        import json as _json_port
+        _snap_p = _snapshot_proyecto()
+        _snap_bytes_p = _json_port.dumps(_snap_p, ensure_ascii=False, indent=2).encode("utf-8")
+        _ts_p = __import__("datetime").datetime.now().strftime("%Y%m%d_%H%M")
+        st.download_button(
+            label="Descargar JSON",
+            data=_snap_bytes_p,
+            file_name=f"solum_proyecto_{_ts_p}.json",
+            mime="application/json",
+            use_container_width=True,
+            key="_btn_export_json_port",
+            help="Descarga los inputs actuales como JSON",
+        )
+        st.markdown('</div>', unsafe_allow_html=True)
+
+    # ── Import JSON ───────────────────────────────────────────────────────
+    with _port_cols[1]:
+        st.markdown(
+            '<div style="background:#FFFFFF;border:1px solid #E2E8F0;border-radius:8px;padding:16px 18px;height:100%;">'
+            '<div style="font-size:11px;font-weight:700;color:#64748B;letter-spacing:2px;'
+            'text-transform:uppercase;margin-bottom:6px;">Importar Proyecto</div>'
+            '<div style="font-size:12px;color:#475569;margin-bottom:12px;">'
+            'Carga un archivo JSON exportado por SOLUM para restaurar los parámetros de un análisis anterior.</div>',
+            unsafe_allow_html=True)
+        _uploaded_json_p = st.file_uploader(
+            "Cargar JSON",
+            type=["json"],
+            key="_uploader_json_port",
+            label_visibility="collapsed",
+            help="Archivo .json exportado por SOLUM",
+        )
+        if _uploaded_json_p is not None:
+            try:
+                _loaded_p = _json_port.loads(_uploaded_json_p.read().decode("utf-8"))
+                if _loaded_p.get("_export_version", "").startswith("SOLUM"):
+                    _SKIP_P = {"_export_ts", "_export_version", "_export_fin",
+                               "_authenticated", "_user_name", "_user_role", "_username"}
+                    _restored_p = 0
+                    for _k_p, _v_p in _loaded_p.items():
+                        if _k_p not in _SKIP_P:
+                            st.session_state[_k_p] = _v_p
+                            _restored_p += 1
+                    if "_export_fin" in _loaded_p and isinstance(_loaded_p["_export_fin"], dict):
+                        st.session_state["fin_params"] = _loaded_p["_export_fin"]
+                    st.success(f"✅ {_restored_p} parámetros restaurados")
+                    st.rerun()
+                else:
+                    st.error("Archivo no reconocido. Use un JSON exportado por SOLUM.")
+            except Exception as _e_lp:
+                st.error(f"Error al cargar: {_e_lp}")
+        st.markdown('</div>', unsafe_allow_html=True)
+
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    # ── HISTORIAL DE ANÁLISIS ─────────────────────────────────────────────
+    st.markdown('<div class="section-title">Historial de Análisis</div>', unsafe_allow_html=True)
+    try:
+        _sb_hist_p = _get_supabase()
+        if _sb_hist_p:
+            _hist_p = (
+                _sb_hist_p.table("analisis_historial")
+                .select("created_at,modulo,distrito,tipo,kpis")
+                .order("created_at", desc=True)
+                .limit(20)
+                .execute()
+            ).data or []
+            if _hist_p:
+                _MOD_COLORS = {
+                    "Residencial": "#7C3AED", "Industrial": "#2E7D32",
+                    "Oficinas": "#1D4ED8",    "Retail": "#B45309",
+                }
+                _hist_html = (
+                    '<div style="background:#FFFFFF;border:1px solid #E2E8F0;border-radius:8px;overflow:hidden;">'
+                    '<table style="width:100%;border-collapse:collapse;">'
+                    '<thead><tr style="background:#F8FAFC;">'
+                    '<th style="padding:10px 14px;text-align:left;font-size:11px;font-weight:700;color:#64748B;letter-spacing:1px;">FECHA</th>'
+                    '<th style="padding:10px 14px;text-align:left;font-size:11px;font-weight:700;color:#64748B;letter-spacing:1px;">MÓDULO</th>'
+                    '<th style="padding:10px 14px;text-align:left;font-size:11px;font-weight:700;color:#64748B;letter-spacing:1px;">DISTRITO</th>'
+                    '<th style="padding:10px 14px;text-align:left;font-size:11px;font-weight:700;color:#64748B;letter-spacing:1px;">TIPO</th>'
+                    '<th style="padding:10px 14px;text-align:right;font-size:11px;font-weight:700;color:#64748B;letter-spacing:1px;">KPI PRINCIPAL</th>'
+                    '</tr></thead><tbody>'
+                )
+                for _i_h, _hr_p in enumerate(_hist_p):
+                    _dt_p   = (_hr_p.get("created_at","")[:16] or "").replace("T"," ")
+                    _mod_p  = _hr_p.get("modulo","")
+                    _dist_p = _hr_p.get("distrito","") or "—"
+                    _tipo_p = _hr_p.get("tipo","") or "—"
+                    _km_p   = _hr_p.get("kpis") or {}
+                    _mc     = _MOD_COLORS.get(_mod_p, "#475569")
+                    _kpi_p  = ""
+                    if _mod_p == "Residencial":
+                        _v = _km_p.get("tir_anual_pct")
+                        _kpi_p = f"TIR {_v:.1f}%" if _v else "—"
+                    elif _mod_p == "Industrial":
+                        _v = _km_p.get("yield_bruto_pct")
+                        _kpi_p = f"Yield {_v:.1f}%" if _v else "—"
+                    elif _mod_p == "Oficinas":
+                        _v = _km_p.get("cap_rate")
+                        _kpi_p = f"Cap Rate {_v:.1f}%" if _v else "—"
+                    elif _mod_p == "Retail":
+                        _v = _km_p.get("noi")
+                        _kpi_p = f"NOI ${_v:,.0f}" if _v else "—"
+                    _bg_row = "#FAFAFA" if _i_h % 2 == 0 else "#FFFFFF"
+                    _hist_html += (
+                        f'<tr style="background:{_bg_row};border-top:1px solid #F1F5F9;">'
+                        f'<td style="padding:9px 14px;font-size:11px;color:#64748B;">{_dt_p}</td>'
+                        f'<td style="padding:9px 14px;">'
+                        f'<span style="background:{_mc}18;color:{_mc};font-size:10px;font-weight:700;'
+                        f'padding:2px 8px;border-radius:4px;letter-spacing:1px;">{_mod_p.upper()}</span></td>'
+                        f'<td style="padding:9px 14px;font-size:12px;color:#0D2137;font-weight:500;">{_dist_p}</td>'
+                        f'<td style="padding:9px 14px;font-size:11px;color:#475569;">{_tipo_p}</td>'
+                        f'<td style="padding:9px 14px;font-size:12px;color:#0D2137;font-weight:700;text-align:right;">{_kpi_p}</td>'
+                        f'</tr>'
+                    )
+                _hist_html += '</tbody></table></div>'
+                st.markdown(_hist_html, unsafe_allow_html=True)
+            else:
+                st.info("Sin análisis registrados aún. Ejecuta un análisis en cualquier módulo para verlo aquí.")
+        else:
+            st.info("Historial no disponible — Supabase no conectado.")
+    except Exception as _e_hist_p:
+        st.info(f"Historial no disponible: {_e_hist_p}")
+
+    st.markdown("<br>", unsafe_allow_html=True)
 
     # ── COMPARADOR DE ESCENARIOS ─────────────────────────────────────────
     _escenarios = st.session_state.get("_escenarios") or []
