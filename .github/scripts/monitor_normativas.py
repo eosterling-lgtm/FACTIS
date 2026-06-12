@@ -39,6 +39,8 @@ SUPABASE_URL   = os.environ.get("SUPABASE_URL", "")
 SUPABASE_KEY   = os.environ.get("SUPABASE_KEY", "")
 GITHUB_TOKEN   = os.environ.get("GITHUB_TOKEN", "")
 GITHUB_REPO    = os.environ.get("GITHUB_REPOSITORY", "eosterling-lgtm/FACTIS")
+RESEND_KEY     = os.environ.get("RESEND_API_KEY", "")
+NOTIFY_EMAIL   = "eosterling@grupoosterling.com"
 
 HOY  = datetime.date.today()
 AYER = HOY - datetime.timedelta(days=1)
@@ -929,6 +931,123 @@ def crear_github_issue(normas: list[dict], total_revisadas: int) -> None:
 # HELPERS
 # ══════════════════════════════════════════════════════════════════════════════
 
+def enviar_email_resend(normas: list[dict], total_revisadas: int) -> None:
+    """Envía email de alerta vía Resend API."""
+    if not RESEND_KEY or not normas:
+        log.info("[email] Sin key Resend o sin normas — no se envía email")
+        return
+
+    altas  = [n for n in normas if n.get("relevancia") == "alta"]
+    medias = [n for n in normas if n.get("relevancia") == "media"]
+    con_borrador = [n for n in altas if n.get("texto_procesado")]
+
+    def _fila_html(n: dict) -> str:
+        url   = n.get("url", "")
+        titulo = n.get("titulo", "")[:100]
+        titulo_html = f'<a href="{url}" style="color:#0D9488;">{titulo}</a>' if url else titulo
+        entidad = (n.get("entidad") or "")[:50]
+        cats = ", ".join(n.get("categorias") or []) or "—"
+        resumen = (n.get("resumen") or "")[:120]
+        borrador_badge = (
+            '<span style="background:#D1FAE5;color:#065F46;padding:2px 6px;'
+            'border-radius:4px;font-size:11px;font-weight:700;">BORRADOR LISTO</span>'
+            if n.get("texto_procesado") else ""
+        )
+        return (
+            f"<tr>"
+            f'<td style="padding:8px 10px;border-bottom:1px solid #E2E8F0;font-size:13px;">'
+            f"{titulo_html} {borrador_badge}</td>"
+            f'<td style="padding:8px 10px;border-bottom:1px solid #E2E8F0;font-size:12px;color:#475569;">{entidad}</td>'
+            f'<td style="padding:8px 10px;border-bottom:1px solid #E2E8F0;font-size:12px;color:#475569;">{cats}</td>'
+            f'<td style="padding:8px 10px;border-bottom:1px solid #E2E8F0;font-size:12px;color:#475569;">{resumen}</td>'
+            f"</tr>"
+        )
+
+    def _seccion_tabla(titulo: str, color: str, items: list[dict]) -> str:
+        if not items:
+            return ""
+        filas = "".join(_fila_html(n) for n in items)
+        return f"""
+        <h3 style="color:{color};margin:24px 0 8px;">{titulo} ({len(items)})</h3>
+        <table style="width:100%;border-collapse:collapse;font-family:Arial,sans-serif;">
+          <thead>
+            <tr style="background:#F8FAFC;">
+              <th style="padding:8px 10px;text-align:left;font-size:11px;color:#64748B;border-bottom:2px solid #E2E8F0;">NORMA</th>
+              <th style="padding:8px 10px;text-align:left;font-size:11px;color:#64748B;border-bottom:2px solid #E2E8F0;">ENTIDAD</th>
+              <th style="padding:8px 10px;text-align:left;font-size:11px;color:#64748B;border-bottom:2px solid #E2E8F0;">CATEGORÍAS</th>
+              <th style="padding:8px 10px;text-align:left;font-size:11px;color:#64748B;border-bottom:2px solid #E2E8F0;">RESUMEN</th>
+            </tr>
+          </thead>
+          <tbody>{filas}</tbody>
+        </table>"""
+
+    html_body = f"""
+    <div style="font-family:Arial,sans-serif;max-width:900px;margin:0 auto;">
+      <div style="background:#0D2137;padding:20px 28px;border-radius:8px 8px 0 0;">
+        <div style="font-size:11px;color:#8AA8C0;letter-spacing:3px;text-transform:uppercase;">SOLUM · Monitor de Normativas</div>
+        <div style="font-size:22px;font-weight:700;color:#FFFFFF;margin-top:4px;">
+          {len(normas)} normas detectadas — {AYER.strftime('%d/%m/%Y')}
+        </div>
+      </div>
+      <div style="background:#FFFFFF;padding:24px 28px;border:1px solid #E2E8F0;border-top:none;">
+        <div style="display:flex;gap:16px;margin-bottom:24px;flex-wrap:wrap;">
+          {''.join(
+            f'<div style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:8px;padding:12px 18px;text-align:center;">'
+            f'<div style="font-size:22px;font-weight:700;color:#0D2137;">{v}</div>'
+            f'<div style="font-size:11px;color:#64748B;margin-top:2px;">{lbl}</div></div>'
+            for v, lbl in [
+                (total_revisadas, "revisadas"),
+                (len(normas), "relevantes"),
+                (len(altas), "alta relevancia"),
+                (len(con_borrador), "borradores listos"),
+            ]
+          )}
+        </div>
+        {_seccion_tabla("🔴 Alta Relevancia", "#C44A4A", altas)}
+        {_seccion_tabla("🟡 Media Relevancia", "#B8862E", medias)}
+        <div style="margin-top:28px;padding:16px;background:#F0FDFA;border:1px solid #99F6E4;border-radius:8px;">
+          <div style="font-size:12px;color:#0D9488;font-weight:700;margin-bottom:4px;">Para activar en SOLUM</div>
+          <div style="font-size:12px;color:#134E4A;">
+            Ingresa a SOLUM → Portfolio → sección <strong>Gestión de Normativas</strong>.
+            Las normas con borrador listo pueden activarse con un clic.
+          </div>
+        </div>
+      </div>
+      <div style="background:#F8FAFC;padding:12px 28px;border:1px solid #E2E8F0;border-top:none;border-radius:0 0 8px 8px;">
+        <div style="font-size:11px;color:#94A3B8;">Generado automáticamente por SOLUM Monitor · {HOY.strftime('%d/%m/%Y %H:%M')} · eosterling@grupoosterling.com</div>
+      </div>
+    </div>
+    """
+
+    asunto = (
+        f"[SOLUM] {len(altas)} normas ALTA relevancia · {len(con_borrador)} borradores listos — {AYER.strftime('%d/%m/%Y')}"
+        if altas else
+        f"[SOLUM] {len(normas)} normas detectadas — {AYER.strftime('%d/%m/%Y')}"
+    )
+
+    try:
+        resp = requests.post(
+            "https://api.resend.com/emails",
+            headers={
+                "Authorization": f"Bearer {RESEND_KEY}",
+                "Content-Type":  "application/json",
+            },
+            json={
+                "from":    "SOLUM Monitor <onboarding@resend.dev>",
+                "to":      [NOTIFY_EMAIL],
+                "subject": asunto,
+                "html":    html_body,
+            },
+            timeout=20,
+        )
+        if resp.status_code in (200, 201):
+            log.info(f"[email] Enviado a {NOTIFY_EMAIL} — id: {resp.json().get('id','')}")
+        else:
+            log.warning(f"[email] Error {resp.status_code}: {resp.text[:300]}")
+    except Exception as e:
+        log.warning(f"[email] Exception: {e}")
+
+
 def _extraer_entidad(texto: str) -> str:
     for e in ENTIDADES_OBJETIVO:
         if e in texto:
@@ -993,7 +1112,10 @@ def main() -> None:
     guardadas = guardar_alertas(relevantes)
     log.info(f"[fase4] {guardadas} alertas nuevas en Supabase")
 
-    # Fase 5: notificación GitHub Issue
+    # Fase 5: email Resend
+    enviar_email_resend(relevantes, len(todas))
+
+    # Fase 6: notificación GitHub Issue (respaldo)
     crear_github_issue(relevantes, len(todas))
 
     log.info(sep)
