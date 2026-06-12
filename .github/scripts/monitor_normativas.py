@@ -391,7 +391,62 @@ def buscar_el_peruano() -> list[dict]:
     fechas_validas = {str(AYER), str(HOY)}
     resultados = [r for r in resultados if r["fecha_publicacion"] in fechas_validas]
 
+    # ── Fallback: buscador web si PDF no disponible aún (mitad de quincena) ──
+    if not resultados:
+        log.info("[El Peruano] Fallback a buscador web por fecha")
+        resultados += _buscar_el_peruano_web(normas_vistas)
+
     log.info(f"[El Peruano] {len(resultados)} normas relevantes de ayer/hoy")
+    return resultados
+
+
+def _buscar_el_peruano_web(normas_vistas: set) -> list[dict]:
+    """
+    Fallback: scraping del buscador web de El Peruano cuando el PDF quincenal
+    aún no ha sido publicado (días 1-14 y 16-30 del mes).
+    URL: https://busqueda.elperuano.pe/normaslegales/
+    """
+    resultados = []
+    fecha_str = AYER.strftime("%d/%m/%Y")
+    try:
+        resp = requests.get(
+            "https://busqueda.elperuano.pe/normaslegales/",
+            params={"fp": str(AYER), "fs": str(HOY), "q": "municipalidad lima"},
+            headers=HEADERS,
+            timeout=30,
+        )
+        if resp.status_code != 200:
+            log.warning(f"[El Peruano web] HTTP {resp.status_code}")
+            return []
+        soup = BeautifulSoup(resp.text, "html.parser")
+        for item in soup.find_all(["article", "div", "li"], class_=re.compile(r"norma|result|item", re.I)):
+            texto = item.get_text(" ", strip=True)
+            if len(texto) < 20:
+                continue
+            # Filtrar por entidades objetivo
+            texto_up = texto.upper()
+            if not any(e in texto_up for e in ENTIDADES_OBJETIVO):
+                continue
+            titulo_tag = item.find(["h3", "h4", "h2", "a", "strong"])
+            titulo = titulo_tag.get_text(strip=True) if titulo_tag else texto[:200]
+            link_tag = item.find("a", href=True)
+            item_url = link_tag["href"] if link_tag else "https://busqueda.elperuano.pe/normaslegales/"
+            key = re.sub(r"\s+", " ", titulo[:100].upper())
+            if key in normas_vistas:
+                continue
+            normas_vistas.add(key)
+            resultados.append({
+                "fuente":            "el_peruano_web",
+                "titulo":            titulo,
+                "url":               item_url,
+                "fecha_publicacion": str(AYER),
+                "entidad":           _extraer_entidad(texto_up),
+                "tipo_norma":        _extraer_tipo(texto_up),
+                "texto_raw":         texto[:800],
+            })
+    except Exception as e:
+        log.warning(f"[El Peruano web] Error: {e}")
+    log.info(f"[El Peruano web] {len(resultados)} normas encontradas")
     return resultados
 
 
@@ -402,7 +457,7 @@ def buscar_mvcs() -> list[dict]:
 
     for url in [
         "https://www.gob.pe/institucion/vivienda/normas-legales",
-        "https://www.gob.pe/institucion/vivienda/decretos",
+        "https://www.gob.pe/institucion/vivienda/resoluciones-ministeriales",
     ]:
         try:
             resp = requests.get(url, headers=HEADERS, timeout=30)
