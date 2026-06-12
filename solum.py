@@ -27725,7 +27725,21 @@ div[data-testid="stHorizontalBlock"] > div[data-testid="column"]
     # ── Sección label ────────────────────────────────────────────────────
     st.markdown(
         '<div style="font-size:10px;font-weight:700;color:#94A3B8;letter-spacing:3px;'
-        'text-transform:uppercase;margin-bottom:16px;">Gestión de Proyecto</div>',
+        'text-transform:uppercase;margin-bottom:12px;">Gestión de Proyecto</div>',
+        unsafe_allow_html=True)
+
+    # ── Panel explicativo ────────────────────────────────────────────────
+    st.markdown(
+        '<div style="background:#F8FAFC;border:1px solid #E2E8F0;border-left:4px solid #64748B;'
+        'border-radius:8px;padding:14px 18px;margin-bottom:20px;">'
+        '<div style="font-size:12px;font-weight:700;color:#334155;margin-bottom:4px;">'
+        'Continuidad de análisis entre sesiones</div>'
+        '<div style="font-size:12px;color:#64748B;line-height:1.6;">'
+        'Cada vez que cierras SOLUM, los datos de la sesión se pierden. '
+        'Con estas herramientas puedes <strong>guardar el estado completo de tu análisis</strong> '
+        'y retomarlo exactamente donde lo dejaste — sin volver a ingresar ningún parámetro.'
+        '</div>'
+        '</div>',
         unsafe_allow_html=True)
 
     _gc1, _gc2 = st.columns(2, gap="medium")
@@ -27734,12 +27748,15 @@ div[data-testid="stHorizontalBlock"] > div[data-testid="column"]
     with _gc1:
         with st.container(border=True):
             st.markdown(
-                '<div style="padding:4px 0 2px;">'
+                '<div style="padding:4px 0 8px;">'
                 '<div style="font-size:10px;font-weight:700;color:#64748B;letter-spacing:2px;'
-                'text-transform:uppercase;margin-bottom:8px;">Exportar Proyecto</div>'
-                '<div style="font-size:13px;color:#334155;line-height:1.6;margin-bottom:16px;">'
-                'Guarda los parámetros del análisis actual como archivo JSON '
-                'para retomarlo en cualquier sesión futura.</div>'
+                'text-transform:uppercase;margin-bottom:8px;">Guardar sesión actual</div>'
+                '<div style="font-size:13px;font-weight:600;color:#0D2137;margin-bottom:6px;">'
+                'Exportar análisis</div>'
+                '<div style="font-size:12px;color:#475569;line-height:1.6;margin-bottom:16px;">'
+                'Descarga un archivo con todos los parámetros que has configurado en esta sesión. '
+                'Úsalo para retomar el análisis en otro momento o compartirlo con tu equipo.'
+                '</div>'
                 '</div>',
                 unsafe_allow_html=True)
             def _snapshot_proyecto() -> dict:
@@ -27774,7 +27791,7 @@ div[data-testid="stHorizontalBlock"] > div[data-testid="column"]
             _snap_bytes_p = _json_port.dumps(_snap_p, ensure_ascii=False, indent=2).encode("utf-8")
             _ts_p        = __import__("datetime").datetime.now().strftime("%Y%m%d_%H%M")
             st.download_button(
-                label="Descargar JSON",
+                label="Descargar análisis",
                 data=_snap_bytes_p,
                 file_name=f"solum_proyecto_{_ts_p}.json",
                 mime="application/json",
@@ -27787,21 +27804,24 @@ div[data-testid="stHorizontalBlock"] > div[data-testid="column"]
     with _gc2:
         with st.container(border=True):
             st.markdown(
-                '<div style="padding:4px 0 2px;">'
+                '<div style="padding:4px 0 8px;">'
                 '<div style="font-size:10px;font-weight:700;color:#64748B;letter-spacing:2px;'
-                'text-transform:uppercase;margin-bottom:8px;">Importar Proyecto</div>'
-                '<div style="font-size:13px;color:#334155;line-height:1.6;margin-bottom:12px;">'
-                'Carga un archivo JSON exportado por SOLUM para restaurar '
-                'los parámetros de un análisis anterior.</div>'
+                'text-transform:uppercase;margin-bottom:8px;">Retomar sesión anterior</div>'
+                '<div style="font-size:13px;font-weight:600;color:#0D2137;margin-bottom:6px;">'
+                'Importar análisis</div>'
+                '<div style="font-size:12px;color:#475569;line-height:1.6;margin-bottom:16px;">'
+                'Carga un análisis guardado previamente para restaurar todos los parámetros '
+                'automáticamente y continuar exactamente donde lo dejaste.'
+                '</div>'
                 '</div>',
                 unsafe_allow_html=True)
             import json as _json_port
             _uploaded_json_p = st.file_uploader(
-                "Seleccionar archivo",
+                "Seleccionar análisis guardado",
                 type=["json"],
                 key="_uploader_json_port",
-                label_visibility="visible",
-                help="Archivo .json exportado por SOLUM",
+                label_visibility="collapsed",
+                help="Archivo exportado desde SOLUM",
             )
             if _uploaded_json_p is not None:
                 try:
@@ -27816,10 +27836,10 @@ div[data-testid="stHorizontalBlock"] > div[data-testid="column"]
                                 _restored_p += 1
                         if "_export_fin" in _loaded_p and isinstance(_loaded_p["_export_fin"], dict):
                             st.session_state["fin_params"] = _loaded_p["_export_fin"]
-                        st.success(f"{_restored_p} parámetros restaurados correctamente.")
+                        st.success(f"Análisis restaurado correctamente ({_restored_p} parámetros).")
                         st.rerun()
                     else:
-                        st.error("Archivo no reconocido. Use un JSON exportado por SOLUM.")
+                        st.error("Archivo no reconocido. Use un análisis exportado desde SOLUM.")
                 except Exception as _e_lp:
                     st.error(f"Error al cargar: {_e_lp}")
 
