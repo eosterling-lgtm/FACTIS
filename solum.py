@@ -1695,6 +1695,70 @@ def _bf_exito(username: str) -> None:
     """Limpia el contador tras login exitoso."""
     _BF_TRACKER.pop(username.lower(), None)
 
+
+# ── Soft-delete de cuenta (GDPR/CCPA/Apple App Store) ───────────────────────
+
+def _account_deleted_hash(username: str) -> str:
+    return hashlib.sha256(username.strip().lower().encode()).hexdigest()
+
+
+@st.cache_data(ttl=60)
+def _is_account_deleted(username: str) -> bool:
+    """Consulta Supabase: ¿esta cuenta fue marcada como eliminada?"""
+    try:
+        sb = _get_supabase()
+        if not sb:
+            return False
+        h = _account_deleted_hash(username)
+        resp = sb.table("deleted_accounts").select("id").eq("username_hash", h).maybe_single().execute()
+        return resp.data is not None
+    except Exception as _e:
+        _log.warning("_is_account_deleted: %s", _e)
+        return False
+
+
+def _soft_delete_account(username: str) -> bool:
+    """Anonimiza datos del usuario en Supabase y registra la eliminación.
+
+    GDPR Art. 17 / CCPA § 1798.105 / Apple App Store 5.1.1(v):
+    - Anonimiza proyectos y historial (PII → valores neutros)
+    - Registra hash en deleted_accounts para bloquear login futuro
+    - No elimina filas (retención legal mínima 30 días)
+    """
+    try:
+        sb = _get_supabase()
+        if not sb:
+            return False
+        _uname = username.strip().lower()
+        _anon_id = f"deleted_{uuid.uuid4().hex[:12]}"
+
+        # 1. Anonimizar proyectos
+        sb.table("proyectos").update({
+            "nombre_proyecto": "[eliminado]",
+            "usuario": _anon_id,
+            "resumen": None,
+            "datos": {},
+        }).eq("usuario", _uname).execute()
+
+        # 2. Anonimizar historial de análisis
+        sb.table("analisis_historial").update({
+            "usuario": _anon_id,
+            "distrito": "[eliminado]",
+            "kpis": {},
+        }).eq("usuario", _uname).execute()
+
+        # 3. Registrar hash en deleted_accounts (bloquea login futuro)
+        h = _account_deleted_hash(_uname)
+        sb.table("deleted_accounts").upsert({"username_hash": h, "anonymized": True}).execute()
+
+        # Invalidar cache para que el check de login lo detecte de inmediato
+        _is_account_deleted.clear()
+        _log.info("soft_delete: cuenta '%s' anonimizada y registrada.", _uname)
+        return True
+    except Exception as _e:
+        _log.error("_soft_delete_account: %s", _e)
+        return False
+
 def _show_login() -> None:
     _yr  = datetime.date.today().year
     _logo_svg = (
@@ -1826,6 +1890,9 @@ def _show_login() -> None:
         users = _get_users()
         _uname_clean = username.strip().lower()
         user_cfg = users.get(_uname_clean)
+        if _is_account_deleted(_uname_clean):
+            st.error("Esta cuenta ha sido eliminada. Contacta a soporte si crees que es un error.")
+            st.stop()
         if user_cfg and _verify_pw(user_cfg.get("password", ""), password):
             _bf_exito(_uname_clean)
             st.session_state["_authenticated"] = True
@@ -1858,6 +1925,8 @@ def _show_login() -> None:
 
 
 if not st.session_state.get("_authenticated"):
+    if st.session_state.pop("_deleted_account_msg", False):
+        st.success("Tu cuenta ha sido eliminada y tus datos anonimizados. Gracias por usar SOLUM.")
     _show_login()
     st.stop()
 
@@ -15167,6 +15236,35 @@ with st.sidebar:
             st.session_state.pop(k, None)
         st.rerun()
 
+    # ── Eliminar cuenta (GDPR / CCPA / Apple App Store 5.1.1v) ──────────────
+    with st.expander("⚠ Eliminar cuenta", expanded=False):
+        st.markdown(
+            '<div style="font-size:11px;color:rgba(255,255,255,0.55);line-height:1.5;margin-bottom:8px;">'
+            'Esta acción anonimiza tus datos y bloquea el acceso de forma permanente. '
+            'No es reversible.'
+            '</div>',
+            unsafe_allow_html=True,
+        )
+        _del_confirm = st.text_input(
+            "Escribe ELIMINAR para confirmar",
+            key="_delete_confirm_input",
+            placeholder="ELIMINAR",
+        )
+        if st.button("Confirmar eliminación", key="_delete_account_btn", use_container_width=True):
+            if _del_confirm.strip().upper() == "ELIMINAR":
+                _del_user = st.session_state.get("_username", "")
+                with st.spinner("Eliminando cuenta…"):
+                    _ok = _soft_delete_account(_del_user)
+                if _ok:
+                    for k in ["_authenticated","_user_name","_user_role","_username"]:
+                        st.session_state.pop(k, None)
+                    st.session_state["_deleted_account_msg"] = True
+                    st.rerun()
+                else:
+                    st.error("No se pudo completar la eliminación. Contacta a soporte.")
+            else:
+                st.warning("Debes escribir exactamente ELIMINAR para confirmar.")
+
     # Botón Introducción — siempre visible debajo de Cerrar sesión
     if st.button("Introducción", key="_btn_intro", use_container_width=True):
         st.session_state["_show_welcome"] = True
@@ -18113,7 +18211,7 @@ elif tipo_op == "Inmueble Residencial" and run_residencial:
         )
 
 elif run:
-    if not pdf_cert:
+    if not pdf_cert and not st.session_state.get("_cpue_ok_inm", False):
         st.markdown('<div class="alert-info">ℹ️ ' + "⚠️ Adjunta el Certificado de Parámetros para continuar." + '</div>', unsafe_allow_html=True)
         st.stop()
 
@@ -18156,15 +18254,29 @@ elif run:
     _check_rate_limit()
 
     _cert_bytes = st.session_state.get("cert_bytes") or b""
-    if not _cert_bytes:
+    if not _cert_bytes and pdf_cert is not None:
         _cert_bytes = pdf_cert.read()
         st.session_state.cert_bytes = _cert_bytes
-    st.session_state.params = _run_with_retry(
-        lambda _cb=_cert_bytes, _ed=list(extra_docs): extract_parameters(_cb, _ed),
-        "Extrayendo información del documento…",
-    )
 
-    # Aplicar overrides manuales sobre los parámetros extraídos
+    if _cert_bytes:
+        st.session_state.params = _run_with_retry(
+            lambda _cb=_cert_bytes, _ed=list(extra_docs): extract_parameters(_cb, _ed),
+            "Extrayendo información del documento…",
+        )
+    else:
+        # Sin CPUE — construir params mínimo con datos manuales; generate_cabida
+        # usará el RIN integrado del distrito para completar los parámetros faltantes.
+        st.session_state.params = {
+            "distrito":          zona,
+            "area_terreno_m2":   override_area if override_area > 0 else 0,
+            "area_libre_min_pct": override_al if override_al > 0 else 0,
+            "frente_m":          override_frente if override_frente > 0 else 0,
+            "fondo_m":           override_fondo  if override_fondo  > 0 else 0,
+            "notas_altura":      [],
+            "notas_normativas":  ["Análisis basado en normativa distrital general — sin CPUE adjunto."],
+        }
+
+    # Aplicar overrides manuales sobre los parámetros (ya sea extraídos o construidos)
     if override_area > 0:
         st.session_state.params["area_terreno_m2"] = override_area
     if override_al > 0:
@@ -24627,11 +24739,7 @@ elif tipo_op == "Inmueble Residencial":
                         <div style="font-size:11px;color:rgba(255,255,255,0.55);text-transform:uppercase;
                                     letter-spacing:1px;">USD/m²</div>
                         <div style="font-size:20px;font-weight:700;color:#FFFFFF;">${_hero_ppm2:,.0f}</div>
-                    </div>
-                    {_hero_yield_html}
-                </div>
-            </div>
-        </div>""", unsafe_allow_html=True)
+                    </div>{_hero_yield_html}</div></div></div>""", unsafe_allow_html=True)
 
         # ── Panel del Broker ──────────────────────────────────────────────────
         st.components.v1.html("""<script>
@@ -27129,40 +27237,27 @@ elif tipo_op == "Retail / Local Comercial":
         # ── Hero banner con resultado ─────────────────────
         _ret_nombre = st.session_state.get("ret_nombre", "") or r.get("formato", "Retail")
         _ret_dist   = st.session_state.get("ret_distrito", "Lima")
-        st.markdown(f"""
-        <div style="position:relative;border-radius:16px;overflow:hidden;margin-bottom:20px;
-                    box-shadow:0 6px 30px rgba(30,45,61,0.22);">
-            <div style="background:linear-gradient(135deg,#2D1B00 0%,#7A4500 100%);height:200px;"></div>
-            <div style="position:absolute;inset:0;background:linear-gradient(to bottom,
-                        rgba(0,0,0,0.0) 0%,rgba(0,0,0,0.72) 100%);
-                        display:flex;flex-direction:column;justify-content:flex-end;
-                        padding:24px 28px;">
-                <div style="font-size:11px;color:rgba(255,255,255,0.60);letter-spacing:3px;text-transform:uppercase;margin-bottom:6px;">
-                    Análisis Retail / Local Comercial · SOLUM
-                    <span style="margin-left:12px;background:rgba(201,169,110,0.85);color:#fff;
-                                 font-size:11px;letter-spacing:1px;padding:2px 8px;border-radius:3px;
-                                 font-weight:700;text-transform:uppercase;">{_ret_modo}</span>
-                </div>
-                <div style="font-size:26px;font-weight:800;color:#FFFFFF;line-height:1.15;">
-                    {_ret_nombre} <span style="font-size:16px;font-weight:400;color:rgba(255,255,255,0.70);">— {_ret_dist}</span>
-                </div>
-                <div style="display:flex;gap:20px;margin-top:12px;flex-wrap:wrap;">
-                    <div><div style="font-size:11px;color:rgba(255,255,255,0.55);text-transform:uppercase;letter-spacing:1px;">Formato</div>
-                    <div style="font-size:18px;font-weight:700;color:#FFFFFF;">{r.get("formato","—")}</div></div>
-                    {(f'<div><div style="font-size:11px;color:rgba(255,255,255,0.55);text-transform:uppercase;letter-spacing:1px;">Actividad</div><div style="font-size:16px;font-weight:700;color:#FFFFFF;">{r.get("actividad","—")}</div></div>') if r.get("actividad") else ""}
-                    <div><div style="font-size:11px;color:rgba(255,255,255,0.55);text-transform:uppercase;letter-spacing:1px;">Zona</div>
-                    <div style="font-size:18px;font-weight:700;color:#C9A96E;">{r.get("zonificacion","—")}</div></div>
-                    <div><div style="font-size:11px;color:rgba(255,255,255,0.55);text-transform:uppercase;letter-spacing:1px;">GLA</div>
-                    <div style="font-size:18px;font-weight:700;color:#FFFFFF;">{r.get("area_gla",0):,.0f} m²</div></div>
-                    <div><div style="font-size:11px;color:rgba(255,255,255,0.55);text-transform:uppercase;letter-spacing:1px;">Renta/m²/mes</div>
-                    <div style="font-size:18px;font-weight:700;color:#FFFFFF;">${r.get("renta_m2_mes",0):.0f}</div></div>
-                    {(f'<div><div style="font-size:11px;color:rgba(255,255,255,0.55);text-transform:uppercase;letter-spacing:1px;">NOI Anual</div>'
-                      f'<div style="font-size:18px;font-weight:700;color:#FFFFFF;">${r.get("noi",0):,.0f}</div></div>') if _ret_modo != "Arrendatario" else
-                     (f'<div><div style="font-size:11px;color:rgba(255,255,255,0.55);text-transform:uppercase;letter-spacing:1px;">Costo mensual</div>'
-                      f'<div style="font-size:18px;font-weight:700;color:#FFFFFF;">${r.get("costo_mensual_total",0):,.0f}</div></div>')}
-                </div>
-            </div>
-        </div>""", unsafe_allow_html=True)
+        _kpi_lbl = '<div style="font-size:11px;color:rgba(255,255,255,0.55);text-transform:uppercase;letter-spacing:1px;">'
+        _kpi_val = '<div style="font-size:18px;font-weight:700;color:#FFFFFF;">'
+        _kpi_val_g = '<div style="font-size:18px;font-weight:700;color:#C9A96E;">'
+        _ret_actividad_html = (f'<div>{_kpi_lbl}Actividad</div><div style="font-size:16px;font-weight:700;color:#FFFFFF;">{r.get("actividad","—")}</div></div>') if r.get("actividad") else ""
+        _ret_noi_html = (f'<div>{_kpi_lbl}NOI Anual</div>{_kpi_val}${r.get("noi",0):,.0f}</div></div>') if _ret_modo != "Arrendatario" else (f'<div>{_kpi_lbl}Costo mensual</div>{_kpi_val}${r.get("costo_mensual_total",0):,.0f}</div></div>')
+        st.markdown(
+            f'<div style="position:relative;border-radius:16px;overflow:hidden;margin-bottom:20px;box-shadow:0 6px 30px rgba(30,45,61,0.22);">'
+            f'<div style="background:linear-gradient(135deg,#2D1B00 0%,#7A4500 100%);height:200px;"></div>'
+            f'<div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,0.0) 0%,rgba(0,0,0,0.72) 100%);display:flex;flex-direction:column;justify-content:flex-end;padding:24px 28px;">'
+            f'<div style="font-size:11px;color:rgba(255,255,255,0.60);letter-spacing:3px;text-transform:uppercase;margin-bottom:6px;">Análisis Retail / Local Comercial · SOLUM <span style="margin-left:12px;background:rgba(201,169,110,0.85);color:#fff;font-size:11px;letter-spacing:1px;padding:2px 8px;border-radius:3px;font-weight:700;text-transform:uppercase;">{_ret_modo}</span></div>'
+            f'<div style="font-size:26px;font-weight:800;color:#FFFFFF;line-height:1.15;">{_ret_nombre} <span style="font-size:16px;font-weight:400;color:rgba(255,255,255,0.70);">— {_ret_dist}</span></div>'
+            f'<div style="display:flex;gap:20px;margin-top:12px;flex-wrap:wrap;">'
+            f'<div>{_kpi_lbl}Formato</div>{_kpi_val}{r.get("formato","—")}</div></div>'
+            f'{_ret_actividad_html}'
+            f'<div>{_kpi_lbl}Zona</div>{_kpi_val_g}{r.get("zonificacion","—")}</div></div>'
+            f'<div>{_kpi_lbl}GLA</div>{_kpi_val}{r.get("area_gla",0):,.0f} m²</div></div>'
+            f'<div>{_kpi_lbl}Renta/m²/mes</div>{_kpi_val}${r.get("renta_m2_mes",0):.0f}</div></div>'
+            f'{_ret_noi_html}'
+            f'</div></div></div>',
+            unsafe_allow_html=True
+        )
 
         ret_tabs = st.tabs(["Financiero", "Flujo de Caja", "Mercado", "Resumen Ejecutivo"])
 
