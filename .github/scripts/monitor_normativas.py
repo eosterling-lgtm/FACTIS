@@ -987,9 +987,52 @@ def crear_github_issue(normas: list[dict], total_revisadas: int) -> None:
 # ══════════════════════════════════════════════════════════════════════════════
 
 def enviar_email_resend(normas: list[dict], total_revisadas: int) -> None:
-    """Envía email de alerta vía Resend API."""
-    if not RESEND_KEY or not normas:
-        log.info("[email] Sin key Resend o sin normas — no se envía email")
+    """Envía email de alerta vía Resend API. Siempre notifica (normas o sin novedades)."""
+    if not RESEND_KEY:
+        log.info("[email] Sin RESEND_API_KEY configurada — no se envía email")
+        return
+
+    # Caso: sin normas relevantes — enviar resumen de "sin novedades"
+    if not normas:
+        html_sin_novedades = f"""
+    <div style="font-family:Arial,sans-serif;max-width:640px;margin:0 auto;">
+      <div style="background:#134E4A;padding:20px 28px;border-radius:8px 8px 0 0;">
+        <div style="font-size:16px;font-weight:700;color:#FFFFFF;">SOLUM Monitor — Sin novedades normativas</div>
+        <div style="font-size:12px;color:#99F6E4;margin-top:4px;">{AYER.strftime('%d/%m/%Y')} · {total_revisadas} documentos revisados</div>
+      </div>
+      <div style="background:#FFFFFF;padding:24px 28px;border:1px solid #E2E8F0;border-top:none;">
+        <p style="font-size:14px;color:#374151;margin:0 0 12px;">
+          El monitor diario revisó <strong>{total_revisadas}</strong> documentos en El Peruano, MVCS e IMP Lima
+          y <strong>no encontró normas relevantes nuevas</strong> para el {AYER.strftime('%d de %B de %Y')}.
+        </p>
+        <p style="font-size:13px;color:#6B7280;margin:0;">
+          Este email confirma que el proceso corrió correctamente. Solo recibirás alertas detalladas
+          cuando se detecten ordenanzas, decretos o normas de impacto inmobiliario.
+        </p>
+      </div>
+      <div style="background:#F8FAFC;padding:12px 28px;border:1px solid #E2E8F0;border-top:none;border-radius:0 0 8px 8px;">
+        <div style="font-size:11px;color:#94A3B8;">SOLUM Monitor · {HOY.strftime('%d/%m/%Y %H:%M')} · eosterling@grupoosterling.com</div>
+      </div>
+    </div>
+        """
+        try:
+            resp = requests.post(
+                "https://api.resend.com/emails",
+                headers={"Authorization": f"Bearer {RESEND_KEY}", "Content-Type": "application/json"},
+                json={
+                    "from":    "SOLUM Monitor <onboarding@resend.dev>",
+                    "to":      [NOTIFY_EMAIL],
+                    "subject": f"[SOLUM] Sin novedades normativas — {AYER.strftime('%d/%m/%Y')}",
+                    "html":    html_sin_novedades,
+                },
+                timeout=20,
+            )
+            if resp.status_code in (200, 201):
+                log.info(f"[email] Resumen 'sin novedades' enviado — id: {resp.json().get('id','')}")
+            else:
+                log.warning(f"[email] Error {resp.status_code}: {resp.text[:300]}")
+        except Exception as e:
+            log.warning(f"[email] Exception: {e}")
         return
 
     altas  = [n for n in normas if n.get("relevancia") == "alta"]
@@ -1147,7 +1190,8 @@ def main() -> None:
     log.info(f"[fase1] {len(todas)} normas pre-filtradas")
 
     if not todas:
-        log.info("Sin normas pre-filtradas — proceso terminado")
+        log.info("Sin normas pre-filtradas — scraping sin resultados")
+        enviar_email_resend([], 0)
         return
 
     # Fase 2: evaluación Claude (batch)
@@ -1156,6 +1200,7 @@ def main() -> None:
 
     if not relevantes:
         log.info("Sin normas relevantes — proceso terminado sin alertas")
+        enviar_email_resend([], len(todas))
         return
 
     # Fase 3: enriquecer normas de alta relevancia con borrador
