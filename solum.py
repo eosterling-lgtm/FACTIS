@@ -22350,12 +22350,13 @@ elif tipo_op == "Proyecto Inmobiliario":
             st.markdown("---")
 
             # ── Descarga del informe completo ─────────────
-            if c and st.session_state.financ:
+            _financ_para_pdf = st.session_state.get("financ_latest") or st.session_state.financ
+            if c and _financ_para_pdf:
                 _nombre_proy_inf = (st.session_state.get("nombre_proyecto") or
                                     p.get("ubicacion", "Proyecto"))
                 try:
                     _pdf_inf = generar_pdf_solum(
-                        result      = st.session_state.financ,
+                        result      = _financ_para_pdf,
                         cabida      = c,
                         params      = p,
                         fin_inputs  = st.session_state.get("financ_inputs") or {},
