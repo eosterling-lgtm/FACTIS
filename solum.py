@@ -5095,7 +5095,7 @@ def _guardar_historial(modulo: str, distrito: str, tipo: str, kpis: dict, inputs
         import datetime as _dt_h, json as _j
         _usuario = ""
         try:
-            _usuario = st.session_state.get("_user_name", "") or ""
+            _usuario = st.session_state.get("_username", "") or st.session_state.get("_user_name", "") or ""
         except Exception:
             pass
         # Serializar kpis — solo tipos básicos
@@ -5994,17 +5994,21 @@ def _validar_cabida(cab: dict, params: dict, params_cabida: dict) -> dict:
                   f"Falta {deficit:.0f}m² de área libre — ajustar COS/área techada por piso")
 
     # ── 5. eficiencia vendible AV/AT ─────────────────────────────────────────
-    #    Rango real Lima: 70-83% sobre rasante. Fuera de [60%, 93%] es sospechoso.
+    #    Rango real Lima: 70-83% sobre rasante. Fuera de [60%, 85%] se corrige.
     if area_techada > 0 and area_vendible > 0:
         eff = area_vendible / area_techada
         if eff < 0.60:
             _push("amarillo",
                   f"Eficiencia AV/AT baja: {eff*100:.1f}% (Lima típico 70-83%)",
                   "Revisar área de comunes — posible sobredimensionamiento")
-        elif eff > 0.93:
+        elif eff > 0.85:
+            # Corregir area_vendible al 82% del área techada (máximo real Lima)
+            _av_corr = round(area_techada * 0.82, 1)
             _push("amarillo",
-                  f"Eficiencia AV/AT alta: {eff*100:.1f}% — comunes pueden ser insuficientes",
-                  "Confirmar circulaciones, lobby y cuartos técnicos cumplen RNE A.010")
+                  f"Eficiencia AV/AT {eff*100:.1f}% excede rango real Lima (70-83%) — corregida a 82%",
+                  f"area_vendible_m2 ajustada de {area_vendible:.0f} m² → {_av_corr:.0f} m²")
+            cab["area_vendible_m2"] = _av_corr
+            area_vendible = _av_corr
 
     # ── 6. coherencia área techada piso × pisos ≈ área techada total ─────────
     #    La suma de pisos sobre rasante debe aproximar el total declarado.
@@ -6082,15 +6086,33 @@ def generate_cabida(params: dict, config: dict) -> dict:
     # Dúplex — regla condicional según configuración del usuario
     _include_duplex      = bool(config.get("include_duplex", False))
     _duplex_premium_pct  = int(config.get("duplex_precio_premium_pct", 20))
+    # Estimar unidades por piso típico para guiar N_duplex
+    # Lógica: huella útil por piso ≈ area_terreno × COS típico (55%); und/piso ≈ huella / 90m² por und
+    _pisos_max_est    = int(params.get("pisos_max") or config.get("pisos_max") or 7)
+    _area_terr_est    = float(params.get("area_terreno_m2") or 500)
+    _cos_est          = float(params.get("coeficiente_ocupacion_suelo") or 0.55)
+    _huella_est       = _area_terr_est * _cos_est
+    _und_por_piso_est = max(2, round(_huella_est / 90))
+
     if _include_duplex:
         _duplex_rule_txt = (
-            f"8. DÚPLEX EN ÚLTIMO PISO — ACTIVADO por el usuario: el último piso del proyecto "
-            f"debe contener ÚNICAMENTE unidades dúplex (no departamentos estándar). "
-            f"Cada dúplex ocupa la mitad del área del último piso como planta baja "
-            f"+ zona techada superior igual a ≤ 50% de esa área (RNE A.010 Art. 9, azotea habitable). "
-            f"area_m2 del dúplex = área_piso_m2/2 + zona_techada_superior. "
-            f"Número de dúplex = floor(area_techada_piso_m2 / area_m2_duplex). "
-            f"Incluirlos como tipología \"Dúplex\" en el array unidades. "
+            f"8. DÚPLEX EN ÚLTIMO PISO — ACTIVADO por el usuario.\n"
+            f"REGLA OBLIGATORIA: el último piso del proyecto debe contener ÚNICAMENTE unidades dúplex.\n"
+            f"CÁLCULO PASO A PASO (seguir exactamente):\n"
+            f"  a) Determina area_piso_m2 = área techada del último piso (con retranque de azotea ≥2.5m por RNE A.020).\n"
+            f"  b) Determina N_duplex:\n"
+            f"     - Los pisos tipo de este proyecto tienen aproximadamente {_und_por_piso_est} unidades por piso.\n"
+            f"     - N_duplex DEBE ser igual a las unidades del piso tipo, dividido a lo más entre 2 si las unidades son grandes.\n"
+            f"     - NUNCA uses N_duplex = 1 si el piso tipo tiene 2 o más unidades — eso desperdiciaría planta.\n"
+            f"     - Mínimo: N_duplex = max(2, round(und_por_piso_tipo / 2)).\n"
+            f"  c) area_base = area_piso_m2 / N_duplex  → área de cada dúplex en nivel inferior.\n"
+            f"  d) area_azotea = area_base × 0.40  → zona techada superior (RNE A.010 Art. 9: máx 50%).\n"
+            f"  e) area_m2 = area_base + area_azotea  → ESTE es el valor a reportar en el JSON.\n"
+            f"VALIDACIÓN OBLIGATORIA antes de emitir el JSON:\n"
+            f"  - area_m2 del dúplex DEBE SER MAYOR que el area_m2 del 3 Dorm. estándar del proyecto.\n"
+            f"  - Si area_m2 dúplex ≤ area_m2 del 3D, el cálculo es incorrecto — revisa y corrige.\n"
+            f"  - Típicamente area_m2 dúplex = 1.35 × area_m2 del 2D o mayor.\n"
+            f"Incluirlos como tipología \"Dúplex\" en el array unidades.\n"
             f"NOTA FINANCIERA: el modelo aplicará un premium de {_duplex_premium_pct}% sobre el precio/m² base — "
             f"no alteres el campo area_m2 para inflar precio; refleja el área construida real."
         )
@@ -6098,11 +6120,13 @@ def generate_cabida(params: dict, config: dict) -> dict:
         _duplex_rule_txt = (
             "8. DÚPLEX: PROHIBIDO incluir dúplex salvo instrucción explícita del usuario en "
             "NOTAS DEL ANALISTA. Si el JSON de unidades devuelve algún dúplex sin que el usuario "
-            "lo haya pedido, el análisis es incorrecto. El objetivo es maximizar departamentos "
-            "estándar (1D/2D/3D). Si se solicitan: cada dúplex ocupa la mitad del área del último "
-            "piso + zona de azotea/terraza en nivel superior (zona techada superior ≤ 50% del piso "
-            "inferior, RNE A.010 Art. 9); incluirlos como tipología \"Dúplex\" con area_m2 = "
-            "área del piso/2 + zona techada superior."
+            "lo haya pedido, el análisis es incorrecto — reemplazar por departamentos estándar (1D/2D/3D). "
+            "Si se solicitan: CÁLCULO OBLIGATORIO → "
+            "(a) area_base = huella_piso / N_duplex; "
+            "(b) area_azotea = area_base × 0.40 (RNE A.010 Art. 9, máx 50%); "
+            "(c) area_m2 = area_base + area_azotea. "
+            "VALIDACIÓN: area_m2 del dúplex DEBE superar el area_m2 del 3 Dorm. estándar — "
+            "si no lo supera, el cálculo está mal. Incluir como tipología \"Dúplex\"."
         )
 
     # Regla de colindancia — calcular programáticamente y sobreescribir pisos_max
@@ -7074,6 +7098,89 @@ CAMPOS NUEVOS OBLIGATORIOS: tracto_tipo y actua_mediante_poder SIEMPRE deben est
     return parse_json_safe(text)
 
 
+def analizar_legal_multi(
+    partidas_bytes: list,
+    partidas_nombres: list,
+    puhr_bytes: bytes | None = None,
+    cert_params_bytes: bytes | None = None,
+    sugerencias: str = "",
+) -> dict:
+    """Analiza hasta 5 partidas individuales y retorna resultado consolidado."""
+    resultados = []
+    for i, pb in enumerate(partidas_bytes[:5]):
+        nombre = partidas_nombres[i] if i < len(partidas_nombres) else f"Partida {i+1}"
+        # Solo pasar puhr/cert en la primera partida (docs compartidos)
+        res = analizar_legal(
+            pb,
+            puhr_bytes if i == 0 else None,
+            cert_params_bytes if i == 0 else None,
+            None,
+            sugerencias,
+        )
+        resultados.append({"nombre": nombre, "resultado": res or {}})
+
+    if len(resultados) == 1:
+        # Una sola partida — retornar directamente con wrapper
+        return {"partidas": resultados, "consolidado": resultados[0]["resultado"], "multi": False}
+
+    # Consolidar semáforo (peor caso)
+    _sem_ord = {"rojo": 0, "amarillo": 1, "verde": 2}
+    sem_consolidado = min(
+        (r["resultado"].get("semaforo", "amarillo") for r in resultados),
+        key=lambda s: _sem_ord.get(s, 1),
+        default="amarillo",
+    )
+
+    # Consolidar alertas con prefijo de partida
+    alertas_consolidadas = []
+    for r in resultados:
+        _nom = r["nombre"].replace(".pdf", "").replace(".PDF", "")[:30]
+        for a in (r["resultado"].get("alertas") or []):
+            alertas_consolidadas.append(f"[{_nom}] {a}")
+
+    # Consolidar propietarios (todos los lotes)
+    todos_propietarios = []
+    for r in resultados:
+        for p in (r["resultado"].get("propietarios_partida") or []):
+            entrada = dict(p)
+            entrada["_lote"] = r["nombre"].replace(".pdf", "")[:25]
+            todos_propietarios.append(entrada)
+
+    # Detectar propietarios distintos entre lotes (riesgo para operación conjunta)
+    _titulares = [
+        frozenset(p.get("nombre", "") for p in (r["resultado"].get("propietarios_partida") or []))
+        for r in resultados
+    ]
+    _titulares_distintos = len(set(_titulares)) > 1
+
+    _obs_consolidadas = []
+    if _titulares_distintos:
+        _obs_consolidadas.append("⚠ TITULARES DISTINTOS entre lotes — se requiere negociación y firma con múltiples vendedores.")
+    for r in resultados:
+        for o in (r["resultado"].get("observaciones_legales") or []):
+            _obs_consolidadas.append(f"[{r['nombre'][:20]}] {o}")
+
+    # Resumen consolidado
+    _nombres_str = " · ".join(r["nombre"].replace(".pdf", "")[:20] for r in resultados)
+    _resumen = (
+        f"Análisis consolidado de {len(resultados)} partidas: {_nombres_str}. "
+        f"Estado general: {sem_consolidado.upper()}."
+        + (" Titulares distintos entre lotes." if _titulares_distintos else "")
+    )
+
+    consolidado = {
+        "semaforo": sem_consolidado,
+        "alertas": alertas_consolidadas,
+        "resumen_legal": _resumen,
+        "propietarios_partida": todos_propietarios,
+        "observaciones_legales": _obs_consolidadas,
+        "titulares_distintos": _titulares_distintos,
+        "n_partidas": len(resultados),
+    }
+
+    return {"partidas": resultados, "consolidado": consolidado, "multi": True}
+
+
 def _extraer_texto_zip(file_bytes: bytes, filename: str) -> str:
     """Extract plain text from DOCX or PPTX (both are ZIP-based XML)."""
     import zipfile, io, re as _re
@@ -7401,7 +7508,7 @@ def calcular_financiero(cabida: dict, fin: dict, zona: str) -> dict:
     vel             = min(vel, 4.0)
     n_unidades      = cabida.get("total_unidades", 0)
     n_pisos         = cabida.get("num_pisos", 7)
-    _obra_auto      = 24 if n_pisos > 20 else (12 if n_pisos <= 5 else 16)
+    _obra_auto      = 30 if n_pisos > 20 else (18 if n_pisos > 10 else (14 if n_pisos > 5 else 12))
     meses_obra      = int(fin.get("meses_obra_override") or _obra_auto)
     meses_obra      = max(1, min(meses_obra, 60))
 
@@ -7599,6 +7706,7 @@ def calcular_financiero(cabida: dict, fin: dict, zona: str) -> dict:
             "costo_ir":             round(c_ir),
             "utilidad_neta":        round(utilidad_neta),
             "margen_pct":           round(margen_neto, 1),
+            "utilidad_bruta_sin_financ": round(util_sin_f),
             "utilidad_neta_sin_f":  round(util_neta_sin_f),
             "margen_sin_f_pct":     round(margen_sin_f, 1),
             "costo_financiero":     round(c_financiero),
@@ -9510,8 +9618,8 @@ def _build_solum_html(result: dict, cabida: dict, params: dict,
           <div class="result-box-header">Resultado del Proyecto</div>
           <div class="result-box-body">
             <div class="result-row"><span class="lbl">Ingresos brutos</span><span class="val">{_fmt(_ing_b)}</span></div>
-            <div class="result-row"><span class="lbl">Subtotal sin financ.</span><span class="val dim">({_fmt(_ct)})</span></div>
-            <div class="result-row"><span class="lbl">Utilidad bruta</span><span class="val">{_fmt(_ing_b-_ct)} <small style="font-weight:400;color:#A0AEC0">{(_ing_b-_ct)/max(_ing_b,1)*100:.1f}%</small></span></div>
+            <div class="result-row"><span class="lbl">Costo total s/financ.</span><span class="val dim">({_fmt(r.get('costo_total_sin_financ',0) or 0)})</span></div>
+            <div class="result-row"><span class="lbl">Utilidad bruta</span><span class="val">{_fmt(r.get('utilidad_bruta_sin_financ',_ing_b - (r.get('costo_total_sin_financ',0) or 0)))} <small style="font-weight:400;color:#A0AEC0">{r.get('utilidad_bruta_sin_financ', _ing_b-(r.get('costo_total_sin_financ',0) or 0))/max(_ing_b,1)*100:.1f}%</small></span></div>
             <div class="result-row"><span class="lbl">Gasto financiero banco</span><span class="val dim">({_fmt(r.get('costo_financiero',0) or 0)})</span></div>
             <div class="result-row"><span class="lbl">IR (29.5%)</span><span class="val dim">({_fmt(r.get('costo_ir',0) or 0)})</span></div>
             <div class="result-row total"><span class="lbl">Utilidad Neta</span><span class="val">{_fmt(_util)} <small style="font-weight:400;color:#A0AEC0">({_mg:.1f}% neto)</small></span></div>
@@ -10541,14 +10649,14 @@ def _generar_pdf_solum_LEGACY_UNUSED(result: dict, cabida: dict, params: dict,
     _res_rows = [
         ("Ingresos brutos",     _fmt(r.get("ingresos_brutos", 0)),      ""),
         ("Costo total s/financ.", _fmt(r.get("costo_total_sin_financ", 0)), ""),
-        ("Utilidad bruta",      _fmt(r.get("utilidad_bruta", 0)),
-         f"{r.get('margen_bruto_pct',0):.1f}% bruto"),
+        ("Utilidad bruta",      _fmt(r.get("utilidad_bruta_sin_financ", 0)),
+         f"{r.get('utilidad_bruta_sin_financ',0)/max(r.get('ingresos_brutos',1),1)*100:.1f}% bruto"),
+        ("Gasto financiero banco", _fmt(r.get("costo_financiero", 0)),  ""),
         (f"Impuesto a la Renta ({r.get('ir_pct',29.5):.1f}%)",
          _fmt(r.get("costo_ir", 0)), ""),
         ("UTILIDAD NETA",       _fmt(r.get("utilidad_neta", 0)),
          f"{_mg:.1f}% neto"),
         ("",  "",  ""),
-        ("Gasto financiero banco", _fmt(r.get("costo_financiero", 0)),  ""),
         ("Margen s/financiamiento", "",
          f"{r.get('margen_sin_f_pct',0):.1f}%"),
     ]
@@ -14630,6 +14738,13 @@ def generar_informe_residencial_html(r: dict, legal: dict | None, fecha: str,
 
 
 
+def generar_informe_residencial_pdf(r: dict, legal: dict | None, fecha: str,
+                                     distrito: str = "", m2: int = 0, antiguedad: int = 0, fotos: list = None) -> bytes:
+    """Convierte el informe residencial HTML a PDF usando Playwright."""
+    html = generar_informe_residencial_html(r, legal, fecha, distrito=distrito, m2=m2, antiguedad=antiguedad, fotos=fotos)
+    return _html_to_pdf(html)
+
+
 def generar_informe_html(params, cabida, financ, legal, zona, financ_inputs, fecha):
     """Genera informe HTML SOLUM 3 páginas (portada + cabida + financiero/legal)."""
     def _e(s): return _html_esc.escape(str(s or ""))
@@ -15236,35 +15351,6 @@ with st.sidebar:
             st.session_state.pop(k, None)
         st.rerun()
 
-    # ── Eliminar cuenta (GDPR / CCPA / Apple App Store 5.1.1v) ──────────────
-    with st.expander("⚠ Eliminar cuenta", expanded=False):
-        st.markdown(
-            '<div style="font-size:11px;color:rgba(255,255,255,0.55);line-height:1.5;margin-bottom:8px;">'
-            'Esta acción anonimiza tus datos y bloquea el acceso de forma permanente. '
-            'No es reversible.'
-            '</div>',
-            unsafe_allow_html=True,
-        )
-        _del_confirm = st.text_input(
-            "Escribe ELIMINAR para confirmar",
-            key="_delete_confirm_input",
-            placeholder="ELIMINAR",
-        )
-        if st.button("Confirmar eliminación", key="_delete_account_btn", use_container_width=True):
-            if _del_confirm.strip().upper() == "ELIMINAR":
-                _del_user = st.session_state.get("_username", "")
-                with st.spinner("Eliminando cuenta…"):
-                    _ok = _soft_delete_account(_del_user)
-                if _ok:
-                    for k in ["_authenticated","_user_name","_user_role","_username"]:
-                        st.session_state.pop(k, None)
-                    st.session_state["_deleted_account_msg"] = True
-                    st.rerun()
-                else:
-                    st.error("No se pudo completar la eliminación. Contacta a soporte.")
-            else:
-                st.warning("Debes escribir exactamente ELIMINAR para confirmar.")
-
     # Botón Introducción — siempre visible debajo de Cerrar sesión
     if st.button("Introducción", key="_btn_intro", use_container_width=True):
         st.session_state["_show_welcome"] = True
@@ -15443,7 +15529,8 @@ with st.sidebar:
             pdf_cert    = st.file_uploader("Certificado de Parámetros ✱",       type=_doc_types, key="cert")
             pdf_plano   = st.file_uploader("Planos (perimetral / topográfico)",  type=_plan_types, key="plano",
                                            accept_multiple_files=True)
-            pdf_partida = st.file_uploader("Partida Registral",                  type=_doc_types, key="partida")
+            pdf_partida = st.file_uploader("Partida Registral (hasta 5 lotes)",   type=_doc_types, key="partida",
+                                           accept_multiple_files=True)
             pdf_puhr    = st.file_uploader("PU / HR",                            type=_doc_types, key="puhr")
             pdf_norms   = st.file_uploader("Ordenanzas y normativa",             type=_doc_types, key="norms",
                                            accept_multiple_files=True)
@@ -15454,12 +15541,16 @@ with st.sidebar:
             if st.session_state.get("_fp_cert") != _cs:
                 st.session_state.cert_bytes = pdf_cert.read()
                 st.session_state["_fp_cert"] = _cs
-        if pdf_partida is not None:
-            _ps = f"{pdf_partida.name}:{pdf_partida.size}"
+        if pdf_partida:
+            _pdf_partida_list = pdf_partida if isinstance(pdf_partida, list) else [pdf_partida]
+            _ps = "|".join(f"{f.name}:{f.size}" for f in _pdf_partida_list)
             if st.session_state.get("_fp_partida") != _ps:
-                st.session_state.partida_bytes = pdf_partida.read()
+                _partidas_leidas = [f.read() for f in _pdf_partida_list]
+                st.session_state.partida_bytes      = _partidas_leidas[0]
+                st.session_state.partidas_bytes_list = _partidas_leidas
+                st.session_state.partidas_nombres    = [f.name for f in _pdf_partida_list]
                 st.session_state["_fp_partida"] = _ps
-                st.session_state.legal = None  # nuevo doc → borrar resultado anterior
+                st.session_state.legal = None
         if pdf_puhr is not None:
             _us = f"{pdf_puhr.name}:{pdf_puhr.size}"
             if st.session_state.get("_fp_puhr") != _us:
@@ -15799,14 +15890,15 @@ with st.sidebar:
                                     label_visibility="collapsed", key="guardar_nombre_proy")
         if st.button("GUARDAR PROYECTO", use_container_width=True, key="btn_guardar_inm"):
             if st.session_state.get("params"):
-                _fin = st.session_state.get("financ") or {}
+                _fin_raw = st.session_state.get("financ") or {}
+                _fin = _fin_raw.get("resumen") or _fin_raw  # financ tiene estructura {"resumen": {...}}
                 _inm_resumen = {
-                    "margen_pct":     _fin.get("margen_pct") or _fin.get("margen_neto_pct") or 0,
-                    "tir_anual_pct":  _fin.get("tir_anual_pct") or _fin.get("tir_anual") or 0,
-                    "utilidad_neta":  _fin.get("utilidad_neta") or 0,
+                    "margen_pct":      _fin.get("margen_pct") or _fin.get("margen_neto_pct") or 0,
+                    "tir_anual_pct":   _fin.get("tir_anual_pct") or _fin.get("tir_anual") or 0,
+                    "utilidad_neta":   _fin.get("utilidad_neta") or 0,
                     "ingresos_brutos": _fin.get("ingresos_brutos") or _fin.get("ventas_brutas") or 0,
-                    "costo_total":    _fin.get("costo_total") or 0,
-                    "n_unidades":     _fin.get("n_unidades") or 0,
+                    "costo_total":     _fin.get("costo_total") or _fin.get("costo_total_sin_financ") or 0,
+                    "n_unidades":      _fin.get("departamentos") or _fin.get("n_unidades") or 0,
                 }
                 fp = guardar_proyecto(nombre_proy or "sin_nombre", {
                     "params":        st.session_state.params,
@@ -16023,7 +16115,8 @@ with st.sidebar:
                 if _ind_api_k:
                     st.session_state["api_key_input"] = _sanitize_api_key(_ind_api_k)
             _doc_types_ind = ["pdf", "jpg", "jpeg", "png", "webp"]
-            ind_doc_partida = st.file_uploader("Partida Registral (SUNARP)", type=_doc_types_ind, key="ind_doc_partida")
+            ind_doc_partida = st.file_uploader("Partida Registral (SUNARP, hasta 5 lotes)", type=_doc_types_ind, key="ind_doc_partida",
+                                               accept_multiple_files=True)
             ind_doc_puhr    = st.file_uploader("PU / HR (Predio Urbano — SAT/Municipalidad)", type=_doc_types_ind, key="ind_doc_puhr")
             ind_doc_params  = st.file_uploader("Certificado de Parámetros",  type=_doc_types_ind, key="ind_doc_params")
             ind_doc_zon     = st.file_uploader("Cert. Zonificación y Vías",  type=_doc_types_ind, key="ind_doc_zon")
@@ -16035,10 +16128,14 @@ with st.sidebar:
             _ind_has_docs = any([ind_doc_partida, ind_doc_puhr, ind_doc_params, ind_doc_zon, ind_doc_planos])
             run_ind_docs = False
             # Cachear bytes en session_state apenas se suben (huella para no re-leer)
-            if ind_doc_partida is not None:
-                _ips = f"{ind_doc_partida.name}:{ind_doc_partida.size}"
+            if ind_doc_partida:
+                _ind_p_list = ind_doc_partida if isinstance(ind_doc_partida, list) else [ind_doc_partida]
+                _ips = "|".join(f"{f.name}:{f.size}" for f in _ind_p_list)
                 if st.session_state.get("_fp_ind_p") != _ips:
-                    st.session_state.partida_bytes = ind_doc_partida.read()
+                    _ind_leidas = [f.read() for f in _ind_p_list]
+                    st.session_state.partida_bytes       = _ind_leidas[0]
+                    st.session_state.partidas_bytes_list = _ind_leidas
+                    st.session_state.partidas_nombres    = [f.name for f in _ind_p_list]
                     st.session_state["_fp_ind_p"] = _ips
                     st.session_state.industrial_factibilidad = None
             if ind_doc_params is not None:
@@ -16691,7 +16788,8 @@ with st.sidebar:
                 if _res_api_k:
                     st.session_state["api_key_input"] = _sanitize_api_key(_res_api_k)
             _doc_types_res = ["pdf", "jpg", "jpeg", "png", "webp"]
-            res_doc_partida = st.file_uploader("Partida Registral (SUNARP)", type=_doc_types_res, key="res_doc_partida")
+            res_doc_partida = st.file_uploader("Partida Registral (SUNARP, hasta 5 lotes)", type=_doc_types_res, key="res_doc_partida",
+                                               accept_multiple_files=True)
             res_doc_puhr    = st.file_uploader("PU / HR",                    type=_doc_types_res, key="res_doc_puhr")
             res_doc_params  = st.file_uploader("Certificado de Parámetros",  type=_doc_types_res, key="res_doc_params")
             res_doc_planos  = st.file_uploader("Planos del Inmueble (PDF, DXF o imagen)", type=["pdf", "dxf", "dwg", "jpg", "jpeg", "png", "webp"], key="res_doc_planos")
@@ -17016,17 +17114,12 @@ with st.sidebar:
 
         # ── EJECUTAR ─────────────────────────────────────────
         st.markdown("---")
-        # ── PUERTA 1: CPUE Gate ──────────────────────────────
-        _res_trig, _res_warn_active = _cpue_gate_ui("res", res_doc_params)
+        # Para Inmueble Residencial el CPUE es opcional — no bloquear el análisis
         _run_btn_res = st.button(
             "GENERAR ANÁLISIS", use_container_width=True, type="primary",
-            disabled=_res_warn_active, key="btn_run_res_main",
+            key="btn_run_res_main",
         )
-        run_residencial = _run_btn_res or _res_trig
-        if run_residencial and not (bool(res_doc_params) or st.session_state.get("_cpue_ok_res", False)):
-            st.session_state["_cpue_warn_res"] = True
-            run_residencial = False
-            st.rerun()
+        run_residencial = bool(_run_btn_res)
 
         # ── ELABORACIÓN DE PROPUESTA (solo Compra, después del análisis) ──
         if res_modo == "Compra":
@@ -17962,6 +18055,36 @@ with st.sidebar:
             st.session_state["retail_inp"] = _retail_inp
             st.rerun()
 
+    # ── Eliminar cuenta (GDPR / CCPA) — al final del sidebar ────────────────
+    st.markdown('<hr style="border:none;border-top:1px solid rgba(255,255,255,0.08);margin:18px 0 10px;">', unsafe_allow_html=True)
+    with st.expander("⚠ Eliminar cuenta", expanded=False):
+        st.markdown(
+            '<div style="font-size:11px;color:rgba(255,255,255,0.55);line-height:1.5;margin-bottom:8px;">'
+            'Esta acción anonimiza tus datos y bloquea el acceso de forma permanente. '
+            'No es reversible.'
+            '</div>',
+            unsafe_allow_html=True,
+        )
+        _del_confirm = st.text_input(
+            "Escribe ELIMINAR para confirmar",
+            key="_delete_confirm_input",
+            placeholder="ELIMINAR",
+        )
+        if st.button("Confirmar eliminación", key="_delete_account_btn", use_container_width=True):
+            if _del_confirm.strip().upper() == "ELIMINAR":
+                _del_user = st.session_state.get("_username", "")
+                with st.spinner("Eliminando cuenta…"):
+                    _ok = _soft_delete_account(_del_user)
+                if _ok:
+                    for k in ["_authenticated","_user_name","_user_role","_username"]:
+                        st.session_state.pop(k, None)
+                    st.session_state["_deleted_account_msg"] = True
+                    st.rerun()
+                else:
+                    st.error("No se pudo completar la eliminación. Contacta a soporte.")
+            else:
+                st.warning("Debes escribir exactamente ELIMINAR para confirmar.")
+
 # ── SESSION STATE ────────────────────────────────────
 
 for k in ("params", "cabida", "financ", "zona", "legal",
@@ -18090,7 +18213,13 @@ if tipo_op == "Proyecto Logístico / Industrial" and run_ind_docs:
     st.rerun()
 
 if tipo_op == "Inmueble Residencial" and run_res_docs:
-    _rp = res_doc_partida.read() if res_doc_partida else None
+    _res_p_list = (res_doc_partida if isinstance(res_doc_partida, list) else [res_doc_partida]) if res_doc_partida else []
+    if _res_p_list:
+        _res_leidas = [f.read() for f in _res_p_list]
+        st.session_state.partida_bytes       = _res_leidas[0]
+        st.session_state.partidas_bytes_list = _res_leidas
+        st.session_state.partidas_nombres    = [f.name for f in _res_p_list]
+    _rp = _res_leidas[0] if _res_p_list else None
     _ru = res_doc_puhr.read()    if res_doc_puhr    else None
     _rc = res_doc_params.read() if res_doc_params else None
     _rl = (res_doc_planos.read()
@@ -18198,17 +18327,10 @@ elif tipo_op == "Inmueble Residencial" and run_residencial:
     st.session_state["_res_zona_val"]      = res_zona
     st.session_state["_res_m2_val"]        = res_m2
     st.session_state["_res_antiguedad_val"] = res_antiguedad
-    # Auto-trigger legal si hay documentos disponibles
+    # Marcar que hay docs legales pendientes para análisis en Tab Legal
     if any([res_doc_partida, res_doc_puhr, res_doc_params, res_doc_planos]):
-        _rp = res_doc_partida.read() if res_doc_partida else None
-        _ru = res_doc_puhr.read()    if res_doc_puhr    else None
-        _rc = res_doc_params.read()  if res_doc_params  else None
-        _rl = res_doc_planos.read()  if res_doc_planos  else None
-        _rsug = st.session_state.get("res_sugerencias_inp", "")
-        st.session_state.residencial_legal = _run_with_retry(
-            lambda _p=_rp, _u=_ru, _c=_rc, _l=_rl, _sg=_rsug: analizar_legal(_p, _u, _c, _l, _sg),
-            "Analizando documentos legales…",
-        )
+        st.session_state["_res_legal_pendiente"] = True
+    st.rerun()
 
 elif run:
     if not pdf_cert and not st.session_state.get("_cpue_ok_inm", False):
@@ -18354,26 +18476,44 @@ elif run:
     }
     st.session_state.zona = zona
     # Auto-trigger legal si hay partida o PU/HR disponibles
-    _al_p = st.session_state.get("partida_bytes")
-    _al_u = st.session_state.get("puhr_bytes")
-    _al_c = st.session_state.get("cert_bytes")
-    if _al_p or _al_u:
-        st.session_state.legal = _run_with_retry(
-            lambda _p=_al_p, _u=_al_u, _c=_al_c: analizar_legal(_p, _u, _c),
-            "Analizando documentos registrales…",
-        )
+    _al_p  = st.session_state.get("partida_bytes")
+    _al_pl = st.session_state.get("partidas_bytes_list") or ([_al_p] if _al_p else [])
+    _al_pn = st.session_state.get("partidas_nombres") or []
+    _al_u  = st.session_state.get("puhr_bytes")
+    _al_c  = st.session_state.get("cert_bytes")
+    if _al_pl or _al_u:
+        if len(_al_pl) > 1:
+            st.session_state.legal = _run_with_retry(
+                lambda _pl=_al_pl, _pn=_al_pn, _u=_al_u, _c=_al_c:
+                    analizar_legal_multi(_pl, _pn, _u, _c),
+                f"Analizando {len(_al_pl)} partidas registrales…",
+            )
+        else:
+            st.session_state.legal = _run_with_retry(
+                lambda _p=_al_p, _u=_al_u, _c=_al_c: analizar_legal(_p, _u, _c),
+                "Analizando documentos registrales…",
+            )
 
 # ── AUTO-TRIGGERS LEGALES (corren en cualquier rerender si faltan resultados) ──
 
 if tipo_op == "Proyecto Inmobiliario" and st.session_state.get("cabida") and not st.session_state.get("legal"):
-    _tap = st.session_state.get("partida_bytes")
-    _tau = st.session_state.get("puhr_bytes")
-    _tac = st.session_state.get("cert_bytes")
-    if _tap or _tau:
-        st.session_state.legal = _run_with_retry(
-            lambda _p=_tap, _u=_tau, _c=_tac: analizar_legal(_p, _u, _c),
-            "Analizando documentos registrales…",
-        )
+    _tap  = st.session_state.get("partida_bytes")
+    _tapl = st.session_state.get("partidas_bytes_list") or ([_tap] if _tap else [])
+    _tapn = st.session_state.get("partidas_nombres") or []
+    _tau  = st.session_state.get("puhr_bytes")
+    _tac  = st.session_state.get("cert_bytes")
+    if _tapl or _tau:
+        if len(_tapl) > 1:
+            st.session_state.legal = _run_with_retry(
+                lambda _pl=_tapl, _pn=_tapn, _u=_tau, _c=_tac:
+                    analizar_legal_multi(_pl, _pn, _u, _c),
+                f"Analizando {len(_tapl)} partidas registrales…",
+            )
+        else:
+            st.session_state.legal = _run_with_retry(
+                lambda _p=_tap, _u=_tau, _c=_tac: analizar_legal(_p, _u, _c),
+                "Analizando documentos registrales…",
+            )
 
 if tipo_op == "Proyecto Logístico / Industrial" and st.session_state.get("industrial_result") and not st.session_state.get("industrial_factibilidad"):
     _tip = st.session_state.get("partida_bytes")
@@ -20016,8 +20156,8 @@ elif tipo_op == "Proyecto Inmobiliario":
                         st.rerun()
 
                 # ── Preventa Coverage Banner ─────────────────────────
-                _vel_abs  = fin_run.get("vel_absorcion", 1.5) or 1.5
-                _pct_prev = fin_run.get("pct_preventa_banco", 0.30) or 0.30
+                _vel_abs  = MERCADO.get(zona_sel, {}).get("velocidad_venta", 1.5) or 1.5
+                _pct_prev = (fin_run.get("pct_preventa_banco", 30.0) or 30.0) / 100
                 _n_und    = c.get("total_unidades", 0) or 1
                 _und_req  = max(1, round(_n_und * _pct_prev))
                 _meses_prev = max(1, math.ceil(_und_req / _vel_abs))
@@ -20622,24 +20762,25 @@ elif tipo_op == "Proyecto Inmobiliario":
                     _st_row0 = min(range(len(_st_terrenos)), key=lambda i: abs(_st_terrenos[i] - _st_t0))
 
                     def _cell_color_mg(v):
-                        if v >= 18:  return "rgba(39,174,96,0.18)",   "#7BCFA0"   # verde translúcido
-                        if v >= 12:  return "rgba(71,85,105,0.22)",  "#C8A060"   # bronce translúcido
-                        return       "rgba(192,57,43,0.20)",          "#E07878"   # rojo translúcido
+                        # bg, texto principal, texto secundario (TIR)
+                        if v >= 18:  return "#D1FADF", "#14532D", "#166534"   # verde sólido
+                        if v >= 12:  return "#FEF9C3", "#78350F", "#92400E"   # amarillo sólido
+                        return               "#FEE2E2", "#7F1D1D", "#991B1B"   # rojo sólido
 
-                    _NAV = "#0A1628"
-                    _BRD = "#2A3D52"
+                    _NAV = "#1B2A4A"
+                    _BRD = "#D1D5DB"
                     # Cabecera de columnas (precio de venta)
                     _st_html = (
                         f'<div style="overflow-x:auto;margin-bottom:4px;">'
-                        f'<table style="border-collapse:collapse;min-width:100%;">'
+                        f'<table style="border-collapse:collapse;min-width:100%;background:#FFFFFF;">'
                         f'<thead><tr>'
-                        f'<th style="background:{_NAV};color:#A8C0D6;padding:8px 12px;font-size:10px;'
+                        f'<th style="background:{_NAV};color:#FFFFFF;padding:8px 12px;font-size:10px;'
                         f'font-weight:700;text-align:left;border:1px solid {_BRD};white-space:nowrap;">'
                         f'Terreno ↓ / Precio m² →</th>'
                     )
                     for ci, _sp in enumerate(_st_precios):
                         _is_base_col = (ci == _st_col0)
-                        _ch_bg = "#1E3A5A" if _is_base_col else _NAV
+                        _ch_bg = "#2D4A7A" if _is_base_col else _NAV
                         _ch_fw = "800" if _is_base_col else "600"
                         _st_html += (
                             f'<th style="background:{_ch_bg};color:#FFFFFF;padding:8px 10px;'
@@ -20651,25 +20792,26 @@ elif tipo_op == "Proyecto Inmobiliario":
 
                     for ri, t in enumerate(_st_terrenos):
                         _is_base_row = (ri == _st_row0)
-                        _rh_bg = "#1E3A5A" if _is_base_row else "#0D1F30"
+                        _rh_bg  = "#F1F3F5"
+                        _rh_txt = "#1B2A4A"
                         _st_html += (
-                            f'<tr><td style="background:{_rh_bg};color:#FFFFFF;'
-                            f'padding:8px 12px;font-size:10px;font-weight:{"800" if _is_base_row else "500"};'
+                            f'<tr><td style="background:{_rh_bg};color:{_rh_txt};'
+                            f'padding:8px 12px;font-size:10px;font-weight:{"800" if _is_base_row else "600"};'
                             f'border:1px solid {_BRD};white-space:nowrap;">'
                             f'{"⭐ " if _is_base_row else ""}${t:,.0f}</td>'
                         )
                         for ci in range(len(_st_precios)):
                             mg_val  = float(_df_mg.iloc[ri, ci])
                             tir_val = float(_df_tir.iloc[ri, ci])
-                            _bg_cell, _txt_cell = _cell_color_mg(mg_val)
+                            _bg_cell, _txt_main, _txt_sub = _cell_color_mg(mg_val)
                             _is_cur = (_is_base_row and ci == _st_col0)
-                            _border_extra = f"outline:2px solid #475569;outline-offset:-2px;" if _is_cur else ""
+                            _border_extra = "outline:3px solid #C9A84C;outline-offset:-3px;" if _is_cur else ""
                             _st_html += (
-                                f'<td style="background:{_bg_cell};color:{_txt_cell};'
-                                f'padding:6px 10px;font-size:11px;font-weight:700;'
+                                f'<td style="background:{_bg_cell};color:{_txt_main};'
+                                f'padding:6px 10px;font-size:12px;font-weight:700;'
                                 f'text-align:center;border:1px solid {_BRD};{_border_extra}">'
                                 f'{mg_val:.0f}%'
-                                f'<div style="font-size:11px;font-weight:400;margin-top:1px;">'
+                                f'<div style="font-size:10px;font-weight:500;color:{_txt_sub};margin-top:1px;">'
                                 f'TIR {tir_val:.0f}%</div></td>'
                             )
                         _st_html += '</tr>'
@@ -21345,8 +21487,10 @@ elif tipo_op == "Proyecto Inmobiliario":
             st.markdown('<div class="section-title">Due Diligence Legal — Partida Registral &amp; PU/HR</div>',
                         unsafe_allow_html=True)
 
-            tiene_partida = st.session_state.get("partida_bytes") is not None
-            tiene_puhr    = st.session_state.get("puhr_bytes") is not None
+            tiene_partida  = st.session_state.get("partida_bytes") is not None
+            tiene_puhr     = st.session_state.get("puhr_bytes") is not None
+            _n_partidas    = len(st.session_state.get("partidas_bytes_list") or ([None] if tiene_partida else []))
+            _partidas_noms = st.session_state.get("partidas_nombres") or []
 
             if not tiene_partida and not tiene_puhr:
                 st.markdown("""
@@ -21356,13 +21500,122 @@ elif tipo_op == "Proyecto Inmobiliario":
                 </div>""", unsafe_allow_html=True)
             else:
                 docs_disponibles = []
-                if tiene_partida: docs_disponibles.append("Partida Registral")
-                if tiene_puhr:    docs_disponibles.append("PU/HR")
+                if tiene_partida:
+                    _lbl = f"Partidas Registrales ({_n_partidas} lotes)" if _n_partidas > 1 else "Partida Registral"
+                    docs_disponibles.append(_lbl)
+                if tiene_puhr: docs_disponibles.append("PU/HR")
                 st.caption(f"Documentos disponibles: {' · '.join(docs_disponibles)}")
-
                 st.caption("El análisis legal se ejecuta automáticamente al generar el análisis.")
 
-                lg = st.session_state.legal
+                # Detectar si el resultado es multi-partida
+                _lg_raw = st.session_state.legal
+                _es_multi = isinstance(_lg_raw, dict) and _lg_raw.get("multi") is True
+
+                if _es_multi:
+                    # ── Vista multi-partida: tabs por lote + consolidado ──
+                    _partidas_res = _lg_raw.get("partidas", [])
+                    _consolidado  = _lg_raw.get("consolidado", {})
+                    _tab_names    = ["📋 Consolidado"] + [
+                        f"Lote {i+1} · {p['nombre'].replace('.pdf','').replace('.PDF','')[:18]}"
+                        for i, p in enumerate(_partidas_res)
+                    ]
+                    _ltabs = st.tabs(_tab_names)
+
+                    # Tab consolidado
+                    with _ltabs[0]:
+                        _sem_c = (_consolidado.get("semaforo") or "amarillo").lower()
+                        _scfg  = {
+                            "verde":    ("#1A4731", "#E8F5EE", "SIN ALERTAS CRÍTICAS"),
+                            "amarillo": ("#7A4F1A", "#FFF8EE", "OBSERVACIONES"),
+                            "rojo":     ("#7A1A1A", "#FFF0F0", "ALERTAS CRÍTICAS"),
+                        }.get(_sem_c, ("#1E2D3D", "#F5F2ED", "INDETERMINADO"))
+                        _sc2, _sbg2, _setiq2 = _scfg
+                        st.markdown(
+                            f'<div style="background:{_sbg2};border-left:4px solid {_sc2};border-radius:8px;'
+                            f'padding:16px 20px;margin-bottom:16px;">'
+                            f'<div style="font-size:10px;letter-spacing:2px;color:{_sc2};font-weight:700;'
+                            f'text-transform:uppercase;margin-bottom:4px;">Estado Consolidado — {_n_partidas} Lotes</div>'
+                            f'<div style="font-size:18px;font-weight:700;color:{_sc2};margin-bottom:8px;">{_setiq2}</div>'
+                            f'<div style="font-size:12px;color:{_sc2};opacity:.85;">{_consolidado.get("resumen_legal","—")}</div>'
+                            f'</div>', unsafe_allow_html=True)
+                        if _consolidado.get("titulares_distintos"):
+                            st.warning("⚠ Los lotes tienen titulares distintos — se requiere negociación con múltiples vendedores para adquirir el conjunto.")
+                        if _consolidado.get("alertas"):
+                            st.markdown("**Alertas por lote:**")
+                            for _a in _consolidado["alertas"]:
+                                st.markdown(f'<div style="background:#FFF8EE;border-left:3px solid #C9A96E;border-radius:4px;padding:8px 12px;margin-bottom:4px;font-size:12px;">⚠ {_a}</div>', unsafe_allow_html=True)
+                        # Tabla propietarios consolidada
+                        _todos_props = _consolidado.get("propietarios_partida") or []
+                        if _todos_props:
+                            st.markdown("**Propietarios por lote:**")
+                            _prop_rows = "".join(
+                                f'<tr><td style="padding:6px 10px;font-size:11px;">{p.get("_lote","—")}</td>'
+                                f'<td style="padding:6px 10px;font-size:11px;font-weight:600;">{p.get("nombre","—")}</td>'
+                                f'<td style="padding:6px 10px;font-size:11px;">{p.get("tipo_doc","—")}</td>'
+                                f'<td style="padding:6px 10px;font-size:11px;">{p.get("porcentaje") or "—"}</td></tr>'
+                                for p in _todos_props
+                            )
+                            st.markdown(
+                                f'<table style="width:100%;border-collapse:collapse;font-family:Inter,sans-serif;">'
+                                f'<thead><tr style="background:#0D2137;color:#fff;">'
+                                f'<th style="padding:7px 10px;font-size:10px;text-align:left;">Lote</th>'
+                                f'<th style="padding:7px 10px;font-size:10px;text-align:left;">Propietario</th>'
+                                f'<th style="padding:7px 10px;font-size:10px;text-align:left;">Doc.</th>'
+                                f'<th style="padding:7px 10px;font-size:10px;text-align:left;">%</th>'
+                                f'</tr></thead><tbody>{_prop_rows}</tbody></table>',
+                                unsafe_allow_html=True)
+
+                    # Tabs individuales por lote
+                    for _ti, _pr in enumerate(_partidas_res):
+                        with _ltabs[_ti + 1]:
+                            _lg = _pr.get("resultado") or {}
+                            _sg = (_lg.get("semaforo") or "amarillo").lower()
+                            _scfg2 = {
+                                "verde":    ("#1A4731", "#E8F5EE", "SIN ALERTAS CRÍTICAS"),
+                                "amarillo": ("#7A4F1A", "#FFF8EE", "OBSERVACIONES"),
+                                "rojo":     ("#7A1A1A", "#FFF0F0", "ALERTAS CRÍTICAS"),
+                            }.get(_sg, ("#1E2D3D", "#F5F2ED", "INDETERMINADO"))
+                            _sc3, _sbg3, _set3 = _scfg2
+                            st.markdown(
+                                f'<div style="background:{_sbg3};border-left:4px solid {_sc3};border-radius:8px;'
+                                f'padding:14px 18px;margin-bottom:14px;">'
+                                f'<div style="font-size:18px;font-weight:700;color:{_sc3};margin-bottom:6px;">{_set3}</div>'
+                                f'<div style="font-size:12px;color:{_sc3};opacity:.85;">{_lg.get("resumen_legal","—")}</div>'
+                                f'</div>', unsafe_allow_html=True)
+                            # Propietarios
+                            _pp = _lg.get("propietarios_partida") or []
+                            if _pp:
+                                st.markdown("**Titular(es) registral(es):**")
+                                for _p in _pp:
+                                    st.markdown(f'<div style="font-size:12px;padding:4px 0;">👤 <strong>{_p.get("nombre","—")}</strong> · {_p.get("tipo_doc","—")} · {_p.get("porcentaje") or "—"}</div>', unsafe_allow_html=True)
+                            # Tracto
+                            _tt = (_lg.get("tracto_tipo") or "no_verificable").lower()
+                            _tt_lbl = {"regular": "🟢 Regular", "abreviado": "🟡 Tracto Abreviado",
+                                       "judicial": "🟡 Judicial", "prescripcion": "🔴 Prescripción",
+                                       "mixto": "🟡 Mixto", "no_verificable": "⚪ No verificable"}.get(_tt, _tt)
+                            st.markdown(f"**Tracto sucesivo:** {_tt_lbl}")
+                            if _lg.get("tracto_observaciones"):
+                                st.caption(_lg["tracto_observaciones"])
+                            # Cargas
+                            _hv = _lg.get("hipotecas_vigentes") or []
+                            _cv = _lg.get("cargas_vigentes") or []
+                            if _hv or _cv:
+                                st.markdown("**Cargas e hipotecas:**")
+                                for _h in _hv:
+                                    st.markdown(f'<div style="background:#FFF0F0;border-left:3px solid #7A1A1A;border-radius:4px;padding:6px 10px;margin-bottom:4px;font-size:11px;">🏦 {_h}</div>', unsafe_allow_html=True)
+                                for _c in _cv:
+                                    st.markdown(f'<div style="background:#FFF8EE;border-left:3px solid #C9A96E;border-radius:4px;padding:6px 10px;margin-bottom:4px;font-size:11px;">📋 {_c}</div>', unsafe_allow_html=True)
+                            # Alertas
+                            _ats = _lg.get("alertas") or []
+                            if _ats:
+                                st.markdown("**Alertas:**")
+                                for _a in _ats:
+                                    st.markdown(f'<div style="background:#FFF8EE;border-left:3px solid #475569;border-radius:4px;padding:8px 12px;margin-bottom:4px;font-size:11px;">⚠ {_a}</div>', unsafe_allow_html=True)
+
+                    # Saltar el bloque estándar de una sola partida
+                    lg = None
+                else:
+                    lg = _lg_raw
                 if lg:
                     # ── Semáforo ─────────────────────────────
                     sem = lg.get("semaforo", "amarillo").lower()
@@ -25492,26 +25745,70 @@ elif tipo_op == "Inmueble Residencial":
         # TAB 4: LEGAL + DESCARGA
         with res_tabs[4]:
             st.markdown('<div class="section-title">Análisis Legal y Descarga de Informe</div>', unsafe_allow_html=True)
-            _res_html = generar_informe_residencial_html(
-                r, st.session_state.get("residencial_legal"),
-                datetime.datetime.now().strftime("%d/%m/%Y"),
-                distrito=st.session_state.get("_res_zona_val", r.get("zona", "")),
-                m2=st.session_state.get("_res_m2_val", 0),
-                antiguedad=st.session_state.get("_res_antiguedad_val", 0),
-                fotos=st.session_state.get("res_fotos_bytes", []),
-            )
             _res_nombre = (st.session_state.get("nombre_proyecto") or
                            st.session_state.get("_res_zona_val", "Proyecto"))
-            st.download_button(
-                "DESCARGAR INFORME RESIDENCIAL",
-                data=_res_html.encode("utf-8"),
-                file_name=f"Informe de Análisis Residencial - {_res_nombre}.html",
-                mime="text/html",
-                use_container_width=True,
-            )
-            st.caption("El archivo .html se abre en cualquier navegador y puede imprimirse como PDF (Cmd+P / Ctrl+P).")
+            with st.spinner("Generando PDF…"):
+                try:
+                    _res_pdf = generar_informe_residencial_pdf(
+                        r, st.session_state.get("residencial_legal"),
+                        datetime.datetime.now().strftime("%d/%m/%Y"),
+                        distrito=st.session_state.get("_res_zona_val", r.get("zona", "")),
+                        m2=st.session_state.get("_res_m2_val", 0),
+                        antiguedad=st.session_state.get("_res_antiguedad_val", 0),
+                        fotos=st.session_state.get("res_fotos_bytes", []),
+                    )
+                    st.download_button(
+                        "DESCARGAR INFORME RESIDENCIAL (PDF)",
+                        data=_res_pdf,
+                        file_name=f"Informe de Análisis Residencial - {_res_nombre}.pdf",
+                        mime="application/pdf",
+                        use_container_width=True,
+                    )
+                except Exception as _epdf:
+                    # Fallback a HTML si Playwright falla
+                    _res_html = generar_informe_residencial_html(
+                        r, st.session_state.get("residencial_legal"),
+                        datetime.datetime.now().strftime("%d/%m/%Y"),
+                        distrito=st.session_state.get("_res_zona_val", r.get("zona", "")),
+                        m2=st.session_state.get("_res_m2_val", 0),
+                        antiguedad=st.session_state.get("_res_antiguedad_val", 0),
+                        fotos=st.session_state.get("res_fotos_bytes", []),
+                    )
+                    st.download_button(
+                        "DESCARGAR INFORME RESIDENCIAL",
+                        data=_res_html.encode("utf-8"),
+                        file_name=f"Informe de Análisis Residencial - {_res_nombre}.html",
+                        mime="text/html",
+                        use_container_width=True,
+                    )
+                    st.caption(f"PDF no disponible ({_epdf}) — descargando HTML.")
             st.markdown("---")
             lg = st.session_state.get("residencial_legal")
+            # Botón de análisis legal explícito
+            _has_res_docs = any([res_doc_partida, res_doc_puhr, res_doc_params, res_doc_planos])
+            if _has_res_docs:
+                if st.button("⚖ ANALIZAR DOCUMENTOS LEGALES", use_container_width=True, key="btn_res_legal_run", type="primary"):
+                    _rp_list = (res_doc_partida if isinstance(res_doc_partida, list) else [res_doc_partida]) if res_doc_partida else []
+                    _rp_bytes = [f.read() for f in _rp_list]
+                    _ru = res_doc_puhr.read()   if res_doc_puhr   else None
+                    _rc = res_doc_params.read() if res_doc_params else None
+                    _rl = res_doc_planos.read() if res_doc_planos else None
+                    _rsug = st.session_state.get("res_sugerencias_inp", "")
+                    if len(_rp_bytes) > 1:
+                        _nombres_rp = [f.name for f in _rp_list]
+                        st.session_state.residencial_legal = _run_with_retry(
+                            lambda _pl=_rp_bytes, _nl=_nombres_rp, _u=_ru, _c=_rc, _sg=_rsug: analizar_legal_multi(_pl, _nl, _u, _c, _sg),
+                            "Analizando documentos legales…",
+                        )
+                    else:
+                        _rp = _rp_bytes[0] if _rp_bytes else None
+                        st.session_state.residencial_legal = _run_with_retry(
+                            lambda _p=_rp, _u=_ru, _c=_rc, _l=_rl, _sg=_rsug: analizar_legal(_p, _u, _c, _l, _sg),
+                            "Analizando documentos legales…",
+                        )
+                    st.session_state.pop("_res_legal_pendiente", None)
+                    st.rerun()
+                lg = st.session_state.get("residencial_legal")
             if not lg:
                 st.markdown(
                     '<div style="background:#F7F9FC;border:1px solid #D8D4CC;border-radius:8px;'
@@ -25523,7 +25820,7 @@ elif tipo_op == "Inmueble Residencial":
                     '<div style="width:36px;height:2px;background:#475569;margin:12px auto;"></div>'
                     '<div style="font-size:13px;color:#7A7268;line-height:1.7;max-width:480px;margin:0 auto;">'
                     'Adjunta la <strong>Partida Registral (SUNARP)</strong> y/o el <strong>PU/HR</strong> '
-                    'en el panel izquierdo, luego presiona <strong>ANALIZAR DOCUMENTOS</strong> para verificar:'
+                    'en el panel izquierdo, luego presiona <strong>⚖ ANALIZAR DOCUMENTOS LEGALES</strong>.'
                     '<br><br>✓ Titularidad y propietarios registrales<br>'
                     '✓ Cargas, hipotecas y medidas cautelares<br>'
                     '✓ Consistencia de áreas y direcciones entre documentos'
@@ -27956,13 +28253,11 @@ div[data-testid="stHorizontalBlock"] > div[data-testid="column"]
     try:
         _sb_hist_p = _get_supabase()
         if _sb_hist_p:
-            _hist_p = (
-                _sb_hist_p.table("analisis_historial")
-                .select("created_at,modulo,distrito,tipo,kpis")
-                .order("created_at", desc=True)
-                .limit(20)
-                .execute()
-            ).data or []
+            _hist_usuario = st.session_state.get("_username", "") or st.session_state.get("_user_name", "") or ""
+            _hist_q = _sb_hist_p.table("analisis_historial").select("created_at,modulo,distrito,tipo,kpis")
+            if _hist_usuario:
+                _hist_q = _hist_q.eq("usuario", _hist_usuario)
+            _hist_p = _hist_q.order("created_at", desc=True).limit(20).execute().data or []
 
             if _hist_p:
                 # Tabla ejecutiva — HTML puro (sin widgets, funciona correctamente)
